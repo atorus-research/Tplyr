@@ -1,0 +1,2 @@
+### Logging Functions
+NULL
