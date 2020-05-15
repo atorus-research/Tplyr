@@ -1,3 +1,4 @@
-test_that("Placeholder", {
-  expect_equal(2 * 2, 4)
+test_that("safety_table returns an empty envrionment of class 'safety_table' when passed no arguemnts", {
+  st <- safety_table()
+  expect_true(is.environment(st))
 })
