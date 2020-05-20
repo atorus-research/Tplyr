@@ -91,8 +91,7 @@ as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
   stop('Must provide `table` object from the `tplyr` package.')
 }
 
-# New layer
-#' Create a tplyr layer
+#' Create a new tplyr layer
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
@@ -102,11 +101,11 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
   arg_list <- as.list(match.call())[-c(1,2)]
 
+  # Insert parent to the front of the list to prepare the call
+  arg_list <- append(arg_list, parent, after=0)
+
   # Run validation
   validate_tplyr_layer(parent, type, by, target_var, where)
-
-  # Add parent back in as the first argument
-  arg_list <- append(arg_list, parent, after=0)
 
   # Create the new environment by contructing the env call
   e <- do.call('env', arg_list)
@@ -122,7 +121,6 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   structure(e, class=append('tplyr_layer', class(e)))
 }
 
-# Validate layer
 #' Validate a tplyr layer
 #'
 #' @inheritParams tplyr_layer
