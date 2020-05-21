@@ -4,15 +4,10 @@
 \alias{tplyr_table}
 \title{Safety Table}
 \usage{
-tplyr_table(table, headers, header_n)
+tplyr_table(target)
 }
 \arguments{
-\item{table}{Source data used to create the table. A 'data.frame' object.}
-
-\item{headers}{Column display headers}
-
-\item{header_n}{Population count information to dispaly in headers. A
-data.frame with population level information}
+\item{target}{Source data used to create the table. A 'data.frame' object.}
 }
 \value{
 A safety_table object which is an environment where the code
@@ -27,21 +22,24 @@ used to create the table.
 \section{Environment Bindings/Properties}{
 
 \itemize{
-\item{table - The main piece of data the table will be created from.}
+\item{target - The main piece of data the table will be created from.}
 \item{headers - The column headers for the table. These will be repeated
   across pages as appropriate.}
-\item{header_n - The population count information used as the denominator
-  and display in the column headers.}
-\item{layers - The logic used to prepare and render the table.}
+\item{pop_data - The data.frame containing population data.}
+\item{treat_var - The treatment variable arms/sets are split up on.}
+\item{layers - The logic used to prepare and render the table. Stored as a
+  list binded to the environment. Use <add layer function> to add a layer.}
 }
 }
 
 \examples{
-df <- data.frame(a = 1:10, b = 11:20)
-headers <- c("a", "b")
-header_n <- c(a = "10", b = "10")
+df <- data.frame(a = 1:9, b = 10:18, c = rep(c("Placebo", "Low", "High"), 3))
+adsl <- data.frame(d = letters[1:9])
 
-tplyr_table(df, headers, header_n)
+tab <- tplyr_table(df) \%>\%
+  set_tplyr_treat_var(c) \%>\%
+  set_tplyr_pop_data(adsl) \%>\%
+  set_tplyr_header(c("Placebo", "Low", "High"))
 }
 \seealso{
 [layer()]
