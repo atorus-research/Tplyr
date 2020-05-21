@@ -11,8 +11,13 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends:
+    rlang (>= 0.4.6),
+    assertthat (>= 0.2.1),
+    magrittr (>= 1.5)
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 7.0.2
