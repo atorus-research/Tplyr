@@ -37,22 +37,28 @@
 #'   set_tplyr_pop_data(adsl) %>%
 #'   set_tplyr_header(c("Placebo", "Low", "High"))
 #' @export
-tplyr_table <- function(target) {
+tplyr_table <- function(target, treatment_var) {
+
+  treatment_var <- enquo(treatment_var)
+
   if(missing(target)){
     #return a blank environment if no table information is passed
     return(structure(rlang::env(),
            class = c("tplyr_table", "environment")))
   }
-  new_tplyr_table(target)
+  new_tplyr_table(target, treatment_var)
 }
 
 #' @importFrom rlang env
 #' @noRd
-new_tplyr_table <- function(target) {
+new_tplyr_table <- function(target, treatment_var) {
   validate_tplyr_table(target)
 
   structure(rlang::env(
     target = target,
+    treatment_var = treatment_var,
+    pop = target,
+    poptreat_var = treatment_var,
     layers = list()
   ),
            class = append("tplyr_table", "environment"))
