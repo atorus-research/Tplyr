@@ -36,7 +36,13 @@ test_that("pop_data binding attaches pop_data properly", {
 })
 
 test_that("pop_data binding throws expected errors", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20))
 
+  expect_error(tplyr_pop_data(tab) <- "a", "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- iris3, "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- NA, "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- NULL, "'pop_data' argument passed")
+  expect_silent(tplyr_pop_data(tab) <- iris)
 })
 
 ### treat_var tests ###

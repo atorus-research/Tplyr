@@ -23,8 +23,8 @@ set_tplyr_header(table, headers)
 }
 \value{
 For \code{tplyr_header} the header binding of the \code{tplyr_talbe}
-  object. For \code{tplyr_header<-} nothing is returned, the header binding
-  is set silently. For \code{set_tplyr_header} the modified object.
+  object. For \code{tplyr_header<-} and \code{set_tplyr_header} the modified
+  object.
 }
 \description{
 The column header that will be displayed when the table is rendered.

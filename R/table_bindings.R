@@ -7,8 +7,8 @@
 #' @param table A \code{tplyr_table} object to set or return header information.
 #'
 #' @return For \code{tplyr_header} the header binding of the \code{tplyr_talbe}
-#'   object. For \code{tplyr_header<-} nothing is returned, the header binding
-#'   is set silently. For \code{set_tplyr_header} the modified object.
+#'   object. For \code{tplyr_header<-} and \code{set_tplyr_header} the modified
+#'   object.
 #'
 #' @importFrom rlang env_get
 #'
@@ -89,6 +89,83 @@ set_tplyr_header <- function(table, headers) {
 #' @rdname pop_data
 tplyr_pop_data <- function(table) {
   env_get(table, "pop_data")
+}
+
+#' Return or set header_n binding
+#'
+#' @param table A \code{tplyr_table} object
+#'
+#' @importFrom rlang env_get
+#'
+#' @return For \code{tplyr_header_n} the header_n binding of the
+#'   \code{tplyr_table} object. For \code{tplyr_header_n<-} and
+#'   \code{set_tplyr_header_n} the modified object.
+#'
+#' @export
+#' @rdname header_n
+tplyr_header_n <- function(table) {
+  rlang::env_get(table, "header_n")
+}
+
+#' @param x A \code{tplyr_table} object
+#' @param value A named numeric vector. Names of vector should match headers.
+#'
+#' @importFrom rlang env_bind
+#' @importFrom rlang env_has
+#' @importFrom rlang env_get
+#' @importFrom assertthat assert_that
+#'
+#' @export
+#' @rdname header_n
+`tplyr_header_n<-` <- function(x, value) {
+  assertthat::assert_that(rlang::env_has(x, value),
+                          msg = "'headers' must be defined before 'header_n")
+  headers_i <- rlang::env_get(x, "headers")
+  assertthat::assert_that(length(value) == length(headers_i),
+                          all(names(value) %in% headers_i),
+                          msg = "A header_n names don't match to headers")
+
+  rlang::env_bind(x, header_n = value)
+
+  x
+}
+
+#' @param header_n A named numeric vector. Names of vector should match headers.
+#'
+#' @importFrom rlang env_bind
+#' @importFrom rlang env_get
+#' @importFrom rlang env_has
+#' @importFrom assertthat assert_that
+#'
+#' @export
+#' @rdname header_n
+set_tplyr_header_n <- function(table, header_n) {
+  assertthat::assert_that(rlang::env_has(table, header_n),
+                          msg = "'headers' must be defined before 'header_n")
+  headers_i <- env_get(table, "headers")
+  assertthat::assert_that(length(header_n) == length(headers_i),
+                          all(names(header_n) %in% headers_i),
+                          msg = "A header_n names don't match to headers")
+
+  rlang::env_bind(table, header_n = header_n)
+
+  table
+}
+
+#' Return or set pop_data binding
+#'
+#' @param table A \code{tplyr_table} object.
+#'
+#' @return For \code{tplyr_pop_data} the pop_data binding of the
+#'   \code{tplyr_table} object. For \code{tplyr_pop_data<-} and
+#'   \code{set_tplyr_pop_data} the modified object.
+#'
+#' @importFrom rlang env_get
+#'
+#' @export
+#' @rdname pop_data
+tplyr_pop_data <- function(table) {
+  rlang::env_get(table, "pop_data")
 }
 
 #' @param x A \code{tplyr_table} object.
