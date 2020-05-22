@@ -8,11 +8,15 @@
 #' layer environments passed to a 'tplyr_table' are used to evaluate the code
 #' used to create the table.
 #'
+#' The tplyr_table is the parent environment of all the binded tplyr_layers.
+#' The table can contain variables that are visiable to all layers.
+#'
 #' @section Environment Bindings/Properties:
 #' \itemize{
 #' \item{target - The main piece of data the table will be created from.}
 #' \item{headers - The column headers for the table. These will be repeated
 #'   across pages as appropriate.}
+#' \item{header_n - The }
 #' \item{pop_data - The data.frame containing population data.}
 #' \item{treat_var - The treatment variable arms/sets are split up on.}
 #' \item{layers - The logic used to prepare and render the table. Stored as a
@@ -20,6 +24,7 @@
 #' }
 #'
 #' @param target Source data used to create the table. A 'data.frame' object.
+#' @param treat_var Treatment variable in target used to split treatment groups.
 #'
 #' @return A safety_table object which is an environment where the code
 #'   creating the table is evaluated.
@@ -29,13 +34,9 @@
 #' @seealso [layer()]
 #'
 #' @examples
-#' df <- data.frame(a = 1:9, b = 10:18, c = rep(c("Placebo", "Low", "High"), 3))
-#' adsl <- data.frame(d = letters[1:9])
+#' iris_tab <- tplyr_table(iris, Species)
 #'
-#' tab <- tplyr_table(df) %>%
-#'   set_tplyr_treat_var(c) %>%
-#'   set_tplyr_pop_data(adsl) %>%
-#'   set_tplyr_header(c("Placebo", "Low", "High"))
+#'
 #' @export
 tplyr_table <- function(target, treat_var) {
 
@@ -59,7 +60,8 @@ new_tplyr_table <- function(target, treat_var) {
            class = c("tplyr_table", "environment")) %>%
     set_tplyr_treat_var(!!treat_var) %>%
     set_tplyr_pop_data(target) %>%
-    set_tplyr_pop_treat_var(!!treat_var)
+    set_tplyr_pop_treat_var(!!treat_var) %>%
+    default_header_n()
 
 }
 

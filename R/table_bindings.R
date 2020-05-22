@@ -13,7 +13,7 @@
 #' @importFrom rlang env_get
 #'
 #' @examples
-#' tab <- tplyr_table(iris[, -1])
+#' tab <- tplyr_table(iris, Species)
 #'
 #' tplyr_header(tab) <- c("Sepal.Length", "Sepal.Width", "Petal.Length",
 #'                        "Petal.Width", "Species")
@@ -118,12 +118,7 @@ tplyr_header_n <- function(table) {
 #' @export
 #' @rdname header_n
 `tplyr_header_n<-` <- function(x, value) {
-  assertthat::assert_that(rlang::env_has(x, value),
-                          msg = "'headers' must be defined before 'header_n")
-  headers_i <- rlang::env_get(x, "headers")
-  assertthat::assert_that(length(value) == length(headers_i),
-                          all(names(value) %in% headers_i),
-                          msg = "A header_n names don't match to headers")
+  assertthat::assert_that(is.numeric(value))
 
   rlang::env_bind(x, header_n = value)
 
@@ -140,12 +135,7 @@ tplyr_header_n <- function(table) {
 #' @export
 #' @rdname header_n
 set_tplyr_header_n <- function(table, header_n) {
-  assertthat::assert_that(rlang::env_has(table, header_n),
-                          msg = "'headers' must be defined before 'header_n")
-  headers_i <- env_get(table, "headers")
-  assertthat::assert_that(length(header_n) == length(headers_i),
-                          all(names(header_n) %in% headers_i),
-                          msg = "A header_n names don't match to headers")
+  assertthat::assert_that(is.character(header_n))
 
   rlang::env_bind(table, header_n = header_n)
 
