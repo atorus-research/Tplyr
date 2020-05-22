@@ -260,3 +260,50 @@ set_tplyr_treat_var <- function(table, treat_var) {
 
   table
 }
+
+#' Return or set pop_treat_var binding
+#'
+#' @param table A \code{tplyr_table} object
+#'
+#' @return For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}
+#'   object. For \code{tplyr_pop_treat_var<-} and \code{set_tplyr_pop_treat_var} the modified
+#'   object.
+#'
+#' @importFrom rlang env_get
+#'
+#' @rdname pop_treat_var
+#' @export
+tplyr_pop_treat_var <- function(table) {
+  rlang::env_get(table, "pop_treat_var")
+}
+
+#' @param x A \code{tplyr_table} object
+#' @param value A named quosure from the pop_data environment
+#'
+#' @rdname pop_treat_var
+#' @export
+`tplyr_pop_treat_var<-` <- function(x, value) {
+  pop_treat_var <- rlang::enquo(value)
+
+  assertthat::assert_that(class(rlang::quo_get_expr(pop_treat_var)) == "name",
+                          as.character(rlang::quo_get_expr(pop_treat_var)) %in% names(x$pop_data))
+
+  rlang::env_bind(x, pop_treat_var = pop_treat_var)
+
+  x
+}
+
+#' @param pop_treat_var A named quosure from the pop_data environment
+#'
+#' @rdname pop_treat_var
+#' @export
+set_tplyr_pop_treat_var <- function(table, pop_treat_var) {
+  pop_treat_var <- rlang::enquo(pop_treat_var)
+
+  assertthat::assert_that(class(rlang::quo_get_expr(pop_treat_var)) == "name",
+                          as.character(rlang::quo_get_expr(pop_treat_var)) %in% names(table$pop_data))
+
+  rlang::env_bind(table, pop_treat_var = pop_treat_var)
+
+  table
+}
