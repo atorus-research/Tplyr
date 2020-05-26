@@ -9,3 +9,7 @@ tplyr_debug <- function(status) {
 dmessage <- function(message, ...) {
   if (getOption('tplyr_debug')) inform(paste("DEBUG:", message), ...)
 }
+
+datinfo <- function(.data) {
+
+}

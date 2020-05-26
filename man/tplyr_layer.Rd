@@ -4,7 +4,7 @@
 \alias{tplyr_layer}
 \title{Create a \code{tplyr_layer} object}
 \usage{
-tplyr_layer(parent, type, by, target_var, where, ...)
+tplyr_layer(parent, type, by = NULL, target_var = NULL, where = NULL, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
@@ -14,8 +14,7 @@ the layer is a subgroup.}
 \item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
 descriptive statistics, or "shift" for shift table counts}
 
-\item{by}{Character Vector. Required. Variable to group the summary being performed, or label of the group to be provided
-in the stub. Can be a combination of both.}
+\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
 \item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
 the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
