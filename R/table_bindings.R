@@ -228,6 +228,9 @@ tplyr_treat_var <- function(table) {
 `tplyr_treat_var<-` <- function(x, value) {
   value <- rlang::enquo(value)
 
+  assertthat::assert_that(class(rlang::quo_get_expr(value)) == "name",
+                          as.character(rlang::quo_get_expr(value)) %in% names(x$target))
+
   rlang::env_bind(x, treat_var = value)
 
   x

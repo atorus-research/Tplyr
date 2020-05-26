@@ -7,13 +7,15 @@
 tplyr_table(target, treat_var)
 }
 \arguments{
-\item{target}{Source data used to create the table. A 'data.frame' object.}
+\item{target}{Source data used to create the table. A 'data.frame' object.
+This is the analysis dataset the table is generated from.}
 
-\item{treat_var}{Treatment variable in target used to split treatment groups.}
+\item{treat_var}{Treatment variable in target used to split treatment
+groups.}
 }
 \value{
-A safety_table object which is an environment where the code
-  creating the table is evaluated.
+A safety_table object which is a parent environment for the layers
+  where the code creating the table is evaluated.
 }
 \description{
 The function `tplyr_table()` creates a 'tplyr_table' object which is composed
@@ -30,7 +32,8 @@ The table can contain variables that are visiable to all layers.
 \item{target - The main piece of data the table will be created from.}
 \item{headers - The column headers for the table. These will be repeated
   across pages as appropriate.}
-\item{header_n - The }
+\item{header_n - The counts of the population groups that is used for column
+  headers and percentages.}
 \item{pop_data - The data.frame containing population data.}
 \item{treat_var - The treatment variable arms/sets are split up on.}
 \item{layers - The logic used to prepare and render the table. Stored as a

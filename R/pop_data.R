@@ -1,14 +1,18 @@
 ### Populations Functions
 
+#' Title
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom dplyr n
 default_header_n <- function(table) {
-  tplyr_header_n(table) <- evalq({
+  evalq({
     df <- pop_data %>%
       group_by(!!pop_treat_var) %>%
-      summarise(N = n())
+      summarise(N = dplyr::n())
 
-    vec <- unlist(df[, 2])
-    names(vec) <- unlist(df[, 1])
-    vec
+    header_n <- unlist(df[, 2])
+    names(header_n) <- unlist(df[, 1])
+    rm(df)
   }, envir = table)
   table
 }

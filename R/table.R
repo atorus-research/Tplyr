@@ -16,7 +16,8 @@
 #' \item{target - The main piece of data the table will be created from.}
 #' \item{headers - The column headers for the table. These will be repeated
 #'   across pages as appropriate.}
-#' \item{header_n - The }
+#' \item{header_n - The counts of the population groups that is used for column
+#'   headers and percentages.}
 #' \item{pop_data - The data.frame containing population data.}
 #' \item{treat_var - The treatment variable arms/sets are split up on.}
 #' \item{layers - The logic used to prepare and render the table. Stored as a
@@ -24,10 +25,12 @@
 #' }
 #'
 #' @param target Source data used to create the table. A 'data.frame' object.
-#' @param treat_var Treatment variable in target used to split treatment groups.
+#'   This is the analysis dataset the table is generated from.
+#' @param treat_var Treatment variable in target used to split treatment
+#'   groups.
 #'
-#' @return A safety_table object which is an environment where the code
-#'   creating the table is evaluated.
+#' @return A safety_table object which is a parent environment for the layers
+#'   where the code creating the table is evaluated.
 #'
 #' @importFrom rlang env
 #' @importFrom magrittr %>%
@@ -43,7 +46,7 @@ tplyr_table <- function(target, treat_var) {
   if(missing(target)){
     #return a blank environment if no table information is passed
     return(structure(rlang::env(),
-           class = c("tplyr_table", "environment")))
+                     class = c("tplyr_table", "environment")))
   }
   new_tplyr_table(target, enquo(treat_var))
 }
@@ -55,9 +58,9 @@ new_tplyr_table <- function(target, treat_var) {
 
   structure(rlang::env(
     target = target,
-    layers = list()
-  ),
-           class = c("tplyr_table", "environment")) %>%
+    layers = structure(list(),
+                       class = "tplyr_layer_container")
+  ), class = c("tplyr_table", "environment")) %>%
     set_tplyr_treat_var(!!treat_var) %>%
     set_tplyr_pop_data(target) %>%
     set_tplyr_pop_treat_var(!!treat_var) %>%
@@ -71,11 +74,11 @@ validate_tplyr_table <- function(target) {
 
   # table should be a data.frame
   assertthat::assert_that(inherits(target, "data.frame"),
-    msg = paste0("'pop_data' argument passed to tplyr_table must be a data.frame,",
-                  "\n",
-                  "instead a class of: '",
-                  class(target),
-                  "' was passed."))
+                          msg = paste0("'pop_data' argument passed to tplyr_table must be a data.frame,",
+                                       "\n",
+                                       "instead a class of: '",
+                                       class(target),
+                                       "' was passed."))
 }
 
 

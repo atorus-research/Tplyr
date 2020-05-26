@@ -8,7 +8,8 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
   expect_s3_class(tab, "tplyr_table")
   expect_s3_class(tab, "environment")
-  expect_setequal(env_names(tab), c("target", "layers", "pop_data", "treat_var", "pop_treat_var"))
+  expect_setequal(env_names(tab), c("target", "layers", "pop_data",
+                                    "treat_var", "pop_treat_var", "header_n"))
 })
 
 test_that("tplyr_table comes with empty list binded on 'layers'", {
