@@ -228,8 +228,12 @@ tplyr_treat_var <- function(table) {
 `tplyr_treat_var<-` <- function(x, value) {
   value <- rlang::enquo(value)
 
+  assertthat::assert_that(!quo_is_missing(value),
+                          msg = "A treat_var argument must be supplied")
+
   assertthat::assert_that(class(rlang::quo_get_expr(value)) == "name",
-                          as.character(rlang::quo_get_expr(value)) %in% names(x$target))
+                          as.character(rlang::quo_get_expr(value)) %in% names(x$target),
+                          msg = "Cannot find treat_var column in target dataset")
 
   rlang::env_bind(x, treat_var = value)
 
@@ -246,8 +250,12 @@ tplyr_treat_var <- function(table) {
 set_tplyr_treat_var <- function(table, treat_var) {
   treat_var <- rlang::enquo(treat_var)
 
+  assertthat::assert_that(!quo_is_missing(treat_var),
+                          msg = "A treat_var argument must be supplied")
+
   assertthat::assert_that(class(rlang::quo_get_expr(treat_var)) == "name",
-                          as.character(rlang::quo_get_expr(treat_var)) %in% names(table$target))
+                          as.character(rlang::quo_get_expr(treat_var)) %in% names(table$target),
+                          msg = "Cannot find treat_var column in target dataset")
 
   rlang::env_bind(table, treat_var = treat_var)
 
