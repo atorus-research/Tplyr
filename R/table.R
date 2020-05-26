@@ -56,14 +56,17 @@ tplyr_table <- function(target, treat_var) {
 new_tplyr_table <- function(target, treat_var) {
   validate_tplyr_table(target)
 
+  # Create table object with default bindings and class of `tplyr_table`
   structure(rlang::env(
     target = target,
     layers = structure(list(),
                        class = c("tplyr_layer_container", "list"))
   ), class = c("tplyr_table", "environment")) %>%
+    # Set default bindings with standard setter methods
     set_tplyr_treat_var(!!treat_var) %>%
     set_tplyr_pop_data(target) %>%
     set_tplyr_pop_treat_var(!!treat_var) %>%
+    # header_n is set with a default here instead of standard function
     default_header_n()
 
 }
