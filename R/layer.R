@@ -143,7 +143,7 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
     sort <- 'ascending' # Default sorting to ascending
     sort_var <- as.character(quo_get_expr(target_var)) # Sort by the target variable itself
     formatter <- as.character # default format of just the function `as.character`
-    layers <- structure(list(), class=append("tplyr_layer_container", class(list())))
+    layers <- structure(list(), class=append("tplyr_layer_container", "list"))
   }, envir = e)
 
   # Create the object
