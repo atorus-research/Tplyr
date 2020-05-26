@@ -59,7 +59,8 @@ test_that("treat_var binding attaches treat_var properly", {
 test_that("treat_var throws errors as expected", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
-  expect_error(tplyr_treat_var(tab) <- quo(c), "x = as.character")
-  expect_error(tplyr_treat_var(tab) <- "A", "rlang::quo")
+  expect_error(tplyr_treat_var(tab) <- quo(c), "Cannot find treat_var")
+  expect_error(tplyr_treat_var(tab) <- "A", "Cannot find treat_var")
+  expect_error(set_tplyr_treat_var(tab), "A treat_var argument must be")
   expect_silent(set_tplyr_treat_var(tab, b))
 })
