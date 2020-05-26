@@ -9,7 +9,7 @@
 #' used to create the table.
 #'
 #' The tplyr_table is the parent environment of all the binded tplyr_layers.
-#' The table can contain variables that are visiable to all layers.
+#' The table can contain variables that are visable to all layers.
 #'
 #' @section Environment Bindings/Properties:
 #' \itemize{
@@ -59,7 +59,7 @@ new_tplyr_table <- function(target, treat_var) {
   structure(rlang::env(
     target = target,
     layers = structure(list(),
-                       class = "tplyr_layer_container")
+                       class = c("tplyr_layer_container", "list"))
   ), class = c("tplyr_table", "environment")) %>%
     set_tplyr_treat_var(!!treat_var) %>%
     set_tplyr_pop_data(target) %>%

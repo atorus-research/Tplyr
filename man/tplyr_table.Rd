@@ -24,7 +24,7 @@ layer environments passed to a 'tplyr_table' are used to evaluate the code
 used to create the table.
 
 The tplyr_table is the parent environment of all the binded tplyr_layers.
-The table can contain variables that are visiable to all layers.
+The table can contain variables that are visable to all layers.
 }
 \section{Environment Bindings/Properties}{
 

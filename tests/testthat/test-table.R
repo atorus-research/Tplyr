@@ -14,7 +14,7 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
 
 test_that("tplyr_table comes with empty list binded on 'layers'", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
-  expect_equal(tab$layers, list())
+  expect_equal(tab$layers, structure(list(), class = c("tplyr_layer_container", "list")))
 })
 
 ### Errors ###
