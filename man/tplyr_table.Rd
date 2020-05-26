@@ -4,20 +4,27 @@
 \alias{tplyr_table}
 \title{Safety Table}
 \usage{
-tplyr_table(target)
+tplyr_table(target, treat_var)
 }
 \arguments{
-\item{target}{Source data used to create the table. A 'data.frame' object.}
+\item{target}{Source data used to create the table. A 'data.frame' object.
+This is the analysis dataset the table is generated from.}
+
+\item{treat_var}{Treatment variable in target used to split treatment
+groups.}
 }
 \value{
-A safety_table object which is an environment where the code
-  creating the table is evaluated.
+A safety_table object which is a parent environment for the layers
+  where the code creating the table is evaluated.
 }
 \description{
 The function `tplyr_table()` creates a 'tplyr_table' object which is composed
 of a table and table display options, and logic for creating the table. The
 layer environments passed to a 'tplyr_table' are used to evaluate the code
 used to create the table.
+
+The tplyr_table is the parent environment of all the binded tplyr_layers.
+The table can contain variables that are visable to all layers.
 }
 \section{Environment Bindings/Properties}{
 
@@ -25,6 +32,8 @@ used to create the table.
 \item{target - The main piece of data the table will be created from.}
 \item{headers - The column headers for the table. These will be repeated
   across pages as appropriate.}
+\item{header_n - The counts of the population groups that is used for column
+  headers and percentages.}
 \item{pop_data - The data.frame containing population data.}
 \item{treat_var - The treatment variable arms/sets are split up on.}
 \item{layers - The logic used to prepare and render the table. Stored as a
@@ -33,13 +42,9 @@ used to create the table.
 }
 
 \examples{
-df <- data.frame(a = 1:9, b = 10:18, c = rep(c("Placebo", "Low", "High"), 3))
-adsl <- data.frame(d = letters[1:9])
+iris_tab <- tplyr_table(iris, Species)
 
-tab <- tplyr_table(df) \%>\%
-  set_tplyr_treat_var(c) \%>\%
-  set_tplyr_pop_data(adsl) \%>\%
-  set_tplyr_header(c("Placebo", "Low", "High"))
+
 }
 \seealso{
 [layer()]
