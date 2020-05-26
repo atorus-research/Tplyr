@@ -1,6 +1,6 @@
-### header tests ###
+##### header tests #####
 test_that("header binding attaches headers properly", {
-  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20))
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
   expect_error(tplyr_header(tab), "object 'headers' not found")
 
@@ -12,7 +12,7 @@ test_that("header binding attaches headers properly", {
 })
 
 test_that("header binding throws expected errors", {
-  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20))
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
   expect_error(tplyr_header(tab) <- c(1, 2), "'headers' argument passed")
   expect_error(tplyr_header(tab) <- list("a", "b"), "'headers' argument passed")
@@ -22,11 +22,12 @@ test_that("header binding throws expected errors", {
   expect_silent(tplyr_header(tab) <- c("a", "b"))
 })
 
-### pop_data tests ###
+##### pop_data tests #####
 test_that("pop_data binding attaches pop_data properly", {
-  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20))
+  df <- data.frame(a = 1:10, b = 11:20)
+  tab <- tplyr_table(df, a)
 
-  expect_error(tplyr_pop_data(tab), "object 'pop_data' not found")
+  expect_reference(tplyr_pop_data(tab), df)
 
   tplyr_pop_data(tab) <- iris
   expect_reference(tplyr_pop_data(tab), iris)
@@ -36,18 +37,29 @@ test_that("pop_data binding attaches pop_data properly", {
 })
 
 test_that("pop_data binding throws expected errors", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
+  expect_error(tplyr_pop_data(tab) <- "a", "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- iris3, "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- NA, "'pop_data' argument passed")
+  expect_error(tplyr_pop_data(tab) <- NULL, "'pop_data' argument passed")
+  expect_silent(tplyr_pop_data(tab) <- iris)
 })
 
-### treat_var tests ###
+##### treat_var tests #####
 test_that("treat_var binding attaches treat_var properly", {
-  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20))
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
-  expect_error(tplyr_treat_var(tab), "object 'treat_var' not found")
-
-  tab <- set_tplyr_treat_var(tab, a)
   expect_equal(tplyr_treat_var(tab), quo(a))
 
   tab <- set_tplyr_treat_var(tab, b)
   expect_equal(tplyr_treat_var(tab), quo(b))
+})
+
+test_that("treat_var throws errors as expected", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
+
+  expect_error(tplyr_treat_var(tab) <- quo(c), "x = as.character")
+  expect_error(tplyr_treat_var(tab) <- "A", "rlang::quo")
+  expect_silent(set_tplyr_treat_var(tab, b))
 })

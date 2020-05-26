@@ -8,13 +8,14 @@
 \usage{
 tplyr_pop_data(table)
 
+tplyr_pop_data(table)
+
 tplyr_pop_data(x) <- value
 
 set_tplyr_pop_data(table, pop_data)
 }
 \arguments{
-\item{table}{A \code{tplyr_table} object to set or return population data
-information.}
+\item{table}{A \code{tplyr_table} object.}
 
 \item{x}{A \code{tplyr_table} object.}
 
@@ -26,6 +27,10 @@ information.}
 For \code{tplyr_pop_data} the pop_data binding of the \code{tplyr_table}
   object. For \code{tplyr_pop_data<-} nothing is returned, the pop_data binding
   is set silently. For \code{set_tplyr_pop_data} the modified object.
+
+For \code{tplyr_pop_data} the pop_data binding of the
+  \code{tplyr_table} object. For \code{tplyr_pop_data<-} and
+  \code{set_tplyr_pop_data} the modified object.
 }
 \description{
 The population data is used when calculating N counts in the column headers,
