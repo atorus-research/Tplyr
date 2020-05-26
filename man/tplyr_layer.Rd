@@ -44,6 +44,19 @@ See the \href{<link tbd}{vignette} for a more extensive explanation of how these
 }
 \section{\code{tplyr_layer} Object Structure}{
 
+\describe{
+\item{\code{type}}{A string indicating the layer type, which controls the summary that will be performed.}
+\item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
+\item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
+within the target dataset Text strings submitted do not need to exist in the target dataset.}
+\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+\item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
+  Set by default to the value of \code{target_var}}
+\item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
+\item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
+any sublayers of the current layer.}
+\item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
+}
 }
 
 \examples{
