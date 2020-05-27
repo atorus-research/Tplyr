@@ -19,7 +19,7 @@ Authors@R:
     person(given = "Atorus Research LLC",
            role = "cph")
     )
-Description: 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation 
+Description: 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

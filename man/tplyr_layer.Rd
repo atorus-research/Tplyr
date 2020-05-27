@@ -4,22 +4,22 @@
 \alias{tplyr_layer}
 \title{Create a \code{tplyr_layer} object}
 \usage{
-tplyr_layer(parent, type, by = NULL, target_var = NULL, where = NULL, ...)
+tplyr_layer(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
 \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
 the layer is a subgroup.}
 
-\item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
-descriptive statistics, or "shift" for shift table counts}
-
-\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
-
 \item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
 the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
+\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
+
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
+
+\item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
+descriptive statistics, or "shift" for shift table counts}
 
 \item{...}{Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 \href{<link tbd>}{vignette} on adding extensions.}
@@ -62,7 +62,8 @@ any sublayers of the current layer.}
 \examples{
 tab <- tplyr_table(iris, Sepal.Width)
 
-l <- tplyr_layer(tab, type='count', by=vars('Label Text', AEBODSYS), target_var=AEDECOD, where= AESER == "Y")
+l <- tplyr_layer(tab, type='count', by=vars('Label Text', Species),
+                 target_var=Species, where= Sepal.Width < 5.5)
 
 }
 \seealso{

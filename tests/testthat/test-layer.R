@@ -3,10 +3,9 @@ context("layer.R")
 tplyr_debug(FALSE)
 
 ## Check empty return ----
-test_that("tplyr_layer returns an empty envrionment of class `tplyr_layer` when passed no arguemnts", {
-  l <- tplyr_layer()
-  expect_true(is.environment(l))
-  expect_equal(length(rlang::env_names(l)), 0)
+test_that("`tplyr_layer`` errors when no arguments provided", {
+  expect_error(tplyr_layer())
+
 })
 
 ## Check that the object classes returned are appropriate ----
