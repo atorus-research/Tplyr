@@ -13,7 +13,7 @@
 #' @examples
 #' tab <- tplyr_table(iris, Species)
 #'
-#' tplyr_header(tab) <- c("Sepal.Length", "Sepal.Width", "Petal.Length",
+#' header(tab) <- c("Sepal.Length", "Sepal.Width", "Petal.Length",
 #'                        "Petal.Width", "Species")
 #'
 #' @rdname headers
