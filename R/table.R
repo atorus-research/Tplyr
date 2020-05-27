@@ -32,8 +32,6 @@
 #' @return A safety_table object which is a parent environment for the layers
 #'   where the code creating the table is evaluated.
 #'
-#' @importFrom rlang env
-#' @importFrom magrittr %>%
 #' @seealso [layer()]
 #'
 #' @examples
@@ -51,7 +49,6 @@ tplyr_table <- function(target, treat_var) {
   new_tplyr_table(target, enquo(treat_var))
 }
 
-#' @importFrom rlang env
 #' @noRd
 new_tplyr_table <- function(target, treat_var) {
   validate_tplyr_table(target)
@@ -71,7 +68,6 @@ new_tplyr_table <- function(target, treat_var) {
 
 }
 
-#' @importFrom assertthat assert_that
 #' @noRd
 validate_tplyr_table <- function(target) {
 

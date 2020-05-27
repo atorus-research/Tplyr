@@ -1,7 +1,7 @@
 ### Logging Functions
 
 
-#' Toggle Tplyr debug messaging
+#' Toggle 'Tplyr' debug messaging
 #'
 #' @param status TRUE/FALSE - Turns status messaging on or off
 #'

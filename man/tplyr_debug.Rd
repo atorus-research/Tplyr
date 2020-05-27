@@ -2,7 +2,7 @@
 % Please edit documentation in R/log.R
 \name{tplyr_debug}
 \alias{tplyr_debug}
-\title{Toggle Tplyr debug messaging}
+\title{Toggle 'Tplyr' debug messaging}
 \usage{
 tplyr_debug(status)
 }
@@ -13,7 +13,7 @@ tplyr_debug(status)
 Nothing
 }
 \description{
-Toggle Tplyr debug messaging
+Toggle 'Tplyr' debug messaging
 }
 \examples{
 tplyr_debug(TRUE)

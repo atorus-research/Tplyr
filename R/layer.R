@@ -55,7 +55,6 @@
 #' l <- tplyr_layer(tab, type='count', by="AEBODSYS", target_var=AEDECOD, where= AESER == "Y")
 #'
 #' @seealso \code{\link{tplyr_table}}
-#' @importFrom rlang env enquo enquos
 tplyr_layer <- function(parent, type, by=NULL, target_var=NULL, where=NULL, ...) {
 
   # Return a null object if the parent is missing -
@@ -104,7 +103,6 @@ as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
 #' Create a new tplyr layer
 #'
 #' @inheritParams tplyr_layer
-#' @importFrom rlang caller_env abort
 #' @noRd
 new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- new_tplyr_layer')
@@ -156,7 +154,6 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
 #' Validate a tplyr layer
 #'
 #' @inheritParams tplyr_layer
-#' @importFrom rlang is_quosure quo_get_expr quo_is_null abort
 #' @noRd
 validate_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- validate_tplyr_layer')
