@@ -20,6 +20,7 @@ default_header_n <- function(table) {
 
     header_n <- unlist(df[, 2])
     names(header_n) <- unlist(df[, 1])
+    header <- names(header_n)
     rm(df)
   }, envir = table)
   table

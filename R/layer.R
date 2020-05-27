@@ -34,7 +34,7 @@
 #'
 #' @section \code{tplyr_layer} Object Structure:
 #' \describe{
-#' \item{\code{type}}{A string indicating the layer type, which controls the summary that will be performed.}
+#' \item{\code{type}}{This is an attribute. A string indicating the layer type, which controls the summary that will be performed.}
 #' \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
 #' \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 #' within the target dataset Text strings submitted do not need to exist in the target dataset.}
@@ -49,13 +49,11 @@
 #' @export
 #'
 #' @examples
-#' tab <- env(test_data = c(1,2,3,4))
-#' class(tab) <- append('tplyr_table', class(tab))
+#' tab <- tplyr_table(iris, Sepal.Width)
 #'
-#' l <- tplyr_layer(tab, type='count', by="AEBODSYS", target_var=AEDECOD, where= AESER == "Y")
+#' l <- tplyr_layer(tab, type='count', by=vars('Label Text', AEBODSYS), target_var=AEDECOD, where= AESER == "Y")
 #'
 #' @seealso \code{\link{tplyr_table}}
-#' @importFrom rlang env enquo enquos
 tplyr_layer <- function(parent, type, by=NULL, target_var=NULL, where=NULL, ...) {
 
   # Return a null object if the parent is missing -
@@ -104,7 +102,6 @@ as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
 #' Create a new tplyr layer
 #'
 #' @inheritParams tplyr_layer
-#' @importFrom rlang caller_env abort
 #' @noRd
 new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- new_tplyr_layer')
@@ -156,7 +153,6 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
 #' Validate a tplyr layer
 #'
 #' @inheritParams tplyr_layer
-#' @importFrom rlang is_quosure quo_get_expr quo_is_null abort
 #' @noRd
 validate_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- validate_tplyr_layer')

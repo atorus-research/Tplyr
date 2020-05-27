@@ -32,8 +32,6 @@
 #' @return A safety_table object which is a parent environment for the layers
 #'   where the code creating the table is evaluated.
 #'
-#' @importFrom rlang env
-#' @importFrom magrittr %>%
 #' @seealso [layer()]
 #'
 #' @examples
@@ -44,14 +42,17 @@
 tplyr_table <- function(target, treat_var) {
 
   if(missing(target)){
-    #return a blank environment if no table information is passed
+    # return a blank environment if no table information is passed. This can be
+    # used as a placeholder when creating a table if the dataset is not available.
     return(structure(rlang::env(),
                      class = c("tplyr_table", "environment")))
   }
   new_tplyr_table(target, enquo(treat_var))
 }
 
-#' @importFrom rlang env
+#' Construct new tplyr_table
+#'
+#' @inheritParams tplyr_table
 #' @noRd
 new_tplyr_table <- function(target, treat_var) {
   validate_tplyr_table(target)
@@ -63,15 +64,19 @@ new_tplyr_table <- function(target, treat_var) {
                        class = c("tplyr_layer_container", "list"))
   ), class = c("tplyr_table", "environment")) %>%
     # Set default bindings with standard setter methods
-    set_tplyr_treat_var(!!treat_var) %>%
-    set_tplyr_pop_data(target) %>%
-    set_tplyr_pop_treat_var(!!treat_var) %>%
+    set_treat_var(!!treat_var) %>%
+    set_pop_data(target) %>%
+    set_pop_treat_var(!!treat_var) %>%
     # header_n is set with a default here instead of standard function
     default_header_n()
-
 }
 
-#' @importFrom assertthat assert_that
+#' Validate tplyr_table target dataset
+#'
+#' Most validation is done in the binding functions to reduce code duplication
+#'
+#' @param target target dataset passed from new_tplyr_table
+#'
 #' @noRd
 validate_tplyr_table <- function(target) {
 
