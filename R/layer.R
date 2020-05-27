@@ -51,13 +51,14 @@
 #' @examples
 #' tab <- tplyr_table(iris, Sepal.Width)
 #'
-#' l <- tplyr_layer(tab, type='count', by=vars('Label Text', AEBODSYS), target_var=AEDECOD, where= AESER == "Y")
+#' l <- tplyr_layer(tab, type='count', by=vars('Label Text', Species),
+#'                  target_var=Species, where= Sepal.Width < 5.5)
 #'
 #' @seealso \code{\link{tplyr_table}}
-tplyr_layer <- function(parent, type, by=NULL, target_var=NULL, where=NULL, ...) {
+tplyr_layer <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
 
-  # Return a null object if the parent is missing -
-  if(missing(parent)) return(structure(env(), class = c("tplyr_layer", "environment")))
+  # Return a null object if the parent is missing
+  if(missing(parent)) abort("The `parent` argument must be provided.")
 
   # If necessary variables provided then build the layer
   as_tplyr_layer(parent, type=type, by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
@@ -68,33 +69,38 @@ tplyr_layer <- function(parent, type, by=NULL, target_var=NULL, where=NULL, ...)
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-as_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
+as_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   UseMethod("as_tplyr_layer")
 }
 
-## tplyr table
-as_tplyr_layer.tplyr_table <- function(parent, type, by, target_var, where, ...) {
+#' S3 method for tplyr layer creation of \code{tplyr_table} object as parent
+#' @noRd
+as_tplyr_layer.tplyr_table <- function(parent, target_var, by, where, type, ...) {
   dmessage('Dispatch tplyr_table')
-  new_tplyr_layer(parent, type, by, target_var, where, ...)
+  new_tplyr_layer(parent, target_var, by, where, type, ...)
 }
 
-## tplyr layer
-as_tplyr_layer.tplyr_layer <- function(parent, type, by, target_var, where, ...) {
+#' S3 method for tplyr layer creation of \code{tplyr_layer}  object as parent
+#' @noRd
+as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage('Dispatch tplyr_layer')
-  layer <- new_tplyr_layer(parent, type, by, target_var, where, ...)
+  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
   class(layer) <- append('tplyr_subgroup_layer', class(layer))
   layer
 }
 
-as_tplyr_layer.tplyr_subgroup_layer <- function(parent, type, by, target_var, where, ...) {
+#' S3 method for tplyr layer creation of \code{tplyr_subgroup_layer}  object as parent
+#' @noRd
+as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage('Dispatch tplyr_layer')
-  layer <- new_tplyr_layer(parent, type, by, target_var, where, ...)
+  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
   class(layer) <- unique(append('tplyr_subgroup_layer', class(layer)))
   layer
 }
 
-## Unsupported object
-as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
+#' S3 method to produce error for unsupported objects as parent
+#' @noRd
+as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
   dmessage('Dispatch default')
   stop('Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.')
 }
@@ -103,11 +109,11 @@ as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
+new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage('--- new_tplyr_layer')
 
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
-  arg_list <- as.list(match.call())[-c(1:3)]
+  arg_list <- as.list(match.call())[-c(1, 2, 6)]
 
   # Insert parent to the front of the list to prepare the call
   arg_list <- append(arg_list, parent, after=0)
@@ -131,7 +137,7 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   }
 
   # Run validation
-  validate_tplyr_layer(parent, type, by, target_var, where)
+  validate_tplyr_layer(parent, target_var, by, where, type)
 
   # Create the new environment by contructing the env call
   e <- do.call('env', arg_list)
@@ -154,7 +160,7 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-validate_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
+validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage('--- validate_tplyr_layer')
 
 
