@@ -4,7 +4,7 @@
 \alias{tplyr_layer}
 \title{Create a \code{tplyr_layer} object}
 \usage{
-tplyr_layer(parent, type, by, target_var, where, ...)
+tplyr_layer(parent, type, by = NULL, target_var = NULL, where = NULL, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
@@ -14,8 +14,7 @@ the layer is a subgroup.}
 \item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
 descriptive statistics, or "shift" for shift table counts}
 
-\item{by}{Character Vector. Required. Variable to group the summary being performed, or label of the group to be provided
-in the stub. Can be a combination of both.}
+\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
 \item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
 the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
@@ -45,6 +44,19 @@ See the \href{<link tbd}{vignette} for a more extensive explanation of how these
 }
 \section{\code{tplyr_layer} Object Structure}{
 
+\describe{
+\item{\code{type}}{A string indicating the layer type, which controls the summary that will be performed.}
+\item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
+\item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
+within the target dataset Text strings submitted do not need to exist in the target dataset.}
+\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+\item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
+  Set by default to the value of \code{target_var}}
+\item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
+\item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
+any sublayers of the current layer.}
+\item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
+}
 }
 
 \examples{

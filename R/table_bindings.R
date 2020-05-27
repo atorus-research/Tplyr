@@ -10,8 +10,6 @@
 #'   object. For \code{tplyr_header<-} and \code{set_tplyr_header} the modified
 #'   object.
 #'
-#' @importFrom rlang env_get
-#'
 #' @examples
 #' tab <- tplyr_table(iris, Species)
 #'
@@ -26,9 +24,6 @@ tplyr_header <- function(table) {
 
 #' @param x A \code{tplyr_table} object
 #' @param value A character vector detailing the column headers
-#'
-#' @importFrom rlang env_bind
-#' @importFrom assertthat assert_that
 #'
 #' @rdname headers
 #' @export
@@ -49,9 +44,6 @@ tplyr_header <- function(table) {
 
 #' @param table A \code{tplyr_table} object.
 #' @param headers A character vector detailing the column headers
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom rlang env_bind
 #'
 #' @rdname headers
 #' @export
@@ -84,7 +76,6 @@ set_tplyr_header <- function(table, headers) {
 #'   object. For \code{tplyr_pop_data<-} nothing is returned, the pop_data binding
 #'   is set silently. For \code{set_tplyr_pop_data} the modified object.
 #'
-#' @importFrom rlang env_get
 #' @export
 #' @rdname pop_data
 tplyr_pop_data <- function(table) {
@@ -95,7 +86,6 @@ tplyr_pop_data <- function(table) {
 #'
 #' @param table A \code{tplyr_table} object
 #'
-#' @importFrom rlang env_get
 #'
 #' @return For \code{tplyr_header_n} the header_n binding of the
 #'   \code{tplyr_table} object. For \code{tplyr_header_n<-} and
@@ -110,11 +100,6 @@ tplyr_header_n <- function(table) {
 #' @param x A \code{tplyr_table} object
 #' @param value A named numeric vector. Names of vector should match headers.
 #'
-#' @importFrom rlang env_bind
-#' @importFrom rlang env_has
-#' @importFrom rlang env_get
-#' @importFrom assertthat assert_that
-#'
 #' @export
 #' @rdname header_n
 `tplyr_header_n<-` <- function(x, value) {
@@ -126,11 +111,6 @@ tplyr_header_n <- function(table) {
 }
 
 #' @param header_n A named numeric vector. Names of vector should match headers.
-#'
-#' @importFrom rlang env_bind
-#' @importFrom rlang env_get
-#' @importFrom rlang env_has
-#' @importFrom assertthat assert_that
 #'
 #' @export
 #' @rdname header_n
@@ -150,8 +130,6 @@ set_tplyr_header_n <- function(table, header_n) {
 #'   \code{tplyr_table} object. For \code{tplyr_pop_data<-} and
 #'   \code{set_tplyr_pop_data} the modified object.
 #'
-#' @importFrom rlang env_get
-#'
 #' @export
 #' @rdname pop_data
 tplyr_pop_data <- function(table) {
@@ -160,9 +138,6 @@ tplyr_pop_data <- function(table) {
 
 #' @param x A \code{tplyr_table} object.
 #' @param value A data.frame with population level information
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom rlang env_bind
 #'
 #' @export
 #' @rdname pop_data
@@ -180,9 +155,6 @@ tplyr_pop_data <- function(table) {
 }
 
 #' @param pop_data A data.frame with population level information
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom rlang env_bind
 #'
 #' @export
 #' @rdname pop_data
@@ -208,8 +180,6 @@ set_tplyr_pop_data <- function(table, pop_data) {
 #'   object. For \code{tplyr_treat_var<-} nothing is returned, the treat_var binding
 #'   is set silently. For \code{set_tplyr_treat_var} the modified object.
 #'
-#' @importFrom rlang env_get
-#'
 #' @export
 #' @rdname treat_var
 tplyr_treat_var <- function(table) {
@@ -219,9 +189,6 @@ tplyr_treat_var <- function(table) {
 #' @param x A \code{tplyr_table} object to set or return treatment variable
 #'   the table is split by.
 #' @param value A treatment variable. quosure?
-#'
-#' @importFrom rlang env_bind
-#' @importFrom rlang enquo
 #'
 #' @export
 #' @rdname treat_var
@@ -241,9 +208,6 @@ tplyr_treat_var <- function(table) {
 }
 
 #' @param treat_var A treatment variable. quosure?
-#'
-#' @importFrom rlang env_bind
-#' @importFrom rlang enquo
 #'
 #' @export
 #' @rdname treat_var
@@ -269,8 +233,6 @@ set_tplyr_treat_var <- function(table, treat_var) {
 #' @return For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}
 #'   object. For \code{tplyr_pop_treat_var<-} and \code{set_tplyr_pop_treat_var} the modified
 #'   object.
-#'
-#' @importFrom rlang env_get
 #'
 #' @rdname pop_treat_var
 #' @export
