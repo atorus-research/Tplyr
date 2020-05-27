@@ -33,18 +33,18 @@
 #'   as listed below.
 #'
 #' @section \code{tplyr_layer} Object Structure:
-#' @itemize{
-#' \item{type - A string indicating the layer type, which controls the summary that will be performed.}
-#' \item{target_var - A quosure of a name, which is the variable on which a summary will be performed.}
-#' \item{by - A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
+#' \describe{
+#' \item{\code{type}}{A string indicating the layer type, which controls the summary that will be performed.}
+#' \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
+#' \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 #' within the target dataset Text strings submitted do not need to exist in the target dataset.}
-#' \item{where - A quosure of a call that containers the filter logic used to subset the target dataset.}
-#' \item{sort_vars - A character vector containingn the variables that will be used to sort the results of the summary.
+#' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+#' \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
 #'   Set by default to the value of \code{target_var}}
-#' \item{sort - A string containing the sort method. Defaults to 'asc' for ascending.}
-#' \item{layers - A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
+#' \item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
+#' \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 #' any sublayers of the current layer.}
-#' \item{formatter - A function used to create the string formats for the resulting numbers in output presentation.}
+#' \item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 #' }
 #' @export
 #'
@@ -104,6 +104,7 @@ as_tplyr_layer.default <- function(parent, type, by, target_var, where, ...) {
 #' Create a new tplyr layer
 #'
 #' @inheritParams tplyr_layer
+#' @importFrom rlang caller_env abort
 #' @noRd
 new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- new_tplyr_layer')
@@ -141,7 +142,7 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   # Add non-parameter specified defaults into the environment.
   evalq({
     sort <- 'ascending' # Default sorting to ascending
-    sort_var <- as.character(quo_get_expr(target_var)) # Sort by the target variable itself
+    sort_var <- target_var # Sort by the target variable itself
     formatter <- as.character # default format of just the function `as.character`
     layers <- structure(list(), class=append("tplyr_layer_container", "list"))
   }, envir = e)
@@ -155,6 +156,7 @@ new_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
 #' Validate a tplyr layer
 #'
 #' @inheritParams tplyr_layer
+#' @importFrom rlang is_quosure quo_get_expr quo_is_null abort
 #' @noRd
 validate_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
   dmessage('--- validate_tplyr_layer')
@@ -181,6 +183,7 @@ validate_tplyr_layer <- function(parent, type, by, target_var, where, ...) {
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
   # Make sure `target_var` exists in the target data.frame
+  target <- NULL # Mask global definitions check
   vname <- as.character(quo_get_expr(target_var))
   vnames <- evalq(names(target), envir=parent)
   assert_that(vname %in% vnames,
