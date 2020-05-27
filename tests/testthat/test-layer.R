@@ -46,11 +46,11 @@ test_that("Environment contains proper bindings when call is proper", {
 test_that("`Type` attribute is set properly", {
   t <- tplyr_table(iris, Sepal.Width)
   l1 <- tplyr_layer(t, target_var=Species, type='count')
-  expect_equal(attr(l1, 'type'), 'count')
+  expect_s3_class(l1, 'count_layer')
   l2 <- tplyr_layer(t, target_var=Species, type='desc')
-  expect_equal(attr(l2, 'type'), 'desc')
+  expect_s3_class(l2, 'desc_layer')
   l3 <- tplyr_layer(t, target_var=Species, type='shift')
-  expect_equal(attr(l3, 'type'), 'shift')
+  expect_s3_class(l3, 'shift_layer')
 })
 
 ## Error checks ----

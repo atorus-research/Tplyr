@@ -152,8 +152,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 
   # Create the object
   structure(e,
-            class=append('tplyr_layer', class(e)),
-            type=type)
+            class=append(c('tplyr_layer', paste0(type,'_layer')), class(e)))
 }
 
 #' Validate a tplyr layer
