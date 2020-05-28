@@ -1,18 +1,36 @@
 Package: Tplyr
-Title: What the Package Does (One Line, Title Case)
+Title: A Grammar of Clinical Data Summary
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(
+    person(given = "Eli",
+           family = "Miller",
+           role = "aut",
+           email = "Eli.Miller@AtorusResearch.com",
+           comment = c(ORCID = "0000-0002-2127-9456")),
+    person(given = "Mike",
+           family = "Stackhouse",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "mike.stackhouse@atorusresearch.com"),
+    person(given = "Ashley", 
+           family = "Tarasiewicz",
+           email = "Ashley.Tarasiewicz@atorusresearch.com", 
+           role = "aut"),
+    person(given = "Atorus Research LLC",
+           role = "cph")
+    )
+Description: 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends:
+    rlang (>= 0.4.6),
+    assertthat (>= 0.2.1),
+    magrittr (>= 1.5),
+    dplyr (>= 0.8.5)
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 7.0.2
