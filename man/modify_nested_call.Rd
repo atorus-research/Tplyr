@@ -4,10 +4,12 @@
 \alias{modify_nested_call}
 \title{Extract the top function from a nested call and insert desired arguments}
 \usage{
-modify_nested_call(c, ...)
+modify_nested_call(c, allowable_calls = getNamespaceExports("Tplyr"), ...)
 }
 \arguments{
 \item{c}{An R expression}
+
+\item{allowable_calls}{A character vector of function names allowed to be called within a piping sequence}
 
 \item{...}{Parameters to insert into topmost call}
 }
@@ -16,4 +18,8 @@ The original call object with
 }
 \description{
 Extract the top function from a nested call and insert desired arguments
+}
+\examples{
+modify_nested_call(mean(c(1,2,3)) \%>\% print(), na.rm=TRUE)
+
 }

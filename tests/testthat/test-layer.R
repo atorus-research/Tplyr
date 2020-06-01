@@ -3,7 +3,7 @@ context("layer.R")
 tplyr_debug(FALSE)
 
 ## Check empty return ----
-test_that("`tplyr_layer`` errors when no arguments provided", {
+test_that("`tplyr_layer` errors when no arguments provided", {
   expect_error(tplyr_layer())
 
 })

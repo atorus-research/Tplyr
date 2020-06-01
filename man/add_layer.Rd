@@ -7,11 +7,47 @@
 add_layer(parent, layer)
 }
 \arguments{
-\item{layer}{}
+\item{parent}{A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object}
+
+\item{layer}{A layer construction function and associated modifier functionns}
 }
 \value{
-
+A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} with a new layer inserted into the \code{layer}
+  binding
 }
 \description{
-Attach a layer to a \code{tplyr_table} object
+\code{add_layer} inserts a \code{tplyr_layer} into the \code{layers} container of a \code{tplyr_table} object. This allows
+for a tidy style of programming (using \code{magrittr} piping - \code{\%>\%}) with a secondary advantage - the construction
+of the layer object may consist of a series of piped functions itself.
+
+\code{tplyr} encourages a user to view the construction of a table as a series of "layers". The construction of each of these
+layers are isolated and independent of one another - but each of these layers are children of the table itself. \code{add_layer}
+isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
+The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
+construct your layer within the \code{layer} paramater.
+
+Sometimes layers may contain subgroups. For example, a total count row can be viewed as a separate layer with sub-group counts
+intermingled between each total group (for example, within adverse event tables). \code{add_layer} and the \code{tplyr_layer}
+objects handle this by creating \code{tplyr_subgroup_layer} objects. This is as simple as using \code{add_layer} within your current
+\code{add_layer} call, thus creating a subgroup layer. \code{tplyr} understands that the subgroup is a child on the initial group
+and handles it appropriately, from which you can customize with modifier functions.
+}
+\examples{
+## Single layer
+t <- tplyr_table(iris, Sepal.Width) \%>\%
+  add_layer(
+    group_desc(target_var=Species)
+  )
+
+# Layer with sub layer
+t <- tplyr_table(iris, Sepal.Width) \%>\%
+  add_layer(
+    group_desc(target_var=Species) \%>\%
+      add_layer(
+        group_count(target_var=Sepal.Width)
+      )
+  )
+}
+\seealso{
+[tplyr_table(), tplyr_layer(), group_count(), group_desc(), group_shift()]
 }

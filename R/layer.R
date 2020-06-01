@@ -46,6 +46,9 @@
 #' any sublayers of the current layer.}
 #' \item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 #' }
+#'
+#' @family Layer construction functions
+#'
 #' @export
 #'
 #' @examples
@@ -179,13 +182,14 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   assert_that(class(quo_get_expr(target_var)) == 'name',
               msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
 
+  dmessage(paste(where), class(where))
   # Where is not a required field - either must be null or a call. Converted to quosure regardless
   assert_that(is.null(quo_get_expr(where)) || class(quo_get_expr(where)) == 'call',
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
   # Make sure `target_var` exists in the target data.frame
   target <- NULL # Mask global definitions check
-  vname <- as.character(quo_get_expr(target_var))
+  vname <- as_label(quo_get_expr(target_var))
   vnames <- evalq(names(target), envir=parent)
   assert_that(vname %in% vnames,
               msg = paste('`target_var` value', vname, 'does not exist in target data frame.'))
@@ -203,9 +207,9 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
     # Check each element of the `by`` list
     for (v in by) {
       dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
+      dmessage(paste("Checking", as_label(quo_get_expr(v))))
       if (class(quo_get_expr(v)) == "name") {
-        vname <- as.character(quo_get_expr(v))
+        vname <- as_label(quo_get_expr(v))
         assert_that(vname %in% vnames,
                     msg = paste0("By variable `",vname, "` does not exist in target dataset"))
       }

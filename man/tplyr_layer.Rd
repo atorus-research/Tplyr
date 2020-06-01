@@ -68,4 +68,8 @@ l <- tplyr_layer(tab, type='count', by=vars('Label Text', Species),
 }
 \seealso{
 \code{\link{tplyr_table}}
+
+Other Layer construction functions: 
+\code{\link{group_count}()}
 }
+\concept{Layer construction functions}
