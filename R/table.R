@@ -22,6 +22,8 @@
 #' \item{treat_var - The treatment variable arms/sets are split up on.}
 #' \item{layers - The logic used to prepare and render the table. Stored as a
 #'   list binded to the environment. Use <add layer function> to add a layer.}
+#' \item{treat_grps - Additional treatment groupings. Generally made up of
+#'   combiniations of the treatment variable.}
 #' }
 #'
 #' @param target Source data used to create the table. A 'data.frame' object.
@@ -60,6 +62,7 @@ new_tplyr_table <- function(target, treat_var) {
   # Create table object with default bindings and class of `tplyr_table`
   structure(rlang::env(
     target = target,
+    treat_grps = list(),
     layers = structure(list(),
                        class = c("tplyr_layer_container", "list"))
   ), class = c("tplyr_table", "environment")) %>%

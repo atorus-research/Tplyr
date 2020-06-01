@@ -2,30 +2,29 @@
 % Please edit documentation in R/table_bindings.R
 \name{pop_treat_var}
 \alias{pop_treat_var}
-\alias{pop_treat_var<-}
 \alias{set_pop_treat_var}
 \title{Return or set pop_treat_var binding}
 \usage{
 pop_treat_var(table)
-
-pop_treat_var(x) <- value
 
 set_pop_treat_var(table, pop_treat_var)
 }
 \arguments{
 \item{table}{A \code{tplyr_table} object}
 
-\item{x}{A \code{tplyr_table} object}
-
-\item{value}{A named quosure from the pop_data environment}
-
 \item{pop_treat_var}{A named quosure from the pop_data environment}
 }
 \value{
 For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}
-  object. For \code{tplyr_pop_treat_var<-} and \code{set_tplyr_pop_treat_var} the modified
-  object.
+  object. For \code{set_tplyr_pop_treat_var} the modified object.
 }
 \description{
 Return or set pop_treat_var binding
+}
+\examples{
+tab <- tplyr_table(iris, Species)
+
+pop_data(tab) <- mtcars
+set_pop_treat_var(tab, mpg)
+
 }
