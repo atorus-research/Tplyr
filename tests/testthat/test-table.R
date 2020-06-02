@@ -10,7 +10,7 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   expect_s3_class(tab, "environment")
   expect_setequal(env_names(tab), c("target", "layers", "pop_data",
                                     "treat_var", "pop_treat_var", "header_n",
-                                    "header"))
+                                    "header", "treat_grps"))
 })
 
 test_that("tplyr_table comes with empty list binded on 'layers'", {
