@@ -37,7 +37,7 @@ header <- function(table) {
 #' @export
 set_header <- function(table, headers) {
   # headers should be a character vector
-  assert_that(inherits(headers, "character"),
+  assert_that(is.character(headers),
                           msg = paste0("'headers' argument passed to tplyr_table must be a character vector,",
                                        "\n",
                                        "instead a class of: '",
@@ -267,7 +267,7 @@ set_treat_grps <- function(table, group_name, groupings) {
 #' @rdname treat_grps
 add_treat_group <- function(table, group_name, groupings) {
   assert_that(is.character(group_name), is.character(groupings),
-              msg = "'group_name' and 'groupings' argument passed to set_treat_grps must be a character")
+              msg = "'group_name' and 'groupings' argument passed to add_treat_group must be a character")
 
   # Get existing treatment groups
   a_list <- env_get(table, "treat_grps")
