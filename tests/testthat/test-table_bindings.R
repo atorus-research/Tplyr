@@ -85,3 +85,41 @@ test_that("treat_var throws errors as expected", {
   expect_error(set_treat_var(tab), "A treat_var argument must be supplied")
   expect_silent(set_treat_var(tab, b))
 })
+
+##### pop_treat_var #####
+test_that("pop_treat_var binding attaches pop_treat_var properly", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a) %>%
+    set_pop_data(data.frame(d = 21:30))
+
+  expect_equal(pop_treat_var(tab), quo(a))
+
+  set_pop_treat_var(tab, d)
+  expect_equal(pop_treat_var(tab), quo(d))
+})
+
+test_that("pop_treat_var throws errors as expected", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a) %>%
+    set_pop_data(data.frame(d = 21:30))
+
+  expect_error(set_pop_treat_var(tab, a), "pop_treat_var passed to tplyr_table is not a column of pop_data")
+  expect_error(set_pop_treat_var(tab, A), "pop_treat_var passed to tplyr_table is not a column of pop_data")
+  expect_error(set_pop_treat_var(tab), "pop_treat_var passed to tplyr_table is not a column of pop_data")
+  expect_silent(set_pop_treat_var(tab, d))
+})
+
+##### treat_grps #####
+test_that("treat_grps binding attaches properly", {
+  tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
+
+  expect_equal(treat_grps(tab), list())
+
+  add_treat_group(tab, "Total", c("Placebo", "Low", "High"))
+  expect_equal(treat_grps(tab), list(Total = c("Placebo", "Low", "High")))
+
+  add_treat_group(tab, "Treated", c("Low", "High"))
+  expect_equal(treat_grps(tab), list(Total = c("Placebo", "Low", "High"),
+                                     Treated = c("Low", "High")))
+
+  set_treat_grps(tab, "Treated2", c("Low1", "High2"))
+  expect_equal(treat_grps(tab), list(Treated2 = c("Low1", "High2")))
+})

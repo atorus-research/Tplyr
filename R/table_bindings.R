@@ -255,7 +255,7 @@ set_treat_grps <- function(table, group_name, groupings) {
               msg = "'group_name' and 'groupings' argument passed to set_treat_grps must be a character")
 
   # Name a list to bind to the environment
-  a_list <- groupings
+  a_list <- list(groupings)
   names(a_list) <- group_name
 
   rlang::env_bind(table, treat_grps = a_list)
@@ -273,7 +273,7 @@ add_treat_group <- function(table, group_name, groupings) {
   a_list <- env_get(table, "treat_grps")
 
   # Append new treatment group to existing treatment groups
-  new_list <- groupings
+  new_list <- list(groupings)
   names(new_list) <- group_name
   a_list <- append(a_list, new_list)
 
