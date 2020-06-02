@@ -4,7 +4,7 @@ tplyr_debug(FALSE)
 
 ## modify_nested_call ----
 test_that("Call must be quoted", {
-  expect_error(Tplyr:::modify_nested_call(mean(c(1,2,3))))
+  expect_error(Tplyr:::modify_nested_call(mean(c(1,2,3))), "`call` must be a quoted call")
   c <- quo(tplyr_table(treat_var = Species))
   expect_silent(Tplyr:::modify_nested_call(c))
 })
@@ -18,11 +18,11 @@ test_that("With no additional parameters, a call returns unchanged", {
 test_that("By default, only `Tplyr` exported functions are allowed", {
   # Non-tplyr function
   c <- quo(mean(c(1,2,3)))
-  expect_error(Tplyr:::modify_nested_call(c))
+  expect_error(Tplyr:::modify_nested_call(c), "Functions called within `add_layer` must be part of `Tplyr`")
 
   # Non-exported Tplyr function
-  c <- quo(Tplyr:::modify_nested_call(quo(x %>% y)))
-  expect_silent(Tplyr:::modify_nested_call(c))
+  # c <- quo(Tplyr:::modify_nested_call(quo(x %>% y)))
+  # expect_silent(Tplyr:::modify_nested_call(c))
 
   # Exported Tplyr function
   c <- quo(tplyr_table(treat_var = Species))

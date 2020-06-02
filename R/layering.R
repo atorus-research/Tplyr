@@ -46,7 +46,7 @@
 #'   )
 add_layer <- function(parent, layer) {
 
-  assert_that(!missing(layer), msg = "`parent` parameter must be provided")
+  assert_that(!missing(parent), msg = "`parent` parameter must be provided")
   assert_that(!missing(layer), msg = "`layer` parameter must be provided")
 
   # Capture the layer code as a quosure

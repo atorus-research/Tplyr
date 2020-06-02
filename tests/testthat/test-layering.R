@@ -32,13 +32,14 @@ test_that("`group_<type>` function pass parameters through appropriately", {
 ## `add_layer` error testing
 test_that("All parameters must be provided", {
   t <- tplyr_table(iris, Sepal.Width)
-  expect_error(add_layer())
-  expect_error(add_layer(t))
+  expect_error(add_layer(), "`parent` parameter must be provided")
+  expect_error(add_layer(t), "`layer` parameter must be provided")
   expect_silent(add_layer(t, group_desc(target_var=Species)))
 })
 
-test_that("Parent argument is a valid class", {
-  expect_error(add_layer(iris, group_desc(target_var=Species)))
+test_that("Parent argument is a valid class (pass through to `tplyr_layer`)", {
+  expect_error(add_layer(iris, group_desc(target_var=Species)),
+               "Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.")
 })
 
 test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
@@ -55,7 +56,7 @@ test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
         group_desc(target_var=Species) %>%
         print()
       )
-  })
+  }, "Functions called within `add_layer` must be part of `Tplyr`")
 })
 
 ## `add_layer` functionality testing

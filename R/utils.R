@@ -36,3 +36,14 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
     c
   }
 }
+
+
+#' Title
+#'
+#' @return
+#' @export
+#'
+#' @examples
+test_func <- function() {
+  print(getNamespaceExports('Tplyr'))
+}
