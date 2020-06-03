@@ -1,0 +1,104 @@
+---
+title: "tplyr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tplyr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(Tplyr)
+```
+
+# Purpose
+`Tplyr` was designed as a declarative method for creating tables used in clinical pharmaceutical reports. The end result of rendering a table is an object that can be writen out for inclusion in a report. The package was written with a focus on readability and a workflow that can be understanded by a novice R programmer.
+
+
+# Examples
+Using the `iris` dataset:
+
+```{r}
+# Create the table with the treatment group split on 'Species'
+tab <- tplyr_table(iris, Species)
+```
+
+# Usage
+
+## Installation
+
+`tplyr` isn't on CRAN yet. You can download it from GitHub for now.
+
+```{r, eval = FALSE}
+devtools::install_github("atorus-research/tplyr")
+```
+
+## Tables
+The `tplyr_table` is the object that contains the data, layer envrionments, and other properties shared by the layer environments.
+
+* target
+* treat_var
+* pop_data
+* pop_treat_var
+* header
+* header_n
+* layers
+
+## Layers
+The `tplyr_layers` are the workhorse objects of the package and contain the logic and bindings that are performed on the target data. When the table is rendered layers are executed and combined to create the table.
+
+* parent \code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
+#'   \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
+#'   the layer is a subgroup.
+*  type "count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
+#'   descriptive statistics, or "shift" for shift table counts
+*  by A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
+*  target_var Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
+#'   the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.
+*  where Call. Filter logic used to subset the target data when performing a summary.
+
+# What makes Tplyr different
+There are several packages that also aim to make reporting for clinical reports easier. We found that none of these package offered the needed extensiblity or weren't flexible enough to tackle the entire suite of tables intend to create.
+
+## Capabilities
+
+`Tplyr` allows a programmer to create new treatment groups from ones that already exist. This is useful when a table requires comparisons between individual groups and the population or between placebo groups and treated groups. `Tplyr` can create any table you would typically find in an ICH report in a regulatory submission. It is designed to close the gap between an analysis dataset and the creation of the tables.
+
+* Counts for categorical data
+* Statistics for numeric data
+* Shifts from baseline
+* P-values and meta information
+
+
+## Quosures and Environments
+
+`Tplyr` is built off of environments in R to ensure data are scoped properly and not needlessly duplicated. This also allows for nesting of layers for more complicated displays. Reporting tables are abstracted as 'layers' and R code is executed within these layers independently.
+
+Similar to `dplyr`, it is possible to pass functions and unquoted variable names which are evaluated when the table is rendered. This allows the tables to be programmed before the data is available. Moving the programming of the tables forward in the report process can cut down the time from collection -> data programming -> analysis programming -> table programming.
+
+## Audit, Logging, and Debugging
+
+`Tplyr` has functionality to produce the logs you would expect when running a SAS file. This allows a programmer to walk through the execution and see how the functions are effecting the data. It also provides a level of tractability for auditors reviewing the outputs. These logging functions can be toggled on and off with the following options in R. When output is sunk and files are sourced with echo, a reliable audit trail can be persisted and attached to an analysis.
+
+* \<tplyr_debug>
+* \<tidylog_switch>
+* \<sink(file)>
+
+```{r, eval = FALSE}
+options(tplyr_debug = TRUE)
+options(tidylog_switch = TRUE)
+sink("myoutput.txt")
+```
+
+## Related packages
+* atable[https://cran.r-project.org/package=atable/vignettes/atable_usage.pdf]
+* tableone[https://cran.r-project.org/package=tableone/vignettes/introduction.html]
+* gt[https://CRAN.R-project.org/package=gt]
+* huxtable[https://hughjonesd.github.io/huxtable/]
