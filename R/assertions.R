@@ -1,52 +1,73 @@
-#' Custom `tplyr` assertion to display if an improper class was passed into an object.
+
+#' Assert that an argument is of a certain class
 #'
-#' @param x Object whose class should be checked
-#' @param should_be The class the object is required to be
-#' @param arg The function parameter being checked
+#' @param x
+#' @param should_be
 #'
 #' @return
 #' @export
 #'
 #' @examples
-is_class <- function(x, should_be) {
-  class(x) == should_be
-}
+assert_has_class <- function(x, should_be) {
+  # Get the name of the parameter being checked
+  param <- quo_get_expr(enquo(x))
 
-#' Title
-#'
-#' @param call
-#' @param env
-#'
-#' @return
-#' @export
-#'
-#' @examples
-on_failure(is_class) <- function(call, env) {
-  # Pick off the call object arguments to make them easier to access
-  fargs <- call_args(call)
-  val <- eval(fargs$x)
-
-  # Look at the traceback information
-  trc <- trace_back()
-  # Look at the call stack and check how many frames are on the stack
-  max_index = max(trc$indices)
-
-  # A 5th frame means the assertion was raised inside a function
-  if (max_index >= 5){
-    # To get the calling function, look 4 frames back
-    # `trace_back` orders the frames from top call first, so have to look backwards from the end
-    # of the `calls` binding
-    cname <- call_name(trc$calls[[max_index - 4]])
-    # Make a print string out of it
-    cname <- paste0('` in function `',cname, '`')
-  } else {
-    # If the assertion was raised outside of a function then just hold a back tick
-    cname = '`'
+  # Is the argument the class that it shoudl be?
+  if (class(x) != should_be){
+    # Grab the trace back into an object
+    trc <- trace_back()
+    # Look at the length of the traceback
+    max_length <- max(trc$indices)
+    # If it's >1 we're innside a function, so grab the name
+    if (max_length > 1){
+      # Pull the name out of the call stack
+      cname <- call_name(trc$calls[[max_length - 1]])
+      # Make a display string
+      func_str <- paste0('` in function `', cname, '`')
+    } else {
+      # Filler
+      func_str <- '`'
+    }
+    # Abort and show error
+    abort(paste0('Argument `', param, func_str, ' must be ',
+                 should_be, '. Instead a class of "', class(x),
+                 '" was passed.'))
   }
-
-  # Print the error message containing the calling function name if it exists
-  paste0('Argument `', fargs$x, cname, ' must be ', fargs$should_be,
-         ". Instead a class of ", class(val)," was passed.")
 }
 
+#' Assert that an argument inherits certain class
+#'
+#' @param x
+#' @param should_have
+#'
+#' @return
+#' @export
+#'
+#' @examples
+assert_inherits_class <- function(x, should_have) {
+  # Get the name of the parameter being checked
+  param <- quo_get_expr(enquo(x))
 
+  # Is the argument the class that it shoudl be?
+  if (!inherits(x, should_have)){
+
+    # Grab the trace back into an object
+    trc <- trace_back()
+    # Look at the length of the traceback
+    max_length <- max(trc$indices)
+    # If it's >1 we're innside a function, so grab the name
+    if (max_length > 1){
+      # Pull the name out of the call stack
+      cname <- call_name(trc$calls[[max_length - 1]])
+      # Make a display string
+      func_str <- paste0('` in function `', cname, '`')
+    } else {
+      # Filler
+      func_str <- '`'
+    }
+    # Abort and show error
+    abort(paste0('Argument `', param, func_str,
+                 ' does not inherit "', should_have,
+                 '". Classes: ', paste(class(x), collapse=", ")))
+  }
+}
