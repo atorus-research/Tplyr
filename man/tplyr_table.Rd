@@ -38,6 +38,8 @@ The table can contain variables that are visable to all layers.
 \item{treat_var - The treatment variable arms/sets are split up on.}
 \item{layers - The logic used to prepare and render the table. Stored as a
   list binded to the environment. Use <add layer function> to add a layer.}
+\item{treat_grps - Additional treatment groupings. Generally made up of
+  combiniations of the treatment variable.}
 }
 }
 
