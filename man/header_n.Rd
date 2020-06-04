@@ -17,9 +17,11 @@ set_header_n(table, header_n)
 
 \item{x}{A \code{tplyr_table} object}
 
-\item{value}{A named numeric vector. Names of vector should match headers.}
+\item{value}{A named numeric vector. Names of vector should match treatement
+group names.}
 
-\item{header_n}{A named numeric vector. Names of vector should match headers.}
+\item{header_n}{A named numeric vector. Names of vector should match treatement
+group names.}
 }
 \value{
 For \code{tplyr_header_n} the header_n binding of the
@@ -27,5 +29,12 @@ For \code{tplyr_header_n} the header_n binding of the
   \code{set_tplyr_header_n} the modified object.
 }
 \description{
-Return or set header_n binding
+When the header or table body relies on population count data, the header_n
+binding is used for display and calculations.
+}
+\examples{
+tab <- tplyr_table(iris, Species)
+
+header_n(tab) <- c(setosa = 50, versicolor = 50, virginica = 50)
+
 }

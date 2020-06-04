@@ -13,10 +13,9 @@ pop_data(x) <- value
 set_pop_data(table, pop_data)
 }
 \arguments{
-\item{table}{A \code{tplyr_table} object to set or return population data
-information.}
+\item{table}{A \code{tplyr_table} object}
 
-\item{x}{A \code{tplyr_table} object.}
+\item{x}{A \code{tplyr_table} object}
 
 \item{value}{A data.frame with population level information}
 
@@ -31,4 +30,10 @@ For \code{tplyr_pop_data} the pop_data binding of the \code{tplyr_table}
 The population data is used when calculating N counts in the column headers,
 as well as determining denominators for percent calculations in the table
 body.
+}
+\examples{
+tab <- tplyr_table(iris, Species)
+
+pop_data(tab) <- mtcars
+
 }
