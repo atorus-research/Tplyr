@@ -1,4 +1,5 @@
-#' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing as_label current_env quo_name
+#' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
+#' @importFrom rlang call_modify call_standardise call_name call_args as_label is_callas_label current_env quo_name
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 NULL

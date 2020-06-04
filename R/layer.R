@@ -46,6 +46,9 @@
 #' any sublayers of the current layer.}
 #' \item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 #' }
+#'
+#' @family Layer construction functions
+#'
 #' @export
 #'
 #' @examples
@@ -121,11 +124,16 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Unpack the `by` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
   # The only valid use of a `call` is to provide multiple variables using `vars`
-  if (class(quo_get_expr(by[[1]])) == "call") {
+  c <- quo_get_expr(by[[1]])
+  if (is.call(c)) {
     # If it's a call, we need to pull it out a level
-    by <- tryCatch(
-      # Evaluate the quosure by getting the expressionn
-      eval(quo_get_expr(by[[1]]), envir=caller_env()),
+    by <- tryCatch({
+      # If it's in here, the call has to be to dplyr::vars
+      if (call_name(c) != "vars") stop()
+
+      # Evaluate the quosure by getting the expression
+      eval(c, envir=caller_env())
+      },
       # If a 1 item list of variable was provided, it'll fail
       error = function(err) {
         abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
@@ -137,6 +145,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   }
 
   # Run validation
+  dmessage(paste("By came in as: ",class(by)))
   validate_tplyr_layer(parent, target_var, by, where, type)
 
   # Create the new environment by contructing the env call
@@ -179,13 +188,14 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   assert_that(class(quo_get_expr(target_var)) == 'name',
               msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
 
+  dmessage(paste(where), class(where))
   # Where is not a required field - either must be null or a call. Converted to quosure regardless
   assert_that(is.null(quo_get_expr(where)) || class(quo_get_expr(where)) == 'call',
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
   # Make sure `target_var` exists in the target data.frame
   target <- NULL # Mask global definitions check
-  vname <- as.character(quo_get_expr(target_var))
+  vname <- as_label(quo_get_expr(target_var))
   vnames <- evalq(names(target), envir=parent)
   assert_that(vname %in% vnames,
               msg = paste('`target_var` value', vname, 'does not exist in target data frame.'))
@@ -203,9 +213,9 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
     # Check each element of the `by`` list
     for (v in by) {
       dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
+      dmessage(paste("Checking", as_label(quo_get_expr(v))))
       if (class(quo_get_expr(v)) == "name") {
-        vname <- as.character(quo_get_expr(v))
+        vname <- as_label(quo_get_expr(v))
         assert_that(vname %in% vnames,
                     msg = paste0("By variable `",vname, "` does not exist in target dataset"))
       }
