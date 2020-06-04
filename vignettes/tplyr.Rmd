@@ -43,6 +43,8 @@ devtools::install_github("atorus-research/tplyr")
 ## Tables
 The `tplyr_table` is the object that contains the data, layer envrionments, and other properties shared by the layer environments.
 
+### Table Properties
+
 * target
 * treat_var
 * pop_data
@@ -54,15 +56,15 @@ The `tplyr_table` is the object that contains the data, layer envrionments, and 
 ## Layers
 The `tplyr_layers` are the workhorse objects of the package and contain the logic and bindings that are performed on the target data. When the table is rendered layers are executed and combined to create the table.
 
-* parent \code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
-#'   \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
-#'   the layer is a subgroup.
-*  type "count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
-#'   descriptive statistics, or "shift" for shift table counts
-*  by A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
-*  target_var Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
-#'   the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.
-*  where Call. Filter logic used to subset the target data when performing a summary.
+### Layer Properties
+
+* parent 
+* type
+* by
+* target_var
+* where
+* sort_vars
+* sort
 
 # What makes Tplyr different
 There are several packages that also aim to make reporting for clinical reports easier. We found that none of these package offered the needed extensiblity or weren't flexible enough to tackle the entire suite of tables intend to create.
