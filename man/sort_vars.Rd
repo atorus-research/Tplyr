@@ -10,7 +10,7 @@ sort_vars(layer)
 set_sort_vars(layer, sort_vars)
 }
 \arguments{
-\item{layer}{}
+\item{layer}{A \code{tplyr_layer} object}
 
 \item{sort_vars}{A character vector to sort the results of the summary.}
 }

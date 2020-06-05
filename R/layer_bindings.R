@@ -48,7 +48,30 @@ tplyr_by <- function(layer) {
 set_tplyr_by <- function(layer, by) {
   dmessage(paste("By came in as: ",class(by)))
 
-  by <- list(enquo(by))
+  by <- enquos(by)
+
+  # Unpack the `by` group to ensure that the type is `list_of<quosures>`
+  # It had to be a 1 item list, so check if that element is a `call`
+  # The only valid use of a `call` is to provide multiple variables using `vars`
+  c <- quo_get_expr(by[[1]])
+  if (is.call(c)) {
+    # If it's a call, we need to pull it out a level
+    by <- tryCatch({
+      # If it's in here, the call has to be to dplyr::vars
+      if (call_name(c) != "vars") stop()
+
+      # Evaluate the quosure by getting the expression
+      eval(c, envir=caller_env())
+    },
+    # If a 1 item list of variable was provided, it'll fail
+    error = function(err) {
+      abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
+                             "or multiple variable names using `dplyr::vars`."))
+    }
+    )
+    # Override in the arglist
+    by <- by
+  }
 
   # Make sure that by variables not submitted as characters exist in the target dataframe
   if (!quo_is_null(by[[1]])) {
@@ -62,11 +85,12 @@ set_tplyr_by <- function(layer, by) {
     for (v in by) {
       dmessage(print(quo_get_expr(v)))
       dmessage(paste("Checking", as.character(quo_get_expr(v))))
-      if (class(quo_get_expr(v)) == "name") {
-        vname <- as.character(quo_get_expr(v))
-        assert_that(vname %in% vnames,
-                    msg = paste0("By variable `",vname, "` does not exist in target dataset"))
-      }
+      # Propbably going to check this during render
+      # if (class(quo_get_expr(v)) == "name") {
+      #   vname <- as.character(quo_get_expr(v))
+      #   assert_that(vname %in% vnames,
+      #               msg = paste0("By variable `",vname, "` does not exist in target dataset"))
+      # }
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
         abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
@@ -84,7 +108,8 @@ set_tplyr_by <- function(layer, by) {
 #'
 #' @param layer A \code{tplyr_layer} object.
 #'
-#' @return
+#' @return For \code{tplyr_where}, the where binding of the supplied object.
+#'   For \code{set_tplyr_where}, the modified object
 #' @export
 #' @rdname where
 #'
@@ -93,6 +118,11 @@ tplyr_where <- function(layer) {
   env_get(layer, "where")
 }
 
+#' @param where A function detailing the subset
+#'
+#' @return
+#' @export
+#' @rdname where
 set_tplyr_where <- function(layer, where) {
   where <- enquo(where)
   assert_that(is.null(quo_get_expr(where)) || class(quo_get_expr(where)) == 'call',
@@ -103,7 +133,7 @@ set_tplyr_where <- function(layer, where) {
 
 #' Return or set sort_vars layer binding
 #'
-#' @param layer
+#' @param layer A \code{tplyr_layer} object
 #'
 #' @return For \code{sort_vars}, the bindings of the layer object. For
 #'   \code{set_sort_vars}, the modified layer environment.
@@ -120,10 +150,8 @@ sort_vars <- function(layer) {
 #' @export
 #' @rdname sort_vars
 set_sort_vars <- function(layer, sort_vars) {
-  sort_vars <- enquo(sort_vars)
-  assert_that((is.character(sort_vars) |
-                 is_quosure(sort_vars) == "name"),
-              msg = "sort_vars must be a character vector or variable name")
+  assert_that(is.character(sort_vars),
+              msg = "sort_vars must be a character vector")
 
   env_bind(layer, sort_vars = sort_vars)
 }

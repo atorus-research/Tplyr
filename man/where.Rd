@@ -2,14 +2,22 @@
 % Please edit documentation in R/layer_bindings.R
 \name{tplyr_where}
 \alias{tplyr_where}
+\alias{set_tplyr_where}
 \title{Set or return where layer binding}
 \usage{
 tplyr_where(layer)
+
+set_tplyr_where(layer, where)
 }
 \arguments{
 \item{layer}{A \code{tplyr_layer} object.}
+
+\item{where}{A function detailing the subset}
 }
 \value{
+For \code{tplyr_where}, the where binding of the supplied object.
+  For \code{set_tplyr_where}, the modified object
+
 
 }
 \description{

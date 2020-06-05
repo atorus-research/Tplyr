@@ -34,7 +34,7 @@ test_that("tplyr_by binds as expected", {
   expect_equal(tplyr_by(tab)[[1]], quo("aString"))
 
   set_tplyr_by(tab, Species2)
-  expect_equal(tplyr_by(tab), quo(Species2))
+  expect_equal(tplyr_by(tab), quos(Species2))
 
   set_tplyr_by(tab, vars(Species2, Sepal.Width))
   expect_equal(tplyr_by(tab), vars(Species2, Sepal.Width))
@@ -91,9 +91,6 @@ test_that("sort_vars binds sort_var as expected", {
 
   set_sort_vars(tab, NA_character_)
   expect_equal(sort_vars(tab), NA_character_)
-
-  set_sort_vars(tab, Species2)
-  expect_equal(tab, quo(Species2))
 })
 
 test_that("sort_vars throws expected errors", {
@@ -102,8 +99,7 @@ test_that("sort_vars throws expected errors", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_error(set_sort_vars(tab, c(1, 2)), "sort_vars must be a character vector or variable name")
-  expect_error(set_sort_vars(tab, Petal.Width == 1), "sort_vars must be a character vector or variable name")
+  expect_error(set_sort_vars(tab, c(1, 2)), "sort_vars must be a character vector")
 })
 
 ##### sort tests #####
