@@ -20,6 +20,6 @@ The original call object with
 Extract the top function from a nested call and insert desired arguments
 }
 \examples{
-modify_nested_call(mean(c(1,2,3)) \%>\% print(), na.rm=TRUE)
-
+#TBD
+# modify_nested_call(mean(c(1,2,3)) \%>\% print(), na.rm=TRUE)
 }

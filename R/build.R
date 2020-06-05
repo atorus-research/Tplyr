@@ -37,7 +37,8 @@ build <- function(x) {
 build.tplyr_table <- function(x) {
 
   # Prepare the table environment as appropriate
-  NULL
+  layer_output <- NULL
+  layers <- NULL
 
   output <- evalq({
     # Build the layers
@@ -53,6 +54,10 @@ build.tplyr_table <- function(x) {
 #' @noRd
 build.count_layer <- function(x) {
 
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
   output <- evalq({
     # Build the layers
     layer_output <- lapply(build, layers)
@@ -67,6 +72,10 @@ build.count_layer <- function(x) {
 #' @noRd
 build.desc_layer <- function(x) {
 
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
   output <- evalq({
     # Build the layers
     layer_output <- lapply(build, layers)
@@ -80,6 +89,10 @@ build.desc_layer <- function(x) {
 #' shift_layer S3 method
 #' @noRd
 build.shift_layer <- function(x) {
+
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
 
   output <- evalq({
     # Build the layers
