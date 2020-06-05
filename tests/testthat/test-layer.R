@@ -3,8 +3,8 @@ context("layer.R")
 tplyr_debug(FALSE)
 
 ## Check empty return ----
-test_that("`tplyr_layer`` errors when no arguments provided", {
-  expect_error(tplyr_layer())
+test_that("`tplyr_layer` errors when no arguments provided", {
+  expect_error(tplyr_layer(),  "The `parent` argument must be provided.")
 
 })
 
@@ -40,7 +40,7 @@ test_that("tplyr_layer returns a class of `tplyr_subgroup_layer`, `tplyr_layer` 
 test_that("Environment contains proper bindings when call is proper", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- tplyr_layer(t, target_var=Species, type='count')
-  expect_equal(sort(env_names(l)), c("by", "formatter", "layers", "sort", "sort_var", "target_var", "where"))
+  expect_equal(sort(env_names(l)), c("by", "formatter", "layers", "sort", "sort_vars", "target_var", "where"))
 })
 
 test_that("`Type` attribute is set properly", {
@@ -59,10 +59,14 @@ test_that("type field can only contain one of 'count', 'desc', or 'shift'", {
   expect_silent(tplyr_layer(t, target_var=Species, type='count'))
   expect_silent(tplyr_layer(t, target_var=Species, type='desc'))
   expect_silent(tplyr_layer(t, target_var=Species, type='shift'))
-  expect_error(tplyr_layer(t, target_var=Species, type=c('shift', 'desc')))
-  expect_error(tplyr_layer(t, target_var=Species, type=c('count', 'desc')))
-  expect_error(tplyr_layer(t, target_var=Species, type=c('count', 'desc', 'shift')))
-  expect_error(tplyr_layer(t, target_var=Species, type="bad"))
+  expect_error(tplyr_layer(t, target_var=Species, type=c('shift', 'desc')),
+                '`type` must be one of "count", "desc", or "shift"')
+  expect_error(tplyr_layer(t, target_var=Species, type=c('count', 'desc')),
+               '`type` must be one of "count", "desc", or "shift"')
+  expect_error(tplyr_layer(t, target_var=Species, type=c('count', 'desc', 'shift')),
+               '`type` must be one of "count", "desc", or "shift"')
+  expect_error(tplyr_layer(t, target_var=Species, type="bad"),
+               '`type` must be one of "count", "desc", or "shift"')
 })
 
 test_that("Parent must be a `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer`", {
@@ -76,11 +80,13 @@ test_that("`by` must me a string, a variable name, or multiple variables submitt
   expect_silent(tplyr_layer(t, target_var=Species, type='count', by=Petal.Width))
   expect_silent(tplyr_layer(t, target_var=Species, type='count', by=vars('character', Petal.Width)))
   # Error checks
-  expect_error(tplyr_layer(t, target_var=Species, type='count', by=1))
-  expect_error(tplyr_layer(t, target_var=Species, type='count', by=list('a', 'b')))
-  expect_error(tplyr_layer(t, target_var=Species, type='count', by=c('a', 'b')))
-  expect_error(tplyr_layer(t, target_var=Species, type='count', by=vars('character', Petal.Width, x+y)))
-  expect_error(tplyr_layer(t, target_var=Species, type='count', by=vars('character', Petal.Width, 1)))
+  err = "Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."
+  expect_error(tplyr_layer(t, target_var=Species, type='count', by=1), err)
+  expect_error(tplyr_layer(t, target_var=Species, type='count', by=list('a', 'b')), err)
+  expect_error(tplyr_layer(t, target_var=Species, type='count', by=c('a', 'b')), err)
+  expect_error(tplyr_layer(t, target_var=Species, type='count', by=vars('character', Petal.Width, 1)), err)
+  expect_error(tplyr_layer(t, target_var=Species, type='count', by=vars('character', Petal.Width, x+y)),
+               "Arguments to `by` must")
 })
 
 test_that("`target_var` must be a variable name", {
@@ -95,19 +101,22 @@ test_that("`target_var` must exist in target dataset", {
   # Variable exists
   expect_silent(tplyr_layer(t, target_var=Species, type='count'))
   # Variable does not
-  expect_error(tplyr_layer(t, target_var=BadVar, type='count'))
+  expect_error(tplyr_layer(t, target_var=BadVar, type='count'), "`target_var` value BadVar does not exist in target data frame.")
 })
 
 test_that("`by` varaibles must exist in the target dataset", {
   t <- tplyr_table(iris, Sepal.Width)
-  expect_error(tplyr_layer(t, target_var=Species, by=BadVars, type='count'))
-  expect_error(tplyr_layer(t, target_var=Species, by=vars(Species, BadVars), type='count'))
+  expect_error(tplyr_layer(t, target_var=Species, by=BadVars, type='count'),
+               "By variable `BadVars` does not exist in target dataset")
+  expect_error(tplyr_layer(t, target_var=Species, by=vars(Species, BadVars), type='count'),
+               "By variable `BadVars` does not exist in target dataset")
 })
 
 test_that("`where` must be programming logic (quosure of class 'call')", {
   t <- tplyr_table(iris, Sepal.Width)
   expect_silent(tplyr_layer(t, target_var=Species, type="count", where=a == b))
-  expect_error(tplyr_layer(t, target_var=Species, type="count", where=VARAIBLE))
+  expect_error(tplyr_layer(t, target_var=Species, type="count", where=VARAIBLE),
+               "The `where` parameter")
 })
 
 ## Coded defaults ----
@@ -120,7 +129,7 @@ test_that("`sort` defaults to 'ascending'", {
 test_that("`sort_var` defaults to `target_var`", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- tplyr_layer(t, target_var=Species, type='count')
-  expect_true(identical(l$sort_var, l$target_var))
+  expect_true(identical(l$sort_vars, l$target_var))
 })
 
 test_that("`formatter` defaults to `as.character`", {

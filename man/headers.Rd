@@ -13,7 +13,7 @@ header(x) <- value
 set_header(table, headers)
 }
 \arguments{
-\item{table}{A \code{tplyr_table} object.}
+\item{table}{A \code{tplyr_table} object}
 
 \item{x}{A \code{tplyr_table} object}
 

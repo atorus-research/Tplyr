@@ -1,2 +1,109 @@
 ### Build/Render Functions
-NULL
+
+#' Trigger the execution of the \code{tplyr_table}
+#'
+#' @description
+#' The functions used to assemble a \code{tplyr_table} object and each of the layers do not trigger the processing of any data. Rather, a lazy
+#' execution style is used to allow you to contruct your table, preview what the output should look like, and then explicitly state when the
+#' data processing should happen. \code{build} triggers this event.
+#'
+#' @details
+#' When the \code{build} command is executed, all of the data processing commences. Any preprocessing necessary within the table environment
+#' takes place first. Next, each of the layers begings executing. This process is recursive, as when a layer is starts executing, \code{tplyr}
+#' looks to see if there are any sublayers within that layer. Once the layers complete executing, within a layer, the provided instruction
+#' will join them together, or within the table the outputs will be stacked together.
+#'
+#' Once this process is complete, any post-processing necessary within the table environment takes place, and the final output can be
+#' delivered. Metadata and traceability information are kept within each of the layer environments, which allows an investigation into the
+#' source of the resulting datapoints.
+#'
+#' @param x A \code{tplyr_table} object
+#'
+
+#'
+#' @return An executed \code{tplyr_table}
+#' @export
+#'
+#' @examples
+#' # TBD
+#'
+#' @seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
+build <- function(x) {
+  NextMethod("build", x)
+}
+
+#' tplyr_table S3 method
+#' @noRd
+build.tplyr_table <- function(x) {
+
+  # Prepare the table environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
+  output <- evalq({
+    # Build the layers
+    layer_output <- lapply(build, layers)
+
+  }, envir=x)
+
+  # Feed the output up
+  output
+}
+
+#' count_layer S3 method
+#' @noRd
+build.count_layer <- function(x) {
+
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
+  output <- evalq({
+    # Build the layers
+    layer_output <- lapply(build, layers)
+
+  }, envir=x)
+
+  # Feed the output up
+  output
+}
+
+#' desc_layer S3 method
+#' @noRd
+build.desc_layer <- function(x) {
+
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
+  output <- evalq({
+    # Build the layers
+    layer_output <- lapply(build, layers)
+
+  }, envir=x)
+
+  # Feed the output up
+  output
+}
+
+#' shift_layer S3 method
+#' @noRd
+build.shift_layer <- function(x) {
+
+  # Prepare the layer environment as appropriate
+  layer_output <- NULL
+  layers <- NULL
+
+  output <- evalq({
+    # Build the layers
+    layer_output <- lapply(build, layers)
+
+  }, envir=x)
+
+  # Feed the output up
+  output
+}
+
+
+
+

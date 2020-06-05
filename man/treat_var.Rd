@@ -2,13 +2,10 @@
 % Please edit documentation in R/table_bindings.R
 \name{treat_var}
 \alias{treat_var}
-\alias{treat_var<-}
 \alias{set_treat_var}
 \title{Return or set the treatment variable binding}
 \usage{
 treat_var(table)
-
-treat_var(x) <- value
 
 set_treat_var(table, treat_var)
 }
@@ -16,18 +13,18 @@ set_treat_var(table, treat_var)
 \item{table}{A \code{tplyr_table} object to set or return treatment variable
 the table is split by.}
 
-\item{x}{A \code{tplyr_table} object to set or return treatment variable
-the table is split by.}
-
-\item{value}{A treatment variable. quosure?}
-
 \item{treat_var}{A treatment variable. quosure?}
 }
 \value{
 For \code{tplyr_treat_var} the treat_var binding of the \code{tplyr_table}
-  object. For \code{tplyr_treat_var<-} nothing is returned, the treat_var binding
-  is set silently. For \code{set_tplyr_treat_var} the modified object.
+  object. For \code{set_tplyr_treat_var} the modified object.
 }
 \description{
 Return or set the treatment variable binding
+}
+\examples{
+tab <- tplyr_table(mtcars, cyl)
+
+set_treat_var(tab, gear)
+
 }
