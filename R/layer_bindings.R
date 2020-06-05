@@ -147,7 +147,7 @@ set_tplyr_where <- function(layer, where) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_sort_vars(c("Sepal.Length", "Sepal.Width"))
+#'   set_sort_vars(vars(Sepal.Length, Sepal.Width))
 sort_vars <- function(layer) {
   env_get(layer, "sort_vars")
 }

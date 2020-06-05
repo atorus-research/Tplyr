@@ -5,13 +5,12 @@
 #' @param c An R expression
 #' @param allowable_calls A character vector of function names allowed to be called within a piping sequence
 #' @param ... Parameters to insert into topmost call
-
 #'
 #' @return The original call object with
 #'
 #' @examples
-#' modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
-#'
+#' #TBD
+#' # modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
 modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
   # If the call is not from magrittr, then modify the contents and return the call
   if (call_name(c) != "%>%") {

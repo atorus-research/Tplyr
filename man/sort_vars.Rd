@@ -25,5 +25,5 @@ Return or set sort_vars layer binding
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
-  set_sort_vars(c("Sepal.Length", "Sepal.Width"))
+  set_sort_vars(vars(Sepal.Length, Sepal.Width))
 }
