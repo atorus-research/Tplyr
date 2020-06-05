@@ -154,7 +154,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Add non-parameter specified defaults into the environment.
   evalq({
     sort <- 'ascending' # Default sorting to ascending
-    sort_var <- target_var # Sort by the target variable itself
+    sort_vars <- target_var # Sort by the target variable itself
     formatter <- as.character # default format of just the function `as.character`
     layers <- structure(list(), class=append("tplyr_layer_container", "list"))
   }, envir = e)
