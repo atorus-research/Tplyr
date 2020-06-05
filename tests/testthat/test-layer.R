@@ -40,7 +40,7 @@ test_that("tplyr_layer returns a class of `tplyr_subgroup_layer`, `tplyr_layer` 
 test_that("Environment contains proper bindings when call is proper", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- tplyr_layer(t, target_var=Species, type='count')
-  expect_equal(sort(env_names(l)), c("by", "formatter", "layers", "sort", "sort_var", "target_var", "where"))
+  expect_equal(sort(env_names(l)), c("by", "formatter", "layers", "sort", "sort_vars", "target_var", "where"))
 })
 
 test_that("`Type` attribute is set properly", {
@@ -129,7 +129,7 @@ test_that("`sort` defaults to 'ascending'", {
 test_that("`sort_var` defaults to `target_var`", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- tplyr_layer(t, target_var=Species, type='count')
-  expect_true(identical(l$sort_var, l$target_var))
+  expect_true(identical(l$sort_vars, l$target_var))
 })
 
 test_that("`formatter` defaults to `as.character`", {
