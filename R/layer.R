@@ -221,7 +221,7 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
       }
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
+        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b, c)).")
       }
       else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
         abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
