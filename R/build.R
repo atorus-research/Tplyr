@@ -27,7 +27,7 @@
 #' @examples
 #' # TBD
 #'
-#' \seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
+#' @seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
 build <- function(x) {
   NextMethod("build", x)
 }
