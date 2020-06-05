@@ -21,3 +21,9 @@ For \code{layer_sort}, the sort binding of the layer object. For
 \description{
 Set or return sort layer binding
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_layer_sort("desc")
+}

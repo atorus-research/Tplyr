@@ -23,3 +23,9 @@ For \code{tplyr_where}, the where binding of the supplied object.
 \description{
 Set or return where layer binding
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_tplyr_where(Petal.Length > 3)
+}

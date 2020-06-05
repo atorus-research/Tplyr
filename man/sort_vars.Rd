@@ -21,3 +21,9 @@ For \code{sort_vars}, the bindings of the layer object. For
 \description{
 Return or set sort_vars layer binding
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_sort_vars(c("Sepal.Length", "Sepal.Width"))
+}

@@ -22,3 +22,9 @@ For \code{tplyr_by}, the by binding of the supplied layer. For
 \description{
 Set or return by layer binding
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_tplyr_by(vars(Species2, Sepal.Width))
+}

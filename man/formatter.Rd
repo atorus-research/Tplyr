@@ -22,3 +22,9 @@ For \code{layer_formatter}, the formetter function bound to the
 \description{
 Set or return layer formatter
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_layer_formatter(as.numeric)
+}

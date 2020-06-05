@@ -21,3 +21,9 @@ For \code{treat_var}, the treatment variable binding of the layer
 \description{
 Set or return treat_var binding
 }
+\examples{
+iris$Species2 <- iris$Species
+lay <- tplyr_table(iris, Species) \%>\%
+  group_count(Species) \%>\%
+  set_target_var(Species2)
+}
