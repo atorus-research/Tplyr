@@ -18,6 +18,13 @@ group_shift(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
 \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
 the layer is a subgroup.}
 
+\item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
+the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
+
+\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
+
+\item{where}{Call. Filter logic used to subset the target data when performing a summary.}
+
 \item{...}{Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 \href{<link tbd>}{vignette} on adding extensions.}
 }
