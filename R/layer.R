@@ -58,13 +58,13 @@
 #'                  target_var=Species, where= Sepal.Width < 5.5)
 #'
 #' @seealso \code{\link{tplyr_table}}
-tplyr_layer <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 
   # Return a null object if the parent is missing
   if(missing(parent)) abort("The `parent` argument must be provided.")
 
   # If necessary variables provided then build the layer
-  as_tplyr_layer(parent, type=type, by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
+  as_tplyr_layer(parent, type=type, by=by, target_var=target_var, where=where, ...)
 }
 
 # Method dispatch

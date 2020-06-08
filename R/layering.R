@@ -120,18 +120,18 @@ add_layer <- function(parent, layer) {
 #'   add_layer(
 #'     group_desc(target_var=Species)
 #'   )
-group_count <- function(parent, ...) {
-  tplyr_layer(parent, type='count', ...)
+group_count <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='count', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
-group_desc <- function(parent, ...) {
-  tplyr_layer(parent, type='desc', ...)
+group_desc <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='desc', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
-group_shift <- function(parent, ...) {
-  tplyr_layer(parent, type='shift', ...)
+group_shift <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='shift', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
