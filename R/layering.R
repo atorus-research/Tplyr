@@ -77,6 +77,10 @@ add_layer <- function(parent, layer) {
 #' @param parent \code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
 #'   \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
 #'   the layer is a subgroup.
+#' @param target_var Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
+#'   the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.
+#' @param by A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
+#' @param where Call. Filter logic used to subset the target data when performing a summary.
 #' @param ... Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 #'   \href{<link tbd>}{vignette} on adding extensions.
 #'
@@ -116,18 +120,18 @@ add_layer <- function(parent, layer) {
 #'   add_layer(
 #'     group_desc(target_var=Species)
 #'   )
-group_count <- function(parent, ...) {
-  tplyr_layer(parent, type='count', ...)
+group_count <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='count', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
-group_desc <- function(parent, ...) {
-  tplyr_layer(parent, type='desc', ...)
+group_desc <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='desc', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
-group_shift <- function(parent, ...) {
-  tplyr_layer(parent, type='shift', ...)
+group_shift <- function(parent, target_var, by=NULL, where=NULL, type=NULL, ...) {
+  tplyr_layer(parent, type='shift', by=enquos(by), target_var=enquo(target_var), where=enquo(where), ...)
 }
