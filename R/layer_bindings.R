@@ -25,9 +25,11 @@ set_target_var <- function(layer, target_var) {
   target_var <- enquo(target_var)
 
   assert_that(class(quo_get_expr(target_var)) == "name",
-              msg = "target_var must be a variable name")
+              msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
 
   env_bind(layer, target_var = target_var)
+
+  layer
 }
 
 #' Set or return by layer binding
@@ -54,9 +56,10 @@ tplyr_by <- function(layer) {
 #' @export
 #' @rdname by
 set_tplyr_by <- function(layer, by) {
+  by <- enquos(by)
+
   dmessage(paste("By came in as: ",class(by)))
 
-  by <- enquos(by)
 
   # Unpack the `by` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
@@ -101,6 +104,8 @@ set_tplyr_by <- function(layer, by) {
   }
 
   env_bind(layer, by = by)
+
+  layer
 }
 
 #' Set or return where layer binding
@@ -128,10 +133,15 @@ tplyr_where <- function(layer) {
 #' @rdname where
 set_tplyr_where <- function(layer, where) {
   where <- enquo(where)
-  assert_that(quo_is_missing(where) || class(quo_get_expr(where)) == 'call',
+
+  assert_that(quo_is_null(where) || class(quo_get_expr(where)) == 'call',
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
+  dmessage(paste(where), class(where))
+
   env_bind(layer, where = where)
+
+  layer
 }
 
 #' Return or set sort_vars layer binding
@@ -157,9 +167,9 @@ sort_vars <- function(layer) {
 #' @export
 #' @rdname sort_vars
 set_sort_vars <- function(layer, sort_vars) {
-  dmessage(paste("sort_vars came in as: ",class(sort_vars)))
-
   sort_vars <- enquos(sort_vars)
+
+  dmessage(paste("sort_vars came in as: ",class(sort_vars)))
 
   # Unpack the `sort_vars` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
@@ -205,6 +215,8 @@ set_sort_vars <- function(layer, sort_vars) {
 
 
   env_bind(layer, sort_vars = sort_vars)
+
+  layer
 }
 
 #' Set or return sort layer binding
@@ -235,6 +247,8 @@ set_layer_sort <- function(layer, sort) {
               msg = "sort must be 'ascending', 'desc'")
 
   env_bind(layer, sort = sort)
+
+  layer
 }
 
 #' Set or return layer formatter
@@ -265,5 +279,7 @@ set_layer_formatter <- function(layer, formatter) {
               msg = "formatter must be a function")
 
   env_bind(layer, formatter = formatter)
+
+  layer
 }
 

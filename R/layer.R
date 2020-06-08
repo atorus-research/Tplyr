@@ -124,25 +124,25 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Unpack the `by` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
   # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(by[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    by <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop()
-
-      # Evaluate the quosure by getting the expression
-      eval(c, envir=caller_env())
-      },
-      # If a 1 item list of variable was provided, it'll fail
-      error = function(err) {
-        abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                               "or multiple variable names using `dplyr::vars`."))
-      }
-    )
-    # Override in the arglist
-    arg_list$by <- by
-  }
+  # c <- quo_get_expr(by[[1]])
+  # if (is.call(c)) {
+  #   # If it's a call, we need to pull it out a level
+  #   by <- tryCatch({
+  #     # If it's in here, the call has to be to dplyr::vars
+  #     if (call_name(c) != "vars") stop()
+  #
+  #     # Evaluate the quosure by getting the expression
+  #     eval(c, envir=caller_env())
+  #     },
+  #     # If a 1 item list of variable was provided, it'll fail
+  #     error = function(err) {
+  #       abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
+  #                              "or multiple variable names using `dplyr::vars`."))
+  #     }
+  #   )
+  #   # Override in the arglist
+  #   arg_list$by <- by
+  # }
 
   # Run validation
   dmessage(paste("By came in as: ",class(by)))
@@ -153,15 +153,17 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 
   # Add non-parameter specified defaults into the environment.
   evalq({
-    sort <- 'ascending' # Default sorting to ascending
-    sort_vars <- target_var # Sort by the target variable itself
-    formatter <- as.character # default format of just the function `as.character`
     layers <- structure(list(), class=append("tplyr_layer_container", "list"))
   }, envir = e)
 
   # Create the object
-  structure(e,
-            class=append(c('tplyr_layer', paste0(type,'_layer')), class(e)))
+  structure(e ,
+            class=append(c('tplyr_layer', paste0(type,'_layer')), class(e))) %>%
+    set_layer_sort("ascending") %>%
+    set_sort_vars(!!target_var) %>%
+    set_layer_formatter(as.character) %>%
+    set_tplyr_where(!!where) %>%
+    set_tplyr_by(!!by)
 }
 
 #' Validate a tplyr layer
@@ -180,54 +182,12 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   assert_that(is.environment(parent) && inherits(parent, c('tplyr_table', 'tplyr_layer', 'tplyr_subgroup_layer')),
               msg="Parent environment must be a `tplyr_table` or `tplyr_layer")
 
-  # Check that the quosures are properly quosures
-  assert_that(is_quosure(target_var))
-  assert_that(is_quosure(where))
-
-  # Check that the quosures are proper types
-  assert_that(class(quo_get_expr(target_var)) == 'name',
-              msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
-
-  dmessage(paste(where), class(where))
-  # Where is not a required field - either must be null or a call. Converted to quosure regardless
-  assert_that(is.null(quo_get_expr(where)) || class(quo_get_expr(where)) == 'call',
-              msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
-
   # Make sure `target_var` exists in the target data.frame
   target <- NULL # Mask global definitions check
   vname <- as_label(quo_get_expr(target_var))
   vnames <- evalq(names(target), envir=parent)
   assert_that(vname %in% vnames,
               msg = paste('`target_var` value', vname, 'does not exist in target data frame.'))
-
-  dmessage(paste("By came in as: ",class(by)))
-
-  # Make sure that by variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(by[[1]])) {
-    # Make sure the variables provided to `by` are of the correct type
-    msg = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(by, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `by`` list
-    for (v in by) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as_label(quo_get_expr(v))))
-      if (class(quo_get_expr(v)) == "name") {
-        vname <- as_label(quo_get_expr(v))
-        assert_that(vname %in% vnames,
-                    msg = paste0("By variable `",vname, "` does not exist in target dataset"))
-      }
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b, c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
 }
 
 
