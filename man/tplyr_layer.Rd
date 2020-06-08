@@ -4,7 +4,7 @@
 \alias{tplyr_layer}
 \title{Create a \code{tplyr_layer} object}
 \usage{
-tplyr_layer(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+tplyr_layer(parent, target_var, by, where, type, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
