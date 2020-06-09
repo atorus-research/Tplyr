@@ -41,8 +41,17 @@ build.tplyr_table <- function(x) {
   layers <- NULL
 
   output <- evalq({
+    # Dummies for treatment groups added to target dataset
+    for (i in seq(along = treat_grps)) {
+      target[, paste0(".tplyr-", names(treat_grps)[i])] <- target[, as_label(treat_var)] %in% treat_grps[[i]]
+    }
+    # Dummies for treatment groups added to population dataset
+    for (i in seq(along = treat_grps)) {
+      pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- pop_data[, as_label(pop_treat_var)] %in% treat_grps[[i]]
+    }
+
     # Build the layers
-    layer_output <- lapply(build, layers)
+    layer_output <- lapply(layers, build)
 
   }, envir=x)
 
@@ -60,7 +69,7 @@ build.count_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    layer_output <- lapply(layers, build)
 
   }, envir=x)
 
@@ -78,7 +87,7 @@ build.desc_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    layer_output <- lapply(layers, build)
 
   }, envir=x)
 
@@ -96,14 +105,13 @@ build.shift_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    layer_output <- lapply(layers, build)
 
   }, envir=x)
 
   # Feed the output up
   output
 }
-
 
 
 
