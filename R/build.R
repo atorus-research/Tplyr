@@ -49,6 +49,7 @@ build.tplyr_table <- function(x) {
     for (i in seq(along = treat_grps)) {
       pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- pop_data[, as_label(pop_treat_var)] %in% treat_grps[[i]]
     }
+    rm(i)
 
     # Build the layers
     layer_output <- lapply(layers, build)
