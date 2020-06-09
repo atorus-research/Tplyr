@@ -4,7 +4,7 @@
 \alias{get_custom_summaries}
 \title{Get custom user summaries added to the layer environment via \code{set_custom_summaries}}
 \usage{
-get_custom_summaries(e = caller_env())
+get_custom_summaries(e)
 }
 \arguments{
 \item{e}{Environment to extract custom summaries from}

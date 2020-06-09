@@ -6,7 +6,7 @@
 #'
 #' @return \code{custom_summaries} binding in the layer environment
 #' @export
-get_custom_summaries <- function(e = caller_env()) {
+get_custom_summaries <- function(e) {
   # If the custom_summaries object exists in the layer environment then grab it
   if (exists("custom_summaries", envir=e)){
     env_get(e, "custom_summaries")
@@ -36,24 +36,21 @@ set_custom_summaries <- function(e, ...){
   assert_inherits_class(e, 'desc_layer')
 
   # Convert the ellipsis to a named list
-  params <- enquos(...)
+  params <- enexprs(...)
 
   # All items in list must be named so check them all
-  assert_that(all(sapply(names(params), function(x) x != '')),
+  assert_that(is_named(params),
               msg="In `set_custom_summaries` all summaries submitted must have names.")
-
-  # Make a container to hold the output parameters
-  output_params <- list()
 
   # Check each param submitted
   for (name in names(params)) {
     # Each parameter must be a call object
-    assert_that(is_call(quo_get_expr(params[[name]])),
+    assert_that(is_call(params[[name]]),
                 msg = paste0("In `set_custom_summaries` parameter `", name,
                              "` is not a call. All parameters must be syntax (i.e. mean(variable, na.rm=TRUE))."))
 
   }
 
   # Bind to the layer environment
-  env_bind(e, custom_summaries = lapply(params, quo_get_expr))
+  env_bind(e, custom_summaries = params)
 }

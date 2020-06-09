@@ -13,7 +13,7 @@
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_target_var(Species2)
-target_var <- function(layer) {
+get_target_var <- function(layer) {
   env_get(layer, "target_var")
 }
 

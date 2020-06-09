@@ -5,35 +5,44 @@
 #' @return Processed data within layer environment
 process_desc_layer <- function(e) {
   evalq({
-    .dat <- target %>%
+    # Extract the list of summaries that need to be performed
+    summaries <- get_summaries(target_var)
+
+    # Start the tplyr processing
+    summary_dat <- target %>%
       filter(!!where) %>%
-      group_by(!!pop_treat_var) %>%
-      summarize(!!!tplyr_summaries)
+      group_by(!!pop_treat_var, !!!by) %>%
+      summarize(!!!summaries)
+
+
   }, envir=e)
 }
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
 #'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
-get_summaries <- function(e = caller_env()) {
+get_summaries <- function(var, e = caller_env()) {
 
+  print(trace_back())
   # Define the default list of summaries
-  summaries <- list(
-    n      = expr( n()                             ),
-    mean   = rlang::expr( mean({{target_var}})     ),
-    sd     = expr( sd({{ target_var }})            ),
-    var    = expr( var({{ target_var }})           ),
-    median = expr( median({{ target_var }})        ),
-    min    = expr( min({{ target_var }})           ),
-    max    = expr( max({{ target_var }})           ),
-    iqr    = expr( IQR({{ target_var }})           ),
-    q1     = expr( quantile({{ target_var }})[[2]] ),
-    q3     = expr( quantile({{ target_var }})[[4]] )
+  summaries <- exprs(
+    n       = n()                 ,
+    mean    = mean(!!var)         ,
+    sd      = sd(!!var)           ,
+    var     = var(!!var)          ,
+    median  = median(!!var)       ,
+    min     = min(!!var)          ,
+    max     = max(!!var)          ,
+    iqr     = IQR(!!var)          ,
+    q1      = quantile(!!var)[[2]],
+    q3      = quantile(!!var)[[4]],
+    missing = sum(is.na(!!var))
   )
 
   append(summaries, get_custom_summaries(e), after=0)
-
 }
+
+
 
 
 

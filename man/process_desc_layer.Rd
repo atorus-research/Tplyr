@@ -4,7 +4,7 @@
 \alias{process_desc_layer}
 \title{Process a layer of type \code{desc}}
 \usage{
-process_desc_layer(e)
+process_desc_layer(e, summaries)
 }
 \arguments{
 \item{e}{Environment within which a}
