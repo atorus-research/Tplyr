@@ -189,6 +189,8 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   assert_that(vname %in% vnames,
               msg = paste('`target_var` value', vname, 'does not exist in target data frame.'))
 
+  dmessage(paste("by came in as: ",class(by)))
+
   # Make sure that by variables not submitted as characters exist in the target dataframe
   if (!quo_is_null(by[[1]])) {
     # Make sure the variables provided to `by` are of the correct type
@@ -200,7 +202,7 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
     # Check each element of the `by`` list
     for (v in by) {
       dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
+      dmessage(paste("Checking", as_label(quo_get_expr(v))))
       # Check each 'by' to see if it exists in target data.set
       if (class(quo_get_expr(v)) == "name") {
         vname <- as_label(quo_get_expr(v))
@@ -209,7 +211,7 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
       }
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
+        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b, c)).")
       }
       else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
         abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
