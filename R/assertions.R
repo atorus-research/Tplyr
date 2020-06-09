@@ -161,3 +161,10 @@ unpack_vars <- function(quo_var) {
   }
   quo_var
 }
+
+#' @export
+#' @family Custom Assertions
+#' @rdname custom_assertions
+assert_null_or_call <- function(quo_var) {
+  quo_is_null(quo_var) || class(quo_get_expr(quo_var)) == "call"
+}
