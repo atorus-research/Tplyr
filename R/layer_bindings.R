@@ -95,7 +95,7 @@ tplyr_where <- function(layer) {
 set_tplyr_where <- function(layer, where) {
   where <- enquo(where)
 
-  assert_that(assert_null_or_call(where),
+  assert_that(is_null_or_call(where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
   dmessage(paste(where), class(where))
