@@ -5,10 +5,10 @@ test_that("target_var layer bindings attaches properly", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_equal(target_var(tab), quo(Species))
+  expect_equal(get_target_var(tab), quo(Species))
 
   set_target_var(tab, Species2)
-  expect_equal(target_var(tab), quo(Species2))
+  expect_equal(get_target_var(tab), quo(Species2))
 })
 
 test_that("target_var errors raise appropriately", {
@@ -28,16 +28,16 @@ test_that("tplyr_by binds as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_true(quo_is_null(tplyr_by(tab)[[1]]))
+  expect_true(quo_is_null(get_by(tab)[[1]]))
 
   set_tplyr_by(tab, "aString")
-  expect_equal(tplyr_by(tab)[[1]], quo("aString"))
+  expect_equal(get_by(tab)[[1]], quo("aString"))
 
   set_tplyr_by(tab, Species2)
-  expect_equal(tplyr_by(tab), quos(Species2))
+  expect_equal(get_by(tab), quos(Species2))
 
   set_tplyr_by(tab, vars(Species2, Sepal.Width))
-  expect_equal(tplyr_by(tab), vars(Species2, Sepal.Width))
+  expect_equal(get_by(tab), vars(Species2, Sepal.Width))
 })
 
 test_that("tplyr_by raises expected errors", {
@@ -57,10 +57,10 @@ test_that("tplyr_where binds where as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_true(quo_is_null(tplyr_where(tab)))
+  expect_true(quo_is_null(get_where(tab)))
 
   set_tplyr_where(tab, Petal.Length > 3)
-  expect_equal(tplyr_where(tab), quo(Petal.Length > 3))
+  expect_equal(get_where(tab), quo(Petal.Length > 3))
 })
 
 test_that("tplyr_where throws errors as expected", {
@@ -80,14 +80,14 @@ test_that("sort_vars binds sort_var as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_equal(sort_vars(tab)[[1]], quo(Species))
+  expect_equal(get_sort_vars(tab)[[1]], quo(Species))
 
   set_sort_vars(tab, Species2)
 
-  expect_equal(sort_vars(tab), quos(Species2))
+  expect_equal(get_sort_vars(tab), quos(Species2))
 
   set_sort_vars(tab, vars(Species, Species2))
-  expect_equal(sort_vars(tab), quos(Species, Species2))
+  expect_equal(get_sort_vars(tab), quos(Species, Species2))
 })
 
 test_that("sort_vars throws expected errors", {
@@ -104,10 +104,10 @@ test_that("sort sets bindings as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_equal(layer_sort(tab), "ascending")
+  expect_equal(get_layer_sort(tab), "ascending")
 
   set_layer_sort(tab, "desc")
-  expect_equal(layer_sort(tab), "desc")
+  expect_equal(get_layer_sort(tab), "desc")
 })
 
 test_that("sort_throws errors as expected", {
@@ -124,13 +124,13 @@ test_that("formatter layer sets bindings as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_equal(layer_formatter(tab), as.character)
+  expect_equal(get_layer_formatter(tab), as.character)
 
   set_layer_formatter(tab, is.character)
-  expect_equal(layer_formatter(tab), is.character)
+  expect_equal(get_layer_formatter(tab), is.character)
 
   set_layer_formatter(tab, function(x) "abc")
-  expect_equal(layer_formatter(tab), function(x) "abc")
+  expect_equal(get_layer_formatter(tab), function(x) "abc")
 })
 
 test_that("formatter raises errors as expected", {

@@ -13,7 +13,7 @@
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_target_var(Species2)
-target_var <- function(layer) {
+get_target_var <- function(layer) {
   env_get(layer, "target_var")
 }
 
@@ -46,7 +46,7 @@ set_target_var <- function(layer, target_var) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_tplyr_by(vars(Species2, Sepal.Width))
-tplyr_by <- function(layer) {
+get_by <- function(layer) {
   env_get(layer, "by")
 }
 
@@ -83,7 +83,7 @@ set_tplyr_by <- function(layer, by) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_tplyr_where(Petal.Length > 3)
-tplyr_where <- function(layer) {
+get_where <- function(layer) {
   env_get(layer, "where")
 }
 
@@ -119,7 +119,7 @@ set_tplyr_where <- function(layer, where) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_sort_vars(vars(Sepal.Length, Sepal.Width))
-sort_vars <- function(layer) {
+get_sort_vars <- function(layer) {
   env_get(layer, "sort_vars")
 }
 
@@ -155,7 +155,7 @@ set_sort_vars <- function(layer, sort_vars) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_layer_sort("desc")
-layer_sort <- function(layer) {
+get_layer_sort <- function(layer) {
   env_get(layer, "sort")
 }
 
@@ -187,7 +187,7 @@ set_layer_sort <- function(layer, sort) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_layer_formatter(as.numeric)
-layer_formatter <- function(layer) {
+get_layer_formatter <- function(layer) {
   env_get(layer, "formatter")
 }
 
