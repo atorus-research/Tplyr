@@ -96,3 +96,68 @@ assert_inherits_class <- function(x, should_have) {
                  '". Classes: ', paste(class(x), collapse=", ")))
   }
 }
+
+#' Assert that variabes not passed as strings are present in target dataset
+#'
+#' @param quo_var A variable that can be a string, variable, or combination of
+#'   those using dplyr::vars
+#'
+#' @return Returns nothing, raises errors when assertations aren't met
+#' @export
+#' @family Custom Assertions
+#' @rdname custom_assertions
+assert_quo_var_present <- function(quo_var) {
+  # Make sure that quo_var variables not submitted as characters exist in the target dataframe
+  if (!quo_is_null(quo_var[[1]])) {
+    # Make sure the variables provided to `quo_var` are of the correct type
+    msg = paste0("Invalid input to `quo_var`. Submit either a string, a variable name, ",
+                 "or multiple variable names using `dplyr::vars`.")
+    are_quosures <- all(sapply(quo_var, function(x) is_quosure(x)))
+    assert_that(are_quosures, msg = msg)
+
+    # Check each element of the `quo_var` list
+    for (v in quo_var) {
+      dmessage(print(quo_get_expr(v)))
+      dmessage(paste("Checking", as.character(quo_get_expr(v))))
+      # While looping, making sure calls weren't submitted
+      if (class(quo_get_expr(v)) == "call") {
+        abort("Arguments to `quo_var` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
+      }
+      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
+        abort("Invalid input to `quo_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+      }
+    }
+  }
+}
+
+#' Assert that an argument is passed using vars as appropriate
+#'
+#' @param quo_var A variable that can be a string, variable, or combination of
+#'   those using dplyr::vars
+#'
+#' @return Unpacked quosure.
+#' @export
+#' @family Custom Assertions
+#' @rdname custom_assertions
+unpack_vars <- function(quo_var) {
+  # Unpack the `quo_var` group to ensure that the type is `list_of<quosures>`
+  # It had to be a 1 item list, so check if that element is a `call`
+  # The only valid use of a `call` is to provide multiple variables using `vars`
+  c <- quo_get_expr(quo_var[[1]])
+  if (is.call(c)) {
+    # If it's a call, we need to pull it out a level
+    quo_var <- tryCatch({
+      # If it's in here, the call has to be to dplyr::vars
+      if (call_name(c) != "vars") abort("Multiple variables should be using dplyr::vars")
+
+      # Evaluate the quosure sort_vars getting the expression
+      eval(c, envir=caller_env())
+    },
+    # If a 1 item list of variable was provided, it'll fail
+    error = function(err) {
+      abort(message = paste0("Invalid input to `quo_var`. Submit either a string, a variable name, ",
+                             "or multiple variable names using `dplyr::vars`."))
+    })
+  }
+  quo_var
+}

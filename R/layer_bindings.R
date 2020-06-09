@@ -60,48 +60,9 @@ set_tplyr_by <- function(layer, by) {
 
   dmessage(paste("By came in as: ",class(by)))
 
-
-  # Unpack the `by` group to ensure that the type is `list_of<quosures>`
-  # It had to be a 1 item list, so check if that element is a `call`
-  # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(by[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    by <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop("Multiple variables should be using dplyr::vars")
-
-      # Evaluate the quosure by getting the expression
-      eval(c, envir=caller_env())
-    },
-    # If a 1 item list of variable was provided, it'll fail
-    error = function(err) {
-      abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                             "or multiple variable names using `dplyr::vars`."))
-    })
-  }
-
-  # Make sure that by variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(by[[1]])) {
-    # Make sure the variables provided to `by` are of the correct type
-    msg = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(by, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `by`` list
-    for (v in by) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
+  # Unpack sort_vars
+  by <- unpack_vars(by)
+  assert_quo_var_present(by)
 
   env_bind(layer, by = by)
 
@@ -171,48 +132,9 @@ set_sort_vars <- function(layer, sort_vars) {
 
   dmessage(paste("sort_vars came in as: ",class(sort_vars)))
 
-  # Unpack the `sort_vars` group to ensure that the type is `list_of<quosures>`
-  # It had to be a 1 item list, so check if that element is a `call`
-  # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(sort_vars[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    sort_vars <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop("Multiple variables should be using dplyr::vars")
-
-      # Evaluate the quosure sort_vars getting the expression
-      eval(c, envir=caller_env())
-    },
-    # If a 1 item list of variable was provided, it'll fail
-    error = function(err) {
-      abort(message = paste0("Invalid input to `sort_vars`. Submit either a string, a variable name, ",
-                             "or multiple variable names using `dplyr::vars`."))
-    })
-  }
-
-  # Make sure that sort_vars variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(sort_vars[[1]])) {
-    # Make sure the variables provided to `sort_vars` are of the correct type
-    msg = paste0("Invalid input to `sort_vars`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(sort_vars, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `sort_vars` list
-    for (v in sort_vars) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `sort_vars` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `sort_vars`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
-
+  #Unpack sort_vars
+  sort_vars <- unpack_vars(sort_vars)
+  assert_quo_var_present(sort_vars)
 
   env_bind(layer, sort_vars = sort_vars)
 
