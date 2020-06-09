@@ -62,7 +62,7 @@ any sublayers of the current layer.}
 \examples{
 tab <- tplyr_table(iris, Sepal.Width)
 
-l <- tplyr_layer(tab, type='count', by=vars('Label Text', Species),
+l <- group_count(tab, type='count', by=vars('Label Text', Species),
                  target_var=Species, where= Sepal.Width < 5.5)
 
 }

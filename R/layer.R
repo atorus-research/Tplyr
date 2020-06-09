@@ -54,7 +54,7 @@
 #' @examples
 #' tab <- tplyr_table(iris, Sepal.Width)
 #'
-#' l <- tplyr_layer(tab, type='count', by=vars('Label Text', Species),
+#' l <- group_count(tab, type='count', by=vars('Label Text', Species),
 #'                  target_var=Species, where= Sepal.Width < 5.5)
 #'
 #' @seealso \code{\link{tplyr_table}}
@@ -157,10 +157,9 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   }, envir = e)
 
   # Create the object
-  structure(env(
-    layers = structure(list(), class=append("tplyr_layer_container", "list"))
-  ),
+  structure(e,
             class=append(c('tplyr_layer', paste0(type,'_layer')), class(e))) %>%
+    set_target_var(!!target_var) %>%
     set_layer_sort("ascending") %>%
     set_sort_vars(!!target_var) %>%
     set_layer_formatter(as.character) %>%
@@ -202,6 +201,12 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
     for (v in by) {
       dmessage(print(quo_get_expr(v)))
       dmessage(paste("Checking", as.character(quo_get_expr(v))))
+      # Check each 'by' to see if it exists in target data.set
+      if (class(quo_get_expr(v)) == "name") {
+        vname <- as_label(quo_get_expr(v))
+        assert_that(vname %in% vnames,
+                    msg = paste0("By variable `",vname, "` does not exist in target dataset"))
+      }
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
         abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")

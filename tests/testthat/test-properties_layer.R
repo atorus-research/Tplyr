@@ -17,8 +17,8 @@ test_that("target_var errors raise appropriately", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_error(set_target_var(tab, "Species2"), "target_var must be a variable name")
-  expect_error(set_target_var(tab, quo(filter = Species2)), "target_var must be a variable name")
+  expect_error(set_target_var(tab, "Species2"), "The `target_var` parameter must refer to a valid variable name")
+  expect_error(set_target_var(tab, quo(filter = Species2)), "The `target_var` parameter must refer to a valid variable name")
   expect_silent(set_target_var(tab, Species2))
 })
 ##### by tests #####
@@ -80,7 +80,7 @@ test_that("sort_vars binds sort_var as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_equal(sort_vars(tab), quo(Species))
+  expect_equal(sort_vars(tab)[[1]], quo(Species))
 
   set_sort_vars(tab, Species2)
 
