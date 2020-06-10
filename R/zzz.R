@@ -2,7 +2,7 @@
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
 #' @importFrom rlang expr
 #' @importFrom stringr str_split str_extract_all
-#' @importFrom purrr flatten
+#' @importFrom purrr flatten map map_lgl
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 NULL

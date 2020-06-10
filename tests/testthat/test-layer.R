@@ -40,7 +40,7 @@ test_that("tplyr_layer returns a class of `tplyr_subgroup_layer`, `tplyr_layer` 
 test_that("Environment contains proper bindings when call is proper", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- group_count(t, target_var=Species)
-  expect_equal(sort(env_names(l)), c("by", "formatter", "layers", "sort", "sort_vars", "target_var", "where"))
+  expect_equal(sort(env_names(l)), c("by", "cols", "formatter", "layers", "sort", "sort_vars", "target_var", "where"))
 })
 
 test_that("`Type` attribute is set properly", {
@@ -57,16 +57,16 @@ test_that("`Type` attribute is set properly", {
 test_that("type field can only contain one of 'count', 'desc', or 'shift'", {
   t <- tplyr_table(iris, Sepal.Width)
   # In order to test type parameter have to test direct access to tplyr_layer
-  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type='count'))
-  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type='desc'))
-  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type='shift'))
-  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type=c('shift', 'desc')),
+  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='count'))
+  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='desc'))
+  expect_silent(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='shift'))
+  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('shift', 'desc')),
                 '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type=c('count', 'desc')),
+  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('count', 'desc')),
                '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type=c('count', 'desc', 'shift')),
+  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('count', 'desc', 'shift')),
                '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), where=quo(NULL), type="bad"),
+  expect_error(tplyr_layer(t, target_var=quo(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type="bad"),
                '`type` must be one of "count", "desc", or "shift"')
 })
 
@@ -108,9 +108,9 @@ test_that("`target_var` must exist in target dataset", {
 test_that("`by` varaibles must exist in the target dataset", {
   t <- tplyr_table(iris, Sepal.Width)
   expect_error(group_count(t, target_var=Species, by=BadVars),
-               "By variable `BadVars` does not exist in target dataset")
+               "`by` variable `BadVars` does not exist in target dataset")
   expect_error(group_count(t, target_var=Species, by=vars(Species, BadVars)),
-               "By variable `BadVars` does not exist in target dataset")
+               "`by` variable `BadVars` does not exist in target dataset")
 })
 
 test_that("`where` must be programming logic (quosure of class 'call')", {

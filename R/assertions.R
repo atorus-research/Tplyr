@@ -136,10 +136,11 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
 
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `", param, "` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
+        abort(paste0("Arguments to `", param, "` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c))."))
       }
       else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `", param, "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+        abort(paste0("Invalid input to `", param,
+                     "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."))
       }
     }
   }
@@ -154,14 +155,18 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
 #' @export
 #' @family Custom Assertions
 #' @rdname custom_assertions
-unpack_vars <- function(quo_var) {
-  # Unpack the `quo_var` group to ensure that the type is `list_of<quosures>`
+unpack_vars <- function(quo_list) {
+
+  # Get the parameter name that was entered
+  param <- quo_get_expr(enquo(quo_list))
+
+  # Unpack the `quo_list` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
   # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(quo_var[[1]])
+  c <- quo_get_expr(quo_list[[1]])
   if (is.call(c)) {
     # If it's a call, we need to pull it out a level
-    quo_var <- tryCatch({
+    quo_list <- tryCatch({
       # If it's in here, the call has to be to dplyr::vars
       if (call_name(c) != "vars") abort("Multiple variables should be using dplyr::vars")
 
@@ -170,11 +175,11 @@ unpack_vars <- function(quo_var) {
     },
     # If a 1 item list of variable was provided, it'll fail
     error = function(err) {
-      abort(message = paste0("Invalid input to `quo_var`. Submit either a string, a variable name, ",
+      abort(message = paste0("Invalid input to `", param, "`. Submit either a string, a variable name, ",
                              "or multiple variable names using `dplyr::vars`."))
     })
   }
-  quo_var
+  quo_list
 }
 
 #' @export
