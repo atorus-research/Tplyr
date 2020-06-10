@@ -23,7 +23,6 @@ process_desc_layer <- function(e) {
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
 get_summaries <- function(var, e = caller_env()) {
 
-  print(trace_back())
   # Define the default list of summaries
   summaries <- exprs(
     n       = n()                 ,

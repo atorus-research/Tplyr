@@ -4,7 +4,7 @@
 \alias{get_summaries}
 \title{Get the summaries to be passed forward into \code{dplyr::summarize()}}
 \usage{
-get_summaries(e = caller_env())
+get_summaries(var, e = caller_env())
 }
 \value{
 A list of expressions to be unpacked in \code{dplyr::summarize}
