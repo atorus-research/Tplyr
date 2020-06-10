@@ -130,7 +130,8 @@ test_that("`sort` defaults to 'ascending'", {
 test_that("`sort_var` defaults to `target_var`", {
   t <- tplyr_table(iris, Sepal.Width)
   l <- group_count(t, target_var=Species)
-  expect_true(identical(l$sort_vars, l$target_var))
+  # sort_vars is always a list so we can extract it here
+  expect_true(identical(l$sort_vars[[1]], l$target_var))
 })
 
 test_that("`formatter` defaults to `as.character`", {

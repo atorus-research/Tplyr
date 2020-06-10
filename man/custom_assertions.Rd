@@ -3,11 +3,20 @@
 \name{assert_has_class}
 \alias{assert_has_class}
 \alias{assert_inherits_class}
+\alias{assert_quo_var_present}
+\alias{unpack_vars}
+\alias{is_null_or_call}
 \title{Custom assertions}
 \usage{
 assert_has_class(x, should_be)
 
 assert_inherits_class(x, should_have)
+
+assert_quo_var_present(quo_var)
+
+unpack_vars(quo_var)
+
+is_null_or_call(quo_var)
 }
 \arguments{
 \item{x}{Object to be inspected}
@@ -15,6 +24,14 @@ assert_inherits_class(x, should_have)
 \item{should_be}{The expected class of the object}
 
 \item{should_have}{Expected class that object should inherit}
+
+\item{quo_var}{A variable that can be a string, variable, or combination of
+those using dplyr::vars}
+}
+\value{
+Returns nothing, raises errors when assertations aren't met
+
+Unpacked quosure.
 }
 \description{
 These assertions abstract away common checks required throughout package development. Furthermore, the provide detailed and
