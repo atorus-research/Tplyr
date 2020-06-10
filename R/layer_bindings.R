@@ -62,7 +62,7 @@ set_tplyr_by <- function(layer, by) {
 
   # Unpack sort_vars
   by <- unpack_vars(by)
-  assert_quo_var_present(by)
+  assert_quo_var_present(by, envir=layer)
 
   env_bind(layer, by = by)
 
@@ -134,7 +134,7 @@ set_sort_vars <- function(layer, sort_vars) {
 
   #Unpack sort_vars
   sort_vars <- unpack_vars(sort_vars)
-  assert_quo_var_present(sort_vars)
+  assert_quo_var_present(sort_vars, envir=layer)
 
   env_bind(layer, sort_vars = sort_vars)
 

@@ -7,11 +7,35 @@
 \title{Create a \code{count}, \code{desc}, or \code{shift} layer for discrete count based summaries, descriptive statistics summaries,
  or shift count summaries}
 \usage{
-group_count(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_count(
+  parent,
+  target_var,
+  by = NULL,
+  cols = NULL,
+  where = NULL,
+  type = NULL,
+  ...
+)
 
-group_desc(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_desc(
+  parent,
+  target_var,
+  by = NULL,
+  cols = NULL,
+  where = NULL,
+  type = NULL,
+  ...
+)
 
-group_shift(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_shift(
+  parent,
+  target_var,
+  by = NULL,
+  cols = NULL,
+  where = NULL,
+  type = NULL,
+  ...
+)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the

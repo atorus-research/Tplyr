@@ -106,25 +106,40 @@ assert_inherits_class <- function(x, should_have) {
 #' @export
 #' @family Custom Assertions
 #' @rdname custom_assertions
-assert_quo_var_present <- function(quo_var) {
-  # Make sure that quo_var variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(quo_var[[1]])) {
-    # Make sure the variables provided to `quo_var` are of the correct type
-    msg = paste0("Invalid input to `quo_var`. Submit either a string, a variable name, ",
+assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
+
+  # Get the parameter name that was entered
+  param <- quo_get_expr(enquo(quo_list))
+
+  # If the vnames weren't supplied then grab
+  if (is.null(vnames)) {
+    assert_that(!is.null(envir), msg='In `assert_quo_var_present` if `vnames` is not provided then envir must be specified')
+    vnames <- evalq(names(target), envir=envir)
+  }
+
+  # Make sure that quo_list variables not submitted as characters exist in the target dataframe
+  if (!quo_is_null(quo_list[[1]])) {
+    # Make sure the variables provided to `quo_list` are of the correct type
+    msg = paste0("Invalid input to `", param, "`. Submit either a string, a variable name, ",
                  "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(quo_var, function(x) is_quosure(x)))
+    are_quosures <- all(map_lgl(quo_list, is_quosure))
     assert_that(are_quosures, msg = msg)
 
-    # Check each element of the `quo_var` list
-    for (v in quo_var) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
+    # Check each element of the `quo_list` list
+    for (v in quo_list) {
+
+      if (class(quo_get_expr(v)) == "name") {
+        vname <- as_label(quo_get_expr(v))
+        assert_that(vname %in% vnames,
+                    msg = paste0("`", param, "` variable `",vname, "` does not exist in target dataset"))
+      }
+
       # While looping, making sure calls weren't submitted
       if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `quo_var` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
+        abort("Arguments to `", param, "` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
       }
       else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `quo_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+        abort("Invalid input to `", param, "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
       }
     }
   }
