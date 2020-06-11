@@ -16,8 +16,7 @@ the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
-\item{cols}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}.
-Notes the variables that are displayed in columns.}
+\item{cols}{Columns to be used in grouping to be represented width-wize in the output}
 
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 

@@ -12,9 +12,14 @@ assert_has_class(x, should_be)
 
 assert_inherits_class(x, should_have)
 
-assert_quo_var_present(quo_list, vnames = NULL, envir = NULL)
+assert_quo_var_present(
+  quo_list,
+  vnames = NULL,
+  envir = NULL,
+  allow_character = TRUE
+)
 
-unpack_vars(quo_list)
+unpack_vars(quo_list, allow_character = TRUE)
 
 is_null_or_call(quo_var)
 }
@@ -31,6 +36,8 @@ those using dplyr::vars}
 \item{vnames}{Variable names of the target dataset to check against}
 
 \item{envir}{Environment containing the dataset \code{target} from which names will be checked against}
+
+\item{allow_character}{Whether or not character strings are allows in an entry}
 
 \item{quo_var}{A quosure object to check}
 }
@@ -56,14 +63,16 @@ fun1 <- function(my_param) {
 }
 
 fun1(1)
-#>  Error: Argument `my_param` in function `fun1` must be character. Instead a class of "numeric" was passed.
+#>  Error: Argument `my_param` in function `fun1` must be character. Instead a class of
+#>  "numeric" was passed.
 
 fun2 <- function(my_param) {
   assert_inherits_class(my_param, 'numeric')
 }
 
 fun2(tibble::tibble(a=c(1,2,3)))
-#>  Error: Argument `my_param` in function `fun2` does not inherit numeric. Classes: tbl_df, tbl, data.frame
+#>  Error: Argument `my_param` in function `fun2` does not inherit numeric.
+#>  Classes: tbl_df, tbl, data.frame
 }
 }
 \concept{Custom Assertions}

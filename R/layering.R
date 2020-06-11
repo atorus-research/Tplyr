@@ -80,8 +80,7 @@ add_layer <- function(parent, layer) {
 #' @param target_var Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
 #'   the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.
 #' @param by A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
-#' @param cols A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}.
-#'   Notes the variables that are displayed in columns.
+#' @param cols A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
 #' @param where Call. Filter logic used to subset the target data when performing a summary.
 #' @param ... Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 #'   \href{<link tbd>}{vignette} on adding extensions.
@@ -98,7 +97,8 @@ add_layer <- function(parent, layer) {
 #' \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
 #' \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 #' within the target dataset Text strings submitted do not need to exist in the target dataset.}
-#' \item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
+#' \item{\code{cols}}{A list of quosures representing either text labels or variable names used in grouping. These variables
+#' will be used to pivot the table wider}
 #' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
 #' \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
 #'   Set by default to the value of \code{target_var}}
@@ -124,17 +124,17 @@ add_layer <- function(parent, layer) {
 #'     group_desc(target_var=Species)
 #'   )
 group_count <- function(parent, target_var, by=NULL, cols=NULL, where=NULL, ...) {
-  tplyr_layer(parent, type='count', by=enquos(by), cols=enquos(cols), target_var=enquo(target_var), where=enquo(where), ...)
+  tplyr_layer(parent, type='count', by=enquos(by), cols=enquos(cols), target_var=enquos(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
 group_desc <- function(parent, target_var, by=NULL, cols=NULL, where=NULL, ...) {
-  tplyr_layer(parent, type='desc', by=enquos(by), cols=enquos(cols), target_var=enquo(target_var), where=enquo(where), ...)
+  tplyr_layer(parent, type='desc', by=enquos(by), cols=enquos(cols), target_var=enquos(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @export
 group_shift <- function(parent, target_var, by=NULL, cols=NULL, where=NULL, ...) {
-  tplyr_layer(parent, type='shift', by=enquos(by), cols=enquos(cols), target_var=enquo(target_var), where=enquo(where), ...)
+  tplyr_layer(parent, type='shift', by=enquos(by), cols=enquos(cols), target_var=enquos(target_var), where=enquo(where), ...)
 }
