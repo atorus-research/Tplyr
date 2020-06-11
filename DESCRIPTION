@@ -27,7 +27,9 @@ Depends:
     rlang (>= 0.4.6),
     assertthat (>= 0.2.1),
     magrittr (>= 1.5),
-    dplyr (>= 0.8.4)
+    dplyr (>= 0.8.4),
+    purrr (>= 0.3.3),
+    stringr (>= 1.4.0)
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
