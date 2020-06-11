@@ -16,7 +16,6 @@
 #'
 #' @family Custom Assertions
 #' @rdname custom_assertions
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -36,7 +35,7 @@
 #' }
 assert_has_class <- function(x, should_be) {
   # Get the name of the parameter being checked
-  param <- quo_get_expr(enquo(x))
+  param <- enexpr(x)
 
   # Is the argument the class that it shoudl be?
   if (class(x) != should_be){
@@ -66,12 +65,11 @@ assert_has_class <- function(x, should_be) {
 #' @param x Object to be inspected
 #' @param should_have Expected class that object should inherit
 #'
-#' @export
 #' @family Custom Assertions
 #' @rdname custom_assertions
 assert_inherits_class <- function(x, should_have) {
   # Get the name of the parameter being checked
-  param <- quo_get_expr(enquo(x))
+  param <- enexpr(x)
 
   # Is the argument the class that it should be?
   if (!inherits(x, should_have)){
@@ -99,17 +97,18 @@ assert_inherits_class <- function(x, should_have) {
 
 #' Assert that variabes not passed as strings are present in target dataset
 #'
-#' @param quo_var A variable that can be a string, variable, or combination of
+#' @param quo_list A variable that can be a string, variable, or combination of
 #'   those using dplyr::vars
+#' @param vnames Variable names of the target dataset to check against
+#' @param envir Environment containing the dataset \code{target} from which names will be checked against
 #'
 #' @return Returns nothing, raises errors when assertations aren't met
-#' @export
 #' @family Custom Assertions
 #' @rdname custom_assertions
 assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
 
   # Get the parameter name that was entered
-  param <- quo_get_expr(enquo(quo_list))
+  param <- enexpr(quo_list)
 
   # If the vnames weren't supplied then grab
   if (is.null(vnames)) {
@@ -148,17 +147,16 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
 
 #' Assert that an argument is passed using vars as appropriate
 #'
-#' @param quo_var A variable that can be a string, variable, or combination of
+#' @param quo_list A variable that can be a string, variable, or combination of
 #'   those using dplyr::vars
 #'
 #' @return Unpacked quosure.
-#' @export
 #' @family Custom Assertions
 #' @rdname custom_assertions
 unpack_vars <- function(quo_list) {
 
   # Get the parameter name that was entered
-  param <- quo_get_expr(enquo(quo_list))
+  param <- enexpr(quo_list)
 
   # Unpack the `quo_list` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
@@ -182,7 +180,10 @@ unpack_vars <- function(quo_list) {
   quo_list
 }
 
-#' @export
+#' Check if a quosure is null or contains a call
+#'
+#' @param quo_var A quosure object to check
+#'
 #' @family Custom Assertions
 #' @rdname custom_assertions
 is_null_or_call <- function(quo_var) {
