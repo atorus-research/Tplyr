@@ -48,7 +48,8 @@ test_that("pop_data binding attaches pop_data properly", {
   df <- data.frame(a = 1:10, b = 11:20)
   tab <- tplyr_table(df, a)
 
-  expect_reference(pop_data(tab), df)
+  # Changed to equivalent due to attribute change in constructor.
+  expect_equivalent(pop_data(tab), df)
 
   pop_data(tab) <- iris
   expect_reference(pop_data(tab), iris)

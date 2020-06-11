@@ -88,7 +88,7 @@ separate_int_dig <- function(x){
 #' @export
 #'
 #' @examples
-#' TBD
+#' #TBD
 set_format_strings <- function(e, ...) {
 
   # Pick off the ellpsis
