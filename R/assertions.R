@@ -24,14 +24,16 @@
 #' }
 #'
 #' fun1(1)
-#' #>  Error: Argument `my_param` in function `fun1` must be character. Instead a class of "numeric" was passed.
+#' #>  Error: Argument `my_param` in function `fun1` must be character. Instead a class of
+#' #>  "numeric" was passed.
 #'
 #' fun2 <- function(my_param) {
 #'   assert_inherits_class(my_param, 'numeric')
 #' }
 #'
 #' fun2(tibble::tibble(a=c(1,2,3)))
-#' #>  Error: Argument `my_param` in function `fun2` does not inherit numeric. Classes: tbl_df, tbl, data.frame
+#' #>  Error: Argument `my_param` in function `fun2` does not inherit numeric.
+#' #>  Classes: tbl_df, tbl, data.frame
 #' }
 assert_has_class <- function(x, should_be) {
   # Get the name of the parameter being checked
@@ -101,15 +103,26 @@ assert_inherits_class <- function(x, should_have) {
 #'   those using dplyr::vars
 #' @param vnames Variable names of the target dataset to check against
 #' @param envir Environment containing the dataset \code{target} from which names will be checked against
+#' @param allow_character Whether or not character strings are allows in an entry
 #'
 #' @return Returns nothing, raises errors when assertations aren't met
 #' @family Custom Assertions
 #' @rdname custom_assertions
-assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
+assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_character=TRUE) {
 
   # Get the parameter name that was entered
   param <- enexpr(quo_list)
 
+  if (allow_character) {
+    allow <- c('name', 'character')
+    allow_str <- "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."
+  } else {
+    allow <- "name"
+    allow_str <- "`. Submit either a variable name or multiple variable names using `dplyr::vars`."
+  }
+
+  # Global definition warning
+  target <- NULL
   # If the vnames weren't supplied then grab
   if (is.null(vnames)) {
     assert_that(!is.null(envir), msg='In `assert_quo_var_present` if `vnames` is not provided then envir must be specified')
@@ -119,8 +132,7 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
   # Make sure that quo_list variables not submitted as characters exist in the target dataframe
   if (!quo_is_null(quo_list[[1]])) {
     # Make sure the variables provided to `quo_list` are of the correct type
-    msg = paste0("Invalid input to `", param, "`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
+    msg = paste0("Invalid input to `", param, allow_str)
     are_quosures <- all(map_lgl(quo_list, is_quosure))
     assert_that(are_quosures, msg = msg)
 
@@ -134,12 +146,8 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
       }
 
       # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort(paste0("Arguments to `", param, "` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c))."))
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort(paste0("Invalid input to `", param,
-                     "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."))
+      if (!class(quo_get_expr(v)) %in% allow) {
+        abort(msg)
       }
     }
   }
@@ -149,14 +157,21 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL) {
 #'
 #' @param quo_list A variable that can be a string, variable, or combination of
 #'   those using dplyr::vars
+#' @param allow_character Whether or not character strings are allows in an entry
 #'
 #' @return Unpacked quosure.
 #' @family Custom Assertions
 #' @rdname custom_assertions
-unpack_vars <- function(quo_list) {
+unpack_vars <- function(quo_list, allow_character=TRUE) {
 
   # Get the parameter name that was entered
   param <- enexpr(quo_list)
+
+  if (allow_character) {
+    allow_str <- "`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."
+  } else {
+    allow_str <- "`. Submit either a variable name or multiple variable names using `dplyr::vars`."
+  }
 
   # Unpack the `quo_list` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
@@ -173,8 +188,7 @@ unpack_vars <- function(quo_list) {
     },
     # If a 1 item list of variable was provided, it'll fail
     error = function(err) {
-      abort(message = paste0("Invalid input to `", param, "`. Submit either a string, a variable name, ",
-                             "or multiple variable names using `dplyr::vars`."))
+      abort(message = paste0("Invalid input to `", param, allow_str))
     })
   }
   quo_list

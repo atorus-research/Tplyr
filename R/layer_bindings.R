@@ -22,10 +22,11 @@ get_target_var <- function(layer) {
 #' @export
 #' @rdname target_var
 set_target_var <- function(layer, target_var) {
-  target_var <- enquo(target_var)
+  target_var <- enquos(target_var)
 
-  assert_that(class(quo_get_expr(target_var)) == "name",
-              msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
+  # Unpack sort_vars
+  target_var <- unpack_vars(target_var, allow_character=FALSE)
+  assert_quo_var_present(target_var, envir=layer, allow_character=FALSE)
 
   env_bind(layer, target_var = target_var)
 
@@ -37,7 +38,7 @@ set_target_var <- function(layer, target_var) {
 #' @param layer A \code{tplyr_layer} object
 #'
 #' @return For \code{tplyr_by}, the by binding of the supplied layer. For
-#'   \code{set_tplyr_by} the modified layer environment.
+#'   \code{set_by} the modified layer environment.
 #' @export
 #' @rdname by
 #'
@@ -45,7 +46,7 @@ set_target_var <- function(layer, target_var) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_tplyr_by(vars(Species2, Sepal.Width))
+#'   set_by(vars(Species2, Sepal.Width))
 get_by <- function(layer) {
   env_get(layer, "by")
 }
@@ -55,12 +56,10 @@ get_by <- function(layer) {
 #'
 #' @export
 #' @rdname by
-set_tplyr_by <- function(layer, by) {
+set_by <- function(layer, by) {
   by <- enquos(by)
 
-  dmessage(paste("By came in as: ",class(by)))
-
-  # Unpack sort_vars
+  # Unpack by
   by <- unpack_vars(by)
   assert_quo_var_present(by, envir=layer)
 
@@ -73,8 +72,8 @@ set_tplyr_by <- function(layer, by) {
 #'
 #' @param layer A \code{tplyr_layer} object.
 #'
-#' @return For \code{tplyr_where}, the where binding of the supplied object.
-#'   For \code{set_tplyr_where}, the modified object
+#' @return For \code{where}, the where binding of the supplied object.
+#'   For \code{set_where}, the modified object
 #' @export
 #' @rdname where
 #'
@@ -82,7 +81,7 @@ set_tplyr_by <- function(layer, by) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_tplyr_where(Petal.Length > 3)
+#'   set_where(Petal.Length > 3)
 get_where <- function(layer) {
   env_get(layer, "where")
 }
@@ -92,7 +91,7 @@ get_where <- function(layer) {
 #' @return
 #' @export
 #' @rdname where
-set_tplyr_where <- function(layer, where) {
+set_where <- function(layer, where) {
   where <- enquo(where)
 
   assert_that(is_null_or_call(where),
@@ -129,8 +128,6 @@ get_sort_vars <- function(layer) {
 #' @rdname sort_vars
 set_sort_vars <- function(layer, sort_vars) {
   sort_vars <- enquos(sort_vars)
-
-  dmessage(paste("sort_vars came in as: ",class(sort_vars)))
 
   #Unpack sort_vars
   sort_vars <- unpack_vars(sort_vars)

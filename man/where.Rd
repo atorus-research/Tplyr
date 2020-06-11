@@ -2,12 +2,12 @@
 % Please edit documentation in R/layer_bindings.R
 \name{get_where}
 \alias{get_where}
-\alias{set_tplyr_where}
+\alias{set_where}
 \title{Set or return where layer binding}
 \usage{
 get_where(layer)
 
-set_tplyr_where(layer, where)
+set_where(layer, where)
 }
 \arguments{
 \item{layer}{A \code{tplyr_layer} object.}
@@ -15,8 +15,8 @@ set_tplyr_where(layer, where)
 \item{where}{A function detailing the subset}
 }
 \value{
-For \code{tplyr_where}, the where binding of the supplied object.
-  For \code{set_tplyr_where}, the modified object
+For \code{where}, the where binding of the supplied object.
+  For \code{set_where}, the modified object
 
 
 }
@@ -27,5 +27,5 @@ Set or return where layer binding
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
-  set_tplyr_where(Petal.Length > 3)
+  set_where(Petal.Length > 3)
 }

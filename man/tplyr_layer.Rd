@@ -16,6 +16,8 @@ the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
+\item{cols}{Columns to be used in grouping to be represented width-wize in the output}
+
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 
 \item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
