@@ -69,7 +69,7 @@ separate_int_dig <- function(x){
   names(out) <- c('int', 'dig')
 
   # Count the characters on each side of the decimal
-  num_chars <- unname(vapply(str_split(x, "\\.")[[1]], nchar, numeric(1)))
+  num_chars <- map_int(str_split(x, "\\.")[[1]], nchar)
 
   # Insert the number of characters into the named vector
   for (i in seq_along(num_chars)) {
@@ -94,7 +94,7 @@ set_format_strings <- function(e, ...) {
   # Pick off the ellpsis
   format_strings <- list(...)
 
-  # Row labels are pulled from names - grab-em
+  # Row labels are pulled from names - so make sure that everything is named
   assert_that(is_named(format_strings),
               msg = "In `set_format_string` all parameters must be named in order to create row labels.")
 
@@ -114,6 +114,9 @@ set_format_strings <- function(e, ...) {
   # Get the variable names that need to be kept on the same row
   keep_vars <- flatten(map(format_strings, ~ tail(.x$vars, n=length(.x$vars) -1)))
 
+  # Get the max format length
+  max_format_length <- max(map_int(format_strings, ~ .x$size))
+
   # Pick off the row labels
   row_labels <- names(format_strings)
 
@@ -122,7 +125,8 @@ set_format_strings <- function(e, ...) {
            summary_vars = summary_vars,
            keep_vars = keep_vars,
            row_labels = row_labels,
-           trans_vars = trans_vars
+           trans_vars = trans_vars,
+           max_format_length = max_format_length
     )
   e
 }
