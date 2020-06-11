@@ -52,10 +52,10 @@ test_that("pop_data binding attaches pop_data properly", {
   expect_equivalent(pop_data(tab), df)
 
   pop_data(tab) <- iris
-  expect_reference(pop_data(tab), iris)
+  expect_equivalent(pop_data(tab), iris)
 
   tab <- set_pop_data(tab , mtcars)
-  expect_reference(pop_data(tab), mtcars)
+  expect_equivalent(pop_data(tab), mtcars)
 })
 
 test_that("pop_data binding throws expected errors", {

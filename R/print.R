@@ -19,6 +19,7 @@ print.tplyr_table <- function(x, ...) {
     # Print str of pop_data data.frame
     if(!identical(pop_data, target)){
       cat("pop_data (data.frame)\n")
+      cat("\tName: ", attr(pop_data, "pop_data_name"), "\n")
       cat(c("\tRows: ", nrow(pop_data), "\n"))
       cat(c("\tColumns: ", ncol(pop_data), "\n"))
     }
