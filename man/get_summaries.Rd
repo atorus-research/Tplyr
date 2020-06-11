@@ -6,6 +6,11 @@
 \usage{
 get_summaries(var, e = caller_env())
 }
+\arguments{
+\item{var}{A varaible to perform summaries on.}
+
+\item{e}{the environment summaries are stored in.}
+}
 \value{
 A list of expressions to be unpacked in \code{dplyr::summarize}
 }

@@ -1,10 +1,11 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
-#' @importFrom rlang expr
+#' @importFrom rlang expr exprs enexpr enexprs
 #' @importFrom stringr str_split str_extract_all
 #' @importFrom purrr flatten map map_lgl
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
+#' @importFrom utils str
 NULL
 
 #' A grammar of summary data for clinical reports

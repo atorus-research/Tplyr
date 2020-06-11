@@ -1,107 +1,129 @@
 # Dispatches for print and str. These don't need UseMethods as the base
 # function will dispatch to these.
 
-
+#' Print tplyr_table
+#'
+#' @param x A tplyr_table to display
+#' @param ... A paranthesis passed through from print dispatch
 #'
 #'  @export
+#'  @noRd
 print.tplyr_table <- function(x, ...) {
   evalq({
-    print_out <- "~~~tplyr_table~~~\n"
+    cat("*** tplyr_table ***\n")
     # Print str of target data.frame
-    print_out <- append(print_out, "~target (data.frame)~\n")
-    print_out <- append(print_out, c("Rows: ", nrow(target), "\n"))
-    print_out <- append(print_out, c("Columns: ", ncol(target), "\n"))
+    cat("Target (data.frame):\n")
+    cat("\tName: ", attr(target, "target_name"))
+    cat(c("\n\tRows: ", nrow(target)))
+    cat(c("\n\tColumns: ", ncol(target), "\n"))
     # Print str of pop_data data.frame
-    print_out <- append(print_out, "~pop_data (data.frame)~\n")
-    print_out <- append(print_out, c("Rows: ", nrow(pop_data), "\n"))
-    print_out <- append(print_out, c("Columns: ", ncol(pop_data), "\n"))
-    # Print out header
-    print_out <- append(print_out, "~header column (chr)~\n")
-    print_out <- append(print_out, paste(header, collapse = "\n"))
-    print_out <- append(print_out, "\n")
+    if(!identical(pop_data, target)){
+      cat("pop_data (data.frame)\n")
+      cat(c("\tRows: ", nrow(pop_data), "\n"))
+      cat(c("\tColumns: ", ncol(pop_data), "\n"))
+    }
     # Print out treat_var
-    print_out <- append(print_out, "~treat_var variable (quosure)~\n")
-    print_out <- append(print_out, quo_get_expr(treat_var))
-    print_out <- append(print_out, "\n")
-    # Print out header_n
-    print_out <- append(print_out, "~header_n data (int)~\n")
-    print_out <- append(print_out, paste(header_n, collapse = "\n"))
-    print_out <- append(print_out, "\n")
+    cat("treat_var variable (quosure)\n\t")
+    cat(as.character(quo_get_expr(treat_var)))
+    cat("\n")
     # Print out pop_treat_var
-    print_out <- append(print_out, "~pop_treat_var variable (quosure)~\n")
-    print_out <- append(print_out, quo_get_expr(pop_treat_var))
-    print_out <- append(print_out, "\n")
+    if(!identical(pop_treat_var, treat_var)){
+      cat("pop_treat_var variable (quosure)\n\t")
+      cat(as.character(quo_get_expr(pop_treat_var)))
+      cat("\n")
+    }
+    # Print headers
+    cat("header: ")
+    cat(header)
+    # Print header_n
+    cat("\nheader_n: ")
+    for(i in seq(header_n)) {
+      cat(names(header_n)[i])
+      cat(": ")
+      cat(header_n[i])
+      if (i < length(header_n)) cat(", ")
+    }
     # Print out treat_groups
-    print_out <- append(print_out, "~treat_grps groupings (list)~\n")
+    cat("\ntreat_grps groupings (list)\n")
     for(i in seq(treat_grps)) {
-      print_out <- append(print_out, names(treat_grps)[i])
-      print_out <- append(print_out, paste("\n\t", treat_grps[i], collapse = "\t\n"))
-      print_out <- append(print_out, "\n")
+      cat("\t")
+      cat(names(treat_grps)[i])
+      cat("\n")
     }
     # Print out layers
-    print_out <- append(print_out, "~layers: ")
-    print_out <- append(print_out, length(layers))
-    print_out <- append(print_out, "\n")
+    cat("Number of layer(s): ")
+    cat(length(layers))
+    cat("\n")
     # Print out Layer output
-    print_out <- append(print_out, "~layer_output: ")
-    if(!exists("layer_output")) print_out <- append(print_out, "<Table Not Built Yet>")
-    else print_out <- append(print_out, length(layer_output))
-
-    cat(paste(as.character(print_out), sep = "", collapse = ""))
-    rm(print_out)
-
+    cat("layer_output: ")
+    if(!exists("layer_output")) cat("<Table Not Built Yet>")
+    else cat(length(layer_output))
   }, envir = x)
   invisible(x)
 }
 
+#' Print a tplyr_layer package
+#'
+#' @param x A tplyr_layer object to print
+#' @param ... Arguments passed through from print dispatch.
+#'
 #' @export
+#' @noRd
 print.tplyr_layer <- function(x, ...) {
-  print(class(x))
+  cat("*** tplyr_layer ***\n")
+  cat("Self: ", class(x)[2], "<", env_label(x), ">")
+  cat("\nParent: ", class(env_parent(x))[1], "<", env_label(env_parent(x)), ">")
   evalq({
-    print_out <- "~~tplyr_layer~~\n"
     # Print out target_var
-    print_out <- append(print_out, "target_var: ")
-    print_out <- append(print_out, quo_get_expr(target_var))
-    print_out <- append(print_out, "\n")
+    cat("\ntarget_var: ")
+    cat(quo_get_expr(target_var))
+    cat("\n")
     # Print out by
-    print_out <- append(print_out, "by: ")
-    print_out <- append(print_out, purrr::map(by, quo_get_expr))
-    print_out <- append(print_out, "\n")
+    cat("by: ")
+    cat(as.character(purrr::map(by, quo_get_expr)))
+    cat("\n")
     # sort_vars
-    print_out <- append(print_out, "sort_vars: ")
-    print_out <- append(print_out, purrr::map(sort_vars, quo_get_expr))
-    print_out <- append(print_out, "\n")
+    cat("sort_vars: ")
+    cat(as.character(purrr::map(sort_vars, quo_get_expr)))
+    cat("\n")
     # Print sort
-    print_out <- append(print_out, "sort: ")
-    print_out <- append(print_out, sort)
-    print_out <- append(print_out, "\n")
+    cat("sort: ")
+    cat(sort)
+    cat("\n")
     # Print where
-    print_out <- append(print_out, "where: ")
-    print_out <- append(print_out, quo_get_expr(where))
-    print_out <- append(print_out, "\n")
-    # Print formatter
-    print_out <- append(print_out, "formatter: ")
-    print_out <- append(print_out, substitute(formatter))
-    print_out <- append(print_out, "\n")
+    cat("where: ")
+    cat(as.character(quo_get_expr(where)))
+    cat("\n")
     # Print Layers
-    print_out <- append(print_out, "Layer Container(s): ")
-    print_out <- append(print_out, length(layers))
-    print_out <- append(print_out, "\n")
-    cat(paste(as.character(print_out), sep = "", collapse = ""))
-    rm(print_out)
+    cat("Layer(s): ")
+    cat(length(layers))
+    cat("\n")
   }, envir = x)
   invisible(x)
 }
 
+#' Print a f_str object
+#'
+#' @param x A f_str object to print
+#' @param ... Arguments passed through print dispatch
+#'
 #' @export
+#' @noRd
 print.f_str <- function(x, ...) {
   str(x, ...)
 }
 
+#' A tplyr_table object to str
+#'
+#' @param object A tplyr_table object
+#' @param ... Arguments passed from str
+#'
 #' @export
+#' @noRd
 str.tplyr_table <- function(object, ...) {
   evalq({
     cat("*** target data.frame ***\n")
+    cat("Target Name: ", attr(target, "target_name"), "\n")
     str(head(target))
     cat("*** treat_var***\n")
     cat(quo_get_expr(treat_var))
@@ -109,20 +131,48 @@ str.tplyr_table <- function(object, ...) {
     str(pop_data)
     cat("*** pop_treat_var ***\n")
     cat(quo_get_expr(pop_treat_var))
+    cat("\n*** treat_grps ***")
+    for(i in seq(treat_grps)) {
+      cat("\n", names(treat_grps)[i])
+      cat(":\n\t", treat_grps[[i]])
+    }
     cat("\n*** header binding ***\n")
-    cat(header)
-    cat("\n*** header_n ***\n")
-    cat(header_n)
-    cat("\n*** Layer(s) ***\n")
+    for (i in seq(header)) {
+      cat("\t", header[i], "\n")
+    }
+    cat("*** header_n ***\n")
+    for (i in seq(header_n)) {
+      cat("\t", names(header_n)[i], ": ")
+      cat(header_n[i], "\n")
+    }
+    cat("*** Layer(s) ***\n")
     cat(as.character(purrr::map_dfc(layers, class)[2,]))
   }, envir = object)
   invisible(object)
 }
 
+#' Display a tplyr_layer object
+#'
+#' @param object A tplyr_layer object
+#' @param ... Arguemnts passed from str
+#'
 #' @export
+#' @noRd
 str.tplyr_layer <- function(object, ...) {
+  cat("*** tplyr_layer ***")
+  cat("\nSelf: ")
+  cat("\n\tAddress: ", env_label(object))
+  cat("\n\tType: ", class(object)[2])
+  cat("\n\tDepth from table: ", depth_from_table(object, 0))
+  cat("\nParent: ")
+  cat("\n\tAddress: ", env_label(env_parent(object)))
+  cat("\n\tType: ", class(env_parent(object))[1])
+  # Only Print target name if parent is table
+  if (class(env_parent(object))[1] == "tplyr_table"){
+    cat("\n\tTarget Name: ", attr(env_parent(object)$target, "target_name"))
+  }
   evalq({
-    cat("*** target_var ***\n")
+    cat("\n*** target_var ***\n")
     cat(as.character(quo_get_expr(target_var)))
     cat("\n*** sort_vars ***\n")
     cat(as.character(purrr::map(sort_vars, quo_get_expr)))
@@ -130,8 +180,6 @@ str.tplyr_layer <- function(object, ...) {
     cat(as.character(purrr::map(by, quo_get_expr)))
     cat("\n*** where ***\n")
     cat(as.character(quo_get_expr(where)))
-    cat("\n*** formatter ***\n")
-    cat(as.character(deparse(formatter)))
     cat("\n*** Layer(s) ***\n")
     cat(as.character(purrr::map_dfc(layers, class)[2,]))
   }, envir = object)
@@ -139,7 +187,13 @@ str.tplyr_layer <- function(object, ...) {
   invisible(object)
 }
 
+#' Print a f_str object
+#'
+#' @param object A f_str object to display
+#' @param ... Arguments passed from f_str
+#'
 #' @export
+#' @noRd
 str.f_str <- function(object, ...) {
   cat("*** Format String ***\n")
   cat(object$format_string)

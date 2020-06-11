@@ -20,6 +20,9 @@ process_desc_layer <- function(e) {
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
 #'
+#' @param var A varaible to perform summaries on.
+#' @param e the environment summaries are stored in.
+#'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
 get_summaries <- function(var, e = caller_env()) {
 

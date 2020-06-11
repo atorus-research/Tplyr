@@ -16,6 +16,9 @@ the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
+\item{cols}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}.
+Notes the variables that are displayed in columns.}
+
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 
 \item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
@@ -49,6 +52,7 @@ See the \href{<link tbd}{vignette} for a more extensive explanation of how these
 \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
 \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 within the target dataset Text strings submitted do not need to exist in the target dataset.}
+\item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
 \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
 \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
   Set by default to the value of \code{target_var}}
@@ -62,8 +66,10 @@ any sublayers of the current layer.}
 \examples{
 tab <- tplyr_table(iris, Sepal.Width)
 
-l <- group_count(tab, type='count', by=vars('Label Text', Species),
-                 target_var=Species, where= Sepal.Width < 5.5)
+l <- group_count(tab, by=vars('Label Text', Species),
+                 target_var=Species, where= Sepal.Width < 5.5,
+                 cols = Species)
+
 
 }
 \seealso{

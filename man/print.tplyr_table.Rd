@@ -2,10 +2,18 @@
 % Please edit documentation in R/print.R
 \name{print.tplyr_table}
 \alias{print.tplyr_table}
-\title{@export}
+\title{Print tplyr_table}
 \usage{
 \method{print}{tplyr_table}(x, ...)
 }
+\arguments{
+\item{x}{A tplyr_table to display}
+
+\item{...}{A paranthesis passed through from print dispatch
+
+ @export
+ @noRd}
+}
 \description{
-@export
+Print tplyr_table
 }

@@ -25,8 +25,14 @@ is_null_or_call(quo_var)
 
 \item{should_have}{Expected class that object should inherit}
 
-\item{quo_var}{A variable that can be a string, variable, or combination of
+\item{quo_list}{A variable that can be a string, variable, or combination of
 those using dplyr::vars}
+
+\item{vnames}{Variable names of the target dataset to check against}
+
+\item{envir}{Environment containing the dataset \code{target} from which names will be checked against}
+
+\item{quo_var}{A quosure object to check}
 }
 \value{
 Returns nothing, raises errors when assertations aren't met

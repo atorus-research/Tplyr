@@ -24,7 +24,7 @@ test_that("target_var errors raise appropriately", {
 ##### by tests #####
 test_that("tplyr_by binds as expected", {
   iris_a <- iris
-  iris_a$Species2 <- iris_a$Species2
+  iris_a$Species2 <- iris_a$Species
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
