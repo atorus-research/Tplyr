@@ -28,6 +28,7 @@
 #' @param where Call. Filter logic used to subset the target data when performing a summary.
 #' @param ... Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 #'   \href{<link tbd>}{vignette} on adding extensions.
+#' @param cols Columns to be used in grouping to be represented width-wize in the output
 #'
 #' @return An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object
 #'   as listed below.
@@ -114,7 +115,7 @@ new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
 
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
   # Specifically excluding the function call, parent, and type
-  arg_list <- as.list(match.call())[-c(1, 2, 7)]
+  arg_list <- as.list(match.call())[-c(1, 2, 6, 7)]
 
   # Insert parent to the front of the list to prepare the call
   arg_list <- append(arg_list, parent, after=0)
@@ -128,6 +129,13 @@ new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
   # Do the same thing for cols
   cols <- unpack_vars(cols)
   arg_list$cols <- cols
+
+  # Do the same for target_var
+  target_var <- unpack_vars(target_var, allow_character=FALSE)
+  arg_list$target_var <- target_var
+
+  # Add sort_vars in
+  arg_list$sort_vars <- target_var
 
   # Run validation
   validate_tplyr_layer(parent, target_var, by, cols, where, type)
@@ -143,11 +151,9 @@ new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
   # Create the object
   structure(e,
             class=append(c('tplyr_layer', paste0(type,'_layer')), class(e))) %>%
-    set_target_var(!!target_var) %>%
     set_layer_sort("ascending") %>%
-    set_sort_vars(!!target_var) %>%
     set_layer_formatter(as.character) %>%
-    set_tplyr_where(!!where)
+    set_where(!!where)
 }
 
 #' Validate a tplyr layer
@@ -166,17 +172,14 @@ validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...)
 
   # Make sure `target_var` exists in the target data.frame
   target <- NULL # Mask global definitions check
-  vname <- as_label(quo_get_expr(target_var))
   vnames <- evalq(names(target), envir=parent)
-  assert_that(vname %in% vnames,
-              msg = paste('`target_var` value', vname, 'does not exist in target data frame.'))
-
-  dmessage(paste("by came in as: ",class(by)))
 
   # Make sure that by variables not submitted as characters exist in the target dataframe
   assert_quo_var_present(by, vnames)
   # Do the same for cols
   assert_quo_var_present(cols, vnames)
+  # Do the same for target_var
+  assert_quo_var_present(target_var, vnames, allow_character=FALSE)
 }
 
 
