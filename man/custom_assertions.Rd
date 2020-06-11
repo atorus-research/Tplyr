@@ -14,7 +14,7 @@ assert_inherits_class(x, should_have)
 
 assert_quo_var_present(quo_list, vnames = NULL, envir = NULL)
 
-unpack_vars(quo_var)
+unpack_vars(quo_list)
 
 is_null_or_call(quo_var)
 }

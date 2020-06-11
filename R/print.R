@@ -94,6 +94,11 @@ print.tplyr_layer <- function(x, ...) {
 }
 
 #' @export
+print.f_str <- function(x, ...) {
+  str(x, ...)
+}
+
+#' @export
 str.tplyr_table <- function(object, ...) {
   evalq({
     cat("*** target data.frame ***\n")
@@ -132,4 +137,23 @@ str.tplyr_layer <- function(object, ...) {
   }, envir = object)
 
   invisible(object)
+}
+
+#' @export
+str.f_str <- function(object, ...) {
+  cat("*** Format String ***\n")
+  cat(object$format_string)
+  cat("\n*** vars, extracted formats, and settings ***\n")
+  for(i in seq(along = object$vars)) {
+    cat(object$vars[[i]])
+    cat(" formated as: ")
+    cat(object$formats[i])
+    cat("\n\tinteger length: ")
+    cat(object$settings[[i]][1])
+    cat("\n\tdecimal length: ")
+    cat(object$settings[[i]][2])
+    cat("\n")
+  }
+  cat("Total Format Size: ")
+  cat(object$size)
 }
