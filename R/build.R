@@ -42,7 +42,7 @@ build.tplyr_table <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -60,7 +60,7 @@ build.count_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -78,7 +78,7 @@ build.desc_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -96,7 +96,7 @@ build.shift_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(build, layers)
+    lapply(build, layers)
 
   }, envir=x)
 
