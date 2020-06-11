@@ -12,7 +12,7 @@ assert_has_class(x, should_be)
 
 assert_inherits_class(x, should_have)
 
-assert_quo_var_present(quo_var)
+assert_quo_var_present(quo_list, vnames = NULL, envir = NULL)
 
 unpack_vars(quo_var)
 

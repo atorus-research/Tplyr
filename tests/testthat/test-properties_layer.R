@@ -46,9 +46,9 @@ test_that("tplyr_by raises expected errors", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_error(set_tplyr_by(tab, list(Species)), "Invalid input to `quo_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-  expect_error(set_tplyr_by(tab, vars(Species, list())), "Arguments to `quo_var` must be names or character strings - cannot be calls")
-  expect_error(set_tplyr_by(tab, vars(Species2, 2)), "Invalid input to `quo_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+  expect_error(set_tplyr_by(tab, list(Species)), "Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+  expect_error(set_tplyr_by(tab, vars(Species, list())), "Arguments to `by` must be names or character strings - cannot be calls")
+  expect_error(set_tplyr_by(tab, vars(Species, 2)), "Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
 })
 
 ##### where tests #####
@@ -95,7 +95,7 @@ test_that("sort_vars throws expected errors", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_error(set_sort_vars(tab, c(1, 2)), "Invalid input to `quo_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
+  expect_error(set_sort_vars(tab, c(1, 2)), "Invalid input to `sort_vars`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
 })
 
 ##### sort tests #####

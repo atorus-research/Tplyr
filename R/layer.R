@@ -58,13 +58,13 @@
 #'                  target_var=Species, where= Sepal.Width < 5.5)
 #'
 #' @seealso \code{\link{tplyr_table}}
-tplyr_layer <- function(parent, target_var, by, where, type, ...) {
+tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
 
   # Return a null object if the parent is missing
   if(missing(parent)) abort("The `parent` argument must be provided.")
 
   # If necessary variables provided then build the layer
-  as_tplyr_layer(parent, type=type, by=by, target_var=target_var, where=where, ...)
+  as_tplyr_layer(parent, type=type, by=by, cols=cols, target_var=target_var, where=where, ...)
 }
 
 # Method dispatch
@@ -72,38 +72,35 @@ tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-as_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
+as_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
   UseMethod("as_tplyr_layer")
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_table} object as parent
 #' @noRd
-as_tplyr_layer.tplyr_table <- function(parent, target_var, by, where, type, ...) {
-  dmessage('Dispatch tplyr_table')
-  new_tplyr_layer(parent, target_var, by, where, type, ...)
+as_tplyr_layer.tplyr_table <- function(parent, target_var, by, cols, where, type, ...) {
+  new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_layer}  object as parent
 #' @noRd
-as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, where, type, ...) {
-  dmessage('Dispatch tplyr_layer')
-  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
+as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
+  layer <- new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
   class(layer) <- append('tplyr_subgroup_layer', class(layer))
   layer
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_subgroup_layer}  object as parent
 #' @noRd
-as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, where, type, ...) {
-  dmessage('Dispatch tplyr_layer')
-  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
+as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, cols, where, type, ...) {
+  layer <- new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
   class(layer) <- unique(append('tplyr_subgroup_layer', class(layer)))
   layer
 }
 
 #' S3 method to produce error for unsupported objects as parent
 #' @noRd
-as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
+as_tplyr_layer.default <- function(parent, target_var, by, cols, where, type, ...) {
   dmessage('Dispatch default')
   stop('Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.')
 }
@@ -112,11 +109,12 @@ as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
+new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
   dmessage('--- new_tplyr_layer')
 
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
-  arg_list <- as.list(match.call())[-c(1, 2, 6)]
+  # Specifically excluding the function call, parent, and type
+  arg_list <- as.list(match.call())[-c(1, 2, 7)]
 
   # Insert parent to the front of the list to prepare the call
   arg_list <- append(arg_list, parent, after=0)
@@ -124,29 +122,15 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Unpack the `by` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
   # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(by[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    by <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop()
+  by <- unpack_vars(by)
+  arg_list$by <- by
 
-      # Evaluate the quosure by getting the expression
-      eval(c, envir=caller_env())
-      },
-      # If a 1 item list of variable was provided, it'll fail
-      error = function(err) {
-        abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                               "or multiple variable names using `dplyr::vars`."))
-      }
-    )
-    # Override in the arglist
-    arg_list$by <- by
-  }
+  # Do the same thing for cols
+  cols <- unpack_vars(cols)
+  arg_list$cols <- cols
 
   # Run validation
-  dmessage(paste("By came in as: ",class(by)))
-  validate_tplyr_layer(parent, target_var, by, where, type)
+  validate_tplyr_layer(parent, target_var, by, cols, where, type)
 
   # Create the new environment by contructing the env call
   e <- do.call('env', arg_list)
@@ -170,9 +154,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
-  dmessage('--- validate_tplyr_layer')
-
+validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
 
   # Make sure type is valid
   assert_that(!is.null(type) && length(type) == 1 && type %in% c('count', 'desc', 'shift'),
@@ -192,32 +174,9 @@ validate_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage(paste("by came in as: ",class(by)))
 
   # Make sure that by variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(by[[1]])) {
-    # Make sure the variables provided to `by` are of the correct type
-    msg = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(by, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `by`` list
-    for (v in by) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as_label(quo_get_expr(v))))
-      # Check each 'by' to see if it exists in target data.set
-      if (class(quo_get_expr(v)) == "name") {
-        vname <- as_label(quo_get_expr(v))
-        assert_that(vname %in% vnames,
-                    msg = paste0("By variable `",vname, "` does not exist in target dataset"))
-      }
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b, c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
+  assert_quo_var_present(by, vnames)
+  # Do the same for cols
+  assert_quo_var_present(cols, vnames)
 }
 
 
