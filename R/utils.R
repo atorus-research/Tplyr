@@ -35,3 +35,43 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
     c
   }
 }
+
+#' Find depth of a layer object
+#'
+#' This function returns the number of containers "above" a layer object. As
+#' layers can be nested layers may contain layers and so on. This uses
+#' recursion to find the table environment
+#'
+#' @param layer A layer object
+#' @param i The current index
+#'
+#' @return the number of containers a layer is in
+depth_from_table <- function(layer, i){
+  if(class(env_parent(layer))[1] == "tplyr_table") return(i + 1)
+  else {
+    return(depth_from_table(env_parent(layer), i+1))
+  }
+}
+
+
+#' Convert a list of quosures to character strings
+#'
+#' Intended for use in a tidyselect context. Pivots take arguments as character strings or indices. Tidyselect tools return those
+#' indices. This allows you to pass a list of quosures (which Tplyr carries a lot of) without explicitly converting types
+#'
+#' @param vars List of quosures containing variables
+#'
+#' @return Character string of labels
+#'
+#' @examples
+#' iris %>%
+#'   group_by(Species) %>%
+#'   summarize(mean=mean(Sepal.Length), median = median(Sepal.Length)) %>%
+#'   pivot_longer(cols = match_exact(vars(mean, median)))
+#'
+match_exact <- function(var_list) {
+  # Should have been a list of quosures on input
+  assert_inherits_class(var_list, "quosures")
+  # Return the variable names as a character string in appropriate tidyselect format
+  map_chr(var_list, as_label)
+}
