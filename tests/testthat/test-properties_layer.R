@@ -52,7 +52,7 @@ test_that("where binds where as expected", {
   tab <- tplyr_table(iris_a, Species) %>%
     group_count(Species)
 
-  expect_true(quo_is_null(get_where(tab)))
+  expect_true(quo_get_expr(get_where(tab)))
 
   set_where(tab, Petal.Length > 3)
   expect_equal(get_where(tab), quo(Petal.Length > 3))

@@ -6,6 +6,9 @@
 \alias{assert_quo_var_present}
 \alias{unpack_vars}
 \alias{is_null_or_call}
+\alias{is_logical_or_call}
+\alias{assert_is_layer}
+\alias{assert_is_table}
 \title{Custom assertions}
 \usage{
 assert_has_class(x, should_be)
@@ -22,6 +25,12 @@ assert_quo_var_present(
 unpack_vars(quo_list, allow_character = TRUE)
 
 is_null_or_call(quo_var)
+
+is_logical_or_call(quo_var)
+
+assert_is_layer(object)
+
+assert_is_table(object)
 }
 \arguments{
 \item{x}{Object to be inspected}
@@ -40,6 +49,8 @@ those using dplyr::vars}
 \item{allow_character}{Whether or not character strings are allows in an entry}
 
 \item{quo_var}{A quosure object to check}
+
+\item{object}{Object to check if its a layer}
 }
 \value{
 Returns nothing, raises errors when assertations aren't met

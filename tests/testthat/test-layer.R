@@ -57,16 +57,16 @@ test_that("`Type` attribute is set properly", {
 test_that("type field can only contain one of 'count', 'desc', or 'shift'", {
   t <- tplyr_table(iris, Sepal.Width)
   # In order to test type parameter have to test direct access to tplyr_layer
-  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='count'))
-  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='desc'))
-  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type='shift'))
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('shift', 'desc')),
+  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='count'))
+  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='desc'))
+  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='shift'))
+  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('shift', 'desc')),
                 '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('count', 'desc')),
+  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc')),
                '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type=c('count', 'desc', 'shift')),
+  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc', 'shift')),
                '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(NULL), type="bad"),
+  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type="bad"),
                '`type` must be one of "count", "desc", or "shift"')
 })
 
