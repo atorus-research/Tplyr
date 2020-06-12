@@ -41,6 +41,34 @@ build.tplyr_table <- function(x) {
   layers <- NULL
 
   output <- evalq({
+    # Dummies for treatment groups added to target dataset
+    built_target <- target
+    built_pop_data <- pop_data
+    for (i in seq(along = treat_grps)) {
+      # The following is a little nasty but the idea is to:
+      # Add a T/F column named '.tplyr-treat_grp_name'
+      target[, paste0(".tplyr-", names(treat_grps)[i])] <- target[, as_label(treat_var)] %in% treat_grps[[i]]
+      # Make a new data.frame with only the grouped rows
+      grped_df <- target[target[, paste0(".tplyr-", names(treat_grps)[i])],]
+      # Change the treatment group column to the name of the group.
+      grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
+      # Rbind
+      built_target <- rbind(built_target, grped_df)
+    }
+    # Dummies for treatment groups added to population dataset
+    for (i in seq(along = treat_grps)) {
+      # The following is a little nasty but the idea is to:
+      # Add a T/F column named '.tplyr-treat_grp_name'
+      pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- pop_data[, as_label(treat_var)] %in% treat_grps[[i]]
+      # Make a new data.frame with only the grouped rows
+      grped_df <- pop_data[pop_data[, paste0(".tplyr-", names(treat_grps)[i])],]
+      # Change the treatment group column to the name of the group.
+      grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
+      # Rbind
+      built_pop_data <- rbind(built_pop_data, grped_df)
+    }
+    rm(i)
+
     # Build the layers
     lapply(build, layers)
 
@@ -57,6 +85,8 @@ build.count_layer <- function(x) {
   # Prepare the layer environment as appropriate
   layer_output <- NULL
   layers <- NULL
+
+  verify_layer_compatibility(x)
 
   output <- evalq({
     # Build the layers
@@ -104,6 +134,21 @@ build.shift_layer <- function(x) {
   output
 }
 
+verify_layer_compatibility <- function(layer) {
+  NextMethod("verify_layer_compatibility")
+}
+
+verify_layer_compatibility.count_layer <- function(layer){
+
+  evalq({
+
+    assert_has_class(target[, as_label(target_var)], "factor")
+
+    ## Check for where? every variable must be present in target, or just let dplyr do it?
+
+  }, envir = layer)
+  return(invisible(layer))
+}
 
 
 
