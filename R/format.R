@@ -88,7 +88,7 @@ separate_int_dig <- function(x){
 #' @export
 #'
 #' @examples
-#' TBD
+#' #TBD
 set_format_strings <- function(e, ...) {
 
   # Pick off the ellpsis
@@ -122,11 +122,10 @@ set_format_strings <- function(e, ...) {
 
   env_bind(e,
            format_strings = format_strings,
-           summary_vars = summary_vars,
-           keep_vars = keep_vars,
-           row_labels = row_labels,
-           trans_vars = trans_vars,
-           max_format_length = max_format_length
+           summary_vars = vars(!!!summary_vars),
+           keep_vars = vars(!!!keep_vars),
+           trans_vars = map_chr(trans_vars, as_label),
+           row_labels = row_labels
     )
   e
 }
