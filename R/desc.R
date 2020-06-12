@@ -5,15 +5,21 @@
 #' @return Processed data within layer environment
 process_desc_layer <- function(e) {
   evalq({
+    out <- vector("list", length(target_var))
+
     # Extract the list of summaries that need to be performed
-    summaries <- get_summaries(target_var)
+    for (i in seq_along(target_var)) {
+      var <- target_var[[i]]
 
-    # Start the tplyr processing
-    summary_dat <- target %>%
-      filter(!!where) %>%
-      group_by(!!pop_treat_var, !!!by) %>%
-      summarize(!!!summaries)
+      summaries <- get_summaries(var)
 
+      # Start the tplyr processing
+      out[[i]] <- target %>%
+        filter(!!where) %>%
+        group_by(!!pop_treat_var, !!!by) %>%
+        summarize(!!!summaries)
+    }
+    out
 
   }, envir=e)
 }
