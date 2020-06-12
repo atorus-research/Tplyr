@@ -42,8 +42,8 @@ build.tplyr_table <- function(x) {
 
   output <- evalq({
     # Dummies for treatment groups added to target dataset
-    target <- target %>%
-      bind_rows(select(target, ))
+    built_target <- target
+    built_pop_data <- pop_data
     for (i in seq(along = treat_grps)) {
       # The following is a little nasty but the idea is to:
       # Add a T/F column named '.tplyr-treat_grp_name'
@@ -53,7 +53,7 @@ build.tplyr_table <- function(x) {
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
       # Rbind
-      target <- rbind(target, grped_df)
+      built_target <- rbind(built_target, grped_df)
     }
     # Dummies for treatment groups added to population dataset
     for (i in seq(along = treat_grps)) {
@@ -65,10 +65,9 @@ build.tplyr_table <- function(x) {
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
       # Rbind
-      pop_data <- rbind(pop_data, grped_df)
+      built_pop_data <- rbind(built_pop_data, grped_df)
     }
     rm(i)
-    rm(grped_df)
 
     # Build the layers
     layer_output <- lapply(layers, build)
