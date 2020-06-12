@@ -9,15 +9,23 @@ process_desc_layer <- function(e) {
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
+      row_labels <- name_translator(format_strings)
+
       var <- target_var[[i]]
 
-      summaries <- get_summaries(var)
+      summaries <- get_summaries(var)[match_exact(summary_vars)]
 
       # Start the tplyr processing
       out[[i]] <- target %>%
         filter(!!where) %>%
-        group_by(!!pop_treat_var, !!!by) %>%
-        summarize(!!!summaries)
+        group_by(!!treat_var, !!!by) %>%
+        summarize(!!!summaries) %>%
+        pivot_longer(match_exact(trans_vars), names_to = "stat") %>%
+        rowwise %>%
+        mutate(
+          row_label = row_labels[[stat]],
+          fmt = format_strings[row_label]
+        )
     }
     out
 
