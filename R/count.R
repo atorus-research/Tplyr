@@ -9,9 +9,9 @@
 process_count_layer <- function(e) {
   evalq({
 
-    summary_stat <- target %>%
-      # filter(!!where) %>%
-      group_by(!!treat_var, syms(treat_grps), !!!by) %>%
+    summary_stat <- built_target %>%
+      filter(!!where) %>%
+      group_by(!!treat_var, !!target_var, !!!by) %>%
       # Tally here is used to get any missing values
       summarize(count = tally())
 

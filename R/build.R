@@ -36,10 +36,6 @@ build <- function(x) {
 #' @noRd
 build.tplyr_table <- function(x) {
 
-  # Prepare the table environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
   output <- evalq({
     # Dummies for treatment groups added to target dataset
     built_target <- target
@@ -52,8 +48,8 @@ build.tplyr_table <- function(x) {
       grped_df <- target[target[, paste0(".tplyr-", names(treat_grps)[i])],]
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
-      # Rbind
-      built_target <- rbind(built_target, grped_df)
+      # Rbind, suppressing warnings due to factor issues
+      built_target <- suppressWarnings(bind_rows(built_target, grped_df))
     }
     # Dummies for treatment groups added to population dataset
     for (i in seq(along = treat_grps)) {
@@ -65,12 +61,12 @@ build.tplyr_table <- function(x) {
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
       # Rbind
-      built_pop_data <- rbind(built_pop_data, grped_df)
+      built_pop_data <- suppressWarnings(bind_rows(built_pop_data, grped_df))
     }
     rm(i)
 
     # Build the layers
-    lapply(build, layers)
+    #lapply(build, layers)
 
   }, envir=x)
 
