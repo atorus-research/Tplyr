@@ -40,7 +40,7 @@ assert_has_class <- function(x, should_be) {
   param <- enexpr(x)
 
   # Is the argument the class that it shoudl be?
-  if (!(should_be) %in% class(x)){
+  if (class(x) != should_be){
     # Grab the trace back into an object
     trc <- trace_back()
     # Look at the length of the traceback
@@ -211,7 +211,7 @@ is_null_or_call <- function(quo_var) {
 #' @family Custom Assertions
 #' @rdname custom_assertions
 is_logical_or_call <- function(quo_var) {
-  is_logical(quo_get_expr(quo_var)) || class(quo_get_expr(quo_var)) == "call"
+  is_logical(quo_get_expr(quo_var)) || is_call(quo_get_expr(quo_var))
 }
 
 #' @param object Object to check if its a layer
@@ -219,7 +219,7 @@ is_logical_or_call <- function(quo_var) {
 #' @family Custom Assertions
 #' @rdname custom_assertions
 assert_is_layer <- function(object) {
- assert_has_class(object, "tplyr_layer")
+ assert_inherits_class(object, "tplyr_layer")
 }
 
 #' @param object Object to check if its a layer
@@ -227,5 +227,5 @@ assert_is_layer <- function(object) {
 #' @family Custom Assertions
 #' @rdname custom_assertions
 assert_is_table <- function(object) {
-  assert_has_class(object, "tplyr_table")
+  assert_inherits_class(object, "tplyr_table")
 }
