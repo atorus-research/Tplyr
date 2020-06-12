@@ -77,7 +77,9 @@ print.tplyr_layer <- function(x, ...) {
   evalq({
     # Print out target_var
     cat("\ntarget_var: ")
-    cat(quo_get_expr(target_var))
+    for(i in seq(target_var)) {
+      cat("\n", quo_get_expr(target_var[[i]]))
+    }
     cat("\n")
     # Print out by
     cat("by: ")
@@ -173,8 +175,10 @@ str.tplyr_layer <- function(object, ...) {
     cat("\n\tTarget Name: ", attr(env_parent(object)$target, "target_name"))
   }
   evalq({
-    cat("\n*** target_var ***\n")
-    cat(as.character(quo_get_expr(target_var)))
+    cat("\n*** target_var ***")
+    for(i in seq(target_var)) {
+      cat("\n", as.character(quo_get_expr(target_var[[i]])))
+    }
     cat("\n*** sort_vars ***\n")
     cat(as.character(purrr::map(sort_vars, quo_get_expr)))
     cat("\n*** by ***\n")
