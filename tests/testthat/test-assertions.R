@@ -21,6 +21,22 @@
 # }
 # my_func(2)
 
-test_that("Placeholder", {
-  expect_true(TRUE)
-})
+# Issues with the call stack in tests
+# test_that("assert_is_layer_raises errors properly", {
+#   tab <- tplyr_table(iris, Species)
+#   l <- group_count(tab, Species)
+#
+#   expect_silent(assert_is_layer(l))
+#   expect_error(assert_is_layer(tab), "asdf")
+#   expect_error(assert_is_layer(list()), "asdf")
+# })
+#
+# test_that("assert_is_table raises errors properly", {
+#   tab <- tplyr_table(iris, Species)
+#   l <- group_count(tab, Species)
+#
+#   expect_silent(assert_is_table(tab))
+#   expect_error(assert_is_table(l), "asdf")
+#   expect_error(assert_is_table(list()), "asdf")
+# })
+

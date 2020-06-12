@@ -94,10 +94,8 @@ get_where <- function(layer) {
 set_where <- function(layer, where) {
   where <- enquo(where)
 
-  assert_that(is_null_or_call(where),
+  assert_that(is_logical_or_call(where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
-
-  dmessage(paste(where), class(where))
 
   env_bind(layer, where = where)
 
