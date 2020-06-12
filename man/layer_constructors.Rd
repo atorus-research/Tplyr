@@ -7,11 +7,11 @@
 \title{Create a \code{count}, \code{desc}, or \code{shift} layer for discrete count based summaries, descriptive statistics summaries,
  or shift count summaries}
 \usage{
-group_count(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_count(parent, target_var, by = NULL, cols = NULL, where = NULL, ...)
 
-group_desc(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_desc(parent, target_var, by = NULL, cols = NULL, where = NULL, ...)
 
-group_shift(parent, target_var, by = NULL, where = NULL, type = NULL, ...)
+group_shift(parent, target_var, by = NULL, cols = NULL, where = NULL, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
@@ -22,6 +22,8 @@ the layer is a subgroup.}
 the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
+
+\item{cols}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 
@@ -49,6 +51,8 @@ summaries the counts of different changes in states. See the "details" section b
 \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
 \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 within the target dataset Text strings submitted do not need to exist in the target dataset.}
+\item{\code{cols}}{A list of quosures representing either text labels or variable names used in grouping. These variables
+will be used to pivot the table wider}
 \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
 \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
   Set by default to the value of \code{target_var}}

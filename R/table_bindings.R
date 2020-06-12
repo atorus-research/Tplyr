@@ -138,6 +138,7 @@ pop_data <- function(table) {
 #' @export
 #' @rdname pop_data
 set_pop_data <- function(table, pop_data) {
+  pop_data_name <- enexpr(pop_data)
   # table should be a data.frame
   assert_that(inherits(pop_data, "data.frame"),
                           msg = paste0("'pop_data' argument passed to tplyr_table must be a data.frame,",
@@ -145,6 +146,7 @@ set_pop_data <- function(table, pop_data) {
                                        "instead a class of: '",
                                        class(pop_data),
                                        "' was passed."))
+  attr(pop_data, "pop_data_name") <- pop_data_name
   rlang::env_bind(table, pop_data = pop_data)
 
   table

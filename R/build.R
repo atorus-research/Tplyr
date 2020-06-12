@@ -70,7 +70,7 @@ build.tplyr_table <- function(x) {
     rm(i)
 
     # Build the layers
-    layer_output <- lapply(layers, build)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -86,9 +86,11 @@ build.count_layer <- function(x) {
   layer_output <- NULL
   layers <- NULL
 
+  verify_layer_compatibility(x)
+
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(layers, build)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -106,7 +108,7 @@ build.desc_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(layers, build)
+    lapply(build, layers)
 
   }, envir=x)
 
@@ -124,12 +126,28 @@ build.shift_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    layer_output <- lapply(layers, build)
+    lapply(build, layers)
 
   }, envir=x)
 
   # Feed the output up
   output
+}
+
+verify_layer_compatibility <- function(layer) {
+  NextMethod("verify_layer_compatibility")
+}
+
+verify_layer_compatibility.count_layer <- function(layer){
+
+  evalq({
+
+    assert_has_class(target[, as_label(target_var)], "factor")
+
+    ## Check for where? every variable must be present in target, or just let dplyr do it?
+
+  }, envir = layer)
+  return(invisible(layer))
 }
 
 

@@ -49,6 +49,8 @@ tplyr_table <- function(target, treat_var) {
     return(structure(rlang::env(),
                      class = c("tplyr_table", "environment")))
   }
+  target_name <- enexpr(target)
+  attr(target, "target_name") <- target_name
   new_tplyr_table(target, enquo(treat_var))
 }
 

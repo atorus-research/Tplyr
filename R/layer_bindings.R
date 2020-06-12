@@ -13,7 +13,7 @@
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_target_var(Species2)
-target_var <- function(layer) {
+get_target_var <- function(layer) {
   env_get(layer, "target_var")
 }
 
@@ -22,10 +22,11 @@ target_var <- function(layer) {
 #' @export
 #' @rdname target_var
 set_target_var <- function(layer, target_var) {
-  target_var <- enquo(target_var)
+  target_var <- enquos(target_var)
 
-  assert_that(class(quo_get_expr(target_var)) == "name",
-              msg = "The `target_var` parameter must refer to a valid variable name (enter without quotes)")
+  # Unpack sort_vars
+  target_var <- unpack_vars(target_var, allow_character=FALSE)
+  assert_quo_var_present(target_var, envir=layer, allow_character=FALSE)
 
   env_bind(layer, target_var = target_var)
 
@@ -37,7 +38,7 @@ set_target_var <- function(layer, target_var) {
 #' @param layer A \code{tplyr_layer} object
 #'
 #' @return For \code{tplyr_by}, the by binding of the supplied layer. For
-#'   \code{set_tplyr_by} the modified layer environment.
+#'   \code{set_by} the modified layer environment.
 #' @export
 #' @rdname by
 #'
@@ -45,8 +46,8 @@ set_target_var <- function(layer, target_var) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_tplyr_by(vars(Species2, Sepal.Width))
-tplyr_by <- function(layer) {
+#'   set_by(vars(Species2, Sepal.Width))
+get_by <- function(layer) {
   env_get(layer, "by")
 }
 
@@ -55,53 +56,12 @@ tplyr_by <- function(layer) {
 #'
 #' @export
 #' @rdname by
-set_tplyr_by <- function(layer, by) {
+set_by <- function(layer, by) {
   by <- enquos(by)
 
-  dmessage(paste("By came in as: ",class(by)))
-
-
-  # Unpack the `by` group to ensure that the type is `list_of<quosures>`
-  # It had to be a 1 item list, so check if that element is a `call`
-  # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(by[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    by <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop("Multiple variables should be using dplyr::vars")
-
-      # Evaluate the quosure by getting the expression
-      eval(c, envir=caller_env())
-    },
-    # If a 1 item list of variable was provided, it'll fail
-    error = function(err) {
-      abort(message = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                             "or multiple variable names using `dplyr::vars`."))
-    })
-  }
-
-  # Make sure that by variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(by[[1]])) {
-    # Make sure the variables provided to `by` are of the correct type
-    msg = paste0("Invalid input to `by`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(by, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `by`` list
-    for (v in by) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `by` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
+  # Unpack by
+  by <- unpack_vars(by)
+  assert_quo_var_present(by, envir=layer)
 
   env_bind(layer, by = by)
 
@@ -112,8 +72,8 @@ set_tplyr_by <- function(layer, by) {
 #'
 #' @param layer A \code{tplyr_layer} object.
 #'
-#' @return For \code{tplyr_where}, the where binding of the supplied object.
-#'   For \code{set_tplyr_where}, the modified object
+#' @return For \code{where}, the where binding of the supplied object.
+#'   For \code{set_where}, the modified object
 #' @export
 #' @rdname where
 #'
@@ -121,8 +81,8 @@ set_tplyr_by <- function(layer, by) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_tplyr_where(Petal.Length > 3)
-tplyr_where <- function(layer) {
+#'   set_where(Petal.Length > 3)
+get_where <- function(layer) {
   env_get(layer, "where")
 }
 
@@ -131,10 +91,10 @@ tplyr_where <- function(layer) {
 #' @return
 #' @export
 #' @rdname where
-set_tplyr_where <- function(layer, where) {
+set_where <- function(layer, where) {
   where <- enquo(where)
 
-  assert_that(quo_is_null(where) || class(quo_get_expr(where)) == 'call',
+  assert_that(is_null_or_call(where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
   dmessage(paste(where), class(where))
@@ -158,7 +118,7 @@ set_tplyr_where <- function(layer, where) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_sort_vars(vars(Sepal.Length, Sepal.Width))
-sort_vars <- function(layer) {
+get_sort_vars <- function(layer) {
   env_get(layer, "sort_vars")
 }
 
@@ -169,50 +129,9 @@ sort_vars <- function(layer) {
 set_sort_vars <- function(layer, sort_vars) {
   sort_vars <- enquos(sort_vars)
 
-  dmessage(paste("sort_vars came in as: ",class(sort_vars)))
-
-  # Unpack the `sort_vars` group to ensure that the type is `list_of<quosures>`
-  # It had to be a 1 item list, so check if that element is a `call`
-  # The only valid use of a `call` is to provide multiple variables using `vars`
-  c <- quo_get_expr(sort_vars[[1]])
-  if (is.call(c)) {
-    # If it's a call, we need to pull it out a level
-    sort_vars <- tryCatch({
-      # If it's in here, the call has to be to dplyr::vars
-      if (call_name(c) != "vars") stop("Multiple variables should be using dplyr::vars")
-
-      # Evaluate the quosure sort_vars getting the expression
-      eval(c, envir=caller_env())
-    },
-    # If a 1 item list of variable was provided, it'll fail
-    error = function(err) {
-      abort(message = paste0("Invalid input to `sort_vars`. Submit either a string, a variable name, ",
-                             "or multiple variable names using `dplyr::vars`."))
-    })
-  }
-
-  # Make sure that sort_vars variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(sort_vars[[1]])) {
-    # Make sure the variables provided to `sort_vars` are of the correct type
-    msg = paste0("Invalid input to `sort_vars`. Submit either a string, a variable name, ",
-                 "or multiple variable names using `dplyr::vars`.")
-    are_quosures <- all(sapply(sort_vars, function(x) is_quosure(x)))
-    assert_that(are_quosures, msg = msg)
-
-    # Check each element of the `sort_vars` list
-    for (v in sort_vars) {
-      dmessage(print(quo_get_expr(v)))
-      dmessage(paste("Checking", as.character(quo_get_expr(v))))
-      # While looping, making sure calls weren't submitted
-      if (class(quo_get_expr(v)) == "call") {
-        abort("Arguments to `sort_vars` must be names or character strings - cannot be calls (i.e. x + y, list(a, b c)).")
-      }
-      else if (!class(quo_get_expr(v)) %in% c('name', 'character')) {
-        abort("Invalid input to `sort_vars`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.")
-      }
-    }
-  }
-
+  #Unpack sort_vars
+  sort_vars <- unpack_vars(sort_vars)
+  assert_quo_var_present(sort_vars, envir=layer)
 
   env_bind(layer, sort_vars = sort_vars)
 
@@ -233,7 +152,7 @@ set_sort_vars <- function(layer, sort_vars) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_layer_sort("desc")
-layer_sort <- function(layer) {
+get_layer_sort <- function(layer) {
   env_get(layer, "sort")
 }
 
@@ -265,7 +184,7 @@ set_layer_sort <- function(layer, sort) {
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
 #'   set_layer_formatter(as.numeric)
-layer_formatter <- function(layer) {
+get_layer_formatter <- function(layer) {
   env_get(layer, "formatter")
 }
 
