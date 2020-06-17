@@ -11,9 +11,19 @@ process_count_layer <- function(e) {
 
     summary_stat <- built_target %>%
       filter(!!where) %>%
-      group_by(!!treat_var, !!target_var, !!!by) %>%
-      # Tally here is used to get any missing values
-      summarize(count = tally())
+      group_by(!!treat_var, !!!target_var, !!!by) %>%
+      tally() %>%
+      complete(!!treat_var, !!!by, fill = list(n = 0))
+
+    if(quo_is_null(cols[[1]])) {
+      built_table <- summary_stat %>%
+        pivot_wider(id_cols = match_exact(by), names_from = !!treat_var, values_from = n)
+    }
+
+
 
   }, envir = e)
 }
+
+
+

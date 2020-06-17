@@ -7,6 +7,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
 #' @importFrom dplyr summarize filter
+#' @importFrom tidyr complete nesting pivot_wider pivot_longer
 #' @importFrom utils str head
 NULL
 
