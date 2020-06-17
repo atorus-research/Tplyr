@@ -203,3 +203,29 @@ unpack_vars <- function(quo_list, allow_character=TRUE) {
 is_null_or_call <- function(quo_var) {
   quo_is_null(quo_var) || class(quo_get_expr(quo_var)) == "call"
 }
+
+#' Check if a quosure is null or contains a logical value
+#'
+#' @param quo_var A quosure object to check
+#'
+#' @family Custom Assertions
+#' @rdname custom_assertions
+is_logical_or_call <- function(quo_var) {
+  is_logical(quo_get_expr(quo_var)) || is_call(quo_get_expr(quo_var))
+}
+
+#' @param object Object to check if its a layer
+#'
+#' @family Custom Assertions
+#' @rdname custom_assertions
+assert_is_layer <- function(object) {
+ assert_inherits_class(object, "tplyr_layer")
+}
+
+#' @param object Object to check if its a layer
+#'
+#' @family Custom Assertions
+#' @rdname custom_assertions
+assert_is_table <- function(object) {
+  assert_inherits_class(object, "tplyr_table")
+}
