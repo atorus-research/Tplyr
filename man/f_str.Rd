@@ -4,7 +4,7 @@
 \alias{f_str}
 \title{Create a \code{f_str} object}
 \usage{
-f_str(format_string, ...)
+f_str(format_string, ..., empty = "")
 }
 \arguments{
 \item{format_string}{The desired display format. X's indicate digits. On the left, the number of x's indicates the integer length. On the
