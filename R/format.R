@@ -25,6 +25,8 @@ f_str <- function(format_string, ..., empty='') {
 
   # Capture the variables off of the ellipsis
   vars <- enexprs(...)
+  # Null out the names for vars
+  names(vars) <- NULL
 
   # Check format string class
   assert_has_class(format_string, "character")
@@ -163,10 +165,10 @@ name_translator <- function(fmt_strings) {
 #' @param i Index of the format within the \code{f_str} object
 #'
 #' @return String formatted numeric value
-#'
-num_fmt <- function(val, fmt, i) {
+#' @export
+num_fmt <- function(val, i, fmt=NULL) {
 
-  assert_that(is_numeric(val))
+  assert_that(is.numeric(val))
   assert_has_class(fmt, 'f_str')
   assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
 
@@ -180,7 +182,7 @@ num_fmt <- function(val, fmt, i) {
   nsmall = digits
 
   # Incremement digits for to compensate for display
-  if (digits > 0) digits = digits + 1
+  if (digits > 0) digits <- digits + 1
 
   # Form the string
   return(
