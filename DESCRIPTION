@@ -23,7 +23,7 @@ Description: 'Tplyr' is a package dedicated to simplifying the data manipulation
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends:
+Imports:
     rlang (>= 0.4.6),
     assertthat (>= 0.2.1),
     magrittr (>= 1.5),

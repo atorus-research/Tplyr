@@ -21,10 +21,12 @@
 #' @examples
 #' f_str("xx.x (xx.x)", mean, sd)
 #'
-f_str <- function(format_string, ...) {
+f_str <- function(format_string, ..., empty='') {
 
   # Capture the variables off of the ellipsis
   vars <- enexprs(...)
+  # Null out the names for vars
+  names(vars) <- NULL
 
   # Check format string class
   assert_has_class(format_string, "character")
@@ -32,6 +34,9 @@ f_str <- function(format_string, ...) {
   # Capture the format groups
   # Regex looks for 1 or more lower case x, potentially followed by a period and more x's
   formats <- str_extract_all(format_string, regex("x+\\.{0,1}x*"))[[1]]
+
+  # Make the sprintf ready string
+  repl_str <- str_replace_all(format_string, regex("x+\\.{0,1}x*"), "%s")
 
   # Make sure that if two formats were found, two varaibles exist
   assert_that(length(formats) == length(vars),
@@ -49,7 +54,9 @@ f_str <- function(format_string, ...) {
          vars = vars,
          formats = formats,
          settings = settings,
-         size = nchar(format_string)
+         size = nchar(format_string),
+         repl_str = repl_str,
+         empty=empty
     ),
     class="f_str"
   )
@@ -69,7 +76,7 @@ separate_int_dig <- function(x){
   names(out) <- c('int', 'dig')
 
   # Count the characters on each side of the decimal
-  num_chars <- unname(vapply(str_split(x, "\\.")[[1]], nchar, numeric(1)))
+  num_chars <- map_int(str_split(x, "\\.")[[1]], nchar)
 
   # Insert the number of characters into the named vector
   for (i in seq_along(num_chars)) {
@@ -94,7 +101,7 @@ set_format_strings <- function(e, ...) {
   # Pick off the ellpsis
   format_strings <- list(...)
 
-  # Row labels are pulled from names - grab-em
+  # Row labels are pulled from names - so make sure that everything is named
   assert_that(is_named(format_strings),
               msg = "In `set_format_string` all parameters must be named in order to create row labels.")
 
@@ -114,15 +121,78 @@ set_format_strings <- function(e, ...) {
   # Get the variable names that need to be kept on the same row
   keep_vars <- flatten(map(format_strings, ~ tail(.x$vars, n=length(.x$vars) -1)))
 
+  # Get the max format length
+  max_format_length <- max(map_int(format_strings, ~ .x$size))
+
   # Pick off the row labels
   row_labels <- names(format_strings)
 
   env_bind(e,
            format_strings = format_strings,
-           summary_vars = summary_vars,
-           keep_vars = keep_vars,
-           row_labels = row_labels,
-           trans_vars = trans_vars
+           summary_vars = vars(!!!summary_vars),
+           keep_vars = vars(!!!keep_vars),
+           trans_vars = vars(!!!trans_vars),
+           row_labels = row_labels
     )
   e
+}
+
+#' Extract a translation vector for f_str objects
+#'
+#' The names of the format_strings list should be row labels in the output. The first
+#' element of the \code{vars} object are the transpose variables, so make the names of
+#' those variables the vector names, and the names of the format_strings elements the
+#' values to allow easy creation of a \code{row_labels} variable in the data
+#'
+#' @param fmt_strings The \code{format_strings} varaible in a layer
+#'
+#' @return A named character vector with the flipping applied
+#'
+name_translator <- function(fmt_strings) {
+  out <- names(fmt_strings)
+  names(out) <- map_chr(fmt_strings, ~ as_label(.x$vars[[1]]))
+  out
+}
+
+#' Format a numeric value using an \code{f_str} object
+#'
+#' Using the \code{f_str} object, information about the integer length and
+#' significant digits are extracted. Proper round is applied and the formatted numeric value is returned.
+#'
+#'
+#' @param val Numeric value to be formatted
+#' @param fmt \code{f_str} object with formatting information related to numeric value to be formatted
+#' @param i Index of the format within the \code{f_str} object
+#'
+#' @return String formatted numeric value
+#' @export
+num_fmt <- function(val, i, fmt=NULL) {
+
+  assert_that(is.numeric(val))
+  assert_has_class(fmt, 'f_str')
+  assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
+
+  int_len <- fmt$settings[[i]]['int']
+  digits <- fmt$settings[[i]]['dig']
+
+  # Formats summary stat strings to align display correctly
+  if (is.na(val)) return(empty)
+
+  # Set nsmall to input digits
+  nsmall = digits
+
+  # Incremement digits for to compensate for display
+  if (digits > 0) digits <- digits + 1
+
+  # Form the string
+  return(
+    format(
+      # Round
+      round(val, nsmall),
+      # Set width of format string
+      width=(int_len+digits),
+      # Decimals to display
+      nsmall=nsmall
+    )
+  )
 }
