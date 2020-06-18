@@ -13,15 +13,16 @@ process_count_layer <- function(e) {
       filter(!!where) %>%
       group_by(!!treat_var, !!!target_var, !!!by) %>%
       tally() %>%
-      complete(!!treat_var, !!!by, fill = list(n = 0))
+      ungroup() %>%
+      complete(!!treat_var, !!!target_var, !!!by, fill = list(n = 0))
 
-    if(quo_is_null(cols[[1]])) {
+    # if(quo_is_null(cols[[1]])) {
       built_table <- summary_stat %>%
-        pivot_wider(id_cols = match_exact(by), names_from = !!treat_var, values_from = n)
-    }
-
-
-
+        pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)), names_from = c(!!treat_var, match_exact(cols)), values_from = n)
+    # } else {
+    #
+    #
+    # }
   }, envir = e)
 }
 

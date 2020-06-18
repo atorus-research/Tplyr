@@ -43,9 +43,9 @@ build.tplyr_table <- function(x) {
     for (i in seq(along = treat_grps)) {
       # The following is a little nasty but the idea is to:
       # Add a T/F column named '.tplyr-treat_grp_name'
-      target[, paste0(".tplyr-", names(treat_grps)[i])] <- target[, as_label(treat_var)] %in% treat_grps[[i]]
+      target[, paste0(".tplyr-", names(treat_grps)[i])] <- unlist(target[, as_label(treat_var)]) %in% treat_grps[[i]]
       # Make a new data.frame with only the grouped rows
-      grped_df <- target[target[, paste0(".tplyr-", names(treat_grps)[i])],]
+      grped_df <- target[unlist(target[, paste0(".tplyr-", names(treat_grps)[i])]),]
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
       # Rbind, suppressing warnings due to factor issues
@@ -55,9 +55,9 @@ build.tplyr_table <- function(x) {
     for (i in seq(along = treat_grps)) {
       # The following is a little nasty but the idea is to:
       # Add a T/F column named '.tplyr-treat_grp_name'
-      pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- pop_data[, as_label(treat_var)] %in% treat_grps[[i]]
+      pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- unlist(pop_data[, as_label(treat_var)]) %in% treat_grps[[i]]
       # Make a new data.frame with only the grouped rows
-      grped_df <- pop_data[pop_data[, paste0(".tplyr-", names(treat_grps)[i])],]
+      grped_df <- pop_data[unlist(pop_data[, paste0(".tplyr-", names(treat_grps)[i])]),]
       # Change the treatment group column to the name of the group.
       grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
       # Rbind
@@ -66,7 +66,7 @@ build.tplyr_table <- function(x) {
     rm(i)
 
     # Build the layers
-    #lapply(build, layers)
+    lapply(layers, build)
 
   }, envir=x)
 
@@ -85,11 +85,12 @@ build.count_layer <- function(x) {
   verify_layer_compatibility(x)
 
   output <- evalq({
+
     # Build the layers
-    lapply(build, layers)
+    lapply(layers, build)
 
   }, envir=x)
-
+  process_count_layer(x)
   # Feed the output up
   output
 }
@@ -104,7 +105,7 @@ build.desc_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    lapply(build, layers)
+    lapply(layers, build)
 
   }, envir=x)
 
@@ -122,7 +123,7 @@ build.shift_layer <- function(x) {
 
   output <- evalq({
     # Build the layers
-    lapply(build, layers)
+    lapply(layers, build)
 
   }, envir=x)
 
@@ -137,10 +138,6 @@ verify_layer_compatibility <- function(layer) {
 verify_layer_compatibility.count_layer <- function(layer){
 
   evalq({
-
-    assert_has_class(target[, as_label(target_var)], "factor")
-
-    ## Check for where? every variable must be present in target, or just let dplyr do it?
 
   }, envir = layer)
   return(invisible(layer))
