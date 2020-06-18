@@ -4,38 +4,55 @@
 #'
 #' @return Processed data within layer environment
 process_desc_layer <- function(e) {
+  # Execute in the layer environment
   evalq({
+    # Allocate the list elements for the output list
     out <- vector("list", length(target_var))
+
+    # Get the summaries that need to be performed for this layer
+    summaries <- get_summaries(var)[match_exact(summary_vars)]
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
+
+      # Get the row labels out from the format strings list
       row_labels <- name_translator(format_strings)
 
+      # Pull out the target variable being iterated
       var <- target_var[[i]]
-      as_label(var)
-
-      summaries <- get_summaries(var)[match_exact(summary_vars)]
 
       # Start the tplyr processing
       current <- target %>%
+        # Subset by the logic specified in `where`
         filter(!!where) %>%
+        # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
+        # Execute the summaries
         summarize(!!!summaries) %>%
+        # Transpose the summaries that make up the first number in a display string
+        # into the the `value` column with labels by `stat`
         pivot_longer(match_exact(trans_vars), names_to = "stat") %>%
         rowwise() %>%
+        # Add in the row labels
         mutate(
            row_label = row_labels[[stat]]
         )
 
+      # Format the display strings - this is just applying construct_desc_string to each row of
+      # the data.frame
       current['display_string'] <- pmap_chr(current,
                                             function(...) construct_desc_string(..., .fmt_str = format_strings),
                                             format_strings=format_strings
                                             )
+
+      # Now do one more transpose to split the columns out
+      # Default is to use the treatment variable, but if `cols` was provided
+      # then also tranpose by cols.
       out[[i]] <- current %>%
-        pivot_wider(id_cols=c('row_label', match_exact(by)),
-                    names_from = match_exact(vars(!!treat_var, !!!cols)),
-                    names_prefix = paste0(as_label(var), "_"),
-                    values_from = display_string
+        pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
+                    names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
+                    names_prefix = paste0(as_label(var), "_"), # Prefix with the name of the target variable
+                    values_from = display_string # Use the created display_string variable for values
                     )
     }
     out
@@ -98,12 +115,3 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
   # Apply the call to sprintf
   do.call(sprintf, fmt_args)
 }
-
-
-
-
-
-
-# process_desc_layer(l)
-
-# evalq(class(environment()), envir=l)
