@@ -4,14 +4,14 @@
 \alias{num_fmt}
 \title{Format a numeric value using an \code{f_str} object}
 \usage{
-num_fmt(val, fmt, i)
+num_fmt(val, i, fmt = NULL)
 }
 \arguments{
 \item{val}{Numeric value to be formatted}
 
-\item{fmt}{\code{f_str} object with formatting information related to numeric value to be formatted}
-
 \item{i}{Index of the format within the \code{f_str} object}
+
+\item{fmt}{\code{f_str} object with formatting information related to numeric value to be formatted}
 }
 \value{
 String formatted numeric value

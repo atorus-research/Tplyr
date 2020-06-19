@@ -130,7 +130,7 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
   }
 
   # Make sure that quo_list variables not submitted as characters exist in the target dataframe
-  if (!quo_is_null(quo_list[[1]])) {
+  if (length(quo_list) > 0 && !quo_is_null(quo_list[[1]])) {
     # Make sure the variables provided to `quo_list` are of the correct type
     msg = paste0("Invalid input to `", param, allow_str)
     are_quosures <- all(map_lgl(quo_list, is_quosure))
@@ -164,6 +164,9 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
 #' @rdname custom_assertions
 unpack_vars <- function(quo_list, allow_character=TRUE) {
 
+  # Return quo_list if it's empty
+  if (is_empty(quo_list)) return(quo_list)
+
   # Get the parameter name that was entered
   param <- enexpr(quo_list)
 
@@ -190,6 +193,8 @@ unpack_vars <- function(quo_list, allow_character=TRUE) {
     error = function(err) {
       abort(message = paste0("Invalid input to `", param, allow_str))
     })
+  } else {
+    if (is.null(c)) return(vars())
   }
   quo_list
 }

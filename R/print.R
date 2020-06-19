@@ -6,8 +6,8 @@
 #' @param x A tplyr_table to display
 #' @param ... A paranthesis passed through from print dispatch
 #'
-#'  @export
-#'  @noRd
+#' @export
+#' @noRd
 print.tplyr_table <- function(x, ...) {
   evalq({
     cat("*** tplyr_table ***\n")
