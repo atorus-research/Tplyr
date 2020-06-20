@@ -9,11 +9,11 @@ process_desc_layer <- function(e) {
     # Allocate the list elements for the output list
     out <- vector("list", length(target_var))
 
-    # Get the summaries that need to be performed for this layer
-    summaries <- get_summaries(var)[match_exact(summary_vars)]
-
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
+
+      # Get the summaries that need to be performed for this layer
+      summaries <- get_summaries(var)[match_exact(summary_vars)]
 
       # Get the row labels out from the format strings list
       row_labels <- name_translator(format_strings)
