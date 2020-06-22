@@ -51,7 +51,7 @@ process_desc_layer <- function(e) {
       sums[[i]] <- current %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
-                    names_prefix = paste0(as_label(var), "_"), # Prefix with the name of the target variable
+                    names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                     values_from = display_string # Use the created display_string variable for values
                     )
 
@@ -59,6 +59,9 @@ process_desc_layer <- function(e) {
       rm(var, summaries, current)
     }
     out <- reduce(sums, full_join, by=c('row_label', match_exact(by)))
+
+    out <- replace_by_string_names(out, by)
+
     out
 
   }, envir=e)

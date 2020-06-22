@@ -234,3 +234,25 @@ assert_is_layer <- function(object) {
 assert_is_table <- function(object) {
   assert_inherits_class(object, "tplyr_table")
 }
+
+
+#' Return the class of the expression inside a quosure
+#'
+#' @param q A quosure
+#'
+#' @return The class of quosure \code{q}
+#' @export
+#'
+#' @examples
+#' q <- quo(a)
+#' quo_class(q)
+#'
+#' q <- quo("Hello!")
+#' quo_class(q)
+#'
+#' q <- quo(x + y)
+#' quo_class(q)
+quo_class <- function(q) {
+  assert_that(is_quosure(q), msg = "Object `q` is not a quosure")
+  class(quo_get_expr(q))
+}

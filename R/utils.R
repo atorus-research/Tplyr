@@ -76,3 +76,33 @@ match_exact <- function(var_list) {
   out <- map_chr(var_list, as_label)
   out[out != 'NULL'] # Exclude NULL quosures
 }
+
+#' Organize row labels within a layer output
+#'
+#' @param dat A data.frame/tibble to have row labels renamed
+#' @param by The \code{by} object within a layer
+#'
+#' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
+replace_by_string_names <- function(dat, by) {
+  # By must be a list of quosures
+  assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
+
+  i <- 0
+
+  # If there were character strings in the by variables then rename them
+  # with an index, starting at 1
+  for (i in seq_along(by)) {
+    dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
+  }
+
+  # If there was a column named `row_label` the index it
+  if ('row_label' %in% names(dat)) {
+    dat <- rename(dat, !!paste0('row_label', i + 1) := row_label)
+  }
+
+  # Sort the row labels by index
+  row_labels <- names(dat)[str_detect(names(dat), 'row_label')]
+
+  # Insert row labels to the front of the tibble
+  select(dat, all_of(sort(row_labels)), everything())
+}
