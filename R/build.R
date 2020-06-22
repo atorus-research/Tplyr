@@ -19,7 +19,6 @@
 #'
 #' @param x A \code{tplyr_table} object
 #'
-
 #'
 #' @return An executed \code{tplyr_table}
 #' @export
@@ -29,22 +28,19 @@
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
 build <- function(x) {
-  NextMethod("build", x)
+  UseMethod("build")
 }
 
 #' tplyr_table S3 method
 #' @noRd
+#' @export
 build.tplyr_table <- function(x) {
 
   # Prepare the table environment as appropriate
   layer_output <- NULL
   layers <- NULL
 
-  output <- evalq({
-    # Build the layers
-    lapply(build, layers)
-
-  }, envir=x)
+  output <- map(x$layers, build)
 
   # Feed the output up
   output
@@ -70,19 +66,17 @@ build.count_layer <- function(x) {
 
 #' desc_layer S3 method
 #' @noRd
+#' @export
 build.desc_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    lapply(build, layers)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_desc_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
