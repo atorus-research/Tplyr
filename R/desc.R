@@ -7,19 +7,19 @@ process_desc_layer <- function(e) {
   # Execute in the layer environment
   evalq({
     # Allocate the list elements for the output list
-    out <- vector("list", length(target_var))
+    sums <- vector("list", length(target_var))
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
-
-      # Get the summaries that need to be performed for this layer
-      summaries <- get_summaries(var)[match_exact(summary_vars)]
 
       # Get the row labels out from the format strings list
       row_labels <- name_translator(format_strings)
 
       # Pull out the target variable being iterated
       var <- target_var[[i]]
+
+      # Get the summaries that need to be performed for this layer
+      summaries <- get_summaries(var)[match_exact(summary_vars)]
 
       # Start the tplyr processing
       current <- target %>%
@@ -48,13 +48,17 @@ process_desc_layer <- function(e) {
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
       # then also tranpose by cols.
-      out[[i]] <- current %>%
+      sums[[i]] <- current %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0(as_label(var), "_"), # Prefix with the name of the target variable
                     values_from = display_string # Use the created display_string variable for values
                     )
+
+      # Clean up loop
+      rm(var, summaries, current)
     }
+    out <- reduce(sums, full_join, by=c('row_label', match_exact(by)))
     out
 
   }, envir=e)
