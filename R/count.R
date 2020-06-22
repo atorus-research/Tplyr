@@ -45,6 +45,15 @@ process_count_layer <- function(e) {
   }, envir = e)
 }
 
+#' Set Count Layer String Format
+#'
+#' @param x the layer object to add/modify the count format
+#' @param str The f_str object to add
+#'
+#' @return
+#' @export
+#'
+#' @examples
 set_count_fmt <- function(x, str) {
   assert_has_class(x, "count_layer")
 

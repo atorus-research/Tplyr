@@ -19,7 +19,6 @@
 #'
 #' @param x A \code{tplyr_table} object
 #'
-
 #'
 #' @return An executed \code{tplyr_table}
 #' @export
@@ -29,11 +28,12 @@
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
 build <- function(x) {
-  NextMethod("build", x)
+  UseMethod("build")
 }
 
 #' tplyr_table S3 method
 #' @noRd
+#' @export
 build.tplyr_table <- function(x) {
 
   output <- evalq({
@@ -65,13 +65,13 @@ build.tplyr_table <- function(x) {
     }
     rm(i)
 
-    # Build the layers
-    lapply(layers, build)
 
   }, envir=x)
 
+  output <- map(x$layers, build)
+
   # Feed the output up
-  output
+  bind_rows(output)
 }
 
 #' count_layer S3 method
@@ -86,10 +86,8 @@ build.count_layer <- function(x) {
 
   output <- evalq({
 
-
-    # FIXME
-    #if(!exists("count_fmt")) always run for testing
-      count_fmt <- f_str("{layer_width(x)} (xxx.x%)", n, pct)
+    # Add the count_fmt if it wasn't set
+    if(!exists("count_fmt")) count_fmt <- f_str("{layer_width(x)} (xxx.x%)", n, pct)
 
     # Build the layers
     lapply(layers, build)
@@ -102,6 +100,7 @@ build.count_layer <- function(x) {
 
 #' desc_layer S3 method
 #' @noRd
+#' @export
 build.desc_layer <- function(x) {
 
   # Prepare the layer environment as appropriate
@@ -113,8 +112,14 @@ build.desc_layer <- function(x) {
     lapply(layers, build)
 
   }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_desc_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
