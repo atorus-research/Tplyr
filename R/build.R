@@ -86,6 +86,11 @@ build.count_layer <- function(x) {
 
   output <- evalq({
 
+
+    # FIXME
+    #if(!exists("count_fmt")) always run for testing
+      count_fmt <- f_str("{layer_width(x)} (xxx.x%)", n, pct)
+
     # Build the layers
     lapply(layers, build)
 

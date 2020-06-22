@@ -35,8 +35,10 @@ f_str <- function(format_string, ..., empty='') {
   # Regex looks for 1 or more lower case x, potentially followed by a period and more x's
   formats <- str_extract_all(format_string, regex("x+\\.{0,1}x*"))[[1]]
 
+  # Duplicate any '%' to escape them
+  format_string_1 <- str_replace_all(format_string, "%", "%%")
   # Make the sprintf ready string
-  repl_str <- str_replace_all(format_string, regex("x+\\.{0,1}x*"), "%s")
+  repl_str <- str_replace_all(format_string_1, regex("x+\\.{0,1}x*"), "%s")
 
   # Make sure that if two formats were found, two varaibles exist
   assert_that(length(formats) == length(vars),

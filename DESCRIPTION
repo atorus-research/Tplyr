@@ -29,7 +29,8 @@ Imports:
     magrittr (>= 1.5),
     dplyr (>= 0.8.4),
     purrr (>= 0.3.3),
-    stringr (>= 1.4.0)
+    stringr (>= 1.4.0),
+    tidyr (>= 1.0.2)
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
