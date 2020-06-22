@@ -43,7 +43,7 @@ build.tplyr_table <- function(x) {
   output <- map(x$layers, build)
 
   # Feed the output up
-  output
+  bind_rows(output)
 }
 
 #' count_layer S3 method
