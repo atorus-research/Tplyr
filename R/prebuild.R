@@ -1,5 +1,11 @@
 
 
+#' Build treatment groups into tables
+#'
+#' @param table A tplyr_table object to have its groups built.
+#'
+#' @return The table invisibly
+#' @noRd
 treatment_group_build <- function(table) {
   output <- evalq({
     # Dummies for treatment groups added to target dataset
@@ -20,12 +26,20 @@ treatment_group_build <- function(table) {
     }
     rm(grp)
   }, envir=table)
+
+  invisible(table)
 }
 
+#' Verify layer is compatible with the layer it is contained in
+#'
+#' Currently a place holder. Will add more checks in further in development
+#'
+#' @noRd
 verify_layer_compatibility <- function(layer) {
   NextMethod("verify_layer_compatibility")
 }
 
+#' @noRd
 verify_layer_compatibility.count_layer <- function(layer){
 
   evalq({
