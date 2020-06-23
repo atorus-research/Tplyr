@@ -106,3 +106,27 @@ replace_by_string_names <- function(dat, by) {
   # Insert row labels to the front of the tibble
   select(dat, all_of(sort(row_labels)), everything())
 }
+
+#' Replace repeating row label variables with blanks in preparation for display.
+#'
+#' @param dat Data.frame / tibble to mask repeating row_labels
+#'
+#' @return tibble with blanked out rows where appropriate
+#' @noRd
+apply_row_masks <- function(dat) {
+  # Get the row labels that need to be masked
+  nlist <- names(dat)[str_detect(names(dat), "row_label")]
+
+  # Iterate each variable
+  for (name in nlist){
+    dat <- dat %>%
+      # Identify if the value was repeating (ugly compensation for first row)
+      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
+             # If repeating then blank out
+             !!name := ifelse(mask == TRUE, '', !!sym(name))
+      )
+  }
+  # Drop the dummied mask variable
+  dat <- dat %>% select(-mask)
+  dat
+}
