@@ -7,7 +7,12 @@
 construct_count_string(.n, .total, count_fmt = NULL)
 }
 \arguments{
-\item{ns}{}
+\item{.n}{Vector of counts for each cell}
+
+\item{.total}{Vector of totals. Should be the same length as .n and be the
+denominator that column is based off of.}
+
+\item{count_fmt}{The f_str object the strings are formatted around.}
 }
 \value{
 A tibble replacing the originial counts

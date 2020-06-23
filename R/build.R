@@ -36,37 +36,7 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  output <- evalq({
-    # Dummies for treatment groups added to target dataset
-    built_target <- target
-    built_pop_data <- pop_data
-    for (i in seq(along = treat_grps)) {
-      # The following is a little nasty but the idea is to:
-      # Add a T/F column named '.tplyr-treat_grp_name'
-      target[, paste0(".tplyr-", names(treat_grps)[i])] <- unlist(target[, as_label(treat_var)]) %in% treat_grps[[i]]
-      # Make a new data.frame with only the grouped rows
-      grped_df <- target[unlist(target[, paste0(".tplyr-", names(treat_grps)[i])]),]
-      # Change the treatment group column to the name of the group.
-      grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
-      # Rbind, suppressing warnings due to factor issues
-      built_target <- suppressWarnings(bind_rows(built_target, grped_df))
-    }
-    # Dummies for treatment groups added to population dataset
-    for (i in seq(along = treat_grps)) {
-      # The following is a little nasty but the idea is to:
-      # Add a T/F column named '.tplyr-treat_grp_name'
-      pop_data[, paste0(".tplyr-", names(treat_grps)[i])] <- unlist(pop_data[, as_label(treat_var)]) %in% treat_grps[[i]]
-      # Make a new data.frame with only the grouped rows
-      grped_df <- pop_data[unlist(pop_data[, paste0(".tplyr-", names(treat_grps)[i])]),]
-      # Change the treatment group column to the name of the group.
-      grped_df[, as_label(treat_var)] <- names(treat_grps)[i]
-      # Rbind
-      built_pop_data <- suppressWarnings(bind_rows(built_pop_data, grped_df))
-    }
-    rm(i)
-
-
-  }, envir=x)
+  treatment_group_build(x)
 
   output <- map(x$layers, build)
 
@@ -78,23 +48,14 @@ build.tplyr_table <- function(x) {
 #' @noRd
 build.count_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
-  verify_layer_compatibility(x)
-
-  output <- evalq({
-
-    # Add the count_fmt if it wasn't set
-    if(!exists("count_fmt")) count_fmt <- f_str("{layer_width(x)} (xxx.x%)", n, pct)
-
-    # Build the layers
-    lapply(layers, build)
-
-  }, envir=x)
-  process_count_layer(x)
   # Feed the output up
+  layer_output <- process_count_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
@@ -103,15 +64,6 @@ build.count_layer <- function(x) {
 #' @export
 build.desc_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    lapply(layers, build)
-
-  }, envir=x)
   # Build the sub-layers
   sublayer_output <- map(x$layers, build)
 
@@ -127,31 +79,18 @@ build.desc_layer <- function(x) {
 #' @noRd
 build.shift_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    lapply(layers, build)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_shift_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
-verify_layer_compatibility <- function(layer) {
-  NextMethod("verify_layer_compatibility")
-}
 
-verify_layer_compatibility.count_layer <- function(layer){
-
-  evalq({
-
-  }, envir = layer)
-  return(invisible(layer))
-}
 
 
 

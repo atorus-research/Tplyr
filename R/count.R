@@ -9,6 +9,8 @@
 process_count_layer <- function(e) {
   evalq({
 
+    if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
+
     # Construct the counts for each target grouping
     summary_stat <- built_target %>%
       # Filter out based on where
@@ -64,19 +66,22 @@ set_count_fmt <- function(x, str) {
 
 #' Format n counts for display in count_layer
 #'
-#' @param ns
+#' @param .n Vector of counts for each cell
+#' @param .total  Vector of totals. Should be the same length as .n and be the
+#'   denominator that column is based off of.
+#' @param count_fmt The f_str object the strings are formatted around.
 #'
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, count_fmt = NULL) {
 
   # If a layer_width flag is present, edit the formatting string to display the maximum
   # character length
-  if(str_detect(count_fmt$format_string, "\\{layer_width\\(x\\)\\}")) {
+  if(str_detect(count_fmt$format_string, "ax")) {
     # Pull max character length from counts
     max_width <- max(nchar(.n))
 
     # Replace the flag with however many xs
-    count_fmt_str <- str_replace(count_fmt$format_string, "\\{layer_width\\(x\\)\\}",
+    count_fmt_str <- str_replace(count_fmt$format_string, "ax",
                              paste(rep("x", max_width), collapse = ""))
 
     # Make a new f_str and replace the old one
