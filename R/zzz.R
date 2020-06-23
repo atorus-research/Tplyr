@@ -7,7 +7,8 @@
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
-#' @importFrom dplyr summarize filter group_by
+#' @importFrom dplyr summarize filter vars tally ungroup group_by
+#' @importFrom tidyr complete nesting pivot_wider pivot_longer
 #' @importFrom utils str head
 NULL
 

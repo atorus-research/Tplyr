@@ -48,6 +48,6 @@ default_header_n <- function(table) {
 add_total_group <- function(table) {
   evalq({
     add_treat_group(current_env(), "Total",
-                    as.character(unique(pop_data[, quo_name(pop_treat_var)])))
+                    as.character(unlist(unique(pop_data[, quo_name(pop_treat_var)]))))
   }, envir = table)
 }

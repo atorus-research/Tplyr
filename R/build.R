@@ -36,9 +36,7 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  # Prepare the table environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
+  treatment_group_build(x)
 
   output <- map(x$layers, build)
 
@@ -50,17 +48,14 @@ build.tplyr_table <- function(x) {
 #' @noRd
 build.count_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    lapply(build, layers)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_count_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
@@ -84,19 +79,17 @@ build.desc_layer <- function(x) {
 #' @noRd
 build.shift_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    lapply(build, layers)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_shift_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
+
 
 
 
