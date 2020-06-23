@@ -15,12 +15,14 @@ process_count_layer <- function(e) {
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
-      # Only pull out the needed variables
-      select(!!treat_var, !!!target_var, !!!by, !!!cols) %>%
-      # Group by varaibles including target variables
-      count(!!treat_var, !!!target_var, !!!by, !!!cols) %>%
+      # Group by varaibles including target variables and count them
+      group_by(!!treat_var, !!!target_var, !!!by, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
       # Group by all column variables
-      add_count(!!treat_var, !!!cols, name = "Total", wt = n) %>%
+      group_by(!!treat_var, !!!cols) %>%
+      add_tally(name = "Total", wt = n) %>%
+      ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
       complete(!!treat_var, !!!target_var, !!!by, !!!cols, fill = list(n = 0, Total = 0))
@@ -29,10 +31,10 @@ process_count_layer <- function(e) {
     total_stat <- built_target %>%
       # filter out based on where
       filter(!!where) %>%
-      # Only pull out the needed variables
-      select(!!treat_var, !!!target_var, !!!by, !!!cols) %>%
       # Group by all column variables
-      count(!!treat_var, !!!cols) %>%
+      group_by(!!treat_var, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
       mutate(Total = n) %>%
       # complete based on missing groupings
       complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
@@ -42,7 +44,10 @@ process_count_layer <- function(e) {
         bind_rows(total_stat) %>%
         mutate(n = construct_count_string(n, Total, count_fmt)) %>%
         # Pivot table
-        pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)), names_from = c(!!treat_var, match_exact(cols)), values_from = n)
+        pivot_wider(id_cols = c(match_exact(target_var), match_exact(by)), names_from = c(!!treat_var, match_exact(cols)), values_from = n) %>%
+        # Replace String names for by and target variables. target variables are included becasue they are
+        # equivilant to by variables in a count layer
+        replace_by_string_names(c(by, target_var))
 
   }, envir = e)
 }
@@ -60,6 +65,9 @@ set_count_fmt <- function(x, str) {
   assert_has_class(x, "count_layer")
 
   assert_has_class(str, "f_str")
+
+  assert_that(all(str$vars %in% c("n", "pct")),
+              "f_str in a count_layer can only be n or pct")
 
   count_fmt <- str
 }
