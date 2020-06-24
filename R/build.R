@@ -55,19 +55,20 @@ build.count_layer <- function(x) {
 
 
       # Begin with the layer itself and process the first target vars values one by one
-      map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+      layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
               # target_var_1_i represents the current outer target variable
               function(target_var_1_i) {
                 build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
                                   by = !!target_var_1_i, cols = vars(!!!env_get(x, "cols")),
-                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
+                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
+                        set_include_total_row(FALSE))
               })
 
       # Build the sub-layers
       sublayer_output <- map(x$layers, build)
 
       # Feed the output up
-      layer_output <- process_count_layer(x)
+      #layer_output <- process_count_layer(x)
 
       # TODO: Some combination process
       output <- layer_output
