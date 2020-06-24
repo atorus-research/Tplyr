@@ -121,3 +121,27 @@ get_target_levels <- function(e, x) {
     unique(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
   }
 }
+
+#' Replace repeating row label variables with blanks in preparation for display.
+#'
+#' @param dat Data.frame / tibble to mask repeating row_labels
+#'
+#' @return tibble with blanked out rows where appropriate
+#' @noRd
+apply_row_masks <- function(dat) {
+  # Get the row labels that need to be masked
+  nlist <- names(dat)[str_detect(names(dat), "row_label")]
+
+  # Iterate each variable
+  for (name in nlist){
+    dat <- dat %>%
+      # Identify if the value was repeating (ugly compensation for first row)
+      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
+             # If repeating then blank out
+             !!name := ifelse(mask == TRUE, '', !!sym(name))
+      )
+  }
+  # Drop the dummied mask variable
+  dat <- dat %>% select(-mask)
+  dat
+}
