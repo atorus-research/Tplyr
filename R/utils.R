@@ -106,3 +106,18 @@ replace_by_string_names <- function(dat, by) {
   # Insert row labels to the front of the tibble
   select(dat, all_of(sort(row_labels)), everything())
 }
+
+#' Get the unique levels/factors of a dataset
+#'
+#' @param e An environment, generally a table or a layer object
+#' @param target_var A target variable to get the levels/unique values of
+#'
+#' @return Unique target values
+get_target_levels <- function(e, x) {
+  # If its a factor just return the levels
+  if(is.factor(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])) levels(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
+  # Otherwise return the unique values
+  else {
+    unique(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
+  }
+}

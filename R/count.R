@@ -27,6 +27,9 @@ process_count_layer <- function(e) {
       # add 0 for combintions that don't exist
       complete(!!treat_var, !!!target_var, !!!by, !!!cols, fill = list(n = 0, Total = 0))
 
+    # If there is no values in summary_stat, which can happen in nesting. Return nothing
+    if(nrow(summary_stat) == 0) return()
+
     # create a data.frame to create total counts
     total_stat <- built_target %>%
       # filter out based on where
@@ -47,7 +50,7 @@ process_count_layer <- function(e) {
         pivot_wider(id_cols = c(match_exact(target_var), match_exact(by)), names_from = c(!!treat_var, match_exact(cols)), values_from = n) %>%
         # Replace String names for by and target variables. target variables are included becasue they are
         # equivilant to by variables in a count layer
-        replace_by_string_names(c(by, target_var))
+        replace_by_string_names(c(target_var, by))
 
   }, envir = e)
 }
