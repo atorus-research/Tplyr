@@ -45,6 +45,8 @@ process_count_layer <- function(e) {
         mutate(Total = n) %>%
         # Create a variable to label the totals when it is merged in.
         mutate(!!target_var[[1]] := "Total") %>%
+        # Create variables to carry forward 'by'
+        group_by(!!!by) %>%
         # complete based on missing groupings
         complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
     }
