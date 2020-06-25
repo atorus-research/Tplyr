@@ -59,15 +59,18 @@ build.count_layer <- function(x) {
       layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
               # target_var_1_i represents the current outer target variable
               function(target_var_1_i) {
-                # This contains
+                # This contains the subset of the first target variable. TODO: The by variables are currently
+                # set to the 'by' variable. Where and cols should pull through from x
                 inner_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
                                   by = !!target_var_1_i, cols = vars(!!!env_get(x, "cols")),
                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                         set_include_total_row(FALSE))
+                # This should be a single row with the total of target_var 1
                 outer_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
                                   by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                         set_include_total_row(FALSE))
+                # Bind these two to gether and add a row mask
                 bind_rows(outer_layer, inner_layer) %>%
                   apply_row_masks()
               })
