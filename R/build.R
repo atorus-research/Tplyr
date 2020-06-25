@@ -38,10 +38,11 @@ build.tplyr_table <- function(x) {
 
   treatment_group_build(x)
 
-  output <- map(x$layers, build)
+  output <- map(x$layers, build) %>%
+    bind_rows()
 
-  # Feed the output up
-  bind_rows(output)
+  # Rearange columns. Currently just alphabetical
+  output[, sort(names(output))]
 }
 
 #' count_layer S3 method
@@ -58,10 +59,17 @@ build.count_layer <- function(x) {
       layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
               # target_var_1_i represents the current outer target variable
               function(target_var_1_i) {
-                build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+                # This contains
+                inner_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
                                   by = !!target_var_1_i, cols = vars(!!!env_get(x, "cols")),
                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                         set_include_total_row(FALSE))
+                outer_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+                                  by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
+                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
+                        set_include_total_row(FALSE))
+                bind_rows(outer_layer, inner_layer) %>%
+                  apply_row_masks()
               })
 
       # Build the sub-layers

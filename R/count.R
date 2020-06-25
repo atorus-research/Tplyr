@@ -53,10 +53,13 @@ process_count_layer <- function(e) {
         bind_rows(total_stat) %>%
         mutate(n = construct_count_string(n, Total, count_fmt)) %>%
         # Pivot table
-        pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)), names_from = names_prefix(c(!!treat_var, match_exact(cols))), values_from = n) %>%
+        pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
+                    names_from = c(!!treat_var, match_exact(cols)), values_from = n,
+                    names_prefix = "var1_1") %>%
         # Replace String names for by and target variables. target variables are included becasue they are
         # equivilant to by variables in a count layer
-        replace_by_string_names(c(by, target_var))
+        replace_by_string_names(c(by, target_var)) %>%
+        apply_row_masks()
 
   }, envir = e)
 }
