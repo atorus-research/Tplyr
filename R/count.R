@@ -35,12 +35,12 @@ process_count_layer <- function(e) {
     total_stat <- NULL
     if(include_total_row) {
       # create a data.frame to create total counts
-      total_stat <- built_target %>%
+      total_stat <- summary_stat %>%
         # filter out based on where
         filter(!!where) %>%
         # Group by all column variables
         group_by(!!treat_var, !!!cols) %>%
-        tally() %>%
+        summarise(n = sum(n)) %>%
         ungroup() %>%
         mutate(Total = n) %>%
         # complete based on missing groupings
@@ -55,11 +55,10 @@ process_count_layer <- function(e) {
         # Pivot table
         pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                     names_from = c(!!treat_var, match_exact(cols)), values_from = n,
-                    names_prefix = "var1_1") %>%
+                    names_prefix = "var1_") %>%
         # Replace String names for by and target variables. target variables are included becasue they are
         # equivilant to by variables in a count layer
-        replace_by_string_names(c(by, target_var)) %>%
-        apply_row_masks()
+        replace_by_string_names(c(by, target_var))
 
   }, envir = e)
 }
