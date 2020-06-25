@@ -155,10 +155,9 @@ apply_row_masks <- function(dat) {
 #'
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
-  # This contains the subset of the first target variable. TODO: The by variables are currently
-  # set to the 'by' variable. Where and cols should pull through from x
+  # This contains the subset of the first target variable.
   inner_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
-                                   by = vars(!!!get_by(x), !!target_var_1_i), cols = vars(!!!env_get(x, "cols")),
+                                   by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
                                    where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                          set_include_total_row(FALSE))
   # This should be a single row with the total of target_var 1
