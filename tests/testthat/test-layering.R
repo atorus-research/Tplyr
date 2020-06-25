@@ -68,7 +68,7 @@ test_that("`add_layer` attaches layer object into parent", {
 
   expect_true(length(t$layers) == 1)
   expect_s3_class(t$layers[[1]], 'tplyr_layer')
-  expect_true(as_label(t$layers[[1]]$target_var) == "Species")
+  expect_equal(t$layers[[1]]$target_var, vars(Species))
 })
 
 

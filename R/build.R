@@ -19,7 +19,6 @@
 #'
 #' @param x A \code{tplyr_table} object
 #'
-
 #'
 #' @return An executed \code{tplyr_table}
 #' @export
@@ -29,60 +28,80 @@
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, layer_constructors
 build <- function(x) {
-  NextMethod("build", x)
+  UseMethod("build")
 }
 
 #' tplyr_table S3 method
 #' @noRd
+#' @export
 build.tplyr_table <- function(x) {
 
-  # Prepare the table environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
+  treatment_group_build(x)
 
-  output <- evalq({
-    # Build the layers
-    layer_output <- lapply(build, layers)
+  output <- map(x$layers, build) %>%
+    bind_rows()
 
-  }, envir=x)
-
-  # Feed the output up
-  output
+  # Rearange columns. Currently just alphabetical
+  output[, sort(names(output))]
 }
 
 #' count_layer S3 method
 #' @noRd
 build.count_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
+  target_var_length <- length(env_get(x, "target_var"))
 
-  output <- evalq({
-    # Build the layers
-    layer_output <- lapply(build, layers)
+    if(target_var_length == 2) {
 
-  }, envir=x)
 
-  # Feed the output up
-  output
+
+      # Begin with the layer itself and process the first target vars values one by one
+      layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+                              bind_nested_count_layer, x = x)
+
+      # Build the sub-layers
+      sublayer_output <- map(x$layers, build)
+
+      # Feed the output up
+      #layer_output <- process_count_layer(x)
+
+      # TODO: Some combination process
+      output <- layer_output
+      output
+
+      # If there are not two, and not one, fail. TODO: move this into compatibility
+    } else if (target_var_length != 1) {
+      abort("target_var can only contain one or two target_variables.
+            Other amounts are not currently implemented.")
+
+      # If there is just one no need for logic
+    } else {
+
+      # Build the sub-layers
+      sublayer_output <- map(x$layers, build)
+
+      # Feed the output up
+      layer_output <- process_count_layer(x)
+
+      # TODO: Some combination process
+      output <- layer_output
+      output
+    }
 }
 
 #' desc_layer S3 method
 #' @noRd
+#' @export
 build.desc_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    layer_output <- lapply(build, layers)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_desc_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
 
@@ -90,19 +109,17 @@ build.desc_layer <- function(x) {
 #' @noRd
 build.shift_layer <- function(x) {
 
-  # Prepare the layer environment as appropriate
-  layer_output <- NULL
-  layers <- NULL
-
-  output <- evalq({
-    # Build the layers
-    layer_output <- lapply(build, layers)
-
-  }, envir=x)
+  # Build the sub-layers
+  sublayer_output <- map(x$layers, build)
 
   # Feed the output up
+  layer_output <- process_shift_layer(x)
+
+  # TODO: Some combination process
+  output <- layer_output
   output
 }
+
 
 
 
