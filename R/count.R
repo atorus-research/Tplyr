@@ -1,93 +1,89 @@
-#' Process a layer of type \code{group_count}
-#'
-#' @param e A layer environment
-#'
-#' @return A
-#' @export
-#'
-#' @examples
-process_count_layer <- function(e) {
-  evalq({
 
-    if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
-    if(!exists("include_total_row")) include_total_row <- TRUE
+#' @noRd
+process_summaries.count_layer <- function(x, ...) {
 
-    # Construct the counts for each target grouping
-    summary_stat <- built_target %>%
-      # Filter out based on where
-      filter(!!where) %>%
-      # Group by varaibles including target variables and count them
-      group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
-      tally() %>%
-      ungroup() %>%
-      # Group by all column variables
-      group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "Total", wt = n) %>%
-      ungroup() %>%
-      # complete all combiniations of factors to include combiniations that don't exist.
-      # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, Total = 0))
 
-    # If there is no values in summary_stat, which can happen depending on where. Return nothing
-    if(nrow(summary_stat) == 0) return()
+  # Preprocssing in the case of two target_variables
+  if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
+  else if(length(env_get(x, "target_var")) == 2) {
+    # Begin with the layer itself and process the first target vars values one by one
+           map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+                                   bind_nested_count_layer, x = x)
+  } else {
 
-    #
-    total_stat <- NULL
-    if(include_total_row) {
-      # create a data.frame to create total counts
-      total_stat <- summary_stat %>%
-        # filter out based on where
+    evalq({
+
+      if(!exists("include_total_row")) include_total_row <- TRUE
+      if(!exists("total_row_label")) total_row_label <- "Total"
+
+
+      # Construct the counts for each target grouping
+      summary_stat <- built_target %>%
+        # Filter out based on where
         filter(!!where) %>%
+        # Group by varaibles including target variables and count them
+        group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
+        tally(name = "value") %>%
+        ungroup() %>%
         # Group by all column variables
         group_by(!!treat_var, !!!cols) %>%
-        summarise(n = sum(n)) %>%
+        add_tally(name = "Total", wt = value) %>%
         ungroup() %>%
-        mutate(Total = n) %>%
-        # Create a variable to label the totals when it is merged in.
-        mutate(!!target_var[[1]] := "Total") %>%
-        # Create variables to carry forward 'by'
-        group_by(!!!by) %>%
-        # complete based on missing groupings
-        complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
-    }
+        # complete all combiniations of factors to include combiniations that don't exist.
+        # add 0 for combintions that don't exist
+        complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0))
+
+      # If there is no values in summary_stat, which can happen depending on where. Return nothing
+      if(nrow(summary_stat) == 0) return()
+
+      total_stat <- NULL
+      if(include_total_row) {
+        # create a data.frame to create total counts
+        total_stat <- summary_stat %>%
+          # filter out based on where
+          filter(!!where) %>%
+          # Group by all column variables
+          group_by(!!treat_var, !!!cols) %>%
+          summarise(value = sum(value)) %>%
+          ungroup() %>%
+          mutate(Total = value) %>%
+          # Create a variable to label the totals when it is merged in.
+          mutate(!!target_var[[1]] := total_row_label) %>%
+          # Create variables to carry forward 'by'
+          group_by(!!!by) %>%
+          # complete based on missing groupings
+          complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
+      }
 
 
-    # rbind tables together
+      # rbind tables together
       built_table <- summary_stat %>%
-        bind_rows(total_stat) %>%
-        mutate(n = construct_count_string(n, Total, count_fmt)) %>%
-        # Pivot table
-        pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
-                    names_from = c(!!treat_var, match_exact(cols)), values_from = n,
-                    names_prefix = "var1_") %>%
-        # Replace String names for by and target variables. target variables are included becasue they are
-        # equivilant to by variables in a count layer
-        replace_by_string_names(c(by, target_var))
+        bind_rows(total_stat)
 
-  }, envir = e)
+    }, envir = x)
+
+    x
+  }
 }
 
-#' Set Count Layer String Format
-#'
-#' @param x the layer object to add/modify the count format
-#' @param str The f_str object to add
-#'
-#' @return
-#' @export
-#'
-#' @examples
-set_count_fmt <- function(x, str) {
-  assert_inherits_class(x, "count_layer")
+#' @noRd
+process_formatting.count_layer <- function(x, ...) {
+  evalq({
+    if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
 
-  assert_has_class(str, "f_str")
-
-  assert_that(all(str$vars %in% c("n", "pct")),
-              "f_str in a count_layer can only be n or pct")
-
-  env_bind(x, count_fmt = str)
-
-  x
+    formatted_table <- built_table %>%
+      mutate(value = construct_count_string(value, Total, count_fmt))%>%
+      # Pivot table
+      pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
+                  names_from = c(!!treat_var, match_exact(cols)), values_from = value,
+                  names_prefix = "var1_") %>%
+      # Replace String names for by and target variables. target variables are included becasue they are
+      # equivilant to by variables in a count layer
+      replace_by_string_names(c(by, target_var))
+  }, envir = x)
 }
+
+
 
 #' Format n counts for display in count_layer
 #'
@@ -102,12 +98,13 @@ construct_count_string <- function(.n, .total, count_fmt = NULL) {
   # If a layer_width flag is present, edit the formatting string to display the maximum
   # character length
   if(str_detect(count_fmt$format_string, "ax")) {
-    # Pull max character length from counts
+    # Pull max character length from counts.
+    # TODO: This will be replaced when it is available at the table level!
     max_width <- max(nchar(.n))
 
     # Replace the flag with however many xs
     count_fmt_str <- str_replace(count_fmt$format_string, "ax",
-                             paste(rep("x", max_width), collapse = ""))
+                                 paste(rep("x", max_width), collapse = ""))
 
     # Make a new f_str and replace the old one
     count_fmt <- f_str(count_fmt_str, n, pct)
@@ -126,16 +123,74 @@ construct_count_string <- function(.n, .total, count_fmt = NULL) {
 }
 
 
-#' Set the include_total_row option for count processing
+#' #' Process a layer of type \code{group_count}
+#' #'
+#' #' @param e A layer environment
+#' #'
+#' #' @return A
+#' #' @export
+#' #'
+#' #' @examples
+#' process_count_layer <- function(e) {
+#'   evalq({
 #'
-#' @param x A layer object
-#' @param include_total A logical vector
-set_include_total_row <- function(x, include_total) {
-  assert_inherits_class(x, "count_layer")
+#'     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
+#'     if(!exists("include_total_row")) include_total_row <- TRUE
+#'
+#'     # Construct the counts for each target grouping
+#'     summary_stat <- built_target %>%
+#'       # Filter out based on where
+#'       filter(!!where) %>%
+#'       # Group by varaibles including target variables and count them
+#'       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
+#'       tally() %>%
+#'       ungroup() %>%
+#'       # Group by all column variables
+#'       group_by(!!treat_var, !!!cols) %>%
+#'       add_tally(name = "Total", wt = n) %>%
+#'       ungroup() %>%
+#'       # complete all combiniations of factors to include combiniations that don't exist.
+#'       # add 0 for combintions that don't exist
+#'       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, Total = 0))
+#'
+#'     # If there is no values in summary_stat, which can happen depending on where. Return nothing
+#'     if(nrow(summary_stat) == 0) return()
+#'
+#'     #
+#'     total_stat <- NULL
+#'     if(include_total_row) {
+#'       # create a data.frame to create total counts
+#'       total_stat <- summary_stat %>%
+#'         # filter out based on where
+#'         filter(!!where) %>%
+#'         # Group by all column variables
+#'         group_by(!!treat_var, !!!cols) %>%
+#'         summarise(n = sum(n)) %>%
+#'         ungroup() %>%
+#'         mutate(Total = n) %>%
+#'         # Create a variable to label the totals when it is merged in.
+#'         mutate(!!target_var[[1]] := "Total") %>%
+#'         # Create variables to carry forward 'by'
+#'         group_by(!!!by) %>%
+#'         # complete based on missing groupings
+#'         complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
+#'     }
+#'
+#'
+#'     # rbind tables together
+#'       built_table <- summary_stat %>%
+#'         bind_rows(total_stat) %>%
+#'         mutate(n = construct_count_string(n, Total, count_fmt)) %>%
+#'         # Pivot table
+#'         pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
+#'                     names_from = c(!!treat_var, match_exact(cols)), values_from = n,
+#'                     names_prefix = "var1_") %>%
+#'         # Replace String names for by and target variables. target variables are included becasue they are
+#'         # equivilant to by variables in a count layer
+#'         replace_by_string_names(c(by, target_var))
+#'
+#'   }, envir = e)
+#' }
 
-  assert_that(is.logical(include_total))
 
-  env_bind(x, include_total_row = include_total)
 
-  x
-}

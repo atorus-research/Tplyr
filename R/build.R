@@ -36,89 +36,132 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
+  # Table Pre build
   treatment_group_build(x)
 
-  output <- map(x$layers, build) %>%
+  # Process Layer summaries
+  map(x$layers, process_summaries)
+
+  # Get table formatting info
+  formatting_meta <- fetch_formatting_info(x)
+
+  # Format layers/table and pivot. process_formatting should return the built table!
+  output <- map(x$layers, process_formatting)%>%
     bind_rows()
 
   # Rearange columns. Currently just alphabetical
   output[, sort(names(output))]
 }
 
-#' count_layer S3 method
-#' @noRd
-build.count_layer <- function(x) {
-
-  target_var_length <- length(env_get(x, "target_var"))
-
-    if(target_var_length == 2) {
-
-
-
-      # Begin with the layer itself and process the first target vars values one by one
-      layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
-                              bind_nested_count_layer, x = x)
-
-      # Build the sub-layers
-      sublayer_output <- map(x$layers, build)
-
-      # Feed the output up
-      #layer_output <- process_count_layer(x)
-
-      # TODO: Some combination process
-      output <- layer_output
-      output
-
-      # If there are not two, and not one, fail. TODO: move this into compatibility
-    } else if (target_var_length != 1) {
-      abort("target_var can only contain one or two target_variables.
-            Other amounts are not currently implemented.")
-
-      # If there is just one no need for logic
-    } else {
-
-      # Build the sub-layers
-      sublayer_output <- map(x$layers, build)
-
-      # Feed the output up
-      layer_output <- process_count_layer(x)
-
-      # TODO: Some combination process
-      output <- layer_output
-      output
-    }
+#' Process layers to get numeric results of layer
+#'
+#' @param x a tplyr_layer object
+#' @param ... arguments passed to dispatch
+#'
+#' @return The tplyr_layer object with a 'built_table' binding
+process_summaries <- function(x, ...) {
+  UseMethod("process_summaries")
 }
 
-#' desc_layer S3 method
-#' @noRd
-#' @export
-build.desc_layer <- function(x) {
-
-  # Build the sub-layers
-  sublayer_output <- map(x$layers, build)
-
-  # Feed the output up
-  layer_output <- process_desc_layer(x)
-
-  # TODO: Some combination process
-  output <- layer_output
-  output
+#' Process layers to get formatted and pivoted tables.
+#'
+#' @param x A tplyr_layer object
+#' @param ... arguments passed to dispatch
+#'
+#' @return The formatted_table object that is binded to the layer
+process_formatting <- function(x, ...) {
+  UseMethod("process_formatting")
 }
 
-#' shift_layer S3 method
-#' @noRd
-build.shift_layer <- function(x) {
-
-  # Build the sub-layers
-  sublayer_output <- map(x$layers, build)
-
-  # Feed the output up
-  layer_output <- process_shift_layer(x)
-
-  # TODO: Some combination process
-  output <- layer_output
-  output
+#' Placeholder function to fetch table formatting data from layers
+#'
+#' @param x A tplyr_table object
+#'
+#' @return The data used to format layers. Structure currently TBD
+fetch_formatting_info <- function(x) {
+  NULL
 }
+
+
+######################################################################################
+######## Saving the below for posterity but I don't think its needed anymore #########
+######################################################################################
+
+
+#' #' count_layer S3 method
+#' #' @noRd
+#' build.count_layer <- function(x) {
+#'
+#'   target_var_length <- length(env_get(x, "target_var"))
+#'
+#'     if(target_var_length == 2) {
+#'
+#'
+#'
+#'       # Begin with the layer itself and process the first target vars values one by one
+#'       layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+#'                               bind_nested_count_layer, x = x)
+#'
+#'       # Build the sub-layers
+#'       sublayer_output <- map(x$layers, build)
+#'
+#'       # Feed the output up
+#'       #layer_output <- process_count_layer(x)
+#'
+#'       # TODO: Some combination process
+#'       output <- layer_output
+#'       output
+#'
+#'       # If there are not two, and not one, fail. TODO: move this into compatibility
+#'     } else if (target_var_length != 1) {
+#'       abort("target_var can only contain one or two target_variables.
+#'             Other amounts are not currently implemented.")
+#'
+#'       # If there is just one no need for logic
+#'     } else {
+#'
+#'       # Build the sub-layers
+#'       sublayer_output <- map(x$layers, build)
+#'
+#'       # Feed the output up
+#'       layer_output <- process_count_layer(x)
+#'
+#'       # TODO: Some combination process
+#'       output <- layer_output
+#'       output
+#'     }
+#' }
+#'
+#' #' desc_layer S3 method
+#' #' @noRd
+#' #' @export
+#' build.desc_layer <- function(x) {
+#'
+#'   # Build the sub-layers
+#'   sublayer_output <- map(x$layers, build)
+#'
+#'   # Feed the output up
+#'   layer_output <- process_desc_layer(x)
+#'
+#'   # TODO: Some combination process
+#'   output <- layer_output
+#'   output
+#' }
+#'
+#' #' shift_layer S3 method
+#' #' @noRd
+#' build.shift_layer <- function(x) {
+#'
+#'   # Build the sub-layers
+#'   sublayer_output <- map(x$layers, build)
+#'
+#'   # Feed the output up
+#'   layer_output <- process_shift_layer(x)
+#'
+#'   # TODO: Some combination process
+#'   output <- layer_output
+#'   output
+#' }
 
 
 
