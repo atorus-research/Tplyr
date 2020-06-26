@@ -156,16 +156,16 @@ apply_row_masks <- function(dat) {
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
   # This contains the subset of the first target variable.
-  inner_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+  inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
                                    by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
                                    where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                          set_include_total_row(FALSE))
   # This should be a single row with the total of target_var 1
-  outer_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+  outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
                                    by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
                                    where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                          set_include_total_row(FALSE))
   # Bind these two to gether and add a row mask
-  bind_rows(outer_layer, inner_layer) %>%
-    apply_row_masks()
+  b_table <- bind_rows(outer_layer$built_table, inner_layer$built_table)
+  env_bind(x, built_table = b_table)
 }
