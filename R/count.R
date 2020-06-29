@@ -2,7 +2,6 @@
 #' @noRd
 process_summaries.count_layer <- function(x, ...) {
 
-
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
   else if(length(env_get(x, "target_var")) == 2) {
