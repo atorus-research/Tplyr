@@ -22,6 +22,9 @@
 #' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
 #' @param layer A layer construction function and associated modifier functionns
 #'
+#' @family Layer attachment
+#' @rdname layer_attachment
+#'
 #' @return A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} with a new layer inserted into the \code{layer}
 #'   binding
 #'
@@ -31,19 +34,27 @@
 #'
 #' @examples
 #' ## Single layer
-#' t <- tplyr_table(iris, Sepal.Width) %>%
+#' t <- tplyr_table(mtcars, cyl) %>%
 #'   add_layer(
-#'     group_desc(target_var=Species)
+#'     group_desc(target_var=mpg)
 #'   )
 #'
 #' # Layer with sub layer
-#' t <- tplyr_table(iris, Sepal.Width) %>%
+#' t <- tplyr_table(mtcars, cyl)%>%
 #'   add_layer(
-#'     group_desc(target_var=Species) %>%
+#'     group_desc(target_var=cyl) %>%
 #'       add_layer(
-#'         group_count(target_var=Sepal.Width)
+#'         group_count(target_var=gear)
 #'       )
 #'   )
+#'
+#' # Using add_layers
+#' t <- tplyr_table(mtcars, cyl)
+#' l1 <- group_desc(t, target_var=mpg)
+#' l2 <- group_count(t, target_var=cyl)
+#'
+#' t <- add_layers(t, l1, l2)
+#'
 add_layer <- function(parent, layer) {
 
   assert_that(!missing(parent), msg = "`parent` parameter must be provided")
@@ -56,13 +67,33 @@ add_layer <- function(parent, layer) {
   # Insert the `parent` argument into the topmost call of the layer code
   # (i.e. if any pipes %>% then pull out the left most call and modify it)
   l <- modify_nested_call(layer, parent=parent)
-  dmessage(paste('Modified call:', as_label(l)))
 
   # Evaluate the layer and grab `tplyr_layer` or `tplyr_subgroup_layer` object
   executed_layer <- eval(quo_get_expr(l))
 
   # Insert the layer into the parent object
   parent$layers <- append(parent$layers, executed_layer)
+  parent
+}
+
+#' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
+#' @param ... Layers to be added
+#'
+#' @return
+#' @export
+#'
+#' @family Layer attachment
+#' @rdname layer_attachment
+#'
+#' @export
+add_layers <- function(parent, ...) {
+  # Parent exists
+  assert_that(!missing(parent), msg = "`parent` parameter must be provided")
+  # all objects are Tplyr layers
+  map(list(...), assert_is_layer)
+
+  # Insert the layer into the parent object
+  parent$layers <- append(parent$layers, list(...))
   parent
 }
 
