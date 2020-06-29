@@ -4,7 +4,7 @@
 \alias{tplyr_table}
 \title{Safety Table}
 \usage{
-tplyr_table(target, treat_var)
+tplyr_table(target, treat_var, where = TRUE)
 }
 \arguments{
 \item{target}{Source data used to create the table. A 'data.frame' object.

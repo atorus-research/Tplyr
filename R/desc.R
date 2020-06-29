@@ -1,34 +1,38 @@
-#' Process a layer of type \code{desc}
+#' Process numeric data for a layer of type \code{desc}
 #'
-#' @param e Environment within which a
+#' @param x Environment within which a layer is processed
 #'
 #' @return Processed data within layer environment
-process_desc_layer <- function(e) {
+process_summaries.desc_layer <- function(x, ...) {
   # Execute in the layer environment
   evalq({
     # Allocate the list elements for the output list
-    sums <- vector("list", length(target_var))
+    trans_sums <- vector("list", length(target_var))
+    num_sums <- vector("list", length(target_var))
+
+    # Get the row labels out from the format strings list
+    row_labels <- name_translator(format_strings)
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
 
-      # Get the row labels out from the format strings list
-      row_labels <- name_translator(format_strings)
-
       # Pull out the target variable being iterated
-      var <- target_var[[i]]
+      cur_var <- target_var[[i]]
 
       # Get the summaries that need to be performed for this layer
-      summaries <- get_summaries(var)[match_exact(summary_vars)]
+      summaries <- get_summaries(cur_var)[match_exact(summary_vars)]
 
-      # Start the tplyr processing
-      current <- target %>%
+      # Create the numeric summary data
+      num_sums[[i]] <- built_target %>%
         # Subset by the logic specified in `where`
         filter(!!where, !!table_where) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
-        summarize(!!!summaries) %>%
+        summarize(!!!summaries)
+
+      # Create the transposed summary data to prepare for formatting
+      trans_sums[[i]] <- num_sums[[i]] %>%
         # Transpose the summaries that make up the first number in a display string
         # into the the `value` column with labels by `stat`
         pivot_longer(match_exact(trans_vars), names_to = "stat") %>%
@@ -38,33 +42,65 @@ process_desc_layer <- function(e) {
            row_label = row_labels[[stat]]
         )
 
+      # Numeric data needs the variable names replaced and add summary variable name
+      num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
+        mutate(summary_var = as_label(cur_var)) %>%
+        select(summary_var, everything())
+
+      # Clean up loop
+      rm(cur_var, summaries)
+    }
+
+    # numeric_data <- reduce(sums, full_join, by=c('row_label', match_exact(by)))
+    numeric_data <- bind_rows(num_sums)
+
+    # Delete the listed numeric data
+    rm(num_sums)
+
+  }, envir=x)
+}
+
+#' Title
+#'
+#' @param x
+#'
+#' @return
+process_formatting.desc_layer <- function(x, ...) {
+  # Execute in the layer environment
+  evalq({
+    # Initialize list for formatted, transposed outputs
+    form_sums <- vector("list", length(target_var))
+
+    for (i in seq_along(trans_sums)) {
       # Format the display strings - this is just applying construct_desc_string to each row of
       # the data.frame
-      current['display_string'] <- pmap_chr(current,
+      trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
                                             function(...) construct_desc_string(..., .fmt_str = format_strings),
                                             format_strings=format_strings
-                                            )
+      )
 
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
       # then also tranpose by cols.
-      sums[[i]] <- current %>%
+      form_sums[[i]] <- trans_sums[[i]] %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                     values_from = display_string # Use the created display_string variable for values
-                    )
-
-      # Clean up loop
-      rm(var, summaries, current)
+        )
     }
-    out <- reduce(sums, full_join, by=c('row_label', match_exact(by)))
 
-    out <- replace_by_string_names(out, by)
+    # Join the final outputs
+    formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
 
-    out
+    # Replace row label names
+    formatted_data <- replace_by_string_names(formatted_data, by)
 
-  }, envir=e)
+    # Clean up
+    rm(trans_sums, form_sums)
+
+    formatted_data
+  }, envir=x)
 }
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
@@ -78,7 +114,9 @@ get_summaries <- function(var, e = caller_env()) {
   # Define the default list of summaries
   summaries <- exprs(
     n       = n()                             ,
+    mean    = mean(!!var, na.rm=TRUE)         ,
     sd      = sd(!!var, na.rm=TRUE)           ,
+    median  = median(!!var, na.rm=TRUE)       ,
     var     = var(!!var, na.rm=TRUE)          ,
     min     = min(!!var, na.rm=TRUE)          ,
     max     = max(!!var, na.rm=TRUE)          ,
