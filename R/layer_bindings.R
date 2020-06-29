@@ -68,38 +68,23 @@ set_by <- function(layer, by) {
   layer
 }
 
-#' Set or return where layer binding
-#'
-#' @param layer A \code{tplyr_layer} object.
-#'
-#' @return For \code{where}, the where binding of the supplied object.
-#'   For \code{set_where}, the modified object
 #' @export
 #' @rdname where
-#'
-#' @examples
-#' iris$Species2 <- iris$Species
-#' lay <- tplyr_table(iris, Species) %>%
-#'   group_count(Species) %>%
-#'   set_where(Petal.Length > 3)
-get_where <- function(layer) {
-  env_get(layer, "where")
+get_where.tplyr_layer <- function(obj) {
+  env_get(obj, "where")
 }
 
-#' @param where A function detailing the subset
-#'
-#' @return
 #' @export
 #' @rdname where
-set_where <- function(layer, where) {
+set_where.tplyr_layer <- function(obj, where) {
   where <- enquo(where)
 
   assert_that(is_logical_or_call(where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
-  env_bind(layer, where = where)
+  env_bind(obj, where = where)
 
-  layer
+  obj
 }
 
 #' Return or set sort_vars layer binding

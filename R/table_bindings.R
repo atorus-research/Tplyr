@@ -284,3 +284,47 @@ add_treat_group <- function(table, group_name, groupings) {
   table
 }
 
+#' Set or return where binding for layer or table
+#'
+#' @param obj A \code{tplyr_layer} or \code{tplyr_table} object.
+#'
+#' @return For \code{where}, the where binding of the supplied object.
+#'   For \code{set_where}, the modified object
+#' @export
+#' @rdname where
+#'
+#' @examples
+#' iris$Species2 <- iris$Species
+#' lay <- tplyr_table(iris, Species) %>%
+#'   group_count(Species) %>%
+#'   set_where(Petal.Length > 3)
+get_where <- function(obj) {
+  UseMethod("get_where")
+}
+
+#' @rdname where
+#' @export
+get_where.tplyr_table <- function(obj) {
+  env_get(obj, "table_where")
+}
+
+#' @param where An expression detailing the subset
+#'
+#' @export
+#' @rdname where
+set_where <- function(obj, where) {
+  UseMethod("set_where")
+}
+
+#' @rdname where
+#' @export
+set_where.tplyr_table <- function(obj, where) {
+  where <- enquo(where)
+
+  assert_that(is_logical_or_call(where),
+              msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
+
+  env_bind(obj, table_where = where)
+
+  obj
+}

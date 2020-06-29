@@ -24,7 +24,7 @@ process_desc_layer <- function(e) {
       # Start the tplyr processing
       current <- target %>%
         # Subset by the logic specified in `where`
-        filter(!!where) %>%
+        filter(!!where, !!table_where) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
