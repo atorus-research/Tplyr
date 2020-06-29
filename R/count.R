@@ -15,7 +15,7 @@ process_count_layer <- function(e) {
     # Construct the counts for each target grouping
     summary_stat <- built_target %>%
       # Filter out based on where
-      filter(!!where) %>%
+      filter(!!where, !!table_where) %>%
       # Group by varaibles including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally() %>%
@@ -36,8 +36,6 @@ process_count_layer <- function(e) {
     if(include_total_row) {
       # create a data.frame to create total counts
       total_stat <- summary_stat %>%
-        # filter out based on where
-        filter(!!where) %>%
         # Group by all column variables
         group_by(!!treat_var, !!!cols) %>%
         summarise(n = sum(n)) %>%

@@ -30,6 +30,7 @@
 #'   This is the analysis dataset the table is generated from.
 #' @param treat_var Treatment variable in target used to split treatment
 #'   groups.
+#' @param where An expression used to filter the target dataset
 #'
 #' @return A safety_table object which is a parent environment for the layers
 #'   where the code creating the table is evaluated.
@@ -41,7 +42,7 @@
 #'
 #'
 #' @export
-tplyr_table <- function(target, treat_var) {
+tplyr_table <- function(target, treat_var, where = TRUE) {
 
   if(missing(target)){
     # return a blank environment if no table information is passed. This can be
@@ -51,14 +52,14 @@ tplyr_table <- function(target, treat_var) {
   }
   target_name <- enexpr(target)
   attr(target, "target_name") <- target_name
-  new_tplyr_table(target, enquo(treat_var))
+  new_tplyr_table(target, enquo(treat_var), enquo(where))
 }
 
 #' Construct new tplyr_table
 #'
 #' @inheritParams tplyr_table
 #' @noRd
-new_tplyr_table <- function(target, treat_var) {
+new_tplyr_table <- function(target, treat_var, where) {
   validate_tplyr_table(target)
 
   # Create table object with default bindings and class of `tplyr_table`
@@ -72,6 +73,7 @@ new_tplyr_table <- function(target, treat_var) {
     set_treat_var(!!treat_var) %>%
     set_pop_data(target) %>%
     set_pop_treat_var(!!treat_var) %>%
+    set_where(!!where) %>%
     # header_n is set with a default here instead of standard function
     default_header_n()
 }
