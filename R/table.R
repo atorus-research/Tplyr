@@ -41,7 +41,7 @@
 #'
 #'
 #' @export
-tplyr_table <- function(target, treat_var) {
+tplyr_table <- function(target, treat_var, where = TRUE) {
 
   if(missing(target)){
     # return a blank environment if no table information is passed. This can be
@@ -72,7 +72,7 @@ new_tplyr_table <- function(target, treat_var, where) {
     set_treat_var(!!treat_var) %>%
     set_pop_data(target) %>%
     set_pop_treat_var(!!treat_var) %>%
-    set_where(TRUE) %>%
+    set_where(!!where) %>%
     # header_n is set with a default here instead of standard function
     default_header_n()
 }
