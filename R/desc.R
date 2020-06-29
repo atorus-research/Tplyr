@@ -77,16 +77,14 @@ get_summaries <- function(var, e = caller_env()) {
 
   # Define the default list of summaries
   summaries <- exprs(
-    n       = n()                 ,
-    mean    = mean(!!var)         ,
-    sd      = sd(!!var)           ,
-    var     = var(!!var)          ,
-    median  = median(!!var)       ,
-    min     = min(!!var)          ,
-    max     = max(!!var)          ,
-    iqr     = IQR(!!var)          ,
-    q1      = quantile(!!var)[[2]],
-    q3      = quantile(!!var)[[4]],
+    n       = n()                             ,
+    sd      = sd(!!var, na.rm=TRUE)           ,
+    var     = var(!!var, na.rm=TRUE)          ,
+    min     = min(!!var, na.rm=TRUE)          ,
+    max     = max(!!var, na.rm=TRUE)          ,
+    iqr     = IQR(!!var, na.rm=TRUE)          ,
+    q1      = quantile(!!var, na.rm=TRUE)[[2]],
+    q3      = quantile(!!var, na.rm=TRUE)[[4]],
     missing = sum(is.na(!!var))
   )
 
