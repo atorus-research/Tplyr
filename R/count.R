@@ -51,13 +51,31 @@ process_summaries.count_layer <- function(x, ...) {
           # aren't symbols
           group_by(!!!extract_character_from_quo(by)) %>%
           # complete based on missing groupings
-          complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
+          complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
       }
 
 
       # rbind tables together
       numeric_data <- summary_stat %>%
         bind_rows(total_stat)
+
+      # Get formatting metadata prepared
+      if(!exists("format_strings")) format_strings <- f_str("ax (xxx.x%)", n, pct)
+      # If a layer_width flag is present, edit the formatting string to display the maximum
+      # character length
+      if(str_detect(format_strings$format_string, "ax")) {
+        # Pull max character length from counts.
+        # TODO: This will be replaced when it is available at the table level!
+        n_width <- max(nchar(numeric_data$value))
+
+        # Replace the flag with however many xs
+        format_strings <- str_replace(format_strings$format_string, "ax",
+                                     paste(rep("x", n_width), collapse = ""))
+
+        # Make a new f_str and replace the old one
+        format_strings <- f_str(format_strings, n, pct)
+      }
+      max_length <- format_strings$size
 
     }, envir = x)
 
@@ -69,7 +87,7 @@ process_summaries.count_layer <- function(x, ...) {
 #' @export
 process_formatting.count_layer <- function(x, ...) {
   evalq({
-    if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
+
 
     formatted_data <- numeric_data %>%
       mutate(value = construct_count_string(value, Total, count_fmt))%>%
@@ -95,20 +113,7 @@ process_formatting.count_layer <- function(x, ...) {
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, count_fmt = NULL) {
 
-  # If a layer_width flag is present, edit the formatting string to display the maximum
-  # character length
-  if(str_detect(count_fmt$format_string, "ax")) {
-    # Pull max character length from counts.
-    # TODO: This will be replaced when it is available at the table level!
-    max_width <- max(nchar(.n))
 
-    # Replace the flag with however many xs
-    count_fmt_str <- str_replace(count_fmt$format_string, "ax",
-                                 paste(rep("x", max_width), collapse = ""))
-
-    # Make a new f_str and replace the old one
-    format_strings <- f_str(count_fmt_str, n, pct)
-  }
 
   # Make a vector of ncounts
   str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
