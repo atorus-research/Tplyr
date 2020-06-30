@@ -7,8 +7,8 @@ process_summaries.count_layer <- function(x, ...) {
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
   else if(length(env_get(x, "target_var")) == 2) {
     # Begin with the layer itself and process the first target vars values one by one
-           map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
-                                   bind_nested_count_layer, x = x)
+    env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+            bind_nested_count_layer, x = x))
   } else {
 
     evalq({
@@ -20,7 +20,14 @@ process_summaries.count_layer <- function(x, ...) {
       # Construct the counts for each target grouping
       summary_stat <- built_target %>%
         # Filter out based on where
-        filter(!!where, !!table_where) %>%
+        filter(!!where, !!table_where)
+      # get unique variables based on distinct_by value
+      # if (!quo_is_null(distinct_by) {
+      #   summary_stat <- summary_stat %>%
+      #     distinct(!!distinct_by)
+      # }
+
+      summary_stat <- summary_stat %>%
         # Group by varaibles including target variables and count them
         group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
         tally(name = "value") %>%
@@ -59,28 +66,32 @@ process_summaries.count_layer <- function(x, ...) {
       numeric_data <- summary_stat %>%
         bind_rows(total_stat)
 
-      # Get formatting metadata prepared
-      if(!exists("format_strings")) format_strings <- f_str("ax (xxx.x%)", n, pct)
-      # If a layer_width flag is present, edit the formatting string to display the maximum
-      # character length
-      if(str_detect(format_strings$format_string, "ax")) {
-        # Pull max character length from counts.
-        # TODO: This will be replaced when it is available at the table level!
-        n_width <- max(nchar(numeric_data$value))
 
-        # Replace the flag with however many xs
-        replaced_string <- str_replace(format_strings$format_string, "ax",
+      rm(summary_stat, total_stat)
+    }, envir = x)
+  }
+
+  evalq({
+
+    # Get formatting metadata prepared
+    if(!exists("format_strings")) format_strings <- f_str("ax (xxx.x%)", n, pct)
+    # If a layer_width flag is present, edit the formatting string to display the maximum
+    # character length
+    if(str_detect(format_strings$format_string, "ax")) {
+      # Pull max character length from counts. Should be at least 1
+      n_width <- max(c(nchar(numeric_data$value), 1))
+
+      # Replace the flag with however many xs
+      replaced_string <- str_replace(format_strings$format_string, "ax",
                                      paste(rep("x", n_width), collapse = ""))
 
-        # Make a new f_str and replace the old one
-        format_strings <- f_str(replaced_string, n, pct)
-      }
-      max_length <- format_strings$size
+      # Make a new f_str and replace the old one
+      format_strings <- f_str(replaced_string, n, pct)
+    }
+    max_length <- format_strings$size
+  }, envir = x)
 
-    }, envir = x)
-
-    x
-  }
+  x
 }
 
 #' @noRd
@@ -88,9 +99,8 @@ process_summaries.count_layer <- function(x, ...) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
-
     formatted_data <- numeric_data %>%
-      mutate(value = construct_count_string(value, Total, count_fmt))%>%
+      mutate(value = construct_count_string(value, Total, format_strings))%>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = value,
@@ -112,8 +122,6 @@ process_formatting.count_layer <- function(x, ...) {
 #'
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, count_fmt = NULL) {
-
-
 
   # Make a vector of ncounts
   str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)

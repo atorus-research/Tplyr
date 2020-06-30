@@ -94,7 +94,7 @@ fetch_formatting_info <- function(x) {
   max_desc_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, 'desc_layer'), env_get(.x, 'max_length'), 0L)))
 
   # Get the maximum length from a count_layer
-  max_count_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, "count_layer"), env_get(.x, "max_length"), 0L)))
+  max_count_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, "count_layer"), get_max_length(.x), 0L)))
 
   # Get the maximum length from all layers
   max_layer_length <- max(max_desc_length, max_count_length)
