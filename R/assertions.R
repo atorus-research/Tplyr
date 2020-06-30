@@ -257,14 +257,4 @@ quo_class <- function(q) {
   class(quo_get_expr(q))
 }
 
-#' Take a list of quosures and pull out things that aren't symbols
-#'
-#' @param var_list List of quosures
-#'
-#' @return Quosures that aren't symbols
-extract_character_from_quo <- function(var_list) {
 
-  is_symbol_ <- sapply(var_list, quo_is_symbol)
-
-  var_list[!is_symbol_]
-}
