@@ -1,5 +1,6 @@
 
 #' @noRd
+#' @export
 process_summaries.count_layer <- function(x, ...) {
 
   # Preprocssing in the case of two target_variables
@@ -64,6 +65,7 @@ process_summaries.count_layer <- function(x, ...) {
 }
 
 #' @noRd
+#' @export
 process_formatting.count_layer <- function(x, ...) {
   evalq({
     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
