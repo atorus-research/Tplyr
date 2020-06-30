@@ -91,7 +91,7 @@ process_formatting <- function(x, ...) {
 fetch_formatting_info <- function(x) {
 
   # Get the maximum length from a desc layer
-  max_desc_length <- max(map_int(x$layers, ~ env_get(.x, 'max_length')))
+  max_desc_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, 'desc_layer'), env_get(.x, 'max_length'), 0L)))
 
 }
 
