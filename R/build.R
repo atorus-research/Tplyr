@@ -89,7 +89,10 @@ process_formatting <- function(x, ...) {
 #'
 #' @return The data used to format layers. Structure currently TBD
 fetch_formatting_info <- function(x) {
-  NULL
+
+  # Get the maximum length from a desc layer
+  max_desc_length <- max(map_int(x$layers, ~ env_get(.x, 'max_length')))
+
 }
 
 

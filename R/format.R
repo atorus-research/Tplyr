@@ -134,7 +134,8 @@ set_format_strings <- function(e, ...) {
            summary_vars = vars(!!!summary_vars),
            keep_vars = vars(!!!keep_vars),
            trans_vars = vars(!!!trans_vars),
-           row_labels = row_labels
+           row_labels = row_labels,
+           max_length = max_format_length
     )
   e
 }
