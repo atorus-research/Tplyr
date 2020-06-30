@@ -30,6 +30,8 @@
 #'   This is the analysis dataset the table is generated from.
 #' @param treat_var Treatment variable in target used to split treatment
 #'   groups.
+#' @param where An expression used to filter the table before summarizing data
+#' @param cols A set of symbols or text to
 #'
 #' @return A safety_table object which is a parent environment for the layers
 #'   where the code creating the table is evaluated.
@@ -41,7 +43,7 @@
 #'
 #'
 #' @export
-tplyr_table <- function(target, treat_var, where = TRUE) {
+tplyr_table <- function(target, treat_var, where = TRUE, cols = vars()) {
 
   if(missing(target)){
     # return a blank environment if no table information is passed. This can be
@@ -51,20 +53,23 @@ tplyr_table <- function(target, treat_var, where = TRUE) {
   }
   target_name <- enexpr(target)
   attr(target, "target_name") <- target_name
-  new_tplyr_table(target, enquo(treat_var), enquo(where))
+  new_tplyr_table(target, enquo(treat_var), enquo(where), enquos(cols))
 }
 
 #' Construct new tplyr_table
 #'
 #' @inheritParams tplyr_table
 #' @noRd
-new_tplyr_table <- function(target, treat_var, where) {
-  validate_tplyr_table(target)
+new_tplyr_table <- function(target, treat_var, where, cols) {
+  cols <- unpack_vars(cols)
+
+  validate_tplyr_table(target, cols)
 
   # Create table object with default bindings and class of `tplyr_table`
   structure(rlang::env(
     target = target,
     treat_grps = list(),
+    cols = cols,
     layers = structure(list(),
                        class = c("tplyr_layer_container", "list"))
   ), class = c("tplyr_table", "environment")) %>%
@@ -82,9 +87,10 @@ new_tplyr_table <- function(target, treat_var, where) {
 #' Most validation is done in the binding functions to reduce code duplication
 #'
 #' @param target target dataset passed from new_tplyr_table
+#' @param cols cols argument passed from new_tplyr_table
 #'
 #' @noRd
-validate_tplyr_table <- function(target) {
+validate_tplyr_table <- function(target, cols) {
 
   # table should be a data.frame
   assertthat::assert_that(inherits(target, "data.frame"),
@@ -93,6 +99,8 @@ validate_tplyr_table <- function(target) {
                                        "instead a class of: '",
                                        class(target),
                                        "' was passed."))
+
+  assert_quo_var_present(cols, names(target), allow_character = FALSE)
 }
 
 

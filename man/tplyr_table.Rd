@@ -4,7 +4,7 @@
 \alias{tplyr_table}
 \title{Safety Table}
 \usage{
-tplyr_table(target, treat_var, where = TRUE)
+tplyr_table(target, treat_var, where = TRUE, cols = vars())
 }
 \arguments{
 \item{target}{Source data used to create the table. A 'data.frame' object.
@@ -12,6 +12,10 @@ This is the analysis dataset the table is generated from.}
 
 \item{treat_var}{Treatment variable in target used to split treatment
 groups.}
+
+\item{where}{An expression used to filter the table before summarizing data}
+
+\item{cols}{A set of symbols or text to}
 }
 \value{
 A safety_table object which is a parent environment for the layers

@@ -169,3 +169,16 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
   b_table <- bind_rows(outer_layer$built_table, inner_layer$built_table)
   env_bind(x, built_table = b_table)
 }
+
+
+#' Take a list of quosures and pull out things that aren't symbols
+#'
+#' @param var_list List of quosures
+#'
+#' @return Quosures that aren't symbols
+extract_character_from_quo <- function(var_list) {
+
+  is_symbol_ <- sapply(var_list, quo_is_symbol)
+
+  var_list[!is_symbol_]
+}

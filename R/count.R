@@ -47,15 +47,16 @@ process_summaries.count_layer <- function(x, ...) {
           mutate(Total = value) %>%
           # Create a variable to label the totals when it is merged in.
           mutate(!!target_var[[1]] := total_row_label) %>%
-          # Create variables to carry forward 'by'
-          group_by(!!!by) %>%
+          # Create variables to carry forward 'by'. Only pull out the ones that
+          # aren't symbols
+          group_by(!!!extract_character_from_quo(by)) %>%
           # complete based on missing groupings
           complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
       }
 
 
       # rbind tables together
-      built_table <- summary_stat %>%
+      numeric_data <- summary_stat %>%
         bind_rows(total_stat)
 
     }, envir = x)
@@ -70,7 +71,7 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
 
-    formatted_table <- built_table %>%
+    formatted_data <- numeric_data %>%
       mutate(value = construct_count_string(value, Total, count_fmt))%>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
@@ -106,7 +107,7 @@ construct_count_string <- function(.n, .total, count_fmt = NULL) {
                                  paste(rep("x", max_width), collapse = ""))
 
     # Make a new f_str and replace the old one
-    count_fmt <- f_str(count_fmt_str, n, pct)
+    format_strings <- f_str(count_fmt_str, n, pct)
   }
 
   # Make a vector of ncounts

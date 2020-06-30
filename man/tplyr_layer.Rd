@@ -4,7 +4,7 @@
 \alias{tplyr_layer}
 \title{Create a \code{tplyr_layer} object}
 \usage{
-tplyr_layer(parent, target_var, by, cols, where, type, ...)
+tplyr_layer(parent, target_var, by, where, type, ...)
 }
 \arguments{
 \item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
@@ -16,8 +16,6 @@ the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
 
-\item{cols}{Columns to be used in grouping to be represented width-wize in the output}
-
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 
 \item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
@@ -25,6 +23,8 @@ descriptive statistics, or "shift" for shift table counts}
 
 \item{...}{Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 \href{<link tbd>}{vignette} on adding extensions.}
+
+\item{cols}{Columns to be used in grouping to be represented width-wize in the output}
 }
 \value{
 An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object
