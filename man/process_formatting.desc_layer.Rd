@@ -4,10 +4,10 @@
 \alias{process_formatting.desc_layer}
 \title{Title}
 \usage{
-\method{process_formatting}{desc_layer}(e)
+\method{process_formatting}{desc_layer}(x, ...)
 }
 \arguments{
-\item{e}{}
+\item{x}{}
 }
 \value{
 

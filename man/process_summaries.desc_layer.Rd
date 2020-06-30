@@ -4,10 +4,10 @@
 \alias{process_summaries.desc_layer}
 \title{Process numeric data for a layer of type \code{desc}}
 \usage{
-\method{process_summaries}{desc_layer}(e)
+\method{process_summaries}{desc_layer}(x, ...)
 }
 \arguments{
-\item{e}{Environment within which a}
+\item{x}{Environment within which a layer is processed}
 }
 \value{
 Processed data within layer environment

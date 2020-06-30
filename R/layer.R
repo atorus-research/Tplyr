@@ -23,8 +23,6 @@
 #' @param type "count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
 #'   descriptive statistics, or "shift" for shift table counts
 #' @param by A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}
-#' @param cols A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}.
-#'   Notes the variables that are displayed in columns.
 #' @param target_var Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
 #'   the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.
 #' @param where Call. Filter logic used to subset the target data when performing a summary.
@@ -64,13 +62,13 @@
 #'
 #'
 #' @seealso \code{\link{tplyr_table}}
-tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
+tplyr_layer <- function(parent, target_var, by, where, type, ...) {
 
   # Return a null object if the parent is missing
   if(missing(parent)) abort("The `parent` argument must be provided.")
 
   # If necessary variables provided then build the layer
-  as_tplyr_layer(parent, type=type, by=by, cols=cols, target_var=target_var, where=where, ...)
+  as_tplyr_layer(parent, type=type, by=by, target_var=target_var, where=where, ...)
 }
 
 # Method dispatch
@@ -78,35 +76,35 @@ tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-as_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
+as_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   UseMethod("as_tplyr_layer")
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_table} object as parent
 #' @noRd
-as_tplyr_layer.tplyr_table <- function(parent, target_var, by, cols, where, type, ...) {
-  new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
+as_tplyr_layer.tplyr_table <- function(parent, target_var, by, where, type, ...) {
+  new_tplyr_layer(parent, target_var, by, where, type, ...)
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_layer}  object as parent
 #' @noRd
-as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
-  layer <- new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
+as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, where, type, ...) {
+  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
   class(layer) <- append('tplyr_subgroup_layer', class(layer))
   layer
 }
 
 #' S3 method for tplyr layer creation of \code{tplyr_subgroup_layer}  object as parent
 #' @noRd
-as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, cols, where, type, ...) {
-  layer <- new_tplyr_layer(parent, target_var, by, cols, where, type, ...)
+as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, where, type, ...) {
+  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
   class(layer) <- unique(append('tplyr_subgroup_layer', class(layer)))
   layer
 }
 
 #' S3 method to produce error for unsupported objects as parent
 #' @noRd
-as_tplyr_layer.default <- function(parent, target_var, by, cols, where, type, ...) {
+as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
   dmessage('Dispatch default')
   stop('Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.')
 }
@@ -115,7 +113,7 @@ as_tplyr_layer.default <- function(parent, target_var, by, cols, where, type, ..
 #'
 #' @inheritParams tplyr_layer
 #' @noRd
-new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
+new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   dmessage('--- new_tplyr_layer')
 
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
@@ -130,10 +128,6 @@ new_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...) {
   # The only valid use of a `call` is to provide multiple variables using `vars`
   by <- unpack_vars(by)
   arg_list$by <- by
-
-  # Do the same thing for cols
-  cols <- unpack_vars(cols)
-  arg_list$cols <- cols
 
   # Do the same for target_var
   target_var <- unpack_vars(target_var, allow_character=FALSE)
@@ -181,22 +175,9 @@ validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...)
 
   # Make sure that by variables not submitted as characters exist in the target dataframe
   assert_quo_var_present(by, vnames)
-  # Do the same for cols
-  assert_quo_var_present(cols, vnames)
   # Do the same for target_var
   assert_quo_var_present(target_var, vnames, allow_character=FALSE)
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
