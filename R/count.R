@@ -69,7 +69,7 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
 
-    formatted_data <- built_table %>%
+    formatted_data <- numeric_data %>%
       mutate(value = construct_count_string(value, Total, count_fmt))%>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
