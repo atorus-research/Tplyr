@@ -69,11 +69,11 @@ process_summaries.count_layer <- function(x, ...) {
         n_width <- max(nchar(numeric_data$value))
 
         # Replace the flag with however many xs
-        format_strings <- str_replace(format_strings$format_string, "ax",
+        replaced_string <- str_replace(format_strings$format_string, "ax",
                                      paste(rep("x", n_width), collapse = ""))
 
         # Make a new f_str and replace the old one
-        format_strings <- f_str(format_strings, n, pct)
+        format_strings <- f_str(replaced_string, n, pct)
       }
       max_length <- format_strings$size
 
