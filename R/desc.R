@@ -1,13 +1,16 @@
 #' Process numeric data for a layer of type \code{desc}
 #'
-#' @param x Environment within which a layer is processed
+#' @param x Layer object
 #'
-#' @return Processed data within layer environment
+#' @return Nothing
+#' @export
+#' @noRd
 process_summaries.desc_layer <- function(x, ...) {
   # Execute in the layer environment
   evalq({
-    # Allocate the list elements for the output list
+    # trans_sums is the data that will pass forward to be formatted
     trans_sums <- vector("list", length(target_var))
+    # num_sums is the data that will be bound together and returned to provide the numeric internal values
     num_sums <- vector("list", length(target_var))
 
     # Get the row labels out from the format strings list
@@ -48,10 +51,10 @@ process_summaries.desc_layer <- function(x, ...) {
         select(summary_var, everything())
 
       # Clean up loop
-      rm(cur_var, summaries)
+      rm(cur_var, summaries, i)
     }
 
-    # numeric_data <- reduce(sums, full_join, by=c('row_label', match_exact(by)))
+    # Bind the numeric data together within the layer
     numeric_data <- bind_rows(num_sums)
 
     # Delete the listed numeric data
@@ -60,11 +63,13 @@ process_summaries.desc_layer <- function(x, ...) {
   }, envir=x)
 }
 
-#' Title
+#' Format processing for desc layers
 #'
-#' @param x
+#' @param x layer object
 #'
-#' @return
+#' @return Formatted and processed data
+#' @noRd
+#' @export
 process_formatting.desc_layer <- function(x, ...) {
   # Execute in the layer environment
   evalq({
@@ -97,7 +102,7 @@ process_formatting.desc_layer <- function(x, ...) {
     formatted_data <- replace_by_string_names(formatted_data, by)
 
     # Clean up
-    rm(trans_sums, form_sums)
+    rm(trans_sums, form_sums, i)
 
     formatted_data
   }, envir=x)
