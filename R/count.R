@@ -1,7 +1,7 @@
 
 #' @noRd
+#' @export
 process_summaries.count_layer <- function(x, ...) {
-
 
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
@@ -65,6 +65,7 @@ process_summaries.count_layer <- function(x, ...) {
 }
 
 #' @noRd
+#' @export
 process_formatting.count_layer <- function(x, ...) {
   evalq({
     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
