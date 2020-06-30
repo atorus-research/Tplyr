@@ -51,7 +51,7 @@ process_summaries.desc_layer <- function(x, ...) {
         select(summary_var, everything())
 
       # Clean up loop
-      rm(cur_var, summaries)
+      rm(cur_var, summaries, i)
     }
 
     # Bind the numeric data together within the layer
@@ -102,7 +102,7 @@ process_formatting.desc_layer <- function(x, ...) {
     formatted_data <- replace_by_string_names(formatted_data, by)
 
     # Clean up
-    rm(trans_sums, form_sums)
+    rm(trans_sums, form_sums, i)
 
     formatted_data
   }, envir=x)
