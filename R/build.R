@@ -93,7 +93,7 @@ fetch_formatting_info <- function(x) {
   # Get the max length of f_str objects in sub_layers
   max_layer_length <- max(map_int(x$layers, ~ env_get(.x, "max_length")))
   # Get the max length of n counts only, not including f_str formatting
-  max_n_width <- max(map_int(ifelse(inherits(x, 'count_layer'), x$n_width, 0L)))
+  max_n_width <- max(map_dbl(x$layers, ~ ifelse(inherits(.x, 'count_layer'), .x$n_width, 0L)))
 
   env_bind(x, max_layer_length = max_layer_length)
   env_bind(x, max_n_width = max_n_width)
