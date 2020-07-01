@@ -166,8 +166,7 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
                                    where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                          set_include_total_row(FALSE))
   # Bind these two to gether and add a row mask
-  b_table <- bind_rows(outer_layer$built_table, inner_layer$built_table)
-  env_bind(x, built_table = b_table)
+  bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
 }
 
 
@@ -181,4 +180,19 @@ extract_character_from_quo <- function(var_list) {
   is_symbol_ <- sapply(var_list, quo_is_symbol)
 
   var_list[!is_symbol_]
+}
+
+#' Get maximum string format recursivly
+#'
+#' @param lay A layer object
+#'
+#' @return Maximum length of sub layers
+get_max_length <- function(lay) {
+  # Initalize max_ to -1
+  max_ <- -1L
+  # Get maximum length of all sub layers
+  if(length(lay$layers) > 0) max_ <- max(map_int(lay$layers, get_max_length))
+
+  # return greatest between sub layers and current layer
+  max(max_, lay$format_strings$size)
 }

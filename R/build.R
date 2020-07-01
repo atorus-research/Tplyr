@@ -93,6 +93,16 @@ fetch_formatting_info <- function(x) {
   # Get the maximum length from a desc layer
   max_desc_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, 'desc_layer'), env_get(.x, 'max_length'), 0L)))
 
+  # Get the maximum length from a count_layer
+  max_count_length <- max(map_int(x$layers, ~ ifelse(inherits(.x, "count_layer"), get_max_length(.x), 0L)))
+
+  # Get the maximum length from all layers
+  max_layer_length <- max(max_desc_length, max_count_length)
+
+  # Bind all of these to the table environment
+  env_bind(x, max_desc_length = max_desc_length)
+  env_bind(x, max_count_length = max_count_length)
+  env_bind(x, max_layer_length = max_layer_length)
 }
 
 
