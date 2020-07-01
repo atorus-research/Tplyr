@@ -151,8 +151,8 @@ add_layers <- function(parent, ...) {
 #'   add_layer(
 #'     group_desc(target_var=Species)
 #'   )
-group_count <- function(parent, target_var, by=vars(), where=TRUE, distinct_by = NULL, ...) {
-  tplyr_layer(parent, type='count', by=enquos(by), target_var=enquos(target_var), where=enquo(where), distinct_by = enquo(distinct_by), ...)
+group_count <- function(parent, target_var, by=vars(), where=TRUE, ...) {
+  tplyr_layer(parent, type='count', by=enquos(by), target_var=enquos(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
