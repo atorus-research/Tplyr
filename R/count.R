@@ -109,7 +109,7 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
 
     formatted_data <- numeric_data %>%
-      mutate(value = construct_count_string(value, Total, format_strings))%>%
+      mutate(value = construct_count_string(value, Total, format_strings, max_layer_length, max_n_width)) %>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = value,
@@ -130,7 +130,8 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param count_fmt The f_str object the strings are formatted around.
 #'
 #' @return A tibble replacing the originial counts
-construct_count_string <- function(.n, .total, count_fmt = NULL) {
+construct_count_string <- function(.n, .total, count_fmt = NULL,
+                                   max_layer_length, max_n_width) {
 
   # Make a vector of ncounts
   str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
@@ -140,8 +141,20 @@ construct_count_string <- function(.n, .total, count_fmt = NULL) {
   str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
 
   # Put the vector strings together
-  sprintf(count_fmt$repl_str, str1, str2)
+  string_ <- sprintf(count_fmt$repl_str, str1, str2)
 
+  # Pad the left with difference between max_n_width and nchar(string_)
+  if(nchar(string_)[1] < max_n_width) {
+    string_ <- map_chr(string_,
+                       ~ paste0(rep(" ", max_n_width - nchar(string_)[1]),
+                                .x))
+  }
+
+  #Padd the right with the difference of the max layer length
+  string_ <- sapply(string_,
+                    paste0, rep(" ", max_layer_length - nchar(string_)[1]))
+
+  string_
 }
 
 
