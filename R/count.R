@@ -86,12 +86,13 @@ prepare_format_metadata <- function(x) {
 
     # Get formatting metadata prepared
     if(!exists("format_strings")) format_strings <- f_str("ax (xxx.x%)", n, pct)
+
+    # Pull max character length from counts. Should be at least 1
+    n_width <- max(c(nchar(numeric_data$value), 1L))
+
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
     if(str_detect(format_strings$format_string, "ax")) {
-      # Pull max character length from counts. Should be at least 1
-      n_width <- max(c(nchar(numeric_data$value), 1L))
-
       # Replace the flag with however many xs
       replaced_string <- str_replace(format_strings$format_string, "ax",
                                      paste(rep("x", n_width), collapse = ""))
@@ -133,26 +134,37 @@ process_formatting.count_layer <- function(x, ...) {
 construct_count_string <- function(.n, .total, count_fmt = NULL,
                                    max_layer_length, max_n_width) {
 
-  # Make a vector of ncounts
-  str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
-  # Makea vector of ratios between n and total. Replace na values with 0
-  pcts <- replace(.n/.total, is.na(.n/.total), 0)
-  # Make a vector of percentages
-  str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
+  str1 <- NA
+  if("n" %in% count_fmt$vars) {
+    # Make a vector of ncounts
+    str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
+  }
+
+  str2 <- NA
+  if("pct" %in% count_fmt$vars) {
+    # Makea vector of ratios between n and total. Replace na values with 0
+    pcts <- replace(.n/.total, is.na(.n/.total), 0)
+    # Make a vector of percentages
+    str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
+  }
 
   # Put the vector strings together
   string_ <- sprintf(count_fmt$repl_str, str1, str2)
 
   # Pad the left with difference between max_n_width and nchar(string_)
   if(nchar(string_)[1] < max_n_width) {
+    # The double pasting looks weird but the inner one is meant to create single character
+    # that is the needed number of spaces and the outer pastes that to the value
     string_ <- map_chr(string_,
-                       ~ paste0(rep(" ", max_n_width - nchar(string_)[1]),
-                                .x))
+                       ~ paste0(
+                            paste0(rep(" ", max_n_width - nchar(.x)), collapse = ""),
+                         .x))
   }
 
   #Padd the right with the difference of the max layer length
   string_ <- sapply(string_,
-                    paste0, rep(" ", max_layer_length - nchar(string_)[1]))
+                    paste0, paste0(rep(" ", max_layer_length - max(nchar(string_))),
+                                   collapse = ""))
 
   string_
 }
