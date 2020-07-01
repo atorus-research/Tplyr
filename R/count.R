@@ -22,9 +22,9 @@ process_summaries.count_layer <- function(x, ...) {
         # Filter out based on where
         filter(!!where, !!table_where)
       # get unique variables based on distinct_by value
-      if (!quo_is_null(distinct_by)) {
+      if (exists("distinct_by")) {
          summary_stat <- summary_stat %>%
-           distinct(!!distinct_by)
+           distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE)
        }
 
       summary_stat <- summary_stat %>%
