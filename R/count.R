@@ -24,6 +24,9 @@ process_summaries.count_layer <- function(x, ...) {
       # get unique variables based on distinct_by value
       if (exists("distinct_by")) {
          summary_stat <- summary_stat %>%
+           # Distinct based on the current distinct_by, target_var, and treat_var
+           # treat_var is added because duplicates would be created when there are
+           # treatment group totals
            distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE)
        }
 
