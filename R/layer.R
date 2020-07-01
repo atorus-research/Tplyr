@@ -130,7 +130,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   arg_list$by <- by
 
   # Do the same for target_var
-  target_var <- unpack_vars(target_var, allow_character=FALSE)
+  target_var <- unpack_vars(target_var)
   arg_list$target_var <- target_var
 
   # Add sort_vars in
@@ -176,7 +176,7 @@ validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...)
   # Make sure that by variables not submitted as characters exist in the target dataframe
   assert_quo_var_present(by, vnames)
   # Do the same for target_var
-  assert_quo_var_present(target_var, vnames, allow_character=FALSE)
+  assert_quo_var_present(target_var, vnames)
 }
 
 
