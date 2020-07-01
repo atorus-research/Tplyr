@@ -67,7 +67,8 @@ process_summaries.count_layer <- function(x, ...) {
 
       # rbind tables together
       numeric_data <- summary_stat %>%
-        bind_rows(total_stat)
+        bind_rows(total_stat) %>%
+        replace_by_string_names(by)
 
 
       rm(summary_stat, total_stat)
