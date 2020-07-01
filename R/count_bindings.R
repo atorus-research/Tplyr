@@ -35,3 +35,21 @@ set_count_fmt <- function(x, str) {
 
   x
 }
+
+#' Set the distinct_by binding for a count layer
+#'
+#' @param lay A count_layer object
+#' @param distinct_by A variable to get the distinct
+#'
+#' @return The modified layer object
+#' @export
+set_distinct_by <- function(lay, distinct_by) {
+  distinct_by <- enquo(distinct_by)
+
+  # Any other assertions needed here?
+  assert_inherits_class(lay, "count_layer")
+
+  env_bind(lay, distinct_by = distinct_by)
+
+  lay
+}

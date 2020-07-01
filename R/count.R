@@ -31,10 +31,13 @@ process_single_count_target <- function(x) {
       # Filter out based on where
       filter(!!where, !!table_where)
     # get unique variables based on distinct_by value
-    # if (!quo_is_null(distinct_by)) {
-    #    summary_stat <- summary_stat %>%
-    #      distinct(!!distinct_by)
-    #  }
+    if (exists("distinct_by")) {
+      summary_stat <- summary_stat %>%
+        # Distinct based on the current distinct_by, target_var, and treat_var
+        # treat_var is added because duplicates would be created when there are
+        # treatment group totals
+        distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE)
+    }
 
     summary_stat <- summary_stat %>%
       # Group by varaibles including target variables and count them
