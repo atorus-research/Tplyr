@@ -29,7 +29,7 @@ set_count_fmt <- function(x, str) {
   assert_has_class(str, "f_str")
 
   assert_that(all(str$vars %in% c("n", "pct")),
-              "f_str in a count_layer can only be n or pct")
+              msg = "f_str in a count_layer can only be n or pct")
 
   env_bind(x, count_fmt = str)
 
