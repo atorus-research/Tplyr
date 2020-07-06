@@ -128,10 +128,15 @@ process_formatting.count_layer <- function(x, ...) {
 
 #' Format n counts for display in count_layer
 #'
+#' left padding = (maximum_n_width - this_n_width)
+#' right padding = (maximum_layer_width - this_layer_width[after left padding])
+#'
 #' @param .n Vector of counts for each cell
 #' @param .total  Vector of totals. Should be the same length as .n and be the
 #'   denominator that column is based off of.
 #' @param count_fmt The f_str object the strings are formatted around.
+#' @param max_layer_length The maximum layer length of the whole table
+#' @param max_n_width The maximum length of the actual numeric counts
 #'
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, count_fmt = NULL,

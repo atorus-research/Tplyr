@@ -244,6 +244,8 @@ assert_is_table <- function(object) {
 #' @export
 #'
 #' @examples
+#' library(rlang)
+#'
 #' q <- quo(a)
 #' quo_class(q)
 #'

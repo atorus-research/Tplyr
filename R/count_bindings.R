@@ -19,10 +19,11 @@ set_include_total_row <- function(x, include_total) {
 #' @param x the layer object to add/modify the count format
 #' @param str The f_str object to add
 #'
-#' @return
+#' @return Returns the modified layer object.
 #' @export
 #'
 #' @examples
+#' # TBD
 set_count_fmt <- function(x, str) {
   assert_inherits_class(x, "count_layer")
 

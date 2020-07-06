@@ -9,6 +9,8 @@
 #' @rdname target_var
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -43,6 +45,8 @@ set_target_var <- function(layer, target_var) {
 #' @rdname by
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -131,6 +135,9 @@ set_sort_vars <- function(layer, sort_vars) {
 #' @rdname sort
 #'
 #' @examples
+#' # Load in the pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -163,6 +170,8 @@ set_layer_sort <- function(layer, sort) {
 #' @rdname formatter
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%

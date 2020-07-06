@@ -59,11 +59,18 @@ depth_from_table <- function(layer, i){
 #' Intended for use in a tidyselect context. Pivots take arguments as character strings or indices. Tidyselect tools return those
 #' indices. This allows you to pass a list of quosures (which Tplyr carries a lot of) without explicitly converting types
 #'
-#' @param vars List of quosures containing variables
+#' @param var_list List of quosures containing variables
 #'
 #' @return Character string of labels
 #'
+#' @noRd
+#'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#' library(dplyr)
+#' library(tidyr)
+#'
 #' iris %>%
 #'   group_by(Species) %>%
 #'   summarize(mean=mean(Sepal.Length), median = median(Sepal.Length)) %>%
@@ -110,7 +117,7 @@ replace_by_string_names <- function(dat, by) {
 #' Get the unique levels/factors of a dataset
 #'
 #' @param e An environment, generally a table or a layer object
-#' @param target_var A target variable to get the levels/unique values of
+#' @param x A target variable to get the levels/unique values of
 #'
 #' @return Unique target values
 get_target_levels <- function(e, x) {
