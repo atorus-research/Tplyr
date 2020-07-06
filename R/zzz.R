@@ -10,6 +10,7 @@
 #' @importFrom dplyr summarize filter vars tally ungroup group_by
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer
 #' @importFrom utils str head
+#' @importFrom tibble tibble
 NULL
 
 #' A grammar of summary data for clinical reports
