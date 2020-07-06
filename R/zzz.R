@@ -12,6 +12,7 @@
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
+#' @importFrom tibble tibble
 NULL
 
 #' A grammar of summary data for clinical reports
