@@ -31,7 +31,7 @@ process_single_count_target <- function(x) {
       # Filter out based on where
       filter(!!where, !!table_where)
     # get unique variables based on distinct_by value
-    if (exists("distinct_by")) {
+    if (!is.null(distinct_by)) {
       summary_stat <- summary_stat %>%
         # Distinct based on the current distinct_by, target_var, and treat_var
         # treat_var is added because duplicates would be created when there are
@@ -88,7 +88,7 @@ prepare_format_metadata <- function(x) {
   evalq({
 
     # Get formatting metadata prepared
-    if(!exists("format_strings")) format_strings <- f_str("ax (xxx.x%)", n, pct)
+    if(is.null(format_strings)) format_strings <- f_str("ax (xxx.x%)", n, pct)
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$value), 1L))
