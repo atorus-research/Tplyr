@@ -11,7 +11,7 @@ Authors@R:
     person(given = "Mike",
            family = "Stackhouse",
            role = c("aut", "cre"),
-           email = "mike.stackhouse@atorusresearch.com"
+           email = "mike.stackhouse@atorusresearch.com",
            comment = c(ORCID = "0000-0001-6030-723X")),
     person(given = "Ashley", 
            family = "Tarasiewicz",
