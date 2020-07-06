@@ -55,7 +55,7 @@ process_summaries.desc_layer <- function(x, ...) {
     }
 
     # Bind the numeric data together within the layer
-    numeric_data <- bind_rows(num_sums)
+    numeric_data <- pivot_longer(bind_rows(num_sums), match_exact(summary_vars), names_to = "stat")
 
     # Delete the listed numeric data
     rm(num_sums)

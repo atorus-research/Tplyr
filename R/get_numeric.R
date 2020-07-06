@@ -26,10 +26,12 @@ get_numeric_data <- function(x, ...) {
 #' @noRd
 get_numeric_data.tplyr_table <- function(x, ...) {
 
-  if (!exists('built_target', envir=x)) {
+  # If the pre-build wasn't executed then execute it
+  if (!'built_target' %in% ls(x)) {
     treatment_group_build(x)
   }
 
+  # Gather the numeric data from each layer
   num_data <- map(x$layers, get_numeric_data)
 
   num_data
@@ -42,9 +44,11 @@ get_numeric_data.tplyr_table <- function(x, ...) {
 #' @noRd
 get_numeric_data.tplyr_layer <- function(x, ...) {
 
-  if (!exists('numeric_data', envir=x)) {
+  # If the numeric data doesn't exist in the layer then process it
+  if (!'numeric_data' %in% ls(x)) {
     process_summaries(x)
   }
 
+  # Return the object
   env_get(x, 'numeric_data')
 }
