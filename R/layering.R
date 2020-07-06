@@ -33,6 +33,9 @@
 #' @export
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' ## Single layer
 #' t <- tplyr_table(mtcars, cyl) %>%
 #'   add_layer(
@@ -147,6 +150,9 @@ add_layers <- function(parent, ...) {
 #' @export
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' t <- tplyr_table(iris, Sepal.Width) %>%
 #'   add_layer(
 #'     group_desc(target_var=Species)

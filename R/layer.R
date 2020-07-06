@@ -28,7 +28,6 @@
 #' @param where Call. Filter logic used to subset the target data when performing a summary.
 #' @param ... Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 #'   \href{<link tbd>}{vignette} on adding extensions.
-#' @param cols Columns to be used in grouping to be represented width-wize in the output
 #'
 #' @return An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object
 #'   as listed below.

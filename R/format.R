@@ -10,6 +10,7 @@
 #' right, the number of x's controls decimal precision and rounding. Variables are inferred by any separation of the 'x' values other than a
 #' decimal.
 #' @param ... The variables to be formatted using the format specified in \code{format_string}.
+#' @param empty The string to display when the numeric data is not available
 #'
 #' @return A \code{f_str} object, built on a list with two elements:
 #' \describe{
