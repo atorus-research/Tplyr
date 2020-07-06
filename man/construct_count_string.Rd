@@ -4,7 +4,13 @@
 \alias{construct_count_string}
 \title{Format n counts for display in count_layer}
 \usage{
-construct_count_string(.n, .total, count_fmt = NULL)
+construct_count_string(
+  .n,
+  .total,
+  count_fmt = NULL,
+  max_layer_length,
+  max_n_width
+)
 }
 \arguments{
 \item{.n}{Vector of counts for each cell}

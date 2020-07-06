@@ -94,13 +94,14 @@ replace_by_string_names <- function(dat, by) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
 
-  i <- 0
-
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1
   for (i in seq_along(by)) {
     dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
   }
+
+  # If i iterated above, it will be have a value. Otherwise it's null, so set it to 0
+  i <- ifelse(is.null(i), 0, i)
 
   # If there was a column named `row_label` the index it
   if ('row_label' %in% names(dat)) {

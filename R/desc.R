@@ -38,7 +38,7 @@ process_summaries.desc_layer <- function(x, ...) {
       trans_sums[[i]] <- num_sums[[i]] %>%
         # Transpose the summaries that make up the first number in a display string
         # into the the `value` column with labels by `stat`
-        pivot_longer(match_exact(trans_vars), names_to = "stat") %>%
+        pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
         rowwise() %>%
         # Add in the row labels
         mutate(
@@ -55,7 +55,7 @@ process_summaries.desc_layer <- function(x, ...) {
     }
 
     # Bind the numeric data together within the layer
-    numeric_data <- bind_rows(num_sums)
+    numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
 
     # Delete the listed numeric data
     rm(num_sums)
@@ -83,6 +83,11 @@ process_formatting.desc_layer <- function(x, ...) {
                                             function(...) construct_desc_string(..., .fmt_str = format_strings),
                                             format_strings=format_strings
       )
+
+      # String pad each of the display strings to match the longest value across layers
+      # TODO: Introduce auto-padding after alhpa release
+      # trans_sums[[i]] <- trans_sums[[i]] %>%
+      #   mutate(display_string = str_pad(display_string, max_layer_length, side='right'))
 
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
