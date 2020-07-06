@@ -38,7 +38,7 @@ process_summaries.desc_layer <- function(x, ...) {
       trans_sums[[i]] <- num_sums[[i]] %>%
         # Transpose the summaries that make up the first number in a display string
         # into the the `value` column with labels by `stat`
-        pivot_longer(match_exact(trans_vars), names_to = "stat") %>%
+        pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
         rowwise() %>%
         # Add in the row labels
         mutate(
@@ -55,7 +55,7 @@ process_summaries.desc_layer <- function(x, ...) {
     }
 
     # Bind the numeric data together within the layer
-    numeric_data <- pivot_longer(bind_rows(num_sums), match_exact(summary_vars), names_to = "stat")
+    numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
 
     # Delete the listed numeric data
     rm(num_sums)
