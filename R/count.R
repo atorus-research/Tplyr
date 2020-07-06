@@ -65,7 +65,7 @@ process_single_count_target <- function(x) {
         ungroup() %>%
         mutate(Total = value) %>%
         # Create a variable to label the totals when it is merged in.
-        mutate(!!target_var[[1]] := total_row_label) %>%
+        mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
         # Create variables to carry forward 'by'. Only pull out the ones that
         # aren't symbols
         group_by(!!!extract_character_from_quo(by)) %>%
