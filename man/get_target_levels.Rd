@@ -9,7 +9,7 @@ get_target_levels(e, x)
 \arguments{
 \item{e}{An environment, generally a table or a layer object}
 
-\item{target_var}{A target variable to get the levels/unique values of}
+\item{x}{A target variable to get the levels/unique values of}
 }
 \value{
 Unique target values

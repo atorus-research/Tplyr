@@ -14,29 +14,6 @@ set_include_total_row <- function(x, include_total) {
   x
 }
 
-#' Set Count Layer String Format
-#'
-#' @param x the layer object to add/modify the count format
-#' @param str The f_str object to add
-#'
-#' @return Returns the modified layer object.
-#' @export
-#'
-#' @examples
-#' # TBD
-set_count_fmt <- function(x, str) {
-  assert_inherits_class(x, "count_layer")
-
-  assert_has_class(str, "f_str")
-
-  assert_that(all(str$vars %in% c("n", "pct")),
-              msg = "f_str in a count_layer can only be n or pct")
-
-  env_bind(x, format_strings = str)
-
-  x
-}
-
 #' Set the distinct_by binding for a count layer
 #'
 #' @param lay A count_layer object

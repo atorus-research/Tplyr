@@ -16,6 +16,8 @@ The class of quosure \code{q}
 Return the class of the expression inside a quosure
 }
 \examples{
+library(rlang)
+
 q <- quo(a)
 quo_class(q)
 
