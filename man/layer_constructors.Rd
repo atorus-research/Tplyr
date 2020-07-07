@@ -60,6 +60,9 @@ any sublayers of the current layer.}
 }
 
 \examples{
+# Load in pipe
+library(magrittr)
+
 t <- tplyr_table(iris, Sepal.Width) \%>\%
   add_layer(
     group_desc(target_var=Species)

@@ -23,6 +23,8 @@ For \code{layer_formatter}, the formetter function bound to the
 Set or return layer formatter
 }
 \examples{
+# Load in pipe
+library(magrittr)
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%

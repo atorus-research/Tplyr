@@ -23,6 +23,8 @@ For \code{tplyr_by}, the by binding of the supplied layer. For
 Set or return by layer binding
 }
 \examples{
+# Load in pipe
+library(magrittr)
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%

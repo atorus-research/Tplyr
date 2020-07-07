@@ -30,7 +30,7 @@ to much, but don't solve all of the problems. We know we won't handle every scen
 add your own touches where necessary.
 }
 \author{
-\strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com}
+\strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com} (\href{https://orcid.org/0000-0001-6030-723X}{ORCID})
 
 Authors:
 \itemize{

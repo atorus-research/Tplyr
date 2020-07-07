@@ -22,6 +22,8 @@ For \code{treat_var}, the treatment variable binding of the layer
 Set or return treat_var binding
 }
 \examples{
+# Load in pipe
+library(magrittr)
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
