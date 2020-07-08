@@ -16,16 +16,36 @@ decimal.}
 \item{empty}{The string to display when the numeric data is not available}
 }
 \value{
-A \code{f_str} object, built on a list with two elements:
-\describe{
-\item{\code{format_string}}{The specified format string for display}
-\item{\code{vars}}{A list of names containing the variables that will be used to created the formatted display string}
-}
+A \code{f_str} object
 }
 \description{
-The \code{f_str} object carries information that powers a significant amount of layer processing. The \code{format_string} parameter is
-capable of controlling display of a data point and decimal precision. The variables provided in \code{...} control the values from the
+\code{f_str} objects are intended to be used within the function \code{set_format_strings}. The \code{f_str} object carries
+information that powers a significant amount of layer processing. The \code{format_string} parameter is capable of controlling
+display of a data point and decimal precision. The variables provided in \code{...} control the values from the
 data the output a particular formatted display value.
+}
+\details{
+Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
+strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
+before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
+an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
+flexibility to the user.
+
+The display of the numbers in the resulting dataframe is controlled by the \code{format_string} parameter. Just like dummy values
+may be presented on your mocks, this is specified by the user simply by providing a string of how you'd like your strings formatted,
+just replacing the numbers with x's. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'. 'Tplyr'
+does the work to get the numbers in the right place.
+
+To take things further, if you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
+a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)'. Note that you're able to provide different integer lengths and
+different decimal precision for the two values.
+
+The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
+slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
+to see the values \code{n} and (if desired) \code{pct}, which specifies the formatting for your n's and percent values.
+But in descriptive statistc layers, \code{f_str} parameters refer to the names of the summaries being performed,
+either by built in defaults, or custom summaries declared using \code{\link{set_custom_summaries}}.
+See \code{\link{set_format_strings}} for some more notes about layers specific implementation
 }
 \examples{
 f_str("xx.x (xx.x)", mean, sd)

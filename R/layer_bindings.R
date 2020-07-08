@@ -39,7 +39,7 @@ set_target_var <- function(layer, target_var) {
 #'
 #' @param layer A \code{tplyr_layer} object
 #'
-#' @return For \code{tplyr_by}, the by binding of the supplied layer. For
+#' @return For \code{get_by}, the by binding of the supplied layer. For
 #'   \code{set_by} the modified layer environment.
 #' @export
 #' @rdname by

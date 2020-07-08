@@ -15,8 +15,52 @@ set_format_strings(e, ...)
 The layer environment with the format string binding added
 }
 \description{
-Set the format strings and associated summaries to be performed in a layer
+'Tplyr' allows you extensive control over how strings are presented. \code{set_format_strings} allows you
+to apply these string formats to your layer. This behaves slightly differently between layers.
+}
+\details{
+In a count layer, you simply need to provide a single \code{\link{f_str}} object to specify how you want your
+n's (and possibly percents) formatted. In a descriptive statistic layer, \code{set_format_strings} allows you
+to do a couple more things:
+\itemize{
+\item{By naming paramters with character strings, those character strings become a row label in the resulting data frame}
+\item{The actual summaries that are performed come from the names used within the \code{\link{f_str}} calls}
+\item{Using multiple summaries (declared by your \code{\link{f_str}} calls) multiple summary values can appear within
+the same values. For example, to present mean (SD) like displays}
+}
+
+
+Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
+strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
+before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
+an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
+flexibility to the user.
+
+See the \code{\link{f_str}} documentation for more details about how this implementation works.
 }
 \examples{
-#TBD
+# In a count layer
+tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      set_format_strings(f_str('xx (xx\%)', n, pct))
+  ) \%>\%
+    build()
+
+# In a descriptive statistics layer
+tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_desc(mpg) \%>\%
+      set_format_strings(
+        "n"        = f_str("xx", n),
+        "Mean (SD)"= f_str("xx.x", mean),
+        "SD" = f_str("xx.xx", sd),
+        "Median"   = f_str("xx.x", median),
+        "Q1, Q3"   = f_str("xx, xx", q1, q3),
+        "Min, Max" = f_str("xx, xx", min, max),
+        "Missing"  = f_str("xx", missing)
+      )
+  ) \%>\%
+  build()
+
 }

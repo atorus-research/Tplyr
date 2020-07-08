@@ -15,7 +15,15 @@
 #' @export
 #'
 #' @examples
-#' #TBD
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl)
+#'   ) %>%
+#'   add_layer(
+#'     group_desc(mpg)
+#'   ) %>%
+#'   get_numeric_data()
+#'
 get_numeric_data <- function(x, ...) {
   UseMethod("get_numeric_data")
 }

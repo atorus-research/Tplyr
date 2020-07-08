@@ -29,8 +29,7 @@ default_header_n <- function(table) {
 #' Add a treatment group for the entire dataset population
 #'
 #' This function is a wrapper around \code{add_treat_group} and creates a group
-#' named 'Total' containing the set of unique values in the pop_treat_var
-#' variable.
+#' named 'Total', which contains all subjects.
 #'
 #' @param table A \code{tplyr_table} object
 #'
