@@ -7,18 +7,20 @@
 #' any additional columns set by the \code{cols} argument.)
 #'
 #' @param e A layer object
-#' @param add_total TRUE/FALSE
 #'
 #' @export
 #' @examples
 #'
-#'
-add_total_row <- function(e, add_total) {
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_total_row()
+#'    ) %>%
+#'    build()
+add_total_row <- function(e) {
   assert_inherits_class(e, "count_layer")
 
-  assert_that(is.logical(add_total))
-
-  env_bind(e, include_total_row = add_total)
+  env_bind(e, include_total_row = TRUE)
 
   e
 }
