@@ -16,7 +16,7 @@ set_by(layer, by)
 using \code{dplyr::vars}.}
 }
 \value{
-For \code{tplyr_by}, the by binding of the supplied layer. For
+For \code{get_by}, the by binding of the supplied layer. For
   \code{set_by} the modified layer environment.
 }
 \description{

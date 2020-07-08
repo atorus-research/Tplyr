@@ -3,7 +3,10 @@
 
 #' Toggle 'Tplyr' debug messaging
 #'
+#' \strong{NOTE:} This feature is being questioned and is not currently being utilized.
+#'
 #' @param status TRUE/FALSE - Turns status messaging on or off
+#'
 #'
 #' @return Nothing
 #' @export
@@ -16,13 +19,13 @@ tplyr_debug <- function(status) {
   options('tplyr.debug' = status)
 }
 
-#' Title
+#' Produce a debug message in Tplyr code
 #'
 #' @param message The debugging message to be printed
 #' @param ... Additional parameters passed to \code{rlang::inform}
 #'
 #' @return Nothing
-#' @export
+#' @noRd
 #'
 #' @examples
 #' tplyr_debug(TRUE)
@@ -33,7 +36,3 @@ tplyr_debug <- function(status) {
 dmessage <- function(message, ...) {
   if (getOption('tplyr.debug')) inform(paste("DEBUG:", message), ...)
 }
-
-# datinfo <- function(.data) {
-#
-# }

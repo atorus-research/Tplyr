@@ -8,9 +8,10 @@
 #'
 #' @return The original call object with
 #'
+#' @noRd
 #' @examples
-#' #TBD
-#' # modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
+#'
+#' modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
 modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
   # If the call is not from magrittr, then modify the contents and return the call
   if (call_name(c) != "%>%") {
@@ -23,7 +24,7 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
   } else {
     if (!is.null(allowable_calls)) {
       # Only allow the user to use `tplyr` functions
-      assert_that(all(sapply(call_args(c), call_name) %in% allowable_calls),
+      assert_that(all(map_chr(call_args(c), call_name) %in% c(allowable_calls, '%>%')),
                   msg="Functions called within `add_layer` must be part of `Tplyr`")
     }
 
@@ -46,6 +47,7 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
 #' @param i The current index
 #'
 #' @return the number of containers a layer is in
+#' @noRd
 depth_from_table <- function(layer, i){
   if(class(env_parent(layer))[1] == "tplyr_table") return(i + 1)
   else {
@@ -90,6 +92,7 @@ match_exact <- function(var_list) {
 #' @param by The \code{by} object within a layer
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
+#' @noRd
 replace_by_string_names <- function(dat, by) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
@@ -122,6 +125,7 @@ replace_by_string_names <- function(dat, by) {
 #' @param x A target variable to get the levels/unique values of
 #'
 #' @return Unique target values
+#' @noRd
 get_target_levels <- function(e, x) {
   # If its a factor just return the levels
   if(is.factor(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])) levels(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
@@ -184,6 +188,7 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
 #' @param var_list List of quosures
 #'
 #' @return Quosures that aren't symbols
+#' @noRd
 extract_character_from_quo <- function(var_list) {
 
   is_symbol_ <- sapply(var_list, quo_is_symbol)
@@ -196,6 +201,7 @@ extract_character_from_quo <- function(var_list) {
 #' @param lay A layer object
 #'
 #' @return Maximum length of sub layers
+#' @noRd
 get_max_length <- function(lay) {
   # Initalize max_ to -1
   max_ <- -1L

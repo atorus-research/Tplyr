@@ -31,8 +31,7 @@ For \code{treat_grps} the treat_grp binding of the \code{tplyr_talbe}
 }
 \description{
 This function is a wrapper around \code{add_treat_group} and creates a group
-named 'Total' containing the set of unique values in the pop_treat_var
-variable.
+named 'Total', which contains all subjects.
 
 Treatment groups are used to create additional groups that will be analyzed. For example,
 you could create a group of treated subjects vs. placebo in a trial with multiple treatment arms.
