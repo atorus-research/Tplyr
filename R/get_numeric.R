@@ -3,8 +3,8 @@
 #' It may be desirable to access the numeric data from a tplyr object directly, and these objects provide
 #' a method of accessing that directly.
 #'
-#' When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers. The data
-#' are combined into a single data frame and returned to the user. If the data has already been processed (i.e. \code{build} has
+#' When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers. The data will be
+#' returned to the user in a list of dataframes. If the data has already been processed (i.e. \code{build} has
 #' been run), the numeric data is already available and will simply be returned. Otherwise, the numeric portion of the layer will
 #' be processed.
 #'

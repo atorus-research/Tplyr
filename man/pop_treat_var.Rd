@@ -12,7 +12,7 @@ set_pop_treat_var(table, pop_treat_var)
 \arguments{
 \item{table}{A \code{tplyr_table} object}
 
-\item{pop_treat_var}{A named quosure from the pop_data environment}
+\item{pop_treat_var}{Variable containing treatment group assignments within the \code{pop_data} binding. Supply unquoted.}
 }
 \value{
 For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}

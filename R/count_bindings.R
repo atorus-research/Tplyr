@@ -1,15 +1,24 @@
 
 
-#' Set the include_total_row option for count processing
+#' Add a Total row into a count summary.
+#'
+#' Adding a total row creates an additional observation in the count summary that presents the total counts
+#' (i.e. the n's that are) summarized by the \code{by} group variables and the columns (\code{treat_var} along with
+#' any additional columns set by the \code{cols} argument.)
 #'
 #' @param x A layer object
-#' @param include_total A logical vector
-set_include_total_row <- function(x, include_total) {
+#' @param add_total TRUE/FALSE
+#'
+#' @export
+#' @example
+#'
+#'
+add_total_row <- function(x, add_total) {
   assert_inherits_class(x, "count_layer")
 
-  assert_that(is.logical(include_total))
+  assert_that(is.logical(add_total))
 
-  env_bind(x, include_total_row = include_total)
+  env_bind(x, include_total_row = add_total)
 
   x
 }

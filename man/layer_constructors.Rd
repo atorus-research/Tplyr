@@ -40,7 +40,15 @@ to create summary counts of some discrete variable. \code{desc} layer create sum
 summaries the counts of different changes in states. See the "details" section below for more information.
 }
 \details{
-#TODO: Complete this section with more information about each layer type.
+\describe{
+  \item{Count Layers}{Count layers allow you to easily create summaries based on counting values with a variable.
+  Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of
+  instances a value occurs compared to some denominator. \strong{NOTE:} Currently, % values are calculated on the fly
+  using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility
+  for in future releases (remember - this is an alpha release :))}
+  \item{Descriptive Statistics Layers}{}
+  \item{Shift Layers}{}
+}
 }
 \section{\code{tplyr_layer} Object Structure}{
 

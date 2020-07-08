@@ -105,8 +105,8 @@ set_format_strings <- function(e, ...) {
 
 #' Desc layer S3 method for set_format_strings
 #'
-#' @param e
-#' @param ...
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
 #'
 #' @return
 #' @export
@@ -156,8 +156,8 @@ set_format_strings.desc_layer <- function(e, ...) {
 
 #' Set Count Layer String Format
 #'
-#' @param x the layer object to add/modify the count format
-#' @param str The f_str object to add
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
 #'
 #' @return Returns the modified layer object.
 #' @export

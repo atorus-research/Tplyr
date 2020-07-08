@@ -28,7 +28,7 @@ process_summaries.desc_layer <- function(x, ...) {
       # Create the numeric summary data
       num_sums[[i]] <- built_target %>%
         # Subset by the logic specified in `where`
-        filter(!!where, !!table_where) %>%
+        filter(!!where) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
@@ -147,7 +147,7 @@ get_summaries <- function(var, e = caller_env()) {
 #' @param .fmt_str The format strings container with all f_str objects and row labels
 #'
 #' @return A character vector of display formatted strings
-#'
+#' @noRd
 construct_desc_string <- function(..., .fmt_str=NULL) {
   # Unpack names into current namespace for ease
   list2env(list(...), envir=environment())

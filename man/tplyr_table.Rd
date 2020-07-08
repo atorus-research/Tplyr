@@ -2,56 +2,33 @@
 % Please edit documentation in R/table.R
 \name{tplyr_table}
 \alias{tplyr_table}
-\title{Safety Table}
+\title{Create a Tplyr table object}
 \usage{
 tplyr_table(target, treat_var, where = TRUE, cols = vars())
 }
 \arguments{
-\item{target}{Source data used to create the table. A 'data.frame' object.
-This is the analysis dataset the table is generated from.}
+\item{target}{Dataset upon which summaries will be performed}
 
-\item{treat_var}{Treatment variable in target used to split treatment
-groups.}
+\item{treat_var}{Variable containing treatment group assignments. Supply unquoted.}
 
-\item{where}{An expression used to filter the table before summarizing data}
+\item{where}{A general subset to be applied to all layers. Supply as programming logic (i.e. x < 5 & y == 10)}
 
-\item{cols}{A set of symbols or text to}
+\item{cols}{A grouping variable to summarize data by column (in addition to treat_var). Provide multiple
+column variables by using \code{\link[dplyr]{vars}}}
 }
 \value{
-A safety_table object which is a parent environment for the layers
-  where the code creating the table is evaluated.
+A \code{tplyr_table} object
 }
 \description{
-The function `tplyr_table()` creates a 'tplyr_table' object which is composed
-of a table and table display options, and logic for creating the table. The
-layer environments passed to a 'tplyr_table' are used to evaluate the code
-used to create the table.
-
-The tplyr_table is the parent environment of all the binded tplyr_layers.
-The table can contain variables that are visable to all layers.
+The \code{tplyr_table} object is the main container upon which a Tplyr table is constructed. Tplyr tables are made up of
+one or more layers. Each layer contains an instruction for a summary to be performed. The \code{tplyr_table} object contains
+those layers, and the general data, metadata, and logic necessary.
 }
-\section{Environment Bindings/Properties}{
+\details{
 
-\itemize{
-\item{target - The main piece of data the table will be created from.}
-\item{headers - The column headers for the table. These will be repeated
-  across pages as appropriate.}
-\item{header_n - The counts of the population groups that is used for column
-  headers and percentages.}
-\item{pop_data - The data.frame containing population data.}
-\item{treat_var - The treatment variable arms/sets are split up on.}
-\item{layers - The logic used to prepare and render the table. Stored as a
-  list binded to the environment. Use <add layer function> to add a layer.}
-\item{treat_grps - Additional treatment groupings. Generally made up of
-  combiniations of the treatment variable.}
 }
-}
-
 \examples{
-iris_tab <- tplyr_table(iris, Species)
 
+tab <- tplyr_table(iris, species, where = Sepal.Length < 5.8)
 
-}
-\seealso{
-[layer()]
 }

@@ -1,56 +1,9 @@
 ### Table Properties These shouldn't require a method dispatch
 
-#' Return or set header bindings
-#'
-#' The column header that will be displayed when the table is rendered.
-#'
-#' @param table A \code{tplyr_table} object
-#'
-#' @return For \code{tplyr_header} the header binding of the \code{tplyr_talbe}
-#'   object. For \code{tplyr_header<-} and \code{set_tplyr_header} the modified
-#'   object.
-#'
-#' @examples
-#' tab <- tplyr_table(iris, Species)
-#'
-#' header(tab) <- c("Sepal.Length", "Sepal.Width", "Petal.Length",
-#'                        "Petal.Width", "Species")
-#'
-#' @rdname headers
-#' @export
-header <- function(table) {
-  rlang::env_get(table, "headers")
-}
-
-#' @param x A \code{tplyr_table} object
-#' @param value A character vector detailing the column headers
-#'
-#' @rdname headers
-#' @export
-`header<-` <- function(x, value) {
-  set_header(x, value)
-}
-
-#' @param headers A character vector detailing the column headers
-#'
-#' @rdname headers
-#' @export
-set_header <- function(table, headers) {
-  # headers should be a character vector
-  assert_that(is.character(headers),
-                          msg = paste0("'headers' argument passed to tplyr_table must be a character vector,",
-                                       "\n",
-                                       "instead a class of: '",
-                                       class(headers),
-                                       "' was passed."))
-
-
-  rlang::env_bind(table, headers = headers)
-
-  table
-}
-
 #' Return or set header_n binding
+#'
+#' \strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
+#' This is coming in future releases.
 #'
 #' When the header or table body relies on population count data, the header_n
 #' binding is used for display and calculations.
@@ -106,7 +59,7 @@ set_header_n <- function(table, header_n) {
 #' body.
 #'
 #' @param table A \code{tplyr_table} object
-#' @param pop_data A \code{data.frame} object containing the populatoin level
+#' @param pop_data A \code{data.frame} object containing the population level
 #'   information.
 #'
 #' @return For \code{tplyr_pop_data} the pop_data binding of the \code{tplyr_table}
@@ -171,7 +124,7 @@ treat_var <- function(table) {
   rlang::env_get(table, "treat_var")
 }
 
-#' @param treat_var A treatment variable. quosure?
+#' @param treat_var Variable containing treatment group assignments. Supply unquoted.
 #'
 #' @export
 #' @rdname treat_var
@@ -209,7 +162,7 @@ pop_treat_var <- function(table) {
   rlang::env_get(table, "pop_treat_var")
 }
 
-#' @param pop_treat_var A named quosure from the pop_data environment
+#' @param pop_treat_var Variable containing treatment group assignments within the \code{pop_data} binding. Supply unquoted.
 #'
 #' @rdname pop_treat_var
 #' @export
@@ -227,8 +180,10 @@ set_pop_treat_var <- function(table, pop_treat_var) {
 
 #' Return or set treatment groups binding
 #'
-#' Treatment groupings are used to create combenations of groups to group. TODO:
-#' Add 'total' option
+#' Treatment groups are used to create additional groups that will be analyzed. For example,
+#' you could create a group of treated subjects vs. placebo in a trial with multiple treatment arms.
+#' These groups are constructed by supplying the assigned name to be used in the data, and then the
+#' which the larger group will be constructed from (i.e. given Placebo, T1, and T2 - Treated would be c('T1', 'T2'))
 #'
 #' @param table A tplyr_table object
 #'
@@ -239,7 +194,7 @@ set_pop_treat_var <- function(table, pop_treat_var) {
 #' @examples
 #' tab <- tplyr_table(iris, Species)
 #'
-#' add_treat_group(tab, "Total", as.character(unique(iris$Species)))
+#' add_treat_group(tab, "v-species", c('versicolor', 'virigina'))
 #'
 #' @export
 #' @rdname treat_grps
@@ -247,8 +202,8 @@ treat_grps <- function(table) {
   env_get(table, "treat_grps")
 }
 
-#' @param group_name A character vector with the treatment group names.
-#' @param groupings A character vector specifiying the treatment variable names.
+#' @param group_name A character vector with the treatment group names to be assigned
+#' @param groupings A character vector specifiying the treatment variable values to be used to construct the assigned group
 #'
 #' @export
 #' @rdname treat_grps
@@ -308,7 +263,7 @@ get_where.tplyr_table <- function(obj) {
   env_get(obj, "table_where")
 }
 
-#' @param where An expression detailing the subset
+#' @param where An expression (i.e. syntax) to be used to subset the data. Supply as programming logic (i.e. x < 5 & y == 10)
 #'
 #' @export
 #' @rdname where

@@ -15,7 +15,7 @@
 #' \code{tplyr_layer} objects are not created directly, but rather the layer constructor functions \code{add_group_counts},
 #' \code{add_group_desc}, \code{add_group_shift}, and their related subgroup functions.
 #'
-#' See the \href{<link tbd}{vignette} for a more extensive explanation of how these pieces fit together.
+#' See the \href{<link tbd>}{vignette} for a more extensive explanation of how these pieces fit together.
 #'
 #' @param parent \code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
 #'   \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
@@ -39,13 +39,13 @@
 #' \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 #' within the target dataset Text strings submitted do not need to exist in the target dataset.}
 #' \item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
-#' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+#' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This filtering is
+#' in addition to any subsetting done based on \code{where} criteria specified in \code{\link{tplyr_table}}}
 #' \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
 #'   Set by default to the value of \code{target_var}}
 #' \item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
 #' \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 #' any sublayers of the current layer.}
-#' \item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 #' }
 #'
 #' @family Layer construction functions
@@ -150,7 +150,6 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   structure(e,
             class=append(c('tplyr_layer', paste0(type,'_layer')), class(e))) %>%
     set_layer_sort("ascending") %>%
-    set_layer_formatter(as.character) %>%
     set_where(!!where)
 }
 
