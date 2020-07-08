@@ -29,6 +29,10 @@ For \code{tplyr_header_n} the header_n binding of the
   \code{set_tplyr_header_n} the modified object.
 }
 \description{
+\strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
+This is coming in future releases.
+}
+\details{
 When the header or table body relies on population count data, the header_n
 binding is used for display and calculations.
 }

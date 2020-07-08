@@ -112,7 +112,8 @@ replace_by_string_names <- function(dat, by) {
   row_labels <- names(dat)[str_detect(names(dat), 'row_label')]
 
   # Insert row labels to the front of the tibble
-  select(dat, all_of(sort(row_labels)), everything())
+  select(dat, all_of(sort(row_labels)), everything()) %>%
+    mutate_at(row_labels, ~ as.character(.x)) # Coerce all row labels into character
 }
 
 #' Get the unique levels/factors of a dataset
