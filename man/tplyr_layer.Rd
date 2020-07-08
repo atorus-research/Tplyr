@@ -40,7 +40,7 @@ completed, the layers are brought together to construct the output.
 \code{tplyr_layer} objects are not created directly, but rather the layer constructor functions \code{add_group_counts},
 \code{add_group_desc}, \code{add_group_shift}, and their related subgroup functions.
 
-See the \href{<link tbd}{vignette} for a more extensive explanation of how these pieces fit together.
+See the \href{<link tbd>}{vignette} for a more extensive explanation of how these pieces fit together.
 }
 \section{\code{tplyr_layer} Object Structure}{
 

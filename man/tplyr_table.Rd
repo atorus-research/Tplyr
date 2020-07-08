@@ -25,7 +25,24 @@ one or more layers. Each layer contains an instruction for a summary to be perfo
 those layers, and the general data, metadata, and logic necessary.
 }
 \details{
+When a \code{tplyr_table} is created, it will contain the following bindings:
+\itemize{
+\item{target - The dataset upon which summaries will be performed}
+\item{pop_data - The data containing population information. This defaults to the target dataset}
+\item{cols - A categorical variable to present summaries grouped by column (in addition to treat_var)}
+\item{table_where - The \code{where} parameter provided, used to subset the target data}
+\item{treat_var - Variable used to distinguish treatment groups.}
+\item{header_n - Default header N values based on \code{treat_var}}
+\item{pop_treat_var - The treatment variable for \code{pop_data} (if different)}
+\item{layers - The container for individual layers of a \code{tplyr_table}}
+\item{treat_grps - Additional treatment groups to be added to the summary (i.e. Total)}
+}
 
+\code{tplyr_table} allows you a basic interface to instantiate the object. Modifier functions are available to change
+individual parameters catered to your analysis. For example, to add a total group, you can use the
+\code{\link{add_total_group}}.
+
+In future releases, we will provide vigenttes to fully demonstrate these capabilities.
 }
 \examples{
 

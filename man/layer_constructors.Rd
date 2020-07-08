@@ -18,10 +18,11 @@ group_shift(parent, target_var, by = vars(), where = TRUE, ...)
 \code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
 the layer is a subgroup.}
 
-\item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
-the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
+\item{target_var}{Symbol. Required, The variable name(s) on which the summary is to be performed. Must be a variable within
+the target dataset. Enter unquoted - i.e. target_var = AEBODSYS. You may also provide multiple variables with
+\code{\link[dplyr]{vars}}.}
 
-\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
+\item{by}{A string, a variable name, or a list of variable names supplied using \code{\link[dplyr]{vars}}}
 
 \item{where}{Call. Filter logic used to subset the target data when performing a summary.}
 
@@ -46,8 +47,11 @@ summaries the counts of different changes in states. See the "details" section b
   instances a value occurs compared to some denominator. \strong{NOTE:} Currently, % values are calculated on the fly
   using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility
   for in future releases (remember - this is an alpha release :))}
-  \item{Descriptive Statistics Layers}{}
-  \item{Shift Layers}{}
+  \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are
+  a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation,
+  variance, min, max, interquartile range, Q1, Q3, and missing value counts. But you can also add your own summaries using
+  \code{\link{set_custom_summaries}}. This allows you to easily implement any additional sumamry statistics you want presented.}
+  \item{Shift Layers}{\strong{NOTE:} Shift layers are not yet implemented. Expect this in a future release}
 }
 }
 \section{\code{tplyr_layer} Object Structure}{
@@ -57,13 +61,13 @@ summaries the counts of different changes in states. See the "details" section b
 \item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
 \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 within the target dataset Text strings submitted do not need to exist in the target dataset.}
-\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This is
+in addition to the subset applied in \code{\link{tplyr_table}}}
 \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
-  Set by default to the value of \code{target_var}}
-\item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
+  Set by default to the value of \code{target_var}. NOTE: Not yet implemented in practice}
+\item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending. NOTE: Not yet implemented in practice}
 \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 any sublayers of the current layer.}
-\item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 }
 }
 
@@ -77,7 +81,7 @@ t <- tplyr_table(iris, Sepal.Width) \%>\%
   )
 }
 \seealso{
-[add_layer(), tplyr_table, tplyr_layer()]
+[add_layer(), add_layers() tplyr_table(), tplyr_layer()]
 
 Other Layer construction functions: 
 \code{\link{tplyr_layer}()}

@@ -223,7 +223,7 @@ num_fmt <- function(val, i, fmt=NULL) {
   digits <- fmt$settings[[i]]['dig']
 
   # Formats summary stat strings to align display correctly
-  if (is.na(val)) return(empty)
+  if (is.na(val)) return(fmt$empty)
 
   # Set nsmall to input digits
   nsmall = digits
