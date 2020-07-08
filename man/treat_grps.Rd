@@ -18,9 +18,9 @@ add_treat_group(table, group_name, groupings)
 \arguments{
 \item{table}{A tplyr_table object}
 
-\item{group_name}{A character vector with the treatment group names.}
+\item{group_name}{A character vector with the treatment group names to be assigned}
 
-\item{groupings}{A character vector specifiying the treatment variable names.}
+\item{groupings}{A character vector specifiying the treatment variable values to be used to construct the assigned group}
 }
 \value{
 The modified table object
@@ -34,8 +34,10 @@ This function is a wrapper around \code{add_treat_group} and creates a group
 named 'Total' containing the set of unique values in the pop_treat_var
 variable.
 
-Treatment groupings are used to create combenations of groups to group. TODO:
-Add 'total' option
+Treatment groups are used to create additional groups that will be analyzed. For example,
+you could create a group of treated subjects vs. placebo in a trial with multiple treatment arms.
+These groups are constructed by supplying the assigned name to be used in the data, and then the
+which the larger group will be constructed from (i.e. given Placebo, T1, and T2 - Treated would be c('T1', 'T2'))
 }
 \examples{
 tab <- tplyr_table(iris, Species)
@@ -46,6 +48,6 @@ treat_grps(tab)
 
 tab <- tplyr_table(iris, Species)
 
-add_treat_group(tab, "Total", as.character(unique(iris$Species)))
+add_treat_group(tab, "v-species", c('versicolor', 'virigina'))
 
 }

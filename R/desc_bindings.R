@@ -22,6 +22,10 @@ get_custom_summaries <- function(e) {
 #' summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
 #' of summaries built into 'Tplyr', while also adding new desired summary functions.
 #'
+#' When programming the logic of the summary function, use the target variable name in your code.
+#' \strong{NOTE:} This is likely to change in the future, as it currently does not support descriptive statistic layers with two
+#' target variables provided.
+#'
 #' @param e \code{desc} layer the summaries should be bound to
 #' @param ... Named parameters containing syntax to be used in a call to \code{dplyr::summarize()}
 #'
@@ -30,7 +34,7 @@ get_custom_summaries <- function(e) {
 #'
 #' @examples
 #'
-#' #TBD
+#' # TBD
 set_custom_summaries <- function(e, ...){
   # Make sure you're modifying a tplyr_layer
   assert_inherits_class(e, 'desc_layer')

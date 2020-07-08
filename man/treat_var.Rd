@@ -13,7 +13,7 @@ set_treat_var(table, treat_var)
 \item{table}{A \code{tplyr_table} object to set or return treatment variable
 the table is split by.}
 
-\item{treat_var}{A treatment variable. quosure?}
+\item{treat_var}{Variable containing treatment group assignments. Supply unquoted.}
 }
 \value{
 For \code{tplyr_treat_var} the treat_var binding of the \code{tplyr_table}

@@ -19,7 +19,12 @@ This function allows a user to define custom summaries to be performed in a call
 summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
 of summaries built into 'Tplyr', while also adding new desired summary functions.
 }
+\details{
+When programming the logic of the summary function, use the target variable name in your code.
+\strong{NOTE:} This is likely to change in the future, as it currently does not support descriptive statistic layers with two
+target variables provided.
+}
 \examples{
 
-#TBD
+# TBD
 }

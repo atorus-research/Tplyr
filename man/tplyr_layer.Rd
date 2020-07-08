@@ -23,8 +23,6 @@ descriptive statistics, or "shift" for shift table counts}
 
 \item{...}{Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
 \href{<link tbd>}{vignette} on adding extensions.}
-
-\item{cols}{Columns to be used in grouping to be represented width-wize in the output}
 }
 \value{
 An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object
@@ -42,7 +40,7 @@ completed, the layers are brought together to construct the output.
 \code{tplyr_layer} objects are not created directly, but rather the layer constructor functions \code{add_group_counts},
 \code{add_group_desc}, \code{add_group_shift}, and their related subgroup functions.
 
-See the \href{<link tbd}{vignette} for a more extensive explanation of how these pieces fit together.
+See the \href{<link tbd>}{vignette} for a more extensive explanation of how these pieces fit together.
 }
 \section{\code{tplyr_layer} Object Structure}{
 
@@ -52,13 +50,13 @@ See the \href{<link tbd}{vignette} for a more extensive explanation of how these
 \item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
 within the target dataset Text strings submitted do not need to exist in the target dataset.}
 \item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
-\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset.}
+\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This filtering is
+in addition to any subsetting done based on \code{where} criteria specified in \code{\link{tplyr_table}}}
 \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
   Set by default to the value of \code{target_var}}
 \item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
 \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 any sublayers of the current layer.}
-\item{\code{formatter}}{A function used to create the string formats for the resulting numbers in output presentation.}
 }
 }
 

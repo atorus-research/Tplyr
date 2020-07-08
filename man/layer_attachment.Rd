@@ -40,6 +40,9 @@ objects handle this by creating \code{tplyr_subgroup_layer} objects. This is as 
 and handles it appropriately, from which you can customize with modifier functions.
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 ## Single layer
 t <- tplyr_table(mtcars, cyl) \%>\%
   add_layer(

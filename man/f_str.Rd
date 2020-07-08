@@ -12,6 +12,8 @@ right, the number of x's controls decimal precision and rounding. Variables are 
 decimal.}
 
 \item{...}{The variables to be formatted using the format specified in \code{format_string}.}
+
+\item{empty}{The string to display when the numeric data is not available}
 }
 \value{
 A \code{f_str} object, built on a list with two elements:

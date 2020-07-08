@@ -88,7 +88,6 @@ separate_int_dig <- function(x){
   out
 }
 
-
 #' Set the format strings and associated summaries to be performed in a layer
 #'
 #' @param e Layer on which to bind format strings
@@ -100,6 +99,20 @@ separate_int_dig <- function(x){
 #' @examples
 #' #TBD
 set_format_strings <- function(e, ...) {
+  UseMethod("set_format_strings")
+}
+
+
+#' Desc layer S3 method for set_format_strings
+#'
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#'
+#' @return
+#' @export
+#'
+#' @noRd
+set_format_strings.desc_layer <- function(e, ...) {
 
   # Pick off the ellpsis
   format_strings <- list(...)
@@ -138,6 +151,36 @@ set_format_strings <- function(e, ...) {
            row_labels = row_labels,
            max_length = max_format_length
     )
+  e
+}
+
+#' Set Count Layer String Format
+#'
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#'
+#' @return Returns the modified layer object.
+#' @export
+#'
+#' @examples
+#' # TBD
+set_format_strings.count_layer <- function(e, ...) {
+  # Grab the named parameters
+  params <- list(...)
+
+  # Count layers take only 1 format
+  assert_that(length(params) == 1, msg = "Count layers must have only 1 format string supplied")
+
+  # Grab out the supplied parameter
+  str <- params[[1]]
+
+  assert_has_class(str, "f_str")
+
+  assert_that(all(str$vars %in% c("n", "pct")),
+              msg = "f_str in a count_layer can only be n or pct")
+
+  env_bind(e, format_strings = str)
+
   e
 }
 
@@ -180,7 +223,7 @@ num_fmt <- function(val, i, fmt=NULL) {
   digits <- fmt$settings[[i]]['dig']
 
   # Formats summary stat strings to align display correctly
-  if (is.na(val)) return(empty)
+  if (is.na(val)) return(fmt$empty)
 
   # Set nsmall to input digits
   nsmall = digits

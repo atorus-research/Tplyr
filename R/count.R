@@ -20,16 +20,20 @@ process_summaries.count_layer <- function(x, ...) {
   x
 }
 
+#' @param x
+#'
+#' #TODO: Eli, can you provide at least some detail here?
+#' @noRd
 process_single_count_target <- function(x) {
   evalq({
 
-    if(!exists("include_total_row")) include_total_row <- TRUE
+    if(!exists("include_total_row")) include_total_row <- FALSE
     if(!exists("total_row_label")) total_row_label <- "Total"
 
     # Construct the counts for each target grouping
     summary_stat <- built_target %>%
       # Filter out based on where
-      filter(!!where, !!table_where)
+      filter(!!where)
     # get unique variables based on distinct_by value
     if (!is.null(distinct_by)) {
       summary_stat <- summary_stat %>%
@@ -84,6 +88,7 @@ process_single_count_target <- function(x) {
 #' Prepare metadata for table
 #'
 #' @param x count_layer object
+#' @noRd
 prepare_format_metadata <- function(x) {
   evalq({
 

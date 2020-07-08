@@ -159,38 +159,3 @@ set_layer_sort <- function(layer, sort) {
 
   layer
 }
-
-#' Set or return layer formatter
-#'
-#' @param layer A \code{tplyr_layer} object
-#'
-#' @return For \code{layer_formatter}, the formetter function bound to the
-#'   supplied layer. For \code{set_layer_formatter} the modified layer environment.
-#' @export
-#' @rdname formatter
-#'
-#' @examples
-#' # Load in pipe
-#' library(magrittr)
-#' iris$Species2 <- iris$Species
-#' lay <- tplyr_table(iris, Species) %>%
-#'   group_count(Species) %>%
-#'   set_layer_formatter(as.numeric)
-get_layer_formatter <- function(layer) {
-  env_get(layer, "formatter")
-}
-
-#' @param formatter A function used to create the string formats for the
-#'   resulting numbers in output presentation.
-#'
-#' @export
-#' @rdname formatter
-set_layer_formatter <- function(layer, formatter) {
-  assert_that(is_function(formatter),
-              msg = "formatter must be a function")
-
-  env_bind(layer, formatter = formatter)
-
-  layer
-}
-
