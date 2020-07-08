@@ -1,8 +1,5 @@
 # Count Layers
 
-# TODO: Remove the type coersion when the build can handle different types
-mtcars$cyl <- as.character(mtcars$cyl)
-mtcars$gear <- as.character(mtcars$gear)
 # This is used for nesting counts
 mtcars$grp <- rep(c("A", "B", "C", "D"), each = 8)
 t1 <- tplyr_table(mtcars, gear)
@@ -17,9 +14,9 @@ c1 <- group_count(t1, cyl)
 c2 <- group_count(t2, cyl, by = am)
 c3 <- group_count(t3, cyl, by = vars(am, vs))
 c4 <- group_count(t4, cyl, by = vars(am, vs)) %>%
-  set_count_fmt(f_str("xxx", n))
+  set_format_strings(f_str("xxx", n))
 c5 <- group_count(t5, cyl, by = vars(am, vs)) %>%
-  set_include_total_row(FALSE)
+  add_total_row()
 c6 <- group_count(t6, "cyl") %>%
   set_distinct_by(cyl)
 c7 <- group_count(t7, vars(grp, cyl))
