@@ -5,7 +5,7 @@
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom stringr str_sub
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile

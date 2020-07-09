@@ -1,0 +1,179 @@
+---
+title: "Tplyr (alpha release)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tplyr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(Tplyr)
+library(haven)
+library(magrittr)
+adsl <- read_xpt("/home/mstackhouse/cdisc_pilot_data/adsl.xpt")
+```
+
+# The Alpha release
+This is an early preview of our new package, `Tplyr`. This package is still in development, and we're actively working on new features. We decided to release this version early to get community feedback. If you find a bug in our code - please report it! If you'd like to see some particular feature - let us know! The more feedback we collect, the better the end product will be when we publish the first version on CRAN. 
+
+# What is Tplyr? 
+
+[`dplyr`](https://dplyr.tidyverse.org/) from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. `dplyr` conceptually breaks things down into verbs that allow you to focus on _what_ you want to do more than _how_ you have to do it.
+
+`Tplyr` is designed around a similar concept, but its focus is on building summary tables within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create very similar. For the most part, most of the tables created can be broken down into a few categories:
+
+- Counting for event based variables or categories
+- Shifting, which is just counting a 'from' and a 'to'
+- Generating descriptive statistics around some continuous variable. 
+
+For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table. - and let's use an example from the PHUSE project Standard Analyses & Code Sharing - [Analyses & Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf). 
+
+![Demographics Table](./demo_table.png)
+
+When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as 'layers', and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this. 
+
+- First we have Sex, which is made up of n (%) counts.
+- Next we have Age as a continuous variable, where we have a number of descriptive statistics, including n, mean, standard deviation, median, quartile 1, quartile 3, min, max, and missing values.
+- After that we have age, but broken into categories - so this is once again n (%) values.
+- Race - more counting, 
+- Ethnicity - more counting
+- Weight - and we're back to descriptive statistics.
+
+So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. 
+In the same way that `dplyr` is a grammar of data manipulation, `Tplyr` aims to be a grammar of data summary. The goal of `Tplyr` is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller 'layers', and combining them together like you see on the page. 
+
+Enough talking - let's see some code. In these example, we will be using data from the [PHUSE Test Data Factory]( https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09) based on the [original pilot project submission package](https://www.cdisc.org/sdtmadam-pilot-project). See our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
+
+```{r initial_demo}
+
+tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (years)")
+  ) %>% 
+  add_layer(
+    group_count(AGEGR1, by = "Age Categories n (%)")
+  ) %>% 
+  build()
+
+```
+
+## The TL;DR Before The Nitty Gritty
+
+Here are some of the high level benefits of using `Tplyr`:
+
+- Easy construction of tables using an intuitive syntax
+- Smart string formatting for your numbers that's easily specified by the user
+- A great deal of flexibility in what is performed and how it's presented, without specifying hundreds of parameters
+- Extensibility (in the future...) - we're going to open doors to allow you some level of customization.
+
+# How Tplyr works
+
+A `Tplyr` table is constructed of two main objects, a `table_table` object and `tplyr_layer` objects making up the different summaries that are to be performed. 
+
+# The `tplyr_table` object
+
+The `tplyr_table` object is the main container upon which a Tplyr table is constructed. Tplyr tables are made up of
+one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table` object contains
+those layers, and the general data, metadata, and logic necessary.
+
+When a `tplyr_table` is created, it will contain the following bindings:
+
+- target - The dataset upon which summaries will be performed
+- pop_data - The data containing population information. This defaults to the target dataset
+- cols - A categorical variable to present summaries grouped by column (in addition to treat_var)
+- table_where - The `where` parameter provided, used to subset the target data
+- treat_var - Variable used to distinguish treatment groups.
+- header_n - Default header N values based on `treat_var`
+- pop_treat_var - The treatment variable for `pop_data` (if different)
+- layers - The container for individual layers of a `tplyr_table`
+- treat_grps - Additional treatment groups to be added to the summary (i.e. Total)
+
+`tplyr_table` allows you a basic interface to instantiate the object. Modifier functions are available to change
+individual parameters catered to your analysis. For example, to add a total group, you can use the
+`add_total_group`.
+
+```{r tplyr_table}
+t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y")
+t
+```
+
+## The `tplyr_layer` object
+
+Users of `Tplyr` interface with `tplyr_layer` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `desc` layer create descriptive statistics, and `shift` layers summaries the counts of different changes in states.
+
+- *Count Layers*
+  - Count layers allow you to easily create summaries based on counting values with a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. _NOTE: Currently, % values are calculated on the fly using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility for in future releases (remember - this is an alpha release :))_
+- *Descriptive Statistics Layers*
+  - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistc layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional sumamry statistics you want presented.
+- *Shift Layers*
+  - _NOTE: Shift layers are not yet implemented. Expect this in a future release_
+
+```{r tplyr_layer}
+cnt <- group_count(t, AGEGR1)
+cnt
+
+dsc <- group_desc(t, AGE)
+dsc
+
+```
+
+## Adding Layers to a Table
+
+Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, Tplyr is built around tidy syntax, so all of our object consturction supports piping with [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) (i.e. `%>%`). 
+
+There are two ways to add layers to a `tplyr_table`: `add_layer` and `add_layers`. The difference is that `add_layer` allows you to contruct the layer within the call to `add_layer`, whereas with `add_layers` you can attach multiple layers that have already been constructed. upfront:
+
+```{r add_layer}
+t <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(AGEGR1, by = "Age categories n (%)")
+  )
+
+```
+
+Within `add_layer`, the syntax to constructing the count layer for Age Categories was written on the fly. `add_layer` is special in that it also allows you to use piping to use modifier functions on the layer being contructed.
+
+```{r add_layer_with_piping}
+t <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(AGEGR1, by = "Age categories n (%)") %>% 
+      set_format_strings(f_str("xx (xx.x%)", n, pct)) %>% 
+      add_total_row()
+  )
+
+```
+
+`add_layers`, on the other hand, let's you isolate the code to construct a particular layer if you wanted to separate things out more. Some might find this cleaner to work with if you have a large number of layers being constructed.
+
+```{r add_layers}
+t <- tplyr_table(adsl, TRT01P) 
+
+l1 <- group_count(t, AGEGR1, by = "Age categories n (%)")
+l2 <- group_desc(t, AGE, by = "Age (years)")
+
+t <- add_layers(t, l1, l2)
+```
+
+Notice that when you construct the layers separately, you need to specify the table to which they belong. `add_layer` does this automatically. `tplyr_table` and `tplyr_layer` objects are built on environments, and the parent/child relationships are very important. This is why, even though the layer knows who it's table parent is, the layers still need to be attached to the table (as the table doesn't know who its children are). [Advanced R](https://adv-r.hadley.nz/environments.html) does a very good job at explaining what environments in R are, their benefits, and how to use them. 
+
+
+
+
+
+
+
+
+
+## Related packages
+* atable[https://cran.r-project.org/package=atable/vignettes/atable_usage.pdf]
+* tableone[https://cran.r-project.org/package=tableone/vignettes/introduction.html]
+* gt[https://CRAN.R-project.org/package=gt]
+* huxtable[https://hughjonesd.github.io/huxtable/]
