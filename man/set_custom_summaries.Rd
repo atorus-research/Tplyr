@@ -38,12 +38,15 @@ Review the examples to see this put into practice. Note the relationship between
 and the name used in \code{\link{set_format_strings}} within the \code{\link{f_str}} call
 }
 \examples{
+#Load in pipe
+library(magrittr)
 
 tplyr_table(iris, Species) \%>\%
   add_layer(
     group_desc(Sepal.Length, by = "Sepal Length") \%>\%
       set_custom_summaries(
-        geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]), na.rm=TRUE) / length(Sepal.Width))
+        geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]),
+                                     na.rm=TRUE) / length(Sepal.Width))
       ) \%>\%
       set_format_strings(
         'Geometric Mean' = f_str('xx.xx', geometric_mean)

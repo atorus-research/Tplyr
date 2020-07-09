@@ -39,6 +39,9 @@ flexibility to the user.
 See the \code{\link{f_str}} documentation for more details about how this implementation works.
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 # In a count layer
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
