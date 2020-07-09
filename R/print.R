@@ -33,9 +33,6 @@ print.tplyr_table <- function(x, ...) {
       cat(as.character(quo_get_expr(pop_treat_var)))
       cat("\n")
     }
-    # Print headers
-    cat("header: ")
-    cat(header)
     # Print header_n
     cat("\nheader_n: ")
     for(i in seq(header_n)) {
@@ -138,10 +135,6 @@ str.tplyr_table <- function(object, ...) {
     for(i in seq(treat_grps)) {
       cat("\n", names(treat_grps)[i])
       cat(":\n\t", treat_grps[[i]])
-    }
-    cat("\n*** header binding ***\n")
-    for (i in seq(header)) {
-      cat("\t", header[i], "\n")
     }
     cat("*** header_n ***\n")
     for (i in seq(header_n)) {

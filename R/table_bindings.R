@@ -223,9 +223,6 @@ set_treat_grps <- function(table, group_name, groupings) {
 #' @export
 #' @rdname treat_grps
 add_treat_group <- function(table, group_name, groupings) {
-  assert_that(is.character(group_name), is.character(groupings),
-              msg = "'group_name' and 'groupings' argument passed to add_treat_group must be a character")
-
   # Get existing treatment groups
   a_list <- env_get(table, "treat_grps")
 
@@ -249,6 +246,9 @@ add_treat_group <- function(table, group_name, groupings) {
 #' @rdname where
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%

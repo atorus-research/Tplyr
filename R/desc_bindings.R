@@ -45,12 +45,15 @@ get_custom_summaries <- function(e) {
 #' @export
 #'
 #' @examples
+#' #Load in pipe
+#' library(magrittr)
 #'
 #' tplyr_table(iris, Species) %>%
 #'   add_layer(
 #'     group_desc(Sepal.Length, by = "Sepal Length") %>%
 #'       set_custom_summaries(
-#'         geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]), na.rm=TRUE) / length(Sepal.Width))
+#'         geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]),
+#'                                      na.rm=TRUE) / length(Sepal.Width))
 #'       ) %>%
 #'       set_format_strings(
 #'         'Geometric Mean' = f_str('xx.xx', geometric_mean)

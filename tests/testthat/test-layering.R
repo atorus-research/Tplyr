@@ -71,22 +71,22 @@ test_that("`add_layer` attaches layer object into parent", {
   expect_equal(t$layers[[1]]$target_var, vars(Species))
 })
 
-
-test_that("Sequences of add_layer append appropriately into parent", {
-  t <- tplyr_table(iris, Sepal.Width) %>%
-    add_layer(
-      # Adding index to check that order is appropriate.
-      # See test-layer.R tests to see that ellipsis arguments are funneled into layer environment as bindings
-      group_desc(target_var=Species, index=1)
-    ) %>%
-    add_layer(
-      group_desc(target_var=Species, index=2)
-    )
-
-    expect_true(length(t$layers) == 2)
-    expect_true(t$layers[[1]]$index == 1)
-    expect_true(t$layers[[2]]$index == 2)
-})
+# Commening out becasue we removed index
+# test_that("Sequences of add_layer append appropriately into parent", {
+#   t <- tplyr_table(iris, Sepal.Width) %>%
+#     add_layer(
+#       # Adding index to check that order is appropriate.
+#       # See test-layer.R tests to see that ellipsis arguments are funneled into layer environment as bindings
+#       group_desc(target_var=Species, index=1)
+#     ) %>%
+#     add_layer(
+#       group_desc(target_var=Species, index=2)
+#     )
+#
+#     expect_true(length(t$layers) == 2)
+#     expect_true(t$layers[[1]]$index == 1)
+#     expect_true(t$layers[[2]]$index == 2)
+# })
 
 test_that("Using `add_layer` within `add_layer` adds child layers into a layer object", {
   # Make a layer with a subgroup

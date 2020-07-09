@@ -34,6 +34,9 @@ For \code{where}, the where binding of the supplied object.
 Set or return where binding for layer or table
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%

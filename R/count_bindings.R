@@ -10,6 +10,8 @@
 #'
 #' @export
 #' @examples
+#' # Load in Pipe
+#' library(magrittr)
 #'
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
@@ -37,6 +39,8 @@ add_total_row <- function(e) {
 #' @export
 #'
 #' @examples
+#' #Load in pipe
+#' library(magrittr)
 #'
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
