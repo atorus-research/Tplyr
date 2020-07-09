@@ -129,10 +129,10 @@ replace_by_string_names <- function(dat, by) {
 #' @noRd
 get_target_levels <- function(e, x) {
   # If its a factor just return the levels
-  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "target", inherit = TRUE)[, as_name(x)])
+  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   # Otherwise return the unique values
   else {
-    unique(env_get(e, "target", inherit = TRUE)[, as_name(x)])
+    unique(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   }
 }
 
