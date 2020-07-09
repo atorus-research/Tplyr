@@ -77,14 +77,6 @@ test_that("Count layers are summarized without errors and warnings", {
 })
 
 test_that("Count layers are processed as expected", {
-  build(t1)
-  build(t2)
-  build(t3)
-  build(t4)
-  build(t5)
-  build(t6)
-  build(t7)
-
   # After the build there should be 14 things in the layer
   expect_length(c1, 14)
   expect_length(c2, 14)
@@ -102,6 +94,14 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c5$numeric_data), c(39, 6))
   expect_equal(dim(c6$numeric_data), c(3, 4))
   expect_equal(dim(c7$numeric_data), c(34, 5))
+
+  expect_type(c1$numeric_data$value, "double")
+  expect_type(c2$numeric_data$value, "double")
+  expect_type(c3$numeric_data$value, "double")
+  expect_type(c4$numeric_data$value, "double")
+  expect_type(c5$numeric_data$value, "double")
+  expect_type(c6$numeric_data$value, "double")
+  expect_type(c7$numeric_data$value, "double")
 
   expect_equal(dim(c1$formatted_data), c(3, 4))
   expect_equal(dim(c2$formatted_data), c(6, 5))

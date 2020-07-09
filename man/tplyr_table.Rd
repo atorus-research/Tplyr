@@ -46,6 +46,6 @@ In future releases, we will provide vigenttes to fully demonstrate these capabil
 }
 \examples{
 
-tab <- tplyr_table(iris, species, where = Sepal.Length < 5.8)
+tab <- tplyr_table(iris, Species, where = Sepal.Length < 5.8)
 
 }

@@ -26,6 +26,9 @@
 #' @export
 #'
 #' @examples
+#' # Load in Pipe
+#' library(magrittr)
+#'
 #' tplyr_table(iris, Species) %>%
 #'   add_layer(
 #'     group_desc(Sepal.Length, by = "Sepal Length") %>%

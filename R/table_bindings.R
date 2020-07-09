@@ -246,6 +246,9 @@ add_treat_group <- function(table, group_name, groupings) {
 #' @rdname where
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%

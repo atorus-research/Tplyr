@@ -1,12 +1,9 @@
-# Funcational User Testing
-mtcars$carb <- as.character(mtcars$carb)
-mtcars$gear <- as.character(mtcars$gear)
+
 
 ##### T1 Simple count layer #####
 t1 <- tplyr_table(mtcars, gear) %>%
   add_layer(
-    group_count(carb) %>%
-      set_include_total_row(FALSE)
+    group_count(carb)
   )
 
 ##### T2 Simple count layer w/table options #####
@@ -50,12 +47,12 @@ t4 <- tplyr_table(mtcars, gear) %>%
 t5 <- tplyr_table(mtcars, gear, cols = vs) %>%
   set_where(mpg > 15) %>%
   add_total_group() %>%
-  add_treat_group("Cyls 8" , c("8"))
+  add_treat_group("Cyls 8" , c(8))
 t5 <- add_layers(t5,
                  group_count(t5, carb, by = am),
                  group_count(t5, "All", by = am) %>%
                    set_distinct_by(carb) %>%
-                   set_count_fmt(f_str("xxx", n)),
+                   set_format_strings(f_str("xxx", n)),
                  group_desc(t5, mpg) %>%
                    set_format_strings(
                      "n"        = f_str("xx", n),
@@ -77,7 +74,7 @@ t6 <- tplyr_table(mtcars, gear, col = am) %>%
   ) %>%
   add_layer(
     group_count(cyl, by = vars(vs, carb)) %>%
-      set_count_fmt(f_str("xxx", n))
+      set_format_strings(f_str("xxx", n))
   ) %>%
   add_layer(
     group_count("All VS") %>%
@@ -112,12 +109,14 @@ test_that("all tables have the expected dimentions", {
   b_t2 <- build(t2)
   b_t3 <- build(t3)
   b_t4 <- build(t4)
-  #b_t5 <- build(t5)
-  #b_t6 <- build(t6)
+  b_t5 <- build(t5)
+  b_t6 <- build(t6)
 
   expect_equal(dim(b_t1), c(6, 4))
-  expect_equal(dim(b_t2), c(4, 7))
+  expect_equal(dim(b_t2), c(3, 7))
   expect_equal(dim(b_t3), c(7, 4))
   expect_equal(dim(b_t4), c(14, 6))
+  expect_equal(dim(b_t5), c(19, 10))
+  expect_equal(dim(b_t6), c(48, 11))
 })
 

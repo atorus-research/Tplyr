@@ -38,7 +38,7 @@
 #'
 #' @examples
 #'
-#' tab <- tplyr_table(iris, species, where = Sepal.Length < 5.8)
+#' tab <- tplyr_table(iris, Species, where = Sepal.Length < 5.8)
 #'
 tplyr_table <- function(target, treat_var, where = TRUE, cols = vars()) {
 

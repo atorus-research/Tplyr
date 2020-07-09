@@ -25,6 +25,9 @@ been run), the numeric data is already available and will simply be returned. Ot
 be processed.
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl)

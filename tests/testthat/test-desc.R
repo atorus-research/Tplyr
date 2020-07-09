@@ -1,10 +1,5 @@
 # Desc Layer
 
-# TODO: Remove the type coersion when the build can handle different types
-mtcars$cyl <- as.character(mtcars$cyl)
-mtcars$gear <- as.character(mtcars$gear)
-# This is used for nesting counts
-mtcars$grp <- rep(c("A", "B", "C", "D"), each = 8)
 t1 <- tplyr_table(mtcars, gear)
 t2 <- tplyr_table(mtcars, gear)
 t3 <- tplyr_table(mtcars, gear)
@@ -19,13 +14,22 @@ d4 <- group_desc(t4, mpg) %>%
   set_format_strings(
     "Mean Squared" = f_str("xx.xx", mean_squared)
   )
-d5 <- group_desc(t5, vars(mpg, gear))
+d5 <- group_desc(t5, vars(mpg, wt))
 
 t1 <- add_layers(t1, d1)
 t2 <- add_layers(t2, d2)
 t3 <- add_layers(t3, d3)
 t4 <- add_layers(t4, d4)
 t5 <- add_layers(t5, d5)
+
+test_that("group_desc are built as expected", {
+  expect_length(d1, 6)
+  expect_length(d2, 6)
+  expect_length(d3, 6)
+  # The non-default summaries are here
+  expect_length(d4, 13)
+  expect_length(d5, 6)
+})
 
 test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t1))
@@ -35,10 +39,43 @@ test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t5))
 })
 
-test_that("group_desc are built as expected", {
-  expect_length(d1, 6)
-  expect_length(d2, 6)
-  expect_length(d3, 6)
-  expect_length(d4, 6)
-  expect_length(d5, 6)
+test_that("group_desc are processed as expected", {
+
+  expect_length(d1, 14)
+  expect_length(d2, 14)
+  expect_length(d3, 14)
+  expect_length(d4, 15)
+  expect_length(d5, 14)
+
+  expect_equal(dim(d1$numeric_data), c(27, 4))
+  expect_equal(dim(d2$numeric_data), c(36, 5))
+  expect_equal(dim(d3$numeric_data), c(63, 6))
+  expect_equal(dim(d4$numeric_data), c(3, 4))
+  expect_equal(dim(d5$numeric_data), c(54, 4))
+
+  expect_type(d1$numeric_data$value, "double")
+  expect_type(d2$numeric_data$value, "double")
+  expect_type(d3$numeric_data$value, "double")
+  expect_type(d4$numeric_data$value, "double")
+  expect_type(d5$numeric_data$value, "double")
+
+  expect_true(!any(is.na(d1$numeric_data$value)))
+  expect_true(!any(is.na(d2$numeric_data$value)))
+  expect_true(!any(is.na(d3$numeric_data$value)))
+  expect_true(!any(is.na(d4$numeric_data$value)))
+  expect_true(!any(is.na(d5$numeric_data$value)))
+
+  expect_equal(dim(d1$formatted_data), c(6, 4))
+  expect_equal(dim(d2$formatted_data), c(12, 5))
+  expect_equal(dim(d3$formatted_data), c(24, 6))
+  expect_equal(dim(d4$formatted_data), c(1, 4))
+  expect_equal(dim(d5$formatted_data), c(6, 7))
+
+  expect_true(!any(is.na(d1$formatted_data[, 2:4])))
+  expect_true(!any(is.na(d2$formatted_data[, 2:4])))
+  expect_true(!any(is.na(d3$formatted_data[, 4:6])))
+  expect_true(!any(is.na(d4$formatted_data[, 2:4])))
+  expect_true(!any(is.na(d5$formatted_data[, 2:7])))
+
 })
+

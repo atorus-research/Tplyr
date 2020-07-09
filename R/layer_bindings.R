@@ -101,6 +101,9 @@ set_where.tplyr_layer <- function(obj, where) {
 #' @rdname sort_vars
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%

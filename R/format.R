@@ -139,6 +139,9 @@ separate_int_dig <- function(x){
 #' @export
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' # In a count layer
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(

@@ -41,6 +41,9 @@
 #' @export
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#' library(dplyr)
 #' header_string <- "Sepal {Length | Width} | Petal {Length | Width} | Species"
 #'
 #' iris2 <- iris %>%

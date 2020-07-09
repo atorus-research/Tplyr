@@ -22,6 +22,9 @@ For \code{sort_vars}, the bindings of the layer object. For
 Return or set sort_vars layer binding
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
