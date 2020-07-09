@@ -140,7 +140,7 @@ get_target_levels <- function(e, x) {
 #' @param dat Data.frame / tibble to mask repeating row_labels
 #'
 #' @return tibble with blanked out rows where appropriate
-#' @noRd
+#' @export
 apply_row_masks <- function(dat) {
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
