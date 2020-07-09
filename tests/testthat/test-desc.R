@@ -71,11 +71,11 @@ test_that("group_desc are processed as expected", {
   expect_equal(dim(d4$formatted_data), c(1, 4))
   expect_equal(dim(d5$formatted_data), c(6, 7))
 
-  expect_true(!any(is.na(d1$formatted_data[, 2:4])))
-  expect_true(!any(is.na(d2$formatted_data[, 2:4])))
-  expect_true(!any(is.na(d3$formatted_data[, 4:6])))
-  expect_true(!any(is.na(d4$formatted_data[, 2:4])))
-  expect_true(!any(is.na(d5$formatted_data[, 2:7])))
+  expect_true(!any(is.na(unlist(d1$formatted_data[, 2:4]))))
+  expect_true(!any(is.na(unlist(d2$formatted_data[, 2:4]))))
+  expect_true(!any(is.na(unlist(d3$formatted_data[, 4:6]))))
+  expect_true(!any(is.na(unlist(d4$formatted_data[, 2:4]))))
+  expect_true(!any(is.na(unlist(d5$formatted_data[, 2:7]))))
 
 })
 
