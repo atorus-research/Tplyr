@@ -32,7 +32,8 @@ Imports:
     purrr (>= 0.3.3),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
-    tidyselect (>= 1.0.0)
+    tidyselect (>= 1.0.0),
+    tibble (>= 3.0.1)
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

@@ -5,10 +5,16 @@ process_summaries.count_layer <- function(x, ...) {
 
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
+
   else if(length(env_get(x, "target_var")) == 2) {
+
+    # Change treat_var to factor so all combinations appear in nest
+    factor_treat_var(x)
+
     # Begin with the layer itself and process the first target vars values one by one
     env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
             bind_nested_count_layer, x = x))
+
   } else {
 
     process_single_count_target(x)
@@ -20,9 +26,16 @@ process_summaries.count_layer <- function(x, ...) {
   x
 }
 
-#' @param x
+#' @param x A count layer with a single target_var
 #'
-#' #TODO: Eli, can you provide at least some detail here?
+#' This function uses dplyr to filter out the where call, pull out the distinct
+#' rows if applicable, and tallys the different target_var values.
+#'
+#' If include_total_row is true a row will be added with a total row labeled
+#' with total_row_label.
+#'
+#' Complete is used to complete the combinaions of by, treat_var, and target_var
+#'
 #' @noRd
 process_single_count_target <- function(x) {
   evalq({
@@ -34,6 +47,7 @@ process_single_count_target <- function(x) {
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where)
+
     # get unique variables based on distinct_by value
     if (!is.null(distinct_by)) {
       summary_stat <- summary_stat %>%
@@ -54,7 +68,11 @@ process_single_count_target <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0))
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      # Change the treat_var and first target_var to characters to resolve any
+      # issues if there are total rows and the original column is numeric
+      mutate(!!treat_var := as.character(!!treat_var)) %>%
+      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -182,6 +200,20 @@ construct_count_string <- function(.n, .total, count_fmt = NULL,
   string_
 }
 
+#' @param x Count Layer
+#'
+#' When nesting a count layer in some cases a treatment group will not apear in one of the
+#' groups so this will turn the variable into a factor to force it to complete in the
+#' complete logic
+#'
+#' @noRd
+factor_treat_var <- function(x) {
+  evalq({
+
+    built_target[, as_name(treat_var)] <- as.factor(built_target[, as_name(treat_var)])
+
+  }, envir = env_parent(x))
+}
 
 #' #' Process a layer of type \code{group_count}
 #' #'

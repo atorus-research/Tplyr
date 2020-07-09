@@ -44,7 +44,11 @@ summaries the counts of different changes in states. See the "details" section b
 \describe{
   \item{Count Layers}{Count layers allow you to easily create summaries based on counting values with a variable.
   Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of
-  instances a value occurs compared to some denominator. \strong{NOTE:} Currently, % values are calculated on the fly
+  instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships.
+  For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can
+  simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events
+  where you want to see the Preferred Terms within Body Systems, all in one layer.
+  \strong{NOTE:} Currently, % values are calculated on the fly
   using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility
   for in future releases (remember - this is an alpha release :))}
   \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are

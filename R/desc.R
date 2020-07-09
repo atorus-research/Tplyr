@@ -113,7 +113,10 @@ process_formatting.desc_layer <- function(x, ...) {
     }
 
     # Join the final outputs
-    formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
+    formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by))) %>%
+      rowwise() %>%
+      # Replace NA values with the proper empty strings
+      mutate_at(vars(starts_with('var')), ~ replace_na(.x, format_strings[[row_label]]$empty))
 
     # Replace row label names
     formatted_data <- replace_by_string_names(formatted_data, by)

@@ -1,15 +1,17 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace
+#' @importFrom rlang quos quo env_names
+#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
+#' @importFrom stringr str_sub
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at
-#' @importFrom tidyr complete nesting pivot_wider pivot_longer
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble
+#' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble
@@ -86,3 +88,9 @@ summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
 summary_var <- NULL
+spanner_locs <- NULL
+spanned_sects <- NULL
+op <- NULL
+cl <- NULL
+q1 <- NULL
+q3 <- NULL

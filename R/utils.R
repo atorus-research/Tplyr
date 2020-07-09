@@ -116,6 +116,7 @@ replace_by_string_names <- function(dat, by) {
 
   # Insert row labels to the front of the tibble
   select(dat, all_of(sort(row_labels)), everything()) %>%
+    ungroup() %>%
     mutate_at(row_labels, ~ as.character(.x)) # Coerce all row labels into character
 }
 
@@ -128,10 +129,10 @@ replace_by_string_names <- function(dat, by) {
 #' @noRd
 get_target_levels <- function(e, x) {
   # If its a factor just return the levels
-  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "target", inherit = TRUE)[, as_name(x)])
+  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   # Otherwise return the unique values
   else {
-    unique(env_get(e, "target", inherit = TRUE)[, as_name(x)])
+    unique(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   }
 }
 
