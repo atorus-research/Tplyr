@@ -3,7 +3,7 @@
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
