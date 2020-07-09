@@ -59,12 +59,6 @@ test_that("group_desc are processed as expected", {
   expect_type(d4$numeric_data$value, "double")
   expect_type(d5$numeric_data$value, "double")
 
-  expect_true(!any(is.na(d1$numeric_data$value)))
-  expect_true(!any(is.na(d2$numeric_data$value)))
-  expect_true(!any(is.na(d3$numeric_data$value)))
-  expect_true(!any(is.na(d4$numeric_data$value)))
-  expect_true(!any(is.na(d5$numeric_data$value)))
-
   expect_equal(dim(d1$formatted_data), c(6, 4))
   expect_equal(dim(d2$formatted_data), c(12, 5))
   expect_equal(dim(d3$formatted_data), c(24, 6))
