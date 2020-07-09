@@ -27,6 +27,38 @@ add_total_row <- function(e) {
   e
 }
 
+#' Set the label for the total row
+#'
+#' The row label for a total row defaults to "Total", however this can be
+#' overriden using this function.
+#'
+#' @param e A \code{count_layer} object
+#' @param total_row_label A character to label the total row
+#'
+#' @return The modified \code{count_layer} object
+#' @export
+#'
+#' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
+#' t <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_total_row() %>%
+#'       set_total_row_label("Total Cyl")
+#'   )
+#' build(t)
+set_total_row_label <- function(e, total_row_label) {
+
+  assert_has_class(total_row_label, "character")
+  assert_that(length(total_row_label) == 1)
+
+  env_bind(e, total_row_label = total_row_label)
+
+  e
+}
+
 #' Set counts to be distinct by some grouping variable.
 #'
 #' Occasionally summaries call for counting distint values within a group. \code{set_distinct_by}
