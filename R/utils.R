@@ -116,7 +116,7 @@ replace_by_string_names <- function(dat, by) {
 
   # Insert row labels to the front of the tibble
   select(dat, all_of(sort(row_labels)), everything()) %>%
-    ungroup %>%
+    ungroup() %>%
     mutate_at(row_labels, ~ as.character(.x)) # Coerce all row labels into character
 }
 
