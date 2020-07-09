@@ -54,7 +54,11 @@ process_single_count_target <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0))
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      # Change the treat_var and first target_var to characters to resolve any
+      # issues if there are total rows and the original column is numeric
+      mutate(!!treat_var := as.character(!!treat_var)) %>%
+      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
