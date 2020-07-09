@@ -32,12 +32,6 @@ layers are isolated and independent of one another - but each of these layers ar
 isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
 The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
 construct your layer within the \code{layer} paramater.
-
-Sometimes layers may contain subgroups. For example, a total count row can be viewed as a separate layer with sub-group counts
-intermingled between each total group (for example, within adverse event tables). \code{add_layer} and the \code{tplyr_layer}
-objects handle this by creating \code{tplyr_subgroup_layer} objects. This is as simple as using \code{add_layer} within your current
-\code{add_layer} call, thus creating a subgroup layer. \code{tplyr} understands that the subgroup is a child on the initial group
-and handles it appropriately, from which you can customize with modifier functions.
 }
 \examples{
 # Load in pipe

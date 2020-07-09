@@ -49,7 +49,9 @@ summaries the counts of different changes in states. See the "details" section b
   for in future releases (remember - this is an alpha release :))}
   \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are
   a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation,
-  variance, min, max, interquartile range, Q1, Q3, and missing value counts. But you can also add your own summaries using
+  variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation
+  of a descriptive statistc layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
+  You can change these summaries using \code{\link{set_format_strings}}, and you can also add your own summaries using
   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional sumamry statistics you want presented.}
   \item{Shift Layers}{\strong{NOTE:} Shift layers are not yet implemented. Expect this in a future release}
 }

@@ -30,16 +30,6 @@ t6 <- add_layers(t6, c6)
 t7 <- add_layers(t7, c7)
 
 
-test_that("Count layers are summarized without errors and warnings", {
-  expect_silent(build(t1))
-  expect_silent(build(t2))
-  expect_silent(build(t3))
-  expect_silent(build(t4))
-  expect_silent(build(t5))
-  expect_silent(build(t6))
-  expect_silent(build(t7))
-})
-
 test_that("Count layers are built as expected", {
   # Before the build there should only be 7 things in the layer
   # sort_vars, by, sort, where, target_var, and (sub)layers
@@ -71,8 +61,19 @@ test_that("Count layers are built as expected", {
   expect_equal(c7$target_var, quos(grp, cyl))
 
   expect_equal(c4$format_strings, f_str("xxx", n))
-  expect_equal(c5$include_total_row, FALSE)
+  expect_equal(c5$include_total_row, TRUE)
   expect_equal(c6$distinct_by, quo(cyl))
+})
+
+
+test_that("Count layers are summarized without errors and warnings", {
+  expect_silent(build(t1))
+  expect_silent(build(t2))
+  expect_silent(build(t3))
+  expect_silent(build(t4))
+  expect_silent(build(t5))
+  expect_silent(build(t6))
+  expect_silent(build(t7))
 })
 
 test_that("Count layers are processed as expected", {
@@ -88,29 +89,35 @@ test_that("Count layers are processed as expected", {
   expect_length(c1, 14)
   expect_length(c2, 14)
   expect_length(c3, 14)
-  expect_length(c4, 14)
+  expect_length(c4, 13)
   expect_length(c5, 14)
   # c6 will also have distinct_by so 15
   expect_length(c6, 15)
-  expect_length(c7, 14)
+  expect_length(c7, 12)
 
-  expect_equal(dim(c1$numeric_data), c(12, 4))
-  expect_equal(dim(c2$numeric_data), c(21, 5))
-  expect_equal(dim(c3$numeric_data), c(39, 6))
-  expect_equal(dim(c4$numeric_data), c(39, 6))
-  expect_equal(dim(c5$numeric_data), c(36, 6))
-  expect_equal(dim(c6$numeric_data), c(6, 4))
-  expect_equal(dim(c7$numeric_data), c(0, 0))
+  expect_equal(dim(c1$numeric_data), c(9, 4))
+  expect_equal(dim(c2$numeric_data), c(18, 5))
+  expect_equal(dim(c3$numeric_data), c(36, 6))
+  expect_equal(dim(c4$numeric_data), c(36, 6))
+  expect_equal(dim(c5$numeric_data), c(39, 6))
+  expect_equal(dim(c6$numeric_data), c(3, 4))
+  expect_equal(dim(c7$numeric_data), c(34, 5))
 
-  expect_equal(dim(c1$formatted_data), c(4, 4))
-  expect_equal(dim(c2$formatted_data), c(7, 5))
-  expect_equal(dim(c3$formatted_data), c(13, 6))
-  expect_equal(dim(c4$formatted_data), c(13, 6))
-  expect_equal(dim(c5$formatted_data), c(12, 6))
-  expect_equal(dim(c6$formatted_data), c(2, 4))
-  expect_equal(dim(c6$formatted_data), c(4, 4))
+  expect_equal(dim(c1$formatted_data), c(3, 4))
+  expect_equal(dim(c2$formatted_data), c(6, 5))
+  expect_equal(dim(c3$formatted_data), c(12, 6))
+  expect_equal(dim(c4$formatted_data), c(12, 6))
+  expect_equal(dim(c5$formatted_data), c(13, 6))
+  expect_equal(dim(c6$formatted_data), c(1, 4))
+  expect_equal(dim(c6$formatted_data), c(1, 4))
 
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
+  expect_true(all(nchar(unlist(c2$formatted_data[, 3:5])) == 11))
+  expect_true(all(nchar(unlist(c3$formatted_data[, 4:6])) == 11))
   expect_true(all(nchar(unlist(c4$formatted_data[, 5:6])) == 3))
+  expect_true(all(nchar(unlist(c5$formatted_data[, 4:6])) == 11))
   expect_true(all(nchar(unlist(c6$formatted_data[, 3:4])) == 10))
+  expect_true(all(nchar(unlist(c7$formatted_data[, 3:5])) == 10))
+
+
 })

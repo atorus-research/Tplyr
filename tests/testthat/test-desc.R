@@ -14,24 +14,24 @@ t5 <- tplyr_table(mtcars, gear)
 d1 <- group_desc(t1, mpg)
 d2 <- group_desc(t2, mpg, by = am)
 d3 <- group_desc(t3, mpg, by = vars(am, vs))
-# d4 <- group_desc(t4, mpg) %>%
-#   set_custom_summaries(mean_squared = mean(mpg, na.rm=TRUE)**2) %>%
-#   set_format_strings(
-#     "Mean Squared" = f_str("xx.xx", mean_squared)
-#   )
+d4 <- group_desc(t4, mpg) %>%
+  set_custom_summaries(mean_squared = mean(mpg, na.rm=TRUE)**2) %>%
+  set_format_strings(
+    "Mean Squared" = f_str("xx.xx", mean_squared)
+  )
 d5 <- group_desc(t5, vars(mpg, gear))
 
 t1 <- add_layers(t1, d1)
 t2 <- add_layers(t2, d2)
 t3 <- add_layers(t3, d3)
-# t4 <- add_layers(t4, d4)
+t4 <- add_layers(t4, d4)
 t5 <- add_layers(t5, d5)
 
 test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t1))
   expect_silent(build(t2))
   expect_silent(build(t3))
-  # expect_silent(build(t4))
+  expect_silent(build(t4))
   expect_silent(build(t5))
 })
 
@@ -39,6 +39,6 @@ test_that("group_desc are built as expected", {
   expect_length(d1, 6)
   expect_length(d2, 6)
   expect_length(d3, 6)
-  # expect_length(d4, 6)
+  expect_length(d4, 6)
   expect_length(d5, 6)
 })
