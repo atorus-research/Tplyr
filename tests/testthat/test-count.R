@@ -82,7 +82,7 @@ test_that("Count layers are processed as expected", {
   build(t4)
   build(t5)
   build(t6)
-  #build(t7)
+  build(t7)
 
   # After the build there should be 14 things in the layer
   expect_length(c1, 14)
@@ -92,7 +92,7 @@ test_that("Count layers are processed as expected", {
   expect_length(c5, 14)
   # c6 will also have distinct_by so 15
   expect_length(c6, 15)
-  #expect_length(c7, 14)
+  expect_length(c7, 14)
 
   expect_equal(dim(c1$numeric_data), c(12, 4))
   expect_equal(dim(c2$numeric_data), c(21, 5))
@@ -100,7 +100,7 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c4$numeric_data), c(39, 6))
   expect_equal(dim(c5$numeric_data), c(36, 6))
   expect_equal(dim(c6$numeric_data), c(6, 4))
-  #expect_equal(dim(c7$numeric_data), c(0, 0))
+  expect_equal(dim(c7$numeric_data), c(0, 0))
 
   expect_equal(dim(c1$formatted_data), c(4, 4))
   expect_equal(dim(c2$formatted_data), c(7, 5))
@@ -108,7 +108,7 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c4$formatted_data), c(13, 6))
   expect_equal(dim(c5$formatted_data), c(12, 6))
   expect_equal(dim(c6$formatted_data), c(2, 4))
-  #expect_equal(dim(c6$formatted_data), c(4, 4))
+  expect_equal(dim(c6$formatted_data), c(4, 4))
 
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
   expect_true(all(nchar(unlist(c4$formatted_data[, 5:6])) == 3))
