@@ -1,6 +1,6 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
-#' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym :=
+#' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
 #' @importFrom tidyr pivot_longer pivot_wider
@@ -8,7 +8,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename
+#' @importFrom dplyr everything rename mutate_at
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
@@ -27,7 +27,8 @@ NULL
 #'
 #' \describe{
 #' \item{\strong{Denominators}}{n (\%) counts often vary based on the summary being performed. 'Tplyr' allows you to easily control what denominators
-#' are used based on a few common scenarios, or additionally you can provide a custom dataset used in calculation}
+#' are used based on a few common scenarios, or additionally you can provide a custom dataset used in calculation
+#' \strong(NOTE:) This feature is still being developed and is not yet implemented}
 #' \item{\strong{String formatting}}{Different reports warrant different presentation of your strings. Programming this can get tedious, as you always
 #' want to make sure that your decimals properly align. 'Tplyr' abstracts this process away and provides you with a simple format to specify
 #' how you want your data presented}

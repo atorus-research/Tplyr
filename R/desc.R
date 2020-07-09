@@ -6,6 +6,17 @@
 #' @export
 #' @noRd
 process_summaries.desc_layer <- function(x, ...) {
+
+  if (!has_format_strings(x)) {
+    x <- set_format_strings(x,
+      "n"        = f_str("xx", n),
+      "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
+      "Median"   = f_str("xx.x", median),
+      "Q1, Q3"   = f_str("xx, xx", q1, q3),
+      "Min, Max" = f_str("xx, xx", min, max),
+      "Missing"  = f_str("xx", missing)
+    )
+  }
   # Execute in the layer environment
   evalq({
     # trans_sums is the data that will pass forward to be formatted
@@ -71,6 +82,7 @@ process_summaries.desc_layer <- function(x, ...) {
 #' @noRd
 #' @export
 process_formatting.desc_layer <- function(x, ...) {
+
   # Execute in the layer environment
   evalq({
     # Initialize list for formatted, transposed outputs

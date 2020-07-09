@@ -35,6 +35,15 @@ add_total_row <- function(e) {
 #'
 #' @return The layer object with
 #' @export
+#'
+#' @examples
+#'
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_distinct_by(carb)
+#'   ) %>%
+#'   build()
 set_distinct_by <- function(e, distinct_by) {
   distinct_by <- enquo(distinct_by)
 

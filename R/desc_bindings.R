@@ -5,7 +5,6 @@
 #' @param e Environment to extract custom summaries from
 #'
 #' @return \code{custom_summaries} binding in the layer environment
-#' @export
 get_custom_summaries <- function(e) {
   # If the custom_summaries object exists in the layer environment then grab it
   if (exists("custom_summaries", envir=e)){
@@ -26,6 +25,19 @@ get_custom_summaries <- function(e) {
 #' \strong{NOTE:} This is likely to change in the future, as it currently does not support descriptive statistic layers with two
 #' target variables provided.
 #'
+#' @details
+#' An important, yet not immediately obvious, part of using \code{set_custom_summaries} is to understand the
+#' link between the name paramters you set in \code{set_custom_summaries} and the names called in \code{\link{f_str}} objects
+#' within \code{\link{set_format_strings}}. In \code{\link{f_str}}, after you supply the string format you'd like your
+#' numbers to take, you specify the summaries that fill those strings.
+#'
+#' When you go to set your format strings, the name you use to declare a summary in \code{set_custom_summaries} is the same name
+#' that you use in your \code{\link{f_str}} call. This is necessary because \code{\link{set_format_strings}} needs some means
+#' of putting two summaries in the same value, and setting a row label for the summary being performed.
+#'
+#' Review the examples to see this put into practice. Note the relationship between the name created in \code{set_custom_summary}
+#' and the name used in \code{\link{set_format_strings}} within the \code{\link{f_str}} call
+#'
 #' @param e \code{desc} layer the summaries should be bound to
 #' @param ... Named parameters containing syntax to be used in a call to \code{dplyr::summarize()}
 #'
@@ -34,7 +46,17 @@ get_custom_summaries <- function(e) {
 #'
 #' @examples
 #'
-#' # TBD
+#' tplyr_table(iris, Species) %>%
+#'   add_layer(
+#'     group_desc(Sepal.Length, by = "Sepal Length") %>%
+#'       set_custom_summaries(
+#'         geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]), na.rm=TRUE) / length(Sepal.Width))
+#'       ) %>%
+#'       set_format_strings(
+#'         'Geometric Mean' = f_str('xx.xx', geometric_mean)
+#'       )
+#'   ) %>%
+#'   build()
 set_custom_summaries <- function(e, ...){
   # Make sure you're modifying a tplyr_layer
   assert_inherits_class(e, 'desc_layer')
@@ -57,4 +79,5 @@ set_custom_summaries <- function(e, ...){
 
   # Bind to the layer environment
   env_bind(e, custom_summaries = params)
+  e
 }

@@ -13,11 +13,6 @@
 #' The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
 #' construct your layer within the \code{layer} paramater.
 #'
-#' Sometimes layers may contain subgroups. For example, a total count row can be viewed as a separate layer with sub-group counts
-#' intermingled between each total group (for example, within adverse event tables). \code{add_layer} and the \code{tplyr_layer}
-#' objects handle this by creating \code{tplyr_subgroup_layer} objects. This is as simple as using \code{add_layer} within your current
-#' \code{add_layer} call, thus creating a subgroup layer. \code{tplyr} understands that the subgroup is a child on the initial group
-#' and handles it appropriately, from which you can customize with modifier functions.
 #'
 #' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
 #' @param layer A layer construction function and associated modifier functionns
@@ -128,7 +123,9 @@ add_layers <- function(parent, ...) {
 #'   for in future releases (remember - this is an alpha release :))}
 #'   \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are
 #'   a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation,
-#'   variance, min, max, interquartile range, Q1, Q3, and missing value counts. But you can also add your own summaries using
+#'   variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation
+#'   of a descriptive statistc layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
+#'   You can change these summaries using \code{\link{set_format_strings}}, and you can also add your own summaries using
 #'   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional sumamry statistics you want presented.}
 #'   \item{Shift Layers}{\strong{NOTE:} Shift layers are not yet implemented. Expect this in a future release}
 #' }
