@@ -2,7 +2,7 @@
 title: "Tplyr (alpha release)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{tplyr}
+  %\VignetteIndexEntry{Tplyr (alpha release)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -468,10 +468,12 @@ Wouldn't it be nice if you had some resources for where to take it from here? Oh
 We've gotten a lot built into Tplyr, but there's a ways to go. Here are some of the things that we're planning to implement but don't have ready yet:
 
 - Modifying denominators used in counts. They're currently calculated based on treatment group on the fly. There are a lot of ways to do this, and we plan to offer some other options and the ability to provide your own set of denominators.
+- We plan to open up methods to add new columns to a layer, where you can add calculations like risk difference (possibly a set of defaults).  
 - Automated decimal precision calculation. Sometimes the decimal precision should be calculated based on data as collected. We're planning an interface for this, so you could do things like mean collected precision + 1, SD is collected precision +2, etc. This could interface with your 'by' group variables to determine the subset.
 - Headers only support one layer of nesting. We'd like to generalize this. 
 - Allow automated collected of header N values and incorporation in column headers
 - Custom summaries don't support multiple variable summaries (i.e. target_var = vars(var1, var2)). This will require an interface update but offer the capability without much greater difficulty. 
+- Indented nesting formatting for count layers when 2 variables are supplied (i.e. target_var = vars(var1, var2)) - for AE tables with Preferred Term within Body System. 
 
 And more.
 
