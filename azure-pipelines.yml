@@ -8,10 +8,10 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-container: 'rocker/tidyverse:latest'
+container: 'rocker/tidyverse:3.6.2'
 
 steps:
-- script: Rscript -e 'R.version'
+- script: Rscript -e 'sessionInfo()'
   displayName: 'R Version'
 
 - script: sudo Rscript -e 'devtools::check()'
