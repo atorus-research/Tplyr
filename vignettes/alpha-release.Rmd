@@ -15,10 +15,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, include=FALSE}
-library(Tplyr)
 library(tidyverse)
 library(haven)
 library(magrittr)
+library(Tplyr)
 adsl <- read_xpt("adsl.xpt")
 adae <- read_xpt("adae.xpt")
 ```

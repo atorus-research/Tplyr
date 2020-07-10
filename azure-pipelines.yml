@@ -11,7 +11,7 @@ pool:
 container: 'rocker/tidyverse:latest'
 
 steps:
-- script: Rscript -e 'R.version'
+- script: Rscript -e 'sessionInfo()'
   displayName: 'R Version'
 
 - script: sudo Rscript -e 'devtools::check()'
