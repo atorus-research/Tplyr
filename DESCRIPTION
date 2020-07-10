@@ -38,6 +38,7 @@ Suggests:
     testthat (>= 2.1.0),
     haven (>= 2.2.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    huxtable
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
