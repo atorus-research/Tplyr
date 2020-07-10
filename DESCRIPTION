@@ -39,6 +39,7 @@ Suggests:
     haven (>= 2.2.0),
     knitr,
     rmarkdown,
-    huxtable
+    huxtable,
+    tidyverse
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
