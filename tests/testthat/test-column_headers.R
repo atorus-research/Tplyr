@@ -30,7 +30,7 @@ test_that("Header strings must have the same number of columns as the data frame
   err <- "Number of columns provided"
   expect_error(add_column_headers(iris2, less_no_spanner), err)
   expect_error(add_column_headers(iris2, more_no_spanner), err)
-  expect_error(add_column_headers(iris2, less_spanner), "Malformed column header string")
+  expect_error(add_column_headers(iris2, less_spanner), err)
   expect_error(add_column_headers(iris2, more_spanner), err)
   expect_error(add_column_headers(iris2, nested_less), err)
   expect_error(add_column_headers(iris2, nested_more), err)

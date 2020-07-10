@@ -19,8 +19,8 @@ library(Tplyr)
 library(tidyverse)
 library(haven)
 library(magrittr)
-adsl <- read_xpt("/home/mstackhouse/cdisc_pilot_data/adsl.xpt")
-adae <- read_xpt("/home/mstackhouse/cdisc_pilot_data/adae.xpt")
+adsl <- read_xpt("adsl.xpt")
+adae <- read_xpt("adae.xpt")
 ```
 
 # The Alpha Release
@@ -110,11 +110,11 @@ t
 
 Users of `Tplyr` interface with `tplyr_layer` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `desc` layers create descriptive statistics, and `shift` layers summaries the counts of different changes in states.
 
-- *Count Layers*
+- **Count Layers**
   - Count layers allow you to easily create summaries based on counting values with a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. _NOTE: Currently, % values are calculated on the fly using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility for in future releases (remember - this is an alpha release :))_
-- *Descriptive Statistics Layers*
+- **Descriptive Statistics Layers**
   - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into `tplyr` already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional summary statistics you want presented.
-- *Shift Layers*
+- **Shift Layers**
   - _NOTE: Shift layers are not yet implemented. Expect this in a future release_.
 
 ```{r tplyr_layer}
