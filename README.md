@@ -4,6 +4,8 @@
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/github/license/atorus-research/tplyr">](https://github.com/atorus-research/pharmaRTF/blob/master/LICENSE)
 
+# The Alpha Release
+This is an early preview of our new package, `Tplyr`. This package is still in development, and we're actively working on new features. We decided to release this version early to get community feedback. If you find a bug in our code - please report it! If you'd like to see some particular feature - let us know! The more feedback we collect, the better the end product will be when we publish the first version on CRAN. 
 
 # Purpose
 `Tplyr` was designed as a declarative method for creating tables used in clinical pharmaceutical reports. The end result of rendering a table is an object that can be writen out for inclusion in a report. The package was written with a focus on readability and a workflow that can be understanded by a novice R programmer.
@@ -17,9 +19,6 @@
 ```
 devtools::install_github("atorus-research/tplyr")
 ```
-
-# The Alpha Release
-This is an early preview of our new package, `Tplyr`. This package is still in development, and we're actively working on new features. We decided to release this version early to get community feedback. If you find a bug in our code - please report it! If you'd like to see some particular feature - let us know! The more feedback we collect, the better the end product will be when we publish the first version on CRAN. 
 
 # What is Tplyr? 
 
@@ -132,11 +131,11 @@ layer_output: 0
 
 Users of `Tplyr` interface with `tplyr_layer` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `desc` layers create descriptive statistics, and `shift` layers summaries the counts of different changes in states.
 
-- *Count Layers*
+- **Count Layers**
   - Count layers allow you to easily create summaries based on counting values with a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. _NOTE: Currently, % values are calculated on the fly using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility for in future releases (remember - this is an alpha release :))_
-- *Descriptive Statistics Layers*
+- **Descriptive Statistics Layers**
   - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into `tplyr` already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional summary statistics you want presented.
-- *Shift Layers*
+- **Shift Layers**
   - _NOTE: Shift layers are not yet implemented. Expect this in a future release_.
 
 ```r
