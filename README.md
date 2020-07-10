@@ -628,31 +628,32 @@ t %>%
   add_column_headers(" |  | Placebo | Xanomeline (Low) | Xanomeline (High) | Total") %>% 
   apply_row_masks() %>% 
   huxtable::as_hux(add_colnames=FALSE)
-  
-                                                                                       Placebo        Xanomeline (Low)   Xanomeline (High)   Total         
-                                      Sex              F                              53 ( 62%)      40 ( 48%)          50 ( 60%)           143 ( 56%)    
-                                                       M                              33 ( 38%)      44 ( 52%)          34 ( 40%)           111 ( 44%)    
-                                      Age Categories   n                              86             84                 84                  254           
-                                                       Mean (SD)                      75.2 ( 8.59)   74.4 ( 7.89)       75.7 ( 8.29)        75.1 ( 8.25)  
-                                                       Median                         76.0           76.0               77.5                77.0          
-                                                       Q1, Q3                         69, 82         71, 80             71, 82              70, 81        
-                                                       Min, Max                       52, 89         56, 88             51, 88              51, 89        
-                                                       Missing                        0              0                  0                   0             
-                                      Race             AMERICAN INDIAN OR ALASKA      0 ( 0%)        1 ( 1%)            0 ( 0%)             1 ( 0%)       
-                                                       NATIVE                                                                                             
-                                                       BLACK OR AFRICAN AMERICAN      8 ( 9%)        9 ( 11%)           6 ( 7%)             23 ( 9%)      
-                                                       WHITE                          78 ( 91%)      74 ( 88%)          78 ( 93%)           230 ( 91%)    
-                                      Ethnicity        HISPANIC OR LATINO             3 ( 3%)        3 ( 4%)            6 ( 7%)             12 ( 5%)      
-                                                       NOT HISPANIC OR LATINO         83 ( 97%)      81 ( 96%)          78 ( 93%)           242 ( 95%)    
-                                      Weight           n                              86             84                 84                  254           
-                                                       Mean (SD)                      62.8 (12.77)   70.0 (14.65)       67.3 (14.12)        66.6 (14.13)  
-                                                       Median                         60.5           69.2               64.9                66.7          
-                                                       Q1, Q3                         54, 74         57, 80             56, 77              55, 77        
-                                                       Min, Max                       34, 86         42, 108            45, 106             34, 108       
-                                                       Missing                        0              0                  1                   1             
 
-Column names: row_label1, row_label2, var1_Placebo, var1_Xanomeline High Dose, var1_Xanomeline Low Dose, var1_Total
 ```
+
+|||||||
+|--- |--- |--- |--- |--- |--- |
+|||Placebo|Xanomeline (Low)|Xanomeline (High)|Total|
+|Sex|F|53 ( 62%)|40 ( 48%)|50 ( 60%)|143 ( 56%)|
+||M|33 ( 38%)|44 ( 52%)|34 ( 40%)|111 ( 44%)|
+|Age Categories|n|86|84|84|254|
+||Mean (SD)|75.2 ( 8.59)|74.4 ( 7.89)|75.7 ( 8.29)|75.1 ( 8.25)|
+||Median|76.0|76.0|77.5|77.0|
+||Q1, Q3|69, 82|71, 80|71, 82|70, 81|
+||Min, Max|52, 89|56, 88|51, 88|51, 89|
+||Missing|0|0|0|0|
+|Race|AMERICAN INDIAN OR ALASKA NATIVE|0 (  0%)|1 (  1%)|0 (  0%)|1 (  0%)|
+||BLACK OR AFRICAN AMERICAN|8 (  9%)|9 ( 11%)|6 (  7%)|23 (  9%)|
+||WHITE|78 ( 91%)|74 ( 88%)|78 ( 93%)|230 ( 91%)|
+|Ethnicity|HISPANIC OR LATINO|3 (  3%)|3 (  4%)|6 (  7%)|12 (  5%)|
+||NOT HISPANIC OR LATINO|83 ( 97%)|81 ( 96%)|78 ( 93%)|242 ( 95%)|
+|Weight|n|86|84|84|254|
+||Mean (SD)|62.8 (12.77)|70.0 (14.65)|67.3 (14.12)|66.6 (14.13)|
+||Median|60.5|69.2|64.9|66.7|
+||Q1, Q3|54, 74|57, 80|56, 77|55, 77|
+||Min, Max|34, 86|42, 108|45, 106|34, 108|
+||Missing|0|0|1|1|
+
 
 And just like that - you have a huxtable table ready to go. 
 
