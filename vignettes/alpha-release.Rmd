@@ -373,7 +373,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 What about having different by group variables? So far I've only demonstrated `by` to present row label text. It additionally allows you to use grouping variables as well:
 
-```{r by_variables}
+```{r by_variable1}
 tplyr_table(adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = vars("Age categories", SEX))
@@ -383,7 +383,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 Grouping by columns? We've got that to - but this is actually specified at the `tplyr_table` level. Why? It gets complicated if layers don't have consistent columns, and stacking them together would get complex. Similarly, assuming you'd want the `cols` argument the same between layers, it's more tedious to specify it on every layer constructor. 
 
-```{r by_variables}
+```{r by_variables2}
 tplyr_table(adsl, TRT01P, cols=SEX) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories")
