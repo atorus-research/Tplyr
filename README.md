@@ -14,10 +14,10 @@ This is an early preview of our new package, `Tplyr`. This package is still in d
 
 ## Installation
 
-`tplyr` isn't on CRAN yet. You can download it from GitHub for now.
+`Tplyr` isn't on CRAN yet. You can download it from GitHub for now.
 
 ```
-devtools::install_github("atorus-research/tplyr")
+devtools::install_github("atorus-research/Tplyr")
 ```
 
 # What is Tplyr? 
@@ -87,7 +87,7 @@ A `Tplyr` table is constructed of two main objects, a `table_table` object and `
 
 ## The `tplyr_table` Object
 
-The `tplyr_table` object is the main container upon which a `tplyr` table is constructed. `tplyr` tables are made up of
+The `tplyr_table` object is the main container upon which a `Tplyr` table is constructed. `Tplyr` tables are made up of
 one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table` object contains
 those layers, and the general data, metadata, and logic necessary.
 
@@ -134,7 +134,7 @@ Users of `Tplyr` interface with `tplyr_layer` objects using the `group_<type>` f
 - **Count Layers**
   - Count layers allow you to easily create summaries based on counting values with a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. _NOTE: Currently, % values are calculated on the fly using header N values calculated from the target dataset. This is something that we will be adding enhanced flexibility for in future releases (remember - this is an alpha release :))_
 - **Descriptive Statistics Layers**
-  - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into `tplyr` already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional summary statistics you want presented.
+  - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into `Tplyr` already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional summary statistics you want presented.
 - **Shift Layers**
   - _NOTE: Shift layers are not yet implemented. Expect this in a future release_.
 
@@ -170,7 +170,7 @@ Layer(s): 0
 
 ## Adding Layers to a Table
 
-Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, `tplyr` is built around tidy syntax, so all of our object construction supports piping with [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) (i.e. `%>%`). 
+Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, `Tplyr` is built around tidy syntax, so all of our object construction supports piping with [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) (i.e. `%>%`). 
 
 There are two ways to add layers to a `tplyr_table`: `add_layer` and `add_layers`. The difference is that `add_layer` allows you to construct the layer within the call to `add_layer`, whereas with `add_layers` you can attach multiple layers that have already been constructed upfront:
 
