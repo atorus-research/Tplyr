@@ -210,7 +210,7 @@ construct_count_string <- function(.n, .total, count_fmt = NULL,
 factor_treat_var <- function(x) {
   evalq({
 
-    built_target[, as_name(treat_var)] <- as.factor(built_target[, as_name(treat_var)])
+    built_target[, as_name(treat_var)] <- as.factor(unlist(built_target[, as_name(treat_var)]))
 
   }, envir = env_parent(x))
 }

@@ -1,3 +1,5 @@
 ^Tplyr\.Rproj$
 ^\.Rproj\.user$
 ^azure-pipelines\.yml$
+^\.github$
+^\.travis\.yml$
