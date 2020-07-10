@@ -36,6 +36,7 @@ Imports:
     tibble (>= 3.0.1)
 Suggests: 
     testthat (>= 2.1.0),
+    haven (>= 2.2.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr

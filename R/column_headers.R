@@ -207,7 +207,11 @@ get_bottom_row <- function(s, string_segments) {
   }
 
   # Last elements of the bottom row
-  bottom_row[[i+1]] <- str_sub(s, sect_locs['end']+2)
+  if (nchar(s) == unname(sect_locs['end'])) {
+    bottom_row <- head(bottom_row, -1)
+  } else{
+    bottom_row[[i+1]] <- str_sub(s, sect_locs['end']+2)
+  }
 
   # Build the final text string
   bottom_row_text <- paste(map_chr(bottom_row, trim_bars), collapse="|")
