@@ -83,7 +83,7 @@ match_exact <- function(var_list) {
   assert_inherits_class(var_list, "quosures")
   # Return the variable names as a character string in appropriate tidyselect format
   out <- map_chr(var_list, as_label)
-  out[out != 'NULL'] # Exclude NULL quosures
+  unname(out[out != 'NULL']) # Exclude NULL quosures and remove names
 }
 
 #' Organize row labels within a layer output
