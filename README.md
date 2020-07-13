@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/atorus-research/tplyr.svg?branch=master)](https://travis-ci.com/atorus-research/tplyr)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/github/license/atorus-research/tplyr">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 
 # The Alpha Release

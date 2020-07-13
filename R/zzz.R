@@ -15,9 +15,12 @@
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble
+#' @importFrom lifecycle deprecate_soft
 NULL
 
 #' A grammar of summary data for clinical reports
+#'
+#' \lifecycle{experimental}
 #'
 #' 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can
 #' often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around

@@ -6,12 +6,14 @@
 \alias{Tplyr-package}
 \title{A grammar of summary data for clinical reports}
 \description{
+\lifecycle{experimental}
+}
+\details{
 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can
 often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around
 continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting
 this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation
-}
-\details{
+
 'Tplyr' takes this process a few steps further by abstracting away all of the programming that goes into proper presentation, which
 is where even more of the time is spent when programming these reports. For example, 'Tplyr' allows you to easily control:
 
