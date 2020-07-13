@@ -13,7 +13,7 @@ tplyr_debug(status)
 Nothing
 }
 \description{
-Toggle 'Tplyr' debug messaging
+\strong{NOTE:} This feature is being questioned and is not currently being utilized.
 }
 \examples{
 tplyr_debug(TRUE)

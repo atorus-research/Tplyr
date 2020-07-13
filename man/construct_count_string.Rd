@@ -4,7 +4,13 @@
 \alias{construct_count_string}
 \title{Format n counts for display in count_layer}
 \usage{
-construct_count_string(.n, .total, count_fmt = NULL)
+construct_count_string(
+  .n,
+  .total,
+  count_fmt = NULL,
+  max_layer_length,
+  max_n_width
+)
 }
 \arguments{
 \item{.n}{Vector of counts for each cell}
@@ -13,10 +19,15 @@ construct_count_string(.n, .total, count_fmt = NULL)
 denominator that column is based off of.}
 
 \item{count_fmt}{The f_str object the strings are formatted around.}
+
+\item{max_layer_length}{The maximum layer length of the whole table}
+
+\item{max_n_width}{The maximum length of the actual numeric counts}
 }
 \value{
 A tibble replacing the originial counts
 }
 \description{
-Format n counts for display in count_layer
+left padding = (maximum_n_width - this_n_width)
+right padding = (maximum_layer_width - this_layer_width[after left padding])
 }

@@ -244,6 +244,8 @@ assert_is_table <- function(object) {
 #' @export
 #'
 #' @examples
+#' library(rlang)
+#'
 #' q <- quo(a)
 #' quo_class(q)
 #'
@@ -256,3 +258,5 @@ quo_class <- function(q) {
   assert_that(is_quosure(q), msg = "Object `q` is not a quosure")
   class(quo_get_expr(q))
 }
+
+

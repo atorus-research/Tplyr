@@ -9,8 +9,12 @@
 treatment_group_build <- function(table) {
   output <- evalq({
     # Dummies for treatment groups added to target dataset
-    built_target <- target
-    built_pop_data <- pop_data
+    built_target <- target %>%
+      filter(!!table_where) %>%
+      mutate(!!treat_var := as.character(!!treat_var))
+    built_pop_data <- pop_data %>%
+      filter(!!table_where) %>%
+      mutate(!!pop_treat_var := as.character(!!pop_treat_var))
     for (grp in seq(along = treat_grps)) {
       built_target <- built_target %>%
         filter(!!treat_var %in% treat_grps[[grp]]) %>%

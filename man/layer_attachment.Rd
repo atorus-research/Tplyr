@@ -2,18 +2,25 @@
 % Please edit documentation in R/layering.R
 \name{add_layer}
 \alias{add_layer}
+\alias{add_layers}
 \title{Attach a layer to a \code{tplyr_table} object}
 \usage{
 add_layer(parent, layer)
+
+add_layers(parent, ...)
 }
 \arguments{
 \item{parent}{A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object}
 
 \item{layer}{A layer construction function and associated modifier functionns}
+
+\item{...}{Layers to be added}
 }
 \value{
 A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} with a new layer inserted into the \code{layer}
   binding
+
+
 }
 \description{
 \code{add_layer} inserts a \code{tplyr_layer} into the \code{layers} container of a \code{tplyr_table} object. This allows
@@ -25,29 +32,35 @@ layers are isolated and independent of one another - but each of these layers ar
 isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
 The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
 construct your layer within the \code{layer} paramater.
-
-Sometimes layers may contain subgroups. For example, a total count row can be viewed as a separate layer with sub-group counts
-intermingled between each total group (for example, within adverse event tables). \code{add_layer} and the \code{tplyr_layer}
-objects handle this by creating \code{tplyr_subgroup_layer} objects. This is as simple as using \code{add_layer} within your current
-\code{add_layer} call, thus creating a subgroup layer. \code{tplyr} understands that the subgroup is a child on the initial group
-and handles it appropriately, from which you can customize with modifier functions.
 }
 \examples{
+# Load in pipe
+library(magrittr)
+
 ## Single layer
-t <- tplyr_table(iris, Sepal.Width) \%>\%
+t <- tplyr_table(mtcars, cyl) \%>\%
   add_layer(
-    group_desc(target_var=Species)
+    group_desc(target_var=mpg)
   )
 
 # Layer with sub layer
-t <- tplyr_table(iris, Sepal.Width) \%>\%
+t <- tplyr_table(mtcars, cyl)\%>\%
   add_layer(
-    group_desc(target_var=Species) \%>\%
+    group_desc(target_var=cyl) \%>\%
       add_layer(
-        group_count(target_var=Sepal.Width)
+        group_count(target_var=gear)
       )
   )
+
+# Using add_layers
+t <- tplyr_table(mtcars, cyl)
+l1 <- group_desc(t, target_var=mpg)
+l2 <- group_count(t, target_var=cyl)
+
+t <- add_layers(t, l1, l2)
+
 }
 \seealso{
 [tplyr_table(), tplyr_layer(), group_count(), group_desc(), group_shift()]
 }
+\concept{Layer attachment}

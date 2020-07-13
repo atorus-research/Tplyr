@@ -9,6 +9,8 @@
 #' @rdname target_var
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -37,12 +39,14 @@ set_target_var <- function(layer, target_var) {
 #'
 #' @param layer A \code{tplyr_layer} object
 #'
-#' @return For \code{tplyr_by}, the by binding of the supplied layer. For
+#' @return For \code{get_by}, the by binding of the supplied layer. For
 #'   \code{set_by} the modified layer environment.
 #' @export
 #' @rdname by
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -68,38 +72,23 @@ set_by <- function(layer, by) {
   layer
 }
 
-#' Set or return where layer binding
-#'
-#' @param layer A \code{tplyr_layer} object.
-#'
-#' @return For \code{where}, the where binding of the supplied object.
-#'   For \code{set_where}, the modified object
 #' @export
 #' @rdname where
-#'
-#' @examples
-#' iris$Species2 <- iris$Species
-#' lay <- tplyr_table(iris, Species) %>%
-#'   group_count(Species) %>%
-#'   set_where(Petal.Length > 3)
-get_where <- function(layer) {
-  env_get(layer, "where")
+get_where.tplyr_layer <- function(obj) {
+  env_get(obj, "where")
 }
 
-#' @param where A function detailing the subset
-#'
-#' @return
 #' @export
 #' @rdname where
-set_where <- function(layer, where) {
+set_where.tplyr_layer <- function(obj, where) {
   where <- enquo(where)
 
   assert_that(is_logical_or_call(where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
-  env_bind(layer, where = where)
+  env_bind(obj, where = where)
 
-  layer
+  obj
 }
 
 #' Return or set sort_vars layer binding
@@ -112,6 +101,9 @@ set_where <- function(layer, where) {
 #' @rdname sort_vars
 #'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -146,6 +138,9 @@ set_sort_vars <- function(layer, sort_vars) {
 #' @rdname sort
 #'
 #' @examples
+#' # Load in the pipe
+#' library(magrittr)
+#'
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
@@ -167,36 +162,3 @@ set_layer_sort <- function(layer, sort) {
 
   layer
 }
-
-#' Set or return layer formatter
-#'
-#' @param layer A \code{tplyr_layer} object
-#'
-#' @return For \code{layer_formatter}, the formetter function bound to the
-#'   supplied layer. For \code{set_layer_formatter} the modified layer environment.
-#' @export
-#' @rdname formatter
-#'
-#' @examples
-#' iris$Species2 <- iris$Species
-#' lay <- tplyr_table(iris, Species) %>%
-#'   group_count(Species) %>%
-#'   set_layer_formatter(as.numeric)
-get_layer_formatter <- function(layer) {
-  env_get(layer, "formatter")
-}
-
-#' @param formatter A function used to create the string formats for the
-#'   resulting numbers in output presentation.
-#'
-#' @export
-#' @rdname formatter
-set_layer_formatter <- function(layer, formatter) {
-  assert_that(is_function(formatter),
-              msg = "formatter must be a function")
-
-  env_bind(layer, formatter = formatter)
-
-  layer
-}
-

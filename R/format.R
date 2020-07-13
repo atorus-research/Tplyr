@@ -2,20 +2,41 @@
 
 #' Create a \code{f_str} object
 #'
-#' The \code{f_str} object carries information that powers a significant amount of layer processing. The \code{format_string} parameter is
-#' capable of controlling display of a data point and decimal precision. The variables provided in \code{...} control the values from the
+#' \code{f_str} objects are intended to be used within the function \code{set_format_strings}. The \code{f_str} object carries
+#' information that powers a significant amount of layer processing. The \code{format_string} parameter is capable of controlling
+#' display of a data point and decimal precision. The variables provided in \code{...} control the values from the
 #' data the output a particular formatted display value.
+#'
+#' @details
+#' Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
+#' strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
+#' before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
+#' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
+#' flexibility to the user.
+#'
+#' The display of the numbers in the resulting dataframe is controlled by the \code{format_string} parameter. Just like dummy values
+#' may be presented on your mocks, this is specified by the user simply by providing a string of how you'd like your strings formatted,
+#' just replacing the numbers with x's. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'. 'Tplyr'
+#' does the work to get the numbers in the right place.
+#'
+#' To take things further, if you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
+#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)'. Note that you're able to provide different integer lengths and
+#' different decimal precision for the two values.
+#'
+#' The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
+#' slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
+#' to see the values \code{n} and (if desired) \code{pct}, which specifies the formatting for your n's and percent values.
+#' But in descriptive statistc layers, \code{f_str} parameters refer to the names of the summaries being performed,
+#' either by built in defaults, or custom summaries declared using \code{\link{set_custom_summaries}}.
+#' See \code{\link{set_format_strings}} for some more notes about layers specific implementation
 #'
 #' @param format_string The desired display format. X's indicate digits. On the left, the number of x's indicates the integer length. On the
 #' right, the number of x's controls decimal precision and rounding. Variables are inferred by any separation of the 'x' values other than a
 #' decimal.
 #' @param ... The variables to be formatted using the format specified in \code{format_string}.
+#' @param empty The string to display when the numeric data is not available
 #'
-#' @return A \code{f_str} object, built on a list with two elements:
-#' \describe{
-#' \item{\code{format_string}}{The specified format string for display}
-#' \item{\code{vars}}{A list of names containing the variables that will be used to created the formatted display string}
-#' }
+#' @return A \code{f_str} object
 #' @export
 #'
 #' @examples
@@ -87,8 +108,29 @@ separate_int_dig <- function(x){
   out
 }
 
-
 #' Set the format strings and associated summaries to be performed in a layer
+#'
+#' 'Tplyr' allows you extensive control over how strings are presented. \code{set_format_strings} allows you
+#' to apply these string formats to your layer. This behaves slightly differently between layers.
+#'
+#' In a count layer, you simply need to provide a single \code{\link{f_str}} object to specify how you want your
+#' n's (and possibly percents) formatted. In a descriptive statistic layer, \code{set_format_strings} allows you
+#' to do a couple more things:
+#' \itemize{
+#' \item{By naming paramters with character strings, those character strings become a row label in the resulting data frame}
+#' \item{The actual summaries that are performed come from the names used within the \code{\link{f_str}} calls}
+#' \item{Using multiple summaries (declared by your \code{\link{f_str}} calls) multiple summary values can appear within
+#' the same values. For example, to present mean (SD) like displays}
+#' }
+#'
+#' @details
+#' Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
+#' strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
+#' before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
+#' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
+#' flexibility to the user.
+#'
+#' See the \code{\link{f_str}} documentation for more details about how this implementation works.
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
@@ -97,8 +139,48 @@ separate_int_dig <- function(x){
 #' @export
 #'
 #' @examples
-#' #TBD
+#' # Load in pipe
+#' library(magrittr)
+#'
+#' # In a count layer
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_format_strings(f_str('xx (xx%)', n, pct))
+#'   ) %>%
+#'     build()
+#'
+#' # In a descriptive statistics layer
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(mpg) %>%
+#'       set_format_strings(
+#'         "n"        = f_str("xx", n),
+#'         "Mean (SD)"= f_str("xx.x", mean),
+#'         "SD" = f_str("xx.xx", sd),
+#'         "Median"   = f_str("xx.x", median),
+#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
+#'         "Min, Max" = f_str("xx, xx", min, max),
+#'         "Missing"  = f_str("xx", missing)
+#'       )
+#'   ) %>%
+#'   build()
+#'
 set_format_strings <- function(e, ...) {
+  UseMethod("set_format_strings")
+}
+
+
+#' Desc layer S3 method for set_format_strings
+#'
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#'
+#' @return
+#' @export
+#'
+#' @noRd
+set_format_strings.desc_layer <- function(e, ...) {
 
   # Pick off the ellpsis
   format_strings <- list(...)
@@ -134,8 +216,39 @@ set_format_strings <- function(e, ...) {
            summary_vars = vars(!!!summary_vars),
            keep_vars = vars(!!!keep_vars),
            trans_vars = vars(!!!trans_vars),
-           row_labels = row_labels
+           row_labels = row_labels,
+           max_length = max_format_length
     )
+  e
+}
+
+#' Set Count Layer String Format
+#'
+#' @param e Layer on which to bind format strings
+#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#'
+#' @return Returns the modified layer object.
+#' @export
+#'
+#' @examples
+#' # TBD
+set_format_strings.count_layer <- function(e, ...) {
+  # Grab the named parameters
+  params <- list(...)
+
+  # Count layers take only 1 format
+  assert_that(length(params) == 1, msg = "Count layers must have only 1 format string supplied")
+
+  # Grab out the supplied parameter
+  str <- params[[1]]
+
+  assert_has_class(str, "f_str")
+
+  assert_that(all(str$vars %in% c("n", "pct")),
+              msg = "f_str in a count_layer can only be n or pct")
+
+  env_bind(e, format_strings = str)
+
   e
 }
 
@@ -178,7 +291,7 @@ num_fmt <- function(val, i, fmt=NULL) {
   digits <- fmt$settings[[i]]['dig']
 
   # Formats summary stat strings to align display correctly
-  if (is.na(val)) return(empty)
+  if (is.na(val)) return(fmt$empty)
 
   # Set nsmall to input digits
   nsmall = digits
@@ -197,4 +310,14 @@ num_fmt <- function(val, i, fmt=NULL) {
       nsmall=nsmall
     )
   )
+}
+
+#' Check if format strings have been applied to a layer
+#'
+#' @param e Layer environment
+#'
+#' @return Boolean
+#'  @noRd
+has_format_strings <- function(e) {
+  'format_strings' %in% ls(envir=e)
 }

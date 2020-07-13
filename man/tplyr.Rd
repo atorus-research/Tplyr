@@ -17,7 +17,8 @@ is where even more of the time is spent when programming these reports. For exam
 
 \describe{
 \item{\strong{Denominators}}{n (\%) counts often vary based on the summary being performed. 'Tplyr' allows you to easily control what denominators
-are used based on a few common scenarios, or additionally you can provide a custom dataset used in calculation}
+are used based on a few common scenarios, or additionally you can provide a custom dataset used in calculation
+\strong{NOTE:} This feature is still being developed and is not yet implemented}
 \item{\strong{String formatting}}{Different reports warrant different presentation of your strings. Programming this can get tedious, as you always
 want to make sure that your decimals properly align. 'Tplyr' abstracts this process away and provides you with a simple format to specify
 how you want your data presented}
@@ -30,7 +31,7 @@ to much, but don't solve all of the problems. We know we won't handle every scen
 add your own touches where necessary.
 }
 \author{
-\strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com}
+\strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com} (\href{https://orcid.org/0000-0001-6030-723X}{ORCID})
 
 Authors:
 \itemize{

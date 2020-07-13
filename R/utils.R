@@ -8,9 +8,10 @@
 #'
 #' @return The original call object with
 #'
+#' @noRd
 #' @examples
-#' #TBD
-#' # modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
+#'
+#' modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
 modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
   # If the call is not from magrittr, then modify the contents and return the call
   if (call_name(c) != "%>%") {
@@ -23,7 +24,7 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
   } else {
     if (!is.null(allowable_calls)) {
       # Only allow the user to use `tplyr` functions
-      assert_that(all(sapply(call_args(c), call_name) %in% allowable_calls),
+      assert_that(all(map_chr(call_args(c), call_name) %in% c(allowable_calls, '%>%')),
                   msg="Functions called within `add_layer` must be part of `Tplyr`")
     }
 
@@ -46,6 +47,7 @@ modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr")
 #' @param i The current index
 #'
 #' @return the number of containers a layer is in
+#' @noRd
 depth_from_table <- function(layer, i){
   if(class(env_parent(layer))[1] == "tplyr_table") return(i + 1)
   else {
@@ -59,11 +61,18 @@ depth_from_table <- function(layer, i){
 #' Intended for use in a tidyselect context. Pivots take arguments as character strings or indices. Tidyselect tools return those
 #' indices. This allows you to pass a list of quosures (which Tplyr carries a lot of) without explicitly converting types
 #'
-#' @param vars List of quosures containing variables
+#' @param var_list List of quosures containing variables
 #'
 #' @return Character string of labels
 #'
+#' @noRd
+#'
 #' @examples
+#' # Load in pipe
+#' library(magrittr)
+#' library(dplyr)
+#' library(tidyr)
+#'
 #' iris %>%
 #'   group_by(Species) %>%
 #'   summarize(mean=mean(Sepal.Length), median = median(Sepal.Length)) %>%
@@ -74,7 +83,7 @@ match_exact <- function(var_list) {
   assert_inherits_class(var_list, "quosures")
   # Return the variable names as a character string in appropriate tidyselect format
   out <- map_chr(var_list, as_label)
-  out[out != 'NULL'] # Exclude NULL quosures
+  unname(out[out != 'NULL']) # Exclude NULL quosures and remove names
 }
 
 #' Organize row labels within a layer output
@@ -83,17 +92,19 @@ match_exact <- function(var_list) {
 #' @param by The \code{by} object within a layer
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
+#' @noRd
 replace_by_string_names <- function(dat, by) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
-
-  i <- 0
 
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1
   for (i in seq_along(by)) {
     dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
   }
+
+  # If i iterated above, it will be have a value. Otherwise it's null, so set it to 0
+  i <- ifelse(is.null(i), 0, i)
 
   # If there was a column named `row_label` the index it
   if ('row_label' %in% names(dat)) {
@@ -104,21 +115,24 @@ replace_by_string_names <- function(dat, by) {
   row_labels <- names(dat)[str_detect(names(dat), 'row_label')]
 
   # Insert row labels to the front of the tibble
-  select(dat, all_of(sort(row_labels)), everything())
+  select(dat, all_of(sort(row_labels)), everything()) %>%
+    ungroup() %>%
+    mutate_at(row_labels, ~ as.character(.x)) # Coerce all row labels into character
 }
 
 #' Get the unique levels/factors of a dataset
 #'
 #' @param e An environment, generally a table or a layer object
-#' @param target_var A target variable to get the levels/unique values of
+#' @param x A target variable to get the levels/unique values of
 #'
 #' @return Unique target values
+#' @noRd
 get_target_levels <- function(e, x) {
   # If its a factor just return the levels
-  if(is.factor(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])) levels(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
+  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   # Otherwise return the unique values
   else {
-    unique(env_get(e, "target", inherit = TRUE)[, quo_get_expr(x)])
+    unique(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
   }
 }
 
@@ -127,7 +141,7 @@ get_target_levels <- function(e, x) {
 #' @param dat Data.frame / tibble to mask repeating row_labels
 #'
 #' @return tibble with blanked out rows where appropriate
-#' @noRd
+#' @export
 apply_row_masks <- function(dat) {
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
@@ -156,16 +170,43 @@ apply_row_masks <- function(dat) {
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
   # This contains the subset of the first target variable.
-  inner_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
-                                   by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
-                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
-                         set_include_total_row(FALSE))
+  inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+                                   by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
+                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
   # This should be a single row with the total of target_var 1
-  outer_layer <- build(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+  outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
                                    by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
-                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
-                         set_include_total_row(FALSE))
+                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
   # Bind these two to gether and add a row mask
-  bind_rows(outer_layer, inner_layer) %>%
-    apply_row_masks()
+  bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
+}
+
+
+#' Take a list of quosures and pull out things that aren't symbols
+#'
+#' @param var_list List of quosures
+#'
+#' @return Quosures that aren't symbols
+#' @noRd
+extract_character_from_quo <- function(var_list) {
+
+  is_symbol_ <- sapply(var_list, quo_is_symbol)
+
+  var_list[!is_symbol_]
+}
+
+#' Get maximum string format recursivly
+#'
+#' @param lay A layer object
+#'
+#' @return Maximum length of sub layers
+#' @noRd
+get_max_length <- function(lay) {
+  # Initalize max_ to -1
+  max_ <- -1L
+  # Get maximum length of all sub layers
+  if(length(lay$layers) > 0) max_ <- max(map_int(lay$layers, get_max_length))
+
+  # return greatest between sub layers and current layer
+  max(max_, lay$format_strings$size)
 }

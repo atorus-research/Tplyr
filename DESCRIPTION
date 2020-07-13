@@ -11,7 +11,8 @@ Authors@R:
     person(given = "Mike",
            family = "Stackhouse",
            role = c("aut", "cre"),
-           email = "mike.stackhouse@atorusresearch.com"),
+           email = "mike.stackhouse@atorusresearch.com",
+           comment = c(ORCID = "0000-0001-6030-723X")),
     person(given = "Ashley", 
            family = "Tarasiewicz",
            email = "Ashley.Tarasiewicz@atorusresearch.com", 
@@ -30,10 +31,15 @@ Imports:
     dplyr (>= 0.8.4),
     purrr (>= 0.3.3),
     stringr (>= 1.4.0),
-    tidyr (>= 1.0.2)
+    tidyr (>= 1.0.2),
+    tidyselect (>= 1.0.0),
+    tibble (>= 3.0.1)
 Suggests: 
     testthat (>= 2.1.0),
+    haven (>= 2.2.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    huxtable,
+    tidyverse
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2

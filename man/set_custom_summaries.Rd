@@ -19,7 +19,38 @@ This function allows a user to define custom summaries to be performed in a call
 summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
 of summaries built into 'Tplyr', while also adding new desired summary functions.
 }
-\examples{
+\details{
+When programming the logic of the summary function, use the target variable name in your code.
+\strong{NOTE:} This is likely to change in the future, as it currently does not support descriptive statistic layers with two
+target variables provided.
 
-#TBD
+
+An important, yet not immediately obvious, part of using \code{set_custom_summaries} is to understand the
+link between the name paramters you set in \code{set_custom_summaries} and the names called in \code{\link{f_str}} objects
+within \code{\link{set_format_strings}}. In \code{\link{f_str}}, after you supply the string format you'd like your
+numbers to take, you specify the summaries that fill those strings.
+
+When you go to set your format strings, the name you use to declare a summary in \code{set_custom_summaries} is the same name
+that you use in your \code{\link{f_str}} call. This is necessary because \code{\link{set_format_strings}} needs some means
+of putting two summaries in the same value, and setting a row label for the summary being performed.
+
+Review the examples to see this put into practice. Note the relationship between the name created in \code{set_custom_summary}
+and the name used in \code{\link{set_format_strings}} within the \code{\link{f_str}} call
+}
+\examples{
+#Load in pipe
+library(magrittr)
+
+tplyr_table(iris, Species) \%>\%
+  add_layer(
+    group_desc(Sepal.Length, by = "Sepal Length") \%>\%
+      set_custom_summaries(
+        geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]),
+                                     na.rm=TRUE) / length(Sepal.Width))
+      ) \%>\%
+      set_format_strings(
+        'Geometric Mean' = f_str('xx.xx', geometric_mean)
+      )
+  ) \%>\%
+  build()
 }
