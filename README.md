@@ -4,11 +4,12 @@
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/github/license/atorus-research/tplyr">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
 
+
 # The Alpha Release
 This is an early preview of our new package, `Tplyr`. This package is still in development, and we're actively working on new features. We decided to release this version early to get community feedback. If you find a bug in our code - please report it! If you'd like to see some particular feature - let us know! The more feedback we collect, the better the end product will be when we publish the first version on CRAN. 
 
 # Purpose
-`Tplyr` was designed as a declarative method for creating tables used in clinical pharmaceutical reports. The end result of rendering a table is an object that can be writen out for inclusion in a report. The package was written with a focus on readability and a workflow that can be understanded by a novice R programmer.
+`Tplyr` was designed as a declarative method for creating tables used in clinical pharmaceutical reports. The end result of rendering a table is an object that can be written out for inclusion in a report. The package was written with a focus on readability and a workflow that can be understood by a novice R programmer.
 
 # Usage
 
