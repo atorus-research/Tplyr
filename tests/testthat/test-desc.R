@@ -10,7 +10,7 @@ d1 <- group_desc(t1, mpg)
 d2 <- group_desc(t2, mpg, by = am)
 d3 <- group_desc(t3, mpg, by = vars(am, vs))
 d4 <- group_desc(t4, mpg) %>%
-  set_custom_summaries(mean_squared = mean(mpg, na.rm=TRUE)**2) %>%
+  set_custom_summaries(mean_squared = mean(.var, na.rm=TRUE)**2) %>%
   set_format_strings(
     "Mean Squared" = f_str("xx.xx", mean_squared)
   )
