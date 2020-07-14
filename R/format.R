@@ -330,8 +330,8 @@ has_format_strings <- function(e) {
 #' @param ... Additonal arguments passed to dispatch
 #'
 #' @noRd
-pad_numeric_data <- function(x, ...) {
-  UseMethod("pad_numeric_data")
+pad_formatted_data <- function(x, ...) {
+  UseMethod("pad_formatted_data")
 }
 
 #' Pad Numeric Values
@@ -346,24 +346,24 @@ pad_numeric_data <- function(x, ...) {
 #' @return Modified string
 #'
 #' @noRd
-pad_numeric_data.character <- function(x, right_pad, left_pad, ...) {
+pad_formatted_data.character <- function(x, right_pad, left_pad, ...) {
 
   # Pad the left with difference between left_pad and nchar(string_)
-  if(nchar(string_)[1] < left_pad) {
+  if(nchar(x)[1] < left_pad) {
     # The double pasting looks weird but the inner one is meant to create single character
     # that is the needed number of spaces and the outer pastes that to the value
-    string_ <- map_chr(string_,
+    x <- map_chr(x,
                        ~ paste0(
                          paste0(rep(" ", left_pad - nchar(.x)), collapse = ""),
                          .x))
   }
 
   #Padd the right with the difference of the max layer length
-  if(right_pad > max(nchar(string_))) {
-    string_ <- map_chr(string_,
-                       paste0, paste0(rep(" ", right_pad - max(nchar(string_))),
+  if(right_pad > max(nchar(x))) {
+    x <- map_chr(x,
+                       paste0, paste0(rep(" ", right_pad - max(nchar(x))),
                                       collapse = ""))
   }
 
-  string_
+  x
 }

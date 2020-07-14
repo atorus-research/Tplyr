@@ -182,7 +182,7 @@ construct_count_string <- function(.n, .total, count_fmt = NULL,
   # Put the vector strings together
   string_ <- sprintf(count_fmt$repl_str, str1, str2)
 
-  string_ <- pad_numeric_data(string_, max_layer_length, max_n_width)
+  string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
 
   string_
 }
