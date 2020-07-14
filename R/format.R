@@ -321,3 +321,49 @@ num_fmt <- function(val, i, fmt=NULL) {
 has_format_strings <- function(e) {
   'format_strings' %in% ls(envir=e)
 }
+
+#' Pad Numeric Values
+#'
+#' This is dispatched for extensibility but count_layer passes a character vector
+#'
+#' @param x An object, character for count_layer, that is passed to dispatch
+#' @param ... Additonal arguments passed to dispatch
+#'
+#' @noRd
+pad_numeric_data <- function(x, ...) {
+
+}
+
+#' Pad Numeric Values
+#'
+#' This is generally used with a count layer
+#'
+#' @param string_ The current values of the numeric data
+#' @param right_pad The total string length, done after the left pad
+#' @param left_pad The length of the left_pad
+#' @param ... Additonal arguments that are ignored
+#'
+#' @return Modified string
+#'
+#' @noRd
+pad_numeric_data.character <- function(x, right_pad, left_pad, ...) {
+
+  # Pad the left with difference between left_pad and nchar(string_)
+  if(nchar(string_)[1] < left_pad) {
+    # The double pasting looks weird but the inner one is meant to create single character
+    # that is the needed number of spaces and the outer pastes that to the value
+    string_ <- map_chr(string_,
+                       ~ paste0(
+                         paste0(rep(" ", left_pad - nchar(.x)), collapse = ""),
+                         .x))
+  }
+
+  #Padd the right with the difference of the max layer length
+  if(right_pad > max(nchar(string_))) {
+    string_ <- map_chr(string_,
+                       paste0, paste0(rep(" ", right_pad - max(nchar(string_))),
+                                      collapse = ""))
+  }
+
+  string_
+}
