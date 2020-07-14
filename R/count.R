@@ -182,20 +182,7 @@ construct_count_string <- function(.n, .total, count_fmt = NULL,
   # Put the vector strings together
   string_ <- sprintf(count_fmt$repl_str, str1, str2)
 
-  # Pad the left with difference between max_n_width and nchar(string_)
-  if(nchar(string_)[1] < max_n_width) {
-    # The double pasting looks weird but the inner one is meant to create single character
-    # that is the needed number of spaces and the outer pastes that to the value
-    string_ <- map_chr(string_,
-                       ~ paste0(
-                            paste0(rep(" ", max_n_width - nchar(.x)), collapse = ""),
-                         .x))
-  }
-
-  #Padd the right with the difference of the max layer length
-  string_ <- sapply(string_,
-                    paste0, paste0(rep(" ", max_layer_length - max(nchar(string_))),
-                                   collapse = ""))
+  string_ <- pad_numeric_data(string_, max_layer_length, max_n_width)
 
   string_
 }
