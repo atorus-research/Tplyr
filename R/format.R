@@ -331,7 +331,7 @@ has_format_strings <- function(e) {
 #'
 #' @noRd
 pad_numeric_data <- function(x, ...) {
-
+  UseMethod("pad_numeric_data")
 }
 
 #' Pad Numeric Values
