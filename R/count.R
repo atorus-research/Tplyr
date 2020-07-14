@@ -115,7 +115,7 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -229,30 +229,28 @@ process_formatting.count_layer <- function(x, ...) {
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distinct = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
 
-  #TODO: This forces things to be ordered n, pct, distinct, distinct_total
-
   str1 <- NA
-  if("n" %in% count_fmt$vars) {
-    # Make a vector of ncounts
-    str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
-  }
-
   str2 <- NA
-  if("pct" %in% count_fmt$vars) {
-    # Makea vector of ratios between n and total. Replace na values with 0
-    pcts <- replace(.n/.total, is.na(.n/.total), 0)
-    # Make a vector of percentages
-    str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
-  }
-
   str3 <- NA
-  if("distinct" %in% count_fmt$vars) {
-    str3 <- map_chr(.distinct_n, num_fmt, 3, fmt = count_fmt)
-  }
-
   str4 <- NA
-  if("total_distinct" %in% count_fmt$vars) {
-    str4 <- map_chr(.total_distinct, num_fmt, 4, fmt = count_fmt)
+  #This is an vector based on the order the variables should be in
+
+  vars_ord <- map_chr(count_fmt$vars, as_name)
+
+  # This is a little gross but the idea is to assign the value of the ith item in
+  # the f_str to str<i>
+  for(i in seq_along(vars_ord)) {
+    assign(paste0("str", i), switch(vars_ord[i],
+                                    "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
+                                    "pct" = {
+                                      # Makea vector of ratios between n and total. Replace na values with 0
+                                      pcts <- replace(.n/.total, is.na(.n/.total), 0)
+                                      # Make a vector of percentages
+                                      str2 <- map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
+                                    },
+                                    "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
+                                    "total_distinct" = map_chr(.total_distinct, num_fmt, which(vars_ord == "total_distinct"), fmt = count_fmt)))
+
   }
 
   # Put the vector strings together
