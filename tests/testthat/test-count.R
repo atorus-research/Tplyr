@@ -9,6 +9,7 @@ t4 <- tplyr_table(mtcars, gear)
 t5 <- tplyr_table(mtcars, gear)
 t6 <- tplyr_table(mtcars, gear)
 t7 <- tplyr_table(mtcars, gear)
+t8 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 c2 <- group_count(t2, cyl, by = am)
@@ -20,6 +21,9 @@ c5 <- group_count(t5, cyl, by = vars(am, vs)) %>%
 c6 <- group_count(t6, "cyl") %>%
   set_distinct_by(cyl)
 c7 <- group_count(t7, vars(grp, cyl))
+c8 <- group_count(t8, cyl) %>%
+  set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
+  set_distinct_by(am)
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -28,6 +32,7 @@ t4 <- add_layers(t4, c4)
 t5 <- add_layers(t5, c5)
 t6 <- add_layers(t6, c6)
 t7 <- add_layers(t7, c7)
+t8 <- add_layers(t8, c8)
 
 
 test_that("Count layers are built as expected", {

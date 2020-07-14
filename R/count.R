@@ -79,7 +79,7 @@ process_count_n <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -98,7 +98,7 @@ process_count_n <- function(x) {
 process_count_distinct_n <- function(x) {
 
   evalq({
-    summary_stat <- built_target %>%
+    distinct_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
       # Distinct based on the current distinct_by, target_var, and treat_var
@@ -107,11 +107,11 @@ process_count_distinct_n <- function(x) {
       distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
       # Group by varaibles including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
-      tally(name = "value") %>%
+      tally(name = "distinct_n") %>%
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "Total", wt = value) %>%
+      add_tally(name = "Total_distinct", wt = distinct_n) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -120,6 +120,8 @@ process_count_distinct_n <- function(x) {
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
       mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+
+    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "Total_distinct")])
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -182,7 +184,21 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
 
     formatted_data <- numeric_data %>%
-      mutate(value = construct_count_string(value, Total, format_strings, max_layer_length, max_n_width)) %>%
+      # Mutate value based on if there is a
+      mutate(value = {
+        if(is.null(distinct_by)) {
+          construct_count_string(.n=value, .total=Total,
+                                 count_fmt=format_strings,
+                                 max_layer_length=max_layer_length,
+                                 max_n_width=max_n_width)
+        } else {
+          construct_count_string(.n=value, .total=Total,
+                                 .distinct_n=distinct_n, .total_distinct=Total_distinct,
+                                 count_fmt=format_strings,
+                                 max_layer_length=max_layer_length,
+                                 max_n_width=max_n_width)
+        }
+      }) %>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = value,
@@ -206,10 +222,14 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param count_fmt The f_str object the strings are formatted around.
 #' @param max_layer_length The maximum layer length of the whole table
 #' @param max_n_width The maximum length of the actual numeric counts
+#' @param .distinct_n Vector of distinct counts
+#' @param .total_distinct Vector of total counts for distinct
 #'
 #' @return A tibble replacing the originial counts
-construct_count_string <- function(.n, .total, count_fmt = NULL,
-                                   max_layer_length, max_n_width) {
+construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distinct = NULL,
+                                   count_fmt = NULL, max_layer_length, max_n_width) {
+
+  #TODO: This forces things to be ordered n, pct, distinct, distinct_total
 
   str1 <- NA
   if("n" %in% count_fmt$vars) {
@@ -225,8 +245,18 @@ construct_count_string <- function(.n, .total, count_fmt = NULL,
     str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
   }
 
+  str3 <- NA
+  if("distinct" %in% count_fmt$vars) {
+    str3 <- map_chr(.distinct_n, num_fmt, 3, fmt = count_fmt)
+  }
+
+  str4 <- NA
+  if("total_distinct" %in% count_fmt$vars) {
+    str4 <- map_chr(.total_distinct, num_fmt, 4, fmt = count_fmt)
+  }
+
   # Put the vector strings together
-  string_ <- sprintf(count_fmt$repl_str, str1, str2)
+  string_ <- sprintf(count_fmt$repl_str, str1, str2, str3, str4)
 
   string_ <- pad_numeric_data(string_, max_layer_length, max_n_width)
 
