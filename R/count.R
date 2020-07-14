@@ -43,21 +43,32 @@ process_single_count_target <- function(x) {
     if(!exists("include_total_row")) include_total_row <- FALSE
     if(!exists("total_row_label")) total_row_label <- "Total"
 
-    # Construct the counts for each target grouping
+
+    # The current environment should be the layer itself
+    process_count_n(current_env())
+
+    if(!is.null(distinct_by)) process_count_distinct_n(current_env())
+
+    if(include_total_row) process_count_total_row(current_env())
+
+
+    # rbind tables together
+    numeric_data <- summary_stat %>%
+      bind_rows(total_stat)
+
+  }, envir = x)
+}
+
+#' Process the n count data and put into summary_stat
+#'
+#' @param x Count layer
+#' @noRd
+process_count_n <- function(x) {
+
+  evalq({
     summary_stat <- built_target %>%
       # Filter out based on where
-      filter(!!where)
-
-    # get unique variables based on distinct_by value
-    if (!is.null(distinct_by)) {
-      summary_stat <- summary_stat %>%
-        # Distinct based on the current distinct_by, target_var, and treat_var
-        # treat_var is added because duplicates would be created when there are
-        # treatment group totals
-        distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE)
-    }
-
-    summary_stat <- summary_stat %>%
+      filter(!!where) %>%
       # Group by varaibles including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "value") %>%
@@ -76,30 +87,65 @@ process_single_count_target <- function(x) {
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
+  }, envir = x)
 
-    total_stat <- NULL
-    if(include_total_row) {
-      # create a data.frame to create total counts
-      total_stat <- summary_stat %>%
-        # Group by all column variables
-        group_by(!!treat_var, !!!cols) %>%
-        summarise(value = sum(value)) %>%
-        ungroup() %>%
-        mutate(Total = value) %>%
-        # Create a variable to label the totals when it is merged in.
-        mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
-        # Create variables to carry forward 'by'. Only pull out the ones that
-        # aren't symbols
-        group_by(!!!extract_character_from_quo(by)) %>%
-        # complete based on missing groupings
-        complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
-    }
+}
 
-    # rbind tables together
-    numeric_data <- summary_stat %>%
-      bind_rows(total_stat)
+#' Process the distinct n count data and put into summary_stat
+#'
+#' @param x Count layer
+#' @noRd
+process_count_distinct_n <- function(x) {
 
-    rm(summary_stat, total_stat)
+  evalq({
+    summary_stat <- built_target %>%
+      # Filter out based on where
+      filter(!!where) %>%
+      # Distinct based on the current distinct_by, target_var, and treat_var
+      # treat_var is added because duplicates would be created when there are
+      # treatment group totals
+      distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
+      # Group by varaibles including target variables and count them
+      group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
+      tally(name = "value") %>%
+      ungroup() %>%
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols) %>%
+      add_tally(name = "Total", wt = value) %>%
+      ungroup() %>%
+      # complete all combiniations of factors to include combiniations that don't exist.
+      # add 0 for combintions that don't exist
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      # Change the treat_var and first target_var to characters to resolve any
+      # issues if there are total rows and the original column is numeric
+      mutate(!!treat_var := as.character(!!treat_var)) %>%
+      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+
+    # If there is no values in summary_stat, which can happen depending on where. Return nothing
+    if(nrow(summary_stat) == 0) return()
+  }, envir = x)
+}
+
+#' Process the amounts for a total row
+#'
+#' @param x A Count layer
+#' @noRd
+process_count_total_row <- function(x) {
+  evalq({
+    # create a data.frame to create total counts
+    total_stat <- summary_stat %>%
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      mutate(Total = value) %>%
+      # Create a variable to label the totals when it is merged in.
+      mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
+      # Create variables to carry forward 'by'. Only pull out the ones that
+      # aren't symbols
+      group_by(!!!extract_character_from_quo(by)) %>%
+      # complete based on missing groupings
+      complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
   }, envir = x)
 }
 

@@ -94,3 +94,4 @@ op <- NULL
 cl <- NULL
 q1 <- NULL
 q3 <- NULL
+total_stat <- NULL
