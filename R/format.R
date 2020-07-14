@@ -324,12 +324,29 @@ has_format_strings <- function(e) {
 
 #' Pad Numeric Values
 #'
+#' This is dispatched for extensibility but count_layer passes a character vector
+#'
+#' @param x An object, character for count_layer, that is passed to dispatch
+#' @param ... Additonal arguments passed to dispatch
+#'
+#' @noRd
+pad_numeric_data <- function(x, ...) {
+
+}
+
+#' Pad Numeric Values
+#'
+#' This is generally used with a count layer
+#'
 #' @param string_ The current values of the numeric data
 #' @param right_pad The total string length, done after the left pad
 #' @param left_pad The length of the left_pad
+#' @param ... Additonal arguments that are ignored
 #'
 #' @return Modified string
-pad_numeric_data <- function(string_, right_pad, left_pad) {
+#'
+#' @noRd
+pad_numeric_data.character <- function(x, right_pad, left_pad, ...) {
 
   # Pad the left with difference between left_pad and nchar(string_)
   if(nchar(string_)[1] < left_pad) {
