@@ -101,5 +101,5 @@ total_stat <- NULL
 distinct_n <- NULL
 summary_stat <- NULL
 total_row_label <- NULL
-total_distinct <- NULL
-.total_distinct <-NULL
+distinct_total <- NULL
+.distinct_total <-NULL

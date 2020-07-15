@@ -111,17 +111,17 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "total_distinct", wt = distinct_n) %>%
+      add_tally(name = "distinct_total", wt = distinct_n) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, total_distinct = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
       mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
 
-    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "total_distinct")])
+    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "distinct_total")])
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -193,7 +193,7 @@ process_formatting.count_layer <- function(x, ...) {
                                  max_n_width=max_n_width)
         } else {
           construct_count_string(.n=value, .total=total,
-                                 .distinct_n=distinct_n, .total_distinct=total_distinct,
+                                 .distinct_n=distinct_n, .distinct_total=distinct_total,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
@@ -223,10 +223,10 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param max_layer_length The maximum layer length of the whole table
 #' @param max_n_width The maximum length of the actual numeric counts
 #' @param .distinct_n Vector of distinct counts
-#' @param .total_distinct Vector of total counts for distinct
+#' @param .distinct_total Vector of total counts for distinct
 #'
 #' @return A tibble replacing the originial counts
-construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distinct = NULL,
+construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
@@ -269,7 +269,7 @@ count_string_switch_help <- function(x, count_fmt, .n, .total, .distinct_n, vars
            map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
          },
          "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
-         "total_distinct" = map_chr(.total_distinct, num_fmt, which(vars_ord == "total_distinct"),
+         "distinct_total" = map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"),
                                     fmt = count_fmt))
 
 
