@@ -82,7 +82,7 @@ numeric_data <- NULL
 format_strings <- NULL
 max_layer_length <- NULL
 max_n_width <- NULL
-Total <- NULL
+total <- NULL
 display_string <- NULL
 built_target <- NULL
 table_where <- NULL
@@ -102,3 +102,4 @@ distinct_n <- NULL
 summary_stat <- NULL
 total_row_label <- NULL
 total_distinct <- NULL
+.total_distinct <-NULL
