@@ -75,11 +75,11 @@ process_count_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "Total", wt = value) %>%
+      add_tally(name = "total", wt = value) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -115,7 +115,7 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, total_distinct = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -140,14 +140,14 @@ process_count_total_row <- function(x) {
       group_by(!!treat_var, !!!cols) %>%
       summarise(value = sum(value)) %>%
       ungroup() %>%
-      mutate(Total = value) %>%
+      mutate(total = value) %>%
       # Create a variable to label the totals when it is merged in.
       mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
       # complete based on missing groupings
-      complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
+      complete(!!treat_var, !!!cols, fill = list(value = 0, total = 0))
   }, envir = x)
 }
 
@@ -187,12 +187,12 @@ process_formatting.count_layer <- function(x, ...) {
       # Mutate value based on if there is a
       mutate(value = {
         if(is.null(distinct_by)) {
-          construct_count_string(.n=value, .total=Total,
+          construct_count_string(.n=value, .total=total,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
         } else {
-          construct_count_string(.n=value, .total=Total,
+          construct_count_string(.n=value, .total=total,
                                  .distinct_n=distinct_n, .total_distinct=total_distinct,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
@@ -228,12 +228,6 @@ process_formatting.count_layer <- function(x, ...) {
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distinct = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
-
-  str1 <- NA
-  str2 <- NA
-  str3 <- NA
-  str4 <- NA
-  #This is an vector based on the order the variables should be in
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 
