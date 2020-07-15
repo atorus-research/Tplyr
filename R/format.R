@@ -244,7 +244,7 @@ set_format_strings.count_layer <- function(e, ...) {
 
   assert_has_class(str, "f_str")
 
-  assert_that(all(str$vars %in% c("n", "pct", "distinct")),
+  assert_that(all(str$vars %in% c("n", "pct", "distinct", "total_percent")),
               msg = "f_str in a count_layer can only be n, pct, or distinct")
 
   env_bind(e, format_strings = str)

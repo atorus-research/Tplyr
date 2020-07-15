@@ -95,3 +95,7 @@ cl <- NULL
 q1 <- NULL
 q3 <- NULL
 total_stat <- NULL
+distinct_n <- NULL
+summary_stat <- NULL
+total_row_label <- NULL
+total_distinct <- NULL

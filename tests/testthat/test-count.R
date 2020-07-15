@@ -87,9 +87,9 @@ test_that("Count layers are processed as expected", {
   expect_length(c2, 14)
   expect_length(c3, 14)
   expect_length(c4, 13)
-  expect_length(c5, 14)
+  expect_length(c5, 15)
   # c6 will also have distinct_by so 15
-  expect_length(c6, 15)
+  expect_length(c6, 16)
   expect_length(c7, 12)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
@@ -97,7 +97,7 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c3$numeric_data), c(36, 6))
   expect_equal(dim(c4$numeric_data), c(36, 6))
   expect_equal(dim(c5$numeric_data), c(39, 6))
-  expect_equal(dim(c6$numeric_data), c(3, 4))
+  expect_equal(dim(c6$numeric_data), c(3, 6))
   expect_equal(dim(c7$numeric_data), c(45, 5))
 
   expect_type(c1$numeric_data$value, "double")
@@ -121,7 +121,7 @@ test_that("Count layers are processed as expected", {
   expect_true(all(nchar(unlist(c3$formatted_data[, 4:6])) == 11))
   expect_true(all(nchar(unlist(c4$formatted_data[, 5:6])) == 3))
   expect_true(all(nchar(unlist(c5$formatted_data[, 4:6])) == 11))
-  expect_true(all(nchar(unlist(c6$formatted_data[, 3:4])) == 10))
+  expect_true(all(nchar(unlist(c6$formatted_data[, 3:4])) == 11))
   expect_true(all(nchar(unlist(c7$formatted_data[, 3:5])) == 10))
 
 

@@ -111,7 +111,7 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "Total_distinct", wt = distinct_n) %>%
+      add_tally(name = "total_distinct", wt = distinct_n) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -121,7 +121,7 @@ process_count_distinct_n <- function(x) {
       mutate(!!treat_var := as.character(!!treat_var)) %>%
       mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
 
-    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "Total_distinct")])
+    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "total_distinct")])
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -193,7 +193,7 @@ process_formatting.count_layer <- function(x, ...) {
                                  max_n_width=max_n_width)
         } else {
           construct_count_string(.n=value, .total=Total,
-                                 .distinct_n=distinct_n, .total_distinct=Total_distinct,
+                                 .distinct_n=distinct_n, .total_distinct=total_distinct,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
