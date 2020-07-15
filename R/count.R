@@ -237,28 +237,48 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distin
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 
-  # This is a little gross but the idea is to assign the value of the ith item in
-  # the f_str to str<i>
+  # str_all is a list that contains character vectors for each parameter that might be calculated
+  str_all <- vector("list", 5)
+  # Append the repl_str to be passed to do.call
+  str_all[1] <- count_fmt$repl_str
+  # Iterate over every variable
   for(i in seq_along(vars_ord)) {
-    assign(paste0("str", i), switch(vars_ord[i],
-                                    "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
-                                    "pct" = {
-                                      # Makea vector of ratios between n and total. Replace na values with 0
-                                      pcts <- replace(.n/.total, is.na(.n/.total), 0)
-                                      # Make a vector of percentages
-                                      str2 <- map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
-                                    },
-                                    "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
-                                    "total_distinct" = map_chr(.total_distinct, num_fmt, which(vars_ord == "total_distinct"), fmt = count_fmt)))
-
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total, .distinct_n, vars_ord)
   }
 
-  # Put the vector strings together
-  string_ <- sprintf(count_fmt$repl_str, str1, str2, str3, str4)
+  # Put the vector strings together. Only include parts of str_all that aren't null
+  string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
 
   string_ <- pad_numeric_data(string_, max_layer_length, max_n_width)
 
   string_
+}
+
+#' Switch statement used in processing
+#'
+#' @param x Current parameter to format
+#' @param count_fmt f_str object used to format
+#' @param .n values used in 'n'
+#' @param .total values used in pct calculations
+#' @param .distinct_n values used in 'distinct'
+#' @param vars_ord values used in distinct pct
+#'
+#' @noRd
+count_string_switch_help <- function(x, count_fmt, .n, .total, .distinct_n, vars_ord){
+
+  switch(x,
+         "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
+         "pct" = {
+           # Makea vector of ratios between n and total. Replace na values with 0
+           pcts <- replace(.n/.total, is.na(.n/.total), 0)
+           # Make a vector of percentages
+           map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
+         },
+         "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
+         "total_distinct" = map_chr(.total_distinct, num_fmt, which(vars_ord == "total_distinct"),
+                                    fmt = count_fmt))
+
+
 }
 
 #' @param x Count Layer
