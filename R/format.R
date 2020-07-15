@@ -244,8 +244,8 @@ set_format_strings.count_layer <- function(e, ...) {
 
   assert_has_class(str, "f_str")
 
-  assert_that(all(str$vars %in% c("n", "pct")),
-              msg = "f_str in a count_layer can only be n or pct")
+  assert_that(all(str$vars %in% c("n", "pct", "distinct", "total_percent")),
+              msg = "f_str in a count_layer can only be n, pct, or distinct")
 
   env_bind(e, format_strings = str)
 
@@ -324,29 +324,16 @@ has_format_strings <- function(e) {
 
 #' Pad Numeric Values
 #'
-#' This is dispatched for extensibility but count_layer passes a character vector
-#'
-#' @param x An object, character for count_layer, that is passed to dispatch
-#' @param ... Additonal arguments passed to dispatch
-#'
-#' @noRd
-pad_formatted_data <- function(x, ...) {
-  UseMethod("pad_formatted_data")
-}
-
-#' Pad Numeric Values
-#'
 #' This is generally used with a count layer
 #'
 #' @param string_ The current values of the numeric data
 #' @param right_pad The total string length, done after the left pad
 #' @param left_pad The length of the left_pad
-#' @param ... Additonal arguments that are ignored
 #'
 #' @return Modified string
 #'
 #' @noRd
-pad_formatted_data.character <- function(x, right_pad, left_pad, ...) {
+pad_numeric_data <- function(x, right_pad, left_pad) {
 
   # Pad the left with difference between left_pad and nchar(string_)
   if(nchar(x)[1] < left_pad) {

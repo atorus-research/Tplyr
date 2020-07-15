@@ -15,20 +15,20 @@ treatment_group_build <- function(table) {
     built_pop_data <- pop_data %>%
       filter(!!table_where) %>%
       mutate(!!pop_treat_var := as.character(!!pop_treat_var))
-    for (grp in seq(along = treat_grps)) {
+    for (grp_i in seq_along(treat_grps)) {
       built_target <- built_target %>%
-        filter(!!treat_var %in% treat_grps[[grp]]) %>%
-        mutate(!!treat_var := names(treat_grps)[grp]) %>%
+        filter(!!treat_var %in% treat_grps[[grp_i]]) %>%
+        mutate(!!treat_var := names(treat_grps)[grp_i]) %>%
         bind_rows(built_target)
     }
     # Dummies for treatment groups added to population dataset
-    for (grp in seq(along = treat_grps)) {
+    for (grp_i in seq_along(treat_grps)) {
       built_pop_data <- built_pop_data %>%
-        filter(!!treat_var %in% treat_grps[[grp]]) %>%
-        mutate(!!treat_var := names(treat_grps)[grp]) %>%
+        filter(!!treat_var %in% treat_grps[[grp_i]]) %>%
+        mutate(!!treat_var := names(treat_grps)[grp_i]) %>%
         bind_rows(built_pop_data)
     }
-    rm(grp)
+    rm(grp_i)
   }, envir=table)
 
   invisible(table)

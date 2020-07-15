@@ -43,21 +43,32 @@ process_single_count_target <- function(x) {
     if(!exists("include_total_row")) include_total_row <- FALSE
     if(!exists("total_row_label")) total_row_label <- "Total"
 
-    # Construct the counts for each target grouping
+
+    # The current environment should be the layer itself
+    process_count_n(current_env())
+
+    if(!is.null(distinct_by)) process_count_distinct_n(current_env())
+
+    if(include_total_row) process_count_total_row(current_env())
+
+
+    # rbind tables together
+    numeric_data <- summary_stat %>%
+      bind_rows(total_stat)
+
+  }, envir = x)
+}
+
+#' Process the n count data and put into summary_stat
+#'
+#' @param x Count layer
+#' @noRd
+process_count_n <- function(x) {
+
+  evalq({
     summary_stat <- built_target %>%
       # Filter out based on where
-      filter(!!where)
-
-    # get unique variables based on distinct_by value
-    if (!is.null(distinct_by)) {
-      summary_stat <- summary_stat %>%
-        # Distinct based on the current distinct_by, target_var, and treat_var
-        # treat_var is added because duplicates would be created when there are
-        # treatment group totals
-        distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE)
-    }
-
-    summary_stat <- summary_stat %>%
+      filter(!!where) %>%
       # Group by varaibles including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "value") %>%
@@ -68,7 +79,7 @@ process_single_count_target <- function(x) {
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, Total = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -76,30 +87,67 @@ process_single_count_target <- function(x) {
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
+  }, envir = x)
 
-    total_stat <- NULL
-    if(include_total_row) {
-      # create a data.frame to create total counts
-      total_stat <- summary_stat %>%
-        # Group by all column variables
-        group_by(!!treat_var, !!!cols) %>%
-        summarise(value = sum(value)) %>%
-        ungroup() %>%
-        mutate(Total = value) %>%
-        # Create a variable to label the totals when it is merged in.
-        mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
-        # Create variables to carry forward 'by'. Only pull out the ones that
-        # aren't symbols
-        group_by(!!!extract_character_from_quo(by)) %>%
-        # complete based on missing groupings
-        complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
-    }
+}
 
-    # rbind tables together
-    numeric_data <- summary_stat %>%
-      bind_rows(total_stat)
+#' Process the distinct n count data and put into summary_stat
+#'
+#' @param x Count layer
+#' @noRd
+process_count_distinct_n <- function(x) {
 
-    rm(summary_stat, total_stat)
+  evalq({
+    distinct_stat <- built_target %>%
+      # Filter out based on where
+      filter(!!where) %>%
+      # Distinct based on the current distinct_by, target_var, and treat_var
+      # treat_var is added because duplicates would be created when there are
+      # treatment group totals
+      distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
+      # Group by varaibles including target variables and count them
+      group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
+      tally(name = "distinct_n") %>%
+      ungroup() %>%
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols) %>%
+      add_tally(name = "total_distinct", wt = distinct_n) %>%
+      ungroup() %>%
+      # complete all combiniations of factors to include combiniations that don't exist.
+      # add 0 for combintions that don't exist
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0)) %>%
+      # Change the treat_var and first target_var to characters to resolve any
+      # issues if there are total rows and the original column is numeric
+      mutate(!!treat_var := as.character(!!treat_var)) %>%
+      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+
+    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "total_distinct")])
+
+    # If there is no values in summary_stat, which can happen depending on where. Return nothing
+    if(nrow(summary_stat) == 0) return()
+  }, envir = x)
+}
+
+#' Process the amounts for a total row
+#'
+#' @param x A Count layer
+#' @noRd
+process_count_total_row <- function(x) {
+  evalq({
+    # create a data.frame to create total counts
+    total_stat <- summary_stat %>%
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      mutate(Total = value) %>%
+      # Create a variable to label the totals when it is merged in.
+      mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
+      # Create variables to carry forward 'by'. Only pull out the ones that
+      # aren't symbols
+      group_by(!!!extract_character_from_quo(by)) %>%
+      # complete based on missing groupings
+      complete(!!treat_var, !!!cols, fill = list(value = 0, Total = 0))
   }, envir = x)
 }
 
@@ -136,7 +184,21 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
 
     formatted_data <- numeric_data %>%
-      mutate(value = construct_count_string(value, Total, format_strings, max_layer_length, max_n_width)) %>%
+      # Mutate value based on if there is a
+      mutate(value = {
+        if(is.null(distinct_by)) {
+          construct_count_string(.n=value, .total=Total,
+                                 count_fmt=format_strings,
+                                 max_layer_length=max_layer_length,
+                                 max_n_width=max_n_width)
+        } else {
+          construct_count_string(.n=value, .total=Total,
+                                 .distinct_n=distinct_n, .total_distinct=total_distinct,
+                                 count_fmt=format_strings,
+                                 max_layer_length=max_layer_length,
+                                 max_n_width=max_n_width)
+        }
+      }) %>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = value,
@@ -160,31 +222,63 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param count_fmt The f_str object the strings are formatted around.
 #' @param max_layer_length The maximum layer length of the whole table
 #' @param max_n_width The maximum length of the actual numeric counts
+#' @param .distinct_n Vector of distinct counts
+#' @param .total_distinct Vector of total counts for distinct
 #'
 #' @return A tibble replacing the originial counts
-construct_count_string <- function(.n, .total, count_fmt = NULL,
-                                   max_layer_length, max_n_width) {
+construct_count_string <- function(.n, .total, .distinct_n = NULL, .total_distinct = NULL,
+                                   count_fmt = NULL, max_layer_length, max_n_width) {
 
   str1 <- NA
-  if("n" %in% count_fmt$vars) {
-    # Make a vector of ncounts
-    str1 <- map_chr(.n, num_fmt, 1, fmt = count_fmt)
-  }
-
   str2 <- NA
-  if("pct" %in% count_fmt$vars) {
-    # Makea vector of ratios between n and total. Replace na values with 0
-    pcts <- replace(.n/.total, is.na(.n/.total), 0)
-    # Make a vector of percentages
-    str2 <- map_chr(pcts*100, num_fmt, 2, fmt = count_fmt)
+  str3 <- NA
+  str4 <- NA
+  #This is an vector based on the order the variables should be in
+
+  vars_ord <- map_chr(count_fmt$vars, as_name)
+
+  # str_all is a list that contains character vectors for each parameter that might be calculated
+  str_all <- vector("list", 5)
+  # Append the repl_str to be passed to do.call
+  str_all[1] <- count_fmt$repl_str
+  # Iterate over every variable
+  for(i in seq_along(vars_ord)) {
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total, .distinct_n, vars_ord)
   }
 
-  # Put the vector strings together
-  string_ <- sprintf(count_fmt$repl_str, str1, str2)
+  # Put the vector strings together. Only include parts of str_all that aren't null
+  string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
 
   string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
 
   string_
+}
+
+#' Switch statement used in processing
+#'
+#' @param x Current parameter to format
+#' @param count_fmt f_str object used to format
+#' @param .n values used in 'n'
+#' @param .total values used in pct calculations
+#' @param .distinct_n values used in 'distinct'
+#' @param vars_ord values used in distinct pct
+#'
+#' @noRd
+count_string_switch_help <- function(x, count_fmt, .n, .total, .distinct_n, vars_ord){
+
+  switch(x,
+         "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
+         "pct" = {
+           # Makea vector of ratios between n and total. Replace na values with 0
+           pcts <- replace(.n/.total, is.na(.n/.total), 0)
+           # Make a vector of percentages
+           map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
+         },
+         "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
+         "total_distinct" = map_chr(.total_distinct, num_fmt, which(vars_ord == "total_distinct"),
+                                    fmt = count_fmt))
+
+
 }
 
 #' @param x Count Layer
