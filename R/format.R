@@ -333,7 +333,7 @@ has_format_strings <- function(e) {
 #' @return Modified string
 #'
 #' @noRd
-pad_numeric_data <- function(x, right_pad, left_pad) {
+pad_formatted_data <- function(x, right_pad, left_pad) {
 
   # Pad the left with difference between left_pad and nchar(string_)
   if(nchar(x)[1] < left_pad) {
