@@ -57,7 +57,8 @@ process_single_count_target <- function(x) {
     # rbind tables together
     numeric_data <- summary_stat %>%
       bind_rows(total_stat) %>%
-      mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix))
+      mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
+      rename("summary_var" = !!target_var[[1]])
 
   }, envir = x)
 }
@@ -186,6 +187,13 @@ prepare_format_metadata <- function(x) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
+    # This is used if the first target_var is in the numeric data, which happens with nested
+    # counts if nested_counts is TRUE
+    if(as_name(target_var[[1]]) %in% names(numeric_data)){
+      id_cols_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
+    }
+    else id_cols_expr <- expr(c(match_exact(by), "summary_var"))
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a
       mutate(n = {
@@ -203,12 +211,12 @@ process_formatting.count_layer <- function(x, ...) {
         }
       }) %>%
       # Pivot table
-      pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
+      pivot_wider(id_cols = !!id_cols_expr,
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
-      replace_by_string_names(c(by, target_var))
+      replace_by_string_names(by)
   }, envir = x)
 }
 

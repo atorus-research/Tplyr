@@ -27,7 +27,7 @@ c8 <- group_count(t8, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
   set_distinct_by(am)
 c9 <- group_count(t9, vars(grp,cyl)) %>%
-  set_inner_count_layer_prefix("")
+  set_indentation("")
 c10 <- group_count(t10, cyl) %>%
   set_count_row_prefix("abc")
 
@@ -86,7 +86,7 @@ test_that("Count layers are built as expected", {
   expect_equal(c5$include_total_row, TRUE)
   expect_equal(c6$distinct_by, quo(cyl))
   expect_equal(c8$distinct_by, quo(am))
-  expect_equal(c9$inner_count_layer_prefix, "")
+  expect_equal(c9$indentation, "")
   expect_equal(c10$count_row_prefix, "abc")
 })
 

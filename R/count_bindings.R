@@ -128,18 +128,37 @@ set_count_row_prefix <- function(e, count_row_prefix) {
 #' This is generally used internally with a nested count layer.
 #'
 #' @param e A tplyr_count layer
-#' @param inner_count_layer_prefix A character to prefix the row labels in an inner
+#' @param indentation A character to prefix the row labels in an inner
 #'   count layer
 #'
 #' @return The modified count_layer environment
 #' @export
-set_inner_count_layer_prefix <- function(e, inner_count_layer_prefix) {
+set_indentation <- function(e, indentation) {
 
-  assert_inherits_class(inner_count_layer_prefix, "character")
+  assert_inherits_class(indentation, "character")
 
-  assert_that(length(inner_count_layer_prefix) == 1)
+  assert_that(length(indentation) == 1)
 
-  env_bind(e, inner_count_layer_prefix = inner_count_layer_prefix)
+  env_bind(e, indentation = indentation)
 
   e
+}
+
+#' Set the option to nest count layers
+#'
+#' @param e A tplyr_count layer
+#' @param nest_count A logical value to set the nest option
+#'
+#' @return The modified layer
+#' @export
+set_nest_count <- function(e, nest_count) {
+
+  assert_inherits_class(nest_count, "logical")
+
+  assert_that(length(nest_count) == 1)
+
+  env_bind(e, nest_count = nest_count)
+
+  e
+
 }
