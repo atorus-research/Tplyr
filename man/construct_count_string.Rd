@@ -8,7 +8,7 @@ construct_count_string(
   .n,
   .total,
   .distinct_n = NULL,
-  .total_distinct = NULL,
+  .distinct_total = NULL,
   count_fmt = NULL,
   max_layer_length,
   max_n_width
@@ -22,7 +22,7 @@ denominator that column is based off of.}
 
 \item{.distinct_n}{Vector of distinct counts}
 
-\item{.total_distinct}{Vector of total counts for distinct}
+\item{.distinct_total}{Vector of total counts for distinct}
 
 \item{count_fmt}{The f_str object the strings are formatted around.}
 
