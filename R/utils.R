@@ -169,10 +169,14 @@ apply_row_masks <- function(dat) {
 #'
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
+
   # This contains the subset of the first target variable.
   inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
                                    by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
-                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
+                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
+                                     # Set the value for how to prefix the inner layer
+                                     set_count_row_prefix(env_get(x, "inner_count_layer_prefix", default = "\t")))
+
   # This should be a single row with the total of target_var 1
   outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
                                    by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),

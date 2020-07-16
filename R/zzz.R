@@ -103,3 +103,5 @@ summary_stat <- NULL
 total_row_label <- NULL
 distinct_total <- NULL
 .distinct_total <-NULL
+count_row_prefix <- NULL
+inner_count_layer_prefix <- NULL
