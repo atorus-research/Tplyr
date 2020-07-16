@@ -17,15 +17,20 @@ add_risk_diff <- function(layer, ...) {
               msg="Comparisons provided must be character vectors")
 
   # Risk diff must be run on count layers
-  assert_has_class(layer, 'count_layer')
+  assert_inherits_class(layer, 'count_layer')
 
   # Package up the
-  rd <- structure(comparisons = comparisons,
-            fmt = fmt,
-            class="tplyr_riskdiff")
+  rd <- structure(
+      env(
+        layer,
+        comparisons = comps,
+      ),
+      class=c("tplyr_statistic", "tplyr_riskdiff")
+    )
 
   layer$stats <- append(layer$stats, rd)
 
+  layer
 }
 
 #' Title
@@ -36,22 +41,26 @@ add_risk_diff <- function(layer, ...) {
 #' @return A dataframe containing the necessary two-way table data on the same row
 #'
 #' @examples
-prep_two_way <- function(e, ref_comp) {
+prep_two_way <- function(comp, envir=NULL) {
+
+  # Make sure the function is executing in a Tplyr statistic environment
+  # assert_that(inherits(env_parent(), "tplyr_statistic"),
+  #             msg = paste("This function is only intended to run on `tplyr_statistic` environments.",
+  #                         "Do not use in other contexts."))
 
   evalq({
-
-    print('test')
     # Process on the numeric data
     numeric_data %>%
       # Subset down to only treatments with the ref and comp groups
-      filter(!!treat_var %in% ref_comp) %>%
+      filter(!!treat_var %in% comp) %>%
       mutate(!!treat_var := case_when(
-        !!treat_var == ref ~ 'ref',
-        !!treat_var == comp ~ 'comp'
+        !!treat_var == comp[1] ~ 'ref',
+        !!treat_var == comp[2] ~ 'comp'
       )) %>%
-      pivot_wider(id_cols = match_exact(by), names_from=!!treat_var, values_from = c('value', 'total')) %>%
-      mutate(diff_group = paste0(c(ref, comp), collapse="_"))
-  }, envir=e, enclos=environment())
+      pivot_wider(id_cols = match_exact(append(by, target_var)), names_from=!!treat_var, values_from = c('value', 'total')) %>%
+      mutate(diff_group = paste0(comp, collapse="_"))
+
+  }, envir=envir)
 
 }
 
