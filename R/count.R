@@ -71,15 +71,15 @@ process_count_n <- function(x) {
       filter(!!where) %>%
       # Group by varaibles including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
-      tally(name = "value") %>%
+      tally(name = "n") %>%
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "total", wt = value) %>%
+      add_tally(name = "total", wt = n) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(value = 0, total = 0)) %>%
+      complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
@@ -138,16 +138,16 @@ process_count_total_row <- function(x) {
     total_stat <- summary_stat %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      summarise(value = sum(value)) %>%
+      summarise(n = sum(n)) %>%
       ungroup() %>%
-      mutate(total = value) %>%
+      mutate(total = n) %>%
       # Create a variable to label the totals when it is merged in.
       mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
       # complete based on missing groupings
-      complete(!!treat_var, !!!cols, fill = list(value = 0, total = 0))
+      complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
   }, envir = x)
 }
 
@@ -162,7 +162,7 @@ prepare_format_metadata <- function(x) {
     if(is.null(format_strings)) format_strings <- f_str("ax (xxx.x%)", n, pct)
 
     # Pull max character length from counts. Should be at least 1
-    n_width <- max(c(nchar(numeric_data$value), 1L))
+    n_width <- max(c(nchar(numeric_data$n), 1L))
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
@@ -185,14 +185,14 @@ process_formatting.count_layer <- function(x, ...) {
 
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a
-      mutate(value = {
+      mutate(n = {
         if(is.null(distinct_by)) {
-          construct_count_string(.n=value, .total=total,
+          construct_count_string(.n=n, .total=total,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
         } else {
-          construct_count_string(.n=value, .total=total,
+          construct_count_string(.n=n, .total=total,
                                  .distinct_n=distinct_n, .distinct_total=distinct_total,
                                  count_fmt=format_strings,
                                  max_layer_length=max_layer_length,
@@ -201,7 +201,7 @@ process_formatting.count_layer <- function(x, ...) {
       }) %>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
-                  names_from = c(!!treat_var, match_exact(cols)), values_from = value,
+                  names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
