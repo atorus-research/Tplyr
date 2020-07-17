@@ -83,23 +83,37 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
   evalq({
 
+    # Set a default format string
     if (!"riskdiff" %in% names(format_strings)) {
-      format_strings[['riskdiff']] <- f_str('x.xxx (x.xxx, x.xxx)', dif, low, high)
+      format_strings[['riskdiff']] <- f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
     }
 
+    # Grab the format string object
     fmt <- format_strings$riskdiff
 
-    formatted_statistic_data <- vector('list', length(comparisons))
+    # Prepare the formatted datasets
+    formatted_statistic_data <- comp_numeric_data
 
     for (name in names(comp_numeric_data)) {
 
+      # Construct the display string from the numeric variables
       display_string <- comp_numeric_data[[name]] %>%
         pmap_chr(construct_riskdiff_string, .fmt_str = fmt)
 
+      # Pick off all the labels
+      formatted_statistic_data[[name]] <- formatted_statistic_data[[name]] %>%
+        select(!!!target_var, !!!by)
+
+      # Put the display string in
+      formatted_statistic_data[[name]][name] <- display_string
+
     }
 
-    display_string
+    formatted_statistic_data <- reduce(formatted_statistic_data,
+                                       full_join,
+                                       by=match_exact(append(by, target_var)))
 
+    formatted_statistic_data
 
   }, envir=x)
 }
