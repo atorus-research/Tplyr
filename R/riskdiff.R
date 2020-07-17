@@ -59,8 +59,7 @@ prep_two_way <- function(comp) {
         !!treat_var == comp[1] ~ 'ref',
         !!treat_var == comp[2] ~ 'comp'
       )) %>%
-      pivot_wider(id_cols = match_exact(append(by, target_var)), names_from=!!treat_var, values_from = c('value', 'total')) %>%
-      mutate(diff_group = paste0(comp, collapse="_"))
+      pivot_wider(id_cols = match_exact(append(by, target_var)), names_from=!!treat_var, values_from = c('value', 'total'))
 
   }, envir=caller_env())
 
@@ -89,7 +88,6 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
 
   # Create output container with initial values
   out <- list(
-    group = paste0(diff_group, collapse = "_"),
     prop1 = NA,
     prop2 = NA,
     dif = NA,
@@ -106,7 +104,6 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
     test <- do.call('prop.test', append(list(x=c(value_comp,value_ref), n=c(total_comp, total_ref)), args))
 
     # Collect results into standardized format
-    out$group = paste0(diff_group, collapse = "_")
     out$prop1 = unname(test$estimate[1])
     out$prop2 = unname(test$estimate[2])
     out$dif = unname(test$estimate[1] - test$estimate[2])
@@ -115,4 +112,25 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
   }
 
   as.data.frame(out, stringsAsFactors=FALSE)
+}
+
+construct_riskdiff_string <- function(..., .fmt_str=NULL) {
+  # Unpack names into current namespace for ease
+  list2env(list(...), envir=environment())
+
+  # Return empty when necessary
+  if (any(is.na(list(...)))) {
+    return(.fmt_str$empty)
+  }
+
+  # Start constructing the arguments to call
+  fmt_args <- list(fmt = .fmt_str$repl_str)
+
+  # Grab the num formatting for each value in the format string
+  fmt_args <- append(fmt_args, imap(.fmt_str$vars,
+                                    function(val, i, fmt) num_fmt(eval(val), i, fmt),
+                                    fmt=.fmt_str))
+
+  # Apply the call to sprintf
+  do.call(sprintf, fmt_args)
 }
