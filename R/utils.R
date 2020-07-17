@@ -169,14 +169,40 @@ apply_row_masks <- function(dat) {
 #'
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
+
   # This contains the subset of the first target variable.
-  inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
-                                   by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
-                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
-  # This should be a single row with the total of target_var 1
-  outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
-                                   by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
-                                   where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
+  # If nest_counts is true. the first treat_var is added in the by so it appears
+  # in its own column
+  if(!env_get(x, "nest_count", default = FALSE)) {
+    inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+                                                 by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
+                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
+                                       # Set the value for how to prefix the inner layer
+                                       set_count_row_prefix(env_get(x, "indentation", default = "\t")))
+
+    # This should be a single row with the total of target_var 1
+    outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+                                                 by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
+                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
+
+  } else {
+    inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+                                                 by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
+                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
+                                       # Set the value for how to prefix the inner layer
+                                       set_count_row_prefix(env_get(x, "indentation", default = "\t")))
+
+    # This should be a single row with the total of target_var 1
+    outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+                                                 by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
+                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
+
+    outer_layer$numeric_data <- outer_layer$numeric_data %>%
+      mutate(!!env_get(x, "target_var")[[1]] := !!target_var_1_i)
+
+
+  }
+
   # Bind these two to gether and add a row mask
   bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
 }

@@ -90,3 +90,75 @@ set_distinct_by <- function(e, distinct_by) {
 
   e
 }
+
+#' Set the option to prefix the row_label values when a layer is formatted
+#'
+#' This is generally used internally with a nested count layer.
+#'
+#' @param e A tplyr_count layer
+#' @param count_row_prefix A character to prefix the row labels
+#'
+#' @return The modified count_layer environment
+#' @export
+#'
+#' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_count_row_prefix("\t")
+#'   ) %>%
+#'   build()
+#'
+set_count_row_prefix <- function(e, count_row_prefix) {
+
+  assert_inherits_class(count_row_prefix, "character")
+
+  assert_that(length(count_row_prefix) == 1)
+
+  env_bind(e, count_row_prefix = count_row_prefix)
+
+  e
+}
+
+#' Set the option to prefix the row_labels in the inner count_layer
+#'
+#' This is generally used internally with a nested count layer.
+#'
+#' @param e A tplyr_count layer
+#' @param indentation A character to prefix the row labels in an inner
+#'   count layer
+#'
+#' @return The modified count_layer environment
+#' @export
+set_indentation <- function(e, indentation) {
+
+  assert_inherits_class(indentation, "character")
+
+  assert_that(length(indentation) == 1)
+
+  env_bind(e, indentation = indentation)
+
+  e
+}
+
+#' Set the option to nest count layers
+#'
+#' @param e A tplyr_count layer
+#' @param nest_count A logical value to set the nest option
+#'
+#' @return The modified layer
+#' @export
+set_nest_count <- function(e, nest_count) {
+
+  assert_inherits_class(nest_count, "logical")
+
+  assert_that(length(nest_count) == 1)
+
+  env_bind(e, nest_count = nest_count)
+
+  e
+
+}

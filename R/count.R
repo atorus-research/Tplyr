@@ -51,10 +51,14 @@ process_single_count_target <- function(x) {
 
     if(include_total_row) process_count_total_row(current_env())
 
+    if(is.null(count_row_prefix)) count_row_prefix <- ""
+
 
     # rbind tables together
     numeric_data <- summary_stat %>%
-      bind_rows(total_stat)
+      bind_rows(total_stat) %>%
+      mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
+      rename("summary_var" = !!target_var[[1]])
 
   }, envir = x)
 }
@@ -119,7 +123,7 @@ process_count_distinct_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+      mutate(!!as_label(target_var[[1]]) := as_name(target_var[[1]]))
 
     summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "distinct_total")])
 
@@ -183,6 +187,17 @@ prepare_format_metadata <- function(x) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
+    # This is used if the first target_var is in the numeric data, which happens with nested
+    # counts if nested_counts is TRUE
+    if(as_name(target_var[[1]]) %in% names(numeric_data)){
+      id_cols_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
+      by_expr <- quos(!!target_var[[1]], !!!by, summary_var)
+    }
+    else{
+      id_cols_expr <- expr(c(match_exact(by), "summary_var"))
+      by_expr <- quos(!!!by, summary_var)
+    }
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a
       mutate(n = {
@@ -200,12 +215,12 @@ process_formatting.count_layer <- function(x, ...) {
         }
       }) %>%
       # Pivot table
-      pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
+      pivot_wider(id_cols = !!id_cols_expr,
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
-      replace_by_string_names(c(by, target_var))
+      replace_by_string_names(by_expr)
   }, envir = x)
 }
 
@@ -290,74 +305,18 @@ factor_treat_var <- function(x) {
   }, envir = env_parent(x))
 }
 
-#' #' Process a layer of type \code{group_count}
-#' #'
-#' #' @param e A layer environment
-#' #'
-#' #' @return A
-#' #' @export
-#' #'
-#' #' @examples
-#' process_count_layer <- function(e) {
-#'   evalq({
-#'
-#'     if(!exists("count_fmt")) count_fmt <- f_str("ax (xxx.x%)", n, pct)
-#'     if(!exists("include_total_row")) include_total_row <- TRUE
-#'
-#'     # Construct the counts for each target grouping
-#'     summary_stat <- built_target %>%
-#'       # Filter out based on where
-#'       filter(!!where) %>%
-#'       # Group by varaibles including target variables and count them
-#'       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
-#'       tally() %>%
-#'       ungroup() %>%
-#'       # Group by all column variables
-#'       group_by(!!treat_var, !!!cols) %>%
-#'       add_tally(name = "Total", wt = n) %>%
-#'       ungroup() %>%
-#'       # complete all combiniations of factors to include combiniations that don't exist.
-#'       # add 0 for combintions that don't exist
-#'       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, Total = 0))
-#'
-#'     # If there is no values in summary_stat, which can happen depending on where. Return nothing
-#'     if(nrow(summary_stat) == 0) return()
-#'
-#'     #
-#'     total_stat <- NULL
-#'     if(include_total_row) {
-#'       # create a data.frame to create total counts
-#'       total_stat <- summary_stat %>%
-#'         # filter out based on where
-#'         filter(!!where) %>%
-#'         # Group by all column variables
-#'         group_by(!!treat_var, !!!cols) %>%
-#'         summarise(n = sum(n)) %>%
-#'         ungroup() %>%
-#'         mutate(Total = n) %>%
-#'         # Create a variable to label the totals when it is merged in.
-#'         mutate(!!target_var[[1]] := "Total") %>%
-#'         # Create variables to carry forward 'by'
-#'         group_by(!!!by) %>%
-#'         # complete based on missing groupings
-#'         complete(!!treat_var, !!!cols, fill = list(n = 0, Total = 0))
-#'     }
-#'
-#'
-#'     # rbind tables together
-#'       built_table <- summary_stat %>%
-#'         bind_rows(total_stat) %>%
-#'         mutate(n = construct_count_string(n, Total, count_fmt)) %>%
-#'         # Pivot table
-#'         pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
-#'                     names_from = c(!!treat_var, match_exact(cols)), values_from = n,
-#'                     names_prefix = "var1_") %>%
-#'         # Replace String names for by and target variables. target variables are included becasue they are
-#'         # equivilant to by variables in a count layer
-#'         replace_by_string_names(c(by, target_var))
-#'
-#'   }, envir = e)
-#' }
 
+#' Prefix a row with a specifed character
+#'
+#' @param row_i The row to prefix
+#' @param count_row_prefix The prefix
+#'
+#' @return The modified row
+#' @noRd
+prefix_count_row <- function(row_i, count_row_prefix) {
+
+  paste0(count_row_prefix, row_i)
+
+}
 
 
