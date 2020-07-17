@@ -9,12 +9,13 @@
 #' @export
 #'
 #' @examples
-add_risk_diff <- function(layer, ...) {
+add_risk_diff <- function(layer, ..., args=list()) {
 
   comps <- list(...)
 
   assert_that(all(map_lgl(comps, is.character)),
               msg="Comparisons provided must be character vectors")
+
 
   # Risk diff must be run on count layers
   assert_inherits_class(layer, 'count_layer')
@@ -24,6 +25,7 @@ add_risk_diff <- function(layer, ...) {
       env(
         layer,
         comparisons = comps,
+        args = args
       ),
       class=c("tplyr_statistic", "tplyr_riskdiff")
     )
@@ -41,7 +43,7 @@ add_risk_diff <- function(layer, ...) {
 #' @return A dataframe containing the necessary two-way table data on the same row
 #'
 #' @examples
-prep_two_way <- function(comp, envir=NULL) {
+prep_two_way <- function(comp) {
 
   # Make sure the function is executing in a Tplyr statistic environment
   # assert_that(inherits(env_parent(), "tplyr_statistic"),
@@ -60,7 +62,7 @@ prep_two_way <- function(comp, envir=NULL) {
       pivot_wider(id_cols = match_exact(append(by, target_var)), names_from=!!treat_var, values_from = c('value', 'total')) %>%
       mutate(diff_group = paste0(comp, collapse="_"))
 
-  }, envir=envir)
+  }, envir=caller_env())
 
 }
 
@@ -95,6 +97,8 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
     high = NA
   )
 
+  out <- append(list(...), out)
+
   # Totals in the 2 way must be positive
   if (all(c(total_comp, total_ref) > 0)) {
 
@@ -110,5 +114,5 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
     out$high = unname(test$conf.int[2])
   }
 
-  as.data.frame(out)
+  as.data.frame(out, stringsAsFactors=FALSE)
 }
