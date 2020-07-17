@@ -191,8 +191,12 @@ process_formatting.count_layer <- function(x, ...) {
     # counts if nested_counts is TRUE
     if(as_name(target_var[[1]]) %in% names(numeric_data)){
       id_cols_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
+      by_expr <- quos(!!target_var[[1]], !!!by, summary_var)
     }
-    else id_cols_expr <- expr(c(match_exact(by), "summary_var"))
+    else{
+      id_cols_expr <- expr(c(match_exact(by), "summary_var"))
+      by_expr <- quos(!!!by, summary_var)
+    }
 
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a
@@ -216,7 +220,7 @@ process_formatting.count_layer <- function(x, ...) {
                   names_prefix = "var1_") %>%
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
-      replace_by_string_names(by)
+      replace_by_string_names(by_expr)
   }, envir = x)
 }
 
