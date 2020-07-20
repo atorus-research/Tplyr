@@ -105,18 +105,24 @@ test_that("Count layers are summarized without errors and warnings", {
 })
 
 test_that("Count layers are processed as expected", {
-  # After the build there should be 15 things in the layer
-  expect_length(c1, 15)
-  expect_length(c2, 15)
-  expect_length(c3, 15)
-  expect_length(c4, 14)
-  expect_length(c5, 16)
+  # After the build there should be 17 things in the layer
+  # [1] "numeric_data"      "sort_vars"         "include_total_row" "id_col_expr"
+  # [5] "max_length"        "format_strings"    "summary_stat"      "by"
+  # [9] "by_expr"           "sort"              "i"                 "where"
+  # [13] "target_var"        "formatted_data"    "count_row_prefix"  "n_width"
+  # [17] "replaced_string"   "layers"
+  expect_length(c1, 17)
+  expect_length(c2, 17)
+  expect_length(c3, 17)
+  # c4 doesn't have i
+  expect_length(c4, 16)
+  expect_length(c5, 18)
   # c6 will also have distinct_by so 15
-  expect_length(c6, 17)
-  expect_length(c7, 12)
-  expect_length(c8, 16)
-  expect_length(c9, 13)
-  expect_length(c10, 15)
+  expect_length(c6, 19)
+  expect_length(c7, 14)
+  expect_length(c8, 18)
+  expect_length(c9, 15)
+  expect_length(c10, 17)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
   expect_equal(dim(c2$numeric_data), c(18, 5))
@@ -146,9 +152,9 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c4$formatted_data), c(12, 6))
   expect_equal(dim(c5$formatted_data), c(13, 6))
   expect_equal(dim(c6$formatted_data), c(1, 4))
-  expect_equal(dim(c7$formatted_data), c(15, 5))
+  expect_equal(dim(c7$formatted_data), c(15, 4))
   expect_equal(dim(c8$formatted_data), c(3, 4))
-  expect_equal(dim(c9$formatted_data), c(15, 5))
+  expect_equal(dim(c9$formatted_data), c(15, 4))
   expect_equal(dim(c10$formatted_data), c(3, 4))
 
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
@@ -157,7 +163,7 @@ test_that("Count layers are processed as expected", {
   expect_true(all(nchar(unlist(c4$formatted_data[, 5:6])) == 3))
   expect_true(all(nchar(unlist(c5$formatted_data[, 4:6])) == 11))
   expect_true(all(nchar(unlist(c6$formatted_data[, 3:4])) == 11))
-  expect_true(all(nchar(unlist(c7$formatted_data[, 3:5])) == 10))
+  expect_true(all(nchar(unlist(c7$formatted_data[, 2:4])) == 10))
 
   # Check all start with abc
   expect_true(all(map_chr(unlist(c10$formatted_data[, 1]), str_sub, 1, 3) == "abc"))
@@ -177,3 +183,4 @@ test_that("An informative warning/error message is raised appropriate", {
     ) %>%
     build()}, "Some Informative Warning Message")
 })
+

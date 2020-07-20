@@ -142,7 +142,7 @@ process_count_total_row <- function(x) {
     total_stat <- summary_stat %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      summarise(n = sum(n)) %>%
+      summarize(n = sum(n)) %>%
       ungroup() %>%
       mutate(total = n) %>%
       # Create a variable to label the totals when it is merged in.
@@ -150,6 +150,8 @@ process_count_total_row <- function(x) {
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
+      # ungroup right away to make sure the complete works
+      ungroup() %>%
       # complete based on missing groupings
       complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
   }, envir = x)
@@ -188,13 +190,14 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
 
     # This is used if the first target_var is in the numeric data, which happens with nested
-    # counts if nested_counts is TRUE
-    if(as_name(target_var[[1]]) %in% names(numeric_data)){
-      id_cols_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
-      by_expr <- quos(!!target_var[[1]], !!!by, summary_var)
+    # counts in nested counts and if the nest_count is true
+    if(as_name(target_var[[1]]) %in% names(numeric_data) ||
+               (exists("nest_count") && nest_count)){
+      id_col_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
+      by_expr <- quos(!!!by, summary_var)
     }
     else{
-      id_cols_expr <- expr(c(match_exact(by), "summary_var"))
+      id_col_expr <- expr(c(match_exact(by), "summary_var"))
       by_expr <- quos(!!!by, summary_var)
     }
 
@@ -215,12 +218,21 @@ process_formatting.count_layer <- function(x, ...) {
         }
       }) %>%
       # Pivot table
-      pivot_wider(id_cols = !!id_cols_expr,
+      pivot_wider(id_cols = !!id_col_expr,
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
-                  names_prefix = "var1_") %>%
+                  names_prefix = "var1_")
+
+    if(exists("nest_count") && nest_count) {
+      formatted_data <- formatted_data %>%
+        replace_by_string_names(by_expr)
+    } else {
+      formatted_data <- formatted_data %>%
+        mutate(!!as_name(target_var[[1]]) := NULL) %>%
+        replace_by_string_names(by_expr)
+    }
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
-      replace_by_string_names(by_expr)
+      # replace_by_string_names(by_expr)
   }, envir = x)
 }
 
