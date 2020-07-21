@@ -59,7 +59,9 @@ prep_two_way <- function(comp) {
         !!treat_var == comp[1] ~ 'ref',
         !!treat_var == comp[2] ~ 'comp'
       )) %>%
-      pivot_wider(id_cols = match_exact(append(by, target_var)), names_from=!!treat_var, values_from = c('value', 'total'))
+      pivot_wider(id_cols = match_exact(c(by, cols, target_var)),
+                  names_from=!!treat_var,
+                  values_from = c('value', 'total'))
 
   }, envir=caller_env())
 

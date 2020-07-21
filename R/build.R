@@ -72,21 +72,16 @@ build.tplyr_table <- function(x) {
   # Process Layer summaries
   map(x$layers, process_summaries)
 
-  ## TODO: This is where I think we can insert statistical methods to be applied across layers
-  # - The numeric data is prepped in each layer
-  # - We can load some container with methods to be applied. Those methods extract the numeric data from the layer and
-  #   return a new vector
-  # - That vector is bound during process formatting
-
   # Get table formatting info
   formatting_meta <- fetch_formatting_info(x)
 
   # Format layers/table and pivot. process_formatting should return the built table!
   output <- map(x$layers, process_formatting) %>%
-    bind_rows()
+    bind_rows() %>%
+    select(starts_with('row_label'), starts_with('var'), everything())
 
   # Rearange columns. Currently just alphabetical
-  output[, sort(names(output))]
+  output
 }
 
 #' Process layers to get numeric results of layer
@@ -112,6 +107,7 @@ process_summaries <- function(x, ...) {
 process_formatting <- function(x, ...) {
   UseMethod("process_formatting")
 }
+
 
 #' Placeholder function to fetch table formatting data from layers
 #'

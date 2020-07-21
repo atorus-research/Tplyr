@@ -23,6 +23,9 @@ process_summaries.count_layer <- function(x, ...) {
 
   prepare_format_metadata(x)
 
+  # Trigger any derivation of additional statistics
+  map(x$stats, process_statistic_data)
+
   x
 }
 
@@ -202,10 +205,18 @@ process_formatting.count_layer <- function(x, ...) {
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), match_exact(target_var)),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = value,
-                  names_prefix = "var1_") %>%
-      # Replace String names for by and target variables. target variables are included becasue they are
-      # equivilant to by variables in a count layer
-      replace_by_string_names(c(by, target_var))
+                  names_prefix = "var1_")
+
+    # Process the statistical data formatting
+    formatted_stats_data <- map(stats, process_statistic_formatting)
+
+    formatted_data <- reduce(append(list(formatted_data), formatted_stats_data),
+           full_join,
+           by=c(match_exact(target_var), match_exact(by)))
+
+    # Replace String names for by and target variables. target variables are included becasue they are
+    # equivilant to by variables in a count layer
+    formatted_data <- formatted_data %>% replace_by_string_names(c(by, target_var))
   }, envir = x)
 }
 
