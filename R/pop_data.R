@@ -11,6 +11,7 @@ default_header_n <- function(table) {
 
   evalq({
     df <- pop_data %>%
+      filter(!!table_where) %>%
       group_by(!!pop_treat_var, !!!cols) %>%
       tally() %>%
       ungroup() %>%
