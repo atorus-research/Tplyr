@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' library(magrittr)
+#' library(dplyr)
 #'
 #' t <- tplyr_table(mtcars, gear)
 #'
