@@ -47,5 +47,6 @@ this_denom <- function(.data, header_n) {
   # Evaluate the filter above and pull out the 'n' column
   header_n %>%
     filter(!!!filter_logic) %>%
-    select(n)
+    select(n) %>%
+    rename("total" = n)
 }
