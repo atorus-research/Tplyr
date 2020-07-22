@@ -167,8 +167,8 @@ prep_two_way <- function(comp) {
       filter(!!treat_var %in% comp) %>%
       # Rename the treatment groups to ref and comp
       mutate(!!treat_var := case_when(
-        !!treat_var == comp[1] ~ 'comp',
-        !!treat_var == comp[2] ~ 'ref'
+        !!treat_var == comp[1] ~ 'ref',
+        !!treat_var == comp[2] ~ 'comp'
       )) %>%
       # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
       pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
@@ -212,12 +212,12 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
   if (all(c(total_comp, total_ref) > 0)) {
 
     # Run the risk difference
-    test <- do.call('prop.test', append(list(x=c(n_comp,n_ref), n=c(total_comp, total_ref)), args))
+    test <- do.call('prop.test', append(list(x=c(n_ref, n_comp), n=c(total_ref, total_comp)), args))
 
     # Collect results into standardized format
     out$prop1 = unname(test$estimate[1])
     out$prop2 = unname(test$estimate[2])
-    out$dif = unname(test$estimate[1] - test$estimate[2])
+    out$dif = unname(test$estimate[2] - test$estimate[1])
     out$low = unname(test$conf.int[1])
     out$high = unname(test$conf.int[2])
   }
