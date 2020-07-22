@@ -54,11 +54,11 @@ test_that("Count layers are built as expected", {
   # c5 has include_total_row
   expect_length(c5, 8)
   # c6 has distinct_by
-  expect_length(c6, 7)
-  expect_length(c7, 6)
-  expect_length(c8, 8)
-  expect_length(c9, 7)
-  expect_length(c10, 7)
+  expect_length(c6, 8)
+  expect_length(c7, 7)
+  expect_length(c8, 9)
+  expect_length(c9, 8)
+  expect_length(c10, 8)
 
   expect_equal(c1$by, quos())
   expect_equal(c2$by, quos(am))
@@ -112,18 +112,18 @@ test_that("Count layers are processed as expected", {
   # [9] "by_expr"           "sort"              "i"                 "where"
   # [13] "target_var"        "formatted_data"    "count_row_prefix"  "n_width"
   # [17] "replaced_string"   "layers"
-  expect_length(c1, 17)
-  expect_length(c2, 17)
-  expect_length(c3, 17)
+  expect_length(c1, 19)
+  expect_length(c2, 19)
+  expect_length(c3, 19)
   # c4 doesn't have i
-  expect_length(c4, 16)
-  expect_length(c5, 18)
+  expect_length(c4, 18)
+  expect_length(c5, 20)
   # c6 will also have distinct_by so 15
-  expect_length(c6, 19)
-  expect_length(c7, 14)
-  expect_length(c8, 18)
-  expect_length(c9, 15)
-  expect_length(c10, 17)
+  expect_length(c6, 21)
+  expect_length(c7, 16)
+  expect_length(c8, 20)
+  expect_length(c9, 17)
+  expect_length(c10, 19)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
   expect_equal(dim(c2$numeric_data), c(18, 5))
