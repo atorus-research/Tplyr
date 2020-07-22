@@ -4,12 +4,15 @@
 \alias{add_column_headers}
 \title{Attach column headers to a Tplyr output}
 \usage{
-add_column_headers(.data, s)
+add_column_headers(.data, s, header_n = NULL)
 }
 \arguments{
 \item{.data}{The data.frame/tibble on which the headers shall be attached}
 
 \item{s}{The text containing the intended header string}
+
+\item{header_n}{A header_n or generic data.frame to use for binding count values.
+This is required if you are using the token replacement.}
 }
 \value{
 A data.frame with the processed header string elements attached as the top rows
@@ -54,6 +57,24 @@ but based on feedback it could be determined that less common characters may be 
 }
 }
 
+\section{Token Replacement}{
+
+This function has support for reading from the header_n binding on the table
+and adding them in the column headers. Note: The order of the parameters
+passed in the token is important. They should be first the treatment variable
+then any cols in the order they were passed in the table construction.
+
+Use a double underscore "__" at the begining to start the token and another
+double underscore to close it. You can separate column parameters in the token
+with an underscore. For example, __group1_flag2_param3__ will pull the count
+from the header_n binding for group_1 in the treat_var, flag2 in the first cols
+argument, and param3 in the second cols argument.
+
+You can pass fewer arguments in the token to get the sum of multiple columns.
+For example, __group1__ would get the sum of the group1 treat_var,
+and all cols from the header_n.
+}
+
 \examples{
 # Load in pipe
 library(magrittr)
@@ -64,4 +85,20 @@ iris2 <- iris \%>\%
   mutate_all(as.character)
 
 iris2 \%>\% add_column_headers(header_string)
+
+# Example with counts
+mtcars2 <- mtcars \%>\%
+  mutate_all(as.character)
+
+t <- tplyr_table(mtcars2, vs, cols = am) \%>\%
+  add_layer(
+    group_count(cyl)
+  )
+
+b_t <- build(t)
+
+
+count_string <- "Rows | V N=__0__ {auto N=__0_0__ | man N=__0_1__} | S N=__1__ {auto N=__1_0__ | man N=__1_1__}"
+
+add_column_headers(b_t, count_string, header_n(t))
 }
