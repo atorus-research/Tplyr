@@ -1,25 +1,25 @@
-#' Title
+#' Process a tplyr_statistic object
 #'
-#' @param x
-#' @param ...
+#' This is an internal function that is not meant for use externally, but must be exported.
+#' Use with caution.
 #'
-#' @return
+#' @param x A tplyr_statistic environment
+#' @param ... Additional pass through parameters
+#'
+#' @return Numeric statistc data from a tplyr statistc
 #' @export
-#'
-#' @examples
 process_statistic_data <- function(x, ...) {
   UseMethod('process_statistic_data')
 }
 
-#' Title
+#' Risk difference numeric processing
 #'
-#' @param x
-#' @param ...
+#' @param x a tplyr_statistic object
+#' @param ... pass through parameters
 #'
-#' @return
+#' @return numeric risk difference data
+#' @noRd
 #' @export
-#'
-#' @examples
 process_statistic_data.tplyr_riskdiff <- function(x, ...) {
 
   evalq({
@@ -57,28 +57,28 @@ process_statistic_data.tplyr_riskdiff <- function(x, ...) {
   }, envir=x)
 }
 
-#' Title
+#' Process string formatting on a tplyr_statistic object
 #'
-#' @param x
-#' @param ...
+#' This is an internal function that is not meant for use externally, but must be exported.
+#' Use with caution.
 #'
-#' @return
+#' @param x A tplyr_statistic environment
+#' @param ... Additional pass through parameters
+#'
+#' @return Formatted tplyr_statistic data
 #' @export
-#'
-#' @examples
 process_statistic_formatting <- function(x, ...) {
   UseMethod('process_statistic_formatting')
 }
 
-#' Title
+#' Risk difference string formatting
 #'
-#' @param x
-#' @param ...
+#' @param x A tplyr_statistc object
+#' @param ... Pass through paramters
 #'
-#' @return
+#' @return Formatted risk difference data
+#' @noRd
 #' @export
-#'
-#' @examples
 process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
   evalq({
@@ -112,12 +112,16 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
     # Join the rdiff columns together
     formatted_statistic_data <- reduce(formatted_statistic_data,
                                        full_join,
-                                       by=match_exact(c(by, cols, target_var))) %>%
+                                       by=match_exact(c(by, cols, target_var)))
+
+    if (length(cols) > 0) {
       # Pivot by column
-      pivot_wider(id_cols=match_exact(c(by, cols, target_var)),
-                  names_from = match_exact(cols),
-                  names_sep = "_",
-                  values_from=starts_with('rdiff'))
+      formatted_statistic_data <- formatted_statistic_data %>%
+        pivot_wider(id_cols=match_exact(c(by, cols, target_var)),
+                    names_from = match_exact(cols),
+                    names_sep = "_",
+                    values_from=starts_with('rdiff'))
+    }
 
     formatted_statistic_data
 

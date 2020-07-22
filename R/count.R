@@ -162,7 +162,12 @@ prepare_format_metadata <- function(x) {
   evalq({
 
     # Get formatting metadata prepared
-    if(is.null(format_strings)) format_strings <- list("n_counts" = f_str("ax (xxx.x%)", n, pct))
+    if(is.null(format_strings)) {
+      format_strings <- list("n_counts" = f_str("ax (xxx.x%)", n, pct))
+    } else if (!'n_counts' %in% names(format_strings)) {
+      format_strings[['n_counts']] <- f_str("ax (xxx.x%)", n, pct)
+    }
+
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$value), 1L))
@@ -175,7 +180,7 @@ prepare_format_metadata <- function(x) {
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
-      format_strings <- list("n_counts" = f_str(replaced_string, n, pct))
+      format_strings[['n_counts']] <- f_str(replaced_string, n, pct)
     }
     max_length <- format_strings[['n_counts']]$size
   }, envir = x)

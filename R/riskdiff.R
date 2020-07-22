@@ -1,26 +1,127 @@
 # Functions to calculate risk difference
 
-#' Title
+#' Add risk difference to a count layer
+#'
+#' A very common requirement for summary tables is to calculate the risk difference between treatment
+#' groups. \code{add_risk_diff} allows you to do just this. The underlying risk difference calculations
+#' are performed using the Base R function \code{\link{prop.test}} - so prior to using this function,
+#' be sure to familiarize yourself with its functionality. See the Details section for more information
+#' on using \code{add_risk_diff}.
+#'
+#' \code{add_risk_diff} can only be attached to a count layer, so the count layer must be constructed
+#' first. \code{add_risk_diff} allows you to compare the difference between treatment group, so all
+#' comparisons will be based upon the values within the specified \code{treat_var} in your
+#' \code{tplyr_table} object.
+#'
+#' Comparisons are specified by providing two-element character vectors. You can provide as many of
+#' these groups as you want. You can also use groups that have been constructed using
+#' \code{\link{add_treat_group}} or \code{\link{add_total_group}}. The first element provided will be considered
+#' the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
+#' the 'comparison'. So, if you'd like to see the risk difference of 'T1 vs. Placebo', you would specify
+#' this as \code{c('T1', 'Placebo')}.
+#'
+#' Tplyr forms your two-way table in the background, and then runs \code{\link{prop.test}} appropriately.
+#' Similar to way that the display of layers are specified, the exact values and format of how you'd like
+#' the risk difference display are set using \code{\link{set_format_string}}. This controls both the values
+#' and the format of how the risk difference is displayed. Risk difference formats are set within
+#' \code{\link{set_format_strings}} by using the name 'riskdiff'.
+#'
+#' You have 5 variables to choose from in your data presentation:
+#' \describe{
+#'   \item{\strong{prop1}}{Probability of the left hand side group}
+#'   \item{\strong{prop2}}{Probability of the right hand side group}
+#'   \item{\strong{dif}}{Difference of group 1 - group 2}
+#'   \item{\strong{low}}{Lower end of the confidence interval (default is 95\%, override with the \code{args} paramter)}
+#'   \item{\strong{high}}{Upper end of the confidence interval (default is 95\%, override with the \code{args} paramter)}
+#' }
+#'
+#' Use these variable names when forming your \code{\link{f_str}} objects. The default presentation, if no
+#' string format is specified, will be:
+#'   \code{f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)}
+#'
+#' Note - within Tplyr, you can account for negatives by allowing an extra space within your integer
+#' side settings. This will help with your alignment.
+#'
+#' If columns are specified on a Tplyr table, risk difference comparisons still only take place between
+#' groups within the \code{treat_var} variable - but they are instead calculated treating the \code{cols}
+#' variables as by variables. Just like the tplyr layers themselves, the risk difference will then be transposed
+#' and will display each risk difference as separate variables by each of the \code{cols} variables.
+#'
+#' One final note - \code{\link{prop.test}} may throw quite a few warnings. This is natural, because it
+#' alerts you when there's not enough data for the approximations to be correct. This may be unnerving
+#' coming from a SAS programming world, but R is just trying to alert you that the values provided
+#' don't have enough data to truly be statistically accurate.
 #'
 #' @param layer Layer upon which the risk difference will be attached
 #' @param ... Comparison groups, provided as character vectors where the first group is the comparison,
 #' and the second is the reference
+#' @param args Arguments that are passed directly into \code{\link{prop.test}}
 #'
 #' @export
 #'
 #' @examples
+#' ## Two group comparisons with default options applied
+#' t <- tplyr_table(mtcars, gear)
+#'
+#' # Basic risk diff for two groups, using defaults
+#' l1 <- group_count(t, carb) %>%
+#'   # Compare 4 vs. 3, 5 vs. 3
+#'   add_risk_diff(
+#'     c('4', '3'),
+#'     c('5', '3')
+#'   )
+#'
+#' ## Specify custom formats and display variables
+#' t <- tplyr_table(mtcars, gear)
+#'
+#' # Build and show output
+#' add_layers(t, l1) %>% build()
+#'
+#' # Create the layer with custom formatting
+#' l2 <- group_count(t, carb) %>%
+#'   # Compare 4 vs. 3, 5 vs. 3
+#'   add_risk_diff(
+#'     c('4', '3'),
+#'     c('5', '3')
+#'   ) %>%
+#'   set_format_strings(
+#'     'n_counts' = f_str('xx (xx.x)', n, pct),
+#'     'riskdiff' = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', prop1, prop2, dif, low, high)
+#'   )
+#'
+#' # Build and show output
+#' add_layers(t, l2) %>% build()
+#'
+#' ## Passing arguments to prop.test
+#' t <- tplyr_table(mtcars, gear)
+#'
+#' # Create the layer with args option
+#' l3 <- group_count(t, carb) %>%
+#'   # Compare 4 vs. 3, 5 vs. 3
+#'   add_risk_diff(
+#'     c('4', '3'),
+#'     c('5', '3'),
+#'     args = list(conf.level = 0.9, correct=FALSE, alternative='less')
+#'   )
+#'
+#' # Build and show output
+#' add_layers(t, l3) %>% build()
 add_risk_diff <- function(layer, ..., args=list()) {
 
+  # grab the ellipsis args into a list
   comps <- list(...)
 
-  assert_that(all(map_lgl(comps, is.character)),
-              msg="Comparisons provided must be character vectors")
+  # Must be character, must have 2 elements
+  assert_that(all(map_lgl(comps, is.character)), all(map_lgl(comps, ~ length(.x) == 2)),
+              msg="Comparisons provided must be two-element character vectors")
 
+  assert_that(all(names(args) %in% c('p', 'alternative', 'conf.level', 'correct')),
+              msg = "All arguments provided via `args` must be valid arguments of `prop.test`")
 
   # Risk diff must be run on count layers
-  assert_inherits_class(layer, 'count_layer')
+  assert_that(inherits(layer, 'count_layer'), msg = "Risk difference can only be applied to a count layer.")
 
-  # Package up the
+  # Package up the environment
   rd <- structure(
       env(
         layer,
@@ -30,19 +131,20 @@ add_risk_diff <- function(layer, ..., args=list()) {
       class=c("tplyr_statistic", "tplyr_riskdiff")
     )
 
+  # Add to the stats container
   layer$stats <- append(layer$stats, rd)
 
   layer
 }
 
-#' Title
+#' Prepare a two-way table
 #'
 #' @param e Environment two way table is being prepped from
 #' @param ref_comp The reference and comparison group
 #'
 #' @return A dataframe containing the necessary two-way table data on the same row
 #'
-#' @examples
+#' @noRd
 prep_two_way <- function(comp) {
 
   # Make sure the function is executing in a Tplyr statistic environment
@@ -51,14 +153,23 @@ prep_two_way <- function(comp) {
   #                         "Do not use in other contexts."))
 
   evalq({
+
+    # Make sure that the comparisons issued actually exist within the data
+    invalid_groups <- comp[!comp %in% unique(numeric_data[as_label(treat_var)])[[1]]]
+    assert_that(length(invalid_groups) == 0,
+                msg = paste0("There are no records for the following groups within the variable ", as_label(treat_var),
+                             ": ", paste(invalid_groups, collapse=", ")))
+
     # Process on the numeric data
     numeric_data %>%
       # Subset down to only treatments with the ref and comp groups
       filter(!!treat_var %in% comp) %>%
+      # Rename the treatment groups to ref and comp
       mutate(!!treat_var := case_when(
         !!treat_var == comp[1] ~ 'ref',
         !!treat_var == comp[2] ~ 'comp'
       )) %>%
+      # Pivot out to give the var names value_ref, value_comp, total_ref, total_comp for two way
       pivot_wider(id_cols = match_exact(c(by, cols, target_var)),
                   names_from=!!treat_var,
                   values_from = c('value', 'total'))
@@ -85,9 +196,6 @@ prep_two_way <- function(comp) {
 #'
 riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, args=list(), ...) {
 
-  assert_that(all(names(args) %in% c('p', 'alternative', 'conf.level', 'correct')),
-              msg = "All arguments provided via `args` must be valid arguments of `prop.test`")
-
   # Create output container with initial values
   out <- list(
     prop1 = NA,
@@ -113,6 +221,7 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
     out$high = unname(test$conf.int[2])
   }
 
+  # Return as a dataframe
   as.data.frame(out, stringsAsFactors=FALSE)
 }
 

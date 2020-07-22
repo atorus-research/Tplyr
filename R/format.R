@@ -113,8 +113,10 @@ separate_int_dig <- function(x){
 #' 'Tplyr' allows you extensive control over how strings are presented. \code{set_format_strings} allows you
 #' to apply these string formats to your layer. This behaves slightly differently between layers.
 #'
-#' In a count layer, you simply need to provide a single \code{\link{f_str}} object to specify how you want your
-#' n's (and possibly percents) formatted. In a descriptive statistic layer, \code{set_format_strings} allows you
+#' In a count layer, you can simply provide a single \code{\link{f_str}} object to specify how you want your
+#' n's (and possibly percents) formatted. If you are additionally supplying a statistic, like risk difference
+#' using \code{\link{add_risk_diff}}, you specify the count formats using the name 'n_counts'. The risk difference formats
+#' would then be specified using the name "riskdiff". In a descriptive statistic layer, \code{set_format_strings} allows you
 #' to do a couple more things:
 #' \itemize{
 #' \item{By naming paramters with character strings, those character strings become a row label in the resulting data frame}
