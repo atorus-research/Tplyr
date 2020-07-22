@@ -16,8 +16,8 @@ test_that("`add_risk_diff` adds an element of the correct type to the `stats` co
 
   # 1 container added with proper class
   expect_equal(length(l1$stats), 1)
-  expect_s3_class(l$stats[[1]], 'tplyr_statistic')
-  expect_s3_class(l$stats[[1]], 'tplyr_riskdiff')
+  expect_s3_class(l1$stats[[1]], 'tplyr_statistic')
+  expect_s3_class(l1$stats[[1]], 'tplyr_riskdiff')
 
   s <- l1$stats[[1]]
   # Contents of the class are accurate
@@ -74,7 +74,7 @@ test_that("Default processing happens correctly", {
     )
 
   # Build and show output
-  dat <- add_layers(t, l1) %>% build()
+  dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   # 5 columns
   expect_equal(ncol(dat), 5)
@@ -105,7 +105,7 @@ test_that("Multiple comparisons properly populate", {
     )
 
   # Build and show output
-  dat <- add_layers(t, l1) %>% build()
+  dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   # 5 columns
   expect_equal(ncol(dat), 6)
@@ -135,7 +135,7 @@ test_that("Passing arguments into prop.test update values correctly", {
       args = list(conf.level=.9, correct=FALSE, alternative="less")
     )
 
-  dat <- add_layers(t, l1) %>% build()
+  dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   expect_equal(dat$rdiff_4_3[[1]], "-0.133 (-1.000,  0.086)")
 
@@ -172,7 +172,7 @@ test_that("Format strings are applied correctly", {
       riskdiff = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', prop1, prop2, dif, low, high)
       )
 
-  dat <- add_layers(t, l1) %>% build()
+  dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   expect_equal(dat$rdiff_4_3[[1]], " 0.200,  0.333, -0.133, -0.543,  0.277")
 
@@ -194,7 +194,7 @@ test_that("Make sure display values accurately reflect prop.test results", {
     )
 
   # Build the table
-  dat <- add_layers(t, l1) %>% build()
+  dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   # Pick out the available results
   results <- dat$rdiff_4_3[1:4]
@@ -202,9 +202,9 @@ test_that("Make sure display values accurately reflect prop.test results", {
   results <- map(results, ~ as.numeric(str_split(.x, ", ")[[1]]))
 
   # Run a manual prop test from the manually checked values
-  carb_1 <- prop.test(c(3,4), c(15, 12))
-  carb_2 <- prop.test(c(4,4), c(15, 12))
-  carb_4 <- prop.test(c(5,4), c(15, 12))
+  carb_1 <- suppressWarnings(prop.test(c(3,4), c(15, 12)))
+  carb_2 <- suppressWarnings(prop.test(c(4,4), c(15, 12)))
+  carb_4 <- suppressWarnings(prop.test(c(5,4), c(15, 12)))
 
   # Get the values for carb == 1
   carb_1_res <- unname(

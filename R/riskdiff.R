@@ -71,11 +71,12 @@
 #'     c('5', '3')
 #'   )
 #'
-#' ## Specify custom formats and display variables
-#' t <- tplyr_table(mtcars, gear)
 #'
 #' # Build and show output
 #' add_layers(t, l1) %>% build()
+#'
+#' ## Specify custom formats and display variables
+#' t <- tplyr_table(mtcars, gear)
 #'
 #' # Create the layer with custom formatting
 #' l2 <- group_count(t, carb) %>%

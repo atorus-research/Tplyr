@@ -38,16 +38,16 @@ t8 <- add_layers(t8, c8)
 test_that("Count layers are built as expected", {
   # Before the build there should only be 7 things in the layer
   # sort_vars, by, sort, where, target_var, and (sub)layers
-  expect_length(c1, 6)
-  expect_length(c2, 6)
-  expect_length(c3, 6)
+  expect_length(c1, 7)
+  expect_length(c2, 7)
+  expect_length(c3, 7)
   # c4 has format_strings
-  expect_length(c4, 7)
+  expect_length(c4, 8)
   # c5 has include_total_row
-  expect_length(c5, 7)
+  expect_length(c5, 8)
   # c6 has distinct_by
-  expect_length(c6, 7)
-  expect_length(c7, 6)
+  expect_length(c6, 8)
+  expect_length(c7, 7)
 
   expect_equal(c1$by, quos())
   expect_equal(c2$by, quos(am))
@@ -65,7 +65,7 @@ test_that("Count layers are built as expected", {
   expect_equal(c6$target_var, quos("cyl"))
   expect_equal(c7$target_var, quos(grp, cyl))
 
-  expect_equal(c4$format_strings, f_str("xxx", n))
+  expect_equal(c4$format_strings$n_counts, f_str("xxx", n))
   expect_equal(c5$include_total_row, TRUE)
   expect_equal(c6$distinct_by, quo(cyl))
 })
@@ -82,15 +82,15 @@ test_that("Count layers are summarized without errors and warnings", {
 })
 
 test_that("Count layers are processed as expected", {
-  # After the build there should be 14 things in the layer
-  expect_length(c1, 14)
-  expect_length(c2, 14)
-  expect_length(c3, 14)
-  expect_length(c4, 13)
-  expect_length(c5, 15)
-  # c6 will also have distinct_by so 15
-  expect_length(c6, 16)
-  expect_length(c7, 12)
+  # After the build there should be 16 things in the layer
+  expect_length(c1, 16)
+  expect_length(c2, 16)
+  expect_length(c3, 16)
+  expect_length(c4, 15)
+  expect_length(c5, 17)
+  # c6 will also have distinct_by so 18
+  expect_length(c6, 18)
+  expect_length(c7, 14)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
   expect_equal(dim(c2$numeric_data), c(18, 5))
