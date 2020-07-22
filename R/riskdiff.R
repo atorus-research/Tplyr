@@ -167,8 +167,8 @@ prep_two_way <- function(comp) {
       filter(!!treat_var %in% comp) %>%
       # Rename the treatment groups to ref and comp
       mutate(!!treat_var := case_when(
-        !!treat_var == comp[1] ~ 'ref',
-        !!treat_var == comp[2] ~ 'comp'
+        !!treat_var == comp[1] ~ 'comp',
+        !!treat_var == comp[2] ~ 'ref'
       )) %>%
       # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
       pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),

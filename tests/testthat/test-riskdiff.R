@@ -87,7 +87,7 @@ test_that("Default processing happens correctly", {
 
   # 1st row value is accurate
   # Yes this is a lame test - but it's manually verified. Shut it.
-  expect_equal(dat$rdiff_4_3[[1]], "-0.133 (-0.543,  0.277)")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.133 (-0.277,  0.543)")
 
 })
 
@@ -118,7 +118,7 @@ test_that("Multiple comparisons properly populate", {
 
   # 1st row value is accurate
   # Yes this is a lame test - but it's manually verified. Shut it.
-  expect_equal(dat$rdiff_5_3[[2]], "-0.133 (-0.751,  0.484)")
+  expect_equal(dat$rdiff_5_3[[2]], " 0.133 (-0.484,  0.751)")
 
 })
 
@@ -137,7 +137,7 @@ test_that("Passing arguments into prop.test update values correctly", {
 
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
-  expect_equal(dat$rdiff_4_3[[1]], "-0.133 (-1.000,  0.086)")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.133 (-1.000,  0.352)")
 
 })
 
@@ -174,7 +174,7 @@ test_that("Format strings are applied correctly", {
 
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
-  expect_equal(dat$rdiff_4_3[[1]], " 0.200,  0.333, -0.133, -0.543,  0.277")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.333,  0.200,  0.133, -0.277,  0.543")
 
 })
 
@@ -202,9 +202,9 @@ test_that("Make sure display values accurately reflect prop.test results", {
   results <- map(results, ~ as.numeric(str_split(.x, ", ")[[1]]))
 
   # Run a manual prop test from the manually checked values
-  carb_1 <- suppressWarnings(prop.test(c(3,4), c(15, 12)))
-  carb_2 <- suppressWarnings(prop.test(c(4,4), c(15, 12)))
-  carb_4 <- suppressWarnings(prop.test(c(5,4), c(15, 12)))
+  carb_1 <- suppressWarnings(prop.test(c(4, 3), c(12, 15)))
+  carb_2 <- suppressWarnings(prop.test(c(4, 4), c(12, 15)))
+  carb_4 <- suppressWarnings(prop.test(c(4, 5), c(12, 15)))
 
   # Get the values for carb == 1
   carb_1_res <- unname(
