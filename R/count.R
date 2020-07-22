@@ -235,7 +235,7 @@ process_formatting.count_layer <- function(x, ...) {
 
     formatted_data <- reduce(append(list(formatted_data), formatted_stats_data),
                              full_join,
-                             by=c('summary_var', match_exact(by)))
+                             by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
 
     if(exists("nest_count") && nest_count) {
       formatted_data <- formatted_data %>%

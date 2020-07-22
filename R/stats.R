@@ -102,7 +102,7 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
       # Pick off all the labels
       formatted_statistic_data[[name]] <- formatted_statistic_data[[name]] %>%
-        select(summary_var, !!!by, !!!cols)
+        select(summary_var, !!!head(target_var, -1), !!!by, !!!cols)
 
       # Put the display string in
       formatted_statistic_data[[name]][paste0('rdiff_', name)] <- display_string
@@ -112,12 +112,12 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
     # Join the rdiff columns together
     formatted_statistic_data <- reduce(formatted_statistic_data,
                                        full_join,
-                                       by=c(match_exact(c(by, cols)), 'summary_var'))
+                                       by=c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'))
 
     if (length(cols) > 0) {
       # Pivot by column
       formatted_statistic_data <- formatted_statistic_data %>%
-        pivot_wider(id_cols=c(match_exact(c(by, cols)), 'summary_var'),
+        pivot_wider(id_cols=c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
                     names_from = match_exact(cols),
                     names_sep = "_",
                     values_from=starts_with('rdiff'))

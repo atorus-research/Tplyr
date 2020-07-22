@@ -171,7 +171,7 @@ prep_two_way <- function(comp) {
         !!treat_var == comp[2] ~ 'comp'
       )) %>%
       # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
-      pivot_wider(id_cols = c(match_exact(c(by, cols)), 'summary_var'),
+      pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
                   names_from=!!treat_var,
                   values_from = c('n', 'total'))
 
