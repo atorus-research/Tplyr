@@ -75,7 +75,7 @@ get_header_n_value <- function(x, ...) {
 #' @noRd
 get_header_n_value.tplyr_table <- function(x, ...) {
   # Arguments passed
-  dots <- enquos(...)
+  #dots <- enquos(...)
 
   header_names <- names(header_n(x))
 

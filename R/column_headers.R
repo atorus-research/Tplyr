@@ -80,7 +80,6 @@
 #'
 #' b_t <- build(t)
 #'
-#'
 #' count_string <- "Rows | V N=__0__ {auto N=__0_0__ | man N=__0_1__} | S N=__1__ {auto N=__1_0__ | man N=__1_1__}"
 #'
 #' add_column_headers(b_t, count_string, header_n(t))
