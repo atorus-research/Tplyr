@@ -10,7 +10,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols case_when
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
@@ -101,5 +101,7 @@ total_stat <- NULL
 distinct_n <- NULL
 summary_stat <- NULL
 total_row_label <- NULL
-total_distinct <- NULL
-.total_distinct <-NULL
+distinct_total <- NULL
+.distinct_total <-NULL
+count_row_prefix <- NULL
+inner_count_layer_prefix <- NULL

@@ -26,7 +26,6 @@ print.tplyr_table <- function(x, ...) {
     # Print out treat_var
     cat("treat_var variable (quosure)\n\t")
     cat(as.character(quo_get_expr(treat_var)))
-    cat("\n")
     # Print out pop_treat_var
     if(!identical(pop_treat_var, treat_var)){
       cat("pop_treat_var variable (quosure)\n\t")
@@ -35,21 +34,26 @@ print.tplyr_table <- function(x, ...) {
     }
     # Print header_n
     cat("\nheader_n: ")
-    for(i in seq(header_n)) {
-      cat(names(header_n)[i])
-      cat(": ")
-      cat(header_n[i])
-      if (i < length(header_n)) cat(", ")
-    }
+    cat(nrow(header_n), "header groups")
     # Print out treat_groups
-    cat("\ntreat_grps groupings (list)\n")
+    cat("\ntreat_grps groupings (list)")
     for(i in seq(treat_grps)) {
+      cat("\n")
       cat("\t")
       cat(names(treat_grps)[i])
-      cat("\n")
     }
+    # Print out cols
+    cat("\nTable Columns (cols):")
+    for(i in seq(cols)) {
+      cat("\n")
+      cat("\t")
+      cat(as_name(cols[[i]]))
+    }
+    # Print where
+    cat("\nwhere: ")
+    cat(as.character(quo_get_expr(where)))
     # Print out layers
-    cat("Number of layer(s): ")
+    cat("\nNumber of layer(s): ")
     cat(length(layers))
     cat("\n")
     # Print out Layer output
@@ -68,7 +72,7 @@ print.tplyr_table <- function(x, ...) {
 #' @export
 #' @noRd
 print.tplyr_layer <- function(x, ...) {
-  cat("*** tplyr_layer ***\n")
+  cat("***", class(x)[2],"***\n")
   cat("Self: ", class(x)[2], "<", env_label(x), ">")
   cat("\nParent: ", class(env_parent(x))[1], "<", env_label(env_parent(x)), ">")
   evalq({
@@ -80,11 +84,11 @@ print.tplyr_layer <- function(x, ...) {
     cat("\n")
     # Print out by
     cat("by: ")
-    cat(as.character(purrr::map(by, quo_get_expr)))
+    cat(map_chr(by, as_name))
     cat("\n")
     # sort_vars
     cat("sort_vars: ")
-    cat(as.character(purrr::map(sort_vars, quo_get_expr)))
+    cat(map_chr(sort_vars, as_name))
     cat("\n")
     # Print sort
     cat("sort: ")

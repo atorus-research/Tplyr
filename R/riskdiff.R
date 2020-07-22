@@ -170,10 +170,10 @@ prep_two_way <- function(comp) {
         !!treat_var == comp[1] ~ 'ref',
         !!treat_var == comp[2] ~ 'comp'
       )) %>%
-      # Pivot out to give the var names value_ref, value_comp, total_ref, total_comp for two way
-      pivot_wider(id_cols = match_exact(c(by, cols, target_var)),
+      # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
+      pivot_wider(id_cols = c(match_exact(c(by, cols)), 'summary_var'),
                   names_from=!!treat_var,
-                  values_from = c('value', 'total'))
+                  values_from = c('n', 'total'))
 
   }, envir=caller_env())
 
@@ -185,8 +185,8 @@ prep_two_way <- function(comp) {
 #' from \code{prep_two_way}
 #'
 #' @param diff_group The concateations of the reference and comparison groups
-#' @param value_comp The count of of the comparison
-#' @param value_ref The count of the reference
+#' @param n_comp The count of of the comparison
+#' @param n_ref The count of the reference
 #' @param total_comp The total of the comp
 #' @param total_ref The total of the reference
 #' @param args Arguments that will be passed into prop.test, provided as a named list
@@ -195,7 +195,7 @@ prep_two_way <- function(comp) {
 #' @return  A dataframe containing the group, the proportions of each comparator, the difference,
 #' and the lower and upper CI
 #'
-riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, args=list(), ...) {
+riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list(), ...) {
 
   # Create output container with initial values
   out <- list(
@@ -212,7 +212,7 @@ riskdiff <- function(diff_group, value_comp, value_ref, total_comp, total_ref, a
   if (all(c(total_comp, total_ref) > 0)) {
 
     # Run the risk difference
-    test <- do.call('prop.test', append(list(x=c(value_comp,value_ref), n=c(total_comp, total_ref)), args))
+    test <- do.call('prop.test', append(list(x=c(n_comp,n_ref), n=c(total_comp, total_ref)), args))
 
     # Collect results into standardized format
     out$prop1 = unname(test$estimate[1])

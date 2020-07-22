@@ -1,12 +1,8 @@
 ### Populations Functions
 
-#' Title
+#' The default setter for header_n table binding
 #'
 #' @param table `tplyr_table` object
-#'
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
-#' @importFrom dplyr n
 #'
 #' @noRd
 default_header_n <- function(table) {
@@ -15,12 +11,13 @@ default_header_n <- function(table) {
 
   evalq({
     df <- pop_data %>%
-      group_by(!!pop_treat_var) %>%
-      summarise(N = dplyr::n())
+      filter(!!table_where) %>%
+      group_by(!!pop_treat_var, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
+      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
 
-    header_n <- unlist(df[, 2])
-    names(header_n) <- unlist(df[, 1])
-    header <- names(header_n)
+    header_n <- df
     rm(df)
   }, envir = table)
   table
