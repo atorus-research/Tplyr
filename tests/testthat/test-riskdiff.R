@@ -87,7 +87,7 @@ test_that("Default processing happens correctly", {
 
   # 1st row value is accurate
   # Yes this is a lame test - but it's manually verified. Shut it.
-  expect_equal(dat$rdiff_4_3[[1]], "-0.133 (-0.277,  0.543)")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.133 (-0.277,  0.543)")
 
 })
 
@@ -118,7 +118,7 @@ test_that("Multiple comparisons properly populate", {
 
   # 1st row value is accurate
   # Yes this is a lame test - but it's manually verified. Shut it.
-  expect_equal(dat$rdiff_5_3[[2]], "-0.133 (-0.484,  0.751)")
+  expect_equal(dat$rdiff_5_3[[2]], " 0.133 (-0.484,  0.751)")
 
 })
 
@@ -137,7 +137,7 @@ test_that("Passing arguments into prop.test update values correctly", {
 
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
-  expect_equal(dat$rdiff_4_3[[1]], "-0.133 (-1.000,  0.352)")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.133 (-1.000,  0.352)")
 
 })
 
@@ -169,12 +169,12 @@ test_that("Format strings are applied correctly", {
       c('4', '3')
     ) %>%
     set_format_strings(
-      riskdiff = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', prop1, prop2, dif, low, high)
+      riskdiff = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', ref, comp, dif, low, high)
       )
 
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
-  expect_equal(dat$rdiff_4_3[[1]], " 0.333,  0.200, -0.133, -0.277,  0.543")
+  expect_equal(dat$rdiff_4_3[[1]], " 0.200,  0.333,  0.133, -0.277,  0.543")
 
 })
 
@@ -190,7 +190,7 @@ test_that("Make sure display values accurately reflect prop.test results", {
       c('4', '3')
     ) %>%
     set_format_strings(
-      riskdiff = f_str('xx.xxxxxx, xx.xxxxxx, xx.xxxxxx, xx.xxxxxx, xx.xxxxxx', prop1, prop2, dif, low, high)
+      riskdiff = f_str('xx.xxxxxx, xx.xxxxxx, xx.xxxxxx, xx.xxxxxx, xx.xxxxxx', comp, ref, dif, low, high)
     )
 
   # Build the table
@@ -208,17 +208,17 @@ test_that("Make sure display values accurately reflect prop.test results", {
 
   # Get the values for carb == 1
   carb_1_res <- unname(
-    c(carb_1$estimate[1], carb_1$estimate[2], carb_1$estimate[2] - carb_1$estimate[1], carb_1$conf.int[1], carb_1$conf.int[2])
+    c(carb_1$estimate[1], carb_1$estimate[2], carb_1$estimate[1] - carb_1$estimate[2], carb_1$conf.int[1], carb_1$conf.int[2])
     )
 
   # Get the values for carb == 2
   carb_2_res <- unname(
-    c(carb_2$estimate[1], carb_2$estimate[2], carb_2$estimate[2] - carb_2$estimate[1], carb_2$conf.int[1], carb_2$conf.int[2])
+    c(carb_2$estimate[1], carb_2$estimate[2], carb_2$estimate[1] - carb_2$estimate[2], carb_2$conf.int[1], carb_2$conf.int[2])
   )
 
   # Get the values for carb == 4
   carb_4_res <- unname(
-    c(carb_4$estimate[1], carb_4$estimate[2], carb_4$estimate[2] - carb_4$estimate[1], carb_4$conf.int[1], carb_4$conf.int[2])
+    c(carb_4$estimate[1], carb_4$estimate[2], carb_4$estimate[1] - carb_4$estimate[2], carb_4$conf.int[1], carb_4$conf.int[2])
   )
 
   expect_equal(results[[1]], carb_1_res, tolerance = .000001)

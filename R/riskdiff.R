@@ -65,10 +65,10 @@
 #'
 #' # Basic risk diff for two groups, using defaults
 #' l1 <- group_count(t, carb) %>%
-#'   # Compare 4 vs. 3, 5 vs. 3
+#'   # Compare 3 vs. 4, 3 vs. 5
 #'   add_risk_diff(
-#'     c('4', '3'),
-#'     c('5', '3')
+#'     c('3', '4'),
+#'     c('3', '5')
 #'   )
 #'
 #'
@@ -80,14 +80,14 @@
 #'
 #' # Create the layer with custom formatting
 #' l2 <- group_count(t, carb) %>%
-#'   # Compare 4 vs. 3, 5 vs. 3
+#'   # Compare 3 vs. 4, 3 vs. 5
 #'   add_risk_diff(
-#'     c('4', '3'),
-#'     c('5', '3')
+#'     c('3', '4'),
+#'     c('3', '5')
 #'   ) %>%
 #'   set_format_strings(
 #'     'n_counts' = f_str('xx (xx.x)', n, pct),
-#'     'riskdiff' = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', prop1, prop2, dif, low, high)
+#'     'riskdiff' = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', comp, ref, dif, low, high)
 #'   )
 #'
 #' # Build and show output
@@ -98,10 +98,10 @@
 #'
 #' # Create the layer with args option
 #' l3 <- group_count(t, carb) %>%
-#'   # Compare 4 vs. 3, 5 vs. 3
+#'   # Compare 3 vs. 4, 4 vs. 5
 #'   add_risk_diff(
-#'     c('4', '3'),
-#'     c('5', '3'),
+#'     c('3', '4'),
+#'     c('3', '5'),
 #'     args = list(conf.level = 0.9, correct=FALSE, alternative='less')
 #'   )
 #'
@@ -167,8 +167,8 @@ prep_two_way <- function(comp) {
       filter(!!treat_var %in% comp) %>%
       # Rename the treatment groups to ref and comp
       mutate(!!treat_var := case_when(
-        !!treat_var == comp[1] ~ 'ref',
-        !!treat_var == comp[2] ~ 'comp'
+        !!treat_var == comp[1] ~ 'comp',
+        !!treat_var == comp[2] ~ 'ref'
       )) %>%
       # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
       pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
@@ -199,8 +199,8 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
 
   # Create output container with initial values
   out <- list(
-    prop1 = NA,
-    prop2 = NA,
+    comp = NA,
+    ref = NA,
     dif = NA,
     low = NA,
     high = NA
@@ -212,12 +212,12 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
   if (all(c(total_comp, total_ref) > 0)) {
 
     # Run the risk difference
-    test <- do.call('prop.test', append(list(x=c(n_ref, n_comp), n=c(total_ref, total_comp)), args))
+    test <- do.call('prop.test', append(list(x=c(n_comp, n_ref), n=c(total_comp, total_ref)), args))
 
     # Collect results into standardized format
-    out$prop1 = unname(test$estimate[1])
-    out$prop2 = unname(test$estimate[2])
-    out$dif = unname(test$estimate[2] - test$estimate[1])
+    out$comp = unname(test$estimate[1])
+    out$ref = unname(test$estimate[2])
+    out$dif = unname(test$estimate[1] - test$estimate[2])
     out$low = unname(test$conf.int[1])
     out$high = unname(test$conf.int[2])
   }

@@ -266,8 +266,8 @@ set_format_strings.count_layer <- function(e, ...) {
       assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "total_percent")),
                   msg = "f_str for n_counts in a count_layer can only be n, pct, or distinct")
     } else if (name == "riskdiff") {
-      assert_that(all(params[['riskdiff']]$vars %in% c('prop1', 'prop2', 'dif', 'low', 'high')),
-                  msg = "f_str for riskdiff in a count_layer can only be prop1, prop2, dif, low, or high")
+      assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
+                  msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
     }
   }
 
