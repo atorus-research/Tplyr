@@ -17,8 +17,9 @@
 #' these groups as you want. You can also use groups that have been constructed using
 #' \code{\link{add_treat_group}} or \code{\link{add_total_group}}. The first element provided will be considered
 #' the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
-#' the 'comparison'. So, if you'd like to see the risk difference of 'T1 vs. Placebo', you would specify
-#' this as \code{c('T1', 'Placebo')}.
+#' the 'comparison'. So, if you'd like to see the risk difference of 'T1 - Placebo', you would specify
+#' this as \code{c('T1', 'Placebo')}. The left side you can consider the 'comparison', and the right hand side the
+#' 'reference'.
 #'
 #' Tplyr forms your two-way table in the background, and then runs \code{\link{prop.test}} appropriately.
 #' Similar to way that the display of layers are specified, the exact values and format of how you'd like
@@ -28,9 +29,9 @@
 #'
 #' You have 5 variables to choose from in your data presentation:
 #' \describe{
-#'   \item{\strong{prop1}}{Probability of the left hand side group}
-#'   \item{\strong{prop2}}{Probability of the right hand side group}
-#'   \item{\strong{dif}}{Difference of group 1 - group 2}
+#'   \item{\strong{comp}}{Probability of the left hand side group (i.e. comparison)}
+#'   \item{\strong{ref}}{Probability of the right hand side group (i.e. reference)}
+#'   \item{\strong{dif}}{Difference of comparison - reference}
 #'   \item{\strong{low}}{Lower end of the confidence interval (default is 95\%, override with the \code{args} paramter)}
 #'   \item{\strong{high}}{Upper end of the confidence interval (default is 95\%, override with the \code{args} paramter)}
 #' }
