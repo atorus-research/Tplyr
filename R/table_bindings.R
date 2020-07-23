@@ -224,7 +224,7 @@ set_treat_grps <- function(table, group_name, groupings) {
 #' @rdname treat_grps
 add_treat_group <- function(table, group_name, groupings) {
   # Get existing treatment groups
-  a_list <- env_get(table, "treat_grps")
+  a_list <- env_get(table, "treat_grps", default = NULL)
 
   # Append new treatment group to existing treatment groups
   new_list <- list(groupings)
