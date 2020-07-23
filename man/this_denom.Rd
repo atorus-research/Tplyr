@@ -21,7 +21,7 @@ returns the value of the header_n for the current group. `do` is currently
 labeled as questioning but its replacement, group_map, is experimental
 }
 \examples{
-library(magrittr)
+library(dplyr)
 
 t <- tplyr_table(mtcars, gear)
 

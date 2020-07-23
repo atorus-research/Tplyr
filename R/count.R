@@ -23,6 +23,9 @@ process_summaries.count_layer <- function(x, ...) {
 
   prepare_format_metadata(x)
 
+  # Trigger any derivation of additional statistics
+  map(x$stats, process_statistic_data)
+
   x
 }
 
@@ -165,22 +168,27 @@ prepare_format_metadata <- function(x) {
   evalq({
 
     # Get formatting metadata prepared
-    if(is.null(format_strings)) format_strings <- f_str("ax (xxx.x%)", n, pct)
+    if(is.null(format_strings)) {
+      format_strings <- list("n_counts" = f_str("ax (xxx.x%)", n, pct))
+    } else if (!'n_counts' %in% names(format_strings)) {
+      format_strings[['n_counts']] <- f_str("ax (xxx.x%)", n, pct)
+    }
+
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
-    if(str_detect(format_strings$format_string, "ax")) {
+    if(str_detect(format_strings[['n_counts']]$format_string, "ax")) {
       # Replace the flag with however many xs
-      replaced_string <- str_replace(format_strings$format_string, "ax",
+      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "ax",
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
-      format_strings <- f_str(replaced_string, n, pct)
+      format_strings[['n_counts']] <- f_str(replaced_string, n, pct)
     }
-    max_length <- format_strings$size
+    max_length <- format_strings[['n_counts']]$size
   }, envir = x)
 }
 
@@ -206,13 +214,13 @@ process_formatting.count_layer <- function(x, ...) {
       mutate(n = {
         if(is.null(distinct_by)) {
           construct_count_string(.n=n, .total=total,
-                                 count_fmt=format_strings,
+                                 count_fmt=format_strings[['n_counts']],
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
         } else {
           construct_count_string(.n=n, .total=total,
                                  .distinct_n=distinct_n, .distinct_total=distinct_total,
-                                 count_fmt=format_strings,
+                                 count_fmt=format_strings[['n_counts']],
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
         }
@@ -222,6 +230,13 @@ process_formatting.count_layer <- function(x, ...) {
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_")
 
+    # Process the statistical data formatting
+    formatted_stats_data <- map(stats, process_statistic_formatting)
+
+    formatted_data <- reduce(append(list(formatted_data), formatted_stats_data),
+                             full_join,
+                             by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
+
     if(exists("nest_count") && nest_count) {
       formatted_data <- formatted_data %>%
         replace_by_string_names(by_expr)
@@ -230,9 +245,11 @@ process_formatting.count_layer <- function(x, ...) {
         mutate(!!as_name(target_var[[1]]) := NULL) %>%
         replace_by_string_names(by_expr)
     }
+
       # Replace String names for by and target variables. target variables are included becasue they are
       # equivilant to by variables in a count layer
       # replace_by_string_names(by_expr)
+
   }, envir = x)
 }
 

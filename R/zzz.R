@@ -4,13 +4,13 @@
 #' @importFrom rlang quos quo env_names
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom stringr str_sub
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of

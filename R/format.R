@@ -113,8 +113,10 @@ separate_int_dig <- function(x){
 #' 'Tplyr' allows you extensive control over how strings are presented. \code{set_format_strings} allows you
 #' to apply these string formats to your layer. This behaves slightly differently between layers.
 #'
-#' In a count layer, you simply need to provide a single \code{\link{f_str}} object to specify how you want your
-#' n's (and possibly percents) formatted. In a descriptive statistic layer, \code{set_format_strings} allows you
+#' In a count layer, you can simply provide a single \code{\link{f_str}} object to specify how you want your
+#' n's (and possibly percents) formatted. If you are additionally supplying a statistic, like risk difference
+#' using \code{\link{add_risk_diff}}, you specify the count formats using the name 'n_counts'. The risk difference formats
+#' would then be specified using the name "riskdiff". In a descriptive statistic layer, \code{set_format_strings} allows you
 #' to do a couple more things:
 #' \itemize{
 #' \item{By naming paramters with character strings, those character strings become a row label in the resulting data frame}
@@ -236,18 +238,40 @@ set_format_strings.count_layer <- function(e, ...) {
   # Grab the named parameters
   params <- list(...)
 
-  # Count layers take only 1 format
-  assert_that(length(params) == 1, msg = "Count layers must have only 1 format string supplied")
+  # Make sure all parameters were f_str objects
+  map(params, assert_has_class, should_be="f_str")
 
-  # Grab out the supplied parameter
-  str <- params[[1]]
+  # Currently supported format names
+  valid_names <- c("n_counts", "riskdiff")
 
-  assert_has_class(str, "f_str")
+  # Raise error if names were invalid
+  if (is_named(params)) {
+    assert_that(all(names(params) %in% valid_names),
+                msg = paste('Invalid format names supplied. Count layers only accept the following format names:',
+                            paste(valid_names, collapse = ", "))
+                )
 
-  assert_that(all(str$vars %in% c("n", "pct", "distinct", "total_percent")),
-              msg = "f_str in a count_layer can only be n, pct, or distinct")
+  } else {
+    # If unnamed, then only one argument should have been supplied
+    assert_that(length(params) == 1, msg = "If names are not supplied, count layers can only have on format supplied.")
+    # Force the name in of n_counts
+    names(params) <- "n_counts"
+  }
 
-  env_bind(e, format_strings = str)
+
+  # Check content of each f_str based on their supplied name
+  for (name in names(params)) {
+
+    if (name == "n_counts") {
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "total_percent")),
+                  msg = "f_str for n_counts in a count_layer can only be n, pct, or distinct")
+    } else if (name == "riskdiff") {
+      assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
+                  msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
+    }
+  }
+
+  env_bind(e, format_strings = params)
 
   e
 }

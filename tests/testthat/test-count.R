@@ -46,19 +46,19 @@ t10 <- add_layers(t10, c10)
 test_that("Count layers are built as expected", {
   # Before the build there should only be 7 things in the layer
   # sort_vars, by, sort, where, target_var, and (sub)layers
-  expect_length(c1, 6)
-  expect_length(c2, 6)
-  expect_length(c3, 6)
+  expect_length(c1, 7)
+  expect_length(c2, 7)
+  expect_length(c3, 7)
   # c4 has format_strings
-  expect_length(c4, 7)
+  expect_length(c4, 8)
   # c5 has include_total_row
-  expect_length(c5, 7)
+  expect_length(c5, 8)
   # c6 has distinct_by
-  expect_length(c6, 7)
-  expect_length(c7, 6)
-  expect_length(c8, 8)
-  expect_length(c9, 7)
-  expect_length(c10, 7)
+  expect_length(c6, 8)
+  expect_length(c7, 7)
+  expect_length(c8, 9)
+  expect_length(c9, 8)
+  expect_length(c10, 8)
 
   expect_equal(c1$by, quos())
   expect_equal(c2$by, quos(am))
@@ -82,7 +82,7 @@ test_that("Count layers are built as expected", {
   expect_equal(c9$target_var, quos(grp, cyl))
   expect_equal(c10$target_var, quos(cyl))
 
-  expect_equal(c4$format_strings, f_str("xxx", n))
+  expect_equal(c4$format_strings$n_counts, f_str("xxx", n))
   expect_equal(c5$include_total_row, TRUE)
   expect_equal(c6$distinct_by, quo(cyl))
   expect_equal(c8$distinct_by, quo(am))
@@ -105,24 +105,25 @@ test_that("Count layers are summarized without errors and warnings", {
 })
 
 test_that("Count layers are processed as expected", {
+
   # After the build there should be 17 things in the layer
   # [1] "numeric_data"      "sort_vars"         "include_total_row" "id_col_expr"
   # [5] "max_length"        "format_strings"    "summary_stat"      "by"
   # [9] "by_expr"           "sort"              "i"                 "where"
   # [13] "target_var"        "formatted_data"    "count_row_prefix"  "n_width"
   # [17] "replaced_string"   "layers"
-  expect_length(c1, 17)
-  expect_length(c2, 17)
-  expect_length(c3, 17)
+  expect_length(c1, 19)
+  expect_length(c2, 19)
+  expect_length(c3, 19)
   # c4 doesn't have i
-  expect_length(c4, 16)
-  expect_length(c5, 18)
+  expect_length(c4, 18)
+  expect_length(c5, 20)
   # c6 will also have distinct_by so 15
-  expect_length(c6, 19)
-  expect_length(c7, 14)
-  expect_length(c8, 18)
-  expect_length(c9, 15)
-  expect_length(c10, 17)
+  expect_length(c6, 21)
+  expect_length(c7, 16)
+  expect_length(c8, 20)
+  expect_length(c9, 17)
+  expect_length(c10, 19)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
   expect_equal(dim(c2$numeric_data), c(18, 5))
@@ -170,8 +171,6 @@ test_that("Count layers are processed as expected", {
 
 
 })
-
-test_that
 
 test_that("An informative warning/error message is raised appropriate", {
   #Issue 443 - Specifing a f_str with less than the n padding raises warning.
