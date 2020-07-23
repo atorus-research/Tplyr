@@ -107,23 +107,18 @@ test_that("Count layers are summarized without errors and warnings", {
 test_that("Count layers are processed as expected", {
 
   # After the build there should be 17 things in the layer
-  # [1] "numeric_data"      "sort_vars"         "include_total_row" "id_col_expr"
-  # [5] "max_length"        "format_strings"    "summary_stat"      "by"
-  # [9] "by_expr"           "sort"              "i"                 "where"
-  # [13] "target_var"        "formatted_data"    "count_row_prefix"  "n_width"
-  # [17] "replaced_string"   "layers"
-  expect_length(c1, 19)
-  expect_length(c2, 19)
-  expect_length(c3, 19)
+  expect_length(c1, 17)
+  expect_length(c2, 17)
+  expect_length(c3, 17)
   # c4 doesn't have i
-  expect_length(c4, 18)
-  expect_length(c5, 20)
+  expect_length(c4, 16)
+  expect_length(c5, 18)
   # c6 will also have distinct_by so 15
-  expect_length(c6, 21)
-  expect_length(c7, 16)
-  expect_length(c8, 20)
-  expect_length(c9, 17)
-  expect_length(c10, 19)
+  expect_length(c6, 19)
+  expect_length(c7, 14)
+  expect_length(c8, 18)
+  expect_length(c9, 15)
+  expect_length(c10, 17)
 
   expect_equal(dim(c1$numeric_data), c(9, 4))
   expect_equal(dim(c2$numeric_data), c(18, 5))
@@ -177,7 +172,7 @@ test_that("An informative warning/error message is raised appropriate", {
   expect_warning({t <- tplyr_table(mtcars, gear) %>%
     add_total_group() %>%
     add_layer(
-      group_count(cyl)%>%
+      group_count(cyl) %>%
         set_format_strings(f_str("x (xxx%)",n,pct))
     ) %>%
     build()}, "Some Informative Warning Message")

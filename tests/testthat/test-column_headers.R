@@ -84,7 +84,7 @@ test_that("add_column_headers throws an error when you use a token and don't pas
 
     b_t <- build(t)
 
-    count_string <- "Rows | am0 __0__ | am1 __1__"
+    count_string <- "Rows | am0 **0** | am1 **1**"
 
     add_column_headers(b_t, count_string)
   }, "You must pass a header_n if you are using replacement tokens")
@@ -101,7 +101,7 @@ test_that("add_column_headers returns the expected result when tokens are passed
 
   b_t <- build(t)
 
-  count_string <- "Rows | V N=__0__ {auto N=__0_0__ | man N=__0_1__} | S N=__1__ {auto N=__1_0__ | man N=__1_1__}"
+  count_string <- "Rows | V N=**0** {auto N=**0_0** | man N=**0_1**} | S N=**1** {auto N=**1_0** | man N=**1_1**}"
 
   tab <- add_column_headers(b_t, count_string, header_n(t))
   # The strucutre was visually checked

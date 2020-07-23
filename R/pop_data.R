@@ -1,16 +1,13 @@
-### Populations Functions
 
-#' The default setter for header_n table binding
+#' Rebuild the header_n to include treatment groups
 #'
-#' @param table `tplyr_table` object
+#' This is exactly the same as default header_n execpt it works on the built
+#' pop_data.
 #'
 #' @noRd
-default_header_n <- function(table) {
-  pop_data <- NULL
-  pop_treat_var <- NULL
-
+build_header_n <- function(table) {
   evalq({
-    df <- pop_data %>%
+    df <- built_pop_data %>%
       filter(!!table_where) %>%
       group_by(!!pop_treat_var, !!!cols) %>%
       tally() %>%

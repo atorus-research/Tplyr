@@ -45,10 +45,15 @@ this_denom <- function(.data, header_n) {
   })
 
   # Evaluate the filter above and pull out the 'n' column
-  header_n %>%
+  totals <- header_n %>%
     filter(!!!filter_logic) %>%
     select(n) %>%
-    rename("total" = n)
+    sum()
+
+  # Bind the totals to the .data
+  .data$total <- totals
+
+  .data
 }
 
 

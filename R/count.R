@@ -82,7 +82,7 @@ process_count_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "total", wt = n) %>%
+      do(this_denom(., header_n)) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -118,7 +118,8 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      add_tally(name = "distinct_total", wt = distinct_n) %>%
+      do(this_denom(., header_n)) %>%
+      rename(distinct_total = "total") %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -197,18 +198,6 @@ prepare_format_metadata <- function(x) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
-    # This is used if the first target_var is in the numeric data, which happens with nested
-    # counts in nested counts and if the nest_count is true
-    if(as_name(target_var[[1]]) %in% names(numeric_data) ||
-               (exists("nest_count") && nest_count)){
-      id_col_expr <- expr(c(match_exact(by), "summary_var", !!target_var[[1]]))
-      by_expr <- quos(!!!by, summary_var)
-    }
-    else{
-      id_col_expr <- expr(c(match_exact(by), "summary_var"))
-      by_expr <- quos(!!!by, summary_var)
-    }
-
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a
       mutate(n = {
@@ -226,7 +215,7 @@ process_formatting.count_layer <- function(x, ...) {
         }
       }) %>%
       # Pivot table
-      pivot_wider(id_cols = !!id_col_expr,
+      pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_")
 
@@ -239,11 +228,11 @@ process_formatting.count_layer <- function(x, ...) {
 
     if(exists("nest_count") && nest_count) {
       formatted_data <- formatted_data %>%
-        replace_by_string_names(by_expr)
+        replace_by_string_names(quos(!!!by, summary_var))
     } else {
       formatted_data <- formatted_data %>%
         mutate(!!as_name(target_var[[1]]) := NULL) %>%
-        replace_by_string_names(by_expr)
+        replace_by_string_names(quos(!!!by, summary_var))
     }
 
       # Replace String names for by and target variables. target variables are included becasue they are
