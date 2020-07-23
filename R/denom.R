@@ -50,3 +50,84 @@ this_denom <- function(.data, header_n) {
     select(n) %>%
     rename("total" = n)
 }
+
+
+#' Get the header_n value of a certain
+#'
+#' @param x A tplyr_table or data.frame object
+#' @param ... Parameters to filter the header_n. Should be in the order of
+#'   variables passed in the tplyr_table
+#'
+#' @return The sum of the subset of the header_n values after filtering
+#' @noRd
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' t <- tplyr_table(mtcars, gear, cols = vars(cyl, am))
+#'
+#' get_header_n_value(t, 3, 6, 0)
+#' # Returns the number of cars that have 3 gears, 6 cyinders, and auto trasmission
+get_header_n_value <- function(x, ...) {
+  UseMethod("get_header_n_value")
+}
+
+#' @noRd
+get_header_n_value.tplyr_table <- function(x, ...) {
+  # Arguments passed
+  #dots <- enquos(...)
+
+  header_names <- names(header_n(x))
+
+  # You can use all columns in the header_n except the last, find the minimum
+  # of the number of dots passed and the columns you can subset on
+  param_num <- min(length(header_names) - 1, length(dots))
+
+  # Just pull out the names you are selecting for
+  dots_names <- header_names[1:param_num]
+
+  ## I tried this in a map but I had trouble with the names being stripped out
+  filter_logic <- list()
+  for (i in seq_along(dots)) {
+    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!dots[[i]]))
+  }
+
+  # filter_logic <- map(dots, function(x) {
+  #   print(x)
+  #   print(class(x))
+  #   print(str(x))
+  #   expr(!!as.symbol(names(x)) == !!x)
+  #   })
+
+  header_n(x) %>%
+    filter(!!!filter_logic) %>%
+    select(n) %>%
+    sum()
+}
+
+#' @noRd
+get_header_n_value.data.frame <- function(x, ...) {
+  # Arguments passed
+  #dots <- enquos(...)
+
+  header_names <- names(x)
+
+  # You can use all columns in the header_n except the last, find the minimum
+  # of the number of dots passed and the columns you can subset on
+  param_num <- min(length(header_names) - 1, length(...))
+
+  # Just pull out the names you are selecting for
+  dots_names <- header_names[1:param_num]
+
+  ## I tried this in a map but I had trouble with the names being stripped out
+  filter_logic <- list()
+  for (i in seq_along(...)) {
+    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!...[[i]]))
+  }
+
+  x %>%
+    filter(!!!filter_logic) %>%
+    select(n) %>%
+    sum()
+
+}

@@ -34,8 +34,26 @@
 #' but based on feedback it could be determined that less common characters may be necessary.}
 #' }
 #'
+#' @section Token Replacement:
+#' This function has support for reading from the header_n binding on the table
+#' and adding them in the column headers. Note: The order of the parameters
+#' passed in the token is important. They should be first the treatment variable
+#' then any cols in the order they were passed in the table construction.
+#'
+#' Use a double asterisk "**" at the begining to start the token and another
+#' double asterisk to close it. You can separate column parameters in the token
+#' with a single underscore For example, **group1_flag2_param3** will pull the count
+#' from the header_n binding for group1 in the treat_var, flag2 in the first cols
+#' argument, and param3 in the second cols argument.
+#'
+#' You can pass fewer arguments in the token to get the sum of multiple columns.
+#' For example, **group1** would get the sum of the group1 treat_var,
+#' and all cols from the header_n.
+#'
 #' @param s The text containing the intended header string
 #' @param .data The data.frame/tibble on which the headers shall be attached
+#' @param header_n A header_n or generic data.frame to use for binding count values.
+#'   This is required if you are using the token replacement.
 #'
 #' @return A data.frame with the processed header string elements attached as the top rows
 #' @export
@@ -50,7 +68,22 @@
 #'   mutate_all(as.character)
 #'
 #' iris2 %>% add_column_headers(header_string)
-add_column_headers <- function(.data, s) {
+#'
+#' # Example with counts
+#' mtcars2 <- mtcars %>%
+#'   mutate_all(as.character)
+#'
+#' t <- tplyr_table(mtcars2, vs, cols = am) %>%
+#'   add_layer(
+#'     group_count(cyl)
+#'   )
+#'
+#' b_t <- build(t)
+#'
+#' count_string <- "Rows | V N=**0** {auto N=**0_0** | man N=**0_1**} | S N=**1** {auto N=**1_0** | man N=**1_1**}"
+#'
+#' add_column_headers(b_t, count_string, header_n(t))
+add_column_headers <- function(.data, s, header_n = NULL) {
 
   assert_that(all(map_chr(.data, class) == 'character'), msg = "When binding headers, all columns must be character")
 
@@ -68,7 +101,7 @@ add_column_headers <- function(.data, s) {
   }
 
   # Make into a data frame
-  headers <- make_column_df(rows, names_from = .data)
+  headers <- make_column_df(rows, names_from = .data, header_n = header_n)
 
   # Bind back on top of the data
   bind_rows(headers, .data)
@@ -252,10 +285,42 @@ trim_bars <- function(s) {
 #'
 #' @param s The header string or processed spanner/bottom rows
 #' @param names Names to be provided as column names in the output
+#' @param header_n Data.frame to use for evaluation of counts
 #'
 #' @return A data.frame row with the supplied names as columns
 #' @noRd
-make_header_row <- function(s, names) {
+make_header_row <- function(s, names, df) {
+
+  # Logic for adding in counts based on double underscore token
+  if (str_detect(s, "\\*\\*.+\\*\\*")) {
+
+    assert_that(!is.null(df),
+                msg = "You must pass a header_n if you are using replacement tokens")
+
+    # Not sure how this would be done in a map
+    string_placeholder <- str_extract_all(s, "\\*\\*.+?\\*\\*")
+
+    for (i in seq_along(string_placeholder[[1]])) {
+
+      # Remote the leading and trailing double underscores
+      string_arg <- str_sub(string_placeholder[[1]][i], 3)
+      string_arg <- str_sub(string_arg,
+                            end = nchar(string_arg) - 2)
+
+      # Split the placeholder on underscore and parse it as an expression
+      split_args <- parse(text = str_split(string_arg, "_", simplify = TRUE))
+
+      # Evaluate the function in the text. Might want to add more tests to
+      # header_n_value in case weird things are passed
+      replacement <- as.character(get_header_n_value(df, split_args))
+
+      # Replace Asterisk. Lots of escaping here
+      string_placeholder[[1]][i] <- str_replace_all(string_placeholder[[1]][i],
+                                                    "\\*", "\\\\*")
+      # TODO: Might want to add formatting here
+      s <- str_replace(s, string_placeholder[[1]][i], replacement)
+    }
+  }
 
   # Split the strings into invidual columns of a data frame
   row <- as_tibble(as.list(str_trim(str_split(s, fixed("|"))[[1]])), .name_repair='minimal')
@@ -272,17 +337,18 @@ make_header_row <- function(s, names) {
 #'
 #' @param rows Either the header string or the spanner/bottoms rows (as a character vector)
 #' @param names_from The dataframe that names shall be pulled from
+#' @param header_n The header_n data.frame used to evaluate counts
 #'
 #' @return The bound header data frame
 #' @noRd
-make_column_df <- function(rows, names_from) {
+make_column_df <- function(rows, names_from, header_n) {
 
   # Make sure all incoming rows are of the same length
   lengths_match <- length(unique(map_dbl(rows, ~ str_count(.x, fixed("|"))))) == 1
   assert_that(lengths_match, msg = "Malformed column header string - cells in spanner don't match cells in bottom row")
 
   # Create the individual dataframes from each row
-  dfs <- map(rows, make_header_row, names=names(names_from))
+  dfs <- map(rows, make_header_row, names=names(names_from), df = header_n)
 
   # Bind them together
   bind_rows(dfs)
