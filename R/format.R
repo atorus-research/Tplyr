@@ -263,8 +263,8 @@ set_format_strings.count_layer <- function(e, ...) {
   for (name in names(params)) {
 
     if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "total_percent")),
-                  msg = "f_str for n_counts in a count_layer can only be n, pct, or distinct")
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_pct")),
+                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
     } else if (name == "riskdiff") {
       assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
                   msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
@@ -358,7 +358,6 @@ has_format_strings <- function(e) {
 #'
 #' @noRd
 pad_formatted_data <- function(x, right_pad, left_pad) {
-
   # Pad the left with difference between left_pad and nchar(string_)
   if(nchar(x)[1] < left_pad) {
     # The double pasting looks weird but the inner one is meant to create single character

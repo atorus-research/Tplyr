@@ -204,6 +204,7 @@ process_formatting.count_layer <- function(x, ...) {
         if(is.null(distinct_by)) {
           construct_count_string(.n=n, .total=total,
                                  count_fmt=format_strings[['n_counts']],
+                                 .distinct_n = distinct_n,
                                  max_layer_length=max_layer_length,
                                  max_n_width=max_n_width)
         } else {
@@ -270,7 +271,8 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   str_all[1] <- count_fmt$repl_str
   # Iterate over every variable
   for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total, .distinct_n, vars_ord)
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total,
+                                                .distinct_n, .distinct_total, vars_ord)
   }
 
   # Put the vector strings together. Only include parts of str_all that aren't null
@@ -291,7 +293,8 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 #' @param vars_ord values used in distinct pct
 #'
 #' @noRd
-count_string_switch_help <- function(x, count_fmt, .n, .total, .distinct_n, vars_ord){
+count_string_switch_help <- function(x, count_fmt, .n, .total,
+                                     .distinct_n, .distinct_total, vars_ord){
 
   switch(x,
          "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
@@ -302,8 +305,13 @@ count_string_switch_help <- function(x, count_fmt, .n, .total, .distinct_n, vars
            map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
          },
          "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
-         "distinct_total" = map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"),
-                                    fmt = count_fmt))
+         "distinct_pct" = {
+           # Same as pct
+           pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)
+
+           map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
+         }
+  )
 
 
 }
