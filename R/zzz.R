@@ -4,13 +4,13 @@
 #' @importFrom rlang quos quo env_names
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom stringr str_sub
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
@@ -83,7 +83,7 @@ numeric_data <- NULL
 format_strings <- NULL
 max_layer_length <- NULL
 max_n_width <- NULL
-Total <- NULL
+total <- NULL
 display_string <- NULL
 built_target <- NULL
 table_where <- NULL
@@ -98,4 +98,15 @@ op <- NULL
 cl <- NULL
 q1 <- NULL
 q3 <- NULL
+<<<<<<< HEAD
 .var <- NULL
+=======
+total_stat <- NULL
+distinct_n <- NULL
+summary_stat <- NULL
+total_row_label <- NULL
+distinct_total <- NULL
+.distinct_total <-NULL
+count_row_prefix <- NULL
+inner_count_layer_prefix <- NULL
+>>>>>>> 647f47373f5f49bc0db1d2f608635004879c0ecf

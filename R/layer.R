@@ -144,6 +144,7 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Add non-parameter specified defaults into the environment.
   evalq({
     layers <- structure(list(), class=append("tplyr_layer_container", "list"))
+    stats <- list()
   }, envir = e)
 
   # Create the object

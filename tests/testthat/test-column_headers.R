@@ -72,3 +72,45 @@ test_that("Spanning headers produce correctly", {
 
 })
 
+test_that("add_column_headers throws an error when you use a token and don't pass header_n", {
+  expect_error({
+    mtcars2 <- mtcars %>%
+      mutate_all(as.character)
+
+    t <- tplyr_table(mtcars2, am) %>%
+      add_layer(
+        group_count(cyl)
+      )
+
+    b_t <- build(t)
+
+    count_string <- "Rows | am0 __0__ | am1 __1__"
+
+    add_column_headers(b_t, count_string)
+  }, "You must pass a header_n if you are using replacement tokens")
+})
+
+test_that("add_column_headers returns the expected result when tokens are passed", {
+  mtcars2 <- mtcars %>%
+    mutate_all(as.character)
+
+  t <- tplyr_table(mtcars2, vs, cols = am) %>%
+    add_layer(
+      group_count(cyl)
+    )
+
+  b_t <- build(t)
+
+  count_string <- "Rows | V N=__0__ {auto N=__0_0__ | man N=__0_1__} | S N=__1__ {auto N=__1_0__ | man N=__1_1__}"
+
+  tab <- add_column_headers(b_t, count_string, header_n(t))
+  # The strucutre was visually checked
+  expect_equal(tab, structure(list(row_label1 = c("", "Rows", "4", "6", "8"),
+                                   var1_0_0 = c("V N=18", "auto N=12", " 0 (  0.0%)", " 0 (  0.0%)", "12 (100.0%)"),
+                                   var1_0_1 = c("", "man N=6", " 1 ( 16.7%)", " 3 ( 50.0%)", " 2 ( 33.3%)"),
+                                   var1_1_0 = c("S N=14", "auto N=7", " 3 ( 42.9%)", " 4 ( 57.1%)", " 0 (  0.0%)"),
+                                   var1_1_1 = c("", "man N=7", " 7 (100.0%)", " 0 (  0.0%)", " 0 (  0.0%)")),
+                              row.names = c(NA, -5L),
+                              class = c("tbl_df", "tbl", "data.frame")))
+})
+
