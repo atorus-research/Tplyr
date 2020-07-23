@@ -53,11 +53,18 @@ f_str <- function(format_string, ..., empty='') {
   assert_has_class(format_string, "character")
 
   # Capture the format groups
-  # Regex looks for 1 or more lower case x, potentially followed by a period and more x's
+
+  # This regex does a few things so let's break it into pieces
+  # There are two expressions here, separated by the first |
+  # Part 1: x+\\.{0,1}x*
+  #   - Find one or more x
+  #   - If the x is followed by
+  rx <- "(ax(\\+\\d){0,1}|x+)(\\.){0,1}(ax(\\+\\d){0,1}|x+){0,1}"
   formats <- str_extract_all(format_string, regex("x+\\.{0,1}x*"))[[1]]
 
   # Duplicate any '%' to escape them
   format_string_1 <- str_replace_all(format_string, "%", "%%")
+
   # Make the sprintf ready string
   repl_str <- str_replace_all(format_string_1, regex("x+\\.{0,1}x*"), "%s")
 
