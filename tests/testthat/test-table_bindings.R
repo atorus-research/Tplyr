@@ -1,32 +1,10 @@
-##### header tests #####
-# test_that("header binding attaches headers properly", {
-#   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
-#
-#   expect_error(header(tab), "object 'headers' not found")
-#
-#   header(tab) <- c("a", "b")
-#   expect_equal(header(tab), c("a", "b"))
-#
-#   tab <- set_header(tab, c("a", "b", "c"))
-#   expect_equal(header(tab), c("a", "b", "c"))
-# })
-#
-# test_that("header binding throws expected errors", {
-#   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
-#
-#   expect_error(header(tab) <- c(1, 2), "'headers' argument passed")
-#   expect_error(header(tab) <- list("a", "b"), "'headers' argument passed")
-#   expect_error(header(tab) <- NULL, "'headers' argument passed")
-#   expect_error(header(tab) <- NA, "'headers' argument passed")
-#   expect_silent(header(tab) <- NA_character_)
-#   expect_silent(header(tab) <- c("a", "b"))
-# })
 
 ##### header_n tests #####
 test_that("header_n binding attaches header_n properly", {
   tab <- tplyr_table(iris, Species)
 
-  expect_equal(header_n(tab), c(setosa = 50, versicolor = 50, virginica = 50))
+  expect_equal(header_n(tab), tibble(Species = as.factor(c("setosa", "versicolor", "virginica")),
+                                     n = c(50, 50, 50)))
 
   header_n(tab) <- c(group1 = 75, group2 = 75)
   expect_equal(header_n(tab), c(group1 = 75, group2 = 75))

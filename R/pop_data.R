@@ -6,11 +6,30 @@
 #'
 #' @noRd
 default_header_n <- function(table) {
-  pop_data <- NULL
-  pop_treat_var <- NULL
 
   evalq({
     df <- pop_data %>%
+      filter(!!table_where) %>%
+      group_by(!!pop_treat_var, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
+      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+
+    header_n <- df
+    rm(df)
+  }, envir = table)
+  table
+}
+
+#' Rebuild the header_n to include treatment groups
+#'
+#' This is exactly the same as default header_n execpt it works on the built
+#' pop_data.
+#'
+#' @noRd
+rebuild_header_n <- function(table) {
+  evalq({
+    df <- built_pop_data %>%
       filter(!!table_where) %>%
       group_by(!!pop_treat_var, !!!cols) %>%
       tally() %>%
