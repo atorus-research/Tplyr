@@ -64,14 +64,14 @@ and adding them in the column headers. Note: The order of the parameters
 passed in the token is important. They should be first the treatment variable
 then any cols in the order they were passed in the table construction.
 
-Use a double underscore "__" at the begining to start the token and another
-double underscore to close it. You can separate column parameters in the token
-with an underscore. For example, __group1_flag2_param3__ will pull the count
-from the header_n binding for group_1 in the treat_var, flag2 in the first cols
+Use a double asterisk "**" at the begining to start the token and another
+double asterisk to close it. You can separate column parameters in the token
+with a single underscore For example, **group1_flag2_param3** will pull the count
+from the header_n binding for group1 in the treat_var, flag2 in the first cols
 argument, and param3 in the second cols argument.
 
 You can pass fewer arguments in the token to get the sum of multiple columns.
-For example, __group1__ would get the sum of the group1 treat_var,
+For example, **group1** would get the sum of the group1 treat_var,
 and all cols from the header_n.
 }
 
@@ -97,8 +97,7 @@ t <- tplyr_table(mtcars2, vs, cols = am) \%>\%
 
 b_t <- build(t)
 
-
-count_string <- "Rows | V N=__0__ {auto N=__0_0__ | man N=__0_1__} | S N=__1__ {auto N=__1_0__ | man N=__1_1__}"
+count_string <- "Rows | V N=**0** {auto N=**0_0** | man N=**0_1**} | S N=**1** {auto N=**1_0** | man N=**1_1**}"
 
 add_column_headers(b_t, count_string, header_n(t))
 }
