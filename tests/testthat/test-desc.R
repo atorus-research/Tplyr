@@ -50,20 +50,12 @@ test_that("Group_desc can be created without warnings and errors", {
 
 test_that("group_desc are processed as expected", {
 
-<<<<<<< HEAD
-  expect_length(d1, 14)
-  expect_length(d2, 14)
-  expect_length(d3, 14)
-  expect_length(d4, 15)
-  expect_length(d5, 14)
-  expect_length(d6, 15)
-=======
   expect_length(d1, 15)
   expect_length(d2, 15)
   expect_length(d3, 15)
   expect_length(d4, 16)
   expect_length(d5, 15)
->>>>>>> 647f47373f5f49bc0db1d2f608635004879c0ecf
+  expect_length(d6, 16)
 
   expect_equal(dim(d1$numeric_data), c(27, 4))
   expect_equal(dim(d2$numeric_data), c(36, 5))

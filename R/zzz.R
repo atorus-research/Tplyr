@@ -98,9 +98,7 @@ op <- NULL
 cl <- NULL
 q1 <- NULL
 q3 <- NULL
-<<<<<<< HEAD
 .var <- NULL
-=======
 total_stat <- NULL
 distinct_n <- NULL
 summary_stat <- NULL
@@ -109,4 +107,3 @@ distinct_total <- NULL
 .distinct_total <-NULL
 count_row_prefix <- NULL
 inner_count_layer_prefix <- NULL
->>>>>>> 647f47373f5f49bc0db1d2f608635004879c0ecf
