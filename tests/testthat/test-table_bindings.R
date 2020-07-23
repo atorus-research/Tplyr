@@ -1,25 +1,4 @@
 
-##### header_n tests #####
-test_that("header_n binding attaches header_n properly", {
-  tab <- tplyr_table(iris, Species)
-
-  expect_equal(header_n(tab), tibble(Species = as.factor(c("setosa", "versicolor", "virginica")),
-                                     n = c(50, 50, 50)))
-
-  header_n(tab) <- c(group1 = 75, group2 = 75)
-  expect_equal(header_n(tab), c(group1 = 75, group2 = 75))
-
-  set_header_n(tab, c(total = 150))
-  expect_equal(header_n(tab), c(total = 150))
-})
-
-test_that("header_n binding throws errors as expected", {
-  tab <- tplyr_table(iris, Species)
-
-  expect_error(header_n(tab) <- c(1,2,3), "header_n argument must be named")
-  expect_error(set_header_n(tab, c(a = "1", b = "2")), "header_n argument must be numeric")
-  expect_silent(header_n(tab) <- c(a = NA_integer_))
-})
 
 ##### pop_data tests #####
 test_that("pop_data binding attaches pop_data properly", {

@@ -1,25 +1,3 @@
-### Populations Functions
-
-#' The default setter for header_n table binding
-#'
-#' @param table `tplyr_table` object
-#'
-#' @noRd
-default_header_n <- function(table) {
-
-  evalq({
-    df <- pop_data %>%
-      filter(!!table_where) %>%
-      group_by(!!pop_treat_var, !!!cols) %>%
-      tally() %>%
-      ungroup() %>%
-      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
-
-    header_n <- df
-    rm(df)
-  }, envir = table)
-  table
-}
 
 #' Rebuild the header_n to include treatment groups
 #'
@@ -27,7 +5,7 @@ default_header_n <- function(table) {
 #' pop_data.
 #'
 #' @noRd
-rebuild_header_n <- function(table) {
+build_header_n <- function(table) {
   evalq({
     df <- built_pop_data %>%
       filter(!!table_where) %>%

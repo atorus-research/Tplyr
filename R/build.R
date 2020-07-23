@@ -69,7 +69,7 @@ build.tplyr_table <- function(x) {
   # Table Pre build
   treatment_group_build(x)
 
-  x <- rebuild_header_n(x)
+  x <- build_header_n(x)
 
   # Process Layer summaries
   map(x$layers, process_summaries)
