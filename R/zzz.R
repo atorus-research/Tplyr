@@ -8,7 +8,7 @@
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
-#' @importFrom stats IQR median sd quantile
+#' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
@@ -16,6 +16,7 @@
 #' @importFrom tidyselect all_of
 #' @importFrom tibble tibble
 #' @importFrom lifecycle deprecate_soft
+#' @importFrom stats var
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -97,6 +98,7 @@ op <- NULL
 cl <- NULL
 q1 <- NULL
 q3 <- NULL
+.var <- NULL
 total_stat <- NULL
 distinct_n <- NULL
 summary_stat <- NULL

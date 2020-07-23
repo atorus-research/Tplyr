@@ -34,10 +34,12 @@ process_summaries.desc_layer <- function(x, ...) {
       cur_var <- target_var[[i]]
 
       # Get the summaries that need to be performed for this layer
-      summaries <- get_summaries(cur_var)[match_exact(summary_vars)]
+      summaries <- get_summaries()[match_exact(summary_vars)]
 
       # Create the numeric summary data
       num_sums[[i]] <- built_target %>%
+        # Rename the current variable to make each iteration use a generic name
+        rename(.var = !!cur_var) %>%
         # Subset by the logic specified in `where`
         filter(!!where) %>%
         # Group by treatment, provided by variable, and provided column variables
@@ -130,25 +132,24 @@ process_formatting.desc_layer <- function(x, ...) {
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
 #'
-#' @param var A varaible to perform summaries on.
 #' @param e the environment summaries are stored in.
 #'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
-get_summaries <- function(var, e = caller_env()) {
+get_summaries <- function(e = caller_env()) {
 
   # Define the default list of summaries
   summaries <- exprs(
     n       = n()                             ,
-    mean    = mean(!!var, na.rm=TRUE)         ,
-    sd      = sd(!!var, na.rm=TRUE)           ,
-    median  = median(!!var, na.rm=TRUE)       ,
-    var     = var(!!var, na.rm=TRUE)          ,
-    min     = min(!!var, na.rm=TRUE)          ,
-    max     = max(!!var, na.rm=TRUE)          ,
-    iqr     = IQR(!!var, na.rm=TRUE)          ,
-    q1      = quantile(!!var, na.rm=TRUE)[[2]],
-    q3      = quantile(!!var, na.rm=TRUE)[[4]],
-    missing = sum(is.na(!!var))
+    mean    = mean(.var, na.rm=TRUE)         ,
+    sd      = sd(.var, na.rm=TRUE)           ,
+    median  = median(.var, na.rm=TRUE)       ,
+    var     = var(.var, na.rm=TRUE)          ,
+    min     = min(.var, na.rm=TRUE)          ,
+    max     = max(.var, na.rm=TRUE)          ,
+    iqr     = IQR(.var, na.rm=TRUE)          ,
+    q1      = quantile(.var, na.rm=TRUE)[[2]],
+    q3      = quantile(.var, na.rm=TRUE)[[4]],
+    missing = sum(is.na(.var))
   )
 
   append(summaries, get_custom_summaries(e), after=0)
