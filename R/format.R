@@ -55,25 +55,29 @@ f_str <- function(format_string, ..., empty='') {
   # Capture the format groups
 
   # This regex does a few things so let's break it into pieces
-  # There are two expressions here, separated by the first |
-  # Part 1: x+\\.{0,1}x*
-  #   - Find one or more x
-  #   - If the x is followed by
-  rx <- "(ax(\\+\\d){0,1}|x+)(\\.){0,1}(ax(\\+\\d){0,1}|x+){0,1}"
-  formats <- str_extract_all(format_string, regex("x+\\.{0,1}x*"))[[1]]
+  # (a(\\+\\d)?|x+) -> a, possibly followed by + and a digit, or 1 or more x's
+  #    This captures the integer, with either the auto formats or x's
+  # (\\.(a(\\+\\d)?|x+)?)? -> a period, then possibly the same a <+digit>, or multiple x's
+  #    This captures the decimal places, but they don't have to exist
+  rx <- "(a(\\+\\d)?|x+)(\\.(a(\\+\\d)?|x+)?)?"
+  formats <- str_extract_all(format_string, regex(rx))[[1]]
 
   # Duplicate any '%' to escape them
   format_string_1 <- str_replace_all(format_string, "%", "%%")
 
   # Make the sprintf ready string
-  repl_str <- str_replace_all(format_string_1, regex("x+\\.{0,1}x*"), "%s")
+  repl_str <- str_replace_all(format_string_1, regex(rx), "%s")
 
   # Make sure that if two formats were found, two varaibles exist
   assert_that(length(formats) == length(vars),
               msg = paste0("In `f_str` ", length(formats), " formats were entered in the format string ",
                            format_string, "but ", length(vars), " variables were assigned."))
 
-  settings <- lapply(formats, separate_int_dig)
+  # Pull out the integer and decimal
+  settings <- map(formats, separate_int_dig)
+
+  # A value in settings will be <0 if it's an auto format
+  auto_precision <- any(map_lgl(settings, ~ any(.x < 0)))
 
   # All ellipsis variables are names
   assert_that(all(sapply(vars, function(x) class(x) == "name")),
@@ -86,6 +90,7 @@ f_str <- function(format_string, ..., empty='') {
          settings = settings,
          size = nchar(format_string),
          repl_str = repl_str,
+         auto_precision = auto_precision,
          empty=empty
     ),
     class="f_str"
@@ -106,13 +111,38 @@ separate_int_dig <- function(x){
   names(out) <- c('int', 'dig')
 
   # Count the characters on each side of the decimal
-  num_chars <- map_int(str_split(x, "\\.")[[1]], nchar)
+  fields <- str_split(x, "\\.")[[1]]
+
+  num_chars <- map_dbl(fields, parse_fmt)
 
   # Insert the number of characters into the named vector
   for (i in seq_along(num_chars)) {
-    out[[i]] <- num_chars[[i]]
+    out[i] <- num_chars[i]
   }
   out
+}
+
+
+#' Parse a portion of a string format
+#'
+#' After the string is split by the decimal, parse what remains
+#' Auto formats will start at -1 and decrement by the + value
+#'
+#' @param x Portioned string format
+#'
+#' @return A numeric value. >0 is literal length, <0 is auto format
+#' @noRd
+parse_fmt <- function(x) {
+  # If it's an auto format, grab the output value
+  if (grepl('a', x)) {
+    # Pick out the digit
+    add <- replace_na(as.double(str_extract(x, '\\d')), 0)
+    # Auto formats will be -1 - the specified precision
+    val <- -1 - add
+  } else {
+    val <- nchar(x)
+  }
+  val
 }
 
 #' Set the format strings and associated summaries to be performed in a layer
