@@ -27,8 +27,8 @@ make_prec_data <- function(.data, precision_by, precision_on) {
   .data %>%
     group_by(!!!precision_by) %>%
     summarize(
-      max_int = max(nchar_unit(AVAL, 1)),
-      max_dec = max(nchar_unit(AVAL, 2))
+      max_int = max(nchar_unit(precision_on, 1)),
+      max_dec = max(nchar_unit(precision_on, 2))
     ) %>%
-    select(PARAMCD, max_int, max_dec)
+    select(!!!precision_by, max_int, max_dec)
 }
