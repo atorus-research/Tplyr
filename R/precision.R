@@ -23,12 +23,27 @@ nchar_unit <- function(v, side) {
   out
 }
 
-make_prec_data <- function(.data, precision_by, precision_on) {
+#' Make precision look-up table
+#'
+#' Creates the look up table based on precision_by and precision_on bindings
+#'
+#' @param .data Data precision is calculated from
+#' @param precision_by Precision by variables - defaulted to the layer by
+#' @param precision_on Precision on variable - defaulted to first target_var variable
+#'
+#' @return A tibble look-up table with the precision_by variables, a variable for the
+#' maximum integer length (max_int), and the maximum decimal length (max_dec).
+#'
+#' @noRd
+make_prec_data <- function(.data, precision_by, precision_on, cap) {
   .data %>%
     group_by(!!!precision_by) %>%
+    # Grab the maximum level of collected precision within the precision by group
     summarize(
-      max_int = max(nchar_unit(precision_on, 1)),
-      max_dec = max(nchar_unit(precision_on, 2))
+      # We want the minimum of either the max collected precision, or the cap
+      max_int = min(max(nchar_unit(!!precision_on, 1)), cap['int']),
+      max_dec = min(max(nchar_unit(!!precision_on, 2)), cap['dec'])
     ) %>%
-    select(!!!precision_by, max_int, max_dec)
+    select(!!!precision_by, max_int, max_dec) %>%
+    ungroup()
 }
