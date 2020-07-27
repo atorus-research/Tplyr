@@ -77,7 +77,8 @@ f_str <- function(format_string, ..., empty='') {
   settings <- map(formats, separate_int_dig)
 
   # A value in settings will be <0 if it's an auto format
-  auto_precision <- any(map_lgl(settings, ~ any(.x < 0)))
+  auto_precision <- any(map_lgl(settings, ~any(attr(.x, 'auto'))))
+
 
   # All ellipsis variables are names
   assert_that(all(sapply(vars, function(x) class(x) == "name")),
@@ -101,23 +102,28 @@ f_str <- function(format_string, ..., empty='') {
 #'
 #' @param x String to have sections counted
 #'
-#' @return A named vector with the names "int" and "dig", countaining numeric values
+#' @return A named vector with the names "int" and "dec", countaining numeric values
 #'
 #' @noRd
 separate_int_dig <- function(x){
 
   # Initialize a vector and name the elements
   out <- numeric(2)
-  names(out) <- c('int', 'dig')
+  names(out) <- c('int', 'dec')
+  attr(out, 'auto') <- c('int'=FALSE, 'dec'=FALSE)
 
   # Count the characters on each side of the decimal
   fields <- str_split(x, "\\.")[[1]]
 
-  num_chars <- map_dbl(fields, parse_fmt)
+  num_chars <- map(fields, parse_fmt)
+  auto <- map_lgl(num_chars, ~attr(.x, 'auto'))
+  num_chars <- as.numeric(num_chars)
+  attr(num_chars, 'auto') <- auto
 
   # Insert the number of characters into the named vector
   for (i in seq_along(num_chars)) {
     out[i] <- num_chars[i]
+    attr(out, 'auto')[i] <- attr(num_chars, 'auto')[i]
   }
   out
 }
@@ -138,9 +144,13 @@ parse_fmt <- function(x) {
     # Pick out the digit
     add <- replace_na(as.double(str_extract(x, '\\d')), 0)
     # Auto formats will be -1 - the specified precision
-    val <- -1 - add
+    val <- 0 + add
+    # Give an attribute that there's an auto format
+    attr(val, 'auto') <- TRUE
   } else {
     val <- nchar(x)
+    # Not auto format
+    attr(val, 'auto') <- FALSE
   }
   val
 }
@@ -173,6 +183,8 @@ parse_fmt <- function(x) {
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param cap Descriptive statistics layers only. A named character vector containing an
+#' 'int' element for the cap on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
 #' @return The layer environment with the format string binding added
 #' @export
@@ -214,12 +226,14 @@ set_format_strings <- function(e, ...) {
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param cap A named character vector containing an 'int' element for the cap on integer precision,
+#' and a 'dec' element for the cap on decimal precision.
 #'
 #' @return
 #' @export
 #'
 #' @noRd
-set_format_strings.desc_layer <- function(e, ...) {
+set_format_strings.desc_layer <- function(e, ..., cap=c('int' = 99, 'dec'=99)) {
 
   # Pick off the ellpsis
   format_strings <- list(...)
@@ -250,13 +264,18 @@ set_format_strings.desc_layer <- function(e, ...) {
   # Pick off the row labels
   row_labels <- names(format_strings)
 
+  # Identify if auto precision is needed
+  need_prec_table <- any(map_lgl(format_strings, ~ .x$auto_precision))
+
   env_bind(e,
            format_strings = format_strings,
            summary_vars = vars(!!!summary_vars),
            keep_vars = vars(!!!keep_vars),
            trans_vars = vars(!!!trans_vars),
            row_labels = row_labels,
-           max_length = max_format_length
+           max_length = max_format_length,
+           need_prec_table = need_prec_table,
+           cap = cap
     )
   e
 }
@@ -342,23 +361,32 @@ name_translator <- function(fmt_strings) {
 #'
 #' @return String formatted numeric value
 #' @export
-num_fmt <- function(val, i, fmt=NULL) {
+num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 
   assert_that(is.numeric(val))
   assert_has_class(fmt, 'f_str')
   assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
 
-  int_len <- fmt$settings[[i]]['int']
-  digits <- fmt$settings[[i]]['dig']
+  # Auto precision requires that integer and decimal are
+  # pulled from the row. If auto, settings will be the amount to add
+  # to max prec, so add those together. Otherwise pull the manually
+  # specified value
+  int_len <- ifelse(attr(fmt$settings[[i]],'auto')['int'],
+                    fmt$settings[[i]]['int'] + autos['int'],
+                    fmt$settings[[i]]['int'])
+
+  decimals  <- ifelse(attr(fmt$settings[[i]],'auto')['dec'],
+                    fmt$settings[[i]]['dec'] + autos['dec'],
+                    fmt$settings[[i]]['dec'])
 
   # Formats summary stat strings to align display correctly
   if (is.na(val)) return(fmt$empty)
 
-  # Set nsmall to input digits
-  nsmall = digits
+  # Set nsmall to input decimals
+  nsmall = decimals
 
   # Incremement digits for to compensate for display
-  if (digits > 0) digits <- digits + 1
+  if (decimals > 0) decimals <- decimals + 1
 
   # Form the string
   return(
@@ -366,7 +394,7 @@ num_fmt <- function(val, i, fmt=NULL) {
       # Round
       round(val, nsmall),
       # Set width of format string
-      width=(int_len+digits),
+      width=(int_len+decimals),
       # Decimals to display
       nsmall=nsmall
     )
