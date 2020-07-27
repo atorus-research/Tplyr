@@ -205,9 +205,9 @@ str.f_str <- function(object, ...) {
     cat(" formated as: ")
     cat(object$formats[i])
     cat("\n\tinteger length: ")
-    cat(object$settings[[i]][1])
+    cat(object$settings[[i]][[1]])
     cat("\n\tdecimal length: ")
-    cat(object$settings[[i]][2])
+    cat(object$settings[[i]][[2]])
     cat("\n")
   }
   cat("Total Format Size: ")
