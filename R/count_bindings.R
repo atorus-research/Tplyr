@@ -162,3 +162,84 @@ set_nest_count <- function(e, nest_count) {
   e
 
 }
+
+
+#' Set the ordering logic for the count layer
+#'
+#' Count layers are generally displayed in a descending order for a particular
+#' treatment group. However Tplyr also supports displaying based on the factor
+#' of the treatment variable, or on a specified <VAR>N variable already in the
+#' dataset (i.e. VISIT <-> VISITN, TRT <-> TRTN). Defaults to 'byrow'.
+#'
+#' @param e A \code{group_count} layer
+#' @param order_count_method The logic determining how the rows in the final
+#'   layer output will be indexed. Options are 'byrow', 'byfactor', and
+#'   'byvarn'.
+#'
+#' @return The modifed layer object
+#' @export
+set_order_count_method <- function(e, order_count_method) {
+
+  assert_inherits_class(order_count_method, "character")
+
+  assert_that(order_count_method %in% c("byrow", "byfactor", "byvarn"),
+              msg = "Invalid input passed to set_order_count_method.
+              Options are: 'byrow', 'byfactor', or 'byvarn'")
+
+  env_bind(e, order_count_method = order_count_method)
+
+  e
+}
+
+#' Set the columns to use when ordering the data in the count layer
+#'
+#' @param e A tplyr \code{group_count} object
+#' @param ... Unquoted variables used to select the columns whose values will be extracted for ordering.
+#'
+#' @return
+#' @export
+set_ordering_cols <- function(e, ...) {
+
+  ordering_cols <- enquos(...)
+
+  check_ordering_cols <- unpack_vars(ordering_cols, allow_character = FALSE)
+
+  treat_var <- env_get(e, "treat_var", inherit = TRUE)
+  cols <- env_get(e, "cols", inherit = TRUE)
+
+  assert_that(map(check_ordering_cols, as_name) %in% map(c(treat_var, cols), as_name),
+              msg = "Arguments passed to set_ordering_cols weren't found as columns in the table.")
+
+  assert_that(length(check_ordering_cols) == length(c(treat_var, cols)),
+              msg = "You need to pass a variable for each treat_var and cols variable.")
+
+  env_bind(e, ordering_cols = ordering_cols)
+
+  e
+}
+
+#' Set the value the count layer is sorting on when the method is byrow.
+#'
+#' The sorting logic will pull out the numeric value in the count layer and
+#' add that as an ordering column. You can select which numeric value to pull
+#' from.
+#'
+#' @param e A \code{group_count} layer
+#' @param byrow_numeric_value The numeric value the ordering will be done on.
+#'   This can be either n, distinct_n, pct, or distinct_pct. Due to the
+#'   evaluation of the layer you can add a value that isn't actually being
+#'   evaluated, if this happens this will only error out in the ordering.
+#'
+#' @return The modified layer object
+#' @export
+set_byrow_numeric_value <- function(e, byrow_numeric_value) {
+
+  byrow_numeric_value <- enquo(byrow_numeric_value)
+
+  assert_that(quo_get_expr(byrow_numeric_value) %in% quos(n, distinct_n, pct, distinct_pct),
+              msg = "Invalid argument for byrow_numeric_value. It can be n, distinct_n, pct, or distinct_pct.")
+
+  env_bind(e, byrow_numeric_value = byrow_numeric_value)
+
+  e
+}

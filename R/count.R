@@ -240,7 +240,13 @@ process_formatting.count_layer <- function(x, ...) {
       # equivilant to by variables in a count layer
       # replace_by_string_names(by_expr)
 
+
   }, envir = x)
+
+  add_order_columns(x)
+
+  env_get(x, "formatted_data")
+
 }
 
 

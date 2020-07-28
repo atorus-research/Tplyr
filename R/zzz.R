@@ -4,7 +4,7 @@
 #' @importFrom rlang quos quo env_names
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom stringr str_sub
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
@@ -107,3 +107,5 @@ distinct_total <- NULL
 .distinct_total <-NULL
 count_row_prefix <- NULL
 inner_count_layer_prefix <- NULL
+ordering_cols <- NULL
+order_count_method <- NULL
