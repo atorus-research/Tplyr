@@ -236,7 +236,7 @@ set_byrow_numeric_value <- function(e, byrow_numeric_value) {
 
   byrow_numeric_value <- enquo(byrow_numeric_value)
 
-  assert_that(quo_get_expr(byrow_numeric_value) %in% quos(n, distinct_n, pct, distinct_pct),
+  assert_that(as_name(byrow_numeric_value) %in% c("n", "distinct_n", "pct", "distinct_pct"),
               msg = "Invalid argument for byrow_numeric_value. It can be n, distinct_n, pct, or distinct_pct.")
 
   env_bind(e, byrow_numeric_value = byrow_numeric_value)

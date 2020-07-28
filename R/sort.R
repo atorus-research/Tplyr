@@ -162,6 +162,8 @@ add_order_columns.count_layer <- function(x) {
 
     # This adds a column for each by variable and the target variable.
     walk2(by, seq_along(by), function(a_by, by_i) {
+      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
+      if (!is.name(quo_get_expr(a_by))) return()
       formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
     })
 
@@ -171,6 +173,22 @@ add_order_columns.count_layer <- function(x) {
 
 add_order_columns.desc_layer <- function(x) {
 
+  evalq({
+
+    # This adds a column for each by variable and the target variable.
+    walk2(by, seq_along(by), function(a_by, by_i) {
+      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
+      if (!is.name(quo_get_expr(a_by))) return()
+      formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+    })
+
+    # Number of sorting columns needed, number of bys plus one for the target_var
+    formatted_row_index <- length(by) + 1
+
+    formatted_data[, paste0("ord_layer_", formatted_row_index)] <- seq(nrow(formatted_data))
+
+
+  }, envir = x)
 }
 
 #' The indicies of the rows based on the by variables
