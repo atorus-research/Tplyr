@@ -150,7 +150,6 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Create the object
   structure(e,
             class=append(c('tplyr_layer', paste0(type,'_layer')), class(e))) %>%
-    set_layer_sort("ascending") %>%
     set_where(!!where)
 }
 

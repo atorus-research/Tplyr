@@ -189,13 +189,19 @@ get_by_order <- function(formatted_data, target, i, var) {
   # not a factor
   levels_i <- levels(target[, as_name(var)])
 
+  if (has_varn(target, as_name(var))) {
+
+    varn_df <- get_varn_values(target, as_name(var))
+
+    get_data_order_byvarn(formatted_data, varn_df, as_name(var), i)
+
   # If the variable isn't a factor, default to alphabetical
-  if (is.null(levels_i)) {
+  } else if (is.null(levels_i)) {
     # Unlist to get out of tibble, turn into factor which will order it alphabeticlly
     # unclass it to get it as a number
     unclass(as.factor(unlist(formatted_data[, i])))
 
-    # If it is a factor, just use that to sort
+    # If it is a factor, just use levels to sort
   } else {
     # Unlist to pull it out of the tibble, order it based on the orders in the target
     # data.frame, unclass it to pull out the index
@@ -220,8 +226,10 @@ get_data_order <- function(x, formatted_row_index) {
   evalq({
     if (order_count_method == "bycount") {
 
+      if (is.null(byrow_numeric_value)) byrow_numeric_value <- quo(n)
+
       get_data_order_bycount(formatted_data, numeric_data, ordering_cols,
-                             treat_var, by, cols, order_count_rows)
+                             treat_var, by, cols, order_count_rows, byrow_numeric_value)
 
     } else if (order_count_method == "byvarn") {
 
@@ -229,7 +237,8 @@ get_data_order <- function(x, formatted_row_index) {
 
       varn_df <- get_varn_values(target, as_name(target_var[[1]]))
 
-      get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]), formatted_row_index)
+      get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
+                            formatted_row_index)
 
 
       # Here it is 'byfactor'
@@ -272,7 +281,7 @@ get_data_order <- function(x, formatted_row_index) {
 #' Helper method for get_data_order
 #' @noRd
 get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
-                       treat_var, by, cols, order_count_rows) {
+                       treat_var, by, cols, order_count_rows, byrow_numeric_value) {
 
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
@@ -284,14 +293,24 @@ get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
     expr(!!sym(as_name(x)) == !!as_name(y))
   })
 
+  # Logic for pcts
+  if (as_name(byrow_numeric_value) == "pct") {
+
+    # This isn't in an evalq so the modifictions here won't do anything to the layer
+    numeric_data[, "pct"] <- numeric_data[, "n"] / numeric_data[, "total"]
+
+  } else if (as_name(byrow_numeric_value) == "distinct_pct") {
+
+    numeric_data[, "distinct_pct"] <- numeric_data[, "distinct_n"] / numeric_data[, "distinct_total"]
+  }
+
   ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
   numeric_ordering_data <- numeric_data %>%
     filter(!!!filter_logic) %>%
 
     # I'm like 80% sure this logic works out.
     pivot_wider(id_cols = c(match_exact(by), "summary_var", !!!head(ordering_cols, -1)),
-                # TODO: instead of values_from n, it should be logic for n, distinct, pct, or distinct_pct
-                names_from = !!treat_var, values_from = n) %>%
+                names_from = !!treat_var, values_from = !!byrow_numeric_value) %>%
 
     select(!!ordering_cols[[1]])
 
@@ -304,7 +323,7 @@ get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
 
 
   # Order the vector based on the sort and return
-  numeric_ordering_index$x
+  numeric_ordering_index$x[order(numeric_ordering_index$ix)]
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index) {

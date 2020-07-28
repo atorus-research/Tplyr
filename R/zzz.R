@@ -109,3 +109,4 @@ count_row_prefix <- NULL
 inner_count_layer_prefix <- NULL
 ordering_cols <- NULL
 order_count_method <- NULL
+byrow_numeric_value <- NULL
