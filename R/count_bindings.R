@@ -207,9 +207,6 @@ set_ordering_cols <- function(e, ...) {
   treat_var <- env_get(e, "treat_var", inherit = TRUE)
   cols <- env_get(e, "cols", inherit = TRUE)
 
-  assert_that(map(check_ordering_cols, as_name) %in% map(c(treat_var, cols), as_name),
-              msg = "Arguments passed to set_ordering_cols weren't found as columns in the table.")
-
   assert_that(length(check_ordering_cols) == length(c(treat_var, cols)),
               msg = "You need to pass a variable for each treat_var and cols variable.")
 

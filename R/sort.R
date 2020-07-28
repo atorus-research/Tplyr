@@ -322,15 +322,19 @@ get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
     numeric_data[, "distinct_pct"] <- numeric_data[, "distinct_n"] / numeric_data[, "distinct_total"]
   }
 
+  # What will become the column name of the tibble below. It nests the names of the ordering cols and
+  # separates them with an underscore
+  result_column <- paste(map_chr(ordering_cols, as_name), collapse = "_")
+
   ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
   numeric_ordering_data <- numeric_data %>%
     filter(!!!filter_logic) %>%
 
     # I'm like 80% sure this logic works out.
-    pivot_wider(id_cols = c(match_exact(by), "summary_var", !!!head(ordering_cols, -1)),
-                names_from = !!treat_var, values_from = !!byrow_numeric_value) %>%
+    pivot_wider(id_cols = c(match_exact(by), "summary_var"),
+                names_from = c(!!treat_var, !!!cols), values_from = !!byrow_numeric_value) %>%
 
-    select(!!ordering_cols[[1]])
+    select(as.symbol(result_column))
 
   # This is the numeric index that the numeric data is in. radix was chosen because
   # its the only method that gives indicies as far as I can tell
