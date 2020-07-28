@@ -8,19 +8,52 @@
 #' @param ... Parameters passed to disptach that are used in sorting
 #'
 #' @section Sorting a Table:
-#' You can pass the output of a build to reorder the columns. The function will order the
-#' columns in the order the elipsis was passed. If all of the columns aren't used, the
-#' columns that weren't selected will be moved to the end of the data.frame after the
-#' columns that were passed.
+#' You can pass the output of a build to reorder the columns. The function will
+#' order the columns in the order the elipsis was passed. If all of the columns
+#' aren't used, the columns that weren't selected will be moved to the end of
+#' the data.frame after the columns that were passed.
+#'
+#' When a table is built, the output has several ordering(ord_) columns that are
+#' appended. The first represents the layer index. The index is determined by
+#' the order the layer was added to the table. The following are the indicies
+#' for the by variables and the target variable. The by variables are ordered
+#' based on:
+#' 1) A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if one is present.
+#'
+#' 2) If no <VAR>N variable is present, it is ordered based on the factor
+#' present in the target dataset.
+#'
+#' 3) If the variable is not a factor in the
+#' target dataset, it is coersed to one and ordered alphabetically.
+#'
+#' The target variable is ordered depending on the type of layer. See more below.
 #'
 #' @section Ordering a Count Layer:
+#' There are many ways to order a count layer depending on the preferences of
+#' the table programmer. \code{Tplyr} supports sorting by a descending amount in
+#' a column in the table, sorting by a <VAR>N variable, and sorting by a custom
+#' order. These can be set using the `set_order_count_method` function.
 #' \itemize{
-#' \item{Sorting by a count value - }
-#' \item{Sorting by a 'by' variable - }
-#' \item{Sorting by a factor}
+#' \item{Sorting by a numeric count - A selected numeric value from a selected
+#' column will be indexed based on the descending numeric value. The numeric
+#' value extracted defaults to 'n' but can be changed with
+#' `set_byrow_numeric_value`. The column selected for sorting defaults to the
+#' first value in the treatment group varialbe. If there were arguments passed
+#' to the 'cols' argument in the table those must be specified with
+#' `set_ordering_columns`.}
+#' \item{Sorting by a 'varn' variable - If the treatment variable has a <VAR>N
+#' variable. It can be indexed to that variable.}
+#' \item{Sorting by a factor(Default) - If a factor is found for the target
+#' variable in the target dataset that is used to order, if no factor is found
+#' it is coersed to a factor and sorted alphabetically.}
+#' \item{Sorting a nested count layer - WIP}
 #' }
 #'
 #' @section Ordering a Desc Layer:
+#' The order of a desc layer is mostly set during the object construction. The
+#' by variables are resolved and index with the same logic as the count layers.
+#' The target variable is ordered based on the format strings that were used
+#' when the layer was created.
 #'
 #' @return An ordered data.frame if a data.frame was passed. Or nothing in the
 #'   case of a tplyr_layer. These are adjusted silently and will be ordered
@@ -155,7 +188,7 @@ add_order_columns.count_layer <- function(x) {
       head(unique(pop_data[, as_name(treat_var)]), 1)
       ))))
 
-    if (is.null(order_count_method)) order_count_method <- "bycount"
+    if (is.null(order_count_method)) order_count_method <- "byfactor"
 
     # Number of sorting columns needed, number of bys plus one for the target_var
     formatted_row_index <- length(by) + 1
@@ -215,12 +248,14 @@ get_by_order <- function(formatted_data, target, i, var) {
 
   # If the variable isn't a factor, default to alphabetical
   } else if (is.null(levels_i)) {
+
     # Unlist to get out of tibble, turn into factor which will order it alphabeticlly
     # unclass it to get it as a number
     unclass(as.factor(unlist(formatted_data[, i])))
 
     # If it is a factor, just use levels to sort
   } else {
+
     # Unlist to pull it out of the tibble, order it based on the orders in the target
     # data.frame, unclass it to pull out the index
     unclass(ordered(unlist(formatted_data[, i]), levels_i))
@@ -361,7 +396,12 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
       # works just as well.
       filter(.data[[by_var]] == a_by)
 
-    # Index is always in the second row
-    as.double(unlist(ind_row[, 2]))
+    # If the row is legnth zero it is a total row. Just add one so it apears on the bottom
+    if (nrow(ind_row) == 0) {
+      max(by_varn_df[,2]) + 1
+    } else {
+      # Index is always in the second row
+      as.double(unlist(ind_row[, 2]))
+    }
   })
 }
