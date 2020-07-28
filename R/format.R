@@ -14,14 +14,24 @@
 #' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
 #' flexibility to the user.
 #'
-#' The display of the numbers in the resulting dataframe is controlled by the \code{format_string} parameter. Just like dummy values
-#' may be presented on your mocks, this is specified by the user simply by providing a string of how you'd like your strings formatted,
-#' just replacing the numbers with x's. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'. 'Tplyr'
-#' does the work to get the numbers in the right place.
+#' Tplyr provides both manual and automatic decimal precision formatting. The display of the numbers
+#' in the resulting dataframe is controlled by the \code{format_string} parameter. For manual precision, just like dummy values
+#' may be presented on your mocks, integer and decimal precision is specified by the user simply by providing a string of
+#' 'x's for how you'd like your numbers formatted. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'.
+#' 'Tplyr' does the work to get the numbers in the right place.
 #'
-#' To take things further, if you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
-#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)'. Note that you're able to provide different integer lengths and
-#' different decimal precision for the two values.
+#' To take thjs a step further, automatic decimal precision can also be obtained based on the collected precision
+#' within the data. When creating tables where results vary by some parameter, different results may call for different
+#' degrees of precision. To use automatic precision, use a single 'a' on either the integer and decimal side. If you'd like
+#' to use increased precision (i.e. you'd like mean to be collected precision +1), use 'a+1'. So if you'd like both
+#' integer and and decimal precision to be based on the data as collected, you can use a format like 'a.a' - or for
+#' collected+1 decimal precision, 'a.a+1'.  You can mix and match this with manual formats as well, making format strings
+#' such as 'xx.a+1'
+#'
+#' If you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
+#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2).
+#' Note that you're able to provide  different integer lengths and different decimal precision for the two values. Each
+#' format string is independent and relates only to the format specified.
 #'
 #' The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
 #' slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
@@ -30,8 +40,9 @@
 #' either by built in defaults, or custom summaries declared using \code{\link{set_custom_summaries}}.
 #' See \code{\link{set_format_strings}} for some more notes about layers specific implementation
 #'
-#' @param format_string The desired display format. X's indicate digits. On the left, the number of x's indicates the integer length. On the
-#' right, the number of x's controls decimal precision and rounding. Variables are inferred by any separation of the 'x' values other than a
+#' @param format_string The desired display format. X's indicate digits. On the left, the number of x's
+#' indicates the integer length. On the right, the number of x's controls decimal precision and rounding.
+#' Variables are inferred by any separation of the 'x' values other than a
 #' decimal.
 #' @param ... The variables to be formatted using the format specified in \code{format_string}.
 #' @param empty The string to display when the numeric data is not available
@@ -41,6 +52,9 @@
 #'
 #' @examples
 #' f_str("xx.x (xx.x)", mean, sd)
+#' f_str("a.a+1 (a.a+2), mean, sd)
+#' f_str("xx.a (xx.a+1)", mean, sd)
+#' f_str("xx.x, xx.x, xx.x", q1, median, q3)
 #'
 f_str <- function(format_string, ..., empty='') {
 
@@ -59,7 +73,7 @@ f_str <- function(format_string, ..., empty='') {
   #    This captures the integer, with either the auto formats or x's
   # (\\.(a(\\+\\d)?|x+)?)? -> a period, then possibly the same a <+digit>, or multiple x's
   #    This captures the decimal places, but they don't have to exist
-  rx <- "(a(\\+\\d)?|x+)(\\.(a(\\+\\d)?|x+)?)?"
+  rx <- "(a(\\+\\d+)?|x+)(\\.(a(\\+\\d+)?|x+)?)?"
   formats <- str_extract_all(format_string, regex(rx))[[1]]
 
   # Duplicate any '%' to escape them
@@ -142,7 +156,7 @@ parse_fmt <- function(x) {
   # If it's an auto format, grab the output value
   if (grepl('a', x)) {
     # Pick out the digit
-    add <- replace_na(as.double(str_extract(x, '\\d')), 0)
+    add <- replace_na(as.double(str_extract(x, '\\d+')), 0)
     # Auto formats will be -1 - the specified precision
     val <- 0 + add
     # Give an attribute that there's an auto format
