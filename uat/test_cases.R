@@ -116,4 +116,37 @@ test_that('T3',{
   rm(test_3)
 })
 
+#test 4
+test_that('T4',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P)
+    test_4 <- group_desc(t, AGE, by="Age (Groups)", where = SAFFL == "Y")
+
+    # output table to check attributes
+    save(test_4, file = "~/Tplyr/uat/output/test_4.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_4)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_4.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(, label = "T4.1")
+  testthat::expect_equal(, label = "T4.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_4)
+})
+
 rm(vur)
