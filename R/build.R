@@ -78,7 +78,7 @@ build.tplyr_table <- function(x) {
   formatting_meta <- fetch_formatting_info(x)
 
   # Format layers/table and pivot. process_formatting should return the built table!
-  output_list <- map(x$layers, process_formatting)
+  output_list <- purrr::map(x$layers, process_formatting)
 
   output <- output_list %>%
     map2_dfr(seq_along(output_list), add_layer_index) %>%
@@ -103,7 +103,7 @@ process_summaries <- function(x, ...) {
 #' Process layers to get formatted and pivoted tables.
 #'
 #' This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
-#' @param x A tplyr_layer object
+#' @param lay A tplyr_layer object
 #' @param ... arguments passed to dispatch
 #'
 #' @return The formatted_table object that is binded to the layer

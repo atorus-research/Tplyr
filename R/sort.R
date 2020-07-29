@@ -182,25 +182,58 @@ add_order_columns <- function(x) {
 add_order_columns.count_layer <- function(x) {
   evalq({
 
+    if (is.null(byrow_numeric_value)) byrow_numeric_value <- quo(n)
+
     # Set default for ordering column. A lot of weird stripping of the object is done here
     # to make sure its the right class
     if (is.null(ordering_cols)) ordering_cols <- quos(!!unname(unlist(as.character(
       head(unique(pop_data[, as_name(treat_var)]), 1)
       ))))
 
-    if (is.null(order_count_method)) order_count_method <- "byfactor"
+    # If it is a nested count_layer
+    if (length(target_var) == 2) {
 
-    # Number of sorting columns needed, number of bys plus one for the target_var
-    formatted_row_index <- length(by) + 1
+      # Number of sorting columns needed, number of bys plus one for the target_var
+      formatted_row_index <- length(by) + 1
 
-    # This adds a column for each by variable and the target variable.
-    walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
-      if (!is.name(quo_get_expr(a_by))) return()
-      formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
-    })
+      walk2(by, seq_along(by), function(a_by, by_i) {
+        # If a_by is a character, skip and go to the next, it doesn't have any sorting information.
+        if (!is.name(quo_get_expr(a_by))) return()
+        formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+      })
 
-    formatted_data[, paste0("ord_layer_", formatted_row_index)] <- get_data_order(current_env(), formatted_row_index)
+      # This sorts the sub-pieces of the nested layer
+      formatted_data[, paste0("ord_layer_", formatted_row_index)] <- nest_sort_index
+
+      # Used to remove the prefix
+      indentaion_length <- ifelse(exists("indentaion"), length(indentaion), 2)
+
+      # Add the ordering of the peices in the layer
+      formatted_data <- formatted_data %>%
+        group_by(.data[[paste0("ord_layer_", formatted_row_index)]]) %>%
+        do(add_data_order_nested(., formatted_row_index, numeric_data,
+                                 indentaion_length, ordering_cols,
+                                 treat_var, by, cols, order_count_rows,
+                                 byrow_numeric_value))
+
+      # If it isn't a nested count layer
+    } else {
+
+      if (is.null(order_count_method)) order_count_method <- "byfactor"
+
+      # Number of sorting columns needed, number of bys plus one for the target_var
+      formatted_row_index <- length(by) + 1
+
+      # This adds a column for each by variable and the target variable.
+      walk2(by, seq_along(by), function(a_by, by_i) {
+        # If a_by is a character, skip and go to the next, it doesn't have any sorting information.
+        if (!is.name(quo_get_expr(a_by))) return()
+        formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+      })
+
+      formatted_data[, paste0("ord_layer_", formatted_row_index)] <- get_data_order(current_env(), formatted_row_index)
+    }
+
   }, envir = x)
 }
 
@@ -279,7 +312,7 @@ get_data_order <- function(x, formatted_row_index) {
   evalq({
     if (order_count_method == "bycount") {
 
-      if (is.null(byrow_numeric_value)) byrow_numeric_value <- quo(n)
+
 
       get_data_order_bycount(formatted_data, numeric_data, ordering_cols,
                              treat_var, by, cols, order_count_rows, byrow_numeric_value)
@@ -306,7 +339,7 @@ get_data_order <- function(x, formatted_row_index) {
       if (is.null(target_levels)) {
 
         # Change target variable into a factor
-        target_fact <- as.factor(target_data)
+        target_fact <- as.factor(unlist(target_data))
 
         # Create data.frame with levels and index
         fact_df <- tibble(
@@ -405,3 +438,39 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
     }
   })
 }
+
+add_data_order_nested <- function(group_data, final_col, numeric_data,
+                                  indentation_length, ordering_cols,
+                                  treat_var, by, cols, order_count_rows,
+                                  byrow_numeric_value) {
+
+  # The first row is always the first thing in the order so make it -1
+  group_data[1, paste0("ord_layer_", final_col + 1)] <- -1
+
+
+  ## Same logic here as the non-nested. TODO: Could the logic be merged?
+  if (is.null(order_count_method)) order_count_method <- "byfactor"
+
+  filtered_numeric_data <- numeric_data %>%
+    # Only include the parts of the numeric data that is in the current label
+    filter(numeric_data$summary_var %in% unlist(group_data[-1, "row_label1"])) %>%
+    # Remove nesting prefix to prepare numeric data.
+    mutate(summary_var := str_sub(summary_var, indentation_length))
+
+  #Same idea here, remove prefix
+  filtered_group_data <- group_data[-1, ] %>%
+    mutate(row_label1 := str_sub(row_label1, indentation_length))
+
+  group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(group_data[-1, ],
+                                                                            filtered_numeric_data,
+                                                                            ordering_cols,
+                                                                            treat_var,
+                                                                            by,
+                                                                            cols,
+                                                                            order_count_rows,
+                                                                            byrow_numeric_value)
+
+  group_data
+
+}
+

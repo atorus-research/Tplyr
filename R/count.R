@@ -11,6 +11,10 @@ process_summaries.count_layer <- function(x, ...) {
     # Change treat_var to factor so all combinations appear in nest
     factor_treat_var(x)
 
+    # If the nest_sort_index isn't null, reset it
+    # This happens if the layer is reloaded
+    if (!is.null(env_get(x, "nest_sort_index", default = NULL))) env_bind(x, nest_sort_index = NULL)
+
     # Begin with the layer itself and process the first target vars values one by one
     env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
             bind_nested_count_layer, x = x))
@@ -196,10 +200,11 @@ prepare_format_metadata <- function(x) {
 #' @noRd
 #' @export
 process_formatting.count_layer <- function(x, ...) {
+  print("here")
   evalq({
 
     formatted_data <- numeric_data %>%
-      # Mutate value based on if there is a
+      # Mutate value based on if there is a distinct_by
       mutate(n = {
         if(is.null(distinct_by)) {
           construct_count_string(.n=n, .total=total,
@@ -268,6 +273,10 @@ process_formatting.count_layer <- function(x, ...) {
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
+
+  ## Added this for processing formatting in nested count layers where this won't be processed yet
+  if (is.null(max_layer_length)) max_layer_length <- 0
+  if (is.null(max_n_width)) max_n_width <- 0
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 

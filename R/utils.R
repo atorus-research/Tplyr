@@ -173,22 +173,53 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
   # This contains the subset of the first target variable.
   # If nest_counts is true. the first treat_var is added in the by so it appears
   # in its own column
-    inner_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[2]],
+    inner_layer <- process_summaries(group_count(x, target_var = !!get_target_var(x)[[2]],
                                                  by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
                                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                                        # Set the value for how to prefix the inner layer
                                        set_count_row_prefix(env_get(x, "indentation", default = "\t")))
 
+
+    # Process the formatting here to get the metadata. We just need the number of rows
+    inner_layer_form <- inner_layer$numeric_data %>%
+      # Pivot table
+      pivot_wider(id_cols = c(match_exact(get_by(x)), "summary_var", match_exact(head(get_target_var(x), -1))),
+                  names_from = c(!!env_get(x, "treat_var", inherit = TRUE), match_exact(env_get(x, "cols", inherit = TRUE))),
+                  values_from = n,
+                  names_prefix = "var1_")
+
+
     # This should be a single row with the total of target_var 1
-    outer_layer <- process_summaries(group_count(env_parent(x), target_var = !!get_target_var(x)[[1]],
+    outer_layer <- process_summaries(group_count(x, target_var = !!get_target_var(x)[[1]],
                                                  by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
                                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
 
     outer_layer$numeric_data <- outer_layer$numeric_data %>%
       mutate(!!env_get(x, "target_var")[[1]] := !!target_var_1_i)
 
-  # Bind these two to gether and add a row mask
-  bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
+    # Add the index for this part of the layer
+    save_nested_layer_order(x, nrow(inner_layer_form) + 1)
+
+    # Bind these two to gether and add a row mask
+    bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
+}
+
+#' Bind an index for a nested count for use in sorting.
+#' @noRd
+save_nested_layer_order <- function(x, num_rows) {
+
+  # Number to add as the sorting column
+  current_nest <- env_get(x, "current_nest", default = 0) + 1
+
+  # Pull current index vector
+  nest_sort_index <- env_get(x, "nest_sort_index", default = numeric(0))
+
+  # Append current nest level to vecotr
+  env_bind(x, nest_sort_index = append(nest_sort_index, rep(current_nest, num_rows)))
+
+  # add new current nest value
+  env_bind(x, current_nest = current_nest)
+
 }
 
 
