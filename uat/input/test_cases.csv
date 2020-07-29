@@ -1,0 +1,9 @@
+﻿LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
+UpdatedBy,,,,Nathan Kosiba,,
+UpdatedDate,,,,7/16/2020,,
+Setup,,,,_No prerequisites required_,,
+TestCase,A:B,T1,,Output an RTF using a dataframe requiring one page of output and verify output and paging are appropiate,,
+Check,,T1,1,Verify document outputs as an RTF and opens in Word,visual,test_1.rtf
+TestCase,C,T2,,Check document level margins are set to the default value then change margins and verify changes are reflected in the output,,
+Check,,T2,1,"Verify document level margins are set to expected default: 1,1,1,1",programmatic,test_2.Rdata
+Check,,T2,2,"Verify document level margins on output are 2 (top), .5 (bottom), 1.5 (left), .25 (right)",visual,test_2.rtf
