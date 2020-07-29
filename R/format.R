@@ -51,9 +51,13 @@
 #' @export
 #'
 #' @examples
+#'
 #' f_str("xx.x (xx.x)", mean, sd)
-#' f_str("a.a+1 (a.a+2), mean, sd)
+#'
+#' f_str("a.a+1 (a.a+2)", mean, sd)
+#'
 #' f_str("xx.a (xx.a+1)", mean, sd)
+#'
 #' f_str("xx.x, xx.x, xx.x", q1, median, q3)
 #'
 f_str <- function(format_string, ..., empty='') {
