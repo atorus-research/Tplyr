@@ -1,9 +1,34 @@
 ﻿LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,7/16/2020,,
+UpdatedDate,,,,7/23/2020,,
 Setup,,,,_No prerequisites required_,,
-TestCase,A:B,T1,,Output an RTF using a dataframe requiring one page of output and verify output and paging are appropiate,,
-Check,,T1,1,Verify document outputs as an RTF and opens in Word,visual,test_1.rtf
-TestCase,C,T2,,Check document level margins are set to the default value then change margins and verify changes are reflected in the output,,
-Check,,T2,1,"Verify document level margins are set to expected default: 1,1,1,1",programmatic,test_2.Rdata
-Check,,T2,2,"Verify document level margins on output are 2 (top), .5 (bottom), 1.5 (left), .25 (right)",visual,test_2.rtf
+TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
+Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
+Check,,T1,2,Verify treatment variable in table is the same as specified,programmatic,test_1.RData
+TestCase,C,T2,,Population data subset can be specified on user specified conditions,,
+Check,,T2,1,Population data created matches data subset as specified,programmatic,test_2.RData
+TestCase,D:E,T3,,Manual groups can be specified by combining different subgroups and header N counts will be specified from these groups within the population data,,
+Check,,T3,1,Population groups can be added by combining existing groups,programmatic,test_3.RData
+Check,,T3,2,Header N counts of combined groups match the combined total of the groups,programmatic,test_3.RData
+TestCase,F:G,T4,,Analysis data can be specified by the user and treatment variable can be specified for the analysis population,,
+Check,,T4,1,Verify analysis dataset in layer is the same as specified when inherited from table,programmatic,test_4.RData
+Check,,T4,2,Verify treatment variable in layer is the same as specified when inherited from table,programmatic,test_4.RData
+TestCase,A:B:F:G,T5,,Population data and treatment variable can be specified independent of analysis data and treatment variable,,
+Check,,T5,1,Verify population data can be manually specified if not the same as analysis data,programmatic,test_5.RData
+Check,,T5,2,Verify treatment variable can be manually specified if not the same as analysis data,programmatic,test_5.RData
+TestCase,H,,,Analysis data subset can be specified on user specified conditions,,
+Check,,,1,Analysis data created matches data subset as specified,programmatic,
+TestCase,I,,,n counts of values within a variable can be produced,,
+Check,,,1,Complete data value n counts can be produced within a variable,programmatic,
+Check,,,2,Distinct data value n counts can be produced within a variable,programmatic,
+TestCase,J,,,n counts of values within a group of variables can be produced,,
+Check,,,1,Complete data value n counts can be produced within a group of variables,programmatic,
+Check,,,2,Distinct data value n counts can be produced within a group of variables,programmatic,
+TestCase,K:L,,,Total and missing n counts can be added,,
+Check,,,1,Total n count can be added within a layer,programmatic,
+Check,,,2,Missing n count can be added within a layer,programmatic,
+TestCase,M,,,Dummy values can be specified for categories that need to be presented but may not exist within the data,,
+Check,,,1,Values specified by user are presented in the output table,,
+TestCase,N,,,Counts can be produced as n (%),,
+Check,,,1,"When specified, both n and % can be displayed in a n (%) fashion",,
+,,,2,Distinct n and % can be displayed in a n (%) fashion,,
