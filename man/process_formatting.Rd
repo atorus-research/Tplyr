@@ -7,9 +7,9 @@
 process_formatting(x, ...)
 }
 \arguments{
-\item{x}{A tplyr_layer object}
-
 \item{...}{arguments passed to dispatch}
+
+\item{lay}{A tplyr_layer object}
 }
 \value{
 The formatted_table object that is binded to the layer

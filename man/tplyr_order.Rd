@@ -19,27 +19,6 @@ An ordered data.frame if a data.frame was passed. Or nothing in the
 \description{
 Named this way to prevent conflicts
 }
-\section{Sorting a Table}{
-
-You can pass the output of a build to reorder the columns. The function will order the
-columns in the order the elipsis was passed. If all of the columns aren't used, the
-columns that weren't selected will be moved to the end of the data.frame after the
-columns that were passed.
-}
-
-\section{Ordering a Count Layer}{
-
-\itemize{
-\item{Sorting by a count value - }
-\item{Sorting by a 'by' variable - }
-\item{Sorting by a factor}
-}
-}
-
-\section{Ordering a Desc Layer}{
-
-}
-
 \examples{
 library(dplyr)
 

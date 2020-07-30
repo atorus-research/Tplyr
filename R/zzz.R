@@ -6,7 +6,7 @@
 #' @importFrom stringr str_sub
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %<>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
@@ -104,9 +104,9 @@ distinct_n <- NULL
 summary_stat <- NULL
 total_row_label <- NULL
 distinct_total <- NULL
-.distinct_total <-NULL
+.distinct_total <- NULL
 count_row_prefix <- NULL
 inner_count_layer_prefix <- NULL
 ordering_cols <- NULL
 order_count_method <- NULL
-byrow_numeric_value <- NULL
+result_order_var <- NULL

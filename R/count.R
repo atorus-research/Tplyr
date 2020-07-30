@@ -253,8 +253,6 @@ process_formatting.count_layer <- function(x, ...) {
 
 }
 
-
-
 #' Format n counts for display in count_layer
 #'
 #' left padding = (maximum_n_width - this_n_width)

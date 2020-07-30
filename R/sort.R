@@ -7,62 +7,10 @@
 #' @param x A \code{data.frame} or \code{tplyr_layer} object
 #' @param ... Parameters passed to disptach that are used in sorting
 #'
-#' @section Sorting a Table:
-#' You can pass the output of a build to reorder the columns. The function will
-#' order the columns in the order the elipsis was passed. If all of the columns
-#' aren't used, the columns that weren't selected will be moved to the end of
-#' the data.frame after the columns that were passed.
-#'
-#' When a table is built, the output has several ordering(ord_) columns that are
-#' appended. The first represents the layer index. The index is determined by
-#' the order the layer was added to the table. The following are the indicies
-#' for the by variables and the target variable. The by variables are ordered
-#' based on:
-#' 1) A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if one is present.
-#'
-#' 2) If no <VAR>N variable is present, it is ordered based on the factor
-#' present in the target dataset.
-#'
-#' 3) If the variable is not a factor in the
-#' target dataset, it is coersed to one and ordered alphabetically.
-#'
-#' The target variable is ordered depending on the type of layer. See more below.
-#'
-#' @section Ordering a Count Layer:
-#' There are many ways to order a count layer depending on the preferences of
-#' the table programmer. \code{Tplyr} supports sorting by a descending amount in
-#' a column in the table, sorting by a <VAR>N variable, and sorting by a custom
-#' order. These can be set using the `set_order_count_method` function.
-#' \itemize{
-#' \item{Sorting by a numeric count - A selected numeric value from a selected
-#' column will be indexed based on the descending numeric value. The numeric
-#' value extracted defaults to 'n' but can be changed with
-#' `set_byrow_numeric_value`. The column selected for sorting defaults to the
-#' first value in the treatment group varialbe. If there were arguments passed
-#' to the 'cols' argument in the table those must be specified with
-#' `set_ordering_columns`.}
-#' \item{Sorting by a 'varn' variable - If the treatment variable has a <VAR>N
-#' variable. It can be indexed to that variable.}
-#' \item{Sorting by a factor(Default) - If a factor is found for the target
-#' variable in the target dataset that is used to order, if no factor is found
-#' it is coersed to a factor and sorted alphabetically.}
-#' \item{Sorting a nested count layer - As is standard with AE tables, the first
-#' target variable is sorted either alphabetically, if a factor isn't provided,
-#' or ordered based on a supplided factor. The second variable is sorted with
-#' the 'bycount' method, the column and numeric value can be assigned with
-#' `set_ordering_cols` and `set_byrow_numeric_value` respectively.}
-#' }
-#'
-#' @section Ordering a Desc Layer:
-#' The order of a desc layer is mostly set during the object construction. The
-#' by variables are resolved and index with the same logic as the count layers.
-#' The target variable is ordered based on the format strings that were used
-#' when the layer was created.
 #'
 #' @return An ordered data.frame if a data.frame was passed. Or nothing in the
 #'   case of a tplyr_layer. These are adjusted silently and will be ordered
 #'   when the table is output.
-#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -138,6 +86,12 @@ tplyr_order.data.frame <- function(x, ...) {
 #'
 #' For needed by variables, looks for a <by>N. e.g. VISITN
 #'
+#' @param .data The target dataset
+#' @param a_by A character or quosure vector
+#'
+#' @return A logical vector indicating if there is a <VAR>N variable for the
+#'   indicated <VAR>
+#'
 #' @noRd
 has_varn <- function(.data, a_by) {
 
@@ -153,6 +107,12 @@ has_varn <- function(.data, a_by) {
 }
 
 #' Get the value of the by variable in one column and its 'N' in the other
+#'
+#' @param .data The target dataset
+#' @param a_by A single variable name as a character or quosure
+#'
+#' @return A two column data.frame with the unique combinations of <VAR> and
+#'   <VAR>N.
 #' @noRd
 get_varn_values <- function(.data, a_by) {
 
@@ -161,7 +121,7 @@ get_varn_values <- function(.data, a_by) {
 
   # For the <VAR>N to be well formed there should be one and only one N for each value.
   # Therefore the number unique indices should be the number of total rows.
-  assert_that(nrow(unique(varn_df[, paste0(as_name(a_by), "N")])) == nrow(varn_df),
+  assert_that(nrow(unique(varn_df)) == nrow(varn_df),
               msg = "Bad indices were pulled when ordering on the by variable")
 
   varn_df
@@ -186,19 +146,20 @@ add_order_columns <- function(x) {
 add_order_columns.count_layer <- function(x) {
   evalq({
 
-    if (is.null(byrow_numeric_value)) byrow_numeric_value <- quo(n)
-
-    # Set default for ordering column. A lot of weird stripping of the object is done here
-    # to make sure its the right class
+    # Set all defaults for ordering
+    if (is.null(result_order_var)) result_order_var <- quo(n)
+    # A lot of weird stripping of the object is done here to make sure its the
+    # right class
     if (is.null(ordering_cols)) ordering_cols <- quos(!!unname(unlist(as.character(
       head(unique(pop_data[, as_name(treat_var)]), 1)
       ))))
+    if (is.null(order_count_method)) order_count_method <- "byfactor"
 
     # If it is a nested count_layer
     if (length(target_var) == 2) {
 
       # Number of sorting columns needed, number of bys plus one for the target_var
-      formatted_row_index <- length(by) + 1
+      formatted_col_index <- length(by) + 1
 
       walk2(by, seq_along(by), function(a_by, by_i) {
         # If a_by is a character, skip and go to the next, it doesn't have any sorting information.
@@ -207,26 +168,25 @@ add_order_columns.count_layer <- function(x) {
       })
 
       # This sorts the sub-pieces of the nested layer
-      formatted_data[, paste0("ord_layer_", formatted_row_index)] <- nest_sort_index
+      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- nest_sort_index
 
       # Used to remove the prefix
       indentaion_length <- ifelse(exists("indentaion"), length(indentaion), 2)
 
       # Add the ordering of the peices in the layer
       formatted_data <- formatted_data %>%
-        group_by(.data[[paste0("ord_layer_", formatted_row_index)]]) %>%
-        do(add_data_order_nested(., formatted_row_index, numeric_data,
+        group_by(.data[[paste0("ord_layer_", formatted_col_index)]]) %>%
+        do(add_data_order_nested(., formatted_col_index, numeric_data,
                                  indentaion_length, ordering_cols,
-                                 treat_var, by, cols, order_count_rows,
-                                 byrow_numeric_value))
+                                 treat_var, by, cols,
+                                 result_order_var, target_var))
 
       # If it isn't a nested count layer
     } else {
 
-      if (is.null(order_count_method)) order_count_method <- "byfactor"
 
       # Number of sorting columns needed, number of bys plus one for the target_var
-      formatted_row_index <- length(by) + 1
+      formatted_col_index <- length(by) + 1
 
       # This adds a column for each by variable and the target variable.
       walk2(by, seq_along(by), function(a_by, by_i) {
@@ -235,7 +195,7 @@ add_order_columns.count_layer <- function(x) {
         formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
-      formatted_data[, paste0("ord_layer_", formatted_row_index)] <- get_data_order(current_env(), formatted_row_index)
+      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
     }
 
   }, envir = x)
@@ -253,21 +213,22 @@ add_order_columns.desc_layer <- function(x) {
     })
 
     # Number of sorting columns needed, number of bys plus one for the target_var
-    formatted_row_index <- length(by) + 1
+    formatted_col_index <- length(by) + 1
 
-    formatted_data[, paste0("ord_layer_", formatted_row_index)] <- seq(nrow(formatted_data))
+    formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
 
 
   }, envir = x)
 }
 
-#' The indicies of the rows based on the by variables
+#' Return the indicies of the rows based on the by variables
 #'
 #'
 #' @param formatted_data The formatted_data object from the layer
 #' @param target The target dataset in the tplyr_table
 #' @param i The index of the by variable i.e. the order it was passed in the
-#'   \code{tplyr_layer}.
+#'   \code{tplyr_layer}. This is also the column the by variable is output in
+#'   the formatted_data.
 #' @param var The by variable as a quosure
 #'
 #' @noRd
@@ -305,21 +266,23 @@ get_by_order <- function(formatted_data, target, i, var) {
 #' and 'byfactor' into their own function
 #'
 #' @param x The tplyr layer environment
+#' @param formatted_col_index the column index of the target variable data.
 #'
 #' @return Returns the index the variables should be ordered in, in the cases of
 #'   ordering by a <VAR>N variable and ordering by factors. Returns the numeric
 #'   value in the case of ordering by column values.
 #'
 #' @noRd
-get_data_order <- function(x, formatted_row_index) {
+get_data_order <- function(x, formatted_col_index) {
 
   evalq({
+
+    # Swtich for the sorting method
     if (order_count_method == "bycount") {
 
-
-
+      # No processing is needed here just pass in the needed info
       get_data_order_bycount(formatted_data, numeric_data, ordering_cols,
-                             treat_var, by, cols, order_count_rows, byrow_numeric_value)
+                             treat_var, by, cols, result_order_var, target_var)
 
     } else if (order_count_method == "byvarn") {
 
@@ -328,7 +291,7 @@ get_data_order <- function(x, formatted_row_index) {
       varn_df <- get_varn_values(target, as_name(target_var[[1]]))
 
       get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                            formatted_row_index)
+                            formatted_col_index)
 
 
       # Here it is 'byfactor'
@@ -352,7 +315,7 @@ get_data_order <- function(x, formatted_row_index) {
         )
 
         # The logic is the same now for a byvarn so reuse that function
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_row_index)
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
 
       } else {
 
@@ -361,7 +324,7 @@ get_data_order <- function(x, formatted_row_index) {
           factor_index := unclass(unique(sort(target_data)))
         )
 
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_row_index)
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
 
       }
     }
@@ -371,7 +334,7 @@ get_data_order <- function(x, formatted_row_index) {
 #' Helper method for get_data_order
 #' @noRd
 get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
-                       treat_var, by, cols, order_count_rows, byrow_numeric_value) {
+                       treat_var, by, cols, result_order_var, target_var) {
 
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
@@ -384,12 +347,12 @@ get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
   })
 
   # Logic for pcts
-  if (as_name(byrow_numeric_value) == "pct") {
+  if (as_name(result_order_var) == "pct") {
 
     # This isn't in an evalq so the modifictions here won't do anything to the layer
     numeric_data[, "pct"] <- numeric_data[, "n"] / numeric_data[, "total"]
 
-  } else if (as_name(byrow_numeric_value) == "distinct_pct") {
+  } else if (as_name(result_order_var) == "distinct_pct") {
 
     numeric_data[, "distinct_pct"] <- numeric_data[, "distinct_n"] / numeric_data[, "distinct_total"]
   }
@@ -402,9 +365,9 @@ get_data_order_bycount <- function(formatted_data, numeric_data, ordering_cols,
   numeric_ordering_data <- numeric_data %>%
     filter(!!!filter_logic) %>%
 
-    # I'm like 80% sure this logic works out.
-    pivot_wider(id_cols = c(match_exact(by), "summary_var"),
-                names_from = c(!!treat_var, !!!cols), values_from = !!byrow_numeric_value) %>%
+    # I'm like 98% sure this logic works out.
+    pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
+                names_from = c(!!treat_var, !!!cols), values_from = !!result_order_var) %>%
 
     select(as.symbol(result_column))
 
@@ -443,17 +406,28 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
   })
 }
 
+#' Add an ordering column for a nested count layer
+#'
+#' @param group_data A formatted_data object that has been grouped on the first
+#'   target variable
+#' @param final_col The last column of the formatted_data object. I.e where the
+#'   sort happened
+#' @param numeric_data The numeric_data object that is used to extract the order
+#'   count
+#' @param indentation_length The length of the prefix that was used in the
+#'   nesting indentaion.
+#' @param ordering_cols The ordering_cols object used to select the columns used
+#'   in ordering.
+#' @param treat_var The treat_var variable binding
+#' @param by The by variable binding
+#' @param cols The cols variable binding
+#' @param result_order_var The result being used to order the numeric data.
+#'
+#' @noRd
 add_data_order_nested <- function(group_data, final_col, numeric_data,
                                   indentation_length, ordering_cols,
-                                  treat_var, by, cols, order_count_rows,
-                                  byrow_numeric_value) {
-
-  # The first row is always the first thing in the order so make it -1
-  group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
-
-
-  ## Same logic here as the non-nested. TODO: Could the logic be merged?
-  if (is.null(order_count_method)) order_count_method <- "byfactor"
+                                  treat_var, by, cols,
+                                  result_order_var, target_var) {
 
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
@@ -465,14 +439,16 @@ add_data_order_nested <- function(group_data, final_col, numeric_data,
   filtered_group_data <- group_data[-1, ] %>%
     mutate(row_label1 := str_sub(row_label1, indentation_length))
 
+  # The first row is always the first thing in the order so make it Inf
+  group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
   group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(group_data[-1, ],
                                                                             filtered_numeric_data,
                                                                             ordering_cols,
                                                                             treat_var,
                                                                             by,
                                                                             cols,
-                                                                            order_count_rows,
-                                                                            byrow_numeric_value)
+                                                                            result_order_var,
+                                                                            target_var)
 
   group_data
 
