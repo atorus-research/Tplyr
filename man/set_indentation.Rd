@@ -16,5 +16,7 @@ count layer}
 The modified count_layer environment
 }
 \description{
-This is generally used internally with a nested count layer.
+When a count layer uses nesting (i.e. triggered by \code{\link{set_nest_count}}),
+the \code{indentation} argument's value will be used as a prefix for the inner layer's
+records
 }

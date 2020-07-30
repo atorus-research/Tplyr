@@ -11,7 +11,6 @@
 #'
 #' @return A single numeric value from the header_n binding that is pulled
 #'  from the groups
-#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -22,6 +21,7 @@
 #'   group_by(gear, vs) %>%
 #'   do(this_denom(., header_n(t)))
 #'
+#' @noRd
 this_denom <- function(.data, header_n) {
   # Get names of header_n execpt last one, last should be the count
   header_n_grp_names <- names(header_n)[1:ncol(header_n) - 1]

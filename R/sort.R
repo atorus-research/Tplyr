@@ -27,6 +27,7 @@
 #' # This orders the column as 4, 5, Total, 3
 #' # The 3 appears at the end because it wasn't passed.
 #'
+#' @noRd
 tplyr_order <- function(x, ...) {
   UseMethod("tplyr_order")
 }

@@ -231,7 +231,7 @@ save_nested_layer_order <- function(x, num_rows) {
 #' @noRd
 extract_character_from_quo <- function(var_list) {
 
-  is_symbol_ <- sapply(var_list, quo_is_symbol)
+  is_symbol_ <- map_lgl(var_list, quo_is_symbol)
 
   var_list[!is_symbol_]
 }

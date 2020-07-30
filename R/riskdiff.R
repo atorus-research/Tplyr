@@ -48,6 +48,9 @@
 #' variables as by variables. Just like the tplyr layers themselves, the risk difference will then be transposed
 #' and will display each risk difference as separate variables by each of the \code{cols} variables.
 #'
+#' If \code{distinct} is TRUE (the default), all calculations will take place on the distinct counts, if
+#' they are available. Otherwise, non-distinct counts will be used.
+#'
 #' One final note - \code{\link{prop.test}} may throw quite a few warnings. This is natural, because it
 #' alerts you when there's not enough data for the approximations to be correct. This may be unnerving
 #' coming from a SAS programming world, but R is just trying to alert you that the values provided
@@ -57,6 +60,7 @@
 #' @param ... Comparison groups, provided as character vectors where the first group is the comparison,
 #' and the second is the reference
 #' @param args Arguments that are passed directly into \code{\link{prop.test}}
+#' @param distinct Logical - Use distinct counts (if available).
 #'
 #' @export
 #'
@@ -73,7 +77,6 @@
 #'     c('3', '4'),
 #'     c('3', '5')
 #'   )
-#'
 #'
 #' # Build and show output
 #' add_layers(t, l1) %>% build()
@@ -110,7 +113,7 @@
 #'
 #' # Build and show output
 #' add_layers(t, l3) %>% build()
-add_risk_diff <- function(layer, ..., args=list()) {
+add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
 
   # grab the ellipsis args into a list
   comps <- list(...)
@@ -130,7 +133,8 @@ add_risk_diff <- function(layer, ..., args=list()) {
       env(
         layer,
         comparisons = comps,
-        args = args
+        args = args,
+        distinct = distinct
       ),
       class=c("tplyr_statistic", "tplyr_riskdiff")
     )
@@ -164,8 +168,16 @@ prep_two_way <- function(comp) {
                 msg = paste0("There are no records for the following groups within the variable ", as_label(treat_var),
                              ": ", paste(invalid_groups, collapse=", ")))
 
+    two_way <- numeric_data
+
+    # If distinct is set and distinct values are there, use them
+    if (distinct == TRUE && any(str_detect(names(two_way), 'distinct'))) {
+      two_way <- two_way %>%
+        select(-n, -total) %>%
+        rename(n = distinct_n, total = distinct_total)
+    }
     # Process on the numeric data
-    numeric_data %>%
+    two_way <- two_way %>%
       # Subset down to only treatments with the ref and comp groups
       filter(!!treat_var %in% comp) %>%
       # Rename the treatment groups to ref and comp
@@ -197,6 +209,8 @@ prep_two_way <- function(comp) {
 #'
 #' @return  A dataframe containing the group, the proportions of each comparator, the difference,
 #' and the lower and upper CI
+#'
+#' @noRd
 #'
 riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list(), ...) {
 
