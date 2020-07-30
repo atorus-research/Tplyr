@@ -105,5 +105,19 @@ test_that("A nested group_count layer can be ordered properly", {
 })
 
 test_that("A group_desc layer can be ordered properly", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(mpg, by = cyl) %>%
+        set_format_strings(
+          "n"         = f_str("xx", n),
+          "Mean (SD)" = f_str("xx.x (xx.xx)", mean, sd)
+        )
+    )
+  b_t <- build(t)
+
+  expect_equal(b_t[, 1], tibble(row_label1 = rep(c("4", "6", "8"), 2)))
+  expect_equal(b_t[, 2], tibble(row_label2 = rep(c("n", "Mean (SD)"), 3)))
+  expect_equal(b_t[, 7], tibble(ord_layer_1 = as.integer(rep(c(1, 2, 3), 2))))
+  expect_equal(b_t[, 8], tibble(ord_layer_2 = 1:6))
 
 })
