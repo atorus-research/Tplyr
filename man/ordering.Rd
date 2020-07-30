@@ -110,14 +110,14 @@ mtcars$cylN <- mtcars$cyl
 t <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_count_order_method("byvarn")
+      set_order_count_method("byvarn")
   )
 
 # Sorting by row count
 t <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-    set_count_order_method("bycount") \%>\%
+    set_order_count_method("bycount") \%>\%
     # Orders based on the 6 gear group
     set_ordering_cols(6)
   )

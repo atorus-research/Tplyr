@@ -297,6 +297,9 @@ get_data_order <- function(x, formatted_col_index) {
       # Here it is 'byfactor'
     } else {
 
+      # If the target_var is a character, no order is needed
+      if(is.character(quo_get_expr(target_var[[1]]))) return(NA)
+
       target_data <- target[, as_name(target_var[[1]])]
 
       #Pull levels from target variable
