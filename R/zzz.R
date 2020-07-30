@@ -1,12 +1,12 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names
+#' @importFrom rlang quos quo env_names env_bind_active
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
 #' @importFrom stringr str_sub str_extract
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %<>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
@@ -104,6 +104,9 @@ distinct_n <- NULL
 summary_stat <- NULL
 total_row_label <- NULL
 distinct_total <- NULL
-.distinct_total <-NULL
+.distinct_total <- NULL
 count_row_prefix <- NULL
 inner_count_layer_prefix <- NULL
+ordering_cols <- NULL
+order_count_method <- NULL
+result_order_var <- NULL

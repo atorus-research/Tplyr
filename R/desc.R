@@ -142,6 +142,10 @@ process_formatting.desc_layer <- function(x, ...) {
 
     formatted_data
   }, envir=x)
+
+  add_order_columns(x)
+
+  env_get(x, "formatted_data")
 }
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
