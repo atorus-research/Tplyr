@@ -10,6 +10,9 @@ set_format_strings(e, ...)
 \item{e}{Layer on which to bind format strings}
 
 \item{...}{Named parmeters containing calls to \code{f_str} to set the format strings}
+
+\item{cap}{Descriptive statistics layers only. A named character vector containing an
+'int' element for the cap on integer precision, and a 'dec' element for the cap on decimal precision.}
 }
 \value{
 The layer environment with the format string binding added

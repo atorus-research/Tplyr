@@ -170,9 +170,9 @@ prepare_format_metadata <- function(x) {
 
     # Get formatting metadata prepared
     if(is.null(format_strings)) {
-      format_strings <- list("n_counts" = f_str("ax (xxx.x%)", n, pct))
+      format_strings <- list("n_counts" = f_str("a (xxx.x%)", n, pct))
     } else if (!'n_counts' %in% names(format_strings)) {
-      format_strings[['n_counts']] <- f_str("ax (xxx.x%)", n, pct)
+      format_strings[['n_counts']] <- f_str("a (xxx.x%)", n, pct)
     }
 
 
@@ -181,9 +181,9 @@ prepare_format_metadata <- function(x) {
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
-    if(str_detect(format_strings[['n_counts']]$format_string, "ax")) {
+    if(str_detect(format_strings[['n_counts']]$format_string, "a")) {
       # Replace the flag with however many xs
-      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "ax",
+      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "a",
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one

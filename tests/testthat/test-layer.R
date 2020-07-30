@@ -40,7 +40,7 @@ test_that("tplyr_layer returns a class of `tplyr_subgroup_layer`, `tplyr_layer` 
 test_that("Environment contains proper bindings when call is proper", {
   t <- tplyr_table(iris, Species)
   l <- group_count(t, target_var=Sepal.Width)
-  expect_named(l, c("sort_vars", "by", "stats", "sort", "where", "target_var", "layers"))
+  expect_named(l, c("sort_vars", "by", "stats", "sort", "precision_on", "where", "target_var", "precision_by", "layers"))
 })
 
 test_that("`Type` attribute is set properly", {

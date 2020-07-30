@@ -4,7 +4,7 @@
 \alias{num_fmt}
 \title{Format a numeric value using an \code{f_str} object}
 \usage{
-num_fmt(val, i, fmt = NULL)
+num_fmt(val, i, fmt = NULL, autos = NULL)
 }
 \arguments{
 \item{val}{Numeric value to be formatted}
