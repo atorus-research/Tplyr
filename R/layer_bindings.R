@@ -26,7 +26,7 @@ get_target_var <- function(layer) {
 set_target_var <- function(layer, target_var) {
   target_var <- enquos(target_var)
 
-  # Unpack sort_vars
+  # Unpack target variable
   target_var <- unpack_vars(target_var, allow_character=FALSE)
   assert_quo_var_present(target_var, envir=layer, allow_character=FALSE)
 

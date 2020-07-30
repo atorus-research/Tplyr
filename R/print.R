@@ -168,8 +168,6 @@ str.tplyr_layer <- function(object, ...) {
     for(i in seq(target_var)) {
       cat("\n", as.character(quo_get_expr(target_var[[i]])))
     }
-    cat("\n*** sort_vars ***\n")
-    cat(as.character(purrr::map(sort_vars, quo_get_expr)))
     cat("\n*** by ***\n")
     cat(as.character(purrr::map(by, quo_get_expr)))
     cat("\n*** where ***\n")

@@ -150,7 +150,6 @@ Parent:  tplyr_table < 0x562f9d935030 >
 target_var: 
  AGEGR1
 by: 
-sort_vars: AGEGR1
 sort: ascending
 where: TRUE
 Layer(s): 0
@@ -164,7 +163,6 @@ Parent:  tplyr_table < 0x562f9d935030 >
 target_var: 
  AGE
 by: 
-sort_vars: AGE
 sort: ascending
 where: TRUE
 Layer(s): 0
