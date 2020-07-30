@@ -97,9 +97,8 @@ f_str <- function(format_string, ..., empty='') {
   # A value in settings will be <0 if it's an auto format
   auto_precision <- any(map_lgl(settings, ~any(attr(.x, 'auto'))))
 
-
   # All ellipsis variables are names
-  assert_that(all(sapply(vars, function(x) class(x) == "name")),
+  assert_that(all(map_lgl(vars, function(x) class(x) == "name")),
               msg = "In `f_str` all values submitted via `...` must be variable names.")
 
   structure(

@@ -200,7 +200,7 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
 #' @noRd
 extract_character_from_quo <- function(var_list) {
 
-  is_symbol_ <- sapply(var_list, quo_is_symbol)
+  is_symbol_ <- map_lgl(var_list, quo_is_symbol)
 
   var_list[!is_symbol_]
 }
