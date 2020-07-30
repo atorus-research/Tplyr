@@ -23,7 +23,7 @@
 #'
 #' Tplyr forms your two-way table in the background, and then runs \code{\link{prop.test}} appropriately.
 #' Similar to way that the display of layers are specified, the exact values and format of how you'd like
-#' the risk difference display are set using \code{\link{set_format_string}}. This controls both the values
+#' the risk difference display are set using \code{\link{set_format_strings}}. This controls both the values
 #' and the format of how the risk difference is displayed. Risk difference formats are set within
 #' \code{\link{set_format_strings}} by using the name 'riskdiff'.
 #'
@@ -61,6 +61,8 @@
 #' @export
 #'
 #' @examples
+#' library(magrittr)
+#'
 #' ## Two group comparisons with default options applied
 #' t <- tplyr_table(mtcars, gear)
 #'

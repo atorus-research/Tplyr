@@ -86,14 +86,6 @@ print.tplyr_layer <- function(x, ...) {
     cat("by: ")
     cat(map_chr(by, as_name))
     cat("\n")
-    # sort_vars
-    cat("sort_vars: ")
-    cat(map_chr(sort_vars, as_name))
-    cat("\n")
-    # Print sort
-    cat("sort: ")
-    cat(sort)
-    cat("\n")
     # Print where
     cat("where: ")
     cat(as.character(quo_get_expr(where)))

@@ -10,10 +10,10 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when n
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
-#' @importFrom utils str head
-#' @importFrom tidyselect all_of
+#' @importFrom utils str head tail
+#' @importFrom tidyselect all_of vars_select
 #' @importFrom tibble tibble
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
@@ -110,3 +110,20 @@ inner_count_layer_prefix <- NULL
 ordering_cols <- NULL
 order_count_method <- NULL
 result_order_var <- NULL
+nest_sort_index <- NULL
+.data <- NULL
+. <- NULL
+built_pop_data <- NULL
+factor_index <- NULL
+formatted_data <- NULL
+dots <- NULL
+stats <- NULL
+nest_count <- NULL
+dif <- NULL
+comparisons <- NULL
+n <- NULL
+low <- NULL
+high <- NULL
+row_label1 <- NULL
+comp_numeric_data <- NULL
+indentation <- NULL
