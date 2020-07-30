@@ -32,10 +32,42 @@ Returns the modified layer object. The 'ord_' columns are added
   during the build process.
 }
 \description{
-Count layers are generally displayed in a descending order for a particular
-treatment group. However Tplyr also supports displaying based on the factor
-of the treatment variable, or on a specified <VAR>N variable already in the
-dataset (i.e. VISIT <-> VISITN, TRT <-> TRTN). Defaults to 'byrow'.
+The sorting of a table can greatly vary depending on the situation at hand.
+For count layers, when creating tables like adverse event summaries, you may
+wish to order the table by decending occurrence within a particular treatment
+group. But in other situations, such as AEs of special interest, or subject
+disposition, there may be a specific order you wish to display values. Tplyr
+offers solutions to each of these situations.
+
+Instead of allowing you to specify a custom sort order, Tplyr instead provides you
+with order variables that can be used to sort your table after the data are summarized.
+Tplyr has a default order in which the table will be returned, but the order variables
+will always persist. This allows you to use powerful sorting functions like
+\code{\link{dplyr::arrange}} to get your desired order, and in double programming
+situations, helps your validator understand the how you acheived a particular sort
+order and where discrepancies may be coming from.
+
+When creating order variables for a layer, for each 'by' variable, Tplyr will search
+for a <VAR>N version of that variable (i.e. VISIT <-> VISITN, PARAM <-> PARAMN).
+If available, this variable will be used for sorting. If not available, Tplyr will
+created a new ordered factor version of that variable to use in alphanumeric
+sorting. This makes it easy for the user to control a custom sorting order.
+Simply leave an existing <VAR>N variable in your dataset if it exists, or create
+one based on the order in which you wish to sort - no custom functions in
+Tplyr required.
+
+Ordering of results is where things start to differ. Different situations
+call for different methods. Descriptive statistics layers keep it simple - the
+order in which you input your formats using \code{\link{set_format_strings}} is
+the order in which the results will appear (with an order variable added).
+For count layers, Tplyr offers three solutions: If the target variable is a
+factor, use the factor orders. Separately, if there is a <VAR>N version
+of your target variable use that. Finally, you can use a specific data point
+from your results columns. The result column can often have multiple datapoints,
+between the n counts, percent, distinct n, and distinct percent. Tplyr allows you
+to choose which of these values will be used when creating the order columns
+for a specified result column (i.e. based on the \code{treat_var} and \code{cols}
+arguments). See the 'Sorting a Table' section for more information.
 }
 \section{Sorting a Table}{
 
@@ -49,13 +81,13 @@ appended. The first represents the layer index. The index is determined by
 the order the layer was added to the table. The following are the indicies
 for the by variables and the target variable. The by variables are ordered
 based on:
-1) A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if one is present.
-
-2) If no <VAR>N variable is present, it is ordered based on the factor
-present in the target dataset.
-
-3) If the variable is not a factor in the
-target dataset, it is coersed to one and ordered alphabetically.
+\enumerate{
+\item{A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if one is present.}
+\item{If no <VAR>N variable is present, it is ordered based on the factor
+present in the target dataset.}
+\item{If the variable is not a factor in the
+target dataset, it is coersed to one and ordered alphabetically.}
+}
 
 The target variable is ordered depending on the type of layer. See more below.
 }
@@ -66,20 +98,20 @@ There are many ways to order a count layer depending on the preferences of
 the table programmer. \code{Tplyr} supports sorting by a descending amount in
 a column in the table, sorting by a <VAR>N variable, and sorting by a custom
 order. These can be set using the `set_order_count_method` function.
-\itemize{
-\item{Sorting by a numeric count - A selected numeric value from a selected
+\describe{
+\item{Sorting by a numeric count}{A selected numeric value from a selected
 column will be indexed based on the descending numeric value. The numeric
 value extracted defaults to 'n' but can be changed with
 `set_result_order_var`. The column selected for sorting defaults to the
 first value in the treatment group varialbe. If there were arguments passed
 to the 'cols' argument in the table those must be specified with
 `set_ordering_columns`.}
-\item{Sorting by a 'varn' variable - If the treatment variable has a <VAR>N
+\item{Sorting by a 'varn' variable}{If the treatment variable has a <VAR>N
 variable. It can be indexed to that variable.}
-\item{Sorting by a factor(Default) - If a factor is found for the target
+\item{Sorting by a factor(Default)}{If a factor is found for the target
 variable in the target dataset that is used to order, if no factor is found
 it is coersed to a factor and sorted alphabetically.}
-\item{Sorting a nested count layer - As is standard with AE tables, the first
+\item{Sorting a nested count layer}{As is standard with AE tables, the first
 target variable is sorted either alphabetically, if a factor isn't provided,
 or ordered based on a supplided factor. The second variable is sorted with
 the 'bycount' method, the column and numeric value can be assigned with
@@ -117,8 +149,34 @@ t <- tplyr_table(mtcars, gear) \%>\%
 t <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-    set_order_count_method("bycount") \%>\%
-    # Orders based on the 6 gear group
-    set_ordering_cols(6)
+      set_order_count_method("bycount") \%>\%
+      # Orders based on the 6 gear group
+      set_ordering_cols(6)
+  )
+
+# Sorting by row count by percentages
+t <- tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      set_order_count_method("bycount") \%>\%
+      set_result_order_var(pct)
+  )
+
+# Sorting when you have column arguments in the table
+t <- tplyr_table(mtcars, gear, cols = vs) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      # Uses the fourth gear group and the 0 vs group in ordering
+      set_ordering_cols(4, 0)
+  )
+
+# Using a custom factor to order
+mtcars$cyl <- factor(mtcars$cyl, c(6, 4, 8))
+t <- tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      # This is the default but can be used to change the setting if it is
+      #set at the table level.
+      set_order_count_method("byfactor")
   )
 }
