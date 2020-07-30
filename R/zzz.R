@@ -3,18 +3,18 @@
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
 #' @importFrom rlang quos quo env_names env_bind_active
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
-#' @importFrom stringr str_sub
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
+#' @importFrom stringr str_sub str_extract
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% %<>%
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
-#' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when
+#' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head
 #' @importFrom tidyselect all_of
-#' @importFrom tibble tibble
+#' @importFrom tibble tibble rownames_to_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
 NULL

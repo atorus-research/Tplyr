@@ -90,3 +90,88 @@ set_where.tplyr_layer <- function(obj, where) {
 
   obj
 }
+
+#' Set or return precision_by layer binding
+#'
+#' The precision_by variables are used to collect the integer and decimal precision
+#' when auto-precision is used. These by variables are used to group the input data
+#' and identify the maximum precision available within the dataset for each
+#' by group. The precision_by variables must be a subset of the by variables
+#'
+#' @param layer A \code{tplyr_layer} object
+#'
+#' @return For \code{get_precision_by}, the precision_by binding of the supplied layer. For
+#'   \code{set_precision_by} the modified layer environment.
+#' @export
+#' @rdname precision_by
+#'
+#' @examples
+#' # Load in pipe
+#' library(magrittr)
+#' lay <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(mpg, by=vars(carb, am)) %>%
+#'     set_precision_by(carb)
+#'   )
+get_precision_by <- function(layer) {
+  env_get(layer, "precision_by")
+}
+
+#' @param precision_by A string, a variable name, or a list of variable names supplied
+#'   using \code{dplyr::vars}.
+#'
+#' @export
+#' @rdname by
+set_precision_by <- function(layer, precision_by) {
+  precision_by <- enquos(precision_by)
+
+  # Unpack by
+  precision_by <- unpack_vars(precision_by)
+
+  assert_that(all(precision_by %in% env_get(layer, "by")),
+              msg = "The precision_by variables must be a subset of the layer by variables.")
+
+  env_bind(layer, precision_by = precision_by)
+
+  layer
+}
+
+#' Set or return precision_on layer binding
+#'
+#' The precision_on variable is the variable used to establish numeric precision.
+#' This variable must be included in the list of \code{target_var} variables.
+#'
+#' @param layer A \code{tplyr_layer} object
+#'
+#' @return For \code{get_precision_on}, the precision_on binding of the supplied layer. For
+#'   \code{set_precision_on} the modified layer environment.
+#' @export
+#' @rdname precision_on
+#'
+#' @examples
+#' # Load in pipe
+#' library(magrittr)
+#' lay <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(vars(mpg, disp), by=vars(carb, am)) %>%
+#'     set_precision_on(disp)
+#'   )
+get_precision_on <- function(layer) {
+  env_get(layer, "precision_on")
+}
+
+#' @param precision_on A string, a variable name, or a list of variable names supplied
+#'   using \code{dplyr::vars}.
+#'
+#' @export
+#' @rdname precision_on
+set_precision_on <- function(layer, precision_on) {
+  precision_on <- enquo(precision_on)
+
+  assert_that(list(precision_on) %in% env_get(layer, "target_var"),
+              msg = "The precision_on variable must be included in `target_var`")
+
+  env_bind(layer, precision_on = precision_on)
+
+  layer
+}

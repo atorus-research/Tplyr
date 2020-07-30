@@ -4,7 +4,7 @@
 \alias{add_risk_diff}
 \title{Add risk difference to a count layer}
 \usage{
-add_risk_diff(layer, ..., args = list())
+add_risk_diff(layer, ..., args = list(), distinct = TRUE)
 }
 \arguments{
 \item{layer}{Layer upon which the risk difference will be attached}
@@ -13,6 +13,8 @@ add_risk_diff(layer, ..., args = list())
 and the second is the reference}
 
 \item{args}{Arguments that are passed directly into \code{\link{prop.test}}}
+
+\item{distinct}{Logical - Use distinct counts (if available).}
 }
 \description{
 A very common requirement for summary tables is to calculate the risk difference between treatment
@@ -62,6 +64,9 @@ groups within the \code{treat_var} variable - but they are instead calculated tr
 variables as by variables. Just like the tplyr layers themselves, the risk difference will then be transposed
 and will display each risk difference as separate variables by each of the \code{cols} variables.
 
+If \code{distinct} is TRUE (the default), all calculations will take place on the distinct counts, if
+they are available. Otherwise, non-distinct counts will be used.
+
 One final note - \code{\link{prop.test}} may throw quite a few warnings. This is natural, because it
 alerts you when there's not enough data for the approximations to be correct. This may be unnerving
 coming from a SAS programming world, but R is just trying to alert you that the values provided
@@ -78,7 +83,6 @@ l1 <- group_count(t, carb) \%>\%
     c('3', '4'),
     c('3', '5')
   )
-
 
 # Build and show output
 add_layers(t, l1) \%>\% build()

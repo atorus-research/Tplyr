@@ -14,14 +14,24 @@
 #' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
 #' flexibility to the user.
 #'
-#' The display of the numbers in the resulting dataframe is controlled by the \code{format_string} parameter. Just like dummy values
-#' may be presented on your mocks, this is specified by the user simply by providing a string of how you'd like your strings formatted,
-#' just replacing the numbers with x's. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'. 'Tplyr'
-#' does the work to get the numbers in the right place.
+#' Tplyr provides both manual and automatic decimal precision formatting. The display of the numbers
+#' in the resulting dataframe is controlled by the \code{format_string} parameter. For manual precision, just like dummy values
+#' may be presented on your mocks, integer and decimal precision is specified by the user simply by providing a string of
+#' 'x's for how you'd like your numbers formatted. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'.
+#' 'Tplyr' does the work to get the numbers in the right place.
 #'
-#' To take things further, if you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
-#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)'. Note that you're able to provide different integer lengths and
-#' different decimal precision for the two values.
+#' To take thjs a step further, automatic decimal precision can also be obtained based on the collected precision
+#' within the data. When creating tables where results vary by some parameter, different results may call for different
+#' degrees of precision. To use automatic precision, use a single 'a' on either the integer and decimal side. If you'd like
+#' to use increased precision (i.e. you'd like mean to be collected precision +1), use 'a+1'. So if you'd like both
+#' integer and and decimal precision to be based on the data as collected, you can use a format like 'a.a' - or for
+#' collected+1 decimal precision, 'a.a+1'.  You can mix and match this with manual formats as well, making format strings
+#' such as 'xx.a+1'
+#'
+#' If you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
+#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2).
+#' Note that you're able to provide  different integer lengths and different decimal precision for the two values. Each
+#' format string is independent and relates only to the format specified.
 #'
 #' The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
 #' slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
@@ -30,8 +40,9 @@
 #' either by built in defaults, or custom summaries declared using \code{\link{set_custom_summaries}}.
 #' See \code{\link{set_format_strings}} for some more notes about layers specific implementation
 #'
-#' @param format_string The desired display format. X's indicate digits. On the left, the number of x's indicates the integer length. On the
-#' right, the number of x's controls decimal precision and rounding. Variables are inferred by any separation of the 'x' values other than a
+#' @param format_string The desired display format. X's indicate digits. On the left, the number of x's
+#' indicates the integer length. On the right, the number of x's controls decimal precision and rounding.
+#' Variables are inferred by any separation of the 'x' values other than a
 #' decimal.
 #' @param ... The variables to be formatted using the format specified in \code{format_string}.
 #' @param empty The string to display when the numeric data is not available
@@ -40,7 +51,14 @@
 #' @export
 #'
 #' @examples
+#'
 #' f_str("xx.x (xx.x)", mean, sd)
+#'
+#' f_str("a.a+1 (a.a+2)", mean, sd)
+#'
+#' f_str("xx.a (xx.a+1)", mean, sd)
+#'
+#' f_str("xx.x, xx.x, xx.x", q1, median, q3)
 #'
 f_str <- function(format_string, ..., empty='') {
 
@@ -53,23 +71,34 @@ f_str <- function(format_string, ..., empty='') {
   assert_has_class(format_string, "character")
 
   # Capture the format groups
-  # Regex looks for 1 or more lower case x, potentially followed by a period and more x's
-  formats <- str_extract_all(format_string, regex("x+\\.{0,1}x*"))[[1]]
+
+  # This regex does a few things so let's break it into pieces
+  # (a(\\+\\d)?|x+) -> a, possibly followed by + and a digit, or 1 or more x's
+  #    This captures the integer, with either the auto formats or x's
+  # (\\.(a(\\+\\d)?|x+)?)? -> a period, then possibly the same a <+digit>, or multiple x's
+  #    This captures the decimal places, but they don't have to exist
+  rx <- "(a(\\+\\d+)?|x+)(\\.(a(\\+\\d+)?|x+)?)?"
+  formats <- str_extract_all(format_string, regex(rx))[[1]]
 
   # Duplicate any '%' to escape them
   format_string_1 <- str_replace_all(format_string, "%", "%%")
+
   # Make the sprintf ready string
-  repl_str <- str_replace_all(format_string_1, regex("x+\\.{0,1}x*"), "%s")
+  repl_str <- str_replace_all(format_string_1, regex(rx), "%s")
 
   # Make sure that if two formats were found, two varaibles exist
   assert_that(length(formats) == length(vars),
               msg = paste0("In `f_str` ", length(formats), " formats were entered in the format string ",
                            format_string, "but ", length(vars), " variables were assigned."))
 
-  settings <- lapply(formats, separate_int_dig)
+  # Pull out the integer and decimal
+  settings <- map(formats, separate_int_dig)
+
+  # A value in settings will be <0 if it's an auto format
+  auto_precision <- any(map_lgl(settings, ~any(attr(.x, 'auto'))))
 
   # All ellipsis variables are names
-  assert_that(all(sapply(vars, function(x) class(x) == "name")),
+  assert_that(all(map_lgl(vars, function(x) class(x) == "name")),
               msg = "In `f_str` all values submitted via `...` must be variable names.")
 
   structure(
@@ -79,6 +108,7 @@ f_str <- function(format_string, ..., empty='') {
          settings = settings,
          size = nchar(format_string),
          repl_str = repl_str,
+         auto_precision = auto_precision,
          empty=empty
     ),
     class="f_str"
@@ -89,23 +119,57 @@ f_str <- function(format_string, ..., empty='') {
 #'
 #' @param x String to have sections counted
 #'
-#' @return A named vector with the names "int" and "dig", countaining numeric values
+#' @return A named vector with the names "int" and "dec", countaining numeric values
 #'
 #' @noRd
 separate_int_dig <- function(x){
 
   # Initialize a vector and name the elements
   out <- numeric(2)
-  names(out) <- c('int', 'dig')
+  names(out) <- c('int', 'dec')
+  attr(out, 'auto') <- c('int'=FALSE, 'dec'=FALSE)
 
   # Count the characters on each side of the decimal
-  num_chars <- map_int(str_split(x, "\\.")[[1]], nchar)
+  fields <- str_split(x, "\\.")[[1]]
+
+  num_chars <- map(fields, parse_fmt)
+  auto <- map_lgl(num_chars, ~attr(.x, 'auto'))
+  num_chars <- as.numeric(num_chars)
+  attr(num_chars, 'auto') <- auto
 
   # Insert the number of characters into the named vector
   for (i in seq_along(num_chars)) {
-    out[[i]] <- num_chars[[i]]
+    out[i] <- num_chars[i]
+    attr(out, 'auto')[i] <- attr(num_chars, 'auto')[i]
   }
   out
+}
+
+
+#' Parse a portion of a string format
+#'
+#' After the string is split by the decimal, parse what remains
+#' Auto formats will start at -1 and decrement by the + value
+#'
+#' @param x Portioned string format
+#'
+#' @return A numeric value. >0 is literal length, <0 is auto format
+#' @noRd
+parse_fmt <- function(x) {
+  # If it's an auto format, grab the output value
+  if (grepl('a', x)) {
+    # Pick out the digit
+    add <- replace_na(as.double(str_extract(x, '\\d+')), 0)
+    # Auto formats will be -1 - the specified precision
+    val <- 0 + add
+    # Give an attribute that there's an auto format
+    attr(val, 'auto') <- TRUE
+  } else {
+    val <- nchar(x)
+    # Not auto format
+    attr(val, 'auto') <- FALSE
+  }
+  val
 }
 
 #' Set the format strings and associated summaries to be performed in a layer
@@ -136,6 +200,8 @@ separate_int_dig <- function(x){
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param cap Descriptive statistics layers only. A named character vector containing an
+#' 'int' element for the cap on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
 #' @return The layer environment with the format string binding added
 #' @export
@@ -177,12 +243,14 @@ set_format_strings <- function(e, ...) {
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param cap A named character vector containing an 'int' element for the cap on integer precision,
+#' and a 'dec' element for the cap on decimal precision.
 #'
 #' @return
 #' @export
 #'
 #' @noRd
-set_format_strings.desc_layer <- function(e, ...) {
+set_format_strings.desc_layer <- function(e, ..., cap=c('int' = 99, 'dec'=99)) {
 
   # Pick off the ellpsis
   format_strings <- list(...)
@@ -213,13 +281,18 @@ set_format_strings.desc_layer <- function(e, ...) {
   # Pick off the row labels
   row_labels <- names(format_strings)
 
+  # Identify if auto precision is needed
+  need_prec_table <- any(map_lgl(format_strings, ~ .x$auto_precision))
+
   env_bind(e,
            format_strings = format_strings,
            summary_vars = vars(!!!summary_vars),
            keep_vars = vars(!!!keep_vars),
            trans_vars = vars(!!!trans_vars),
            row_labels = row_labels,
-           max_length = max_format_length
+           max_length = max_format_length,
+           need_prec_table = need_prec_table,
+           cap = cap
     )
   e
 }
@@ -305,23 +378,32 @@ name_translator <- function(fmt_strings) {
 #'
 #' @return String formatted numeric value
 #' @export
-num_fmt <- function(val, i, fmt=NULL) {
+num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 
   assert_that(is.numeric(val))
   assert_has_class(fmt, 'f_str')
   assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
 
-  int_len <- fmt$settings[[i]]['int']
-  digits <- fmt$settings[[i]]['dig']
+  # Auto precision requires that integer and decimal are
+  # pulled from the row. If auto, settings will be the amount to add
+  # to max prec, so add those together. Otherwise pull the manually
+  # specified value
+  int_len <- ifelse(attr(fmt$settings[[i]],'auto')['int'],
+                    fmt$settings[[i]]['int'] + autos['int'],
+                    fmt$settings[[i]]['int'])
+
+  decimals  <- ifelse(attr(fmt$settings[[i]],'auto')['dec'],
+                    fmt$settings[[i]]['dec'] + autos['dec'],
+                    fmt$settings[[i]]['dec'])
 
   # Formats summary stat strings to align display correctly
   if (is.na(val)) return(fmt$empty)
 
-  # Set nsmall to input digits
-  nsmall = digits
+  # Set nsmall to input decimals
+  nsmall = decimals
 
   # Incremement digits for to compensate for display
-  if (digits > 0) digits <- digits + 1
+  if (decimals > 0) decimals <- decimals + 1
 
   # Form the string
   return(
@@ -329,7 +411,7 @@ num_fmt <- function(val, i, fmt=NULL) {
       # Round
       round(val, nsmall),
       # Set width of format string
-      width=(int_len+digits),
+      width=(int_len+decimals),
       # Decimals to display
       nsmall=nsmall
     )

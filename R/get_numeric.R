@@ -40,6 +40,7 @@ get_numeric_data.tplyr_table <- function(x, ...) {
   # If the pre-build wasn't executed then execute it
   if (!'built_target' %in% ls(x)) {
     treatment_group_build(x)
+    build_header_n(x)
   }
 
   # Gather the numeric data from each layer

@@ -7,8 +7,9 @@
 f_str(format_string, ..., empty = "")
 }
 \arguments{
-\item{format_string}{The desired display format. X's indicate digits. On the left, the number of x's indicates the integer length. On the
-right, the number of x's controls decimal precision and rounding. Variables are inferred by any separation of the 'x' values other than a
+\item{format_string}{The desired display format. X's indicate digits. On the left, the number of x's
+indicates the integer length. On the right, the number of x's controls decimal precision and rounding.
+Variables are inferred by any separation of the 'x' values other than a
 decimal.}
 
 \item{...}{The variables to be formatted using the format specified in \code{format_string}.}
@@ -31,14 +32,24 @@ before trimming is sometimes forgotten - it can become a tedious mess that, in t
 an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
 flexibility to the user.
 
-The display of the numbers in the resulting dataframe is controlled by the \code{format_string} parameter. Just like dummy values
-may be presented on your mocks, this is specified by the user simply by providing a string of how you'd like your strings formatted,
-just replacing the numbers with x's. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'. 'Tplyr'
-does the work to get the numbers in the right place.
+Tplyr provides both manual and automatic decimal precision formatting. The display of the numbers
+in the resulting dataframe is controlled by the \code{format_string} parameter. For manual precision, just like dummy values
+may be presented on your mocks, integer and decimal precision is specified by the user simply by providing a string of
+'x's for how you'd like your numbers formatted. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'.
+'Tplyr' does the work to get the numbers in the right place.
 
-To take things further, if you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
-a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)'. Note that you're able to provide different integer lengths and
-different decimal precision for the two values.
+To take thjs a step further, automatic decimal precision can also be obtained based on the collected precision
+within the data. When creating tables where results vary by some parameter, different results may call for different
+degrees of precision. To use automatic precision, use a single 'a' on either the integer and decimal side. If you'd like
+to use increased precision (i.e. you'd like mean to be collected precision +1), use 'a+1'. So if you'd like both
+integer and and decimal precision to be based on the data as collected, you can use a format like 'a.a' - or for
+collected+1 decimal precision, 'a.a+1'.  You can mix and match this with manual formats as well, making format strings
+such as 'xx.a+1'
+
+If you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
+a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2).
+Note that you're able to provide  different integer lengths and different decimal precision for the two values. Each
+format string is independent and relates only to the format specified.
 
 The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
 slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
@@ -48,6 +59,13 @@ either by built in defaults, or custom summaries declared using \code{\link{set_
 See \code{\link{set_format_strings}} for some more notes about layers specific implementation
 }
 \examples{
+
 f_str("xx.x (xx.x)", mean, sd)
+
+f_str("a.a+1 (a.a+2)", mean, sd)
+
+f_str("xx.a (xx.a+1)", mean, sd)
+
+f_str("xx.x, xx.x, xx.x", q1, median, q3)
 
 }
