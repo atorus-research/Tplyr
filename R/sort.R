@@ -46,7 +46,11 @@
 #' \item{Sorting by a factor(Default) - If a factor is found for the target
 #' variable in the target dataset that is used to order, if no factor is found
 #' it is coersed to a factor and sorted alphabetically.}
-#' \item{Sorting a nested count layer - WIP}
+#' \item{Sorting a nested count layer - As is standard with AE tables, the first
+#' target variable is sorted either alphabetically, if a factor isn't provided,
+#' or ordered based on a supplided factor. The second variable is sorted with
+#' the 'bycount' method, the column and numeric value can be assigned with
+#' `set_ordering_cols` and `set_byrow_numeric_value` respectively.}
 #' }
 #'
 #' @section Ordering a Desc Layer:
@@ -445,7 +449,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data,
                                   byrow_numeric_value) {
 
   # The first row is always the first thing in the order so make it -1
-  group_data[1, paste0("ord_layer_", final_col + 1)] <- -1
+  group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
 
 
   ## Same logic here as the non-nested. TODO: Could the logic be merged?

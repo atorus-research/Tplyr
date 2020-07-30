@@ -200,7 +200,6 @@ prepare_format_metadata <- function(x) {
 #' @noRd
 #' @export
 process_formatting.count_layer <- function(x, ...) {
-  print("here")
   evalq({
 
     formatted_data <- numeric_data %>%
