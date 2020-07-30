@@ -66,10 +66,10 @@ f_str <- function(format_string, ..., empty='') {
               msg = paste0("In `f_str` ", length(formats), " formats were entered in the format string ",
                            format_string, "but ", length(vars), " variables were assigned."))
 
-  settings <- lapply(formats, separate_int_dig)
+  settings <- map(formats, separate_int_dig)
 
   # All ellipsis variables are names
-  assert_that(all(sapply(vars, function(x) class(x) == "name")),
+  assert_that(all(map_lgl(vars, function(x) class(x) == "name")),
               msg = "In `f_str` all values submitted via `...` must be variable names.")
 
   structure(
