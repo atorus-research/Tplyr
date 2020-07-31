@@ -32,6 +32,14 @@ Furthermore, 'Tplyr' was built to be extensible. A common pitfall in creating th
 to much, but don't solve all of the problems. We know we won't handle every scenario - and therefore we've left channels open for you to
 add your own touches where necessary.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/atorus-research/Tplyr}
+  \item Report bugs at \url{https://github.com/atorus-research/Tplyr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com} (\href{https://orcid.org/0000-0001-6030-723X}{ORCID})
 
