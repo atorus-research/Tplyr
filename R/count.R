@@ -241,7 +241,7 @@ process_formatting.count_layer <- function(x, ...) {
 
     if(!is.null(nest_count) && nest_count) {
       formatted_data <- formatted_data %>%
-        replace_by_string_names(quos(!!!by, summary_var))
+        replace_by_string_names(quos(!!target_var[[1]], !!!by, summary_var))
     } else {
       formatted_data <- formatted_data %>%
         mutate(!!as_name(target_var[[1]]) := NULL) %>%

@@ -16,7 +16,7 @@ set_result_order_var(e, result_order_var)
 \item{e}{A \code{group_count} layer}
 
 \item{order_count_method}{The logic determining how the rows in the final
-layer output will be indexed. Options are 'byrow', 'byfactor', and
+layer output will be indexed. Options are 'bycount', 'byfactor', and
 'byvarn'.}
 
 \item{...}{Unquoted variables used to select the columns whose values will be
