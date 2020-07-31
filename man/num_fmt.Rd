@@ -12,6 +12,9 @@ num_fmt(val, i, fmt = NULL, autos = NULL)
 \item{i}{Index of the format within the \code{f_str} object}
 
 \item{fmt}{\code{f_str} object with formatting information related to numeric value to be formatted}
+
+\item{autos}{A named numeric vector containing the 'auto' formatting values
+for the integer length(int) and decimal length(dec).}
 }
 \value{
 String formatted numeric value

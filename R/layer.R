@@ -41,8 +41,6 @@
 #' \item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
 #' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This filtering is
 #' in addition to any subsetting done based on \code{where} criteria specified in \code{\link{tplyr_table}}}
-#' \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
-#'   Set by default to the value of \code{target_var}}
 #' \item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
 #' \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 #' any sublayers of the current layer.}
@@ -131,9 +129,6 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   # Do the same for target_var
   target_var <- unpack_vars(target_var)
   arg_list$target_var <- target_var
-
-  # Add sort_vars in
-  arg_list$sort_vars <- target_var
 
   # Run validation
   validate_tplyr_layer(parent, target_var, by, cols, where, type)

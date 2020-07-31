@@ -43,7 +43,7 @@ Instead of allowing you to specify a custom sort order, Tplyr instead provides y
 with order variables that can be used to sort your table after the data are summarized.
 Tplyr has a default order in which the table will be returned, but the order variables
 will always persist. This allows you to use powerful sorting functions like
-\code{\link{dplyr::arrange}} to get your desired order, and in double programming
+\code{\link[dplyr]{arrange}} to get your desired order, and in double programming
 situations, helps your validator understand the how you acheived a particular sort
 order and where discrepancies may be coming from.
 

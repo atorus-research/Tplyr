@@ -200,8 +200,6 @@ parse_fmt <- function(x) {
 #'
 #' @param e Layer on which to bind format strings
 #' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
-#' @param cap Descriptive statistics layers only. A named character vector containing an
-#' 'int' element for the cap on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
 #' @return The layer environment with the format string binding added
 #' @export
@@ -375,6 +373,8 @@ name_translator <- function(fmt_strings) {
 #' @param val Numeric value to be formatted
 #' @param fmt \code{f_str} object with formatting information related to numeric value to be formatted
 #' @param i Index of the format within the \code{f_str} object
+#' @param autos A named numeric vector containing the 'auto' formatting values
+#'   for the integer length(int) and decimal length(dec).
 #'
 #' @return String formatted numeric value
 #' @export

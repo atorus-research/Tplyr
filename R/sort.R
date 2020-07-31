@@ -27,6 +27,7 @@
 #' # This orders the column as 4, 5, Total, 3
 #' # The 3 appears at the end because it wasn't passed.
 #'
+#' @noRd
 tplyr_order <- function(x, ...) {
   UseMethod("tplyr_order")
 }
@@ -171,13 +172,13 @@ add_order_columns.count_layer <- function(x) {
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- nest_sort_index
 
       # Used to remove the prefix
-      indentaion_length <- ifelse(exists("indentaion"), length(indentaion), 2)
+      indentation_length <- ifelse(!is.null(indentation), length(indentation), 2)
 
       # Add the ordering of the peices in the layer
       formatted_data <- formatted_data %>%
         group_by(.data[[paste0("ord_layer_", formatted_col_index)]]) %>%
         do(add_data_order_nested(., formatted_col_index, numeric_data,
-                                 indentaion_length, ordering_cols,
+                                 indentation_length, ordering_cols,
                                  treat_var, by, cols,
                                  result_order_var, target_var))
 
@@ -418,7 +419,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 #' @param numeric_data The numeric_data object that is used to extract the order
 #'   count
 #' @param indentation_length The length of the prefix that was used in the
-#'   nesting indentaion.
+#'   nesting indentation.
 #' @param ordering_cols The ordering_cols object used to select the columns used
 #'   in ordering.
 #' @param treat_var The treat_var variable binding

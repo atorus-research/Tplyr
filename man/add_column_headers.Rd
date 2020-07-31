@@ -95,9 +95,11 @@ t <- tplyr_table(mtcars2, vs, cols = am) \%>\%
     group_count(cyl)
   )
 
-b_t <- build(t)
+b_t <- build(t) \%>\%
+  mutate_all(as.character)
 
-count_string <- "Rows | V N=**0** {auto N=**0_0** | man N=**0_1**} | S N=**1** {auto N=**1_0** | man N=**1_1**}"
+count_string <- paste0(" | V N=**0** {auto N=**0_0** | man N=**0_1**} |",
+                       " S N=**1** {auto N=**1_0** | man N=**1_1**} | | ")
 
 add_column_headers(b_t, count_string, header_n(t))
 }

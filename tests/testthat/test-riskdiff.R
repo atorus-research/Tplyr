@@ -77,7 +77,7 @@ test_that("Default processing happens correctly", {
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   # 5 columns
-  expect_equal(ncol(dat), 5)
+  expect_equal(ncol(dat), 7)
 
   # 1 rdiff column (check if rdiff in the names of dat and sum the logicals)
   expect_equal(sum(grepl("rdiff", names(dat), fixed=TRUE)), 1)
@@ -108,7 +108,7 @@ test_that("Multiple comparisons properly populate", {
   dat <- suppressWarnings(add_layers(t, l1) %>% build())
 
   # 5 columns
-  expect_equal(ncol(dat), 6)
+  expect_equal(ncol(dat), 8)
 
   # 1 rdiff column (check if rdiff in the names of dat and sum the logicals)
   expect_equal(sum(grepl("rdiff", names(dat), fixed=TRUE)), 2)

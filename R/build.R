@@ -103,7 +103,7 @@ process_summaries <- function(x, ...) {
 #' Process layers to get formatted and pivoted tables.
 #'
 #' This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
-#' @param lay A tplyr_layer object
+#' @param x A tplyr_layer object
 #' @param ... arguments passed to dispatch
 #'
 #' @return The formatted_table object that is binded to the layer

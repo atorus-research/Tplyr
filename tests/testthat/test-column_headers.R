@@ -82,7 +82,7 @@ test_that("add_column_headers throws an error when you use a token and don't pas
         group_count(cyl)
       )
 
-    b_t <- build(t)
+    b_t <- build(t) %>% mutate_all(as.character)
 
     count_string <- "Rows | am0 **0** | am1 **1**"
 
@@ -99,7 +99,8 @@ test_that("add_column_headers returns the expected result when tokens are passed
       group_count(cyl)
     )
 
-  b_t <- build(t)
+  b_t <- build(t) %>%
+    select(starts_with("row_label1") | starts_with("var1_"))
 
   count_string <- "Rows | V N=**0** {auto N=**0_0** | man N=**0_1**} | S N=**1** {auto N=**1_0** | man N=**1_1**}"
 

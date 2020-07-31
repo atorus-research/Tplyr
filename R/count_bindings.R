@@ -99,18 +99,6 @@ set_distinct_by <- function(e, distinct_by) {
 #' @param count_row_prefix A character to prefix the row labels
 #'
 #' @return The modified count_layer environment
-#'
-#' @examples
-#' # Load in pipe
-#' library(magrittr)
-#'
-#' tplyr_table(mtcars, gear) %>%
-#'   add_layer(
-#'     group_count(cyl) %>%
-#'       set_count_row_prefix("\t")
-#'   ) %>%
-#'   build()
-#'
 set_count_row_prefix <- function(e, count_row_prefix) {
 
   assert_inherits_class(count_row_prefix, "character")
@@ -185,7 +173,7 @@ set_nest_count <- function(e, nest_count) {
 #' with order variables that can be used to sort your table after the data are summarized.
 #' Tplyr has a default order in which the table will be returned, but the order variables
 #' will always persist. This allows you to use powerful sorting functions like
-#' \code{\link{dplyr::arrange}} to get your desired order, and in double programming
+#' \code{\link[dplyr]{arrange}} to get your desired order, and in double programming
 #' situations, helps your validator understand the how you acheived a particular sort
 #' order and where discrepancies may be coming from.
 #'
