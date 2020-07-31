@@ -112,11 +112,11 @@ test_that("all tables have the expected dimentions", {
   b_t5 <- build(t5)
   b_t6 <- build(t6)
 
-  expect_equal(dim(b_t1), c(6, 4))
-  expect_equal(dim(b_t2), c(3, 7))
-  expect_equal(dim(b_t3), c(7, 4))
-  expect_equal(dim(b_t4), c(14, 6))
-  expect_equal(dim(b_t5), c(19, 10))
-  expect_equal(dim(b_t6), c(48, 11))
+  expect_equal(dim(b_t1), c(6, 6))
+  expect_equal(dim(b_t2), c(3, 9))
+  expect_equal(dim(b_t3), c(7, 6))
+  expect_equal(dim(b_t4), c(14, 9))
+  expect_equal(dim(b_t5), c(19, 13))
+  expect_equal(dim(b_t6), c(48, 15))
 })
 

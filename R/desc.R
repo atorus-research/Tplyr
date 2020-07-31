@@ -27,6 +27,8 @@ process_summaries.desc_layer <- function(x, ...) {
     # Get the row labels out from the format strings list
     row_labels <- name_translator(format_strings)
 
+
+
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
 
@@ -90,11 +92,23 @@ process_formatting.desc_layer <- function(x, ...) {
     # Initialize list for formatted, transposed outputs
     form_sums <- vector("list", length(target_var))
 
+    if (need_prec_table) {
+      # If the precision table is required, create it
+      prec <- make_prec_data(built_target, precision_by, precision_on, cap)
+    }
+
     for (i in seq_along(trans_sums)) {
       # Format the display strings - this is just applying construct_desc_string to each row of
       # the data.frame
+
+      if (need_prec_table) {
+        # Merge the precision data on
+        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=match_exact(precision_by))
+      }
+
       trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
-                                            function(...) construct_desc_string(..., .fmt_str = format_strings),
+                                            function(...) construct_desc_string(...,
+                                                                                .fmt_str = format_strings),
                                             format_strings=format_strings
       )
 
@@ -128,6 +142,10 @@ process_formatting.desc_layer <- function(x, ...) {
 
     formatted_data
   }, envir=x)
+
+  add_order_columns(x)
+
+  env_get(x, "formatted_data")
 }
 
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
@@ -171,14 +189,25 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]
 
+  # Make the autos argument
+  if (fmt$auto_precision) {
+    autos <- c('int'=max_int, 'dec'=max_dec)
+  } else {
+    autos <- c('int'=0, 'dec'=0)
+  }
+
   # Format the transposed value
-  fmt_args <- list(fmt = fmt$repl_str, num_fmt(value, 1, fmt))
+  fmt_args <- list(fmt = fmt$repl_str, num_fmt(value, 1, fmt, autos))
+
 
   # Now evaluate any additional numbers that must be formatted
   # Exclude the initial variable because it's already been evaluated
   # i is intended to start on the second argument so +1 in the num_fmt call
   fmt_args <- append(fmt_args,
-                     imap(fmt$vars[-1], function(val, i, fmt) num_fmt(eval(val), i+1, fmt), fmt=fmt)
+                     imap(fmt$vars[-1],
+                          function(val, i, fmt, autos) num_fmt(eval(val), i+1, fmt, autos),
+                          fmt=fmt,
+                          autos=autos)
   )
 
   # Apply the call to sprintf

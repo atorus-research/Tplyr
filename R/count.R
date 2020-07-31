@@ -11,6 +11,10 @@ process_summaries.count_layer <- function(x, ...) {
     # Change treat_var to factor so all combinations appear in nest
     factor_treat_var(x)
 
+    # If the nest_sort_index isn't null, reset it
+    # This happens if the layer is reloaded
+    if (!is.null(env_get(x, "nest_sort_index", default = NULL))) env_bind(x, nest_sort_index = NULL)
+
     # Begin with the layer itself and process the first target vars values one by one
     env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
             bind_nested_count_layer, x = x))
@@ -170,9 +174,9 @@ prepare_format_metadata <- function(x) {
 
     # Get formatting metadata prepared
     if(is.null(format_strings)) {
-      format_strings <- list("n_counts" = f_str("ax (xxx.x%)", n, pct))
+      format_strings <- list("n_counts" = f_str("a (xxx.x%)", n, pct))
     } else if (!'n_counts' %in% names(format_strings)) {
-      format_strings[['n_counts']] <- f_str("ax (xxx.x%)", n, pct)
+      format_strings[['n_counts']] <- f_str("a (xxx.x%)", n, pct)
     }
 
 
@@ -181,9 +185,9 @@ prepare_format_metadata <- function(x) {
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
-    if(str_detect(format_strings[['n_counts']]$format_string, "ax")) {
+    if(str_detect(format_strings[['n_counts']]$format_string, "a")) {
       # Replace the flag with however many xs
-      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "ax",
+      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "a",
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
@@ -199,7 +203,7 @@ process_formatting.count_layer <- function(x, ...) {
   evalq({
 
     formatted_data <- numeric_data %>%
-      # Mutate value based on if there is a
+      # Mutate value based on if there is a distinct_by
       mutate(n = {
         if(is.null(distinct_by)) {
           construct_count_string(.n=n, .total=total,
@@ -227,7 +231,7 @@ process_formatting.count_layer <- function(x, ...) {
                              full_join,
                              by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
 
-    if(exists("nest_count") && nest_count) {
+    if(!is.null(nest_count) && nest_count) {
       formatted_data <- formatted_data %>%
         replace_by_string_names(quos(!!!by, summary_var))
     } else {
@@ -240,10 +244,14 @@ process_formatting.count_layer <- function(x, ...) {
       # equivilant to by variables in a count layer
       # replace_by_string_names(by_expr)
 
+
   }, envir = x)
+
+  add_order_columns(x)
+
+  env_get(x, "formatted_data")
+
 }
-
-
 
 #' Format n counts for display in count_layer
 #'
@@ -262,6 +270,10 @@ process_formatting.count_layer <- function(x, ...) {
 #' @return A tibble replacing the originial counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
+
+  ## Added this for processing formatting in nested count layers where this won't be processed yet
+  if (is.null(max_layer_length)) max_layer_length <- 0
+  if (is.null(max_n_width)) max_n_width <- 0
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 

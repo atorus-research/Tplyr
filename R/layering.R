@@ -145,8 +145,6 @@ add_layers <- function(parent, ...) {
 #' within the target dataset Text strings submitted do not need to exist in the target dataset.}
 #' \item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This is
 #' in addition to the subset applied in \code{\link{tplyr_table}}}
-#' \item{\code{sort_vars}}{A character vector containingn the variables that will be used to sort the results of the summary.
-#'   Set by default to the value of \code{target_var}. NOTE: Not yet implemented in practice}
 #' \item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending. NOTE: Not yet implemented in practice}
 #' \item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
 #' any sublayers of the current layer.}

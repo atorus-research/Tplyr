@@ -37,12 +37,6 @@ test_that("tplyr_layer returns a class of `tplyr_subgroup_layer`, `tplyr_layer` 
 
 ## Environment checks from a proper call ----
 
-test_that("Environment contains proper bindings when call is proper", {
-  t <- tplyr_table(iris, Species)
-  l <- group_count(t, target_var=Sepal.Width)
-  expect_named(l, c("sort_vars", "by", "stats", "sort", "where", "target_var", "layers"))
-})
-
 test_that("`Type` attribute is set properly", {
   t <- tplyr_table(iris, Sepal.Width)
   l1 <- group_count(t, target_var=Species)
@@ -129,18 +123,6 @@ test_that("`where` must be programming logic (quosure of class 'call')", {
 })
 
 ## Coded defaults ----
-test_that("`sort` defaults to 'ascending'", {
-  t <- tplyr_table(iris, Sepal.Width)
-  l <- group_count(t, target_var=Species)
-  expect_equal(l$sort, 'ascending')
-})
-
-test_that("`sort_vars` defaults to `target_var`", {
-  t <- tplyr_table(iris, Sepal.Width)
-  l <- group_count(t, target_var=Species)
-  # sort_vars is always a list so we can extract it here
-  expect_true(identical(l$sort_vars, l$target_var))
-})
 
 test_that("`layers` defaults to an empty list with a class of `tplyr_layer_container`", {
   t <- tplyr_table(iris, Sepal.Width)

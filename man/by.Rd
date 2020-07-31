@@ -3,16 +3,22 @@
 \name{get_by}
 \alias{get_by}
 \alias{set_by}
+\alias{set_precision_by}
 \title{Set or return by layer binding}
 \usage{
 get_by(layer)
 
 set_by(layer, by)
+
+set_precision_by(layer, precision_by)
 }
 \arguments{
 \item{layer}{A \code{tplyr_layer} object}
 
 \item{by}{A string, a variable name, or a list of variable names supplied
+using \code{dplyr::vars}.}
+
+\item{precision_by}{A string, a variable name, or a list of variable names supplied
 using \code{dplyr::vars}.}
 }
 \value{
