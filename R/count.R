@@ -86,7 +86,7 @@ process_count_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n)) %>%
+      do(this_denom(., header_n, treat_var)) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -122,7 +122,7 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n)) %>%
+      do(this_denom(., header_n, treat_var)) %>%
       rename(distinct_total = "total") %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.

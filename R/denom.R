@@ -19,10 +19,14 @@
 #'
 #' mtcars %>%
 #'   group_by(gear, vs) %>%
-#'   do(this_denom(., header_n(t)))
+#'   do(this_denom(., header_n(t), treat_var(t)))
 #'
 #' @noRd
-this_denom <- function(.data, header_n) {
+this_denom <- function(.data, header_n, treat_var) {
+  # Rename the first column of the header_n to the treat_var, is saved as the
+  # pop_treat_var at first
+  names(header_n)[1] <- as_name(treat_var)
+
   # Get names of header_n execpt last one, last should be the count
   header_n_grp_names <- names(header_n)[1:ncol(header_n) - 1]
 
