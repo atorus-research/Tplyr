@@ -7,12 +7,22 @@
 #' @noRd
 build_header_n <- function(table) {
   evalq({
-    df <- built_pop_data %>%
-      filter(!!table_where) %>%
-      group_by(!!pop_treat_var, !!!cols) %>%
-      tally() %>%
-      ungroup() %>%
-      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+
+    # If there is a distinct_by, use it to make the header_n
+    if(is.null(distinct_by)) {
+      df <- built_pop_data %>%
+        group_by(!!pop_treat_var, !!!cols) %>%
+        tally() %>%
+        ungroup() %>%
+        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+    } else {
+      df <- built_pop_data %>%
+        distinct(!!distinct_by, .keep_all = TRUE) %>%
+        group_by(!!pop_treat_var, !!!cols) %>%
+        tally() %>%
+        ungroup() %>%
+        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+    }
 
     header_n <- df
     rm(df)

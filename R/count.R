@@ -202,6 +202,14 @@ prepare_format_metadata <- function(x) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
+    # TODO: Move this to the layer compatibility when we implment that
+    # If there is a distinct and there isn't a distinct_by, stop
+    if(("distinct" %in% map(format_strings$n_counts$vars, as_name) |
+       "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
+       is.null(distinct_by)) {
+      stop("You can't use distinct without specifying a distinct_by")
+    }
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = {
