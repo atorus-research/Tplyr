@@ -173,6 +173,14 @@ built_dm <- t_dm %>%
   arrange(ord_layer_index, ord_layer_1)
 
 
+t_by <- tplyr_table(adsl, TRT01P) %>%
+  add_layer(
+    group_count(AGEGR1, by=vars(ETHNIC,RACE))
+  )
+
+built_by <- build(t_by)
+
+
 #desc layer testing
 
 t_cont <- tplyr_table(adsl, TRT01P) %>%
