@@ -170,6 +170,10 @@ apply_row_masks <- function(dat) {
 #' @noRd
 bind_nested_count_layer <- function(target_var_1_i, x) {
 
+  indentation <- env_get(x, "indentation", default = "\t", inherit = TRUE)
+  # Logic for it its inheriting from the global environment
+  indentation <- ifelse(is.null(indentation), "\t", indentation)
+
   # This contains the subset of the first target variable.
   # If nest_counts is true. the first treat_var is added in the by so it appears
   # in its own column
@@ -177,7 +181,7 @@ bind_nested_count_layer <- function(target_var_1_i, x) {
                                                  by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
                                                  where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
                                        # Set the value for how to prefix the inner layer
-                                       set_count_row_prefix(env_get(x, "indentation", default = "\t")))
+                                       set_count_row_prefix(indentation))
 
 
     # Process the formatting here to get the metadata. We just need the number of rows
