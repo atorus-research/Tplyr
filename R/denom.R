@@ -131,7 +131,7 @@ get_header_n_value.data.frame <- function(x, ...) {
   ## I tried this in a map but I had trouble with the names being stripped out
   filter_logic <- list()
   for (i in seq_along(...)) {
-    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!...[[i]]))
+    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!as_name(...[[i]])))
   }
 
   x %>%
