@@ -239,7 +239,7 @@ process_formatting.count_layer <- function(x, ...) {
                              full_join,
                              by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
 
-    if(!is.null(nest_count) && nest_count) {
+    if(!is.null(nest_count) && !nest_count) {
       formatted_data <- formatted_data %>%
         replace_by_string_names(quos(!!target_var[[1]], !!!by, summary_var))
     } else {
