@@ -152,7 +152,7 @@ add_order_columns.count_layer <- function(x) {
     # A lot of weird stripping of the object is done here to make sure its the
     # right class
     if (is.null(ordering_cols)) ordering_cols <- quos(!!unname(unlist(as.character(
-      head(unique(pop_data[, as_name(treat_var)]), 1)
+      head(unique(pop_data[, as_name(pop_treat_var)]), 1)
       ))))
     if (is.null(order_count_method)) order_count_method <- "byfactor"
 

@@ -24,8 +24,8 @@ treatment_group_build <- function(table) {
     # Dummies for treatment groups added to population dataset
     for (grp_i in seq_along(treat_grps)) {
       built_pop_data <- built_pop_data %>%
-        filter(!!treat_var %in% treat_grps[[grp_i]]) %>%
-        mutate(!!treat_var := names(treat_grps)[grp_i]) %>%
+        filter(!!pop_treat_var %in% treat_grps[[grp_i]]) %>%
+        mutate(!!pop_treat_var := names(treat_grps)[grp_i]) %>%
         bind_rows(built_pop_data)
     }
     rm(grp_i)
