@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -17,6 +17,11 @@ Authors@R:
            family = "Tarasiewicz",
            email = "Ashley.Tarasiewicz@atorusresearch.com", 
            role = "aut"),
+    person(given = "Nathan",
+           family = "Kosiba",
+           email = "Nathan.Kosiba@atorusresearch.com",
+           role = "aut",
+           comment = c(ORCID = "0000-0001-5359-4234")),
     person(given = "Atorus Research LLC",
            role = "cph")
     )
