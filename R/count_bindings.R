@@ -83,9 +83,6 @@ set_total_row_label <- function(e, total_row_label) {
 set_distinct_by <- function(e, distinct_by) {
   distinct_by <- enquo(distinct_by)
 
-  # Any other assertions needed here?
-  assert_inherits_class(e, "count_layer")
-
   env_bind(e, distinct_by = distinct_by)
 
   e
