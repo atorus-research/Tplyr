@@ -91,7 +91,6 @@ test_that('T3',{
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
     test_3 <- tplyr_table(adsl, TRT01P) %>%
-      add_total_group() %>%
       add_treat_group('Total Xanomeline', c("Xanomeline High Dose", "Xanomeline Low Dose"))
 
     # output table to check attributes
@@ -149,6 +148,29 @@ test_that('T4',{
   rm(test_4)
 })
 
+#count layer testing
+
+t_dm <- tplyr_table(adsl, TRT01P) %>%
+  add_total_group() %>%
+  add_layer(
+    group_count(RACE) %>%
+      set_order_count_method("byvarn")
+  ) %>%
+  add_layer(
+    group_count(ETHNIC) %>%
+      set_order_count_method("byvarn")
+  ) %>%
+  add_layer(
+    group_count(SEX) %>%
+      set_order_count_method("byvarn")
+  ) %>%
+  add_layer(
+    group_desc(AGE)
+  )
+
+built_dm <- t_dm %>%
+  build() %>%
+  arrange(ord_layer_index, ord_layer_1)
 
 
 #desc layer testing
