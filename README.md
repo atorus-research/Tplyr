@@ -829,7 +829,7 @@ Sorting
 -------
 
 You may have noticed the addition of `ord` columns on the datasets
-output so far. Tplyr now provides order columns built in to the table
+output so far. Tplyr now provides order columns built into the table
 returned to you via the `build` function. This follows a few basic
 principles:
 
@@ -1115,7 +1115,7 @@ that it’s reasonable for us to include. So let’s take a look at risk
 difference.
 
 Our current implementation of risk difference is solely built on top of
-the base R function `prop.test`. For a any and all questions about this
+the base R function `prop.test`. For any and all questions about this
 method, please review the `prop.test` documentation within R.
 
 Risk difference is built on top of count layers, as it’s a comparison of
@@ -1150,7 +1150,7 @@ suppressWarnings(build(t)) %>%
 | ALCOHOL USE          | 0 ( 0.0%)     | 1 ( 0.2%)                  | 0 ( 0.0%)                 |                  1|                                      |                                     |              6|
 
 Comparisons are specified with two-element character vectors. These are
-simply you comparison group - the first element, and your reference
+simply your comparison group - the first element, and your reference
 group - the second. This coincides with how you might see risk
 difference specified in the header of your mock, where you’ll see
 something like T1-Placebo. You can provide as many comparisons as you
@@ -1158,7 +1158,7 @@ want - the values specified in the comparison just need to be valid
 treatment groups within your data. This works with any treatment group
 built using `add_treat_group` or `add_total_group` as well.
 
-The risk difference calculation are displayed in the `rdiff` columns.
+The risk difference calculations are displayed in the `rdiff` columns.
 There will be an `rdiff` column for every comparison that is made,
 following the convention `rdiff_<comparison>_<reference>`.
 

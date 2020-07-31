@@ -122,7 +122,7 @@ After the table is built and you order your columns, using `add_column_headers`,
 
 ## Sorting
 
-You may have noticed the addition of `ord` columns on the datasets output so far. Tplyr now provides order columns built in to the table returned to you via the `build` function. This follows a few basic principles:
+You may have noticed the addition of `ord` columns on the datasets output so far. Tplyr now provides order columns built into the table returned to you via the `build` function. This follows a few basic principles:
 
 - Each layer will have its own index based on the order in which it was attached to the `tplyr_table` object. 
 - `by` variables will be sorted based on:
@@ -278,7 +278,7 @@ build(t) %>%
 
 Tplyr does not support, nor do we intended to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
 
-Our current implementation of risk difference is solely built on top of the base R function `prop.test`. For a any and all questions about this method, please review the `prop.test` documentation within R. 
+Our current implementation of risk difference is solely built on top of the base R function `prop.test`. For any and all questions about this method, please review the `prop.test` documentation within R. 
 
 Risk difference is built on top of count layers, as it's a comparison of proportions. To add risk difference into a count layer, you simply use the function `add_risk_diff`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
 
@@ -299,9 +299,9 @@ suppressWarnings(build(t)) %>%
 
 ```
 
-Comparisons are specified with two-element character vectors. These are simply you comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_group` or `add_total_group` as well.
+Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_group` or `add_total_group` as well.
 
-The risk difference calculation are displayed in the `rdiff` columns. There will be an `rdiff` column for every comparison that is made, following the convention `rdiff_<comparison>_<reference>`. 
+The risk difference calculations are displayed in the `rdiff` columns. There will be an `rdiff` column for every comparison that is made, following the convention `rdiff_<comparison>_<reference>`. 
 
 Note the use of `suppressWarnings` - if the counts used in `prop.test` are too low, you'll get a warning that says "Chi-squared approximation may be incorrect" for every time `prop.test` is run with counts that are too low... This could happen a lot, but the warning is perfectly valid. 
 
