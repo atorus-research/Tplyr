@@ -433,15 +433,20 @@ add_data_order_nested <- function(group_data, final_col, numeric_data,
                                   treat_var, by, cols,
                                   result_order_var, target_var) {
 
+  # Here are the names of the formatted data row labels. We ussually only work with the last
+  row_label_vec <- vars_select(names(group_data), starts_with("row_label"))
+
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% unlist(group_data[-1, "row_label1"])) %>%
+    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]])) %>%
     # Remove nesting prefix to prepare numeric data.
     mutate(summary_var := str_sub(summary_var, indentation_length))
 
+
   #Same idea here, remove prefix
   filtered_group_data <- group_data[-1, ] %>%
-    mutate(row_label1 := str_sub(row_label1, indentation_length))
+    mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
+                                                                   indentation_length))
 
   # The first row is always the first thing in the order so make it Inf
   group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
