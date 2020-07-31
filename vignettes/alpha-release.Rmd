@@ -404,8 +404,9 @@ tplyr_table(adsl, TRT01P) %>%
     group_desc(AGE, by = "Age (Years)")
   ) %>% 
   build() %>% 
+  mutate_all(as.character) %>%
   add_column_headers(
-    ' | Statistic | Placebo | Xanomeline (High) | Xanomeline (Low)'
+    ' | Statistic | Placebo | Xanomeline (High) | Xanomeline (Low) | ord_layer_index | ord_layer_2'
   )
 
 ```
@@ -418,8 +419,9 @@ tplyr_table(adsl, TRT01P) %>%
     group_desc(vars(AGE, AVGDD), by = "Age and Avg. Daily Dose")
   ) %>% 
   build() %>% 
+  mutate_all(as.character) %>%
   add_column_headers(
-    ' | Statistic | Age {Placebo | Xanomeline (High) | Xanomeline (Low)} | Average Daily Dose {Placebo | Xanomeline (High) | Xanomeline (Low)}'
+    ' | Statistic | Age {Placebo | Xanomeline (High) | Xanomeline (Low)} | Average Daily Dose {Placebo | Xanomeline (High) | Xanomeline (Low)} | Layer Index | Layer Order 2'
   )
 
 ```

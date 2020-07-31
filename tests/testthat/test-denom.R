@@ -6,12 +6,13 @@ header_n <- tibble(
   gear = c(3, 4, 5),
   n = c(15, 12, 5)
 )
+treat_var <- quo(gear)
 
 test_that("this_denom can be called after a group_by and gives totals", {
 
   df <- mtcars %>%
     group_by(gear) %>%
-    do(this_denom(., header_n)) %>%
+    do(this_denom(., header_n, treat_var)) %>%
     ungroup() %>%
     select(total)
 
@@ -19,7 +20,7 @@ test_that("this_denom can be called after a group_by and gives totals", {
 
   df2 <- mtcars %>%
     group_by(gear, vs) %>%
-    do(this_denom(., header_n)) %>%
+    do(this_denom(., header_n, treat_var)) %>%
     ungroup() %>%
     select(total)
 
@@ -31,6 +32,6 @@ test_that("this_denom raises error when bad groups are passed", {
     mtcars %>%
       # Not grouped by gear
       group_by(cyl) %>%
-      do(this_denom(., header_n))
+      do(this_denom(., header_n, treat_var))
   }, "All columns in the call must be in separate groups in the table.")
 })

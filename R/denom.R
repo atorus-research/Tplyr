@@ -11,7 +11,6 @@
 #'
 #' @return A single numeric value from the header_n binding that is pulled
 #'  from the groups
-#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -20,9 +19,14 @@
 #'
 #' mtcars %>%
 #'   group_by(gear, vs) %>%
-#'   do(this_denom(., header_n(t)))
+#'   do(this_denom(., header_n(t), treat_var(t)))
 #'
-this_denom <- function(.data, header_n) {
+#' @noRd
+this_denom <- function(.data, header_n, treat_var) {
+  # Rename the first column of the header_n to the treat_var, is saved as the
+  # pop_treat_var at first
+  names(header_n)[1] <- as_name(treat_var)
+
   # Get names of header_n execpt last one, last should be the count
   header_n_grp_names <- names(header_n)[1:ncol(header_n) - 1]
 
@@ -127,7 +131,7 @@ get_header_n_value.data.frame <- function(x, ...) {
   ## I tried this in a map but I had trouble with the names being stripped out
   filter_logic <- list()
   for (i in seq_along(...)) {
-    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!...[[i]]))
+    filter_logic <- append(filter_logic, expr(!!as.symbol(dots_names[i]) == !!as_name(...[[i]])))
   }
 
   x %>%

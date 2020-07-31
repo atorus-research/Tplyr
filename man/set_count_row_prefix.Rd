@@ -17,15 +17,3 @@ The modified count_layer environment
 \description{
 This is generally used internally with a nested count layer.
 }
-\examples{
-# Load in pipe
-library(magrittr)
-
-tplyr_table(mtcars, gear) \%>\%
-  add_layer(
-    group_count(cyl) \%>\%
-      set_count_row_prefix("\t")
-  ) \%>\%
-  build()
-
-}

@@ -12,8 +12,8 @@
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
-#' @importFrom utils str head
-#' @importFrom tidyselect all_of
+#' @importFrom utils str head tail
+#' @importFrom tidyselect all_of vars_select
 #' @importFrom tibble tibble rownames_to_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
@@ -70,7 +70,6 @@ tplyr_default_options <- list(
 target_var <- NULL
 target <- NULL
 where <- NULL
-sort_vars <- NULL
 layers <- NULL
 layer_output <- NULL
 mask <- NULL
@@ -110,3 +109,26 @@ inner_count_layer_prefix <- NULL
 ordering_cols <- NULL
 order_count_method <- NULL
 result_order_var <- NULL
+nest_sort_index <- NULL
+.data <- NULL
+. <- NULL
+built_pop_data <- NULL
+factor_index <- NULL
+formatted_data <- NULL
+dots <- NULL
+stats <- NULL
+nest_count <- NULL
+dif <- NULL
+comparisons <- NULL
+n <- NULL
+low <- NULL
+high <- NULL
+row_label1 <- NULL
+comp_numeric_data <- NULL
+indentation <- NULL
+max_int <- NULL
+max_dec <- NULL
+need_prec_table <- NULL
+precision_by <- NULL
+precision_on <- NULL
+cap <- NULL

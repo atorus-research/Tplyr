@@ -86,7 +86,7 @@ process_count_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n)) %>%
+      do(this_denom(., header_n, treat_var)) %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
       # add 0 for combintions that don't exist
@@ -122,7 +122,7 @@ process_count_distinct_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n)) %>%
+      do(this_denom(., header_n, treat_var)) %>%
       rename(distinct_total = "total") %>%
       ungroup() %>%
       # complete all combiniations of factors to include combiniations that don't exist.
@@ -191,7 +191,7 @@ prepare_format_metadata <- function(x) {
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
-      format_strings[['n_counts']] <- f_str(replaced_string, n, pct)
+      format_strings[['n_counts']] <- f_str(replaced_string, !!!format_strings$n_counts$vars)
     }
     max_length <- format_strings[['n_counts']]$size
   }, envir = x)
@@ -201,6 +201,14 @@ prepare_format_metadata <- function(x) {
 #' @export
 process_formatting.count_layer <- function(x, ...) {
   evalq({
+
+    # TODO: Move this to the layer compatibility when we implment that
+    # If there is a distinct and there isn't a distinct_by, stop
+    if(("distinct" %in% map(format_strings$n_counts$vars, as_name) |
+       "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
+       is.null(distinct_by)) {
+      stop("You can't use distinct without specifying a distinct_by")
+    }
 
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
@@ -231,7 +239,7 @@ process_formatting.count_layer <- function(x, ...) {
                              full_join,
                              by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
 
-    if(exists("nest_count") && nest_count) {
+    if(!is.null(nest_count) && nest_count) {
       formatted_data <- formatted_data %>%
         replace_by_string_names(quos(!!!by, summary_var))
     } else {

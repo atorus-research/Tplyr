@@ -11,21 +11,18 @@ build_header_n <- function(table) {
     # If there is a distinct_by, use it to make the header_n
     if(is.null(distinct_by)) {
       df <- built_pop_data %>%
-        filter(!!table_where) %>%
         group_by(!!pop_treat_var, !!!cols) %>%
         tally() %>%
         ungroup() %>%
         complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
     } else {
       df <- built_pop_data %>%
-        filter(!!table_where) %>%
-        distinct(!!distinct_by) %>%
+        distinct(!!distinct_by, .keep_all = TRUE) %>%
         group_by(!!pop_treat_var, !!!cols) %>%
         tally() %>%
         ungroup() %>%
         complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
     }
-
 
     header_n <- df
     rm(df)
