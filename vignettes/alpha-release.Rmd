@@ -16,11 +16,10 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(haven)
 library(magrittr)
 library(Tplyr)
-adsl <- read_xpt("adsl.xpt")
-adae <- read_xpt("adae.xpt")
+adsl <- haven::read_xpt("adsl.xpt")
+adae <- haven::read_xpt("adae.xpt")
 ```
 
 # The Alpha Release
