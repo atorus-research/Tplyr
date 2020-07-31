@@ -230,4 +230,11 @@ testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AG
 testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
                        subset(ndat, stat == 'missing' & TRT01P == 'Placebo')[['value']])
 
+
+#format matching
+re_npe <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)\s\[\s?\d?\d\]"
+re_np <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)"
+
+
+#clean up
 rm(vur)
