@@ -11,6 +11,7 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   expect_setequal(env_names(tab), c("target", "pop_data", "cols", "table_where",
                                     "treat_var", "pop_treat_var",
                                     "treat_grps", "layers"))
+
 })
 
 test_that("tplyr_table comes with empty list binded on 'layers'", {

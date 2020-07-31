@@ -1,5 +1,6 @@
 
 
+
 ##### pop_data tests #####
 test_that("pop_data binding attaches pop_data properly", {
   df <- data.frame(a = 1:10, b = 11:20)
