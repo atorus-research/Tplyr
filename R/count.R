@@ -191,7 +191,7 @@ prepare_format_metadata <- function(x) {
                                      paste(rep("x", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
-      format_strings[['n_counts']] <- f_str(replaced_string, n, pct)
+      format_strings[['n_counts']] <- f_str(replaced_string, !!!format_strings$n_counts$vars)
     }
     max_length <- format_strings[['n_counts']]$size
   }, envir = x)
