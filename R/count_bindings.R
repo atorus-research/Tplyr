@@ -198,7 +198,7 @@ set_nest_count <- function(e, nest_count) {
 #'
 #' @param e A \code{group_count} layer
 #' @param order_count_method The logic determining how the rows in the final
-#'   layer output will be indexed. Options are 'byrow', 'byfactor', and
+#'   layer output will be indexed. Options are 'bycount', 'byfactor', and
 #'   'byvarn'.
 #'
 #'
