@@ -191,15 +191,3 @@ test_that("Count layers are processed as expected", {
 
 
 })
-
-test_that("An informative warning/error message is raised appropriate", {
-  #Issue 443 - Specifing a f_str with less than the n padding raises warning.
-  expect_warning({t <- tplyr_table(mtcars, gear) %>%
-    add_total_group() %>%
-    add_layer(
-      group_count(cyl) %>%
-        set_format_strings(f_str("x (xxx%)",n,pct))
-    ) %>%
-    build()}, "Some Informative Warning Message")
-})
-
