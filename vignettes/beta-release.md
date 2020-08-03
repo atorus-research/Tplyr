@@ -131,6 +131,7 @@ headers. Now, we’ve made that easy.
 t <- tplyr_table(adae, TRTA, where= SAFFL == "Y") %>%
   set_pop_data(adsl) %>%  # Specify the population dataset
   set_pop_treat_var(TRT01A) %>% # Specify the treatment variable within the population
+  set_pop_where(SAFFL == "Y") %>%
   add_layer(
     group_count(AEDECOD) %>% # Create the count layer
       set_distinct_by(USUBJID) %>% # Specify the variable to determine a distinct count by
@@ -169,7 +170,7 @@ Sorting
 -------
 
 You may have noticed the addition of `ord` columns on the datasets
-output so far. Tplyr now provides order columns built in to the table
+output so far. Tplyr now provides order columns built into the table
 returned to you via the `build` function. This follows a few basic
 principles:
 
@@ -396,28 +397,28 @@ Eli for getting this as far as we have!
 
 While we’re on the subject of multi-level counts, we’ve also added some
 enhanced capabilities for presenting these situations by offering
-nesting. The second variable is nested inside the first. You’re able to
-turn this setting off:
+nesting - as you can see in the summary above. The second variable is
+nested inside the first. You’re able to turn this setting off:
 
 ``` r
 t <- tplyr_table(adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
-      set_nest_count(TRUE) 
+      set_nest_count(FALSE) 
   ) 
 
 build(t) %>% 
   head() 
-#> # A tibble: 6 x 7
+#> # A tibble: 6 x 8
 #> # Groups:   ord_layer_1 [1]
-#>   row_label1                        var1_Placebo  `var1_Xanomeline Hig… `var1_Xanomeline Low… ord_layer_index ord_layer_1 ord_layer_2
-#>   <chr>                             <chr>         <chr>                 <chr>                           <int>       <dbl>       <dbl>
-#> 1 "GENERAL DISORDERS AND ADMINISTR… " 48 ( 15.9%… "124 ( 27.3%)"        "120 ( 27.6%)"                      1           1         Inf
-#> 2 "\tAPPLICATION SITE BLEEDING"     "  0 (  0.0%… "  0 (  0.0%)"        "  1 (  0.2%)"                      1           1           0
-#> 3 "\tAPPLICATION SITE DERMATITIS"   "  9 (  3.0%… " 12 (  2.6%)"        " 15 (  3.4%)"                      1           1           9
-#> 4 "\tAPPLICATION SITE DESQUAMATION" "  0 (  0.0%… "  0 (  0.0%)"        "  1 (  0.2%)"                      1           1           0
-#> 5 "\tAPPLICATION SITE DISCHARGE"    "  0 (  0.0%… "  1 (  0.2%)"        "  0 (  0.0%)"                      1           1           0
-#> 6 "\tAPPLICATION SITE DISCOLOURATI… "  0 (  0.0%… "  0 (  0.0%)"        "  1 (  0.2%)"                      1           1           0
+#>   row_label1   row_label2    var1_Placebo `var1_Xanomelin… `var1_Xanomelin… ord_layer_index ord_layer_1 ord_layer_2
+#>   <chr>        <chr>         <chr>        <chr>            <chr>                      <int>       <dbl>       <dbl>
+#> 1 GENERAL DIS… "GENERAL DIS… " 48 ( 15.9… "124 ( 27.3%)"   "120 ( 27.6%)"                 1           1         Inf
+#> 2 GENERAL DIS… "\tAPPLICATI… "  0 (  0.0… "  0 (  0.0%)"   "  1 (  0.2%)"                 1           1           0
+#> 3 GENERAL DIS… "\tAPPLICATI… "  9 (  3.0… " 12 (  2.6%)"   " 15 (  3.4%)"                 1           1           9
+#> 4 GENERAL DIS… "\tAPPLICATI… "  0 (  0.0… "  0 (  0.0%)"   "  1 (  0.2%)"                 1           1           0
+#> 5 GENERAL DIS… "\tAPPLICATI… "  0 (  0.0… "  1 (  0.2%)"   "  0 (  0.0%)"                 1           1           0
+#> 6 GENERAL DIS… "\tAPPLICATI… "  0 (  0.0… "  0 (  0.0%)"   "  1 (  0.2%)"                 1           1           0
 ```
 
 You can also change the character used to set the indentation, which
@@ -455,7 +456,7 @@ that it’s reasonable for us to include. So let’s take a look at risk
 difference.
 
 Our current implementation of risk difference is solely built on top of
-the base R function `prop.test`. For a any and all questions about this
+the base R function `prop.test`. For any and all questions about this
 method, please review the `prop.test` documentation within R.
 
 Risk difference is built on top of count layers, as it’s a comparison of
@@ -490,7 +491,7 @@ suppressWarnings(build(t)) %>%
 | ALCOHOL USE          | 0 ( 0.0%)     | 1 ( 0.2%)                  | 0 ( 0.0%)                 |                  1|                                      |                                     |              6|
 
 Comparisons are specified with two-element character vectors. These are
-simply you comparison group - the first element, and your reference
+simply your comparison group - the first element, and your reference
 group - the second. This coincides with how you might see risk
 difference specified in the header of your mock, where you’ll see
 something like T1-Placebo. You can provide as many comparisons as you
@@ -498,7 +499,7 @@ want - the values specified in the comparison just need to be valid
 treatment groups within your data. This works with any treatment group
 built using `add_treat_group` or `add_total_group` as well.
 
-The risk difference calculation are displayed in the `rdiff` columns.
+The risk difference calculations are displayed in the `rdiff` columns.
 There will be an `rdiff` column for every comparison that is made,
 following the convention `rdiff_<comparison>_<reference>`.
 
