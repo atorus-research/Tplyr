@@ -1,0 +1,17 @@
+List of 1
+ $ n_counts:*** Format String ***
+xx (xx.xx%) [xxx] [xx.xx%]
+*** vars, extracted formats, and settings ***
+distinct formated as: xx
+	integer length: 2
+	decimal length: 0
+distinct_pct formated as: xx.xx
+	integer length: 2
+	decimal length: 2
+n formated as: xxx
+	integer length: 3
+	decimal length: 0
+pct formated as: xx.xx
+	integer length: 2
+	decimal length: 2
+Total Format Size: 26

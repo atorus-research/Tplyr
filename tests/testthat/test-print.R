@@ -1,31 +1,36 @@
-# Print tests
-
-t <- tplyr_table(mtcars, gear, cols = vs, where = am == 1)
-
-c1 <- group_count(t, cyl, by = hp)
-
-t <- add_layers(t, c1)
 
 
-# test_that("A tplyr_table prints to console as expected", {
-#   print_t <- "*** tplyr_table ***
-# Target (data.frame):
-# 	Name:  mtcars
-# 	Rows:  32
-# 	Columns:  11
-# pop_data (data.frame)
-# 	Name:  target
-# 	Rows:  32
-# 	Columns:  11
-# treat_var variable (quosure)
-# 	gear
-# header_n: 6 header groups
-# treat_grps groupings (list)
-# Table Columns (cols):
-# 	vs
-# where: == am 1
-# Number of layer(s): 1
-# layer_output: 0"
-#
-#   expect_equal(print(t), print_t)
-# })
+t_ <- tplyr_table(mtcars, gear, cols = vs) %>%
+  add_total_group() %>%
+  add_layer(
+    group_count(cyl, by = am) %>%
+      set_distinct_by(cyl) %>%
+      set_format_strings(f_str("a (xx.xx%) [xxx] [xx.xx%]", distinct, distinct_pct, n, pct))
+  )
+
+
+test_that("tplyr_table is printed as expected", {
+
+  expect_known_output(print(t_), test_path("table_print.txt"))
+
+  expect_known_output(str(t_), test_path("table_str.txt"))
+
+  build(t_)
+
+  expect_known_output(print(t_), test_path("table_built_print.txt"))
+
+  expect_known_output(str(t_), test_path("table_built_str.txt"))
+
+})
+
+test_that("tplyr layers are printed as expected", {
+  expect_output_file(print(t_$layers[[1]], print_env = FALSE), test_path("layer_print.txt"))
+
+  expect_known_output(str(t_$layers[[1]], print_env = FALSE), test_path("layer_str.txt"))
+})
+
+test_that("f_str objects are printed as expected", {
+  expect_known_output(print(t_$layers[[1]]$format_strings), test_path("fstr_print.txt"))
+
+  expect_known_output(str(t_$layers[[1]]$format_strings), test_path("fstr_str.txt"))
+})

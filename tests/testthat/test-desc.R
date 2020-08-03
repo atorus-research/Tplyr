@@ -202,9 +202,9 @@ test_that("Auto precision builds correctly", {
   t_uncap_comp <- readr::read_csv('t_uncap.csv')
   t_cap_comp <- readr::read_csv('t_cap.csv')
 
-  expect_equal(mutate_all(t_uncap, as.character),
+  expect_equivalent(mutate_all(t_uncap, as.character),
                mutate_all(t_uncap_comp, as.character))
-  expect_equal(mutate_all(t_cap, as.character),
+  expect_equivalent(mutate_all(t_cap, as.character),
                mutate_all(t_cap_comp, as.character))
 
 })
