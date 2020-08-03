@@ -70,6 +70,7 @@ tplyr_default_options <- list(
 target_var <- NULL
 target <- NULL
 where <- NULL
+pop_where <- NULL
 layers <- NULL
 layer_output <- NULL
 mask <- NULL

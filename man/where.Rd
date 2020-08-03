@@ -7,6 +7,8 @@
 \alias{get_where.tplyr_table}
 \alias{set_where}
 \alias{set_where.tplyr_table}
+\alias{set_pop_where}
+\alias{get_pop_where}
 \title{Set or return where binding for layer or table}
 \usage{
 \method{get_where}{tplyr_layer}(obj)
@@ -20,6 +22,10 @@ get_where(obj)
 set_where(obj, where)
 
 \method{set_where}{tplyr_table}(obj, where)
+
+set_pop_where(obj, where)
+
+get_pop_where(obj)
 }
 \arguments{
 \item{obj}{A \code{tplyr_layer} or \code{tplyr_table} object.}

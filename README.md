@@ -10,7 +10,7 @@
 
 Welcome to the beta release of our package, `Tplyr`! This package is still in development, and we're actively working on new features. We decided to release this version early to get community feedback. If you find a bug in our code - please report it! If you'd like to see some particular feature - let us know! The more feedback we collect, the better the end product will be when we publish the first version on CRAN. 
 
-If you've already reviewed the Alhpa release, then to see what's new, skip down the the "New in Beta" section.
+If you've already reviewed the Alhpa release, then to see what's new, skip down the ["New in Beta" section.](#new-in-beta)
 
 # Usage
 
@@ -669,25 +669,35 @@ surface, but introduce critical functionality needed for Tplyr to
 accomplish the goals we’ve laid out.
 
 The enhancements that we’re going to cover in this document are as
-follows: - General updates: - Calculate your header N counts based on
+follows:
+
+- General updates:
+  - Calculate your header N counts based on
 the population dataset or the target dataset. The alpha release had an
 option to set the population data but this wasn’t actually used anywhere
-in the internals. - Use these header N counts as token replacements when
-using the `add_column_headers` function. - Order variables are now added
+in the internals.
+  - Use these header N counts as token replacements when
+using the `add_column_headers` function.
+  - Order variables are now added
 to the built dataset to allow you to sort the output dataset as you wish
-with numeric variables. - Count layer updates: - Optionally use the
-population data N counts as denominators for percent calculation. - For
-multi-level count summaries, nest the row label columns together to
-present both row labels in a single column - You can now present both
-distinct and non-distinct counts instead of one or the other - Sorting
-options allow you to order results from the target variable values or
-from derived counts within a specified column - Risk difference
-calculations can now be added as additional columns, with flexible
-options for presentation - Descriptive statistics layer updates: - The
-custom summary functionality has been updated to apply to multi-variable
-summaries, which results in an interface change - Automatic decimal
-precision has been added to allow you to base the presentation on the
-precision of the data as collected
+with numeric variables.
+- Count layer updates:
+  - Optionally use the
+population data N counts as denominators for percent calculation.
+  - For multi-level count summaries, nest the row label columns together to
+present both row labels in a single column
+  - You can now present both distinct and non-distinct counts instead of one or
+the other
+  - Sorting options allow you to order results from the target variable values or
+from derived counts within a specified column
+  - Risk difference calculations can now be added as additional columns, with
+flexible options for presentation
+- Descriptive statistics layer updates:
+  - The custom summary functionality has
+been updated to apply to multi-variable summaries, which results in an interface
+change
+  - Automatic decimal precision has been added to allow you to base the
+presentation on the precision of the data as collected
 
 Let’s dig into each of these updates one by one.
 

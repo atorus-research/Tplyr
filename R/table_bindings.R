@@ -283,3 +283,22 @@ set_where.tplyr_table <- function(obj, where) {
 
   obj
 }
+
+#' @rdname where
+#' @export
+set_pop_where <- function(obj, where) {
+  where <- enquo(where)
+
+  assert_that(is_logical_or_call(where),
+              msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
+
+  env_bind(obj, pop_where = where)
+
+  obj
+}
+
+#' @export
+#' @rdname where
+get_pop_where <- function(obj) {
+  env_get(obj, "pop_where")
+}
