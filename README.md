@@ -722,6 +722,7 @@ Consider the following:
 t <- tplyr_table(adae, TRTA, where= SAFFL == "Y") %>%
   set_pop_data(adsl) %>%  # Specify the population dataset
   set_pop_treat_var(TRT01A) %>% # Specify the treatment variable within the population
+  set_pop_where(SAFFL == "Y") %>%
   add_layer(
     group_count(AEDECOD) %>% # Create the count layer
       set_distinct_by(USUBJID) %>% # Specify the variable to determine a distinct count by

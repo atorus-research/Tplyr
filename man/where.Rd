@@ -46,5 +46,8 @@ library(magrittr)
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
-  set_where(Petal.Length > 3)
+  set_where(Petal.Length > 3) \%>\%
+  # Set logic for pop_data as well
+  set_pop_where(Petal.Length > 3)
+
 }
