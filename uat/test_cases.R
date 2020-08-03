@@ -10,12 +10,11 @@ context("Atorus Validation")
 library(Tplyr)
 library(tidyverse)
 library(testthat)
-library(haven)
 library(rlang)
 
 #insert code applicable to all tests i.e. functions
-adsl <- read_xpt("~/Tplyr/uat/input/adsl.xpt")
-adae <- read_xpt("~/Tplyr/uat/input/adae.xpt")
+adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
+adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
 
 
 #no updates needed - initializes vur which is used to determine which parts of code to execute during testing
