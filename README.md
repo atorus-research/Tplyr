@@ -753,6 +753,17 @@ adae %>%
 #> 1 Placebo                 69
 #> 2 Xanomeline High Dose    79
 #> 3 Xanomeline Low Dose     77
+
+adsl %>%
+  filter(SAFFL == "Y") %>%
+  distinct(TRT01A, USUBJID) %>%
+  count(TRT01A)
+#>  # A tibble: 3 x 2
+#>  TRT01A                   n
+#>  <chr>                <int>
+#> 1 Placebo                 86
+#> 2 Xanomeline High Dose    84
+#> 3 Xanomeline Low Dose     84
 ```
 
 Note also the use of the new `f_str` variable names `distinct` and
