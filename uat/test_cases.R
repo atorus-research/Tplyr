@@ -180,67 +180,93 @@ t_by <- tplyr_table(adsl, TRT01P) %>%
 built_by <- build(t_by)
 
 
-#desc layer testing
+#test 16
+test_that('T16',{
+  if(is.null(vur)) {
 
-t_cont <- tplyr_table(adsl, TRT01P) %>%
-  add_layer(
-    group_desc(AGE) %>%
-      set_format_strings(
-        'n' = f_str('xx', n),
-        'mean' = f_str('xx.x', mean),
-        'median' = f_str('xx.x', median),
-        'sd' = f_str('xx.xx', sd),
-        'var' = f_str('xx.xx', var),
-        'min' = f_str('xx', min),
-        'max' = f_str('xx', max),
-        'iqr' = f_str('xx.x', iqr),
-        'q1' = f_str('xx.x', q1),
-        'q3' = f_str('xx.x', q3),
-        'missing' = f_str('xx', missing)
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'n' = f_str('xx', n),
+            'mean' = f_str('xx.x', mean),
+            'median' = f_str('xx.x', median),
+            'sd' = f_str('xx.xx', sd),
+            'var' = f_str('xx.xx', var),
+            'min' = f_str('xx', min),
+            'max' = f_str('xx', max),
+            'iqr' = f_str('xx.x', iqr),
+            'q1' = f_str('xx.x', q1),
+            'q3' = f_str('xx.x', q3),
+            'missing' = f_str('xx', missing)
+          )
       )
-  )
-built_cont <- t_cont %>%
-  build()
+    built_cont <- t %>%
+      build()
 
-ndat <- get_numeric_data(t_cont)[[1]]
+    test_16 <- get_numeric_data(t_cont)[[1]]
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
-                       subset(ndat, stat == 'n' & TRT01P == 'Placebo')[['value']])
+    # output table to check attributes
+    save(test_16, file = "~/Tplyr/uat/output/test_16.RData")
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
-                       subset(ndat, stat == 'mean' & TRT01P == 'Placebo')[['value']])
+    #clean up working directory
+    rm(t)
+    rm(test_16)
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
-                       subset(ndat, stat == 'median' & TRT01P == 'Placebo')[['value']])
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_16.RData")
+  }
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
-                       subset(ndat, stat == 'sd' & TRT01P == 'Placebo')[['value']])
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
+                         subset(test_16, stat == 'n' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.1")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
+                         subset(test_16, stat == 'mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.2")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
+                         subset(test_16, stat == 'median' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.3")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
+                         subset(test_16, stat == 'sd' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.4")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
+                         subset(test_16, stat == 'var' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.5")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
+                         subset(test_16, stat == 'min' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.6")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
+                         subset(test_16, stat == 'max' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.7")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
+                         subset(test_16, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.8")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
+                         subset(test_16, stat == 'q1' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.9")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
+                         subset(test_16, stat == 'q3' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.10")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
+                         subset(test_16, stat == 'missing' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.11")
+  #manual check(s)
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
-                       subset(ndat, stat == 'var' & TRT01P == 'Placebo')[['value']])
 
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
-                       subset(ndat, stat == 'min' & TRT01P == 'Placebo')[['value']])
-
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
-                       subset(ndat, stat == 'max' & TRT01P == 'Placebo')[['value']])
-
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
-                       subset(ndat, stat == 'iqr' & TRT01P == 'Placebo')[['value']])
-
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
-                       subset(ndat, stat == 'q1' & TRT01P == 'Placebo')[['value']])
-
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
-                       subset(ndat, stat == 'q3' & TRT01P == 'Placebo')[['value']])
-
-testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
-                       subset(ndat, stat == 'missing' & TRT01P == 'Placebo')[['value']])
-
+  #clean up working directory
+  rm(test_16)
+})
 
 #format matching
-re_npe <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)\s\[\s?\d?\d\]"
-re_np <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)"
+#re_npe <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)\s\[\s?\d?\d\]"
+#re_np <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)"
 
 
 #clean up
