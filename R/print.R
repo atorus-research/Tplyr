@@ -61,7 +61,7 @@ print.tplyr_table <- function(x, ...) {
     if(!exists("layer_output")) cat("<Table Not Built Yet>")
     else cat(length(layer_output))
   }, envir = x)
-  invisible(x)
+  invisible()
 }
 
 #' Print a tplyr_layer package
@@ -71,10 +71,13 @@ print.tplyr_table <- function(x, ...) {
 #'
 #' @export
 #' @noRd
-print.tplyr_layer <- function(x, ...) {
+print.tplyr_layer <- function(x, ..., print_env = TRUE) {
   cat("***", class(x)[2],"***\n")
-  cat("Self: ", class(x)[2], "<", env_label(x), ">")
-  cat("\nParent: ", class(env_parent(x))[1], "<", env_label(env_parent(x)), ">")
+  ## Added for testing
+  if(print_env) {
+    cat("Self: ", class(x)[2], "<", env_label(x), ">")
+    cat("\nParent: ", class(env_parent(x))[1], "<", env_label(env_parent(x)), ">")
+  }
   evalq({
     # Print out target_var
     cat("\ntarget_var: ")
@@ -95,7 +98,7 @@ print.tplyr_layer <- function(x, ...) {
     cat(length(layers))
     cat("\n")
   }, envir = x)
-  invisible(x)
+  invisible()
 }
 
 #' Print a f_str object
@@ -132,13 +135,6 @@ str.tplyr_table <- function(object, ...) {
       cat("\n", names(treat_grps)[i])
       cat(":\n\t", treat_grps[[i]])
     }
-    cat("*** header_n ***\n")
-    for (i in seq(header_n)) {
-      cat("\t", names(header_n)[i], ": ")
-      cat(header_n[i], "\n")
-    }
-    cat("*** Layer(s) ***\n")
-    cat(as.character(purrr::map_dfc(layers, class)[2,]))
   }, envir = object)
   invisible(object)
 }
@@ -150,15 +146,17 @@ str.tplyr_table <- function(object, ...) {
 #'
 #' @export
 #' @noRd
-str.tplyr_layer <- function(object, ...) {
+str.tplyr_layer <- function(object, ..., print_env = TRUE) {
   cat("*** tplyr_layer ***")
-  cat("\nSelf: ")
-  cat("\n\tAddress: ", env_label(object))
-  cat("\n\tType: ", class(object)[2])
-  cat("\n\tDepth from table: ", depth_from_table(object, 0))
-  cat("\nParent: ")
-  cat("\n\tAddress: ", env_label(env_parent(object)))
-  cat("\n\tType: ", class(env_parent(object))[1])
+  if(print_env) {
+    cat("\nSelf: ")
+    cat("\n\tAddress: ", env_label(object))
+    cat("\n\tType: ", class(object)[2])
+    cat("\n\tDepth from table: ", depth_from_table(object, 0))
+    cat("\nParent: ")
+    cat("\n\tAddress: ", env_label(env_parent(object)))
+    cat("\n\tType: ", class(env_parent(object))[1])
+  }
   # Only Print target name if parent is table
   if (class(env_parent(object))[1] == "tplyr_table"){
     cat("\n\tTarget Name: ", attr(env_parent(object)$target, "target_name"))

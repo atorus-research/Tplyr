@@ -252,7 +252,10 @@ add_treat_group <- function(table, group_name, groupings) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_where(Petal.Length > 3)
+#'   set_where(Petal.Length > 3) %>%
+#'   # Set logic for pop_data as well
+#'   set_pop_where(Petal.Length > 3)
+#'
 get_where <- function(obj) {
   UseMethod("get_where")
 }
@@ -282,4 +285,23 @@ set_where.tplyr_table <- function(obj, where) {
   env_bind(obj, table_where = where)
 
   obj
+}
+
+#' @rdname where
+#' @export
+set_pop_where <- function(obj, where) {
+  where <- enquo(where)
+
+  assert_that(is_logical_or_call(where),
+              msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
+
+  env_bind(obj, pop_where = where)
+
+  obj
+}
+
+#' @export
+#' @rdname where
+get_pop_where <- function(obj) {
+  env_get(obj, "pop_where")
 }

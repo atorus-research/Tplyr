@@ -145,7 +145,6 @@ separate_int_dig <- function(x){
   out
 }
 
-
 #' Parse a portion of a string format
 #'
 #' After the string is split by the decimal, parse what remains

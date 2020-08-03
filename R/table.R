@@ -74,7 +74,8 @@ new_tplyr_table <- function(target, treat_var, where, cols) {
     set_treat_var(!!treat_var) %>%
     set_pop_data(target) %>%
     set_pop_treat_var(!!treat_var) %>%
-    set_where(!!where)
+    set_where(!!where) %>%
+    set_pop_where(TRUE)
 }
 
 #' Validate tplyr_table target dataset
