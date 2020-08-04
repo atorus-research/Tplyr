@@ -1,23 +1,27 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names
+#' @importFrom rlang quos quo env_names env_bind_active
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
-#' @importFrom stringr str_sub
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
+#' @importFrom stringr str_sub str_extract
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %<>%
 #' @importFrom assertthat assert_that
-#' @importFrom stats IQR median sd quantile
-#' @importFrom dplyr summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble
+#' @importFrom stats IQR median sd quantile var
+#' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
-#' @importFrom utils str head
-#' @importFrom tidyselect all_of
-#' @importFrom tibble tibble
+#' @importFrom utils str head tail
+#' @importFrom tidyselect all_of vars_select
+#' @importFrom tibble tibble rownames_to_column
+#' @importFrom lifecycle deprecate_soft
+#' @importFrom stats var
 NULL
 
 #' A grammar of summary data for clinical reports
+#'
+#' \lifecycle{experimental}
 #'
 #' 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can
 #' often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around
@@ -66,7 +70,7 @@ tplyr_default_options <- list(
 target_var <- NULL
 target <- NULL
 where <- NULL
-sort_vars <- NULL
+pop_where <- NULL
 layers <- NULL
 layer_output <- NULL
 mask <- NULL
@@ -79,7 +83,7 @@ numeric_data <- NULL
 format_strings <- NULL
 max_layer_length <- NULL
 max_n_width <- NULL
-Total <- NULL
+total <- NULL
 display_string <- NULL
 built_target <- NULL
 table_where <- NULL
@@ -94,3 +98,38 @@ op <- NULL
 cl <- NULL
 q1 <- NULL
 q3 <- NULL
+.var <- NULL
+total_stat <- NULL
+distinct_n <- NULL
+summary_stat <- NULL
+total_row_label <- NULL
+distinct_total <- NULL
+.distinct_total <- NULL
+count_row_prefix <- NULL
+inner_count_layer_prefix <- NULL
+ordering_cols <- NULL
+order_count_method <- NULL
+result_order_var <- NULL
+nest_sort_index <- NULL
+.data <- NULL
+. <- NULL
+built_pop_data <- NULL
+factor_index <- NULL
+formatted_data <- NULL
+dots <- NULL
+stats <- NULL
+nest_count <- NULL
+dif <- NULL
+comparisons <- NULL
+n <- NULL
+low <- NULL
+high <- NULL
+row_label1 <- NULL
+comp_numeric_data <- NULL
+indentation <- NULL
+max_int <- NULL
+max_dec <- NULL
+need_prec_table <- NULL
+precision_by <- NULL
+precision_on <- NULL
+cap <- NULL

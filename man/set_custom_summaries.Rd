@@ -20,13 +20,12 @@ summary by the same name as a default summary will override the default. This al
 of summaries built into 'Tplyr', while also adding new desired summary functions.
 }
 \details{
-When programming the logic of the summary function, use the target variable name in your code.
-\strong{NOTE:} This is likely to change in the future, as it currently does not support descriptive statistic layers with two
-target variables provided.
+When programming the logic of the summary function, use the variable name \code{.var} to within your summary functions. This allows
+you apply the summary function to each variable when multiple target variables are declared.
 
 
 An important, yet not immediately obvious, part of using \code{set_custom_summaries} is to understand the
-link between the name paramters you set in \code{set_custom_summaries} and the names called in \code{\link{f_str}} objects
+link between the name parameters you set in \code{set_custom_summaries} and the names called in \code{\link{f_str}} objects
 within \code{\link{set_format_strings}}. In \code{\link{f_str}}, after you supply the string format you'd like your
 numbers to take, you specify the summaries that fill those strings.
 
@@ -45,8 +44,8 @@ tplyr_table(iris, Species) \%>\%
   add_layer(
     group_desc(Sepal.Length, by = "Sepal Length") \%>\%
       set_custom_summaries(
-        geometric_mean = exp(sum(log(Sepal.Width[Sepal.Width > 0]),
-                                     na.rm=TRUE) / length(Sepal.Width))
+        geometric_mean = exp(sum(log(.var[.var > 0]),
+                                     na.rm=TRUE) / length(.var))
       ) \%>\%
       set_format_strings(
         'Geometric Mean' = f_str('xx.xx', geometric_mean)

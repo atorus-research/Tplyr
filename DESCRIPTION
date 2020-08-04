@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -17,11 +17,18 @@ Authors@R:
            family = "Tarasiewicz",
            email = "Ashley.Tarasiewicz@atorusresearch.com", 
            role = "aut"),
+    person(given = "Nathan",
+           family = "Kosiba",
+           email = "Nathan.Kosiba@atorusresearch.com",
+           role = "aut",
+           comment = c(ORCID = "0000-0001-5359-4234")),
     person(given = "Atorus Research LLC",
            role = "cph")
     )
 Description: 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation. 
 License: MIT + file LICENSE
+URL: https://github.com/atorus-research/Tplyr
+BugReports: https://github.com/atorus-research/Tplyr/issues
 Encoding: UTF-8
 LazyData: true
 Imports:
@@ -33,13 +40,16 @@ Imports:
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
     tidyselect (>= 1.0.0),
-    tibble (>= 3.0.1)
+    tibble (>= 3.0.1),
+    lifecycle
 Suggests: 
     testthat (>= 2.1.0),
     haven (>= 2.2.0),
     knitr,
     rmarkdown,
     huxtable,
-    tidyverse
+    tidyverse,
+    readr
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
+RdMacros: lifecycle

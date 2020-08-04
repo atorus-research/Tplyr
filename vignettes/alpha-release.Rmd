@@ -16,11 +16,10 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(haven)
 library(magrittr)
 library(Tplyr)
-adsl <- read_xpt("adsl.xpt")
-adae <- read_xpt("adae.xpt")
+adsl <- haven::read_xpt("adsl.xpt")
+adae <- haven::read_xpt("adae.xpt")
 ```
 
 # The Alpha Release
@@ -285,7 +284,7 @@ tplyr_table(adsl, TRT01P) %>%
   add_layer(
     group_desc(AGE, by = "Sepal Length") %>%
       set_custom_summaries(
-        geometric_mean = exp(sum(log(AGE[AGE > 0]), na.rm=TRUE) / length(AGE))
+        geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))
       ) %>%
       set_format_strings(
         'Geometric Mean (SD)' = f_str('xx.xx (xx.xxx)', geometric_mean, sd)
@@ -295,7 +294,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-In `set_custom_summaries`, first you name the summary being performed. This is important - that name is what you use in the f_str call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to `dplyr::summarize` - so use similar syntax. Currently, you use the same variable name as your target variable (in this example, `AGE`), but this will likely have to change in the future - to support the next feature of descriptive statistic layers - multi-variable summaries.
+In `set_custom_summaries`, first you name the summary being performed. This is important - that name is what you use in the f_str call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to `dplyr::summarize` - so use similar syntax. Use the variable name `.var` in your custom summary function. This is necessary because it allows a generic variable name to be used when multiple target variables are specified - and therefore the function can be applied to both target variables. 
 
 Sometimes there's a need to present multiple variables summarized side by side. `Tplyr` makes this easy as well.
 
@@ -404,8 +403,9 @@ tplyr_table(adsl, TRT01P) %>%
     group_desc(AGE, by = "Age (Years)")
   ) %>% 
   build() %>% 
+  mutate_all(as.character) %>%
   add_column_headers(
-    ' | Statistic | Placebo | Xanomeline (High) | Xanomeline (Low)'
+    ' | Statistic | Placebo | Xanomeline (High) | Xanomeline (Low) | ord_layer_index | ord_layer_2'
   )
 
 ```
@@ -418,8 +418,9 @@ tplyr_table(adsl, TRT01P) %>%
     group_desc(vars(AGE, AVGDD), by = "Age and Avg. Daily Dose")
   ) %>% 
   build() %>% 
+  mutate_all(as.character) %>%
   add_column_headers(
-    ' | Statistic | Age {Placebo | Xanomeline (High) | Xanomeline (Low)} | Average Daily Dose {Placebo | Xanomeline (High) | Xanomeline (Low)}'
+    ' | Statistic | Age {Placebo | Xanomeline (High) | Xanomeline (Low)} | Average Daily Dose {Placebo | Xanomeline (High) | Xanomeline (Low)} | Layer Index | Layer Order 2'
   )
 
 ```

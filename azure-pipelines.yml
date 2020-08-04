@@ -11,8 +11,9 @@ pool:
 container: 'rocker/tidyverse:latest'
 
 steps:
-- script: Rscript -e 'sessionInfo()'
-  displayName: 'R Version'
 
 - script: sudo Rscript -e 'install.packages("huxtable"); devtools::check(cran = FALSE)'
   displayName: 'Package Check'
+
+- script: Rscript -e 'sessionInfo()'
+  displayName: 'R Version'

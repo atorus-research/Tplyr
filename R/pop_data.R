@@ -1,26 +1,31 @@
-### Populations Functions
 
-#' Title
+
+#' Rebuild the header_n to include treatment groups
 #'
-#' @param table `tplyr_table` object
-#'
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
-#' @importFrom dplyr n
+#' This is exactly the same as default header_n execpt it works on the built
+#' pop_data.
 #'
 #' @noRd
-default_header_n <- function(table) {
-  pop_data <- NULL
-  pop_treat_var <- NULL
-
+build_header_n <- function(table) {
   evalq({
-    df <- pop_data %>%
-      group_by(!!pop_treat_var) %>%
-      summarise(N = dplyr::n())
 
-    header_n <- unlist(df[, 2])
-    names(header_n) <- unlist(df[, 1])
-    header <- names(header_n)
+    # If there is a distinct_by, use it to make the header_n
+    if(is.null(distinct_by)) {
+      df <- built_pop_data %>%
+        group_by(!!pop_treat_var, !!!cols) %>%
+        tally() %>%
+        ungroup() %>%
+        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+    } else {
+      df <- built_pop_data %>%
+        distinct(!!distinct_by, .keep_all = TRUE) %>%
+        group_by(!!pop_treat_var, !!!cols) %>%
+        tally() %>%
+        ungroup() %>%
+        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+    }
+
+    header_n <- df
     rm(df)
   }, envir = table)
   table

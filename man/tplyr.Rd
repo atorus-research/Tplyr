@@ -6,12 +6,14 @@
 \alias{Tplyr-package}
 \title{A grammar of summary data for clinical reports}
 \description{
+\lifecycle{experimental}
+}
+\details{
 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can
 often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around
 continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting
 this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation
-}
-\details{
+
 'Tplyr' takes this process a few steps further by abstracting away all of the programming that goes into proper presentation, which
 is where even more of the time is spent when programming these reports. For example, 'Tplyr' allows you to easily control:
 
@@ -30,6 +32,14 @@ Furthermore, 'Tplyr' was built to be extensible. A common pitfall in creating th
 to much, but don't solve all of the problems. We know we won't handle every scenario - and therefore we've left channels open for you to
 add your own touches where necessary.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/atorus-research/Tplyr}
+  \item Report bugs at \url{https://github.com/atorus-research/Tplyr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Mike Stackhouse \email{mike.stackhouse@atorusresearch.com} (\href{https://orcid.org/0000-0001-6030-723X}{ORCID})
 
@@ -37,6 +47,7 @@ Authors:
 \itemize{
   \item Eli Miller \email{Eli.Miller@AtorusResearch.com} (\href{https://orcid.org/0000-0002-2127-9456}{ORCID})
   \item Ashley Tarasiewicz \email{Ashley.Tarasiewicz@atorusresearch.com}
+  \item Nathan Kosiba \email{Nathan.Kosiba@atorusresearch.com} (\href{https://orcid.org/0000-0001-5359-4234}{ORCID})
 }
 
 Other contributors:

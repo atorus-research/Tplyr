@@ -4,11 +4,9 @@
 \alias{get_summaries}
 \title{Get the summaries to be passed forward into \code{dplyr::summarize()}}
 \usage{
-get_summaries(var, e = caller_env())
+get_summaries(e = caller_env())
 }
 \arguments{
-\item{var}{A varaible to perform summaries on.}
-
 \item{e}{the environment summaries are stored in.}
 }
 \value{

@@ -75,8 +75,7 @@ new_tplyr_table <- function(target, treat_var, where, cols) {
     set_pop_data(target) %>%
     set_pop_treat_var(!!treat_var) %>%
     set_where(!!where) %>%
-    # header_n is set with a default here instead of standard function
-    default_header_n()
+    set_pop_where(TRUE)
 }
 
 #' Validate tplyr_table target dataset
