@@ -256,7 +256,7 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
   assert_that(is_named(format_strings),
               msg = "In `set_format_string` all parameters must be named in order to create row labels.")
 
-  # Make sure that all of the attachments were `f_str`` objects
+  # Make sure that all of the attachments were `f_str` objects
   for (name in names(format_strings)) {
     assert_that(class(format_strings[[name]]) == "f_str",
                 msg = paste0("In `set_format_string` entry `",name,"` is not an `f_str` object. All assignmentes made within",
