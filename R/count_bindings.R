@@ -316,9 +316,13 @@ set_order_count_method <- function(e, order_count_method) {
 
   assert_inherits_class(order_count_method, "character")
 
-  assert_that(order_count_method %in% c("bycount", "byfactor", "byvarn"),
+  assert_that(all(order_count_method %in% c("bycount", "byfactor", "byvarn")),
               msg = "Invalid input passed to set_order_count_method.
               Options are: 'bycount', 'byfactor', or 'byvarn'")
+
+  assert_that(length(env_get(e, "target_var")) == length(order_count_method) ||
+              length(order_count_method) == 1,
+              msg = "The length of the order_count_method must be equal to the length of the target_var, or 1")
 
   env_bind(e, order_count_method = order_count_method)
 
