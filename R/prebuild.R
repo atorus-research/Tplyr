@@ -8,13 +8,30 @@
 #' @noRd
 treatment_group_build <- function(table) {
   output <- evalq({
+
+    # Make built_target a copy of target
+    built_target <- target
+    built_pop_data <- pop_data
+
+    # Remove all of the attributes of built_target
+    for (n in names(built_target)) {
+      attributes(built_target[[n]]) <- NULL
+    }
+
+    # Remove all the attributes of pop data
+    for (n in names(built_pop_data)) {
+      attributes(built_pop_data[[n]]) <- NULL
+    }
+
     # Dummies for treatment groups added to target dataset
-    built_target <- target %>%
+    built_target <- built_target %>%
       filter(!!table_where) %>%
       mutate(!!treat_var := as.character(!!treat_var))
-    built_pop_data <- pop_data %>%
+
+    built_pop_data <- built_pop_data %>%
       filter(!!pop_where) %>%
       mutate(!!pop_treat_var := as.character(!!pop_treat_var))
+
     for (grp_i in seq_along(treat_grps)) {
       built_target <- built_target %>%
         filter(!!treat_var %in% treat_grps[[grp_i]]) %>%
