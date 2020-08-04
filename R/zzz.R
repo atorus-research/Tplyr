@@ -52,7 +52,33 @@ NULL
 
 # Default options ----
 tplyr_default_options <- list(
-  tplyr.debug = FALSE
+  # Debug (deprecated)
+  tplyr.debug = FALSE,
+
+  # Count layer defaults
+  tplyr.count_layer_default_formats =
+    list(n_counts = f_str("a (xxx.x%)", n, pct),
+         riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+         ),
+
+  # Desc layer defaults
+  tplyr.desc_layer_default_formats =
+    list("n"        = f_str("xx", n),
+         "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
+         "Median"   = f_str("xx.x", median),
+         "Q1, Q3"   = f_str("xx, xx", q1, q3),
+         "Min, Max" = f_str("xx, xx", min, max),
+         "Missing"  = f_str("xx", missing)
+         ),
+
+  # Precision caps for decimal and integer precision
+  tplyr.precision_cap = c('int' = 99, 'dec'=99),
+
+  # Custom summaries
+  tplyr.custom_summaries = NULL,
+
+  # Set to avoid printing in scientific notation
+  tplyr.scipen = 1000
 )
 
 # Carry out process on load ----

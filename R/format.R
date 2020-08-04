@@ -239,7 +239,7 @@ set_format_strings <- function(e, ...) {
 #' Desc layer S3 method for set_format_strings
 #'
 #' @param e Layer on which to bind format strings
-#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param ... Named parameters containing calls to \code{f_str} to set the format strings
 #' @param cap A named character vector containing an 'int' element for the cap on integer precision,
 #' and a 'dec' element for the cap on decimal precision.
 #'
@@ -247,9 +247,9 @@ set_format_strings <- function(e, ...) {
 #' @export
 #'
 #' @noRd
-set_format_strings.desc_layer <- function(e, ..., cap=c('int' = 99, 'dec'=99)) {
+set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision_cap')) {
 
-  # Pick off the ellpsis
+  # Pick off the ellipsis
   format_strings <- list(...)
 
   # Row labels are pulled from names - so make sure that everything is named
@@ -401,7 +401,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   # Set nsmall to input decimals
   nsmall = decimals
 
-  # Incremement digits for to compensate for display
+  # Increment digits for to compensate for display
   if (decimals > 0) decimals <- decimals + 1
 
   # Form the string
