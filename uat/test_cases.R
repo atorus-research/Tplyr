@@ -112,8 +112,8 @@ test_that('T3',{
   skip_if(is.null(vur))
   #programmatic check(s)
     testns <- c(nrow(filter(adsl, TRT01P == "Placebo")), nrow(adsl),
-                 nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
-                 nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
+                nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
+                nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
     testthat::expect_equal(c("Placebo", "Total", "Total Xanomeline", "Xanomeline High Dose", "Xanomeline Low Dose"),
                            test_3[[1]], label = "T3.1")
     testthat::expect_equal(test_ns, test_3[[2]], label = "T3.2")
@@ -186,12 +186,87 @@ test_that('T5',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(adsl, Tplyr::pop_data(test_5), label = "T4.1")
-  testthat::expect_equal("TRT01P", Tplyr::treat_var(test_5), label = "T4.2")
+  testthat::expect_equal(adsl, Tplyr::pop_data(test_5), label = "T5.1")
+  testthat::expect_equal(adae, test_5$target, label = "T5.2")
+  testthat::expect_equal("TRT01P", Tplyr::treat_var(test_5), label = "T5.3")
+  testthat::expect_equal("TRTA", Tplyr::pop_treat_var(test_5), label = "T5.4")
   #manual check(s)
 
   #clean up working directory
   rm(test_5)
+})
+
+#test 6
+test_that('T6',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    test_6 <- tplyr_table(adae, TRTA) %>%
+      add_layer(
+        group_count(AEDECOD, by="Preferred Term", where = SAFFL == "Y")
+      )
+
+    # output table to check attributes
+    save(test_6, file = "~/Tplyr/uat/output/test_6.RData")
+
+    #clean up working directory
+    rm(test_6)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_6.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(filter(adae, SAFFL == 'Y'),
+                         filter(Tplyr::pop_data(test_6),!!Tplyr::get_where(test_6)),
+                         label = "T6.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_6)
+})
+
+#test 7
+test_that('T7',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      )
+    build(t)
+    test_7 <- get_numeric_data(t)
+
+    # output table to check attributes
+    save(test_7, file = "~/Tplyr/uat/output/test_7.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_7)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_7.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(nrow(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE')),
+                         subset(test_7, TRT01P == 'Placebo' & summary_var == "WHITE")[['n']],
+                         label = "T7.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_7)
 })
 
 #count layer testing
