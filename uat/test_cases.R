@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 7/29/2020
+#' 8/04/2020
 
 #insert any necessary libraries
 library(Tplyr)
@@ -89,8 +89,12 @@ test_that('T3',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    test_3 <- tplyr_table(adsl, TRT01P) %>%
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_total_group() %>%
       add_treat_group('Total Xanomeline', c("Xanomeline High Dose", "Xanomeline Low Dose"))
+
+    test_3 <- build(t) %>%
+      header_n
 
     # output table to check attributes
     save(test_3, file = "~/Tplyr/uat/output/test_3.RData")
