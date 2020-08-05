@@ -10,18 +10,8 @@ treatment_group_build <- function(table) {
   output <- evalq({
 
     # Make built_target a copy of target
-    built_target <- target
-    built_pop_data <- pop_data
-
-    # Remove all of the attributes of built_target
-    for (n in names(built_target)) {
-      attributes(built_target[[n]]) <- NULL
-    }
-
-    # Remove all the attributes of pop data
-    for (n in names(built_pop_data)) {
-      attributes(built_pop_data[[n]]) <- NULL
-    }
+    built_target <- clean_attr(target)
+    built_pop_data <- clean_attr(pop_data)
 
     # Dummies for treatment groups added to target dataset
     built_target <- built_target %>%

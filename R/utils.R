@@ -255,3 +255,20 @@ get_max_length <- function(lay) {
   # return greatest between sub layers and current layer
   max(max_, lay$format_strings$size)
 }
+
+#' Clean variable attributes
+#'
+#' @param dat Dataframe to strip of variable attributes
+#'
+#' @return Dataframe with variable attributes removed, except for factor levels
+#' @noRd
+clean_attr <- function(dat) {
+  for (n in names(dat)) {
+    for (a in names(attributes(dat[[n]]))) {
+      if (!a  %in% c('levels', 'class')) {
+        attr(dat[[n]], a) <- NULL
+      }
+    }
+  }
+  dat
+}
