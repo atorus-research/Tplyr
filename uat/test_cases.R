@@ -595,6 +595,7 @@ test_that('T15',{
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       )
 
+<<<<<<< HEAD
     build(t)
     test_15 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
 
@@ -602,6 +603,13 @@ test_that('T15',{
 
     # output table to check attributes
     save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
+=======
+    test_15 <- build(t)
+
+
+    # output table to check attributes
+    save(test_14, file = "~/Tplyr/uat/output/test_15.RData")
+>>>>>>> 0078852cd06a53c9d6ee36d4f94d23b20979e95c
 
     #clean up working directory
     rm(t)
@@ -615,6 +623,7 @@ test_that('T15',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+<<<<<<< HEAD
   tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose"), n=n())[[1]]
   cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
   tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
@@ -636,6 +645,11 @@ test_that('T15',{
   rm(tot_t)
   rm(cnt_t)
   rm(t15)
+=======
+  testthat::expect_equal(,label = "T15.1")
+  testthat::expect_equal(,label = "T15.2")
+  #clean up working directory
+>>>>>>> 0078852cd06a53c9d6ee36d4f94d23b20979e95c
   rm(test_15)
 })
 
