@@ -174,11 +174,10 @@ prepare_format_metadata <- function(x) {
 
     # Get formatting metadata prepared
     if(is.null(format_strings)) {
-      format_strings <- list("n_counts" = f_str("a (xxx.x%)", n, pct))
+      format_strings <- gather_defaults(environment())
     } else if (!'n_counts' %in% names(format_strings)) {
-      format_strings[['n_counts']] <- f_str("a (xxx.x%)", n, pct)
+      format_strings[['n_counts']] <- gather_defaults(environment())[['n_counts']]
     }
-
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))

@@ -11,8 +11,8 @@ process_summaries.desc_layer <- function(x, ...) {
   if (!has_format_strings(x)) {
     # Grab the defaults available at the table or option level
     params <- gather_defaults(x)
-    # Place
-    x <- do.call('set_format_strings', params)
+    # Place the formats
+    x <- do.call('set_format_strings', append(x, params))
   }
 
   # Execute in the layer environment
