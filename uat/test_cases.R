@@ -582,6 +582,43 @@ test_that('T14',{
   rm(test_14)
 })
 
+#test 15
+test_that('T15',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01A) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      )
+
+    test_15 <- build(t)
+
+
+    # output table to check attributes
+    save(test_14, file = "~/Tplyr/uat/output/test_15.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_15)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_15.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(,label = "T15.1")
+  testthat::expect_equal(,label = "T15.2")
+  #clean up working directory
+  rm(test_15)
+})
+
 
 #test 16
 test_that('T16',{
