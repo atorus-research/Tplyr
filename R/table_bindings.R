@@ -2,9 +2,6 @@
 
 #' Return or set header_n binding
 #'
-#' \strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
-#' This is coming in future releases.
-#'
 #' When the header or table body relies on population count data, the header_n
 #' binding is used for display and calculations.
 #'
@@ -26,7 +23,7 @@ header_n <- function(table) {
 }
 
 #' @param x A \code{tplyr_table} object
-#' @param value A named numeric vector. Names of vector should match treatement
+#' @param value A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
@@ -35,7 +32,7 @@ header_n <- function(table) {
   set_header_n(x, value)
 }
 
-#' @param header_n A named numeric vector. Names of vector should match treatement
+#' @param header_n A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
@@ -330,7 +327,7 @@ get_pop_where <- function(obj) {
 #' @param obj A tplyr_table object
 #'
 #' @export
-#' @rdname desc_layer_formats
+#' @rdname table_format_defaults
 get_desc_layer_formats <- function(obj) {
   # Bind the formats into the table
   env_get(obj, 'desc_layer_formats')
@@ -339,10 +336,11 @@ get_desc_layer_formats <- function(obj) {
 #' @param ... formats to pass forward
 #'
 #' @export
-#' @rdname desc_layer_formats
+#' @rdname table_format_defaults
 set_desc_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
   env_bind(obj, desc_layer_formats = list(...))
+  obj
 }
 
 #' @export
@@ -355,8 +353,9 @@ get_count_layer_formats <- function(obj) {
 #' @param ... formats to pass forward
 #'
 #' @export
-#' @rdname desc_layer_formats
+#' @rdname table_format_defaults
 set_count_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
   env_bind(obj, count_layer_formats = list(...))
+  obj
 }

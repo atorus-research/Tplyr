@@ -16,7 +16,7 @@ get_custom_summaries <- function(e) {
   }
 
   # Check to make sure all the summaries are named
-  assert_that(is_named(cust_sums), msg = "All custom summaries must have names.")
+  assert_that(is_empty(cust_sums) || is_named(cust_sums), msg = "All custom summaries must have names.")
 
   cust_sums
 }
@@ -24,7 +24,7 @@ get_custom_summaries <- function(e) {
 #' Set custom summaries to be performed within a descriptive statistics layer
 #'
 #' This function allows a user to define custom summaries to be performed in a call to \code{dplyr::summarize()}. A custom
-#' summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
+#' summary by the same name as a default summary will override the default. This allows the user to override the default behavior
 #' of summaries built into 'Tplyr', while also adding new desired summary functions.
 #'
 #' When programming the logic of the summary function, use the variable name \code{.var} to within your summary functions. This allows
