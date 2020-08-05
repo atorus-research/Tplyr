@@ -361,6 +361,7 @@ test_that('T9',{
     save(test_9, file = "~/Tplyr/uat/output/test_9.RData")
 
     #clean up working directory
+    rm(t)
     rm(test_9)
 
     #load output for checks
@@ -402,6 +403,7 @@ test_that('T10',{
     save(test_10, file = "~/Tplyr/uat/output/test_10.RData")
 
     #clean up working directory
+    rm(t)
     rm(test_10)
 
     #load output for checks
@@ -437,8 +439,8 @@ test_that('T11',{
           set_format_strings(f_str("xxx (xx.x%)", distinct, distinct_pct))
       )%>%
       add_layer(
-        group_count(RACE) %>%
-          set_distinct_by(AEDECOD) %>%
+        group_count(AEDECOD) %>%
+          set_distinct_by(USUBJID) %>%
           set_format_strings(f_str("xxx (xx.x%) [xxx (xx.x%)]", n, pct, distinct, distinct_pct))
       )
 
@@ -448,6 +450,7 @@ test_that('T11',{
     save(test_11, file = "~/Tplyr/uat/output/test_11.RData")
 
     #clean up working directory
+    rm(t)
     rm(test_11)
 
     #load output for checks
@@ -465,28 +468,119 @@ test_that('T11',{
   rm(test_11)
 })
 
+#test 12
+test_that('T12',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_format_strings(f_str("xxx (xx.x%)", n, pct))
+      )
+
+    test_12 <- build(t)
 
 
-#count layer testing
+    # output table to check attributes
+    save(test_12, file = "~/Tplyr/uat/output/test_12.RData")
 
-t_dm <- tplyr_table(adsl, TRT01P) %>%
-  add_total_group() %>%
-  add_layer(
-    group_count(RACE) %>%
-      set_order_count_method("byvarn")
-  )
+    #clean up working directory
+    rm(t)
+    rm(test_12)
 
-built_dm <- t_dm %>%
-  build() %>%
-  arrange(ord_layer_index, ord_layer_1)
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_12.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(,label = "T12.1")
+  testthat::expect_equal(,label = "T12.2")
+  #clean up working directory
+  rm(test_12)
+})
+
+#test 13
+test_that('T13',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      set_pop_where(SEX == "F") %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_format_strings(f_str("xxx (xx.x%)", n, pct))
+      )
+
+    test_13 <- build(t)
 
 
-t_by <- tplyr_table(adsl, TRT01P) %>%
-  add_layer(
-    group_count(AGEGR1, by=vars(ETHNIC,RACE))
-  )
+    # output table to check attributes
+    save(test_13, file = "~/Tplyr/uat/output/test_13.RData")
 
-built_by <- build(t_by)
+    #clean up working directory
+    rm(t)
+    rm(test_13)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_13.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(,label = "T13.1")
+  testthat::expect_equal(,label = "T13.2")
+  #clean up working directory
+  rm(test_13)
+})
+
+#test 14
+test_that('T14',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
+      add_layer(
+      group_count(AEDECOD) %>%
+        set_format_strings(f_str("xxx (xx.x%)", n, pct))
+    )
+
+    test_14 <- build(t)
+
+
+    # output table to check attributes
+    save(test_14, file = "~/Tplyr/uat/output/test_14.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_14)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_14.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(,label = "T14.1")
+  testthat::expect_equal(,label = "T14.2")
+  #clean up working directory
+  rm(test_14)
+})
 
 
 #test 16
