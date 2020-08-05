@@ -25,7 +25,11 @@ gather_defaults.desc_layer <- function(x) {
 
   # Return the opt settings if the table settings are null
   # Otherwise return the table settings
-  ifelse(is.null(table_settings), opt_settings, table_settings)
+  if (is_empty(table_settings)) {
+    opt_settings
+  } else {
+    table_settings
+  }
 }
 
 
