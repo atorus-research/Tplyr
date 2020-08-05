@@ -481,7 +481,8 @@ test_that('T12',{
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
-    test_12 <- build(t)
+    build(t)
+    test_12 <- get_numeric_data(t)
 
 
     # output table to check attributes
@@ -519,7 +520,8 @@ test_that('T13',{
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
-    test_13 <- build(t)
+    build(t)
+    test_13 <- get_numeric_data(t)
 
 
     # output table to check attributes
@@ -550,6 +552,7 @@ test_that('T14',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
+
     t <- tplyr_table(adae, TRTA) %>%
       set_pop_data(adsl) %>%
       set_pop_treat_var(TRT01P) %>%
@@ -558,8 +561,8 @@ test_that('T14',{
         set_format_strings(f_str("xxx (xx.x%)", n, pct))
     )
 
-    test_14 <- build(t)
-
+    build(t)
+    test_14 <- get_numeric_data(t)
 
     # output table to check attributes
     save(test_14, file = "~/Tplyr/uat/output/test_14.RData")
