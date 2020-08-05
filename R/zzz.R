@@ -133,3 +133,4 @@ need_prec_table <- NULL
 precision_by <- NULL
 precision_on <- NULL
 cap <- NULL
+..index <- NULL

@@ -174,13 +174,23 @@ add_order_columns.count_layer <- function(x) {
       # Used to remove the prefix
       indentation_length <- ifelse(!is.null(indentation), length(indentation), 2)
 
-      # Add the ordering of the peices in the layer
+      # Only the outer columns
+      filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
+        expr(!!sym(as_name(x)) == !!as_name(y))
+      })
+      all_outer <- numeric_data %>%
+        filter(!!!filter_logic) %>%
+        group_by(!!target_var[[1]]) %>%
+        do(extract(., 1, ))
+
+      # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
         group_by(.data[[paste0("ord_layer_", formatted_col_index)]]) %>%
         do(add_data_order_nested(., formatted_col_index, numeric_data,
                                  indentation_length, ordering_cols,
-                                 treat_var, by, cols,
-                                 result_order_var, target_var, order_count_method, target))
+                                 treat_var, by, cols, result_order_var,
+                                 target_var, order_count_method, target,
+                                 all_outer, filter_logic))
 
       # If it isn't a nested count layer
     } else {
@@ -435,24 +445,15 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 add_data_order_nested <- function(group_data, final_col, numeric_data,
                                   indentation_length, ordering_cols,
                                   treat_var, by, cols, result_order_var,
-                                  target_var, order_count_method, target) {
+                                  target_var, order_count_method, target,
+                                  all_outer, filter_logic) {
 
   # Here are the names of the formatted data row labels. We ussually only work with the last
   row_label_vec <- vars_select(names(group_data), starts_with("row_label"))
 
-  filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
-    expr(!!sym(as_name(x)) == !!as_name(y))
-  })
-
   ##### Outer nest values #####
   # The value of the outer label
   outer_value <- group_data[1, tail(row_label_vec, 1)][[1]]
-
-  ## TODO: Move out of this function so it doesn't constantly recalculate
-  all_outer <- numeric_data %>%
-    filter(!!!filter_logic) %>%
-    group_by(!!target_var[[1]]) %>%
-    do(extract(., 1, ))
 
   if(order_count_method[1] == "byvarn") {
     varn_df <- get_varn_values(target, as_name(target_var[[1]]))
