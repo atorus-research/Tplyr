@@ -36,7 +36,7 @@ process_summaries.count_layer <- function(x, ...) {
 #' @param x A count layer with a single target_var
 #'
 #' This function uses dplyr to filter out the where call, pull out the distinct
-#' rows if applicable, and tallys the different target_var values.
+#' rows if applicable, and tallies the different target_var values.
 #'
 #' If include_total_row is true a row will be added with a total row labeled
 #' with total_row_label.
@@ -80,7 +80,7 @@ process_count_n <- function(x) {
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
-      # Group by varaibles including target variables and count them
+      # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
       ungroup() %>%
@@ -88,8 +88,8 @@ process_count_n <- function(x) {
       group_by(!!treat_var, !!!cols) %>%
       do(this_denom(., header_n, treat_var)) %>%
       ungroup() %>%
-      # complete all combiniations of factors to include combiniations that don't exist.
-      # add 0 for combintions that don't exist
+      # complete all combinations of factors to include combinations that don't exist.
+      # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric

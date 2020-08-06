@@ -222,6 +222,10 @@ add_order_columns.desc_layer <- function(x) {
   }, envir = x)
 }
 
+add_order_columns.shift_layer <- function(x) {
+  x$formatted_data
+}
+
 #' Return the indicies of the rows based on the by variables
 #'
 #'
