@@ -119,7 +119,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
-      # then also tranpose by cols.
+      # then also transpose by cols.
       form_sums[[i]] <- trans_sums[[i]] %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
