@@ -386,7 +386,7 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
     # I'm like 98% sure this logic works out.
     pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
                 names_from = c(!!treat_var, !!!cols), values_from = !!result_order_var) %>%
-
+    ungroup() %>%
     select(as.symbol(result_column))
 
   # This is the numeric index that the numeric data is in. radix was chosen because
@@ -442,11 +442,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 #' @param result_order_var The result being used to order the numeric data.
 #'
 #' @noRd
-add_data_order_nested <- function(group_data, final_col, numeric_data,
-                                  indentation_length, ordering_cols,
-                                  treat_var, by, cols, result_order_var,
-                                  target_var, order_count_method, target,
-                                  all_outer, filter_logic) {
+add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   # Here are the names of the formatted data row labels. We ussually only work with the last
   row_label_vec <- vars_select(names(group_data), starts_with("row_label"))
