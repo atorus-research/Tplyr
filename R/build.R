@@ -66,6 +66,12 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
+  # Store the default options
+  op <- options()
+
+  # Reset the scientific notation presentation settings temporarily
+  options('scipen' = getOption('tplyr.scipen'))
+
   # Table Pre build
   treatment_group_build(x)
 
@@ -84,7 +90,9 @@ build.tplyr_table <- function(x) {
     map2_dfr(seq_along(output_list), add_layer_index) %>%
     select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
 
-  # Rearange columns. Currently just alphabetical
+  # Set options back to defaults
+  options(op)
+
   output
 }
 

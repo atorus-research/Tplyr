@@ -6,19 +6,25 @@
 #'
 #' @return \code{custom_summaries} binding in the layer environment
 get_custom_summaries <- function(e) {
+
+  # Grab any custom summaries set within an option
+  cust_sums <- append(list(), getOption('tplyr.custom_summaries'))
+
   # If the custom_summaries object exists in the layer environment then grab it
   if (exists("custom_summaries", envir=e)){
-    env_get(e, "custom_summaries")
-  } else {
-    # Otherwise return a list
-    list()
+    cust_sums <- append(env_get(e, "custom_summaries"), cust_sums)
   }
+
+  # Check to make sure all the summaries are named
+  assert_that(is_empty(cust_sums) || is_named(cust_sums), msg = "All custom summaries must have names.")
+
+  cust_sums
 }
 
-#' Set custom summaries to be performed within a decsriptive statistics layer
+#' Set custom summaries to be performed within a descriptive statistics layer
 #'
 #' This function allows a user to define custom summaries to be performed in a call to \code{dplyr::summarize()}. A custom
-#' summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
+#' summary by the same name as a default summary will override the default. This allows the user to override the default behavior
 #' of summaries built into 'Tplyr', while also adding new desired summary functions.
 #'
 #' When programming the logic of the summary function, use the variable name \code{.var} to within your summary functions. This allows
