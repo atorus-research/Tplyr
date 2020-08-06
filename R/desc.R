@@ -192,7 +192,7 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
 
   # If all the values summarized are NA then return the empty string
   if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
-    if ('overall' %in% names(fmt$empty)) {
+    if ('.overall' %in% names(fmt$empty)) {
       return(fmt$empty['.overall'])
     }
   }
