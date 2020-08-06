@@ -93,7 +93,6 @@ build.tplyr_table <- function(x) {
   # Set options back to defaults
   options(op)
 
-  # Rearrange columns. Currently just alphabetical
   output
 }
 
