@@ -265,7 +265,7 @@ get_max_length <- function(lay) {
 clean_attr <- function(dat) {
   for (n in names(dat)) {
     for (a in names(attributes(dat[[n]]))) {
-      if (!a  %in% c('levels', 'class')) {
+      if (!a  %in% c('levels', 'class', 'names', 'row.names', 'groups')) {
         attr(dat[[n]], a) <- NULL
       }
     }
