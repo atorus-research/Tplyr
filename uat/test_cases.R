@@ -602,7 +602,6 @@ test_that('T15',{
     test_15 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
 
 
-
     # output table to check attributes
     save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
     test_15 <- build(t)
@@ -636,17 +635,12 @@ test_that('T15',{
                            filter(test_15, summary_var == 'WHITE' & measure == 'high')[[3]]),
                          label = "T15.2")
 
-
-  filter(test_15, summary_var == 'WHITE' & measure == 'dif')[[3]]
   #clean up working directory
   rm(tot_p)
   rm(cnt_p)
   rm(tot_t)
   rm(cnt_t)
   rm(t15)
-  testthat::expect_equal(,label = "T15.1")
-  testthat::expect_equal(,label = "T15.2")
-  #clean up working directory
   rm(test_15)
 })
 
