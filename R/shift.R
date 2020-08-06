@@ -8,8 +8,10 @@ process_summaries.shift_layer <- function(x, ...) {
                 all(c("row", "column") %in% names(target_var)),
                 msg = "target_vars passed to a shift layer must be named.")
 
-    # Overwrite the cols in the table
+    # Overwrite the cols in the table and rebuild header_n
     cols <<- vars(!!!cols, !!target_var$column)
+    build_header_n(env_parent())
+
 
     y <- process_summaries(group_count(parent = current_env(), target_var = !!target_var$row,
                                   by = vars(!!!by), where = !!where) %>%
