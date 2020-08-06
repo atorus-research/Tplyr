@@ -2,9 +2,6 @@
 
 #' Return or set header_n binding
 #'
-#' \strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
-#' This is coming in future releases.
-#'
 #' When the header or table body relies on population count data, the header_n
 #' binding is used for display and calculations.
 #'
@@ -26,7 +23,7 @@ header_n <- function(table) {
 }
 
 #' @param x A \code{tplyr_table} object
-#' @param value A named numeric vector. Names of vector should match treatement
+#' @param value A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
@@ -35,7 +32,7 @@ header_n <- function(table) {
   set_header_n(x, value)
 }
 
-#' @param header_n A named numeric vector. Names of vector should match treatement
+#' @param header_n A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
@@ -304,4 +301,61 @@ set_pop_where <- function(obj, where) {
 #' @rdname where
 get_pop_where <- function(obj) {
   env_get(obj, "pop_where")
+}
+
+#' Get or set the default format strings for descriptive statistics layers
+#'
+#' Tplyr provides you with the ability to set table-wide defaults of
+#' format strings. You may wish to reuse the same format strings across
+#' numerous layers. \code{set_desc_layer_formats} and \code{set_count_layer_formats}
+#' allow you to apply your desired format strings within the entire scope of the table.
+#'
+#' For descriptive statistic layers, you can also use \code{set_format_strings}
+#' and \code{set_desc_layer_formats} together within a table, but not within
+#' the same layer. In the absence of specified format strings, first the table will
+#' be checked for any available defaults, and otherwise the
+#' \code{tplyr.desc_layer_default_formats} will be used. \code{set_format_strings} will
+#' always take precedence over either. Defaults cannot be combined between \code{set_format_strings},
+#' \code{set_desc_layer_formats}, and the \code{tplyr.desc_layer_default_formats} because
+#' the order of presentation of results is controlled by the format strings,
+#' so relying on combinations of these setting would not be intuitive.
+#'
+#' For count layers, you can override the \code{n_counts} or \code{riskdiff} format strings
+#' separately, and the narrowest scope available will be used, from layer, to table, to
+#' default options.
+#'
+#' @param obj A tplyr_table object
+#'
+#' @export
+#' @rdname table_format_defaults
+get_desc_layer_formats <- function(obj) {
+  # Bind the formats into the table
+  env_get(obj, 'desc_layer_formats')
+}
+
+#' @param ... formats to pass forward
+#'
+#' @export
+#' @rdname table_format_defaults
+set_desc_layer_formats <- function(obj, ...) {
+  # Bind the formats into the table
+  env_bind(obj, desc_layer_formats = list(...))
+  obj
+}
+
+#' @export
+#' @rdname table_format_defaults
+get_count_layer_formats <- function(obj) {
+  # Bind the formats into the table
+  env_get(obj, 'count_layer_formats')
+}
+
+#' @param ... formats to pass forward
+#'
+#' @export
+#' @rdname table_format_defaults
+set_count_layer_formats <- function(obj, ...) {
+  # Bind the formats into the table
+  env_bind(obj, count_layer_formats = list(...))
+  obj
 }

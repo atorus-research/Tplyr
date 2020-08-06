@@ -2,7 +2,7 @@
 % Please edit documentation in R/desc_bindings.R
 \name{set_custom_summaries}
 \alias{set_custom_summaries}
-\title{Set custom summaries to be performed within a decsriptive statistics layer}
+\title{Set custom summaries to be performed within a descriptive statistics layer}
 \usage{
 set_custom_summaries(e, ...)
 }
@@ -16,7 +16,7 @@ Binds a variable \code{custom_summaries} to the specified layer
 }
 \description{
 This function allows a user to define custom summaries to be performed in a call to \code{dplyr::summarize()}. A custom
-summary by the same name as a default summary will override the default. This allows the user to override the default behaivor
+summary by the same name as a default summary will override the default. This allows the user to override the default behavior
 of summaries built into 'Tplyr', while also adding new desired summary functions.
 }
 \details{

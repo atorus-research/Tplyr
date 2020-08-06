@@ -7,16 +7,14 @@
 #' @noRd
 process_summaries.desc_layer <- function(x, ...) {
 
+  # If format strings weren't provided, then grab the defaults
   if (!has_format_strings(x)) {
-    x <- set_format_strings(x,
-      "n"        = f_str("xx", n),
-      "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
-      "Median"   = f_str("xx.x", median),
-      "Q1, Q3"   = f_str("xx, xx", q1, q3),
-      "Min, Max" = f_str("xx, xx", min, max),
-      "Missing"  = f_str("xx", missing)
-    )
+    # Grab the defaults available at the table or option level
+    params <- gather_defaults(x)
+    # Place the formats
+    x <- do.call('set_format_strings', append(x, params))
   }
+
   # Execute in the layer environment
   evalq({
     # trans_sums is the data that will pass forward to be formatted
