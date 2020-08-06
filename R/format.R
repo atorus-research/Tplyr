@@ -395,14 +395,16 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
                     fmt$settings[[i]]['dec'] + autos['dec'],
                     fmt$settings[[i]]['dec'])
 
-  # Formats summary stat strings to align display correctly
-  if (is.na(val)) return(fmt$empty)
-
   # Set nsmall to input decimals
   nsmall = decimals
 
   # Increment digits for to compensate for display
   if (decimals > 0) decimals <- decimals + 1
+
+  # Empty return string
+  if (is.na(val)) {
+    return(format(fmt$empty[1], width = (int_len+decimals)))
+  }
 
   # Form the string
   return(
