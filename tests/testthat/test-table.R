@@ -8,9 +8,9 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
   expect_s3_class(tab, "tplyr_table")
   expect_s3_class(tab, "environment")
-  expect_setequal(env_names(tab), c("target", "pop_data", "pop_where", "cols", "table_where",
-                                    "treat_var", "pop_treat_var",
-                                    "treat_grps", "layers"))
+  expect_setequal(env_names(tab), c("target", "count_layer_formats", "pop_data", "pop_where", "cols",
+                                    "table_where", "desc_layer_formats", "treat_var", "pop_treat_var",
+                                    "layers", "treat_grps"))
 
 })
 

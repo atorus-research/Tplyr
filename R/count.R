@@ -80,7 +80,7 @@ process_count_n <- function(x) {
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
-      # Group by varaibles including target variables and count them
+      # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
       ungroup() %>%
@@ -88,8 +88,8 @@ process_count_n <- function(x) {
       group_by(!!treat_var, !!!cols) %>%
       do(this_denom(., header_n, treat_var)) %>%
       ungroup() %>%
-      # complete all combiniations of factors to include combiniations that don't exist.
-      # add 0 for combintions that don't exist
+      # complete all combinations of factors to include combinations that don't exist.
+      # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
@@ -116,7 +116,7 @@ process_count_distinct_n <- function(x) {
       # treat_var is added because duplicates would be created when there are
       # treatment group totals
       distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
-      # Group by varaibles including target variables and count them
+      # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
       ungroup() %>%
@@ -125,8 +125,8 @@ process_count_distinct_n <- function(x) {
       do(this_denom(., header_n, treat_var)) %>%
       rename(distinct_total = "total") %>%
       ungroup() %>%
-      # complete all combiniations of factors to include combiniations that don't exist.
-      # add 0 for combintions that don't exist
+      # complete all combinations of factors to include combinations that don't exist.
+      # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
@@ -174,11 +174,10 @@ prepare_format_metadata <- function(x) {
 
     # Get formatting metadata prepared
     if(is.null(format_strings)) {
-      format_strings <- list("n_counts" = f_str("a (xxx.x%)", n, pct))
+      format_strings <- gather_defaults(environment())
     } else if (!'n_counts' %in% names(format_strings)) {
-      format_strings[['n_counts']] <- f_str("a (xxx.x%)", n, pct)
+      format_strings[['n_counts']] <- gather_defaults(environment())[['n_counts']]
     }
-
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))

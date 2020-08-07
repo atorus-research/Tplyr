@@ -103,19 +103,18 @@ order. These can be set using the `set_order_count_method` function.
 column will be indexed based on the descending numeric value. The numeric
 value extracted defaults to 'n' but can be changed with
 `set_result_order_var`. The column selected for sorting defaults to the
-first value in the treatment group varialbe. If there were arguments passed
+first value in the treatment group variable. If there were arguments passed
 to the 'cols' argument in the table those must be specified with
 `set_ordering_columns`.}
 \item{Sorting by a 'varn' variable}{If the treatment variable has a <VAR>N
 variable. It can be indexed to that variable.}
 \item{Sorting by a factor(Default)}{If a factor is found for the target
 variable in the target dataset that is used to order, if no factor is found
-it is coersed to a factor and sorted alphabetically.}
-\item{Sorting a nested count layer}{As is standard with AE tables, the first
-target variable is sorted either alphabetically, if a factor isn't provided,
-or ordered based on a supplided factor. The second variable is sorted with
-the 'bycount' method, the column and numeric value can be assigned with
-`set_ordering_cols` and `set_result_order_var` respectively.}
+it is coerced to a factor and sorted alphabetically.}
+\item{Sorting a nested count layer}{If two variables are targeted by a count
+layer, two methods can be passed to `set_order_count`. If two are passed, the
+first is used to sort the blocks, the second is used to sort the "inside" of
+the blocks. If one method is passed, that will be used to sort both.}
 }
 }
 

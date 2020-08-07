@@ -83,9 +83,9 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
   evalq({
 
-    # Set a default format string
+    # Grab the default format string
     if (!"riskdiff" %in% names(format_strings)) {
-      format_strings[['riskdiff']] <- f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+      format_strings[['riskdiff']] <- gather_defaults(env_parent())[['riskdiff']]
     }
 
     # Grab the format string object
