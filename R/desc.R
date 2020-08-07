@@ -45,7 +45,10 @@ process_summaries.desc_layer <- function(x, ...) {
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
-        summarize(!!!summaries)
+        summarize(!!!summaries) %>%
+        ungroup() %>%
+        # Fill in any
+        complete(!!treat_var, !!!by, !!!cols)
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums[[i]] %>%
@@ -186,6 +189,13 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
 
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]
+
+  # If all the values summarized are NA then return the empty string
+  if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
+    if ('.overall' %in% names(fmt$empty)) {
+      return(fmt$empty['.overall'])
+    }
+  }
 
   # Make the autos argument
   if (fmt$auto_precision) {

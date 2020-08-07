@@ -127,13 +127,13 @@ test_that("group_desc are processed as expected", {
                                "format_strings"))
 
   expect_equal(dim(d1$numeric_data), c(27, 4))
-  expect_equal(dim(d2$numeric_data), c(36, 5))
-  expect_equal(dim(d3$numeric_data), c(63, 6))
+  expect_equal(dim(d2$numeric_data), c(54, 5))
+  expect_equal(dim(d3$numeric_data), c(108, 6))
   expect_equal(dim(d4$numeric_data), c(3, 4))
   expect_equal(dim(d5$numeric_data), c(54, 4))
   expect_equal(dim(d6$numeric_data), c(6, 4))
   expect_equal(dim(d7$numeric_data), c(54, 5))
-  expect_equal(dim(d8$numeric_data), c(117, 6))
+  expect_equal(dim(d8$numeric_data), c(324, 6))
 
 
   expect_type(d1$numeric_data$value, "double")
