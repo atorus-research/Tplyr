@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/04/2020
+#' 8/07/2020
 
 #insert any necessary libraries
 library(Tplyr)
@@ -547,6 +547,7 @@ test_that('T13',{
   testthat::expect_equal(,label = "T13.1")
   testthat::expect_equal(,label = "T13.2")
   #clean up working directory
+  rm(t13_1)
   rm(test_13)
 })
 
@@ -589,6 +590,7 @@ test_that('T14',{
   testthat::expect_equal(,label = "T14.1")
   testthat::expect_equal(,label = "T14.2")
   #clean up working directory
+  rm(t14_1)
   rm(test_14)
 })
 
@@ -615,7 +617,7 @@ test_that('T15',{
 
 
     # output table to check attributes
-    save(test_14, file = "~/Tplyr/uat/output/test_15.RData")
+    save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
 
     #clean up working directory
     rm(t)
