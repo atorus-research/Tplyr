@@ -500,6 +500,8 @@ test_that('T12',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t12_1 <- group_by(adsl, TRT01P) %>%
+    summarise(n=n())
   testthat::expect_equal(,label = "T12.1")
   testthat::expect_equal(,label = "T12.2")
   #clean up working directory
@@ -539,6 +541,9 @@ test_that('T13',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t13_1 <- filter(adsl, SEX == "F") %>%
+    group_by(TRT01P) %>%
+    summarise(n=n())
   testthat::expect_equal(,label = "T13.1")
   testthat::expect_equal(,label = "T13.2")
   #clean up working directory
@@ -579,6 +584,8 @@ test_that('T14',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t14_1 <- group_by(adsl, TRT01P) %>%
+    summarise(n=n())
   testthat::expect_equal(,label = "T14.1")
   testthat::expect_equal(,label = "T14.2")
   #clean up working directory
