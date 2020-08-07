@@ -30,14 +30,6 @@ this_denom <- function(.data, header_n, treat_var) {
   # Get names of header_n execpt last one, last should be the count
   header_n_grp_names <- names(header_n)[1:ncol(header_n) - 1]
 
-  # Make sure all of the header_n group names have only one unique value.
-  # If they don't that means they weren't grouped on correctly.
-  assert_that(all(map_lgl(header_n_grp_names, function(x) {
-    nrow(unique(.data[, x])) == 1
-  })),
-  msg = "The groups passed to `this_denom` weren't correct.
-  All columns in the call must be in separate groups in the table.")
-
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
   # Examples

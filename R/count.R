@@ -25,7 +25,7 @@ process_summaries.count_layer <- function(x, ...) {
 
   }
 
-  prepare_format_metadata(x)
+  prepare_count_format_metadata(x)
 
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
@@ -169,7 +169,7 @@ process_count_total_row <- function(x) {
 #'
 #' @param x count_layer object
 #' @noRd
-prepare_format_metadata <- function(x) {
+prepare_count_format_metadata <- function(x) {
   evalq({
 
     # Get formatting metadata prepared
