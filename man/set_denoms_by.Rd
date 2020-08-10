@@ -2,16 +2,21 @@
 % Please edit documentation in R/shift_bindings.R
 \name{set_denoms_by}
 \alias{set_denoms_by}
-\title{Title}
+\title{Set variables used in pct denominator calculation}
 \usage{
 set_denoms_by(x, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{A count/shift layer object}
+
+\item{...}{Unquoted variable names}
 }
 \value{
-
+The modified layer object
 }
 \description{
-Title
+This function is used when calculating pct in count or shift layers. The
+percentages default to the treatment variable and any column variables but
+can be calculated on any variables passed to target_var, treat_var, by, or
+cols.
 }

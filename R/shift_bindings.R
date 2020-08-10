@@ -1,14 +1,17 @@
 
 
-#' Title
+#' Set variables used in pct denominator calculation
 #'
-#' @param x
-#' @param ...
+#' This function is used when calculating pct in count or shift layers. The
+#' percentages default to the treatment variable and any column variables but
+#' can be calculated on any variables passed to target_var, treat_var, by, or
+#' cols.
 #'
-#' @return
+#' @param x A count/shift layer object
+#' @param ... Unquoted variable names
+#'
+#' @return The modified layer object
 #' @export
-#'
-#' @examples
 set_denoms_by <- function(x, ...) {
 
   dots <- vars(...)
