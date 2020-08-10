@@ -133,3 +133,20 @@ get_header_n_value.data.frame <- function(x, ...) {
     sum()
 
 }
+
+#' Get the denominator used in shift pcts
+#'
+#' This is meant to be called in a dplyr grouped context
+#'
+#' @param .data A data.frame that has been grouped
+#' @param denom_by The variables
+#'
+#' @return A data.frame with the
+get_shift_total <- function(.data, denom_by, denoms_df) {
+
+  .data$total <- denoms_df %>%
+    group_by(!!!denom_by) %>%
+    extract("n") %>%
+    sum()
+
+}

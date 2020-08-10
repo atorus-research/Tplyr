@@ -1,5 +1,5 @@
 
-
+#' @export
 process_summaries.shift_layer <- function(x, ...) {
 
   evalq({
@@ -10,11 +10,15 @@ process_summaries.shift_layer <- function(x, ...) {
 
   }, envir = x)
 
+  process_shift_denoms(x)
+
+  # Create the table used for denoms
   process_shift_n(x)
 
   prepare_shift_format_metadata(x)
 }
 
+#' @export
 process_shift_n <- function(x) {
 
   evalq({
@@ -37,10 +41,26 @@ process_shift_n <- function(x) {
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(numeric_data) == 0) return()
+
+    if("pct" %in% format_strings$vars) process_shift_total(current_env())
   }, envir = x)
 
 }
 
+#' @export
+process_shift_total <- function(x) {
+
+  evalq({
+    if(is.null(denom_by)) denom_by <- c(treat_var, cols)
+
+    numeric_data %<>%
+      group_by(!!!denom_by) %>%
+      do(get_shift_total(., denom_by, denoms_df))
+
+  }, envir = x)
+}
+
+#' @export
 prepare_shift_format_metadata <- function(x) {
 
   evalq({
@@ -62,6 +82,7 @@ prepare_shift_format_metadata <- function(x) {
 
 }
 
+#' @export
 process_formatting.shift_layer <- function(x, ...) {
 
   evalq({
@@ -85,7 +106,7 @@ process_formatting.shift_layer <- function(x, ...) {
 
 }
 
-
+#' @export
 construct_shift_string <- function(.n, shift_fmt, max_layer_length, max_n_width) {
 
   vars_ord <- map_chr(shift_fmt$vars, as_name)
@@ -108,6 +129,7 @@ construct_shift_string <- function(.n, shift_fmt, max_layer_length, max_n_width)
   string_
 }
 
+#' @export
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
 
@@ -133,4 +155,17 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
 
   string_
+}
+
+#' @export
+process_shift_denoms <- function(x) {
+
+  evalq({
+
+    denoms_df <- built_target %>%
+      group_by(!!!target_var, !!treat_var, !!!by, !!!cols) %>%
+      summarize(n = n())
+
+  }, envir = x)
+
 }
