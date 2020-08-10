@@ -128,10 +128,19 @@ add_layers <- function(parent, ...) {
 #'   \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are
 #'   a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation,
 #'   variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation
-#'   of a descriptive statistc layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
+#'   of a descriptive statistic layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
 #'   You can change these summaries using \code{\link{set_format_strings}}, and you can also add your own summaries using
-#'   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional sumamry statistics you want presented.}
-#'   \item{Shift Layers}{\strong{NOTE:} Shift layers are not yet implemented. Expect this in a future release}
+#'   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional summary statistics you want presented.}
+#'   \item{Shift Layers}{A shift layer displays an endpoints 'shift' throughout
+#'   the duration of the study. It is an abstraction over the count layer,
+#'   however we have proveded a method that is more effeicent, and more
+#'   intuitive. Targets are passed as named quosures using `dplyr::vars`.
+#'   Geneerally the baseline flag is passed with the name 'row' and the shift is
+#'   passed with the name 'column'. Both counts(n) and percentages(pct) are
+#'   supported and can be specifed with the `set_format_strings` function. To
+#'   allow for flexibility when defining percetnages, you can define the
+#'   denominator using the `set_denom_by` function. This function takes variable
+#'   names and uses those to determine the denominator for the counts.}
 #' }
 #'
 #' @return An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object

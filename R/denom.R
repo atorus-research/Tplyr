@@ -149,11 +149,12 @@ get_shift_total <- function(.data, denoms_by, denoms_df) {
     expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
   })
 
-  .data$.total <- denoms_df %>%
+  sums <-  denoms_df %>%
     filter(!!!filter_logic) %>%
     group_by(!!!denoms_by) %>%
-    extract("n") %>%
-    sum(na.rm = TRUE)
+    extract("n")
+
+  .data$.total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
 
   .data
 }
