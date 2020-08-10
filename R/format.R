@@ -360,6 +360,18 @@ set_format_strings.count_layer <- function(e, ...) {
   e
 }
 
+set_format_strings.shift_layer <- function(e, ...) {
+
+  dots <- list(...)
+
+  assert_that(all(dots$vars %in% c("n", "pct")),
+              msg = "formats in shift layers can only be n")
+
+  env_bind(e, format_strings = dots[[1]])
+
+  e
+}
+
 #' Extract a translation vector for f_str objects
 #'
 #' The names of the format_strings list should be row labels in the output. The first
