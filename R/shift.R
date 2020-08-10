@@ -88,7 +88,7 @@ process_formatting.shift_layer <- function(x, ...) {
   evalq({
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
-      mutate(n = construct_shift_string(.n=n,
+      mutate(n = construct_shift_string(.n=n, .total = .total,
                                         shift_fmt=format_strings,
                                         max_layer_length=max_layer_length,
                                         max_n_width=max_n_width)) %>%
@@ -130,22 +130,21 @@ construct_shift_string <- function(.n, shift_fmt, max_layer_length, max_n_width)
 }
 
 #' @export
-construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
-                                   count_fmt = NULL, max_layer_length, max_n_width) {
+construct_shift_string <- function(.n, .total, shift_fmt = NULL, max_layer_length, max_n_width) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
 
-  vars_ord <- map_chr(count_fmt$vars, as_name)
+  vars_ord <- map_chr(shift_fmt$vars, as_name)
 
   # str_all is a list that contains character vectors for each parameter that might be calculated
   str_all <- vector("list", 5)
   # Append the repl_str to be passed to do.call
-  str_all[1] <- count_fmt$repl_str
+  str_all[1] <- shift_fmt$repl_str
   # Iterate over every variable
   for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total,
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], shift_fmt, .n, .total,
                                                 .distinct_n, .distinct_total, vars_ord)
   }
 

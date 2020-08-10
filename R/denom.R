@@ -144,9 +144,10 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @return A data.frame with the
 get_shift_total <- function(.data, denom_by, denoms_df) {
 
-  .data$total <- denoms_df %>%
+  .data$.total <- denoms_df %>%
     group_by(!!!denom_by) %>%
     extract("n") %>%
     sum()
 
+  .data
 }
