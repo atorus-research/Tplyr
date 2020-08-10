@@ -11,11 +11,12 @@
 #' layers are isolated and independent of one another - but each of these layers are children of the table itself. \code{add_layer}
 #' isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
 #' The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
-#' construct your layer within the \code{layer} paramater.
+#' construct your layer within the \code{layer} parameter.
 #'
 #'
 #' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
-#' @param layer A layer construction function and associated modifier functionns
+#' @param layer A layer construction function and associated modifier functions
+#' @param name A name to provide the layer in the table layers container
 #'
 #' @family Layer attachment
 #' @rdname layer_attachment
@@ -37,13 +38,10 @@
 #'     group_desc(target_var=mpg)
 #'   )
 #'
-#' # Layer with sub layer
-#' t <- tplyr_table(mtcars, cyl)%>%
-#'   add_layer(
-#'     group_desc(target_var=cyl) %>%
-#'       add_layer(
-#'         group_count(target_var=gear)
-#'       )
+#' ## Single layer with name
+#' t <- tplyr_table(mtcars, cyl) %>%
+#'   add_layer(name='mpg',
+#'     group_desc(target_var=mpg)
 #'   )
 #'
 #' # Using add_layers
@@ -51,9 +49,9 @@
 #' l1 <- group_desc(t, target_var=mpg)
 #' l2 <- group_count(t, target_var=cyl)
 #'
-#' t <- add_layers(t, l1, l2)
+#' t <- add_layers(t, l1, 'cyl' = l2)
 #'
-add_layer <- function(parent, layer) {
+add_layer <- function(parent, layer, name=NULL) {
 
   assert_that(!missing(parent), msg = "`parent` parameter must be provided")
   assert_that(!missing(layer), msg = "`layer` parameter must be provided")
@@ -67,7 +65,10 @@ add_layer <- function(parent, layer) {
   l <- modify_nested_call(layer, parent=parent)
 
   # Evaluate the layer and grab `tplyr_layer` or `tplyr_subgroup_layer` object
-  executed_layer <- eval(quo_get_expr(l))
+  executed_layer <- list(eval(quo_get_expr(l)))
+
+  # Attach the name
+  names(executed_layer) <- name
 
   # Insert the layer into the parent object
   parent$layers <- append(parent$layers, executed_layer)
