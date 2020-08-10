@@ -258,9 +258,11 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 
   # Make sure that all of the attachments were `f_str` objects
   for (name in names(check)) {
-    assert_that(class(quo_get_expr(check[[name]])) == "f_str" || (is_call(check[[name]]) && call_name(check[[name]]) == "f_str"),
-                msg = paste0("In `set_format_string` entry `",name,"` is not an `f_str` object. All assignmentes made within",
-                             " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation."))
+    assert_that(
+      class(quo_get_expr(check[[name]])) == "f_str" || (is_call(quo_get_expr(check[[name]])) && call_name(check[[name]]) == "f_str"),
+      msg = paste0("In `set_format_string` entry `",name,"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+      )
   }
 
   # Pick off the ellipsis
@@ -315,7 +317,7 @@ set_format_strings.count_layer <- function(e, ...) {
 
   # Make sure that all of the attachments were `f_str` objects
   for (i in seq_along(check)) {
-    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(check[[i]]) && call_name(check[[i]]) == "f_str"),
+    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
                 msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
                              " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation."))
   }
