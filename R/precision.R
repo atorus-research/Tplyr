@@ -45,5 +45,8 @@ make_prec_data <- function(.data, precision_by, precision_on, cap) {
       max_dec = min(max(nchar_unit(!!precision_on, 2)), cap['dec'])
     ) %>%
     select(!!!precision_by, max_int, max_dec) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(
+      precision_on = as_label(precision_on)
+    )
 }
