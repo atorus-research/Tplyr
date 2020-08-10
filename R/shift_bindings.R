@@ -1,5 +1,14 @@
 
 
+#' Title
+#'
+#' @param x
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 set_denoms_by <- function(x, ...) {
 
   dots <- vars(...)
