@@ -5,14 +5,16 @@
 \alias{add_layers}
 \title{Attach a layer to a \code{tplyr_table} object}
 \usage{
-add_layer(parent, layer)
+add_layer(parent, layer, name = NULL)
 
 add_layers(parent, ...)
 }
 \arguments{
 \item{parent}{A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object}
 
-\item{layer}{A layer construction function and associated modifier functionns}
+\item{layer}{A layer construction function and associated modifier functions}
+
+\item{name}{A name to provide the layer in the table layers container}
 
 \item{...}{Layers to be added}
 }
@@ -31,7 +33,7 @@ of the layer object may consist of a series of piped functions itself.
 layers are isolated and independent of one another - but each of these layers are children of the table itself. \code{add_layer}
 isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
 The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
-construct your layer within the \code{layer} paramater.
+construct your layer within the \code{layer} parameter.
 }
 \examples{
 # Load in pipe
@@ -43,13 +45,10 @@ t <- tplyr_table(mtcars, cyl) \%>\%
     group_desc(target_var=mpg)
   )
 
-# Layer with sub layer
-t <- tplyr_table(mtcars, cyl)\%>\%
-  add_layer(
-    group_desc(target_var=cyl) \%>\%
-      add_layer(
-        group_count(target_var=gear)
-      )
+## Single layer with name
+t <- tplyr_table(mtcars, cyl) \%>\%
+  add_layer(name='mpg',
+    group_desc(target_var=mpg)
   )
 
 # Using add_layers
@@ -57,7 +56,7 @@ t <- tplyr_table(mtcars, cyl)
 l1 <- group_desc(t, target_var=mpg)
 l2 <- group_count(t, target_var=cyl)
 
-t <- add_layers(t, l1, l2)
+t <- add_layers(t, l1, 'cyl' = l2)
 
 }
 \seealso{
