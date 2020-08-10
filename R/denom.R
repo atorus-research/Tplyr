@@ -30,14 +30,6 @@ this_denom <- function(.data, header_n, treat_var) {
   # Get names of header_n execpt last one, last should be the count
   header_n_grp_names <- names(header_n)[1:ncol(header_n) - 1]
 
-  # Make sure all of the header_n group names have only one unique value.
-  # If they don't that means they weren't grouped on correctly.
-  assert_that(all(map_lgl(header_n_grp_names, function(x) {
-    nrow(unique(.data[, x])) == 1
-  })),
-  msg = "The groups passed to `this_denom` weren't correct.
-  All columns in the call must be in separate groups in the table.")
-
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
   # Examples
@@ -140,4 +132,29 @@ get_header_n_value.data.frame <- function(x, ...) {
     select(n) %>%
     sum()
 
+}
+
+#' Get the denominator used in shift pcts
+#'
+#' This is meant to be called in a dplyr grouped context
+#'
+#' @param .data A data.frame that has been grouped
+#' @param denom_by The variables
+#'
+#' @return A data.frame with the
+get_shift_total <- function(.data, denoms_by, denoms_df) {
+
+  # Filter denoms dataset
+  filter_logic <- map(denoms_by, function(x) {
+    expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+  })
+
+  sums <-  denoms_df %>%
+    filter(!!!filter_logic) %>%
+    group_by(!!!denoms_by) %>%
+    extract("n")
+
+  .data$.total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
+
+  .data
 }

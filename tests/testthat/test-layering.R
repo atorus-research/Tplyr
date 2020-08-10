@@ -71,23 +71,6 @@ test_that("`add_layer` attaches layer object into parent", {
   expect_equal(t$layers[[1]]$target_var, vars(Species))
 })
 
-# Commening out becasue we removed index
-# test_that("Sequences of add_layer append appropriately into parent", {
-#   t <- tplyr_table(iris, Sepal.Width) %>%
-#     add_layer(
-#       # Adding index to check that order is appropriate.
-#       # See test-layer.R tests to see that ellipsis arguments are funneled into layer environment as bindings
-#       group_desc(target_var=Species, index=1)
-#     ) %>%
-#     add_layer(
-#       group_desc(target_var=Species, index=2)
-#     )
-#
-#     expect_true(length(t$layers) == 2)
-#     expect_true(t$layers[[1]]$index == 1)
-#     expect_true(t$layers[[2]]$index == 2)
-# })
-
 test_that("Using `add_layer` within `add_layer` adds child layers into a layer object", {
   # Make a layer with a subgroup
   t <- tplyr_table(iris, Sepal.Width) %>%
@@ -107,6 +90,41 @@ test_that("Using `add_layer` within `add_layer` adds child layers into a layer o
   expect_equal(env_parent(child_layer), parent_layer)
   expect_s3_class(child_layer, 'tplyr_subgroup_layer')
   expect_s3_class(child_layer, 'tplyr_layer')
+})
+
+test_that("Layers accept names when specified", {
+
+  # Using add_layer - multiple call types
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(name = "Test",
+              group_desc(drat)
+    )
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(drat) %>%
+        set_format_strings('n'=f_str('a', n)),
+      name="Test"
+    )
+
+  t3 <- t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      layer = group_desc(drat) %>%
+        set_format_strings('n'=f_str('a', n)),
+      name="Test"
+    )
+
+  expect_equal(names(t1$layers), 'Test')
+  expect_equal(names(t2$layers), 'Test')
+  expect_equal(names(t3$layers), 'Test')
+
+
+  # Using add_layers
+  t <- tplyr_table(mtcars, gear)
+  l <- group_desc(t, drat)
+  t <- add_layers(t, 'Test' = l)
+  expect_equal(names(t$layers), "Test")
+
 })
 
 

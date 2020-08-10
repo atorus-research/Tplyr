@@ -129,96 +129,10 @@ process_formatting <- function(x, ...) {
 fetch_formatting_info <- function(x) {
 
   # Get the max length of f_str objects in sub_layers
-  max_layer_length <- max(map_int(x$layers, ~ env_get(.x, "max_length")))
+  max_layer_length <- max(map_int(x$layers, ~ env_get(.x, "max_length")), inherit = TRUE)
   # Get the max length of n counts only, not including f_str formatting
   max_n_width <- max(map_dbl(x$layers, ~ ifelse(inherits(.x, 'count_layer'), .x$n_width, 0L)))
 
   env_bind(x, max_layer_length = max_layer_length)
   env_bind(x, max_n_width = max_n_width)
 }
-
-
-######################################################################################
-######## Saving the below for posterity but I don't think its needed anymore #########
-######################################################################################
-
-
-#' #' count_layer S3 method
-#' #' @noRd
-#' build.count_layer <- function(x) {
-#'
-#'   target_var_length <- length(env_get(x, "target_var"))
-#'
-#'     if(target_var_length == 2) {
-#'
-#'
-#'
-#'       # Begin with the layer itself and process the first target vars values one by one
-#'       layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
-#'                               bind_nested_count_layer, x = x)
-#'
-#'       # Build the sub-layers
-#'       sublayer_output <- map(x$layers, build)
-#'
-#'       # Feed the output up
-#'       #layer_output <- process_count_layer(x)
-#'
-#'       # TODO: Some combination process
-#'       output <- layer_output
-#'       output
-#'
-#'       # If there are not two, and not one, fail. TODO: move this into compatibility
-#'     } else if (target_var_length != 1) {
-#'       abort("target_var can only contain one or two target_variables.
-#'             Other amounts are not currently implemented.")
-#'
-#'       # If there is just one no need for logic
-#'     } else {
-#'
-#'       # Build the sub-layers
-#'       sublayer_output <- map(x$layers, build)
-#'
-#'       # Feed the output up
-#'       layer_output <- process_count_layer(x)
-#'
-#'       # TODO: Some combination process
-#'       output <- layer_output
-#'       output
-#'     }
-#' }
-#'
-#' #' desc_layer S3 method
-#' #' @noRd
-#' #' @export
-#' build.desc_layer <- function(x) {
-#'
-#'   # Build the sub-layers
-#'   sublayer_output <- map(x$layers, build)
-#'
-#'   # Feed the output up
-#'   layer_output <- process_desc_layer(x)
-#'
-#'   # TODO: Some combination process
-#'   output <- layer_output
-#'   output
-#' }
-#'
-#' #' shift_layer S3 method
-#' #' @noRd
-#' build.shift_layer <- function(x) {
-#'
-#'   # Build the sub-layers
-#'   sublayer_output <- map(x$layers, build)
-#'
-#'   # Feed the output up
-#'   layer_output <- process_shift_layer(x)
-#'
-#'   # TODO: Some combination process
-#'   output <- layer_output
-#'   output
-#' }
-
-
-
-
-

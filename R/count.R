@@ -25,7 +25,7 @@ process_summaries.count_layer <- function(x, ...) {
 
   }
 
-  prepare_format_metadata(x)
+  prepare_count_format_metadata(x)
 
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
@@ -36,7 +36,7 @@ process_summaries.count_layer <- function(x, ...) {
 #' @param x A count layer with a single target_var
 #'
 #' This function uses dplyr to filter out the where call, pull out the distinct
-#' rows if applicable, and tallys the different target_var values.
+#' rows if applicable, and tallies the different target_var values.
 #'
 #' If include_total_row is true a row will be added with a total row labeled
 #' with total_row_label.
@@ -169,7 +169,7 @@ process_count_total_row <- function(x) {
 #'
 #' @param x count_layer object
 #' @noRd
-prepare_format_metadata <- function(x) {
+prepare_count_format_metadata <- function(x) {
   evalq({
 
     # Get formatting metadata prepared

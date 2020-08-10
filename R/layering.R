@@ -11,11 +11,12 @@
 #' layers are isolated and independent of one another - but each of these layers are children of the table itself. \code{add_layer}
 #' isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
 #' The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
-#' construct your layer within the \code{layer} paramater.
+#' construct your layer within the \code{layer} parameter.
 #'
 #'
 #' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
-#' @param layer A layer construction function and associated modifier functionns
+#' @param layer A layer construction function and associated modifier functions
+#' @param name A name to provide the layer in the table layers container
 #'
 #' @family Layer attachment
 #' @rdname layer_attachment
@@ -37,13 +38,10 @@
 #'     group_desc(target_var=mpg)
 #'   )
 #'
-#' # Layer with sub layer
-#' t <- tplyr_table(mtcars, cyl)%>%
-#'   add_layer(
-#'     group_desc(target_var=cyl) %>%
-#'       add_layer(
-#'         group_count(target_var=gear)
-#'       )
+#' ## Single layer with name
+#' t <- tplyr_table(mtcars, cyl) %>%
+#'   add_layer(name='mpg',
+#'     group_desc(target_var=mpg)
 #'   )
 #'
 #' # Using add_layers
@@ -51,9 +49,9 @@
 #' l1 <- group_desc(t, target_var=mpg)
 #' l2 <- group_count(t, target_var=cyl)
 #'
-#' t <- add_layers(t, l1, l2)
+#' t <- add_layers(t, l1, 'cyl' = l2)
 #'
-add_layer <- function(parent, layer) {
+add_layer <- function(parent, layer, name=NULL) {
 
   assert_that(!missing(parent), msg = "`parent` parameter must be provided")
   assert_that(!missing(layer), msg = "`layer` parameter must be provided")
@@ -67,7 +65,10 @@ add_layer <- function(parent, layer) {
   l <- modify_nested_call(layer, parent=parent)
 
   # Evaluate the layer and grab `tplyr_layer` or `tplyr_subgroup_layer` object
-  executed_layer <- eval(quo_get_expr(l))
+  executed_layer <- list(eval(quo_get_expr(l)))
+
+  # Attach the name
+  names(executed_layer) <- name
 
   # Insert the layer into the parent object
   parent$layers <- append(parent$layers, executed_layer)
@@ -128,10 +129,19 @@ add_layers <- function(parent, ...) {
 #'   \item{Descriptive Statistics Layers}{Descriptive statistics layers perform summaries on continuous variables. There are
 #'   a number of summaries built into Tplyr already that you can perform, including n, mean, median, standard deviation,
 #'   variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation
-#'   of a descriptive statistc layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
+#'   of a descriptive statistic layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'.
 #'   You can change these summaries using \code{\link{set_format_strings}}, and you can also add your own summaries using
-#'   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional sumamry statistics you want presented.}
-#'   \item{Shift Layers}{\strong{NOTE:} Shift layers are not yet implemented. Expect this in a future release}
+#'   \code{\link{set_custom_summaries}}. This allows you to easily implement any additional summary statistics you want presented.}
+#'   \item{Shift Layers}{A shift layer displays an endpoints 'shift' throughout
+#'   the duration of the study. It is an abstraction over the count layer,
+#'   however we have proveded a method that is more effeicent, and more
+#'   intuitive. Targets are passed as named quosures using `dplyr::vars`.
+#'   Geneerally the baseline flag is passed with the name 'row' and the shift is
+#'   passed with the name 'column'. Both counts(n) and percentages(pct) are
+#'   supported and can be specifed with the `set_format_strings` function. To
+#'   allow for flexibility when defining percetnages, you can define the
+#'   denominator using the `set_denom_by` function. This function takes variable
+#'   names and uses those to determine the denominator for the counts.}
 #' }
 #'
 #' @return An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object

@@ -236,6 +236,46 @@ add_order_columns.desc_layer <- function(x) {
   }, envir = x)
 }
 
+add_order_columns.shift_layer <- function(x) {
+  evalq({
+
+    # This adds a column for each by variable and the target variable.
+    walk2(by, seq_along(by), function(a_by, by_i) {
+      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
+      if (!is.name(quo_get_expr(a_by))) return()
+      formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+    })
+
+    # Number of sorting columns needed, number of bys plus one for the target_var
+    formatted_col_index <- length(by) + 1
+
+    #### The Factor data order method.
+    target_data <- target[, as_name(target_var$row)]
+
+    #Pull levels from target variable
+    target_levels <- levels(target_data)
+
+    # If the levels are null, the target was not a factor. So turn it into a factor
+    if (is.null(target_levels)) {
+
+      # Change target variable into a factor
+      target_fact <- as.factor(unlist(target_data))
+
+      # Create data.frame with levels and index
+      fact_df <- tibble(
+        !!target_var$row := unique(sort(target_fact)),
+        factor_index := unclass(unique(sort(target_fact)))
+      )
+
+      # The logic is the same now for a byvarn so reuse that function
+      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
+
+    }
+
+
+  }, envir = x)
+}
+
 #' Return the indicies of the rows based on the by variables
 #'
 #'

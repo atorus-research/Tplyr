@@ -47,7 +47,7 @@ process_summaries.desc_layer <- function(x, ...) {
         # Execute the summaries
         summarize(!!!summaries) %>%
         ungroup() %>%
-        # Fill in any
+        # Fill in any missing treat/col combinations
         complete(!!treat_var, !!!by, !!!cols)
 
       # Create the transposed summary data to prepare for formatting
@@ -60,6 +60,14 @@ process_summaries.desc_layer <- function(x, ...) {
         mutate(
            row_label = row_labels[[stat]]
         )
+
+      # If precision is required, then create the variable identifier
+      if (need_prec_table) {
+        trans_sums[[i]] <- trans_sums[[i]] %>%
+          mutate(
+            precision_on = as_label(precision_on)
+          )
+      }
 
       # Numeric data needs the variable names replaced and add summary variable name
       num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
@@ -104,7 +112,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
       if (need_prec_table) {
         # Merge the precision data on
-        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=match_exact(precision_by))
+        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=c(match_exact(precision_by), 'precision_on'))
       }
 
       trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
