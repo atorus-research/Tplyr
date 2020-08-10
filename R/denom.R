@@ -142,7 +142,7 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param denom_by The variables
 #'
 #' @return A data.frame with the
-get_shift_total <- function(.data, denoms_by, denoms_df) {
+get_denom_total <- function(.data, denoms_by, denoms_df) {
 
   # Filter denoms dataset
   filter_logic <- map(denoms_by, function(x) {

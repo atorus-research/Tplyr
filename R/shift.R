@@ -10,7 +10,7 @@ process_summaries.shift_layer <- function(x, ...) {
 
   }, envir = x)
 
-  process_shift_denoms(x)
+  process_layer_denoms(x)
 
   # Create the table used for denoms
   process_shift_n(x)
@@ -55,7 +55,7 @@ process_shift_total <- function(x) {
 
     numeric_data %<>%
       group_by(!!!denoms_by) %>%
-      do(get_shift_total(., denoms_by, denoms_df))
+      do(get_denom_total(., denoms_by, denoms_df))
 
   }, envir = x)
 }
@@ -160,7 +160,7 @@ construct_shift_string <- function(.n, .total, shift_fmt = NULL, max_layer_lengt
 }
 
 #' @export
-process_shift_denoms <- function(x) {
+process_layer_denoms <- function(x) {
 
   evalq({
 

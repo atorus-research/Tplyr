@@ -3,6 +3,8 @@
 #' @export
 process_summaries.count_layer <- function(x, ...) {
 
+  process_layer_denoms(x)
+
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
 
@@ -77,6 +79,9 @@ process_single_count_target <- function(x) {
 process_count_n <- function(x) {
 
   evalq({
+
+    if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
+
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
@@ -86,7 +91,7 @@ process_count_n <- function(x) {
       ungroup() %>%
       # Group by all column variables
       group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n, treat_var)) %>%
+      do(get_denom_total(., denom_df, denoms_by)) %>%
       ungroup() %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
