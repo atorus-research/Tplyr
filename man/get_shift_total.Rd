@@ -4,7 +4,7 @@
 \alias{get_shift_total}
 \title{Get the denominator used in shift pcts}
 \usage{
-get_shift_total(.data, denom_by, denoms_df)
+get_shift_total(.data, denoms_by, denoms_df)
 }
 \arguments{
 \item{.data}{A data.frame that has been grouped}

@@ -142,12 +142,18 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param denom_by The variables
 #'
 #' @return A data.frame with the
-get_shift_total <- function(.data, denom_by, denoms_df) {
+get_shift_total <- function(.data, denoms_by, denoms_df) {
+
+  # Filter denoms dataset
+  filter_logic <- map(denoms_by, function(x) {
+    expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+  })
 
   .data$.total <- denoms_df %>%
-    group_by(!!!denom_by) %>%
+    filter(!!!filter_logic) %>%
+    group_by(!!!denoms_by) %>%
     extract("n") %>%
-    sum()
+    sum(na.rm = TRUE)
 
   .data
 }

@@ -160,4 +160,4 @@ precision_by <- NULL
 precision_on <- NULL
 cap <- NULL
 ..index <- NULL
-denom_by <- NULL
+denoms_by <- NULL

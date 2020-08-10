@@ -51,11 +51,11 @@ process_shift_n <- function(x) {
 process_shift_total <- function(x) {
 
   evalq({
-    if(is.null(denom_by)) denom_by <- c(treat_var, cols)
+    if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
 
     numeric_data %<>%
-      group_by(!!!denom_by) %>%
-      do(get_shift_total(., denom_by, denoms_df))
+      group_by(!!!denoms_by) %>%
+      do(get_shift_total(., denoms_by, denoms_df))
 
   }, envir = x)
 }
@@ -64,6 +64,9 @@ process_shift_total <- function(x) {
 prepare_shift_format_metadata <- function(x) {
 
   evalq({
+
+    if(is.null(format_strings)) format_strings <- f_str("a", n)
+
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
 
@@ -94,7 +97,7 @@ process_formatting.shift_layer <- function(x, ...) {
                                         max_n_width=max_n_width)) %>%
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), "summary_var"),
-                  names_from = c(!!treat_var, match_exact(cols), !!target_var$column),
+                  names_from = c( !!treat_var, !!target_var$column, match_exact(cols)),
                   values_from = n,
                   names_prefix = "var1_") %>%
       replace_by_string_names(quos(!!!by, summary_var))
@@ -162,8 +165,12 @@ process_shift_denoms <- function(x) {
   evalq({
 
     denoms_df <- built_target %>%
-      group_by(!!!target_var, !!treat_var, !!!by, !!!cols) %>%
-      summarize(n = n())
+      group_by(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
+      summarize(n = n()) %>%
+      complete(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
+      # The rows will duplicate for some reason so this removes that
+      distinct() %>%
+      rename("summary_var" := !!target_var$row)
 
   }, envir = x)
 
