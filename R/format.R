@@ -373,7 +373,7 @@ set_format_strings.count_layer <- function(e, ...) {
 #'
 name_translator <- function(fmt_strings) {
   out <- names(fmt_strings)
-  names(out) <- map_chr(fmt_strings, ~ as_label(.x$vars[[1]]))
+  names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
   out
 }
 

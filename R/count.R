@@ -94,7 +94,7 @@ process_count_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]]))
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -131,7 +131,7 @@ process_count_distinct_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_label(target_var[[1]]) := as_name(target_var[[1]]))
+      mutate(!!as_name(target_var[[1]]) := as_name(target_var[[1]]))
 
     summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "distinct_total")])
 
@@ -154,7 +154,7 @@ process_count_total_row <- function(x) {
       ungroup() %>%
       mutate(total = n) %>%
       # Create a variable to label the totals when it is merged in.
-      mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
+      mutate(!!as_name(target_var[[1]]) := total_row_label) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
