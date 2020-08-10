@@ -82,7 +82,7 @@ match_exact <- function(var_list) {
   # Should have been a list of quosures on input
   assert_inherits_class(var_list, "quosures")
   # Return the variable names as a character string in appropriate tidyselect format
-  out <- map_chr(var_list, as_label)
+  out <- map_chr(var_list, as_label) # as_label is needed here vs as_name
   unname(out[out != 'NULL']) # Exclude NULL quosures and remove names
 }
 
