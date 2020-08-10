@@ -19,7 +19,7 @@
 #' @export
 #' @rdname header_n
 header_n <- function(table) {
-  rlang::env_get(table, "header_n")
+  env_get(table, "header_n")
 }
 
 #' @param x A \code{tplyr_table} object
@@ -44,7 +44,7 @@ set_header_n <- function(table, header_n) {
   assert_that(!is.null(names(header_n)),
               msg = "header_n argument must be named")
 
-  rlang::env_bind(table, header_n = header_n)
+  env_bind(table, header_n = header_n)
 
   table
 }
@@ -71,7 +71,7 @@ set_header_n <- function(table, header_n) {
 #' @export
 #' @rdname pop_data
 pop_data <- function(table) {
-  rlang::env_get(table, "pop_data")
+  env_get(table, "pop_data")
 }
 
 #' @param x A \code{tplyr_table} object
@@ -97,7 +97,7 @@ set_pop_data <- function(table, pop_data) {
                                        class(pop_data),
                                        "' was passed."))
   attr(pop_data, "pop_data_name") <- pop_data_name
-  rlang::env_bind(table, pop_data = pop_data)
+  env_bind(table, pop_data = pop_data)
 
   table
 }
@@ -118,7 +118,7 @@ set_pop_data <- function(table, pop_data) {
 #' @export
 #' @rdname treat_var
 treat_var <- function(table) {
-  rlang::env_get(table, "treat_var")
+  env_get(table, "treat_var")
 }
 
 #' @param treat_var Variable containing treatment group assignments. Supply unquoted.
@@ -126,16 +126,16 @@ treat_var <- function(table) {
 #' @export
 #' @rdname treat_var
 set_treat_var <- function(table, treat_var) {
-  treat_var <- rlang::enquo(treat_var)
+  treat_var <- enquo(treat_var)
 
   assert_that(!quo_is_missing(treat_var),
                           msg = "A treat_var argument must be supplied")
 
-  assert_that(class(rlang::quo_get_expr(treat_var)) == "name",
-                          as_label(rlang::quo_get_expr(treat_var)) %in% names(table$target),
+  assert_that(class(quo_get_expr(treat_var)) == "name",
+                          as_name(quo_get_expr(treat_var)) %in% names(table$target),
                           msg = "treat_var column not found in target dataset")
 
-  rlang::env_bind(table, treat_var = treat_var)
+  env_bind(table, treat_var = treat_var)
 
   table
 }
@@ -156,7 +156,7 @@ set_treat_var <- function(table, treat_var) {
 #' @rdname pop_treat_var
 #' @export
 pop_treat_var <- function(table) {
-  rlang::env_get(table, "pop_treat_var")
+  env_get(table, "pop_treat_var")
 }
 
 #' @param pop_treat_var Variable containing treatment group assignments within the \code{pop_data} binding. Supply unquoted.
@@ -164,13 +164,13 @@ pop_treat_var <- function(table) {
 #' @rdname pop_treat_var
 #' @export
 set_pop_treat_var <- function(table, pop_treat_var) {
-  pop_treat_var <- rlang::enquo(pop_treat_var)
+  pop_treat_var <- enquo(pop_treat_var)
 
-  assert_that(class(rlang::quo_get_expr(pop_treat_var)) == "name",
-                          as_label(rlang::quo_get_expr(pop_treat_var)) %in% names(table$pop_data),
+  assert_that(class(quo_get_expr(pop_treat_var)) == "name",
+                          as_name(quo_get_expr(pop_treat_var)) %in% names(table$pop_data),
                           msg = paste0("pop_treat_var passed to tplyr_table is not a column of pop_data"))
 
-  rlang::env_bind(table, pop_treat_var = pop_treat_var)
+  env_bind(table, pop_treat_var = pop_treat_var)
 
   table
 }
@@ -212,7 +212,7 @@ set_treat_grps <- function(table, group_name, groupings) {
   a_list <- list(groupings)
   names(a_list) <- group_name
 
-  rlang::env_bind(table, treat_grps = a_list)
+  env_bind(table, treat_grps = a_list)
 
   table
 }

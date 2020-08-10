@@ -140,7 +140,7 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
     for (v in quo_list) {
 
       if (class(quo_get_expr(v)) == "name") {
-        vname <- as_label(quo_get_expr(v))
+        vname <- as_name(quo_get_expr(v))
         assert_that(vname %in% vnames,
                     msg = paste0("`", param, "` variable `",vname, "` does not exist in target dataset"))
       }

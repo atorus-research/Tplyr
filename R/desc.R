@@ -65,13 +65,13 @@ process_summaries.desc_layer <- function(x, ...) {
       if (need_prec_table) {
         trans_sums[[i]] <- trans_sums[[i]] %>%
           mutate(
-            precision_on = as_label(precision_on)
+            precision_on = as_name(precision_on)
           )
       }
 
       # Numeric data needs the variable names replaced and add summary variable name
       num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
-        mutate(summary_var = as_label(cur_var)) %>%
+        mutate(summary_var = as_name(cur_var)) %>%
         select(summary_var, everything())
 
       # Clean up loop

@@ -252,18 +252,25 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
   # Catch the arguments from the function call so useful errors can be thrown
   check <- enquos(...)
 
+  # Make sure that all of the attachments were `f_str` objects
+  for (i in seq_along(check)) {
+
+    if (is_named(check)) {
+      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    } else {
+      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    }
+
+    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
+                msg = msg)
+  }
+
   # Row labels are pulled from names - so make sure that everything is named
   assert_that(is_named(check),
               msg = "In `set_format_string` all parameters must be named in order to create row labels.")
 
-  # Make sure that all of the attachments were `f_str` objects
-  for (name in names(check)) {
-    assert_that(
-      class(quo_get_expr(check[[name]])) == "f_str" || (is_call(quo_get_expr(check[[name]])) && call_name(check[[name]]) == "f_str"),
-      msg = paste0("In `set_format_string` entry `",name,"` is not an `f_str` object. All assignmentes made within",
-                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
-      )
-  }
 
   # Pick off the ellipsis
   format_strings <- list(...)
@@ -316,10 +323,19 @@ set_format_strings.count_layer <- function(e, ...) {
   check <- enquos(...)
 
   # Make sure that all of the attachments were `f_str` objects
+  # Make sure that all of the attachments were `f_str` objects
   for (i in seq_along(check)) {
+
+    if (is_named(check)) {
+      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    } else {
+      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    }
+
     assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
-                msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
-                             " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation."))
+                msg = msg)
   }
 
   # Grab the named parameters
@@ -385,7 +401,7 @@ set_format_strings.shift_layer <- function(e, ...) {
 #'
 name_translator <- function(fmt_strings) {
   out <- names(fmt_strings)
-  names(out) <- map_chr(fmt_strings, ~ as_label(.x$vars[[1]]))
+  names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
   out
 }
 
