@@ -44,8 +44,8 @@ test_that('T1',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-    testthat::expect_equal(adsl, Tplyr::pop_data(test_1), label = "T1.1")
-    testthat::expect_equal("TRT01P", Tplyr::treat_var(test_1), label = "T1.2")
+  testthat::expect_equal(adsl, Tplyr::pop_data(test_1), label = "T1.1")
+  testthat::expect_equal("TRT01P", Tplyr::treat_var(test_1), label = "T1.2")
   #manual check(s)
 
   #clean up working directory
@@ -75,7 +75,7 @@ test_that('T2',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-    testthat::expect_equal(filter(adsl, EFFFL == 'Y'), filter(Tplyr::pop_data(test_2),!!Tplyr::get_where(test_2)), label = "T2.1")
+  testthat::expect_equal(filter(adsl, EFFFL == 'Y'), filter(Tplyr::pop_data(test_2),!!Tplyr::get_where(test_2)), label = "T2.1")
   #manual check(s)
 
   #clean up working directory
@@ -111,17 +111,17 @@ test_that('T3',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-    testthat::expect_equal(c("Placebo", "Total", "Total Xanomeline", "Xanomeline High Dose", "Xanomeline Low Dose"),
-                           test_3[[1]], label = "T3.1")
-    t3_2 <- c(nrow(filter(adsl, TRT01P == "Placebo")), nrow(adsl),
-                nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
-                nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
-    testthat::expect_equal(t3_2, test_3[[2]], label = "T3.2")
+  testthat::expect_equal(c("Placebo", "Total", "Total Xanomeline", "Xanomeline High Dose", "Xanomeline Low Dose"),
+                         test_3[[1]], label = "T3.1")
+  t3_2 <- c(nrow(filter(adsl, TRT01P == "Placebo")), nrow(adsl),
+              nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
+              nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
+  testthat::expect_equal(t3_2, test_3[[2]], label = "T3.2")
   #manual check(s)
 
   #clean up working directory
-  rm(test_3)
   rm(t3_2)
+  rm(test_3)
 })
 
 #test 4
@@ -281,9 +281,9 @@ test_that('T7',{
   #manual check(s)
 
   #clean up working directory
-  rm(test_7)
   rm(t7_1)
   rm(t7_2)
+  rm(test_7)
 })
 
 #test 8
@@ -336,9 +336,9 @@ test_that('T8',{
   #manual check(s)
 
   #clean up working directory
-  rm(test_8)
   rm(t8_1)
   rm(t8_2)
+  rm(test_8)
 })
 
 #test 9
@@ -375,9 +375,6 @@ test_that('T9',{
   testthat::expect_equal(summarise(filter(adsl, TRT01P == 'Placebo'), n=n())[[1]],
                          subset(test_9[[1]], TRT01P == 'Placebo' & summary_var == 'TOTAL')[['n']],
                          label = "T9.1")
-  #testthat::expect_equal(summarise(filter(adsl, TRT01P == 'Placebo'), n=n())[[1]],
-  #                       subset(test_9[[1]], TRT01P == 'Placebo' & summary_var == 'TOTAL')[['n']],
-  #                       label = "T9.2")
   #manual check(s)
 
   #clean up working directory
@@ -391,10 +388,10 @@ test_that('T10',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    adsl$RACE <- factor(adsl$RACE, c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"))
+    adsl$RACE_FACTOR <- factor(adsl$RACE, c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"))
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE)
+        group_count(RACE_FACTOR)
       )
     build(t)
     test_10 <- get_numeric_data(t)
@@ -461,9 +458,9 @@ test_that('T11',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(,label = "T11.1")
-  testthat::expect_equal(,label = "T11.2")
-  testthat::expect_equal(,label = "T11.3")
+  testthat::expect_equal(, filter(test_11, ord_layer_index == 1),label = "T11.1")
+  testthat::expect_equal(, filter(test_11, ord_layer_index == 2),label = "T11.2")
+  testthat::expect_equal(, filter(test_11, ord_layer_index == 3),label = "T11.3")
   #clean up working directory
   rm(test_11)
 })
@@ -481,7 +478,7 @@ test_that('T12',{
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
-    built <- build(t)
+    build(t)
     test_12 <- filter(get_numeric_data(t)[[1]], total != 0)
 
 
@@ -571,7 +568,6 @@ test_that('T14',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-
     t <- tplyr_table(adae, TRTA) %>%
       set_pop_data(adsl) %>%
       set_pop_treat_var(TRT01P) %>%
@@ -603,7 +599,7 @@ test_that('T14',{
     mutate(total = as.numeric(total))
   t14_2 <- group_by(adsl, TRT01P, RACE) %>%
     summarise(n=n()) %>%
-    left_join(t12_1, by='TRT01P') %>%
+    left_join(t14_1, by='TRT01P') %>%
     mutate(pct = round((n / total) * 100, digits = 1))
   testthat::expect_equal(,label = "T14.1")
   testthat::expect_equal(,label = "T14.2")
@@ -628,11 +624,6 @@ test_that('T15',{
 
     build(t)
     test_15 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
-
-
-    # output table to check attributes
-    save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
-    test_15 <- build(t)
 
 
     # output table to check attributes
@@ -697,9 +688,8 @@ test_that('T16',{
             'missing' = f_str('xx', missing)
           )
       )
-    built_cont <- t %>%
-      build()
 
+    build(t)
     test_16 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
@@ -717,39 +707,39 @@ test_that('T16',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
-                           subset(test_16, stat == 'n' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.1")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
-                           subset(test_16, stat == 'mean' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.2")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
-                           subset(test_16, stat == 'median' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.3")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
-                           subset(test_16, stat == 'sd' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.4")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
-                           subset(test_16, stat == 'var' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.5")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
-                           subset(test_16, stat == 'min' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.6")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
-                           subset(test_16, stat == 'max' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.7")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
-                           subset(test_16, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.8")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
-                           subset(test_16, stat == 'q1' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.9")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
-                           subset(test_16, stat == 'q3' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.10")
-    testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
-                           subset(test_16, stat == 'missing' & TRT01P == 'Placebo')[['value']],
-                           label = "T16.11")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
+                         subset(test_16, stat == 'n' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.1")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
+                         subset(test_16, stat == 'mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.2")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
+                         subset(test_16, stat == 'median' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.3")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
+                         subset(test_16, stat == 'sd' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.4")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
+                         subset(test_16, stat == 'var' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.5")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
+                         subset(test_16, stat == 'min' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.6")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
+                         subset(test_16, stat == 'max' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.7")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
+                         subset(test_16, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.8")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
+                         subset(test_16, stat == 'q1' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.9")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
+                         subset(test_16, stat == 'q3' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.10")
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
+                         subset(test_16, stat == 'missing' & TRT01P == 'Placebo')[['value']],
+                         label = "T16.11")
   #manual check(s)
 
 
