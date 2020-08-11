@@ -3,6 +3,8 @@
 #' @export
 process_summaries.count_layer <- function(x, ...) {
 
+  process_count_denoms(x)
+
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
 
@@ -25,7 +27,7 @@ process_summaries.count_layer <- function(x, ...) {
 
   }
 
-  prepare_count_format_metadata(x)
+  prepare_format_metadata(x)
 
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
@@ -60,12 +62,20 @@ process_single_count_target <- function(x) {
 
     if(is.null(count_row_prefix)) count_row_prefix <- ""
 
+    if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
 
     # rbind tables together
     numeric_data <- summary_stat %>%
       bind_rows(total_stat) %>%
       mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
-      rename("summary_var" = !!target_var[[1]])
+      rename("summary_var" = !!target_var[[1]]) %>%
+      group_by(!!!denoms_by) %>%
+      do(get_denom_total(., denoms_by, denoms_df)) %>%
+      ungroup()
+
+
+    if(!is.null(distinct_stat)) numeric_data <- bind_cols(numeric_data,
+                                                          distinct_stat[, c("distinct_n", "distinct_total")])
 
   }, envir = x)
 }
@@ -77,16 +87,13 @@ process_single_count_target <- function(x) {
 process_count_n <- function(x) {
 
   evalq({
+
     summary_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
-      ungroup() %>%
-      # Group by all column variables
-      group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n, treat_var)) %>%
       ungroup() %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
@@ -109,6 +116,8 @@ process_count_n <- function(x) {
 process_count_distinct_n <- function(x) {
 
   evalq({
+    if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
+
     distinct_stat <- built_target %>%
       # Filter out based on where
       filter(!!where) %>%
@@ -120,20 +129,18 @@ process_count_distinct_n <- function(x) {
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
       ungroup() %>%
-      # Group by all column variables
-      group_by(!!treat_var, !!!cols) %>%
-      do(this_denom(., header_n, treat_var)) %>%
-      rename(distinct_total = "total") %>%
-      ungroup() %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_name(target_var[[1]]) := as_name(target_var[[1]]))
+      mutate(!!as_label(target_var[[1]]) := as_name(target_var[[1]])) %>%
+      group_by(!!!denoms_by) %>%
+      do(get_denom_total(., denoms_by, denoms_df)) %>%
+      ungroup() %>%
+      rename("distinct_total" = "total")
 
-    summary_stat <- bind_cols(summary_stat, distinct_stat[, c("distinct_n", "distinct_total")])
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -169,7 +176,7 @@ process_count_total_row <- function(x) {
 #'
 #' @param x count_layer object
 #' @noRd
-prepare_count_format_metadata <- function(x) {
+prepare_format_metadata.count_layer <- function(x) {
   evalq({
 
     # Get formatting metadata prepared
@@ -364,4 +371,32 @@ prefix_count_row <- function(row_i, count_row_prefix) {
 
 }
 
+#' @noRd
+process_count_denoms <- function(x) {
 
+  evalq({
+
+    # This used in case there is a character passed to the layer
+    layer_params <- c(target_var, treat_var, by, cols)
+    # Logical vector indicating if the param appears in the target dataset.
+    param_apears <- map_lgl(layer_params, function(x) {
+      as_name(x) %in% names(target)
+    })
+
+    denoms_df <- built_target %>%
+      group_by(!!!layer_params[param_apears]) %>%
+      summarize(n = n()) %>%
+      complete(!!!layer_params[param_apears]) %>%
+      # The rows will duplicate for some reason so this removes that
+      distinct()
+
+    if(as_name(target_var[[1]]) %in% names(target)) {
+      denoms_df %<>%
+        rename("summary_var" := !!target_var[[1]])
+    }
+
+    denoms_df
+
+  }, envir = x)
+
+}
