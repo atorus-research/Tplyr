@@ -8,9 +8,10 @@ tab <- tplyr_table(iris, Species) %>%
 build(tab)
 
 test_that("build.tplyr_table preprocesses data appropriately", {
-  expect_named(tab, c("target", "pop_data", "pop_where", "cols", "max_n_width", "table_where",
+  expect_setequal(names(tab), c("target", "pop_data", "pop_where", "cols", "max_n_width", "table_where",
                       "max_layer_length", "treat_var", "built_target", "built_pop_data",
-                      "header_n", "pop_treat_var", "layers",  "treat_grps"))
+                      "header_n", "pop_treat_var", "layers",  "treat_grps", "count_layer_formats",
+                      "desc_layer_formats"))
   expect_equal(nrow(tab$built_target[tab$built_target$Species == "Total", ]), 150)
   expect_equal(nrow(tab$built_target[tab$built_target$Species == "V Species", ]), 100)
 })

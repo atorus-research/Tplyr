@@ -28,7 +28,7 @@ c4 <- group_count(t4, cyl, by = vars(am, vs)) %>%
 c5 <- group_count(t5, cyl, by = vars(am, vs)) %>%
   add_total_row()
 # Add distinct by
-c6 <- group_count(t6, "cyl") %>%
+c6 <- group_count(t6, cyl) %>%
   set_distinct_by(cyl)
 # Multiple target_vars
 c7 <- group_count(t7, vars(cyl, grp))
@@ -115,7 +115,7 @@ test_that("Count layers are built as expected", {
   expect_equal(c3$target_var, quos(cyl))
   expect_equal(c4$target_var, quos(cyl))
   expect_equal(c5$target_var, quos(cyl))
-  expect_equal(c6$target_var, quos("cyl"))
+  expect_equal(c6$target_var, quos(cyl))
   expect_equal(c7$target_var, quos(cyl, grp))
   expect_equal(c8$target_var, quos(cyl))
   expect_equal(c9$target_var, quos(cyl, grp))
@@ -150,7 +150,7 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c3$numeric_data), c(36, 6))
   expect_equal(dim(c4$numeric_data), c(36, 6))
   expect_equal(dim(c5$numeric_data), c(39, 6))
-  expect_equal(dim(c6$numeric_data), c(3, 7))
+  expect_equal(dim(c6$numeric_data), c(9, 6))
   expect_equal(dim(c7$numeric_data), c(27, 5))
   expect_equal(dim(c8$numeric_data), c(9, 6))
   expect_equal(dim(c9$numeric_data), c(27, 5))
@@ -172,7 +172,7 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c3$formatted_data), c(12, 9))
   expect_equal(dim(c4$formatted_data), c(12, 9))
   expect_equal(dim(c5$formatted_data), c(13, 9))
-  expect_equal(dim(c6$formatted_data), c(1, 5))
+  expect_equal(dim(c6$formatted_data), c(3, 5))
   expect_equal(dim(c7$formatted_data), c(9, 6))
   expect_equal(dim(c8$formatted_data), c(3, 5))
   expect_equal(dim(c9$formatted_data), c(9, 6))

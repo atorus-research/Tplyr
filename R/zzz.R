@@ -114,6 +114,7 @@ display_string <- NULL
 built_target <- NULL
 table_where <- NULL
 distinct_by <- NULL
+distinct_stat <- NULL
 summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
@@ -161,3 +162,8 @@ precision_on <- NULL
 cap <- NULL
 ..index <- NULL
 denoms_by <- NULL
+.distinct_n <- NULL
+count_layer_formats <- NULL
+desc_layer_formats <- NULL
+denoms_df <- NULL
+
