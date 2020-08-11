@@ -481,8 +481,8 @@ test_that('T12',{
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
-    build(t)
-    test_12 <- get_numeric_data(t)
+    built <- build(t)
+    test_12 <- filter(get_numeric_data(t)[[1]], total != 0)
 
 
     # output table to check attributes
@@ -501,10 +501,17 @@ test_that('T12',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t12_1 <- group_by(adsl, TRT01P) %>%
-    summarise(n=n())
-  testthat::expect_equal(,label = "T12.1")
+    summarise(total=n()) %>%
+    mutate(total = as.numeric(total))
+  t12_2 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n=n()) %>%
+    left_join(t12_1, by='TRT01P') %>%
+    mutate(pct = round((n / total) * 100, digits = 1))
+  testthat::expect_equal(t12_1,unique(test_12[c("TRT01P", "total")]),label = "T12.1")
   testthat::expect_equal(,label = "T12.2")
   #clean up working directory
+  rm(t12_1)
+  rm(t12_2)
   rm(test_12)
 })
 
@@ -543,11 +550,17 @@ test_that('T13',{
   #programmatic check(s)
   t13_1 <- filter(adsl, SEX == "F") %>%
     group_by(TRT01P) %>%
-    summarise(n=n())
+    summarise(total=n())
+  t13_2 <- filter(adsl, SEX == "F") %>%
+    group_by(TRT01P, RACE) %>%
+    summarise(n=n()) %>%
+    left_join(t13_1, by='TRT01P') %>%
+    mutate(pct = round((n / total) * 100, digits = 1))
   testthat::expect_equal(,label = "T13.1")
   testthat::expect_equal(,label = "T13.2")
   #clean up working directory
   rm(t13_1)
+  rm(t13_2)
   rm(test_13)
 })
 
@@ -586,11 +599,17 @@ test_that('T14',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t14_1 <- group_by(adsl, TRT01P) %>%
-    summarise(n=n())
+    summarise(total=n()) %>%
+    mutate(total = as.numeric(total))
+  t14_2 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n=n()) %>%
+    left_join(t12_1, by='TRT01P') %>%
+    mutate(pct = round((n / total) * 100, digits = 1))
   testthat::expect_equal(,label = "T14.1")
   testthat::expect_equal(,label = "T14.2")
   #clean up working directory
   rm(t14_1)
+  rm(t14_2)
   rm(test_14)
 })
 
@@ -745,18 +764,16 @@ test_that('T16',{
 
 #shift tables
 
-adlbc <- haven::read_xpt("/home/mstackhouse/cdisc_pilot_data/adlbc.xpt") %>%
-  filter(!is.na(BNRIND) & !is.na(ANRIND) & VISIT == 'WEEK 26')
-
+adlbc <- haven::read_xpt("/home/mstackhouse/cdisc_pilot_data/adlbc.xpt")
 
 adlbc$ANRIND <- factor(adlbc$ANRIND, c("L", "N", "H"))
 adlbc$BNRIND <- factor(adlbc$BNRIND, c("L", "N", "H"))
 
-t_shifty <- tplyr_table(adlbc, TRTA, cols=SEX) %>%
+t_shifty <- tplyr_table(adlbc, TRTA, cols=SEX, where=(!is.na(BNRIND) & !is.na(ANRIND))) %>%
   add_layer(
-    group_shift(vars(row=ANRIND, column=BNRIND), by=PARAMCD) %>%
+    group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
       set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
-      set_denoms_by(PARAMCD, TRTA, SEX)
+      set_denoms_by(PARAMCD, AVISIT, TRTA, SEX)
   )
 
 built_shifty <- build(t_shifty)
