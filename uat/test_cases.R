@@ -743,5 +743,23 @@ test_that('T16',{
 #re_np <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)"
 
 
+#shift tables
+
+adlbc <- haven::read_xpt("/home/mstackhouse/cdisc_pilot_data/adlbc.xpt") %>%
+  filter(!is.na(BNRIND) & !is.na(ANRIND) & VISIT == 'WEEK 26')
+
+
+adlbc$ANRIND <- factor(adlbc$ANRIND, c("L", "N", "H"))
+adlbc$BNRIND <- factor(adlbc$BNRIND, c("L", "N", "H"))
+
+t_shifty <- tplyr_table(adlbc, TRTA, cols=SEX) %>%
+  add_layer(
+    group_shift(vars(row=ANRIND, column=BNRIND), by=PARAMCD) %>%
+      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
+      set_denoms_by(PARAMCD, TRTA, SEX)
+  )
+
+built_shifty <- build(t_shifty)
+
 #clean up
 rm(vur)
