@@ -15,7 +15,7 @@ process_summaries.shift_layer <- function(x, ...) {
   # Create the table used for denoms
   process_shift_n(x)
 
-  prepare_shift_format_metadata(x)
+  prepare_format_metadata(x)
 }
 
 #' @noRd
@@ -61,7 +61,7 @@ process_shift_total <- function(x) {
 }
 
 #' @noRd
-prepare_shift_format_metadata <- function(x) {
+prepare_format_metadata.shift_layer <- function(x) {
 
   evalq({
 

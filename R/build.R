@@ -137,6 +137,12 @@ fetch_formatting_info <- function(x) {
   env_bind(x, max_n_width = max_n_width)
 }
 
+#' @param x A tplyr_layer object
+#' @noRd
+prepare_format_metadata <- function(x) {
+  UseMethod("prepare_format_metadata")
+}
+
 
 ######################################################################################
 ######## Saving the below for posterity but I don't think its needed anymore #########
