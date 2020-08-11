@@ -9,8 +9,8 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   expect_s3_class(tab, "tplyr_table")
   expect_s3_class(tab, "environment")
   expect_setequal(env_names(tab), c("target", "pop_data", "pop_where", "cols", "table_where",
-                                    "treat_var", "pop_treat_var",
-                                    "treat_grps", "layers"))
+                                    "treat_var", "pop_treat_var", "treat_grps", "layers",
+                                    "count_layer_formats", "desc_layer_formats"))
 
 })
 
