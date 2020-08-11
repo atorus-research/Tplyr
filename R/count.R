@@ -101,7 +101,7 @@ process_count_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_label(target_var[[1]]) := as.character(!!target_var[[1]]))
+      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]]))
 
     # If there is no values in summary_stat, which can happen depending on where. Return nothing
     if(nrow(summary_stat) == 0) return()
@@ -125,12 +125,12 @@ process_count_distinct_n <- function(x) {
       # treat_var is added because duplicates would be created when there are
       # treatment group totals
       distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
-      # Group by varaibles including target variables and count them
+      # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
       ungroup() %>%
-      # complete all combiniations of factors to include combiniations that don't exist.
-      # add 0 for combintions that don't exist
+      # complete all combinations of factors to include combinations that don't exist.
+      # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
@@ -161,7 +161,7 @@ process_count_total_row <- function(x) {
       ungroup() %>%
       mutate(total = n) %>%
       # Create a variable to label the totals when it is merged in.
-      mutate(!!as_label(target_var[[1]]) := total_row_label) %>%
+      mutate(!!as_name(target_var[[1]]) := total_row_label) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%

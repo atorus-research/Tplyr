@@ -35,6 +35,15 @@ treatment_group_build <- function(table) {
         mutate(!!pop_treat_var := names(treat_grps)[grp_i]) %>%
         bind_rows(built_pop_data)
     }
+
+    # Convert the pop data treatment variable to a factor
+    built_pop_data[[as_label(pop_treat_var)]] <- factor(built_pop_data[[as_label(pop_treat_var)]])
+
+    # Convert the target data treatment variable to a factor and force the levels from
+    # the population data target variable in
+    built_target[[as_label(treat_var)]] <- factor(built_target[[as_label(treat_var)]],
+                                                  levels = levels(built_pop_data[[as_label(pop_treat_var)]]))
+
     rm(grp_i)
   }, envir=table)
 

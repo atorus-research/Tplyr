@@ -249,19 +249,32 @@ set_format_strings <- function(e, ...) {
 #' @noRd
 set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision_cap')) {
 
+  # Catch the arguments from the function call so useful errors can be thrown
+  check <- enquos(...)
+
+  # Make sure that all of the attachments were `f_str` objects
+  for (i in seq_along(check)) {
+
+    if (is_named(check)) {
+      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    } else {
+      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    }
+
+    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
+                msg = msg)
+  }
+
+  # Row labels are pulled from names - so make sure that everything is named
+  assert_that(is_named(check),
+              msg = "In `set_format_string` all parameters must be named in order to create row labels.")
+
+
   # Pick off the ellipsis
   format_strings <- list(...)
 
-  # Row labels are pulled from names - so make sure that everything is named
-  assert_that(is_named(format_strings),
-              msg = "In `set_format_string` all parameters must be named in order to create row labels.")
-
-  # Make sure that all of the attachments were `f_str` objects
-  for (name in names(format_strings)) {
-    assert_that(class(format_strings[[name]]) == "f_str",
-                msg = paste0("In `set_format_string` entry `",name,"` is not an `f_str` object. All assignmentes made within",
-                             " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation."))
-  }
 
   # Get the list of variable names that need to be transposed
   summary_vars <- flatten(map(format_strings, ~ .x$vars))
@@ -305,11 +318,28 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 #' @examples
 #' # TBD
 set_format_strings.count_layer <- function(e, ...) {
+
+  # Catch the arguments from the function call so useful errors can be thrown
+  check <- enquos(...)
+
+  # Make sure that all of the attachments were `f_str` objects
+  # Make sure that all of the attachments were `f_str` objects
+  for (i in seq_along(check)) {
+
+    if (is_named(check)) {
+      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    } else {
+      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    }
+
+    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
+                msg = msg)
+  }
+
   # Grab the named parameters
   params <- list(...)
-
-  # Make sure all parameters were f_str objects
-  map(params, assert_has_class, should_be="f_str")
 
   # Currently supported format names
   valid_names <- c("n_counts", "riskdiff")
@@ -371,7 +401,7 @@ set_format_strings.shift_layer <- function(e, ...) {
 #'
 name_translator <- function(fmt_strings) {
   out <- names(fmt_strings)
-  names(out) <- map_chr(fmt_strings, ~ as_label(.x$vars[[1]]))
+  names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
   out
 }
 
@@ -407,14 +437,16 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
                     fmt$settings[[i]]['dec'] + autos['dec'],
                     fmt$settings[[i]]['dec'])
 
-  # Formats summary stat strings to align display correctly
-  if (is.na(val)) return(fmt$empty)
-
   # Set nsmall to input decimals
   nsmall = decimals
 
   # Increment digits for to compensate for display
   if (decimals > 0) decimals <- decimals + 1
+
+  # Empty return string
+  if (is.na(val)) {
+    return(format(fmt$empty[1], width = (int_len+decimals)))
+  }
 
   # Form the string
   return(

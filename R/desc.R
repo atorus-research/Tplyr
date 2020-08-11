@@ -45,7 +45,10 @@ process_summaries.desc_layer <- function(x, ...) {
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
-        summarize(!!!summaries)
+        summarize(!!!summaries) %>%
+        ungroup() %>%
+        # Fill in any missing treat/col combinations
+        complete(!!treat_var, !!!by, !!!cols)
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums[[i]] %>%
@@ -58,9 +61,17 @@ process_summaries.desc_layer <- function(x, ...) {
            row_label = row_labels[[stat]]
         )
 
+      # If precision is required, then create the variable identifier
+      if (need_prec_table) {
+        trans_sums[[i]] <- trans_sums[[i]] %>%
+          mutate(
+            precision_on = as_name(precision_on)
+          )
+      }
+
       # Numeric data needs the variable names replaced and add summary variable name
       num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
-        mutate(summary_var = as_label(cur_var)) %>%
+        mutate(summary_var = as_name(cur_var)) %>%
         select(summary_var, everything())
 
       # Clean up loop
@@ -101,7 +112,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
       if (need_prec_table) {
         # Merge the precision data on
-        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=match_exact(precision_by))
+        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=c(match_exact(precision_by), 'precision_on'))
       }
 
       trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
@@ -186,6 +197,13 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
 
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]
+
+  # If all the values summarized are NA then return the empty string
+  if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
+    if ('.overall' %in% names(fmt$empty)) {
+      return(fmt$empty['.overall'])
+    }
+  }
 
   # Make the autos argument
   if (fmt$auto_precision) {

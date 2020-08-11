@@ -51,7 +51,7 @@ process_shift_n <- function(x) {
 process_shift_total <- function(x) {
 
   evalq({
-    if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
+    if(is.null(denoms_by)) denoms_by <- c(treat_var, by, cols)
 
     numeric_data %<>%
       group_by(!!!denoms_by) %>%

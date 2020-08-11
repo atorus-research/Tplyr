@@ -32,7 +32,7 @@ set_denoms_by.shift_layer <- function(x, ...) {
 
   # If the row variable is here, rename it to summary_var
   if(as_name(target_var$row) %in% dots_chr) {
-    dots[[which(as_name(target_var$row) %in% dots_chr)]] <- quo(summary_var)
+    dots[[which(dots_chr %in% as_name(target_var$row))]] <- quo(summary_var)
   }
 
   env_bind(x, denoms_by = dots)
