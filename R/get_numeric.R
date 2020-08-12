@@ -37,7 +37,7 @@
 #'
 #'  # Get the data from a specific layer
 #'  get_numeric_data(t, layer='drat')
-#'  get_numeric_data(t, layer=2)
+#'  get_numeric_data(t, layer=1)
 #'
 #'  # Get the data and filter it
 #'  get_numeric_data(t, layer='drat', where = gear==3)
@@ -55,15 +55,16 @@ get_numeric_data.tplyr_table <- function(x, layer=NULL, where=TRUE, ...) {
   where <- enquo(where)
 
   # If where is provided then a layer must be specified
-  assert_that(!(quo_get_expr(where) != TRUE && is.null(layer)),
-              msg="If `where` is provided, `layer_name` must be specified")
+  assert_that(!(quo_get_expr(where) != TRUE && (is.null(layer) || length(layer)!=1)),
+              msg="If `where` is provided, a single `layer` value must be specified")
 
   # If layer is a numeric value then it must be in range
   if (is.numeric(layer)) {
-    assert_that(between(layer, 1, length(x$layers)), msg="Provided layer index is out of range")
+    assert_that(all(between(layer, 1, length(x$layers))), msg="Provided layer index is out of range")
   } else if (!is.null(layer) && !is.null(names(x$layers))) {
     # The provided name must exist
-    assert_that(layer %in% names(x$layers), msg=paste("Layer", layer, "does not exist"))
+    missing_layers <- layer %in% names(x$layers)
+    assert_that(all(missing_layers), msg=paste0("Layer(s) ", paste0(layer[!missing_layers], collapse=", "), " do(es) not exist"))
   }
 
   # If the pre-build wasn't executed then execute it
@@ -75,11 +76,16 @@ get_numeric_data.tplyr_table <- function(x, layer=NULL, where=TRUE, ...) {
   # If not picking a specific layer, then get all the numeric data
   if (is.null(layer)) {
     return(map(x$layers, get_numeric_data))
+  } else if (length(layer) > 1) {
+    # If the layer variable was multiple elements then grap all of them
+    return(map(x$layers[layer], get_numeric_data))
+  } else {
+    # Otherwise, pick it out and filter
+    get_numeric_data(x$layers[[layer]]) %>%
+      filter(!!where)
   }
 
-  # Otherwise, pick it out and filter
-  get_numeric_data(x$layers[[layer]]) %>%
-    filter(!!where)
+
 
 }
 
@@ -174,15 +180,17 @@ get_stats_data.tplyr_table <- function(x, layer=NULL, statistic=NULL, where=TRUE
   where <- enquo(where)
 
   # If where is provided then a layer must be specified
-  assert_that(!(quo_get_expr(where) != TRUE && (is.null(layer) && is.null(statistic))),
+  assert_that(!(quo_get_expr(where) != TRUE && ((is.null(layer) || length(layer)!=1) && is.null(statistic))),
               msg="If `where` is provided, `layer_name` and `statistic` must be specified")
 
   # If layer is a numeric value then it must be in range
   if (is.numeric(layer)) {
-    assert_that(between(layer, 1, length(x$layers)), msg="Provided layer index is out of range")
+    assert_that(all(between(layer, 1, length(x$layers))), msg="Provided layer index is out of range")
   } else if (!is.null(layer) && !is.null(names(x$layers))) {
     # The provided name must exist
-    assert_that(layer %in% names(x$layers), msg=paste("Layer", layer, "does not exist"))
+    missing_layers <- layer %in% names(x$layers)
+    assert_that(all(missing_layers), msg=paste0("Layer(s) ", paste0(layer[!missing_layers], collapse=", "),
+                                               " do(es) not exist"))
   }
 
   # If the pre-build wasn't executed then execute it
@@ -194,6 +202,8 @@ get_stats_data.tplyr_table <- function(x, layer=NULL, statistic=NULL, where=TRUE
   # If not picking a specific layer, then get all the numeric data
   if (is.null(layer)) {
     return(map(x$layers, get_stats_data, statistic=statistic))
+  } else if (length(layer) > 1) {
+    return(map(x$layers[layer], get_stats_data, statistic=statistic))
   }
 
   # Otherwise, pick out the stats container

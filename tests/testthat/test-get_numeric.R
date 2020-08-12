@@ -6,11 +6,17 @@ test_that("Error handling - numeric", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(name='drat',
       group_desc(drat)
+    ) %>%
+    add_layer(name='cyl',
+              group_count(cyl)
     )
 
   expect_error(get_numeric_data(t, where=x==1), "If `where`")
-  expect_error(get_numeric_data(t, layer='blah'), regexp="does not exist$")
+  expect_error(get_numeric_data(t, layer=c('drat', 'cyl'), where=x==1), "If `where`")
+  expect_error(get_numeric_data(t, layer='blah'), regexp="do\\(es\\) not exist$")
+  expect_error(get_numeric_data(t, layer=c('drat','blah')), regexp="do\\(es\\) not exist$")
   expect_error(get_numeric_data(t, layer=10), "Provided layer index is out of range")
+  expect_error(get_numeric_data(t, layer=c(1, 10)), "Provided layer index is out of range")
 
 })
 
@@ -36,6 +42,20 @@ test_that("No parameters gives a list of all numeric datasets", {
   expect_type(dat_list, 'list')
   expect_s3_class(dat_list[[1]], 'tbl_df')
   expect_s3_class(dat_list[[2]], 'tbl_df')
+})
+
+test_that("Requesting multiple layers gives a list of those layers' numeric datasets", {
+
+  # Reorder to show that the selection works
+  dat_list <- get_numeric_data(t, layer=c('cyl', 'drat'))
+  # Check the types of everything
+  expect_type(dat_list, 'list')
+  expect_s3_class(dat_list[[1]], 'tbl_df')
+  expect_s3_class(dat_list[[2]], 'tbl_df')
+  expect_named(dat_list, c('cyl', 'drat'))
+
+  expect_equal(dat_list, get_numeric_data(t, layer=c(2,1)))
+
 })
 
 test_that("Providing a layer returns a dataframe from that layer", {
@@ -67,8 +87,11 @@ test_that("Error handling - statistic", {
     )
 
   expect_error(get_stats_data(t, where=x==1), "If `where`")
-  expect_error(get_stats_data(t, layer='blah'), regexp="does not exist$")
+  expect_error(get_stats_data(t, layer=c(1, 2), where=x==1), "If `where`")
+  expect_error(get_stats_data(t, layer='blah'), regexp="do\\(es\\) not exist$")
+  expect_error(get_stats_data(t, layer=c('am', 'blah')), regexp="do\\(es\\) not exist$")
   expect_error(get_stats_data(t, layer=10), "Provided layer index is out of range")
+  expect_error(get_stats_data(t, layer=c(1, 10)), "Provided layer index is out of range")
 
 })
 
@@ -108,6 +131,37 @@ test_that("No parameters gives a list of statistics data in a list of layers", {
   # Last 2 have dataframes
   expect_s3_class(dat_list[[3]][[1]], 'tbl_df')
   expect_s3_class(dat_list[[4]][[1]], 'tbl_df')
+
+
+})
+
+test_that("Multiple layers gives a list of statistics data in a list for those layers", {
+  dat_list <- get_stats_data(t)
+
+  # Named list
+  expect_type(dat_list, 'list')
+  expect_named(dat_list, c('drat', 'cyl', 'am', 'carb'))
+  # Elements of list contain a list
+  walk(dat_list, expect_type, type='list')
+  # No stats on first two - empty
+  expect_equivalent(map_int(dat_list, length), c(0, 0, 1, 1))
+  # Last 2 have dataframes
+  expect_s3_class(dat_list[[3]][[1]], 'tbl_df')
+  expect_s3_class(dat_list[[4]][[1]], 'tbl_df')
+
+  dat_list <- get_stats_data(t, layer=c("carb", "am"))
+
+  expect_type(dat_list, 'list')
+  expect_named(dat_list, c('carb', 'am'))
+  # Elements of list contain a list
+  walk(dat_list, expect_type, type='list')
+  # No stats on first two - empty
+  expect_equivalent(map_int(dat_list, length), c(1, 1))
+  # Last 2 have dataframes
+  expect_s3_class(dat_list[[1]][[1]], 'tbl_df')
+  expect_s3_class(dat_list[[2]][[1]], 'tbl_df')
+
+  expect_equal(dat_list, get_stats_data(t, layer=c(4, 3)))
 
 
 })

@@ -49,7 +49,7 @@ t <- tplyr_table(mtcars, gear) \%>\%
 
  # Get the data from a specific layer
  get_numeric_data(t, layer='drat')
- get_numeric_data(t, layer=2)
+ get_numeric_data(t, layer=1)
 
  # Get the data and filter it
  get_numeric_data(t, layer='drat', where = gear==3)
