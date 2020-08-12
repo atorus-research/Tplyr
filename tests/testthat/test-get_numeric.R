@@ -40,8 +40,10 @@ test_that("No parameters gives a list of all numeric datasets", {
 
 test_that("Providing a layer returns a dataframe from that layer", {
 
-  dat <- get_numeric_data(t, layer='drat')
-  expect_equal(dat, t$layers$drat$numeric_data)
+  dat <- get_numeric_data(t, layer='cyl')
+  dat2 <- get_numeric_data(t, layer=2)
+  expect_equal(dat, t$layers$cyl$numeric_data)
+  expect_equal(dat, dat2)
 
 })
 
@@ -115,7 +117,9 @@ test_that("Providing a layer returns a list of statistics from that layer", {
   stats <- get_stats_data(t, layer='drat')
   expect_equal(stats, list())
   stats <- get_stats_data(t, layer='am')
+  stats2 <- get_stats_data(t, layer=3)
   expect_equal(stats, map(t$layers$am$stats, ~ env_get(env=.x, 'stats_numeric_data')))
+  expect_equal(stats, stats2)
 
 })
 

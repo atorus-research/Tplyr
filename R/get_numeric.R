@@ -60,11 +60,9 @@ get_numeric_data.tplyr_table <- function(x, layer=NULL, where=TRUE, ...) {
 
   # If layer is a numeric value then it must be in range
   if (is.numeric(layer)) {
-    assert_that(between(layer, 1, length(layers)), msg="Provided layer index is out of range")
-  }
-
-  # The provided name must exist
-  if (!is.null(layer) && !is.null(names(x$layers))) {
+    assert_that(between(layer, 1, length(x$layers)), msg="Provided layer index is out of range")
+  } else if (!is.null(layer) && !is.null(names(x$layers))) {
+    # The provided name must exist
     assert_that(layer %in% names(x$layers), msg=paste("Layer", layer, "does not exist"))
   }
 
@@ -155,7 +153,7 @@ get_numeric_data.tplyr_layer <- function(x, layer=NULL, where=TRUE, ...) {
 #'
 #'  # Return the statistic data for just the "am" layer - a list
 #'  get_stats_data(t, layer="am")
-#'  get_stats_data(t, layer=2)
+#'  get_stats_data(t, layer=3)
 #'
 #'  # Return the riskdiff for the "am" layer - a data frame
 #'  get_stats_data(t, layer="am", statistic="riskdiff")
@@ -181,11 +179,9 @@ get_stats_data.tplyr_table <- function(x, layer=NULL, statistic=NULL, where=TRUE
 
   # If layer is a numeric value then it must be in range
   if (is.numeric(layer)) {
-    assert_that(between(layer, 1, length(layers)), msg="Provided layer index is out of range")
-  }
-
-  # The provided name must exist
-  if (!is.null(layer) && !is.null(names(x$layers))) {
+    assert_that(between(layer, 1, length(x$layers)), msg="Provided layer index is out of range")
+  } else if (!is.null(layer) && !is.null(names(x$layers))) {
+    # The provided name must exist
     assert_that(layer %in% names(x$layers), msg=paste("Layer", layer, "does not exist"))
   }
 
