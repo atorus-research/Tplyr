@@ -39,6 +39,10 @@
 #'  get_numeric_data(t, layer='drat')
 #'  get_numeric_data(t, layer=1)
 #'
+#'  # Choose multiple layers by name or index
+#'  get_numeric_data(t, layer=c('cyl', 'drat'))
+#'  get_numeric_data(t, layer=c(2, 1))
+#'
 #'  # Get the data and filter it
 #'  get_numeric_data(t, layer='drat', where = gear==3)
 #'
@@ -160,6 +164,15 @@ get_numeric_data.tplyr_layer <- function(x, layer=NULL, where=TRUE, ...) {
 #'  # Return the statistic data for just the "am" layer - a list
 #'  get_stats_data(t, layer="am")
 #'  get_stats_data(t, layer=3)
+#'
+#'  # Return the statistic data for just the "am" and "cyl", layer - a list of lists
+#'  get_stats_data(t, layer=c("am", "cyl"))
+#'  get_stats_data(t, layer=c(3, 2))
+#'
+#'  # Return just the statistic data for "am" and "cyl" - a list
+#'  get_stats_data(t, layer=c("am", "cyl"), statistic="riskdiff")
+#'  get_stats_data(t, layer=c(3, 2), statistic="riskdiff")
+#'
 #'
 #'  # Return the riskdiff for the "am" layer - a data frame
 #'  get_stats_data(t, layer="am", statistic="riskdiff")
