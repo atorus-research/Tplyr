@@ -14,7 +14,7 @@
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select
-#' @importFrom tibble tibble rownames_to_column
+#' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
 NULL
