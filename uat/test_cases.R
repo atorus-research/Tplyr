@@ -15,6 +15,7 @@ library(rlang)
 #insert code applicable to all tests i.e. functions
 adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
 adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
+advs <- haven::read_xpt("~/Tplyr/uat/input/advs.xpt")
 
 
 #no updates needed - initializes vur which is used to determine which parts of code to execute during testing
