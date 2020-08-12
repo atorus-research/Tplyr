@@ -17,9 +17,11 @@ process_summaries.count_layer <- function(x, ...) {
     # This happens if the layer is reloaded
     if (!is.null(env_get(x, "nest_sort_index", default = NULL))) env_bind(x, nest_sort_index = NULL)
 
-    # Begin with the layer itself and process the first target vars values one by one
-    env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
-            bind_nested_count_layer, x = x))
+    process_nested_count_target(x)
+
+    # # Begin with the layer itself and process the first target vars values one by one
+    # env_bind(x, numeric_data = map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
+    #         bind_nested_count_layer, x = x))
 
   } else {
 
@@ -78,6 +80,25 @@ process_single_count_target <- function(x) {
                                                           distinct_stat[, c("distinct_n", "distinct_total")])
 
   }, envir = x)
+}
+
+process_nested_count_target <- function(x) {
+
+  evalq({
+
+    first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
+                                                 by = vars(!!!by), where = !!where))
+
+    second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
+                                                  by = vars(!!target_var[[1]], !!!by), where = !!where))
+
+    numeric_data <- bind_rows(first_layer$numeric_data, second_layer$numeric_data)
+    by <- c(target_var[[1]], by)
+    target_var <- vars(!!target_var[[2]])
+
+
+  }, envir = x)
+
 }
 
 #' Process the n count data and put into summary_stat
