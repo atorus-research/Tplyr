@@ -3,6 +3,7 @@
 # This is used for nesting counts
 mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
 mtcars$amn <- unclass(as.factor(mtcars$am))
+mtcars <- mutate_all(mtcars, as.character)
 t1 <- tplyr_table(mtcars, gear)
 t2 <- tplyr_table(mtcars, gear)
 t3 <- tplyr_table(mtcars, gear)
@@ -173,9 +174,9 @@ test_that("Count layers are processed as expected", {
   expect_equal(dim(c4$formatted_data), c(12, 9))
   expect_equal(dim(c5$formatted_data), c(13, 9))
   expect_equal(dim(c6$formatted_data), c(3, 5))
-  expect_equal(dim(c7$formatted_data), c(9, 6))
+  expect_equal(dim(c7$formatted_data), c(9, 7))
   expect_equal(dim(c8$formatted_data), c(3, 5))
-  expect_equal(dim(c9$formatted_data), c(9, 6))
+  expect_equal(dim(c9$formatted_data), c(9, 7))
   expect_equal(dim(c10$formatted_data), c(3, 5))
 
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
@@ -184,10 +185,17 @@ test_that("Count layers are processed as expected", {
   expect_true(all(nchar(unlist(c4$formatted_data[, 5:6])) == 3))
   expect_true(all(nchar(unlist(c5$formatted_data[, 4:6])) == 11))
   expect_true(all(nchar(unlist(c6$formatted_data[, 3:4])) == 11))
-  expect_true(all(nchar(unlist(c7$formatted_data[, 2:4])) == 11))
+  expect_true(all(nchar(unlist(c7$formatted_data[, 3:5])) == 11))
 
   # Check all start with abc
   expect_true(all(map_chr(unlist(c10$formatted_data[, 1]), str_sub, 1, 3) == "abc"))
 
+})
+
+test_that("nested count layers can be rebuilt without changes", {
+  tmp1 <- build(t7)
+  tmp2 <- build(t7)
+
+  expect_equal(tmp1, tmp2)
 
 })

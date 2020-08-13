@@ -157,7 +157,7 @@ add_order_columns.count_layer <- function(x) {
     if (is.null(order_count_method)) order_count_method <- "byfactor"
 
     # If it is a nested count_layer
-    if (length(target_var) == 2) {
+    if (is_built_nest) {
 
       # Number of sorting columns needed, number of bys plus one for the target_var
       formatted_col_index <- length(by) + 1
@@ -172,20 +172,21 @@ add_order_columns.count_layer <- function(x) {
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- nest_sort_index
 
       # Used to remove the prefix
-      indentation_length <- ifelse(!is.null(indentation), length(indentation), 2)
+      indentation_length <- ifelse(!is.null(indentation), length(indentation), 0) #FIXME
 
       # Only the outer columns
       filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
         expr(!!sym(as_name(x)) == !!as_name(y))
       })
+
       all_outer <- numeric_data %>%
-        filter(!!!filter_logic) %>%
-        group_by(!!target_var[[1]]) %>%
+        filter(!!!filter_logic, !is.na(!!by[[1]])) %>%
+        group_by(!!by[[1]]) %>%
         do(extract(., 1, ))
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
-        group_by(.data[[paste0("ord_layer_", formatted_col_index)]]) %>%
+        group_by(.data[[paste0("ord_layer_", formatted_col_index - 1)]]) %>%
         do(add_data_order_nested(., formatted_col_index, numeric_data,
                                  indentation_length = indentation_length,
                                  ordering_cols = ordering_cols,
@@ -332,7 +333,7 @@ get_data_order <- function(x, formatted_col_index) {
 
   evalq({
 
-    # Swtich for the sorting method
+    # Switch for the sorting method
     if (order_count_method == "bycount") {
 
       # No processing is needed here just pass in the needed info
@@ -427,9 +428,17 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   numeric_ordering_data <- numeric_data %>%
     filter(!!!filter_logic) %>%
 
+    # Sometimes row numbers are needed for nested counts if a value in the first
+    # target variable is the same as a variable in the second
+    mutate(row = row_number()) %>%
+
     # I'm like 98% sure this logic works out.
-    pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
+    pivot_wider(id_cols = c(match_exact(by), "summary_var", row),
                 names_from = c(!!treat_var, !!!cols), values_from = !!result_order_var) %>%
+
+    # Remove the placeholder row
+    mutate(row = NULL) %>%
+
     ungroup() %>%
     select(as.symbol(result_column))
 
@@ -499,10 +508,10 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   outer_value <- group_data[1, tail(row_label_vec, 1)][[1]]
 
   if(dots$order_count_method[1] == "byvarn") {
-    varn_df <- get_varn_values(dots$target, as_name(dots$target_var[[1]]))
+    varn_df <- get_varn_values(dots$target, as_name(dots$by[[1]]))
 
     dots$all_outer$..index <- group_data[1,] %>%
-      get_data_order_byvarn(varn_df, dots$target_var[[1]], final_col)
+      get_data_order_byvarn(varn_df, dots$by[[1]], final_col)
 
     group_data[, paste0("ord_layer_", final_col)] <- dots$all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -512,11 +521,11 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   } else if(dots$order_count_method[1] == "bycount") {
 
     dots$all_outer$..index <- dots$all_outer %>%
-      get_data_order_bycount(dots$ordering_cols, dots$treat_var, dots$by, dots$cols,
-                             dots$result_order_var, dots$target_var)
+      get_data_order_bycount(dots$ordering_cols, dots$treat_var, vars(!!!head(dots$by, -1)), dots$cols,
+                             dots$result_order_var, vars(!!dots$by[[1]], !!dots$target_var))
 
     group_data[, paste0("ord_layer_", final_col)] <- dots$all_outer %>%
-      filter(summary_var == outer_value) %>%
+      filter(!!dots$by[[1]] == outer_value) %>%
       ungroup() %>%
       select(..index)
   }
@@ -524,7 +533,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]])) %>%
+    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]]), !is.na(!!dots$by[[1]])) %>%
     # Remove nesting prefix to prepare numeric data.
     mutate(summary_var := str_sub(summary_var, dots$indentation_length))
 
@@ -541,7 +550,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
                                                                                    dots$ordering_cols,
                                                                                    dots$treat_var,
-                                                                                   dots$by,
+                                                                                   head(dots$by, -1),
                                                                                    dots$cols,
                                                                                    dots$result_order_var,
                                                                                    dots$target_var)

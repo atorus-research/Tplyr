@@ -3,7 +3,9 @@
 #' @export
 process_summaries.count_layer <- function(x, ...) {
 
-  process_count_denoms(x)
+  if(is_built_nest) {
+    refresh_nest(x)
+  }
 
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
@@ -20,6 +22,8 @@ process_summaries.count_layer <- function(x, ...) {
     process_nested_count_target(x)
 
   } else {
+
+    process_count_denoms(x)
 
     process_single_count_target(x)
 
@@ -78,6 +82,7 @@ process_single_count_target <- function(x) {
   }, envir = x)
 }
 
+#' @noRd
 process_nested_count_target <- function(x) {
 
   evalq({
@@ -88,21 +93,39 @@ process_nested_count_target <- function(x) {
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
                                                   by = vars(!!target_var[[1]], !!!by), where = !!where))
 
-    first_layer_final <- first_layer$numeric_data %>%
-      add_column(!!target_var[[1]] := .[["summary_var"]])
+    first_layer_final <- first_layer$numeric_data
+       # add_column(!!target_var[[1]] := .[["summary_var"]])
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%
       do(filter_nested_inner_layer(., target, as_name(target_var[[1]]), as_name(target_var[[2]])))
 
+    # Bind the numeric data together
     numeric_data <- bind_rows(first_layer_final, second_layer_final)
-    # Flip the names of the summary_var and the second
+
+    # Save the original by and target_vars incase the layer is rebuilt
+    by_saved <- by
+    target_var_saved <- target_var
+    is_built_nest <- TRUE
+
     by <- vars(!!target_var[[1]], !!!by)
     target_var <- vars(!!target_var[[2]])
 
 
   }, envir = x)
 
+}
+
+#' This function resets the variables for a nested layer after it was built
+#' @noRd
+refresh_nest <- function(x) {
+  evalq({
+
+    by <- by_saved
+    target_var <- target_var_saved
+
+
+  }, envir = x)
 }
 
 #' This function is meant to remove the values of an inner layer that don't
@@ -275,8 +298,9 @@ process_formatting.count_layer <- function(x, ...) {
                                  max_n_width=max_n_width)
         }
       }) %>%
+
       # Pivot table
-      pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
+      pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_")
 
@@ -290,10 +314,23 @@ process_formatting.count_layer <- function(x, ...) {
     if(!is.null(nest_count) && !nest_count) {
       formatted_data <- formatted_data %>%
         replace_by_string_names(quos(!!!by, summary_var))
+
+      # I had trouble doing this in a 'tidy' way so I just did it here.
+      # First column is always the outer target variable.
+      # Last row label is always the inner target variable
+      row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
+      # Replace the missing 'outer' with the original target
+      formatted_data[is.na(formatted_data[, 1]), 1] <- formatted_data[is.na(formatted_data[, 1]),
+                                                                      tail(row_labels, 1)]
     } else {
       formatted_data <- formatted_data %>%
         mutate(!!as_name(target_var[[1]]) := NULL) %>%
         replace_by_string_names(quos(!!!by, summary_var))
+
+      row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
+      # Replace the missing 'outer' with the original target
+      formatted_data[is.na(formatted_data[, 1]), 1] <- formatted_data[is.na(formatted_data[, 1]),
+                                                                      tail(row_labels, 1)]
     }
 
       # Replace String names for by and target variables. target variables are included becasue they are

@@ -105,7 +105,7 @@ test_that("A nested group_count layer can be ordered properly", {
     )
   b_t <- build(t)
 
-  expect_equivalent(b_t[, 6], tibble(ord_layer_2 = rep(c(Inf, 1, 2), 3)))
+  expect_equivalent(b_t[, 6], tibble(ord_layer_1 = c(1, 2, 3, rep(c( 1, 2, 3), each = 2))))
 })
 
 test_that("A group_desc layer can be ordered properly", {
@@ -128,7 +128,7 @@ test_that("A group_desc layer can be ordered properly", {
 })
 
 ##### Nested
-adsl <- haven::read_xpt("~/CDISC_pilot_replication/data/adam/adsl.xpt")
+adsl <- haven::read_xpt("../../vignettes/adsl.xpt")
 adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
 adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
 adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
