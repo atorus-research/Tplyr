@@ -139,7 +139,8 @@ test_that("Parent of layer is appropraitely parent environment", {
   expect_true(identical(env_parent(l), t))
 })
 
-# I don't remember this very much but it's not working
+# There's some nuance here that makes this tricky so leaving the tests out for now.
+# Not much practical use currently anyway.
 # test_that("Objects submitted through ellipsis argument appear in environment", {
 #   t <- tplyr_table(iris, Sepal.Width)
 #   dat <- data.frame(var = c(1,2,3))
