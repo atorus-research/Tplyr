@@ -4,12 +4,16 @@
 \alias{get_numeric_data}
 \title{Retrieve the numeric data from a tplyr objects}
 \usage{
-get_numeric_data(x, ...)
+get_numeric_data(x, layer = NULL, where = TRUE, ...)
 }
 \arguments{
 \item{x}{A tplyr_table or tplyr_layer object}
 
-\item{...}{Arguments to pass foward}
+\item{layer}{Layer name or index to select out specifically}
+
+\item{where}{Subset criteria passed to dplyr::filter}
+
+\item{...}{Additional arguments to pass forward}
 }
 \value{
 Numeric data from the Tplyr layer
@@ -20,21 +24,38 @@ a method of accessing that directly.
 }
 \details{
 When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers. The data will be
-returned to the user in a list of dataframes. If the data has already been processed (i.e. \code{build} has
+returned to the user in a list of data frames. If the data has already been processed (i.e. \code{build} has
 been run), the numeric data is already available and will simply be returned. Otherwise, the numeric portion of the layer will
 be processed.
+
+Using the layer and where parameters, data for a specific layer can be extracted and subset, making it
+simple to directly access data of interest. This is most clear when layers are given text names
+instead of using a layer index, but a numeric index works as well.
 }
 \examples{
 # Load in pipe
 library(magrittr)
 
-tplyr_table(mtcars, gear) \%>\%
-  add_layer(
-    group_count(cyl)
-  ) \%>\%
-  add_layer(
-    group_desc(mpg)
-  ) \%>\%
-  get_numeric_data()
+t <- tplyr_table(mtcars, gear) \%>\%
+ add_layer(name='drat',
+           group_desc(drat)
+ ) \%>\%
+ add_layer(name='cyl',
+           group_count(cyl)
+ )
+
+ # Return a list of the numeric dataframes
+ get_numeric_data(t)
+
+ # Get the data from a specific layer
+ get_numeric_data(t, layer='drat')
+ get_numeric_data(t, layer=1)
+
+ # Choose multiple layers by name or index
+ get_numeric_data(t, layer=c('cyl', 'drat'))
+ get_numeric_data(t, layer=c(2, 1))
+
+ # Get the data and filter it
+ get_numeric_data(t, layer='drat', where = gear==3)
 
 }

@@ -140,7 +140,7 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
     )
 
   # Add to the stats container
-  layer$stats <- append(layer$stats, rd)
+  layer$stats <- append(layer$stats, list(riskdiff = rd))
 
   layer
 }
