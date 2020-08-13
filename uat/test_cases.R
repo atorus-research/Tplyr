@@ -17,12 +17,11 @@ adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
 adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
 advs <- haven::read_xpt("~/Tplyr/uat/input/advs.xpt")
 
-
 #no updates needed - initializes vur which is used to determine which parts of code to execute during testing
 vur <- NULL
 if(file.exists("~/Tplyr/uat/references/output/vur_auto.Rds")) vur <- readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")
 
-#test 1
+#test 1 ----
 test_that('T1',{
   if(is.null(vur)) {
 
@@ -53,7 +52,7 @@ test_that('T1',{
   rm(test_1)
 })
 
-#test 2
+#test 2 ----
 test_that('T2',{
   if(is.null(vur)) {
 
@@ -83,7 +82,7 @@ test_that('T2',{
   rm(test_2)
 })
 
-#test 3
+#test 3 ----
 test_that('T3',{
   if(is.null(vur)) {
 
@@ -125,7 +124,7 @@ test_that('T3',{
   rm(test_3)
 })
 
-#test 4
+#test 4 ----
 test_that('T4',{
   if(is.null(vur)) {
 
@@ -159,7 +158,7 @@ test_that('T4',{
   rm(test_4)
 })
 
-#test 5
+#test 5 ----
 test_that('T5',{
   if(is.null(vur)) {
 
@@ -197,7 +196,7 @@ test_that('T5',{
   rm(test_5)
 })
 
-#test 6
+#test 6 ----
 test_that('T6',{
   if(is.null(vur)) {
 
@@ -232,7 +231,7 @@ test_that('T6',{
   rm(test_6)
 })
 
-#test 7
+#test 7 ----
 test_that('T7',{
   if(is.null(vur)) {
 
@@ -287,7 +286,7 @@ test_that('T7',{
   rm(test_7)
 })
 
-#test 8
+#test 8 ----
 test_that('T8',{
   if(is.null(vur)) {
 
@@ -342,7 +341,7 @@ test_that('T8',{
   rm(test_8)
 })
 
-#test 9
+#test 9 ----
 test_that('T9',{
   if(is.null(vur)) {
 
@@ -382,8 +381,12 @@ test_that('T9',{
   rm(test_9)
 })
 
-#test 10
-test_that('T10',{
+
+#test 10 ----
+#HOLD FOR MISSING COUNTS
+
+#test 11 ----
+test_that('T11',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -395,32 +398,32 @@ test_that('T10',{
         group_count(RACE_FACTOR)
       )
     build(t)
-    test_10 <- get_numeric_data(t)
+    test_11 <- get_numeric_data(t)
 
     # output table to check attributes
-    save(test_10, file = "~/Tplyr/uat/output/test_10.RData")
+    save(test_11, file = "~/Tplyr/uat/output/test_11.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_10)
+    rm(test_11)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_10.RData")
+    load("~/Tplyr/uat/output/test_11.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
   testthat::expect_equal(c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
-                         unique(test_10[[1]]$summary_var),
-                         label = "T10.1")
+                         unique(test_11[[1]]$summary_var),
+                         label = "T11.1")
   #clean up working directory
-  rm(test_10)
+  rm(test_11)
 })
 
-#test 11
-test_that('T11',{
+#test 12 ----
+test_that('T12',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -442,46 +445,7 @@ test_that('T11',{
           set_format_strings(f_str("xxx (xx.x%) [xxx (xx.x%)]", n, pct, distinct, distinct_pct))
       )
 
-    test_11 <- build(t)
-
-    # output table to check attributes
-    save(test_11, file = "~/Tplyr/uat/output/test_11.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_11)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_11.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  testthat::expect_equal(, filter(test_11, ord_layer_index == 1),label = "T11.1")
-  testthat::expect_equal(, filter(test_11, ord_layer_index == 2),label = "T11.2")
-  testthat::expect_equal(, filter(test_11, ord_layer_index == 3),label = "T11.3")
-  #clean up working directory
-  rm(test_11)
-})
-
-#test 12
-test_that('T12',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_count(RACE) %>%
-          set_format_strings(f_str("xxx (xx.x%)", n, pct))
-      )
-
-    build(t)
-    test_12 <- filter(get_numeric_data(t)[[1]], total != 0)
-
+    test_12 <- build(t)
 
     # output table to check attributes
     save(test_12, file = "~/Tplyr/uat/output/test_12.RData")
@@ -498,22 +462,14 @@ test_that('T12',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t12_1 <- group_by(adsl, TRT01P) %>%
-    summarise(total=n()) %>%
-    mutate(total = as.numeric(total))
-  t12_2 <- group_by(adsl, TRT01P, RACE) %>%
-    summarise(n=n()) %>%
-    left_join(t12_1, by='TRT01P') %>%
-    mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(t12_1,unique(test_12[c("TRT01P", "total")]),label = "T12.1")
-  testthat::expect_equal(,label = "T12.2")
+  testthat::expect_equal(, filter(test_12, ord_layer_index == 1),label = "T12.1")
+  testthat::expect_equal(, filter(test_12, ord_layer_index == 2),label = "T12.2")
+  testthat::expect_equal(, filter(test_12, ord_layer_index == 3),label = "T12.3")
   #clean up working directory
-  rm(t12_1)
-  rm(t12_2)
   rm(test_12)
 })
 
-#test 13
+#test 13 ----
 test_that('T13',{
   if(is.null(vur)) {
 
@@ -521,14 +477,13 @@ test_that('T13',{
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
-      set_pop_where(SEX == "F") %>%
       add_layer(
         group_count(RACE) %>%
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
     build(t)
-    test_13 <- get_numeric_data(t)
+    test_13 <- filter(get_numeric_data(t)[[1]], total != 0)
 
 
     # output table to check attributes
@@ -546,15 +501,14 @@ test_that('T13',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t13_1 <- filter(adsl, SEX == "F") %>%
-    group_by(TRT01P) %>%
-    summarise(total=n())
-  t13_2 <- filter(adsl, SEX == "F") %>%
-    group_by(TRT01P, RACE) %>%
+  t13_1 <- group_by(adsl, TRT01P) %>%
+    summarise(total=n()) %>%
+    mutate(total = as.numeric(total))
+  t13_2 <- group_by(adsl, TRT01P, RACE) %>%
     summarise(n=n()) %>%
-    left_join(t13_1, by='TRT01P') %>%
+    left_join(t12_1, by='TRT01P') %>%
     mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(,label = "T13.1")
+  testthat::expect_equal(t13_1,unique(test_13[c("TRT01P", "total")]),label = "T13.1")
   testthat::expect_equal(,label = "T13.2")
   #clean up working directory
   rm(t13_1)
@@ -562,8 +516,57 @@ test_that('T13',{
   rm(test_13)
 })
 
-#test 14
+#test 14 ----
 test_that('T14',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      set_pop_where(SEX == "F") %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_format_strings(f_str("xxx (xx.x%)", n, pct))
+      )
+
+    build(t)
+    test_14 <- get_numeric_data(t)
+
+
+    # output table to check attributes
+    save(test_14, file = "~/Tplyr/uat/output/test_14.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_14)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_13.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t14_1 <- filter(adsl, SEX == "F") %>%
+    group_by(TRT01P) %>%
+    summarise(total=n())
+  t14_2 <- filter(adsl, SEX == "F") %>%
+    group_by(TRT01P, RACE) %>%
+    summarise(n=n()) %>%
+    left_join(t14_1, by='TRT01P') %>%
+    mutate(pct = round((n / total) * 100, digits = 1))
+  testthat::expect_equal(,label = "T14.1")
+  testthat::expect_equal(,label = "T14.2")
+  #clean up working directory
+  rm(t14_1)
+  rm(t14_2)
+  rm(test_14)
+})
+
+#test 15 ----
+test_that('T15',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -578,54 +581,7 @@ test_that('T14',{
     )
 
     build(t)
-    test_14 <- get_numeric_data(t)
-
-    # output table to check attributes
-    save(test_14, file = "~/Tplyr/uat/output/test_14.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_14)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_14.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t14_1 <- group_by(adsl, TRT01P) %>%
-    summarise(total=n()) %>%
-    mutate(total = as.numeric(total))
-  t14_2 <- group_by(adsl, TRT01P, RACE) %>%
-    summarise(n=n()) %>%
-    left_join(t14_1, by='TRT01P') %>%
-    mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(,label = "T14.1")
-  testthat::expect_equal(,label = "T14.2")
-  #clean up working directory
-  rm(t14_1)
-  rm(t14_2)
-  rm(test_14)
-})
-
-#test 15
-test_that('T15',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01A) %>%
-      add_layer(
-        group_count(RACE) %>%
-          add_risk_diff(c('Xanomeline High Dose','Placebo'))
-      )
-
-    build(t)
-    test_15 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
-
+    test_15 <- get_numeric_data(t)
 
     # output table to check attributes
     save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
@@ -642,31 +598,78 @@ test_that('T15',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t15_1 <- group_by(adsl, TRT01P) %>%
+    summarise(total=n()) %>%
+    mutate(total = as.numeric(total))
+  t15_2 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n=n()) %>%
+    left_join(t15_1, by='TRT01P') %>%
+    mutate(pct = round((n / total) * 100, digits = 1))
+  testthat::expect_equal(,label = "T15.1")
+  testthat::expect_equal(,label = "T15.2")
+  #clean up working directory
+  rm(t15_1)
+  rm(t15_2)
+  rm(test_15)
+})
+
+#test 16 ----
+test_that('T16',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01A) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      )
+
+    build(t)
+    test_16 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
+
+
+    # output table to check attributes
+    save(test_16, file = "~/Tplyr/uat/output/test_16.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_16)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_16.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
   tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose"), n=n())[[1]]
   cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
   tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
   cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
-  t15 <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
+  t16 <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
   testthat::expect_equal(t15$estimate[[1]] - t15$estimate[[2]],
-                         filter(test_15, summary_var == 'WHITE' & measure == 'dif')[[3]],
-                         label = "T15.1")
+                         filter(test_16, summary_var == 'WHITE' & measure == 'dif')[[3]],
+                         label = "T16.1")
   testthat::expect_equal(c(t15$conf.int[1], t15$conf.int[2]),
-                         c(filter(test_15, summary_var == 'WHITE' & measure == 'low')[[3]],
-                           filter(test_15, summary_var == 'WHITE' & measure == 'high')[[3]]),
-                         label = "T15.2")
+                         c(filter(test_16, summary_var == 'WHITE' & measure == 'low')[[3]],
+                           filter(test_16, summary_var == 'WHITE' & measure == 'high')[[3]]),
+                         label = "T16.2")
 
   #clean up working directory
   rm(tot_p)
   rm(cnt_p)
   rm(tot_t)
   rm(cnt_t)
-  rm(t15)
-  rm(test_15)
+  rm(t16)
+  rm(test_16)
 })
 
 
-#test 16
-test_that('T16',{
+#test 17 ----
+test_that('T17',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -691,61 +694,237 @@ test_that('T16',{
       )
 
     build(t)
-    test_16 <- get_numeric_data(t)[[1]]
+    test_17 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
-    save(test_16, file = "~/Tplyr/uat/output/test_16.RData")
+    save(test_17, file = "~/Tplyr/uat/output/test_17.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_16)
+    rm(test_17)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_16.RData")
+    load("~/Tplyr/uat/output/test_17")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
-                         subset(test_16, stat == 'n' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.1")
+                         subset(test_17, stat == 'n' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.1")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
-                         subset(test_16, stat == 'mean' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.2")
+                         subset(test_17, stat == 'mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.2")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
-                         subset(test_16, stat == 'median' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.3")
+                         subset(test_17, stat == 'median' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.3")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
-                         subset(test_16, stat == 'sd' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.4")
+                         subset(test_17, stat == 'sd' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.4")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
-                         subset(test_16, stat == 'var' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.5")
+                         subset(test_17, stat == 'var' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.5")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
-                         subset(test_16, stat == 'min' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.6")
+                         subset(test_17, stat == 'min' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.6")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
-                         subset(test_16, stat == 'max' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.7")
+                         subset(test_17, stat == 'max' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.7")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
-                         subset(test_16, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.8")
+                         subset(test_17, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.8")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
-                         subset(test_16, stat == 'q1' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.9")
+                         subset(test_17, stat == 'q1' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.9")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
-                         subset(test_16, stat == 'q3' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.10")
+                         subset(test_17, stat == 'q3' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.10")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
-                         subset(test_16, stat == 'missing' & TRT01P == 'Placebo')[['value']],
-                         label = "T16.11")
+                         subset(test_17, stat == 'missing' & TRT01P == 'Placebo')[['value']],
+                         label = "T17.11")
   #manual check(s)
 
 
   #clean up working directory
-  rm(test_16)
+  rm(test_17)
+})
+
+
+#test 18 ----
+test_that('T18',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_custom_summaries(
+            geometric_mean = exp(sum(log(.var[.var > 0]),
+                                     na.rm=TRUE) / length(.var))
+          ) %>%
+          set_format_strings(
+            'Geometric Mean (SD)' = f_str('xx.xx (xx.xxx)', geometric_mean, sd)
+          )
+      )
+
+    build(t)
+    test_18 <- get_numeric_data(t)[[1]]
+
+    # output table to check attributes
+    save(test_18, file = "~/Tplyr/uat/output/test_18.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_18)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_18.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',],
+                                   geometric_mean = exp(sum(log(AGE[AGE > 0]),na.rm=TRUE) / length(AGE)))[[1]],
+                         subset(test_18, stat == 'geometric_mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T18.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(test_18)
+})
+
+
+#test 19 ----
+test_that('T19',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE, by=ETHNIC) %>%
+          set_format_strings(
+            'n' = f_str('xx', n),
+            'mean' = f_str('xx.x', mean),
+            'median' = f_str('xx.x', median),
+            'sd' = f_str('xx.xx', sd),
+            'var' = f_str('xx.xx', var),
+            'min' = f_str('xx', min),
+            'max' = f_str('xx', max),
+            'iqr' = f_str('xx.x', iqr),
+            'q1' = f_str('xx.x', q1),
+            'q3' = f_str('xx.x', q3)
+          )
+      )
+
+    build(t)
+    test_19 <- filter(get_numeric_data(t)[[1]], TRT01P == 'Placebo')
+
+    # output table to check attributes
+    save(test_19, file = "~/Tplyr/uat/output/test_19.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_19)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_19.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t19_1 <- pivot_longer(data.frame(summarise(group_by(adsl[adsl$TRT01P == 'Placebo',],ETHNIC),
+                                             n=n(),
+                                             mean=mean(AGE),
+                                             median=median(AGE),
+                                             sd=sd(AGE),
+                                             var=var(AGE),
+                                             min=min(AGE),
+                                             max=max(AGE),
+                                             iqr=IQR(AGE),
+                                             q1=quantile(AGE)[[2]],
+                                             q3=quantile(AGE)[[4]]
+                                             )
+                                   ),
+                        cols=c(n,mean,median,sd,var,min,max,iqr,q1,q3),names_to="STAT")
+
+  testthat::expect_equal(t19_1$value,
+                         test_19$value,
+                         label = "T19.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(t19_1)
+  rm(test_19)
+})
+
+
+#test 20 ----
+test_that('T20',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'combo' = f_str('xx, xx.x, xx, x.xx, xx.xx, xx, xx, xx.x, xx.x, xx.x',
+                            n,   mean, median, sd,  var,   min, max, iqr, q1,  q3)
+          )
+      )
+
+    test_20 <- build(t)$var1_Placebo
+
+    # output table to check attributes
+    save(test_20, file = "~/Tplyr/uat/output/test_20.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_20)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_20.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+
+  t20_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=median(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=round(sd(AGE),2))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=round(var(AGE),2))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=round(IQR(AGE),1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=round(quantile(AGE)[[2]],1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]],
+                 sep=", ")
+
+  testthat::expect_equal(t20_1,
+                         test_20,
+                         label = "T20.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(t20_1)
+  rm(test_20)
 })
 
 #format matching
