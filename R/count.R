@@ -122,13 +122,8 @@ process_nested_count_target <- function(x) {
 #' This function resets the variables for a nested layer after it was built
 #' @noRd
 refresh_nest <- function(x) {
-  evalq({
-
-    by <- by_saved
-    target_var <- target_var_saved
-
-
-  }, envir = x)
+  env_bind(x, by = env_get(x, "by_saved"))
+  env_bind(x, target_var = env_get(x, "target_var_saved"))
 }
 
 #' This function is meant to remove the values of an inner layer that don't
@@ -334,10 +329,10 @@ process_formatting.count_layer <- function(x, ...) {
       row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
       # Replace the missing 'outer' with the original target
       # The indexing looks weird but the idea is to get rid of the matrix with the '[, 1]'
-      formatted_data[is.na(formatted_data[, 1])[, 1], 1] <- formatted_data[is.na(formatted_data[, 1])[, 1],
+      formatted_data[is.na(formatted_data[[1]]), 1] <- formatted_data[is.na(formatted_data[[1]]),
                                                                       tail(row_labels, 1)]
     } else {
-      formatted_data %<>%
+      formatted_data <- formatted_data %>%
         replace_by_string_names(quos(!!!by, summary_var))
     }
 

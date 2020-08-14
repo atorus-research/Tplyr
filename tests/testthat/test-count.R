@@ -201,3 +201,4 @@ test_that("nested count layers can be rebuilt without changes", {
   expect_equal(tmp1, tmp2)
 
 })
+
