@@ -942,7 +942,7 @@ test_that('T23',{
       add_layer(
         group_desc(AGE) %>%
           set_format_strings(
-            'combo' = f_str('xx, (xx.x), )xx(), x.xx%%, [xx.xx[], xx, xx, xx.x, Q1 - xx.x, Q3 - xx.x',
+            'combo' = f_str('xx, (xx.x), )xx(), x.xx%%, [xx.xx[], xx, xx, xx.x, {Q1 - xx.x}, Q3 - xx.x',
                             n,   mean, median, sd,  var,   min, max, iqr, q1,  q3)
           )
       )
@@ -980,9 +980,9 @@ test_that('T23',{
                   summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
                   ", ",
                   summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=round(IQR(AGE),1))[[1]],
-                  ", Q1 - ",
+                  ", {Q1 - ",
                   summarise(adsl[adsl$TRT01P == 'Placebo',],q1=round(quantile(AGE)[[2]],1))[[1]],
-                  ", Q3 - ",
+                  "}, Q3 - ",
                   summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]]
                   )
 
