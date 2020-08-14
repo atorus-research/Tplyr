@@ -132,12 +132,14 @@ get_numeric_data.tplyr_layer <- function(x, layer=NULL, where=TRUE, ...) {
 #' @param layer Layer name or index to select out specifically
 #' @param statistic Statistic name or index to select
 #' @param where Subset criteria passed to dplyr::filter
-#' @param ...
+#' @param ... Additional arguments passed to dispatch
 #'
-#' @return
+#' @return The statistics data of the supplied layer
 #' @export
 #'
 #' @examples
+#' library(magrittr)
+#'
 #' t <- tplyr_table(mtcars, gear) %>%
 #'   add_layer(name='drat',
 #'             group_desc(drat)
