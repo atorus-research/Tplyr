@@ -175,7 +175,7 @@ validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...)
 
   # For desc layers additionally make sure that the target variables all are numeric
   if (type == "desc") {
-    walk(target_var, ~ assert_that(is.numeric(parent$target[[as_name(.x)]]),
+    walk(target_var, ~ assert_that(is.numeric(evalq(target, envir=parent)[[as_name(.x)]]),
                                    msg = paste0("Target variable `", as_name(.x), "` is not numeric. ",
                                                 "Target variables must be numeric for desc layers.")))
   }

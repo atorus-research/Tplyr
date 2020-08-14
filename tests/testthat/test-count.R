@@ -202,3 +202,12 @@ test_that("nested count layers can be rebuilt without changes", {
 
 })
 
+test_that("Count layer clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(am, where=bad == code)
+    )
+
+  expect_error(build(t), "group_count `where` condition `bad == code` is invalid.")
+})
+

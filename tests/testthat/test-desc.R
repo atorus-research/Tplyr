@@ -77,49 +77,49 @@ test_that("Group_desc can be created without warnings and errors", {
 
 test_that("group_desc are processed as expected", {
 
-  expect_setequal(names(d1), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d1), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings"))
-  expect_setequal(names(d2), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d2), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings"))
-  expect_setequal(names(d3), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d3), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings"))
-  expect_setequal(names(d4), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d4), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings", "custom_summaries"))
-  expect_setequal(names(d5), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d5), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings"))
-  expect_setequal(names(d6), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d6), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings", "custom_summaries"))
-  expect_setequal(names(d7), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d7), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
                                "format_strings"))
-  expect_setequal(names(d7), c("where", "need_prec_table", "formatted_col_index",
+  expect_setequal(names(d7), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
@@ -207,4 +207,13 @@ test_that("Auto precision builds correctly", {
   expect_equivalent(mutate_all(t_cap, as.character),
                mutate_all(t_cap_comp, as.character))
 
+})
+
+test_that("Desc layer clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(drat, where=bad == code)
+    )
+
+  expect_error(build(t), "group_desc `where` condition `bad == code` is invalid.")
 })
