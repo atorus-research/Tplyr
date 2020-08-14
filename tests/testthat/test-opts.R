@@ -17,7 +17,7 @@ test_that('Default count level options pass forward', {
   dat <- suppressWarnings(build(t))
 
   expected_cnt <- c('3 ( 20.0%)','4 ( 26.7%)','3 ( 20.0%)','5 ( 33.3%)','0 (  0.0%)','0 (  0.0%)')
-  expected_rdiff <- c(" 0.133 (-0.277,  0.543)", " 0.067 (-0.348,  0.481)", "", " 0.000 (-0.358,  0.358)", "", "")
+  expected_rdiff <- c(" 0.133 (-0.277,  0.543)", " 0.067 (-0.348,  0.481)", "-0.200 (-0.477,  0.077)", " 0.000 (-0.358,  0.358)", " 0.000 ( 0.000,  0.000)", " 0.000 ( 0.000,  0.000)")
 
   expect_equal(dat$var1_3, expected_cnt)
   expect_equal(dat$rdiff_4_3, expected_rdiff)
@@ -45,7 +45,7 @@ test_that('Default count level options pass forward', {
   dat <- suppressWarnings(build(t))
 
   expected_cnt <- c('   3','   4','   3','   5','   0','   0')
-  expected_rdiff <- c(" 0.133", " 0.067", "", " 0.000", "", "")
+  expected_rdiff <- c(" 0.133", " 0.067", "-0.200", " 0.000", " 0.000", " 0.000")
 
   expect_equal(dat$var1_3, expected_cnt)
   expect_equal(dat$rdiff_4_3, expected_rdiff)
@@ -100,11 +100,11 @@ test_that('Table level overrides superseed option defaults', {
 
   # Default values
   def_expected_cnt <- c('3 ( 20.0%)','4 ( 26.7%)','3 ( 20.0%)','5 ( 33.3%)','0 (  0.0%)','0 (  0.0%)')
-  def_expected_rdiff <- c(" 0.133 (-0.277,  0.543)", " 0.067 (-0.348,  0.481)", "", " 0.000 (-0.358,  0.358)", "", "")
+  def_expected_rdiff <- c(" 0.133 (-0.277,  0.543)", " 0.067 (-0.348,  0.481)", "-0.200 (-0.477,  0.077)", " 0.000 (-0.358,  0.358)", " 0.000 ( 0.000,  0.000)", " 0.000 ( 0.000,  0.000)")
 
   # Table override values
   tbl_expected_cnt <- c('   3','   4','   3','   5','   0','   0')
-  tbl_expected_rdiff <- c(" 0.133", " 0.067", "", " 0.000", "", "")
+  tbl_expected_rdiff <- c(" 0.133", " 0.067", "-0.200", " 0.000", " 0.000", " 0.000")
 
   # Override count, not risk
   expect_equal(t_cnt_dat$var1_3, tbl_expected_cnt)
@@ -178,10 +178,10 @@ test_that('Table level overrides superseed option defaults', {
 
   # Table override values
   tbl_expected_cnt <- c('   3','   4','   3','   5','   0','   0')
-  tbl_expected_rdiff <- c(" 0.133", " 0.067", "", " 0.000", "", "")
+  tbl_expected_rdiff <- c(" 0.133", " 0.067", "-0.200", " 0.000", " 0.000", " 0.000")
 
   lay_expected_cnt <- c("(20%)", "(27%)", "(20%)", "(33%)", "( 0%)", "( 0%)")
-  lay_expected_rdiff <- c("-0.277,  0.543", "-0.348,  0.481", "", "-0.358,  0.358", "", "")
+  lay_expected_rdiff <- c("-0.277,  0.543", "-0.348,  0.481", "-0.477,  0.077", "-0.358,  0.358", " 0.000,  0.000", " 0.000,  0.000")
 
   # Override count, not risk
   expect_equal(t_cnt_dat$var1_3, lay_expected_cnt)
@@ -225,8 +225,8 @@ test_that('Scientific notation overrides function properly', {
  # Make sure scipen outside of tplyr is unchanged
  expect_equal(getOption('scipen'), 0)
 
- expected_def <- c(" 0.600 ( 0.230,  0.970)"," 0.200 (-0.192,  0.592)", "")
- expected_chg <- c(" 6e-01 (2.3e-01, 9.7e-01)", " 2e-01 (-1.92e-01, 5.92e-01)", "")
+ expected_def <- c(" 0.600 ( 0.230,  0.970)"," 0.200 (-0.192,  0.592)", "-0.800 (-1.000, -0.523)")
+ expected_chg <- c(" 6e-01 (2.3e-01, 9.7e-01)", " 2e-01 (-1.92e-01, 5.92e-01)", "-8e-01 (-1.000, -5.23e-01)")
 
  expect_equal(def$rdiff_4_3, expected_def)
  expect_equal(chg$rdiff_4_3, expected_chg)

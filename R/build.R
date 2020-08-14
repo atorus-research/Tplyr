@@ -120,6 +120,10 @@ process_formatting <- function(x, ...) {
   UseMethod("process_formatting")
 }
 
+#' @noRd
+prepare_format_metadata <- function(x) {
+  UseMethod("prepare_format_metadata")
+}
 
 #' Placeholder function to fetch table formatting data from layers
 #'

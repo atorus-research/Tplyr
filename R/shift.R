@@ -15,10 +15,10 @@ process_summaries.shift_layer <- function(x, ...) {
   # Create the table used for denoms
   process_shift_n(x)
 
-  prepare_shift_format_metadata(x)
+  prepare_format_metadata(x)
 }
 
-#' @export
+#' @noRd
 process_shift_n <- function(x) {
 
   evalq({
@@ -47,7 +47,7 @@ process_shift_n <- function(x) {
 
 }
 
-#' @export
+#' @noRd
 process_shift_total <- function(x) {
 
   evalq({
@@ -55,13 +55,13 @@ process_shift_total <- function(x) {
 
     numeric_data %<>%
       group_by(!!!denoms_by) %>%
-      do(get_shift_total(., denoms_by, denoms_df))
+      do(get_denom_total(., denoms_by, denoms_df))
 
   }, envir = x)
 }
 
-#' @export
-prepare_shift_format_metadata <- function(x) {
+#' @noRd
+prepare_format_metadata.shift_layer <- function(x) {
 
   evalq({
 
@@ -91,7 +91,7 @@ process_formatting.shift_layer <- function(x, ...) {
   evalq({
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
-      mutate(n = construct_shift_string(.n=n, .total = .total,
+      mutate(n = construct_shift_string(.n=n, .total = total,
                                         shift_fmt=format_strings,
                                         max_layer_length=max_layer_length,
                                         max_n_width=max_n_width)) %>%
@@ -109,8 +109,14 @@ process_formatting.shift_layer <- function(x, ...) {
 
 }
 
-#' @export
-construct_shift_string <- function(.n, shift_fmt, max_layer_length, max_n_width) {
+#' @noRd
+#'
+#' @param .n counts
+#' @param .total The value used in the denominator of the pct
+#' @param shift_fmt The f_str object used to display the string
+#' @param max_layer_length The maximum character length in the table
+#' @param max_n_width The maximum count length in the table.
+construct_shift_string <- function(.n, .total, shift_fmt, max_layer_length, max_n_width) {
 
   vars_ord <- map_chr(shift_fmt$vars, as_name)
 
@@ -132,34 +138,11 @@ construct_shift_string <- function(.n, shift_fmt, max_layer_length, max_n_width)
   string_
 }
 
-#' @export
-construct_shift_string <- function(.n, .total, shift_fmt = NULL, max_layer_length, max_n_width) {
-
-  ## Added this for processing formatting in nested count layers where this won't be processed yet
-  if (is.null(max_layer_length)) max_layer_length <- 0
-  if (is.null(max_n_width)) max_n_width <- 0
-
-  vars_ord <- map_chr(shift_fmt$vars, as_name)
-
-  # str_all is a list that contains character vectors for each parameter that might be calculated
-  str_all <- vector("list", 5)
-  # Append the repl_str to be passed to do.call
-  str_all[1] <- shift_fmt$repl_str
-  # Iterate over every variable
-  for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], shift_fmt, .n, .total,
-                                                .distinct_n, .distinct_total, vars_ord)
-  }
-
-  # Put the vector strings together. Only include parts of str_all that aren't null
-  string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
-
-  string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
-
-  string_
-}
-
-#' @export
+#' @noRd
+#' @param x The layer object
+#'
+#' This creates the `denoms_df` object that contains the counts of the combinations
+#' of the layer and table parameters
 process_shift_denoms <- function(x) {
 
   evalq({

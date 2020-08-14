@@ -105,7 +105,7 @@ test_that("A nested group_count layer can be ordered properly", {
     )
   b_t <- build(t)
 
-  expect_equivalent(b_t[, 6], tibble(ord_layer_2 = rep(c(Inf, 1, 2), 3)))
+  expect_equivalent(b_t[, 6], tibble(ord_layer_1 = as.integer(rep(c( 1, 2, 3), each = 3))))
 })
 
 test_that("A group_desc layer can be ordered properly", {
@@ -122,13 +122,13 @@ test_that("A group_desc layer can be ordered properly", {
 
   expect_equivalent(b_t[, 1], tibble(row_label1 = rep(c("4", "6", "8"), each = 2)))
   expect_equivalent(b_t[, 2], tibble(row_label2 = rep(c("n", "Mean (SD)"), 3)))
-  expect_equivalent(b_t[, 7], tibble(ord_layer_1 = as.numeric(rep(c(1, 2, 3), each = 2))))
+  expect_equivalent(b_t[, 7], tibble(ord_layer_1 = as.integer(rep(c(1, 2, 3), each = 2))))
   expect_equivalent(b_t[, 8], tibble(ord_layer_2 = 1:6))
 
 })
 
 ##### Nested
-adsl <- haven::read_xpt("~/CDISC_pilot_replication/data/adam/adsl.xpt")
+adsl <- haven::read_xpt("adsl.xpt")
 adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
 adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
 adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
@@ -175,9 +175,9 @@ adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
       set_order_count_method(c("byfactor", "byfactor"))
   )
 adsl_3 <- build(adsl3)
-byfactor_out <- c(1, 1, 2, 2,
-                   2, 2, 2, 2,
-                   2, 2, 2)
+byfactor_out <- c(101, 101, 102, 102,
+                   102, 102, 102, 102,
+                   102, 102, 102)
 byfactor_in <- c(Inf, 1, Inf, 1,
                   2, 3, 4, 5,
                   6, 7, 8)
@@ -190,9 +190,6 @@ test_that("Nested count layers are ordered properly", {
   expect_equivalent(adsl_2$ord_layer_2, bycount_in)
   expect_equivalent(adsl_3$ord_layer_1, byfactor_out)
   expect_equivalent(adsl_3$ord_layer_2, byfactor_in)
-
-
-
 
 })
 

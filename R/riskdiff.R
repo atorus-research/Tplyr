@@ -140,7 +140,7 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
     )
 
   # Add to the stats container
-  layer$stats <- append(layer$stats, rd)
+  layer$stats <- append(layer$stats, list(riskdiff = rd))
 
   layer
 }
@@ -163,9 +163,9 @@ prep_two_way <- function(comp) {
   evalq({
 
     # Make sure that the comparisons issued actually exist within the data
-    invalid_groups <- comp[!comp %in% unique(numeric_data[as_label(treat_var)])[[1]]]
+    invalid_groups <- comp[!comp %in% unique(numeric_data[as_name(treat_var)])[[1]]]
     assert_that(length(invalid_groups) == 0,
-                msg = paste0("There are no records for the following groups within the variable ", as_label(treat_var),
+                msg = paste0("There are no records for the following groups within the variable ", as_name(treat_var),
                              ": ", paste(invalid_groups, collapse=", ")))
 
     two_way <- numeric_data
