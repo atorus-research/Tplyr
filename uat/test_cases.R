@@ -927,6 +927,76 @@ test_that('T20',{
   rm(test_20)
 })
 
+
+
+
+
+#test 23 ----
+test_that('T23',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'combo' = f_str('xx, (xx.x), )xx(), x.xx%%, [xx.xx[], xx, xx, xx.x, Q1 - xx.x, Q3 - xx.x',
+                            n,   mean, median, sd,  var,   min, max, iqr, q1,  q3)
+          )
+      )
+
+    test_23 <- build(t)$var1_Placebo
+
+    # output table to check attributes
+    save(test_23, file = "~/Tplyr/uat/output/test_23.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_23)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_23.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+
+  t23_1 <- paste0(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+                  ", (",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
+                  "), )",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],median=median(AGE))[[1]],
+                  "(), ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],sd=round(sd(AGE),2))[[1]],
+                  "%%, [",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],var=round(var(AGE),2))[[1]],
+                  "[], ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
+                  ", ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
+                  ", ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=round(IQR(AGE),1))[[1]],
+                  ", Q1 - ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],q1=round(quantile(AGE)[[2]],1))[[1]],
+                  ", Q3 - ",
+                  summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]]
+                  )
+
+  testthat::expect_equal(t23_1,
+                         test_23,
+                         label = "T23.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(t23_1)
+  rm(test_23)
+})
+
 #format matching
 #re_npe <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)\s\[\s?\d?\d\]"
 #re_np <- "\s?\d?\d\s\(\s?\d?\d?\d.\d%\)"
