@@ -311,26 +311,30 @@ process_formatting.count_layer <- function(x, ...) {
                              full_join,
                              by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
 
-    if(!is.null(nest_count) && !nest_count) {
-      formatted_data <- formatted_data %>%
-        replace_by_string_names(quos(!!!by, summary_var))
+    if(is_built_nest) {
+
+      if(!is.null(nest_count) && nest_count) {
+        formatted_data <- formatted_data %>%
+          mutate(!!as_name(by[[1]]) := NULL) %>%
+          replace_by_string_names(quos(!!!by, summary_var))
+
+      } else {
+        formatted_data <- formatted_data %>%
+          replace_by_string_names(quos(!!!by, summary_var))
+
+      }
 
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
       # Last row label is always the inner target variable
       row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
       # Replace the missing 'outer' with the original target
-      formatted_data[is.na(formatted_data[, 1]), 1] <- formatted_data[is.na(formatted_data[, 1]),
+      # The indexing looks weird but the idea is to get rid of the matrix with the '[, 1]'
+      formatted_data[is.na(formatted_data[, 1])[, 1], 1] <- formatted_data[is.na(formatted_data[, 1])[, 1],
                                                                       tail(row_labels, 1)]
     } else {
-      formatted_data <- formatted_data %>%
-        mutate(!!as_name(target_var[[1]]) := NULL) %>%
+      formatted_data %<>%
         replace_by_string_names(quos(!!!by, summary_var))
-
-      row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
-      # Replace the missing 'outer' with the original target
-      formatted_data[is.na(formatted_data[, 1]), 1] <- formatted_data[is.na(formatted_data[, 1]),
-                                                                      tail(row_labels, 1)]
     }
 
       # Replace String names for by and target variables. target variables are included becasue they are

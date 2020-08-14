@@ -37,7 +37,7 @@ c7 <- group_count(t7, vars(cyl, grp))
 c8 <- group_count(t8, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
   set_distinct_by(am)
-# Change indentaion
+# Change indentation
 c9 <- group_count(t9, vars(cyl, grp)) %>%
   set_indentation("")
 # Change row prefix
@@ -129,7 +129,6 @@ test_that("Count layers are built as expected", {
   expect_equal(c9$indentation, "")
   expect_equal(c10$count_row_prefix, "abc")
 })
-
 
 test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t1))
