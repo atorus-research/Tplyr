@@ -3,7 +3,7 @@
 #' @export
 process_summaries.count_layer <- function(x, ...) {
 
-  if(is_built_nest) {
+  if(env_get(x, "is_built_nest", default = FALSE)) {
     refresh_nest(x)
   }
 
