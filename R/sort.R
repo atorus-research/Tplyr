@@ -157,7 +157,7 @@ add_order_columns.count_layer <- function(x) {
     if (is.null(order_count_method)) order_count_method <- "byfactor"
 
     # If it is a nested count_layer
-    if (length(target_var) == 2) {
+    if (is_built_nest) {
 
       # Number of sorting columns needed, number of bys plus one for the target_var
       formatted_col_index <- length(by) + 1
@@ -168,25 +168,24 @@ add_order_columns.count_layer <- function(x) {
         formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
-      # This sorts the sub-pieces of the nested layer
-      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- nest_sort_index
-
-      # Used to remove the prefix
-      indentation_length <- ifelse(!is.null(indentation), length(indentation), 2)
+      # Used to remove the prefix. String is encoded to get contolled characters i.e. \t
+      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 2)
 
       # Only the outer columns
       filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
         expr(!!sym(as_name(x)) == !!as_name(y))
       })
+
+      # Get the number of unique outer values, that is the number of rows to pull out
+      outer_number <- length(unlist(unique(target[, as_name(by[[1]])])))
       all_outer <- numeric_data %>%
         filter(!!!filter_logic) %>%
-        group_by(!!target_var[[1]]) %>%
-        do(extract(., 1, ))
+        extract(1:outer_number, )
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
-        group_by(.data[[paste0("ord_layer_", formatted_col_index)]]) %>%
-        do(add_data_order_nested(., formatted_col_index, numeric_data,
+        group_by(.data[[paste0("ord_layer_", formatted_col_index - 1)]]) %>%
+        do(add_data_order_nested(., formatted_col_index - 1, numeric_data,
                                  indentation_length = indentation_length,
                                  ordering_cols = ordering_cols,
                                  treat_var = treat_var, by = by, cols = cols,
@@ -194,7 +193,8 @@ add_order_columns.count_layer <- function(x) {
                                  target_var = target_var,
                                  order_count_method = order_count_method,
                                  target = target, all_outer = all_outer,
-                                 filter_logic = filter_logic))
+                                 filter_logic = filter_logic,
+                                 indentation = indentation))
 
       # If it isn't a nested count layer
     } else {
@@ -332,7 +332,7 @@ get_data_order <- function(x, formatted_col_index) {
 
   evalq({
 
-    # Swtich for the sorting method
+    # Switch for the sorting method
     if (order_count_method == "bycount") {
 
       # No processing is needed here just pass in the needed info
@@ -427,9 +427,17 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   numeric_ordering_data <- numeric_data %>%
     filter(!!!filter_logic) %>%
 
+    # Sometimes row numbers are needed for nested counts if a value in the first
+    # target variable is the same as a variable in the second
+    mutate(row = row_number()) %>%
+
     # I'm like 98% sure this logic works out.
-    pivot_wider(id_cols = c(match_exact(by), "summary_var", match_exact(head(target_var, -1))),
+    pivot_wider(id_cols = c(match_exact(by), "summary_var", row),
                 names_from = c(!!treat_var, !!!cols), values_from = !!result_order_var) %>%
+
+    # Remove the placeholder row
+    mutate(row = NULL) %>%
+
     ungroup() %>%
     select(as.symbol(result_column))
 
@@ -445,7 +453,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   numeric_ordering_index$x[order(numeric_ordering_index$ix)]
 }
 
-get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index) {
+get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
+                                  indentation = "") {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
@@ -456,7 +465,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
     ind_row <- by_varn_df %>%
       # Converting by_var to a symbol didn't work here for some reason but this
       # works just as well.
-      filter(.data[[by_var]] == a_by)
+      filter(.data[[as_name(by_var)]] == a_by)
 
     # If the row is length zero it is a total row. Just add one so it appears on the bottom
     if (nrow(ind_row) == 0) {
@@ -484,12 +493,13 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 #' @param by The by variable binding
 #' @param cols The cols variable binding
 #' @param result_order_var The result being used to order the numeric data.
+#' @param ... Additional arguments that are passed, most are above
 #'
 #' @noRd
 add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   # Pull out dots
-  dots <- list(...)
+  list2env(list(...), envir = environment())
 
   # Here are the names of the formatted data row labels. We usually only work with the last
   row_label_vec <- vars_select(names(group_data), starts_with("row_label"))
@@ -498,24 +508,24 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   # The value of the outer label
   outer_value <- group_data[1, tail(row_label_vec, 1)][[1]]
 
-  if(dots$order_count_method[1] == "byvarn") {
-    varn_df <- get_varn_values(dots$target, as_name(dots$target_var[[1]]))
+  if(order_count_method[1] == "byvarn") {
+    varn_df <- get_varn_values(target, as_name(by[[1]]))
 
-    dots$all_outer$..index <- group_data[1,] %>%
-      get_data_order_byvarn(varn_df, dots$target_var[[1]], final_col)
+    all_outer$..index <- group_data[1,] %>%
+      get_data_order_byvarn(varn_df, by[[1]], final_col)
 
-    group_data[, paste0("ord_layer_", final_col)] <- dots$all_outer %>%
+    group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
       ungroup() %>%
       select(..index)
 
-  } else if(dots$order_count_method[1] == "bycount") {
+  } else if(order_count_method[1] == "bycount") {
 
-    dots$all_outer$..index <- dots$all_outer %>%
-      get_data_order_bycount(dots$ordering_cols, dots$treat_var, dots$by, dots$cols,
-                             dots$result_order_var, dots$target_var)
+    all_outer$..index <- all_outer %>%
+      get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
+                             result_order_var, vars(!!by[[1]], !!target_var))
 
-    group_data[, paste0("ord_layer_", final_col)] <- dots$all_outer %>%
+    group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
       ungroup() %>%
       select(..index)
@@ -524,35 +534,38 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]])) %>%
+    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]]), !is.na(!!by[[1]])) %>%
     # Remove nesting prefix to prepare numeric data.
-    mutate(summary_var := str_sub(summary_var, dots$indentation_length))
+    mutate(summary_var := str_sub(summary_var, indentation_length))
 
 
   #Same idea here, remove prefix
   filtered_group_data <- group_data[-1, ] %>%
     mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
-                                                             dots$indentation_length))
+                                                             indentation_length))
 
   # The first row is always the first thing in the order so make it Inf
   group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
 
-  if(tail(dots$order_count_method, 1) == "bycount") {
+  if(tail(order_count_method, 1) == "bycount") {
     group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
-                                                                                   dots$ordering_cols,
-                                                                                   dots$treat_var,
-                                                                                   dots$by,
-                                                                                   dots$cols,
-                                                                                   dots$result_order_var,
-                                                                                   dots$target_var)
-  } else if(tail(dots$order_count_method, 1) == "byvarn") {
+                                                                                   ordering_cols,
+                                                                                   treat_var,
+                                                                                   head(by, -1),
+                                                                                   cols,
+                                                                                   result_order_var,
+                                                                                   target_var)
+  } else if(tail(order_count_method, 1) == "byvarn") {
 
-    varn_df <- get_varn_values(dots$target, dots$target_var[[2]])
+    varn_df <- get_varn_values(target, target_var[[1]])
+
+
 
     group_data[-1, paste0("ord_layer_", final_col + 1)] <- get_data_order_byvarn(filtered_group_data,
                                                                                  varn_df,
-                                                                                 dots$target_var[[2]],
-                                                                                 final_col)
+                                                                                 target_var[[1]],
+                                                                                 length(by) + 1,
+                                                                                 indentation)
 
   } else {
 
