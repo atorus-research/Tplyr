@@ -465,7 +465,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
     ind_row <- by_varn_df %>%
       # Converting by_var to a symbol didn't work here for some reason but this
       # works just as well.
-      filter(.data[[by_var]] == a_by)
+      filter(.data[[as_name(by_var)]] == a_by)
 
     # If the row is length zero it is a total row. Just add one so it appears on the bottom
     if (nrow(ind_row) == 0) {
