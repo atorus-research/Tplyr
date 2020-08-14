@@ -191,8 +191,5 @@ test_that("Nested count layers are ordered properly", {
   expect_equivalent(adsl_3$ord_layer_1, byfactor_out)
   expect_equivalent(adsl_3$ord_layer_2, byfactor_in)
 
-
-
-
 })
 

@@ -168,8 +168,8 @@ add_order_columns.count_layer <- function(x) {
         formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
-      # Used to remove the prefix
-      indentation_length <- ifelse(!is.null(indentation), length(indentation), 0) #FIXME
+      # Used to remove the prefix. String is encoded to get contolled characters i.e. \t
+      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 2)
 
       # Only the outer columns
       filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
@@ -193,7 +193,8 @@ add_order_columns.count_layer <- function(x) {
                                  target_var = target_var,
                                  order_count_method = order_count_method,
                                  target = target, all_outer = all_outer,
-                                 filter_logic = filter_logic))
+                                 filter_logic = filter_logic,
+                                 indentation = indentation))
 
       # If it isn't a nested count layer
     } else {
@@ -452,7 +453,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   numeric_ordering_index$x[order(numeric_ordering_index$ix)]
 }
 
-get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index) {
+get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
+                                  indentation = "") {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
@@ -561,7 +563,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     group_data[-1, paste0("ord_layer_", final_col + 1)] <- get_data_order_byvarn(filtered_group_data,
                                                                                  varn_df,
                                                                                  dots$target_var[[1]],
-                                                                                 length(dots$by) + 1)
+                                                                                 length(dots$by) + 1,
+                                                                                 indentation)
 
   } else {
 
