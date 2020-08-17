@@ -429,20 +429,20 @@ test_that('T12',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adae, TRTA) %>%
+    t <- tplyr_table(adae, TRTA, where=TRTA == 'Placebo') %>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_format_strings(f_str("xxx (xx.x%)", n, pct))
+          set_format_strings(f_str("xxx (xxx.x%)", n, pct))
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
           set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx (xx.x%)", distinct, distinct_pct))
+          set_format_strings(f_str("xxx (xxx.x%)", distinct, distinct_pct))
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
           set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx (xx.x%) [xxx (xx.x%)]", n, pct, distinct, distinct_pct))
+          set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct, distinct_pct))
       )
 
     test_12 <- build(t)
@@ -462,10 +462,49 @@ test_that('T12',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(, filter(test_12, ord_layer_index == 1),label = "T12.1")
-  testthat::expect_equal(, filter(test_12, ord_layer_index == 2),label = "T12.2")
-  testthat::expect_equal(, filter(test_12, ord_layer_index == 3),label = "T12.3")
+  t12_totals <- filter(adae) %>%
+    group_by(TRTA) %>%
+    summarize(total=n())
+  t12_totals_distinct <- filter(adae) %>%
+    distinct(USUBJID, TRTA) %>%
+    group_by(TRTA) %>%
+    summarize(distinct_total=n())
+
+  t12_1 <- filter(adae, TRTA == 'Placebo') %>%
+    group_by(AEDECOD, TRTA) %>%
+    summarize(cnt=n()) %>%
+    left_join(t12_totals,by="TRTA") %>%
+    mutate(pct = sprintf("%5s", format(round(cnt/total*100,digits = 1), nsmall = 1))) %>%
+    mutate(col = paste0(as.character(cnt),' (',pct,'%)'))
+
+  t12_2 <- filter(adae, TRTA == 'Placebo') %>%
+    distinct(USUBJID, TRTA, AEDECOD) %>%
+    group_by(AEDECOD, TRTA) %>%
+    summarize(cnt=n()) %>%
+    left_join(t12_totals_distinct,by="TRTA") %>%
+    mutate(pct = sprintf("%5s", format(round(cnt/distinct_total*100,digits = 1), nsmall = 1))) %>%
+    mutate(distinct_col = paste0(as.character(cnt),' (',pct,'%)'))
+
+  t12_3 <- select(t12_1,c("TRTA","AEDECOD","col")) %>%
+    left_join(t12_2, by=c("TRTA","AEDECOD")) %>%
+    mutate(col_combo = paste0(col, " [",sprintf("%12s",distinct_col),"]"))
+
+
+  testthat::expect_equal(t12_1$col,
+                         trimws(filter(test_12, ord_layer_index == 1)[["var1_Placebo"]]),
+                         label = "T12.1")
+  testthat::expect_equal(t12_2$distinct_col,
+                         trimws(filter(test_12, ord_layer_index == 2)[["var1_Placebo"]]),
+                         label = "T12.2")
+  testthat::expect_equal(t12_3$col_combo,
+                         trimws(filter(test_12, ord_layer_index == 3)[["var1_Placebo"]]),
+                         label = "T12.3")
   #clean up working directory
+  rm(t12_totals)
+  rm(t12_totals_distinct)
+  rm(t12_1)
+  rm(t12_2)
+  rm(t12_3)
   rm(test_12)
 })
 
