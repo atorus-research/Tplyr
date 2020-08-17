@@ -232,5 +232,14 @@ test_that("missing counts can be displayed as expected", {
     build()
   expect_equal(t3[3, 1], tibble(row_label1 = "UNK"))
   expect_equal(t3[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[mtcars$cyl == 8, "cyl"] <- NA
+  t4 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+        set_denom_ignore("Unknown", "NA")
+    ) %>%
+    build()
 })
 

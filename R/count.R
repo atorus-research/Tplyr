@@ -494,7 +494,10 @@ process_count_denoms <- function(x) {
       as_name(x) %in% names(target)
     })
 
-    denoms_df <- built_target %>%
+    denom_target <- built_target %>%
+      filter(!(!!tail(target_var, 1)[[1]] %in% unlist(denom_ignore)))
+
+    denoms_df <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(n = n()) %>%
       complete(!!!layer_params[param_apears]) %>%
@@ -502,7 +505,7 @@ process_count_denoms <- function(x) {
       distinct()
 
     if(!is.null(distinct_by)) {
-      denoms_df <- built_target %>%
+      denoms_df <- denom_target %>%
         group_by(!!!layer_params[param_apears]) %>%
         distinct(!!distinct_by, .keep_all = TRUE) %>%
         summarize(distinct_n = n()) %>%

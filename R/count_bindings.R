@@ -393,3 +393,23 @@ set_missing_count <- function(e, f_str, string = "NA") {
 
   e
 }
+
+
+#' Set values the denominator calcuation will ignore
+#'
+#' This is generally used for missing values. Values like "", NA, "NA" are common.
+#'
+#' @param e A count_layer object
+#' @param ... Quoted values.
+#'
+#' @return The modified layer object
+#' @export
+set_denom_ignore <- function(e, ...) {
+
+  dots <- list(...)
+
+  env_bind(e, denom_ignore = dots)
+
+  e
+
+}
