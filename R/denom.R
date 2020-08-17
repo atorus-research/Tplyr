@@ -142,9 +142,10 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param denoms_by The variables used to get the denoms from
 #' @param denoms_df The denoms_df that is created during layer processing.
 #'   Contains the unique combinations of all layer parameters and their counts.
+#' @param total_extract Either 'n' or distinct_n
 #'
 #' @return A data.frame with the
-get_denom_total <- function(.data, denoms_by, denoms_df) {
+get_denom_total <- function(.data, denoms_by, denoms_df, total_extract = "n") {
 
   # Filter denoms dataset
   filter_logic <- map(denoms_by, function(x) {
@@ -154,7 +155,7 @@ get_denom_total <- function(.data, denoms_by, denoms_df) {
   sums <-  denoms_df %>%
     filter(!!!filter_logic) %>%
     group_by(!!!denoms_by) %>%
-    extract("n")
+    extract(total_extract)
 
   .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
 

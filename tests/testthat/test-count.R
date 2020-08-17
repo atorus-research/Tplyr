@@ -202,3 +202,35 @@ test_that("nested count layers can be rebuilt without changes", {
 
 })
 
+test_that("missing counts can be displayed as expected", {
+  mtcars[mtcars$cyl == 6, "cyl"] <- NA
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n))
+    ) %>%
+    build()
+  expect_equal(t1[3, 1], tibble(row_label1 = "Missing"))
+  expect_equal(t1[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[is.na(mtcars$cyl), "cyl"] <- "Not here"
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = "Not here")
+    ) %>%
+    build()
+  expect_equal(t2[3, 1], tibble(row_label1 = "Missing"))
+  expect_equal(t2[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[mtcars$cyl == "Not here", "cyl"] <- "Unknown"
+  t3 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = c(UNK = "Unknown"))
+    ) %>%
+    build()
+  expect_equal(t3[3, 1], tibble(row_label1 = "UNK"))
+  expect_equal(t3[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+})
+

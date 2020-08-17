@@ -376,7 +376,7 @@ set_result_order_var <- function(e, result_order_var) {
 #'
 #' @param e A count layer
 #' @param f_str An f_str object to change the display of the missing counts
-#' @param string The string to use for the missing values
+#' @param string A named string representing the value to rename missing values
 #'
 #' @return The modified layer binding
 #' @export
@@ -384,8 +384,12 @@ set_missing_count <- function(e, f_str, string = "NA") {
 
   assert_inherits_class(f_str, "f_str")
 
+  if(is.null(names(string))) missing_name <- "Missing"
+  else missing_name <- names(string)
+
   env_bind(e, missing_count_string = f_str)
   env_bind(e, missing_string = string)
+  env_bind(e, missing_name = missing_name)
 
   e
 }

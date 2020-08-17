@@ -170,3 +170,5 @@ is_built_nest <- FALSE
 by_saved <- NULL
 target_var_saved <- NULL
 indentation_length <- NULL
+missing_count_string <- NULL
+missing_string <- NULL

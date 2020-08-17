@@ -58,18 +58,8 @@
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
 build <- function(x) {
-  tryCatch({
-    # Store the default options
-    op <- options()
-
-    # Reset the scientific notation presentation settings temporarily
-    options('scipen' = getOption('tplyr.scipen'))
 
     UseMethod("build")
-  }, finally = {
-    # Set options back to defaults
-    options(op)
-  })
 }
 
 #' tplyr_table S3 method
