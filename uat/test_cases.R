@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/07/2020
+#' 8/17/2020
 
 #insert any necessary libraries
 library(Tplyr)
@@ -522,8 +522,7 @@ test_that('T13',{
       )
 
     build(t)
-    test_13 <- filter(get_numeric_data(t)[[1]], total != 0)
-
+    test_13 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
     save(test_13, file = "~/Tplyr/uat/output/test_13.RData")
@@ -542,13 +541,16 @@ test_that('T13',{
   #programmatic check(s)
   t13_1 <- group_by(adsl, TRT01P) %>%
     summarise(total=n()) %>%
-    mutate(total = as.numeric(total))
+    mutate(total = as_integer(total))
   t13_2 <- group_by(adsl, TRT01P, RACE) %>%
-    summarise(n=n()) %>%
-    left_join(t12_1, by='TRT01P') %>%
+    summarise(n = n()) %>%
+    left_join(t13_1, by='TRT01P') %>%
     mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(t13_1,unique(test_13[c("TRT01P", "total")]),label = "T13.1")
-  testthat::expect_equal(,label = "T13.2")
+
+  testthat::expect_equal(t13_1$total,unique(test_13[c("TRT01P", "total")])$total,label = "T13.1")
+  testthat::expect_equal(t13_2$pct,
+                         mutate(filter(test_13, n != 0),pct = round((n / total) * 100, digits = 1))[['pct']],
+                         label = "T13.2")
   #clean up working directory
   rm(t13_1)
   rm(t13_2)
@@ -562,15 +564,14 @@ test_that('T14',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      set_pop_where(SEX == "F") %>%
+    t <- tplyr_table(adsl, TRT01P, where=SEX == "F") %>%
       add_layer(
         group_count(RACE) %>%
           set_format_strings(f_str("xxx (xx.x%)", n, pct))
       )
 
     build(t)
-    test_14 <- get_numeric_data(t)
+    test_14 <- get_numeric_data(t)[[1]]
 
 
     # output table to check attributes
@@ -582,7 +583,7 @@ test_that('T14',{
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_13.RData")
+    load("~/Tplyr/uat/output/test_14.RData")
   }
 
   #perform checks
@@ -596,8 +597,11 @@ test_that('T14',{
     summarise(n=n()) %>%
     left_join(t14_1, by='TRT01P') %>%
     mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(,label = "T14.1")
-  testthat::expect_equal(,label = "T14.2")
+
+  testthat::expect_equal(t14_1$total,unique(test_14[c("TRT01P", "total")])$total,label = "T14.1")
+  testthat::expect_equal(t14_2$pct,
+                         mutate(filter(test_14, n != 0),pct = round((n / total) * 100, digits = 1))[['pct']],
+                         label = "T14.2")
   #clean up working directory
   rm(t14_1)
   rm(t14_2)
@@ -620,7 +624,7 @@ test_that('T15',{
     )
 
     build(t)
-    test_15 <- get_numeric_data(t)
+    test_15 <- merge(get_numeric_data(t)[[1]], rename(header_n(t), header_n=n),by.x = "TRTA", by.y = "TRT01P")
 
     # output table to check attributes
     save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
@@ -640,12 +644,14 @@ test_that('T15',{
   t15_1 <- group_by(adsl, TRT01P) %>%
     summarise(total=n()) %>%
     mutate(total = as.numeric(total))
-  t15_2 <- group_by(adsl, TRT01P, RACE) %>%
+  t15_2 <- group_by(adae, TRTA, AEDECOD) %>%
     summarise(n=n()) %>%
-    left_join(t15_1, by='TRT01P') %>%
+    merge(t15_1, by.y='TRT01P', by.x = "TRTA") %>%
     mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(,label = "T15.1")
-  testthat::expect_equal(,label = "T15.2")
+  testthat::expect_equal(t15_1$total,unique(test_15[c("TRTA", "header_n")])$header_n,label = "T15.1")
+  testthat::expect_equal(t15_2$pct,
+                         mutate(filter(test_15, n != 0),pct = round((n / header_n) * 100, digits = 1))[['pct']],
+                         label = "T15.2")
   #clean up working directory
   rm(t15_1)
   rm(t15_2)
