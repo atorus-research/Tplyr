@@ -368,3 +368,24 @@ set_result_order_var <- function(e, result_order_var) {
 
   e
 }
+
+#' Set the display for missing strings
+#'
+#' If there is a special way NA or missing values should be counted, this binding
+#' will display the values in a different way.
+#'
+#' @param e A count layer
+#' @param f_str An f_str object to change the display of the missing counts
+#' @param string The string to use for the missing values
+#'
+#' @return The modified layer binding
+#' @export
+set_missing_count <- function(e, f_str, string = "NA") {
+
+  assert_inherits_class(f_str, "f_str")
+
+  env_bind(e, missing_count_string = f_str)
+  env_bind(e, missing_string = string)
+
+  e
+}

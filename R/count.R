@@ -298,6 +298,8 @@ process_formatting.count_layer <- function(x, ...) {
         }
       }) %>%
 
+
+
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
@@ -362,14 +364,19 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param max_n_width The maximum length of the actual numeric counts
 #' @param .distinct_n Vector of distinct counts
 #' @param .distinct_total Vector of total counts for distinct
+#' @param missing_string The value of the string used to note missing. Usually NA
+#' @param missing_f_str The f_str object used to display missing values
 #'
-#' @return A tibble replacing the originial counts
+#' @return A tibble replacing the original counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
-                                   count_fmt = NULL, max_layer_length, max_n_width) {
+                                   count_fmt = NULL, max_layer_length, max_n_width, missing_string = NULL,
+                                   missing_f_str = NULL) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
+  missing_rows <- TRUE
+  if (!is.null(missing_f_str)) missing_rows <- numeric_data %in% missing_string
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 
@@ -379,8 +386,8 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   str_all[1] <- count_fmt$repl_str
   # Iterate over every variable
   for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total,
-                                                .distinct_n, .distinct_total, vars_ord)
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n[missing_rows], .total[missing_rows],
+                                                .distinct_n[missing_rows], .distinct_total[missing_rows], vars_ord)
   }
 
   # Put the vector strings together. Only include parts of str_all that aren't null
