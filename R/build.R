@@ -66,32 +66,34 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  # Store the default options
   op <- options()
 
-  # Reset the scientific notation presentation settings temporarily
-  options('scipen' = getOption('tplyr.scipen'))
+  tryCatch({
+    # Override scipen with Typlr option
+    options('scipen' = getOption('tplyr.scipen')) # Override scipen
 
-  # Table Pre build
-  treatment_group_build(x)
+    # Table Pre build
+    treatment_group_build(x)
 
-  x <- build_header_n(x)
+    x <- build_header_n(x)
 
-  # Process Layer summaries
-  map(x$layers, process_summaries)
+    # Process Layer summaries
+    map(x$layers, process_summaries)
 
-  # Get table formatting info
-  formatting_meta <- fetch_formatting_info(x)
+    # Get table formatting info
+    formatting_meta <- fetch_formatting_info(x)
 
-  # Format layers/table and pivot. process_formatting should return the built table!
-  output_list <- purrr::map(x$layers, process_formatting)
+    # Format layers/table and pivot. process_formatting should return the built table!
+    output_list <- purrr::map(x$layers, process_formatting)
 
-  output <- output_list %>%
-    map2_dfr(seq_along(output_list), add_layer_index) %>%
-    select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+    output <- output_list %>%
+      map2_dfr(seq_along(output_list), add_layer_index) %>%
+      select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
 
-  # Set options back to defaults
-  options(op)
+  }, finally = {
+    # Set options back to defaults
+    options(op)
+  })
 
   output
 }
