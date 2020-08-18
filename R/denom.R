@@ -142,6 +142,8 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param denoms_by The variables used to get the denoms from
 #' @param denoms_df The denoms_df that is created during layer processing.
 #'   Contains the unique combinations of all layer parameters and their counts.
+#' @param denoms_distinct_df The values calculated that represent the distinct
+#'   denominator values used in a pct.
 #' @param total_extract Either 'n' or distinct_n
 #'
 #' @return A data.frame with the

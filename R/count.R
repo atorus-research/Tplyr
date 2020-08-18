@@ -362,6 +362,8 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param .distinct_total Vector of total counts for distinct
 #' @param missing_string The value of the string used to note missing. Usually NA
 #' @param missing_f_str The f_str object used to display missing values
+#' @param summary_var The summary_var values that contain the values of the
+#'   target variable.
 #'
 #' @return A tibble replacing the original counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
@@ -516,7 +518,7 @@ process_count_denoms <- function(x) {
       distinct()
 
     if(as_name(target_var[[1]]) %in% names(target)) {
-      denoms_df %<>%
+      denoms_df <- denoms_df %>%
         rename("summary_var" := !!target_var[[1]])
     }
 

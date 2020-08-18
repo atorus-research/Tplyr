@@ -377,8 +377,9 @@ set_result_order_var <- function(e, result_order_var) {
 #' @param e A count layer
 #' @param f_str An f_str object to change the display of the missing counts
 #' @param string A named string representing the value to rename missing values
+#'   This value can be named to change the row name in the table.
 #'
-#' @return The modified layer binding
+#' @return The modified layer
 #' @export
 set_missing_count <- function(e, f_str, string = "NA") {
 
@@ -395,12 +396,15 @@ set_missing_count <- function(e, f_str, string = "NA") {
 }
 
 
-#' Set values the denominator calcuation will ignore
+#' Set values the denominator calculation will ignore
 #'
-#' This is generally used for missing values. Values like "", NA, "NA" are common.
+#' This is generally used for missing values. Values like "", NA, "NA" are
+#' common ways missing values are presented in a data.frame. In certain cases,
+#' percentages do not use "missing" values in the denominator. This function
+#' notes different values as "missing" and excludes them from the denominators.
 #'
 #' @param e A count_layer object
-#' @param ... Quoted values.
+#' @param ... Values to exclude from the percentage calculation.
 #'
 #' @return The modified layer object
 #' @export

@@ -11,10 +11,11 @@ set_missing_count(e, f_str, string = "NA")
 
 \item{f_str}{An f_str object to change the display of the missing counts}
 
-\item{string}{A named string representing the value to rename missing values}
+\item{string}{A named string representing the value to rename missing values
+This value can be named to change the row name in the table.}
 }
 \value{
-The modified layer binding
+The modified layer
 }
 \description{
 If there is a special way NA or missing values should be counted, this binding

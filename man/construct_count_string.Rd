@@ -36,6 +36,9 @@ denominator that column is based off of.}
 \item{missing_string}{The value of the string used to note missing. Usually NA}
 
 \item{missing_f_str}{The f_str object used to display missing values}
+
+\item{summary_var}{The summary_var values that contain the values of the
+target variable.}
 }
 \value{
 A tibble replacing the original counts
