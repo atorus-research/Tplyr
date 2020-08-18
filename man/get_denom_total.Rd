@@ -4,7 +4,7 @@
 \alias{get_denom_total}
 \title{Get the denominator used in shift pcts}
 \usage{
-get_denom_total(.data, denoms_by, denoms_df)
+get_denom_total(.data, denoms_by, denoms_df, total_extract = "n")
 }
 \arguments{
 \item{.data}{A data.frame that has been grouped}
@@ -13,6 +13,8 @@ get_denom_total(.data, denoms_by, denoms_df)
 
 \item{denoms_df}{The denoms_df that is created during layer processing.
 Contains the unique combinations of all layer parameters and their counts.}
+
+\item{total_extract}{Either 'n' or distinct_n}
 }
 \value{
 A data.frame with the

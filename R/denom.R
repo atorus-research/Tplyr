@@ -145,17 +145,25 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param total_extract Either 'n' or distinct_n
 #'
 #' @return A data.frame with the
-get_denom_total <- function(.data, denoms_by, denoms_df, total_extract = "n") {
-
+get_denom_total <- function(.data, denoms_by, denoms_df, denoms_distinct_df, total_extract = "n") {
+total_extract
   # Filter denoms dataset
   filter_logic <- map(denoms_by, function(x) {
     expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
   })
 
-  sums <-  denoms_df %>%
-    filter(!!!filter_logic) %>%
-    group_by(!!!denoms_by) %>%
-    extract(total_extract)
+  if(total_extract == "n") {
+    sums <-  denoms_df %>%
+      filter(!!!filter_logic) %>%
+      group_by(!!!denoms_by) %>%
+      extract("n")
+  } else {
+    sums <- denoms_distinct_df %>%
+      filter(!!!filter_logic) %>%
+      group_by(!!!denoms_by) %>%
+      extract("distinct_n")
+  }
+
 
   .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
 

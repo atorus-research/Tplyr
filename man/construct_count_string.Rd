@@ -11,7 +11,10 @@ construct_count_string(
   .distinct_total = NULL,
   count_fmt = NULL,
   max_layer_length,
-  max_n_width
+  max_n_width,
+  missing_string,
+  missing_f_str,
+  summary_var
 )
 }
 \arguments{
@@ -29,9 +32,13 @@ denominator that column is based off of.}
 \item{max_layer_length}{The maximum layer length of the whole table}
 
 \item{max_n_width}{The maximum length of the actual numeric counts}
+
+\item{missing_string}{The value of the string used to note missing. Usually NA}
+
+\item{missing_f_str}{The f_str object used to display missing values}
 }
 \value{
-A tibble replacing the originial counts
+A tibble replacing the original counts
 }
 \description{
 left padding = (maximum_n_width - this_n_width)

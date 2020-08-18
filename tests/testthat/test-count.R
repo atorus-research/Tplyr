@@ -238,8 +238,10 @@ test_that("missing counts can be displayed as expected", {
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
-        set_denom_ignore("Unknown", "NA")
+        set_denom_ignore("Unknown", NA)
     ) %>%
     build()
+
+
 })
 
