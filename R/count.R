@@ -289,6 +289,11 @@ process_formatting.count_layer <- function(x, ...) {
       stop("You can't use distinct without specifying a distinct_by")
     }
 
+    # Calculate the indentation length. This is needed if there are missing
+    #values in a nested count layer. Length is sent to string construction and
+    #used to split the string.
+    indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = {
@@ -299,7 +304,8 @@ process_formatting.count_layer <- function(x, ...) {
                                max_n_width=max_n_width,
                                missing_string = missing_string,
                                missing_f_str = missing_count_string,
-                               summary_var = summary_var)
+                               summary_var = summary_var,
+                               indentation_length = indentation_length)
       }) %>%
 
       # Rename missing values
@@ -373,17 +379,25 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param missing_f_str The f_str object used to display missing values
 #' @param summary_var The summary_var values that contain the values of the
 #'   target variable.
+#' @param indentation_length If this is a nested count layer. The row prefixes
+#'   must be removed
 #'
 #' @return A tibble replacing the original counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
-                                   missing_f_str, summary_var) {
+                                   missing_f_str, summary_var, indentation_length) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
   missing_rows <- FALSE
   if (!is.null(missing_f_str)) {
+
+    # This subsets the indentation length for nested count layers. The 'outer'
+    # values will be cut off but they will never be "missing" so that shouldn't
+    # be an issue.
+    summary_var <- str_sub(summary_var, indentation_length)
+
     missing_rows <- summary_var %in% missing_string
     missing_vars_ord <- map_chr(missing_f_str$vars, as_name)
   }
