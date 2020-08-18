@@ -6,7 +6,7 @@
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
 #' @importFrom stringr str_sub str_extract
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>% %<>% extract
+#' @importFrom magrittr %>% extract
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
@@ -170,3 +170,8 @@ is_built_nest <- FALSE
 by_saved <- NULL
 target_var_saved <- NULL
 indentation_length <- NULL
+missing_count_string <- NULL
+missing_string <- NULL
+denom_ignore <- NULL
+denoms_distinct_df <- NULL
+missing_name <- NULL

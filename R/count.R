@@ -72,7 +72,7 @@ process_single_count_target <- function(x) {
       mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
       rename("summary_var" = !!tail(target_var, 1)[[1]]) %>%
       group_by(!!!denoms_by) %>%
-      do(get_denom_total(., denoms_by, denoms_df)) %>%
+      do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "n")) %>%
       ungroup()
 
 
@@ -97,7 +97,7 @@ process_nested_count_target <- function(x) {
                                         set_count_row_prefix(indentation))
 
     first_layer_final <- first_layer$numeric_data
-       # add_column(!!target_var[[1]] := .[["summary_var"]])
+    # add_column(!!target_var[[1]] := .[["summary_var"]])
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%
@@ -210,7 +210,7 @@ process_count_distinct_n <- function(x) {
       mutate(!!treat_var := as.character(!!treat_var)) %>%
       mutate(!!as_label(target_var[[1]]) := as_name(target_var[[1]])) %>%
       group_by(!!!denoms_by) %>%
-      do(get_denom_total(., denoms_by, denoms_df)) %>%
+      do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "distinct_n")) %>%
       ungroup() %>%
       rename("distinct_total" = "total")
 
@@ -284,28 +284,32 @@ process_formatting.count_layer <- function(x, ...) {
     # TODO: Move this to the layer compatibility when we implment that
     # If there is a distinct and there isn't a distinct_by, stop
     if(("distinct" %in% map(format_strings$n_counts$vars, as_name) |
-       "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
+        "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
        is.null(distinct_by)) {
       stop("You can't use distinct without specifying a distinct_by")
     }
 
+    # Calculate the indentation length. This is needed if there are missing
+    #values in a nested count layer. Length is sent to string construction and
+    #used to split the string.
+    indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = {
-        if(is.null(distinct_by)) {
-          construct_count_string(.n=n, .total=total,
-                                 count_fmt=format_strings[['n_counts']],
-                                 .distinct_n = distinct_n,
-                                 max_layer_length=max_layer_length,
-                                 max_n_width=max_n_width)
-        } else {
-          construct_count_string(.n=n, .total=total,
-                                 .distinct_n=distinct_n, .distinct_total=distinct_total,
-                                 count_fmt=format_strings[['n_counts']],
-                                 max_layer_length=max_layer_length,
-                                 max_n_width=max_n_width)
-        }
+        construct_count_string(.n=n, .total=total,
+                               .distinct_n=distinct_n, .distinct_total=distinct_total,
+                               count_fmt=format_strings[['n_counts']],
+                               max_layer_length=max_layer_length,
+                               max_n_width=max_n_width,
+                               missing_string = missing_string,
+                               missing_f_str = missing_count_string,
+                               summary_var = summary_var,
+                               indentation_length = indentation_length)
       }) %>%
+
+      # Rename missing values
+      mutate(summary_var = ifelse(summary_var %in% missing_string, missing_name, summary_var)) %>%
 
       # Pivot table
       pivot_wider(id_cols = c(match_exact(by), "summary_var"),
@@ -345,9 +349,9 @@ process_formatting.count_layer <- function(x, ...) {
         replace_by_string_names(quos(!!!by, summary_var))
     }
 
-      # Replace String names for by and target variables. target variables are included becasue they are
-      # equivilant to by variables in a count layer
-      # replace_by_string_names(by_expr)
+    # Replace String names for by and target variables. target variables are included becasue they are
+    # equivilant to by variables in a count layer
+    # replace_by_string_names(by_expr)
 
 
   }, envir = x)
@@ -371,14 +375,32 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param max_n_width The maximum length of the actual numeric counts
 #' @param .distinct_n Vector of distinct counts
 #' @param .distinct_total Vector of total counts for distinct
+#' @param missing_string The value of the string used to note missing. Usually NA
+#' @param missing_f_str The f_str object used to display missing values
+#' @param summary_var The summary_var values that contain the values of the
+#'   target variable.
+#' @param indentation_length If this is a nested count layer. The row prefixes
+#'   must be removed
 #'
-#' @return A tibble replacing the originial counts
+#' @return A tibble replacing the original counts
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
-                                   count_fmt = NULL, max_layer_length, max_n_width) {
+                                   count_fmt = NULL, max_layer_length, max_n_width, missing_string,
+                                   missing_f_str, summary_var, indentation_length) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
+  missing_rows <- FALSE
+  if (!is.null(missing_f_str)) {
+
+    # This subsets the indentation length for nested count layers. The 'outer'
+    # values will be cut off but they will never be "missing" so that shouldn't
+    # be an issue.
+    summary_var <- str_sub(summary_var, indentation_length)
+
+    missing_rows <- summary_var %in% missing_string
+    missing_vars_ord <- map_chr(missing_f_str$vars, as_name)
+  }
 
   vars_ord <- map_chr(count_fmt$vars, as_name)
 
@@ -388,12 +410,35 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   str_all[1] <- count_fmt$repl_str
   # Iterate over every variable
   for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n, .total,
-                                                .distinct_n, .distinct_total, vars_ord)
+    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n[!missing_rows], .total[!missing_rows],
+                                                .distinct_n[!missing_rows], .distinct_total[!missing_rows], vars_ord)
   }
 
-  # Put the vector strings together. Only include parts of str_all that aren't null
-  string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
+
+  # Logic for missing
+  if(!is.null(missing_f_str)) {
+    # Same logic as above, just add for missing
+    missing_str_all <- vector("list", 5)
+    missing_str_all[1] <- missing_f_str$repl_str
+    for(i in seq_along(missing_vars_ord)) {
+      missing_str_all[[i+1]] <- count_string_switch_help(missing_vars_ord[i], missing_f_str, .n[missing_rows], .total[missing_rows],
+                                                         .distinct_n[missing_rows], .distinct_total[missing_rows], missing_vars_ord)
+    }
+
+    # Put the vector strings together. Only include parts of str_all that aren't null
+    string_nm <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
+    string_m <- do.call(sprintf, missing_str_all[!map_lgl(missing_str_all, is.null)])
+    string_ <- character(length(string_nm) + length(string_m))
+    string_[!missing_rows] <- string_nm
+    string_[missing_rows] <- string_m
+
+    # If there is no missing
+  } else {
+
+    string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
+
+  }
+
 
   string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
 
@@ -474,7 +519,21 @@ process_count_denoms <- function(x) {
       as_name(x) %in% names(target)
     })
 
-    denoms_df <- built_target %>%
+    denom_target <- built_target %>%
+      filter(!(!!target_var[[1]] %in% unlist(denom_ignore)))
+
+
+
+    if(!is.null(distinct_by)) {
+      denoms_distinct_df <- denom_target %>%
+        distinct(!!distinct_by, .keep_all = TRUE) %>%
+        group_by(!!!cols, !!treat_var) %>%
+        summarize(distinct_n = n()) %>%
+        complete(!!!cols, !!treat_var) %>%
+        ungroup()
+    }
+
+    denoms_df <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(n = n()) %>%
       complete(!!!layer_params[param_apears]) %>%
@@ -482,11 +541,9 @@ process_count_denoms <- function(x) {
       distinct()
 
     if(as_name(target_var[[1]]) %in% names(target)) {
-      denoms_df %<>%
+      denoms_df <- denoms_df %>%
         rename("summary_var" := !!target_var[[1]])
     }
-
-    denoms_df
 
   }, envir = x)
 

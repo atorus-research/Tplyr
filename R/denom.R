@@ -142,19 +142,30 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param denoms_by The variables used to get the denoms from
 #' @param denoms_df The denoms_df that is created during layer processing.
 #'   Contains the unique combinations of all layer parameters and their counts.
+#' @param denoms_distinct_df The values calculated that represent the distinct
+#'   denominator values used in a pct.
+#' @param total_extract Either 'n' or distinct_n
 #'
 #' @return A data.frame with the
-get_denom_total <- function(.data, denoms_by, denoms_df) {
-
+get_denom_total <- function(.data, denoms_by, denoms_df, denoms_distinct_df, total_extract = "n") {
+total_extract
   # Filter denoms dataset
   filter_logic <- map(denoms_by, function(x) {
     expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
   })
 
-  sums <-  denoms_df %>%
-    filter(!!!filter_logic) %>%
-    group_by(!!!denoms_by) %>%
-    extract("n")
+  if(total_extract == "n") {
+    sums <-  denoms_df %>%
+      filter(!!!filter_logic) %>%
+      group_by(!!!denoms_by) %>%
+      extract("n")
+  } else {
+    sums <- denoms_distinct_df %>%
+      filter(!!!filter_logic) %>%
+      group_by(!!!denoms_by) %>%
+      extract("distinct_n")
+  }
+
 
   .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
 

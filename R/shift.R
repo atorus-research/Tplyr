@@ -64,7 +64,7 @@ process_shift_total <- function(x) {
   evalq({
     if(is.null(denoms_by)) denoms_by <- c(treat_var, by, cols)
 
-    numeric_data %<>%
+    numeric_data <- numeric_data %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df))
 

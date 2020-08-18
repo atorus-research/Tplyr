@@ -58,7 +58,8 @@
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
 build <- function(x) {
-  UseMethod("build")
+
+    UseMethod("build")
 }
 
 #' tplyr_table S3 method
