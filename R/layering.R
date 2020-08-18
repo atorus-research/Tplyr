@@ -174,9 +174,9 @@ add_layers <- function(parent, ...) {
 #' # Load in pipe
 #' library(magrittr)
 #'
-#' t <- tplyr_table(iris, Sepal.Width) %>%
+#' t <- tplyr_table(iris, Species) %>%
 #'   add_layer(
-#'     group_desc(target_var=Species)
+#'     group_desc(target_var=Sepal.Width)
 #'   )
 group_count <- function(parent, target_var, by=vars(), where=TRUE, ...) {
   tplyr_layer(parent, type='count', by=enquos(by), target_var=enquos(target_var), where=enquo(where), ...)

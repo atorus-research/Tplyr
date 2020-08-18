@@ -51,3 +51,12 @@ test_that("group_shift outputs the expected formatted data", {
 
 
 })
+
+test_that("Shift layer clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_shift(vars(row=vs, column=am), where=bad == code)
+    )
+
+  expect_error(build(t), "group_shift `where` condition `bad == code` is invalid.")
+})

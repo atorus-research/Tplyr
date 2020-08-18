@@ -13,13 +13,33 @@ treatment_group_build <- function(table) {
     built_target <- clean_attr(target)
     built_pop_data <- clean_attr(pop_data)
 
-    # Dummies for treatment groups added to target dataset
+    # Apply the filter and catch any filter errors, report
+    # the issue to the user explicitly
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!table_where)
+    }, error = function(e) {
+      abort(paste0("tplyr_table `where` condition `",
+                   as_label(table_where),
+                   "` is invalid. Filter error:\n", e))
+    })
+
+
     built_target <- built_target %>%
-      filter(!!table_where) %>%
       mutate(!!treat_var := as.character(!!treat_var))
 
+    # Same filter test on population data
+    tryCatch({
+      built_pop_data <- built_pop_data %>%
+        filter(!!pop_where)
+    }, error = function(e) {
+      abort(paste0("Population data `pop_where` condition `",
+                   as_label(pop_where),
+                   "` is invalid. Filter error:\n", e,
+                   "If the population data and target data subsets should be different, use `set_pop_where`."))
+    })
+
     built_pop_data <- built_pop_data %>%
-      filter(!!pop_where) %>%
       mutate(!!pop_treat_var := as.character(!!pop_treat_var))
 
     for (grp_i in seq_along(treat_grps)) {

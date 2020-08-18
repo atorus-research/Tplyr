@@ -152,9 +152,18 @@ process_count_n <- function(x) {
 
   evalq({
 
+    # Subset the local built_target based on where
+    # Catch errors
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_count `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
+
     summary_stat <- built_target %>%
-      # Filter out based on where
-      filter(!!where) %>%
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%

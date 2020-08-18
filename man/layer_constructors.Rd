@@ -88,9 +88,9 @@ any sublayers of the current layer.}
 # Load in pipe
 library(magrittr)
 
-t <- tplyr_table(iris, Sepal.Width) \%>\%
+t <- tplyr_table(iris, Species) \%>\%
   add_layer(
-    group_desc(target_var=Species)
+    group_desc(target_var=Sepal.Width)
   )
 }
 \seealso{

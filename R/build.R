@@ -67,24 +67,34 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  # Table Pre build
-  treatment_group_build(x)
+  op <- options()
 
-  x <- build_header_n(x)
+  tryCatch({
+    # Override scipen with Typlr option
+    options('scipen' = getOption('tplyr.scipen')) # Override scipen
 
-  # Process Layer summaries
-  map(x$layers, process_summaries)
+    # Table Pre build
+    treatment_group_build(x)
 
-  # Get table formatting info
-  formatting_meta <- fetch_formatting_info(x)
+    x <- build_header_n(x)
 
-  # Format layers/table and pivot. process_formatting should return the built table!
-  output_list <- purrr::map(x$layers, process_formatting)
+    # Process Layer summaries
+    map(x$layers, process_summaries)
 
-  output <- output_list %>%
-    map2_dfr(seq_along(output_list), add_layer_index) %>%
-    select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+    # Get table formatting info
+    formatting_meta <- fetch_formatting_info(x)
 
+    # Format layers/table and pivot. process_formatting should return the built table!
+    output_list <- purrr::map(x$layers, process_formatting)
+
+    output <- output_list %>%
+      map2_dfr(seq_along(output_list), add_layer_index) %>%
+      select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+
+  }, finally = {
+    # Set options back to defaults
+    options(op)
+  })
 
   output
 }

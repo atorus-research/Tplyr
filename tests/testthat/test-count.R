@@ -248,6 +248,14 @@ test_that("missing counts can be displayed as expected", {
                           ord_layer_index = c(1L, 1L, 1L),
                           ord_layer_1 = c(row_label11 = 1, row_label12 = 2, row_label13 = 3)))
 
+})
 
+test_that("Count layer clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(am, where=bad == code)
+    )
+
+  expect_error(build(t), "group_count `where` condition `bad == code` is invalid.")
 })
 

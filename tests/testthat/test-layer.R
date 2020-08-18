@@ -41,7 +41,7 @@ test_that("`Type` attribute is set properly", {
   t <- tplyr_table(iris, Sepal.Width)
   l1 <- group_count(t, target_var=Species)
   expect_s3_class(l1, 'count_layer')
-  l2 <- group_desc(t, target_var=Species)
+  l2 <- group_desc(t, target_var=Sepal.Length)
   expect_s3_class(l2, 'desc_layer')
   l3 <- group_shift(t, target_var=Species)
   expect_s3_class(l3, 'shift_layer')
@@ -52,7 +52,7 @@ test_that("type field can only contain one of 'count', 'desc', or 'shift'", {
   t <- tplyr_table(iris, Sepal.Width)
   # In order to test type parameter have to test direct access to tplyr_layer
   expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='count'))
-  expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='desc'))
+  expect_silent(tplyr_layer(t, target_var=quos(Sepal.Length), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='desc'))
   expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='shift'))
   expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('shift', 'desc')),
                 '`type` must be one of "count", "desc", or "shift"')
@@ -139,7 +139,8 @@ test_that("Parent of layer is appropraitely parent environment", {
   expect_true(identical(env_parent(l), t))
 })
 
-# I don't remember this very much but it's not working
+# There's some nuance here that makes this tricky so leaving the tests out for now.
+# Not much practical use currently anyway.
 # test_that("Objects submitted through ellipsis argument appear in environment", {
 #   t <- tplyr_table(iris, Sepal.Width)
 #   dat <- data.frame(var = c(1,2,3))
@@ -149,4 +150,25 @@ test_that("Parent of layer is appropraitely parent environment", {
 #   expect_equal(env_get(l, 'z'), 'c')
 # })
 
+test_that("Desc layers only accept numeric variables", {
+
+  expect_error({tplyr_table(ToothGrowth, dose) %>%
+    add_layer(
+      group_desc(supp)
+    )
+  }, regexp = "Target variables must be numeric for desc layers\\.")
+
+  expect_error({tplyr_table(ToothGrowth, dose) %>%
+      add_layer(
+        group_desc(vars(len, supp))
+      )
+  }, regexp = "Target variables must be numeric for desc layers\\.")
+
+  expect_error({tplyr_table(ToothGrowth, dose) %>%
+      add_layer(
+        group_desc(vars(supp, len))
+      )
+  }, regexp = "Target variables must be numeric for desc layers\\.")
+
+})
 
