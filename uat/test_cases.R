@@ -6,6 +6,7 @@ context("Atorus Validation")
 #' @section Last Update Date:
 #' 8/17/2020
 
+#setup ----
 #insert any necessary libraries
 library(Tplyr)
 library(tidyverse)
@@ -384,6 +385,13 @@ test_that('T9',{
 
 #test 10 ----
 #HOLD FOR MISSING COUNTS
+t <- tplyr_table(adsl, TRT01P) %>%
+  add_layer(
+    group_count(RACE) %>%
+      set_missing_count(f_str("xx ", n), string = c(Missing = 'AMERICAN INDIAN OR ALASKA NATIVE', Unknown = 'WHITE')) %>%
+      set_denom_ignore('AMERICAN INDIAN OR ALASKA NATIVE')
+  ) %>%
+  build()
 
 #test 11 ----
 test_that('T11',{
@@ -972,8 +980,162 @@ test_that('T20',{
   rm(test_20)
 })
 
+#test 21 ----
+test_that('T21',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'combo' = f_str('xx, xx.xx, xx.xx, xx.xxx, xx.xxx, xx, xx, xx.xx, xx.xx, xx.xx',
+                             n,  mean, median, sd,     var,    min, max, iqr, q1,  q3)
+          )
+      )
+
+    test_21 <- build(t)$var1_Placebo
+
+    # output table to check attributes
+    save(test_21, file = "~/Tplyr/uat/output/test_21.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_21)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_21.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+
+  t21_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=sprintf("%5.2f",round(mean(AGE),2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=sprintf("%5.2f",round(median(AGE),2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=sprintf("%6.3f",round(sd(AGE),3)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=sprintf("%6.3f",round(var(AGE),3)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=sprintf("%5.2f",round(IQR(AGE),1)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=sprintf("%5.2f",round(quantile(AGE)[[2]],2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=sprintf("%5.2f",round(quantile(AGE)[[4]],2)))[[1]],
+                 sep=", ")
+
+  testthat::expect_equal(t21_1,
+                         test_21,
+                         label = "T21.1")
+  #manual check(s)
 
 
+  #clean up working directory
+  rm(t21_1)
+  rm(test_21)
+})
+
+#test 22 ----
+test_that('T22',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(advs, TRTA) %>%
+      add_layer(
+        group_desc(AVAL, by=PARAMCD) %>%
+          set_format_strings(
+            'combo' = f_str('xxxx, a.a+1, xx.a+1, a.a+2, xx.a+2, xxx, a, a.xx, xxx.xx, a.a+1',
+                             n,    mean,  median, sd,    var,    min, max, iqr,   q1,    q3)
+          )
+      )
+
+    test_22 <- build(t)
+
+    # output table to check attributes
+    save(test_22, file = "~/Tplyr/uat/output/test_22.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_22)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_22.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+
+  t22_dat <- mutate(advs, avalc = as.character(AVAL)) %>%
+    rowwise() %>%
+    mutate(intlen = nchar(unlist(strsplit(avalc,'\\.'))[[1]])) %>%
+    mutate(hasdec = as.numeric(grepl('\\.', avalc))) %>%
+    mutate(declen = ifelse(hasdec > 0, nchar(unlist(strsplit(avalc,'\\.'))[[2]]), 0)) %>%
+    ungroup() %>%
+    group_by(PARAMCD) %>%
+    mutate(intlen = max(intlen, na.rm=TRUE)) %>%
+    mutate(hasdec = max(hasdec)) %>%
+    mutate(declen = max(declen))
+
+  t22_1 <- unique(t22_dat[,c("PARAMCD","intlen","declen","hasdec")]) %>%
+    left_join(summarise(t22_dat[t22_dat$TRTA == 'Placebo',], n=n(), mean=mean(AVAL), median=median(AVAL), sd=sd(AVAL),
+                        var=var(AVAL), min=min(AVAL), max=max(AVAL), iqr=IQR(AVAL),
+                        q1=quantile(AVAL)[[2]], q3=quantile(AVAL)[[4]]), by="PARAMCD") %>%
+    mutate(combo = paste(sprintf("%4s",n),
+                         sprintf("%*s", (intlen + declen + 2),
+                                 sprintf("%.*f",declen+1,
+                                         round(mean,declen+1)
+                                         )[[1]]),
+                         sprintf("%*s", 2 + declen + 2,
+                                 sprintf("%.*f",declen+1,
+                                         round(median,declen+1)
+                                         )[[1]]),
+                         sprintf("%*s", intlen + declen + 3,
+                                 sprintf("%.*f",declen+2,
+                                         round(sd,declen+2)
+                                         )[[1]]),
+                         sprintf("%*s", 2 + declen + 3,
+                                 sprintf("%.*f",declen+2,
+                                         round(var,declen+2)
+                                 )[[1]]),
+                         sprintf("%*s", 3,
+                                 sprintf("%.*f",0,
+                                         round(min,0)
+                                 )[[1]]),
+                         sprintf("%*s", intlen,
+                                 sprintf("%.*f",0,
+                                         round(max,0)
+                                 )[[1]]),
+                         sprintf("%*s", intlen + 3,
+                                 sprintf("%.*f",2,
+                                         round(iqr,2)
+                                 )[[1]]),
+                         sprintf("%*s", 6,
+                                 sprintf("%.*f",2,
+                                         round(q1,2)
+                                 )[[1]]),
+                         sprintf("%*s", intlen + declen + 2,
+                                 sprintf("%.*f",declen+1,
+                                         round(q3,declen+1)
+                                 )[[1]]),
+                         sep = ", "))
+
+  testthat::expect_equal(t22_1$combo,
+                         test_22$var1_Placebo,
+                         label = "T22.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(t22_dat)
+  rm(t22_1)
+  rm(test_22)
+})
 
 
 #test 23 ----
