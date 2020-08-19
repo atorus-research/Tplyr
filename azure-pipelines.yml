@@ -3,36 +3,36 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-parameters:
-- name: tidyverse_version
-  displayName: Tidyverse Version
-  type: string
-  default: 'rocker/tidyverse:latest'
-  values:
-  - 'rocker/tidyverse:latest'
-  - rocker/tidyverse:3.6.3
-  - rocker/tidyverse:3.6.2
-  - rocker/tidyverse:3.6.1
-  - rocker/tidyverse:3.6.0
-  - rocker/tidyverse:3.5.3
-  - rocker/tidyverse:3.5.2
-  - rocker/tidyverse:3.5.1
-  - rocker/tidyverse:3.5.0
-  - rocker/tidyverse:3.4.4
-  - rocker/tidyverse:3.4.3
-  - rocker/tidyverse:3.4.2
-  - rocker/tidyverse:3.4.1
-  - rocker/tidyverse:3.4.0
-  - rocker/tidyverse:3.3.3
-  - rocker/tidyverse:3.3.2
-  - rocker/tidyverse:3.3.1
+# parameters:
+# - name: tidyverse_version
+#   displayName: Tidyverse Version
+#   type: string
+#   default: 'rocker/tidyverse:latest'
+#   values:
+#   - 'rocker/tidyverse:latest'
+#   - rocker/tidyverse:3.6.3
+#   - rocker/tidyverse:3.6.2
+#   - rocker/tidyverse:3.6.1
+#   - rocker/tidyverse:3.6.0
+#   - rocker/tidyverse:3.5.3
+#   - rocker/tidyverse:3.5.2
+#   - rocker/tidyverse:3.5.1
+#   - rocker/tidyverse:3.5.0
+#   - rocker/tidyverse:3.4.4
+#   - rocker/tidyverse:3.4.3
+#   - rocker/tidyverse:3.4.2
+#   - rocker/tidyverse:3.4.1
+#   - rocker/tidyverse:3.4.0
+#   - rocker/tidyverse:3.3.3
+#   - rocker/tidyverse:3.3.2
+#   - rocker/tidyverse:3.3.1
 
 trigger: none
 
 pool:
   vmImage: 'ubuntu-latest'
 
-container: ${{ parameters.tidyverse_version }}
+container: 'rocker/tidyverse:latest'
 
 steps:
 
