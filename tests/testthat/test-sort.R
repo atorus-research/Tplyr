@@ -97,7 +97,8 @@ test_that("A group_count layer can be ordered properly by a VARN", {
 test_that("A nested group_count layer can be ordered properly", {
   iris$treat <- rep(c("Group1", "Group2"), 75)
   iris$grp <- rep(c("A", "B", "C", "D", "E", "F"), each = 25)
-  iris %<>% mutate_all(as.character)
+  iris <- iris %>%
+    mutate_all(as.character)
 
   t <- tplyr_table(iris, treat) %>%
     add_layer(

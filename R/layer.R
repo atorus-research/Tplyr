@@ -112,7 +112,6 @@ as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, where, t
 #' S3 method to produce error for unsupported objects as parent
 #' @noRd
 as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
-  dmessage('Dispatch default')
   stop('Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.')
 }
 
@@ -121,7 +120,6 @@ as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
 #' @inheritParams tplyr_layer
 #' @noRd
 new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
-  dmessage('--- new_tplyr_layer')
 
   # Pull out the arguments from the function call that aren't quosures (and exclude parent)
   # Specifically excluding the function call, parent, and type

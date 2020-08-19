@@ -202,6 +202,54 @@ test_that("nested count layers can be rebuilt without changes", {
 
 })
 
+test_that("missing counts can be displayed as expected", {
+  mtcars[mtcars$cyl == 6, "cyl"] <- NA
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n))
+    ) %>%
+    build()
+  expect_equal(t1[3, 1], tibble(row_label1 = "Missing"))
+  expect_equal(t1[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[is.na(mtcars$cyl), "cyl"] <- "Not here"
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = "Not here")
+    ) %>%
+    build()
+  expect_equal(t2[3, 1], tibble(row_label1 = "Missing"))
+  expect_equal(t2[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[mtcars$cyl == "Not here", "cyl"] <- "Unknown"
+  t3 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = c(UNK = "Unknown"))
+    ) %>%
+    build()
+  expect_equal(t3[3, 1], tibble(row_label1 = "UNK"))
+  expect_equal(t3[3, 2:4], tibble(var1_3 = " 2 ", var1_4 = " 4 ", var1_5 = " 1 "))
+
+  mtcars[mtcars$cyl == 8, "cyl"] <- NA
+  t4 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+        set_denom_ignore("Unknown", NA)
+    ) %>%
+    build()
+  expect_equal(t4, tibble(row_label1 = c("4", "Unknown", "Missing"),
+                          var1_3 = c(" 1 (100.0%)", " 2 (200.0%)", "12 "),
+                          var1_4 = c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "),
+                          var1_5 = c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "),
+                          ord_layer_index = c(1L, 1L, 1L),
+                          ord_layer_1 = c(row_label11 = 1, row_label12 = 2, row_label13 = 3)))
+
+})
+
 test_that("Count layer clauses with invalid syntax give informative error", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(

@@ -371,3 +371,74 @@ set_result_order_var <- function(e, result_order_var) {
 
   e
 }
+
+#' Set the display for missing strings
+#'
+#' If there is a special way NA or missing values should be counted, this binding
+#' will display the values in a different way.
+#'
+#' @param e A count layer
+#' @param f_str An f_str object to change the display of the missing counts
+#' @param string A named string representing the value to rename missing values
+#'   This value can be named to change the row name in the table.
+#'
+#' @return The modified layer
+#' @export
+#'
+#' @examples
+#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+#'       set_denom_ignore("Unknown", "NA")
+#'   ) %>%
+#'   build()
+set_missing_count <- function(e, f_str, string = "NA") {
+
+  assert_inherits_class(f_str, "f_str")
+
+  if(is.null(names(string))) missing_name <- "Missing"
+  else missing_name <- names(string)
+
+  env_bind(e, missing_count_string = f_str)
+  env_bind(e, missing_string = string)
+  env_bind(e, missing_name = missing_name)
+
+  e
+}
+
+
+#' Set values the denominator calculation will ignore
+#'
+#' This is generally used for missing values. Values like "", NA, "NA" are
+#' common ways missing values are presented in a data frame. In certain cases,
+#' percentages do not use "missing" values in the denominator. This function
+#' notes different values as "missing" and excludes them from the denominators.
+#'
+#' @param e A count_layer object
+#' @param ... Values to exclude from the percentage calculation.
+#'
+#' @return The modified layer object
+#' @export
+#'
+#' @examples
+#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+#'       set_denom_ignore("Unknown", "NA")
+#'   ) %>%
+#'   build()
+set_denom_ignore <- function(e, ...) {
+
+  dots <- list(...)
+
+  env_bind(e, denom_ignore = dots)
+
+  e
+
+}

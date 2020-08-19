@@ -71,7 +71,6 @@ add_layer <- function(parent, layer, name=NULL) {
 
   # Capture the layer code as a quosure
   layer <- enquo(layer)
-  dmessage(layer)
 
   # Insert the `parent` argument into the topmost call of the layer code
   # (i.e. if any pipes %>% then pull out the left most call and modify it)
