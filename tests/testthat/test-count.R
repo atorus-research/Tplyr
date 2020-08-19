@@ -246,7 +246,7 @@ test_that("missing counts can be displayed as expected", {
                           var1_4 = c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "),
                           var1_5 = c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "),
                           ord_layer_index = c(1L, 1L, 1L),
-                          ord_layer_1 = c(row_label11 = 1, row_label12 = 2, row_label13 = 3)))
+                          ord_layer_1 = c(1, 2, 3)))
 
 })
 
