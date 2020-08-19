@@ -2,6 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+
 parameters:
 - name: tidyverse_version
   displayName: Tidyverse Version
@@ -31,7 +32,7 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-container: ${{ parameters.tidyverse_version}}
+container: tidyverse_version
 
 steps:
 
