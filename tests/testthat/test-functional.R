@@ -47,7 +47,7 @@ t4 <- tplyr_table(mtcars, gear) %>%
 t5 <- tplyr_table(mtcars, gear, cols = vs) %>%
   set_where(mpg > 15) %>%
   add_total_group() %>%
-  add_treat_group("Cyls 8" , c(8))
+  add_treat_grps("Cyls 8" = c(8))
 t5 <- add_layers(t5,
                  group_count(t5, carb, by = am),
                  group_count(t5, "All", by = am) %>%
