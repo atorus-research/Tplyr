@@ -372,7 +372,8 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param .distinct_n Vector of distinct counts
 #' @param .distinct_total Vector of total counts for distinct
 #'
-#' @return A tibble replacing the originial counts
+#' @return A tibble replacing the original counts
+#' @noRd
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width) {
 

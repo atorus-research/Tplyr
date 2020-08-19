@@ -2,50 +2,70 @@
 
 #' Create a \code{f_str} object
 #'
-#' \code{f_str} objects are intended to be used within the function \code{set_format_strings}. The \code{f_str} object carries
-#' information that powers a significant amount of layer processing. The \code{format_string} parameter is capable of controlling
-#' display of a data point and decimal precision. The variables provided in \code{...} control the values from the
-#' data the output a particular formatted display value.
+#' \code{f_str} objects are intended to be used within the function
+#' \code{set_format_strings}. The \code{f_str} object carries information that
+#' powers a significant amount of layer processing. The \code{format_string}
+#' parameter is capable of controlling the display of a data point and decimal
+#' precision. The variables provided in \code{...} control which data points are
+#' used to populate the string formatted output.
 #'
-#' @details
-#' Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
-#' strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
-#' before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
-#' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
-#' flexibility to the user.
+#' @details Format strings are one of the most powerful components of 'Tplyr'.
+#'   Traditionally, converting numeric values into strings for presentation can
+#'   consume a good deal of time. Values and decimals need to align between
+#'   rows, rounding before trimming is sometimes forgotten - it can become a
+#'   tedious mess that is realistically not an important part of the analysis
+#'   being performed. 'Tplyr' makes this process as simple as we can, while
+#'   still allowing flexibility to the user.
 #'
-#' Tplyr provides both manual and automatic decimal precision formatting. The display of the numbers
-#' in the resulting dataframe is controlled by the \code{format_string} parameter. For manual precision, just like dummy values
-#' may be presented on your mocks, integer and decimal precision is specified by the user simply by providing a string of
-#' 'x's for how you'd like your numbers formatted. If you'd like 2 integers with 3 decimal places, you specify your string as 'xx.xxx'.
-#' 'Tplyr' does the work to get the numbers in the right place.
+#'   Tplyr provides both manual and automatic decimal precision formatting. The
+#'   display of the numbers in the resulting data frame is controlled by the
+#'   \code{format_string} parameter. For manual precision, just like dummy
+#'   values may be presented on your mocks, integer and decimal precision is
+#'   specified by the user providing a string of 'x's for how you'd like your
+#'   numbers formatted. If you'd like 2 integers with 3 decimal places, you
+#'   specify your string as 'xx.xxx'. 'Tplyr' does the work to get the numbers
+#'   in the right place.
 #'
-#' To take thjs a step further, automatic decimal precision can also be obtained based on the collected precision
-#' within the data. When creating tables where results vary by some parameter, different results may call for different
-#' degrees of precision. To use automatic precision, use a single 'a' on either the integer and decimal side. If you'd like
-#' to use increased precision (i.e. you'd like mean to be collected precision +1), use 'a+1'. So if you'd like both
-#' integer and and decimal precision to be based on the data as collected, you can use a format like 'a.a' - or for
-#' collected+1 decimal precision, 'a.a+1'.  You can mix and match this with manual formats as well, making format strings
-#' such as 'xx.a+1'
+#'   To take this a step further, automatic decimal precision can also be
+#'   obtained based on the collected precision within the data. When creating
+#'   tables where results vary by some parameter, different results may call for
+#'   different degrees of precision. To use automatic precision, use a single
+#'   'a' on either the integer and decimal side. If you'd like to use increased
+#'   precision (i.e. you'd like mean to be collected precision +1), use 'a+1'.
+#'   So if you'd like both integer and and decimal precision to be based on the
+#'   data as collected, you can use a format like 'a.a' - or for collected+1
+#'   decimal precision, 'a.a+1'.  You can mix and match this with manual formats
+#'   as well, making format strings such as 'xx.a+1'.
 #'
-#' If you want two numbers on the same line, you provide two sets of x's. For example, if you're presenting
-#' a value like "mean (sd)" - you could provide the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2).
-#' Note that you're able to provide  different integer lengths and different decimal precision for the two values. Each
-#' format string is independent and relates only to the format specified.
+#'   If you want two numbers on the same line, you provide two sets of x's. For
+#'   example, if you're presenting a value like "mean (sd)" - you could provide
+#'   the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2). Note that you're
+#'   able to provide  different integer lengths and different decimal precision
+#'   for the two values. Each format string is independent and relates only to
+#'   the format specified.
 #'
-#' The other parameters of the \code{f_str} call specify what values should fill the x's. \code{f_str} objects are used
-#' slightly differently between different layers. When declaring a format string within a count layer, \code{f_str} expects
-#' to see the values \code{n} and (if desired) \code{pct}, which specifies the formatting for your n's and percent values.
-#' But in descriptive statistc layers, \code{f_str} parameters refer to the names of the summaries being performed,
-#' either by built in defaults, or custom summaries declared using \code{\link{set_custom_summaries}}.
-#' See \code{\link{set_format_strings}} for some more notes about layers specific implementation
+#'   The other parameters of the \code{f_str} call specify what values should
+#'   fill the x's. \code{f_str} objects are used slightly differently between
+#'   different layers. When declaring a format string within a count layer,
+#'   \code{f_str} expects to see the values \code{n} and (if desired)
+#'   \code{pct}, which specifies the formatting for your n's and percent values.
+#'   But in descriptive statistic layers, \code{f_str} parameters refer to the
+#'   names of the summaries being performed, either by built in defaults, or
+#'   custom summaries declared using \code{\link{set_custom_summaries}}. See
+#'   \code{\link{set_format_strings}} for some more notes about layers specific
+#'   implementation.
 #'
-#' @param format_string The desired display format. X's indicate digits. On the left, the number of x's
-#' indicates the integer length. On the right, the number of x's controls decimal precision and rounding.
-#' Variables are inferred by any separation of the 'x' values other than a
-#' decimal.
-#' @param ... The variables to be formatted using the format specified in \code{format_string}.
-#' @param empty The string to display when the numeric data is not available
+#' @param format_string The desired display format. X's indicate digits. On the
+#'   left, the number of x's indicates the integer length. On the right, the
+#'   number of x's controls decimal precision and rounding. Variables are
+#'   inferred by any separation of the 'x' values other than a decimal.
+#' @param ... The variables to be formatted using the format specified in
+#'   \code{format_string}.
+#' @param empty The string to display when the numeric data is not available.
+#'   For desc layers, an unnamed character vector will populate within the
+#'   provided format string, set to the same width as the fitted numbers. Use a
+#'   single element character vector, with the element named '.overall' to
+#'   instead replace the whole string.
 #'
 #' @return A \code{f_str} object
 #' @export
@@ -60,7 +80,7 @@
 #'
 #' f_str("xx.x, xx.x, xx.x", q1, median, q3)
 #'
-f_str <- function(format_string, ..., empty='') {
+f_str <- function(format_string, ..., empty=c(.overall='')) {
 
   # Capture the variables off of the ellipsis
   vars <- enexprs(...)
@@ -173,35 +193,53 @@ parse_fmt <- function(x) {
 
 #' Set the format strings and associated summaries to be performed in a layer
 #'
-#' 'Tplyr' allows you extensive control over how strings are presented. \code{set_format_strings} allows you
-#' to apply these string formats to your layer. This behaves slightly differently between layers.
+#' 'Tplyr' gives you extensive control over how strings are presented.
+#' \code{set_format_strings} allows you to apply these string formats to your
+#' layer. This behaves slightly differently between layers.
 #'
-#' In a count layer, you can simply provide a single \code{\link{f_str}} object to specify how you want your
-#' n's (and possibly percents) formatted. If you are additionally supplying a statistic, like risk difference
-#' using \code{\link{add_risk_diff}}, you specify the count formats using the name 'n_counts'. The risk difference formats
-#' would then be specified using the name "riskdiff". In a descriptive statistic layer, \code{set_format_strings} allows you
-#' to do a couple more things:
-#' \itemize{
-#' \item{By naming paramters with character strings, those character strings become a row label in the resulting data frame}
-#' \item{The actual summaries that are performed come from the names used within the \code{\link{f_str}} calls}
-#' \item{Using multiple summaries (declared by your \code{\link{f_str}} calls) multiple summary values can appear within
-#' the same values. For example, to present mean (SD) like displays}
-#' }
+#' @details Format strings are one of the most powerful components of 'Tplyr'.
+#'   Traditionally, converting numeric values into strings for presentation can
+#'   consume a good deal of time. Values and decimals need to align between
+#'   rows, rounding before trimming is sometimes forgotten - it can become a
+#'   tedious mess that, in the grand scheme of things, is not an important part
+#'   of the analysis being performed. 'Tplyr' makes this process as simple as we
+#'   can, while still allowing flexibility to the user.
 #'
-#' @details
-#' Format strings are one of the most powerful components of 'Tplyr'. Traditionally, converting numeric values into
-#' strings for presentation can consume a good deal of time. Values and decimals need to align between rows, rounding
-#' before trimming is sometimes forgotten - it can become a tedious mess that, in the grand scheme of things, is not
-#' an important part of the analysis being performed. 'Tplyr' makes this process as simple as we can, while still allowing
-#' flexibility to the user.
+#'   In a count layer, you can simply provide a single \code{\link{f_str}}
+#'   object to specify how you want your n's (and possibly percents) formatted.
+#'   If you are additionally supplying a statistic, like risk difference using
+#'   \code{\link{add_risk_diff}}, you specify the count formats using the name
+#'   'n_counts'. The risk difference formats would then be specified using the
+#'   name "riskdiff". In a descriptive statistic layer,
+#'   \code{set_format_strings} allows you to do a couple more things: \itemize{
+#'   \item{By naming parameters with character strings, those character strings
+#'   become a row label in the resulting data frame} \item{The actual summaries
+#'   that are performed come from the variable names used within the
+#'   \code{\link{f_str}} calls} \item{Using multiple summaries (declared by your
+#'   \code{\link{f_str}} calls), multiple summary values can appear within the
+#'   same line. For example, to present "Mean (SD)" like displays.} \item{Format
+#'   strings in the desc layer also allow you to configure how empty values
+#'   should be presented. In the \code{f_str} call, use the \code{empty}
+#'   parameter to specify how missing values should present. A single element
+#'   character vector should be provided. If the vector is unnamed, that value
+#'   will be used in the format string and fill the space similar to how the
+#'   numbers will display. Meaning - if your empty string is 'NA' and your
+#'   format string is 'xx (xxx)', the empty values will populate as 'NA ( NA)'.
+#'   If you name the character vector in the 'empty' parameter '.overall', like
+#'   \code{empty = c(.overall='')}, then that exact string will fill the value
+#'   instead. For example, providing 'NA' will instead create the formatted
+#'   string as 'NA' exactly.}}
 #'
-#' See the \code{\link{f_str}} documentation for more details about how this implementation works.
+#'   See the \code{\link{f_str}} documentation for more details about how this
+#'   implementation works.
 #'
-#' @param e Layer on which to bind format strings
-#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param e Layer on which string formats will be bound
+#' @param ... Named parameters containing calls to \code{f_str} to set the
+#'   format strings
 #'
 #' @return The layer environment with the format string binding added
 #' @export
+#' @rdname set_format_strings
 #'
 #' @examples
 #' # Load in pipe
@@ -213,21 +251,29 @@ parse_fmt <- function(x) {
 #'     group_count(cyl) %>%
 #'       set_format_strings(f_str('xx (xx%)', n, pct))
 #'   ) %>%
-#'     build()
+#'   build()
 #'
 #' # In a descriptive statistics layer
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
 #'     group_desc(mpg) %>%
 #'       set_format_strings(
-#'         "n"        = f_str("xx", n),
-#'         "Mean (SD)"= f_str("xx.x", mean),
-#'         "SD" = f_str("xx.xx", sd),
-#'         "Median"   = f_str("xx.x", median),
-#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'         "Min, Max" = f_str("xx, xx", min, max),
-#'         "Missing"  = f_str("xx", missing)
+#'         "n"         = f_str("xx", n),
+#'         "Mean (SD)" = f_str("xx.x", mean, empty='NA'),
+#'         "SD"        = f_str("xx.xx", sd),
+#'         "Median"    = f_str("xx.x", median),
+#'         "Q1, Q3"    = f_str("xx, xx", q1, q3, empty=c(.overall='NA')),
+#'         "Min, Max"  = f_str("xx, xx", min, max),
+#'         "Missing"   = f_str("xx", missing)
 #'       )
+#'   ) %>%
+#'   build()
+#'
+#' # In a shift layer
+#' tplyr_table(mtcars, am) %>%
+#'   add_layer(
+#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'     set_format_strings(f_str("xxx (xx.xx%)", n, pct))
 #'   ) %>%
 #'   build()
 #'
@@ -239,14 +285,15 @@ set_format_strings <- function(e, ...) {
 #' Desc layer S3 method for set_format_strings
 #'
 #' @param e Layer on which to bind format strings
-#' @param ... Named parameters containing calls to \code{f_str} to set the format strings
-#' @param cap A named character vector containing an 'int' element for the cap on integer precision,
-#' and a 'dec' element for the cap on decimal precision.
+#' @param ... Named parameters containing calls to \code{f_str} to set the
+#'   format strings
+#' @param cap A named character vector containing an 'int' element for the cap
+#'   on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
 #' @return
 #' @export
 #'
-#' @noRd
+#' @rdname set_format_strings
 set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision_cap')) {
 
   # Catch the arguments from the function call so useful errors can be thrown
@@ -314,9 +361,7 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 #'
 #' @return Returns the modified layer object.
 #' @export
-#'
-#' @examples
-#' # TBD
+#' @rdname set_format_strings
 set_format_strings.count_layer <- function(e, ...) {
 
   # Catch the arguments from the function call so useful errors can be thrown
@@ -398,7 +443,7 @@ set_format_strings.shift_layer <- function(e, ...) {
 #' @param fmt_strings The \code{format_strings} varaible in a layer
 #'
 #' @return A named character vector with the flipping applied
-#'
+#' @noRd
 name_translator <- function(fmt_strings) {
   out <- names(fmt_strings)
   names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
@@ -418,7 +463,7 @@ name_translator <- function(fmt_strings) {
 #'   for the integer length(int) and decimal length(dec).
 #'
 #' @return String formatted numeric value
-#' @export
+#' @noRd
 num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 
   assert_that(is.numeric(val))
@@ -466,7 +511,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #' @param e Layer environment
 #'
 #' @return Boolean
-#'  @noRd
+#' @noRd
 has_format_strings <- function(e) {
   'format_strings' %in% ls(envir=e)
 }

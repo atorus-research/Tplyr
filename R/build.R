@@ -17,9 +17,6 @@
 #' source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
 #' a layer using \code{\link{get_numeric_data}}.
 #'
-#' In future releases, Tplyr will have options to examine consistency across layers and make formatting
-#' decisions for consistency (i.e. decimal alignment).
-#'
 #' @param x A \code{tplyr_table} object
 #'
 #' @return An executed \code{tplyr_table}
@@ -31,30 +28,12 @@
 #'
 #' tplyr_table(iris, Species) %>%
 #'   add_layer(
-#'     group_desc(Sepal.Length, by = "Sepal Length") %>%
-#'       set_format_strings(
-#'         "n"        = f_str("xx", n),
-#'         "Mean (SD)"= f_str("xx.x", mean),
-#'         "SD"       = f_str("xx.xx", sd),
-#'         "Median"   = f_str("xx.x", median),
-#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'         "Min, Max" = f_str("xx, xx", min, max),
-#'         "Missing"  = f_str("xx", missing)
-#'       )
+#'     group_desc(Sepal.Length, by = "Sepal Length")
 #'   ) %>%
-#'     add_layer(
-#'       group_desc(Sepal.Width, by = "Sepal Width")%>%
-#'         set_format_strings(
-#'           "n"        = f_str("xx", n),
-#'           "Mean (SD)"= f_str("xx.x", mean),
-#'           "SD"       = f_str("xx.xx", sd),
-#'           "Median"   = f_str("xx.x", median),
-#'          "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'           "Min, Max" = f_str("xx, xx", min, max),
-#'           "Missing"  = f_str("xx", missing)
-#'         )
-#'     ) %>%
-#'     build()
+#'   add_layer(
+#'     group_desc(Sepal.Width, by = "Sepal Width")
+#'   ) %>%
+#'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
 build <- function(x) {
@@ -127,11 +106,12 @@ prepare_format_metadata <- function(x) {
   UseMethod("prepare_format_metadata")
 }
 
-#' Placeholder function to fetch table formatting data from layers
+#' Fetch table formatting info from layers
 #'
 #' @param x A tplyr_table object
 #'
 #' @return The data used to format layers. Structure currently TBD
+#' @noRd
 fetch_formatting_info <- function(x) {
 
   # Get the max length of f_str objects in sub_layers

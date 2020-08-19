@@ -144,6 +144,7 @@ get_header_n_value.data.frame <- function(x, ...) {
 #'   Contains the unique combinations of all layer parameters and their counts.
 #'
 #' @return A data.frame with the
+#' @noRd
 get_denom_total <- function(.data, denoms_by, denoms_df) {
 
   # Filter denoms dataset

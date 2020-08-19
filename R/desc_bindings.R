@@ -5,6 +5,7 @@
 #' @param e Environment to extract custom summaries from
 #'
 #' @return \code{custom_summaries} binding in the layer environment
+#' @noRd
 get_custom_summaries <- function(e) {
 
   # Grab any custom summaries set within an option
@@ -23,28 +24,37 @@ get_custom_summaries <- function(e) {
 
 #' Set custom summaries to be performed within a descriptive statistics layer
 #'
-#' This function allows a user to define custom summaries to be performed in a call to \code{dplyr::summarize()}. A custom
-#' summary by the same name as a default summary will override the default. This allows the user to override the default behavior
-#' of summaries built into 'Tplyr', while also adding new desired summary functions.
+#' This function allows a user to define custom summaries to be performed in a
+#' call to \code{dplyr::summarize()}. A custom summary by the same name as a
+#' default summary will override the default. This allows the user to override
+#' the default behavior of summaries built into 'Tplyr', while also adding new
+#' desired summary functions.
 #'
-#' When programming the logic of the summary function, use the variable name \code{.var} to within your summary functions. This allows
-#' you apply the summary function to each variable when multiple target variables are declared.
+#' When programming the logic of the summary function, use the variable name
+#' \code{.var} to within your summary functions. This allows you apply the
+#' summary function to each variable when multiple target variables are
+#' declared.
 #'
-#' @details
-#' An important, yet not immediately obvious, part of using \code{set_custom_summaries} is to understand the
-#' link between the name parameters you set in \code{set_custom_summaries} and the names called in \code{\link{f_str}} objects
-#' within \code{\link{set_format_strings}}. In \code{\link{f_str}}, after you supply the string format you'd like your
+#' @details An important, yet not immediately obvious, part of using
+#' \code{set_custom_summaries} is to understand the link between the named
+#' parameters you set in \code{set_custom_summaries} and the names called in
+#' \code{\link{f_str}} objects within \code{\link{set_format_strings}}. In
+#' \code{\link{f_str}}, after you supply the string format you'd like your
 #' numbers to take, you specify the summaries that fill those strings.
 #'
-#' When you go to set your format strings, the name you use to declare a summary in \code{set_custom_summaries} is the same name
-#' that you use in your \code{\link{f_str}} call. This is necessary because \code{\link{set_format_strings}} needs some means
-#' of putting two summaries in the same value, and setting a row label for the summary being performed.
+#' When you go to set your format strings, the name you use to declare a summary
+#' in \code{set_custom_summaries} is the same name that you use in your
+#' \code{\link{f_str}} call. This is necessary because
+#' \code{\link{set_format_strings}} needs some means of putting two summaries in
+#' the same value, and setting a row label for the summary being performed.
 #'
-#' Review the examples to see this put into practice. Note the relationship between the name created in \code{set_custom_summary}
-#' and the name used in \code{\link{set_format_strings}} within the \code{\link{f_str}} call
+#' Review the examples to see this put into practice. Note the relationship
+#' between the name created in \code{set_custom_summaries} and the name used in
+#' \code{\link{set_format_strings}} within the \code{\link{f_str}} call
 #'
-#' @param e \code{desc} layer the summaries should be bound to
-#' @param ... Named parameters containing syntax to be used in a call to \code{dplyr::summarize()}
+#' @param e \code{desc} layer on which the summaries should be bound
+#' @param ... Named parameters containing syntax to be used in a call to
+#'   \code{dplyr::summarize()}
 #'
 #' @return Binds a variable \code{custom_summaries} to the specified layer
 #' @export
