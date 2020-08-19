@@ -72,13 +72,11 @@ test_that("treat_grps binding attaches properly", {
 
   expect_equal(treat_grps(tab), list())
 
-  add_treat_group(tab, "Total", c("Placebo", "Low", "High"))
+  add_treat_grps(tab, "Total" = c("Placebo", "Low", "High"))
   expect_equal(treat_grps(tab), list(Total = c("Placebo", "Low", "High")))
 
-  add_treat_group(tab, "Treated", c("Low", "High"))
+  add_treat_grps(tab, "Treated" = c("Low", "High"))
   expect_equal(treat_grps(tab), list(Total = c("Placebo", "Low", "High"),
                                      Treated = c("Low", "High")))
 
-  set_treat_grps(tab, "Treated2", c("Low1", "High2"))
-  expect_equal(treat_grps(tab), list(Treated2 = c("Low1", "High2")))
 })

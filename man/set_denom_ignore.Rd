@@ -16,7 +16,18 @@ The modified layer object
 }
 \description{
 This is generally used for missing values. Values like "", NA, "NA" are
-common ways missing values are presented in a data.frame. In certain cases,
+common ways missing values are presented in a data frame. In certain cases,
 percentages do not use "missing" values in the denominator. This function
 notes different values as "missing" and excludes them from the denominators.
+}
+\examples{
+mtcars[mtcars$cyl == 6, "cyl"] <- NA
+mtcars[mtcars$cyl == 8, "cyl"] <- NA
+tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) \%>\%
+      set_denom_ignore("Unknown", "NA")
+  ) \%>\%
+  build()
 }

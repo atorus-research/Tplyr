@@ -7,55 +7,66 @@
 tplyr_layer(parent, target_var, by, where, type, ...)
 }
 \arguments{
-\item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent environment of the layer. This must be either the
-\code{tplyr_table} object that the layer is contained within, or another \code{tplyr_layer} object of which
-the layer is a subgroup.}
+\item{parent}{\code{tplyr_table} or \code{tplyr_layer}. Required. The parent
+environment of the layer. This must be either the \code{tplyr_table} object
+that the layer is contained within, or another \code{tplyr_layer} object of
+which the layer is a subgroup.}
 
-\item{target_var}{Symbol. Required, The variable name on which the summary is to be performed. Must be a variable within
-the target dataset. Enter unquoted - i.e. target_var = AEBODSYS.}
+\item{target_var}{Symbol. Required, The variable name on which the summary is
+to be performed. Must be a variable within the target dataset. Enter
+unquoted - i.e. target_var = AEBODSYS.}
 
-\item{by}{A string, a variable name, or a list of variable names supplied using \code{dplyr::vars}}
+\item{by}{A string, a variable name, or a list of variable names supplied
+using \code{dplyr::vars}}
 
-\item{where}{Call. Filter logic used to subset the target data when performing a summary.}
+\item{where}{Call. Filter logic used to subset the target data when
+performing a summary.}
 
-\item{type}{"count", "desc", or "shift". Required. The category of layer - either "counts" for categorical counts, "desc" for
-descriptive statistics, or "shift" for shift table counts}
+\item{type}{"count", "desc", or "shift". Required. The category of layer -
+either "counts" for categorical counts, "desc" for descriptive statistics,
+or "shift" for shift table counts}
 
-\item{...}{Additional arguments that will be passed directly into the \code{tplyr_layer} environment. See the
-\href{<link tbd>}{vignette} on adding extensions.}
+\item{...}{Additional arguments}
 }
 \value{
-An \code{tplyr_layer} environment that is a child of the specified parent. The environment contains the object
-  as listed below.
+A \code{tplyr_layer} environment that is a child of the specified
+  parent. The environment contains the object as listed below.
 }
 \description{
-This object is the workhorse of the \code{tplyr} package. A \code{tplyr_layer} can be thought of
-as a block, or "layer" of a table. Summary tables typically consist of different sections that require
-different summaries. When programming these section, your code will create different layers that need to be
-stacked or merged together. A \code{tplyr_layer} is the container for those isolated building blocks.
+This object is the workhorse of the \code{tplyr} package. A
+\code{tplyr_layer} can be thought of as a block, or "layer" of a table.
+Summary tables typically consist of different sections that require different
+summaries. When programming these section, your code will create different
+layers that need to be stacked or merged together. A \code{tplyr_layer} is
+the container for those isolated building blocks.
 
-When building the \code{tplyr_table}, each layer will execute independently. When all of the data processing has
-completed, the layers are brought together to construct the output.
+When building the \code{tplyr_table}, each layer will execute independently.
+When all of the data processing has completed, the layers are brought
+together to construct the output.
 
-\code{tplyr_layer} objects are not created directly, but rather the layer constructor functions \code{add_group_counts},
-\code{add_group_desc}, \code{add_group_shift}, and their related subgroup functions.
-
-See the \href{<link tbd>}{vignette} for a more extensive explanation of how these pieces fit together.
+\code{tplyr_layer} objects are not created directly, but are rather created
+using the layer constructor functions \code{\link{group_count}},
+\code{\link{group_desc}}, and \code{\link{group_shift}}.
 }
-\section{\code{tplyr_layer} Object Structure}{
+\section{\code{tplyr_layer} Core Object Structure}{
+ \describe{
+  \item{\code{type}}{This is an attribute. A string indicating the layer
+  type, which controls the summary that will be performed.}
+  \item{\code{target_var}}{A quosure of a name, which is the variable on
+  which a summary will be performed.} \item{\code{by}}{A list of quosures
+  representing either text labels or variable names used in grouping.
+  Variable names must exist within the target dataset Text strings submitted
+  do not need to exist in the target dataset.} \item{\code{cols}}{A list of
+  quosures used to determine the variables that are used to display in
+  columns.} \item{\code{where}}{A quosure of a call that containers the
+  filter logic used to subset the target dataset. This filtering is in
+  addition to any subsetting done based on \code{where} criteria specified in
+  \code{\link{tplyr_table}}} \item{\code{layers}}{A list with class
+  \code{tplyr_layer_container}. Initialized as empty, but serves as the
+  container for any sublayers of the current layer. Used internally.} }
 
-\describe{
-\item{\code{type}}{This is an attribute. A string indicating the layer type, which controls the summary that will be performed.}
-\item{\code{target_var}}{A quosure of a name, which is the variable on which a summary will be performed.}
-\item{\code{by}}{A list of quosures representing either text labels or variable names used in grouping. Variable names must exist
-within the target dataset Text strings submitted do not need to exist in the target dataset.}
-\item{\code{cols}}{A list of quosures used to determine the variables that are used to display in columns.}
-\item{\code{where}}{A quosure of a call that containers the filter logic used to subset the target dataset. This filtering is
-in addition to any subsetting done based on \code{where} criteria specified in \code{\link{tplyr_table}}}
-\item{\code{sort}}{A string containing the sort method. Defaults to 'asc' for ascending.}
-\item{\code{layers}}{A list with class \code{tplyr_layer_container}. Initialized as empty, but serves as the container for
-any sublayers of the current layer.}
-}
+  Different layer types will have some different bindings specific to that
+  layer's needs.
 }
 
 \examples{
@@ -68,9 +79,6 @@ l <- group_count(tab, by=vars('Label Text', Species),
 
 }
 \seealso{
-\code{\link{tplyr_table}}
-
-Other Layer construction functions: 
-\code{\link{group_count}()}
+\link{tplyr_table}
 }
 \concept{Layer construction functions}

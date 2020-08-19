@@ -4,7 +4,7 @@ tab <- tplyr_table(iris, Species) %>%
     group_count(Petal.Width)
   ) %>%
   add_total_group() %>%
-  add_treat_group("V Species", c("versicolor", "virginica"))
+  add_treat_grps("V Species" = c("versicolor", "virginica"))
 build(tab)
 
 test_that("build.tplyr_table preprocesses data appropriately", {

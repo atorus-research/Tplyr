@@ -10,7 +10,7 @@ header_n(table)
 
 header_n(x) <- value
 
-set_header_n(table, header_n)
+set_header_n(table, value)
 }
 \arguments{
 \item{table}{A \code{tplyr_table} object}

@@ -68,7 +68,7 @@ this_denom <- function(.data, header_n, treat_var) {
 #' t <- tplyr_table(mtcars, gear, cols = vars(cyl, am))
 #'
 #' get_header_n_value(t, 3, 6, 0)
-#' # Returns the number of cars that have 3 gears, 6 cyinders, and auto trasmission
+#' # Returns the number of cars that have 3 gears, 6 cylinders, and auto transmission
 get_header_n_value <- function(x, ...) {
   UseMethod("get_header_n_value")
 }
@@ -147,8 +147,9 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @param total_extract Either 'n' or distinct_n
 #'
 #' @return A data.frame with the
+#' @noRd
 get_denom_total <- function(.data, denoms_by, denoms_df, denoms_distinct_df, total_extract = "n") {
-total_extract
+
   # Filter denoms dataset
   filter_logic <- map(denoms_by, function(x) {
     expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])

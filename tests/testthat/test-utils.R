@@ -1,7 +1,5 @@
 context('utils.R')
 
-tplyr_debug(FALSE)
-
 ## modify_nested_call ----
 test_that("Call must be quoted", {
   expect_error(Tplyr:::modify_nested_call(mean(c(1,2,3))), "`call` must be a quoted call")
