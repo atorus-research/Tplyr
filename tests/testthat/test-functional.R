@@ -101,9 +101,7 @@ test_that("all test tables can be built without errors or warnings", {
   expect_silent(build(t3))
   expect_silent(build(t4))
   expect_silent(build(t5))
-  # There is a bug in certain versions of dplyr/forcats that make this raise
-  # an incorrect warning.
-  # expect_silent(build(t6))
+  expect_silent(suppressWarnings(build(t6))) # This seems to be a bug https://github.com/tidyverse/dplyr/issues/5149
 })
 
 test_that("all tables have the expected dimentions", {

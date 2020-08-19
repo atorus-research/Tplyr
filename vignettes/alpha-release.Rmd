@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(magrittr)
 library(Tplyr)
-adsl <- haven::read_xpt("adsl.xpt")
-adae <- haven::read_xpt("adae.xpt")
+load("adae.Rdata")
+load("adsl.Rdata")
 ```
 
 # The Alpha Release

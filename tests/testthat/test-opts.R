@@ -1,4 +1,4 @@
-context('Options testing')
+context('zzz.R')
 
 # Store the default options
 
