@@ -32,7 +32,7 @@ parameters:
   - rocker/tidyverse:3.3.2
   - rocker/tidyverse:3.3.1
 
-container: 'rocker/tidyverse:latest'
+container: ${{ parameters.tidyverse_version }}
 
 steps:
 
