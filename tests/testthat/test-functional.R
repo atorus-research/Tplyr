@@ -101,7 +101,7 @@ test_that("all test tables can be built without errors or warnings", {
   expect_silent(build(t3))
   expect_silent(build(t4))
   expect_silent(build(t5))
-  expect_silent(build(t6))
+  expect_silent(suppressWarnings(build(t6))) # This seems to be a bug https://github.com/tidyverse/dplyr/issues/5149
 })
 
 test_that("all tables have the expected dimentions", {
@@ -110,7 +110,7 @@ test_that("all tables have the expected dimentions", {
   b_t3 <- build(t3)
   b_t4 <- build(t4)
   b_t5 <- build(t5)
-  b_t6 <- build(t6)
+  b_t6 <- suppressWarnings(build(t6))
 
   expect_equal(dim(b_t1), c(6, 6))
   expect_equal(dim(b_t2), c(3, 9))
