@@ -22,14 +22,17 @@ set_pop_data(table, pop_data)
 \item{pop_data}{A data.frame with population level information}
 }
 \value{
-For \code{tplyr_pop_data} the pop_data binding of the \code{tplyr_table}
-  object. For \code{tplyr_pop_data<-} nothing is returned, the pop_data binding
-  is set silently. For \code{set_tplyr_pop_data} the modified object.
+For \code{tplyr_pop_data} the pop_data binding of the
+  \code{tplyr_table} object. For \code{tplyr_pop_data<-} nothing is returned,
+  the pop_data binding is set silently. For \code{set_tplyr_pop_data} the
+  modified object.
 }
 \description{
-The population data is used when calculating N counts in the column headers,
-as well as determining denominators for percent calculations in the table
-body.
+The population data is used to gather information that may not be available
+from the target dataset. For example, missing treatment groups, population N
+counts, and proper N counts for denominators will be provided through the
+population dataset. The population dataset defaults to the target dataset
+unless otherwise specified using \code{set_pop_data}.
 }
 \examples{
 tab <- tplyr_table(iris, Species)

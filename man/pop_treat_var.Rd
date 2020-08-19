@@ -15,11 +15,14 @@ set_pop_treat_var(table, pop_treat_var)
 \item{pop_treat_var}{Variable containing treatment group assignments within the \code{pop_data} binding. Supply unquoted.}
 }
 \value{
-For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}
-  object. For \code{set_tplyr_pop_treat_var} the modified object.
+For \code{tplyr_pop_treat_var} the pop_treat_var binding of the
+  \code{tplyr_table} object. For \code{set_tplyr_pop_treat_var} the modified
+  object.
 }
 \description{
-Return or set pop_treat_var binding
+The treatment variable used in the target data may be different than the
+variable within the population dataset. \code{set_pop_treat_var} allows you
+to change this.
 }
 \examples{
 tab <- tplyr_table(iris, Species)
