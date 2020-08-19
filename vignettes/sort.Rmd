@@ -1,0 +1,44 @@
+---
+title: "sort"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sort}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Tplyr)
+```
+
+
+# Sorting a Tplyr Table
+Keeping with Tplyr's design philosophy, there are many ways 
+
+### High Level theory.
+
+## Sorting Table Columns
+### row_, var_, ord_ naming conventions
+### select, relocate, and extract for reordering,
+### row dropping
+
+## Sorting the layers
+### ord_layer_index, names
+### Using arrange
+
+## Sorting the 'by' varaibles
+### VARN
+### Factor
+### Alphabetical
+
+## Sorting a 'desc' target
+
+## Sorting a 'count' target
+

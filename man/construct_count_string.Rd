@@ -14,7 +14,8 @@ construct_count_string(
   max_n_width,
   missing_string,
   missing_f_str,
-  summary_var
+  summary_var,
+  indentation_length
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ denominator that column is based off of.}
 
 \item{summary_var}{The summary_var values that contain the values of the
 target variable.}
+
+\item{indentation_length}{If this is a nested count layer. The row prefixes
+must be removed}
 }
 \value{
 A tibble replacing the original counts
