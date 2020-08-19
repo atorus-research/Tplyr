@@ -13,7 +13,7 @@ library(tidyverse)
 library(testthat)
 library(rlang)
 
-#insert code applicable to all tests i.e. functions
+#insert code applicable to all tests i.e. functions or data
 adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
 adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
 advs <- haven::read_xpt("~/Tplyr/uat/input/advs.xpt")
@@ -1254,49 +1254,8 @@ test_that('T24',{
   rm(test_24)
 })
 
-
 #test 25 ----
-test_that('T25',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
-      add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
-      )
-    build(t)
-    test_25 <- get_numeric_data(t)[[1]]
-
-    # output table to check attributes
-    save(test_25, file = "~/Tplyr/uat/output/test_25.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_25)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_25.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t25_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, ANRIND, BNRIND) %>%
-    summarise(n=n()) %>%
-    ungroup() %>%
-    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t25_1$n,test_25$n,label = "T25.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t25_1)
-  rm(test_25)
-})
-
+# f_str(empty = "NA")
 
 #test 26 ----
 test_that('T26',{
@@ -1307,7 +1266,7 @@ test_that('T26',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=SEX)
+        group_shift(vars(row=ANRIND, column=BNRIND))
       )
     build(t)
     test_26 <- get_numeric_data(t)[[1]]
@@ -1328,16 +1287,59 @@ test_that('T26',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t26_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, SEX, ANRIND, BNRIND) %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, SEX, ANRIND, BNRIND, fill=list(n = 0))
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0))
   testthat::expect_equal(t26_1$n,test_26$n,label = "T26.1")
   #manual check(s)
 
   #clean up working directory
   rm(t26_1)
   rm(test_26)
+})
+
+
+#test 27 ----
+test_that('T27',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND), by=SEX)
+      )
+    build(t)
+    test_27 <- get_numeric_data(t)[[1]]
+
+    # output table to check attributes
+    save(test_27, file = "~/Tplyr/uat/output/test_27.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_27)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_27.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t27_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, SEX, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, ANRIND, BNRIND, fill=list(n = 0))
+  testthat::expect_equal(t27_1$n,test_27$n,label = "T26.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t27_1)
+  rm(test_27)
 })
 
 #shift tables
