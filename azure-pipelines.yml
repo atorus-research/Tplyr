@@ -7,9 +7,9 @@ parameters:
 - name: tidyverse_version
   displayName: Tidyverse Version
   type: string
-  default: rocker/tidyverse:latest
+  default: 'rocker/tidyverse:latest'
   values:
-  - rocker/tidyverse:latest
+  - 'rocker/tidyverse:latest'
   - rocker/tidyverse:3.6.3
   - rocker/tidyverse:3.6.2
   - rocker/tidyverse:3.6.1
