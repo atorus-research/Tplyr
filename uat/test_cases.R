@@ -484,7 +484,7 @@ test_that('T12',{
     group_by(AEDECOD, TRTA) %>%
     summarize(cnt=n()) %>%
     left_join(t12_totals,by="TRTA") %>%
-    mutate(pct = sprintf("%5s", format(round(cnt/total*100,digits = 1), nsmall = 1))) %>%
+    mutate(pct = sprintf("%5.1f", round(cnt/total*100,digits = 1))) %>%
     mutate(col = paste0(as.character(cnt),' (',pct,'%)'))
 
   t12_2 <- filter(adae, TRTA == 'Placebo') %>%
@@ -492,7 +492,7 @@ test_that('T12',{
     group_by(AEDECOD, TRTA) %>%
     summarize(cnt=n()) %>%
     left_join(t12_totals_distinct,by="TRTA") %>%
-    mutate(pct = sprintf("%5s", format(round(cnt/distinct_total*100,digits = 1), nsmall = 1))) %>%
+    mutate(pct = sprintf("%5.1f", round(cnt/distinct_total*100,digits = 1))) %>%
     mutate(distinct_col = paste0(as.character(cnt),' (',pct,'%)'))
 
   t12_3 <- select(t12_1,c("TRTA","AEDECOD","col")) %>%
@@ -1334,7 +1334,7 @@ test_that('T27',{
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, SEX, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t27_1$n,test_27$n,label = "T26.1")
+  testthat::expect_equal(t27_1$n,test_27$n,label = "T27.1")
   #manual check(s)
 
   #clean up working directory
@@ -1342,21 +1342,145 @@ test_that('T27',{
   rm(test_27)
 })
 
-#shift tables
+#test 28 ----
+test_that('T28',{
+  if(is.null(vur)) {
 
-adlbc <- haven::read_xpt("/home/mstackhouse/cdisc_pilot_data/adlbc.xpt")
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(RACE, SEX))
+      )
+    build(t)
+    test_28 <- get_numeric_data(t)[[1]]
 
-adlbc$ANRIND <- factor(adlbc$ANRIND, c("L", "N", "H"))
-adlbc$BNRIND <- factor(adlbc$BNRIND, c("L", "N", "H"))
+    # output table to check attributes
+    save(test_28, file = "~/Tplyr/uat/output/test_28.RData")
 
-t_shifty <- tplyr_table(adlbc, TRTA, cols=SEX, where=(!is.na(BNRIND) & !is.na(ANRIND))) %>%
-  add_layer(
-    group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
-      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
-      set_denoms_by(PARAMCD, AVISIT, TRTA, SEX)
-  )
+    #clean up working directory
+    rm(t)
+    rm(test_28)
 
-built_shifty <- build(t_shifty)
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_28.RData")
+  }
 
-#clean up
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t28_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, RACE, SEX, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, RACE, SEX, ANRIND, BNRIND, fill=list(n = 0))
+  testthat::expect_equal(t28_1$n,test_28$n,label = "T27.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t28_1)
+  rm(test_28)
+})
+
+#test 29 ----
+test_that('T29',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+
+    adlb$ANRIND_FACTOR <- factor(adlb$ANRIND, c("L","N","H"))
+    adlb$BNRIND_FACTOR <- factor(adlb$BNRIND, c("L","N","H"))
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
+      )
+    build(t)
+    test_29 <- get_numeric_data(t)[[1]]
+
+    # output table to check attributes
+    save(test_29, file = "~/Tplyr/uat/output/test_29.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_29)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_29.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t29_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND_FACTOR, BNRIND_FACTOR) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0))
+  testthat::expect_equal(t29_1$n,test_29$n,label = "T29.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t29_1)
+  rm(test_29)
+})
+
+#test 30 ----
+test_that('T30',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+      )
+
+    test_30 <- build(t)
+
+    # output table to check attributes
+    save(test_30, file = "~/Tplyr/uat/output/test_30.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_30)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_30.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t30_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND) %>%
+    summarise(total=n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, fill=list(total = 0))
+  t30_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t30_tots, by=c("TRTA","BNRIND")) %>%
+    mutate(pct = ifelse(total > 0, n / total * 100,0)) %>%
+    mutate(col =paste0(sprintf("%3s",n),' (',sprintf("%5.1f",pct),'%)')) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t30_1$col,test_30$var1_Placebo_N,label = "T30.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t30_tots)
+  rm(t30_1)
+  rm(test_30)
+})
+
+#clean up ----
 rm(vur)
