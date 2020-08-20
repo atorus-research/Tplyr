@@ -16,29 +16,67 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(Tplyr)
+library(dplyr)
 ```
 
 
 # Sorting a Tplyr Table
-Keeping with Tplyr's design philosophy, there are many ways 
+Keeping with Tplyr's design philosophy, the user can sort that table in any way they need. Columns and rows are designed so they can be arranged easily at output without any additional processing.
 
-### High Level theory.
+In this example, the `t` table will output with method for sorting the layers, the `am` variable, and the values of the calculations.
+
+```{r}
+t <- tplyr_table(mtcars, gear) %>%
+  add_total_group() %>%
+  add_treat_grps(High = c(4, 5)) %>%
+  add_layer(
+    group_count(cyl, by = am) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols(Total)
+  ) %>%
+  add_layer(
+    group_desc(mpg, by = am)
+  ) %>%
+  build()
+
+t
+
+```
 
 ## Sorting Table Columns
-### row_, var_, ord_ naming conventions
-### select, relocate, and extract for reordering,
-### row dropping
+### Column Naming Conventions
+Built Tplyr tables output with three types of columns:
+* row_label_<n> - Row labels are the context for the data displayed in each row. It contains the combinations of 'by' variables, target_variables (Count and Shift), and summary names (Desc). <n> represents the index of the label. Indexes are ordered as, grouping 'target' variable (nested count), 'by' variables in the order they are presented, name of summaries (Desc), and 'target' variable (count).
+* var<n>_<grp> - Variable columns contain the actual derivations performed on the data. <n> represents the 'target' variable (Desc), and <grp> represents the combination of treatment group and 'cols' value.
+* ord_<x> - Ordering helpers are columns that can be used to arrange the rows of the table. One for each Row Label, plus a column for the layers output from the build and they can be used to order the table in several ways.
 
-## Sorting the layers
-### ord_layer_index, names
-### Using arrange
+### Reordering and Droping Columns
+The functions `dplyr::select()`, `dplyr::relocate()`, `magrittr::extract()`, and `[` can all be used to reorder, drop, and sort columns however a user needs too.
+
+To drop the ordering helpers, you can easily subtract them with dplyr and tidyselect.
+```{r}
+t %>% 
+  select(-starts_with("ord_"))
+
+```
+Or you can reorder columns, in this example total is moved to the first column.
+```{r}
+t %>%
+  select( starts_with("row"), var1_Total, starts_with("var1"))
+```
+
+## Sorting the Layers
+### Arranging the Table
 
 ## Sorting the 'by' varaibles
 ### VARN
 ### Factor
 ### Alphabetical
 
-## Sorting a 'desc' target
+## Sorting 'Desc' Targets
 
-## Sorting a 'count' target
+## Sorting 'Count' and 'Shift' Targets
+### bycount
+### byvarn
+### by factor
 
