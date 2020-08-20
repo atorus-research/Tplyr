@@ -1,4 +1,4 @@
-context('Options testing')
+context('zzz.R')
 
 # Store the default options
 
@@ -369,8 +369,8 @@ test_that('Precision cap override is picked up from option', {
   t_opt_dat <- suppressWarnings(build(t_opt))
 
   # Test
-  expect_equal(t_def_dat$var1_3, c("3.13", "    "))
-  expect_equal(t_opt_dat$var1_3, c("3.1", "   "))
+  expect_equal(t_def_dat$var1_3, c("3.13", ""))
+  expect_equal(t_opt_dat$var1_3, c("3.1", ""))
 
   options(op)
 })
@@ -398,7 +398,7 @@ test_that('Custom summaries set within options are available for build', {
   dat <- suppressWarnings(build(t))
 
   # Test
-  expect_equal(dat$var1_3, c("3.12", "    "))
+  expect_equal(dat$var1_3, c("3.12", ""))
 
   options(op)
 })

@@ -213,6 +213,8 @@ add_order_columns.count_layer <- function(x) {
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
     }
 
+    rm(formatted_col_index)
+
   }, envir = x)
 }
 
@@ -232,6 +234,7 @@ add_order_columns.desc_layer <- function(x) {
 
     formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
 
+    rm(formatted_col_index)
 
   }, envir = x)
 }
@@ -272,6 +275,7 @@ add_order_columns.shift_layer <- function(x) {
 
     }
 
+    rm(formatted_col_index)
 
   }, envir = x)
 }

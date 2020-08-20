@@ -25,15 +25,28 @@ A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} with a ne
 
 }
 \description{
-\code{add_layer} inserts a \code{tplyr_layer} into the \code{layers} container of a \code{tplyr_table} object. This allows
-for a tidy style of programming (using \code{magrittr} piping - \code{\%>\%}) with a secondary advantage - the construction
-of the layer object may consist of a series of piped functions itself.
+\code{add_layer} attaches a \code{tplyr_layer} to a \code{tplyr_table} object. This allows
+for a tidy style of programming (using \code{magrittr} piping, i.e. \code{\%>\%}) with a
+secondary advantage - the construction of the layer object may consist of a series of piped
+functions itself.
 
-\code{tplyr} encourages a user to view the construction of a table as a series of "layers". The construction of each of these
-layers are isolated and independent of one another - but each of these layers are children of the table itself. \code{add_layer}
-isolates the construction of an individual layer and allows the user to construct that layer and insert it back into the parent.
-The syntax for this is intuitive and allows for tidy piping. Simply pipe the current table object in, and write the code to
-construct your layer within the \code{layer} parameter.
+\code{Tplyr} encourages a user to view the construction of a table as a series of "layers".
+The construction of each of these layers are isolated and independent of one another - but
+each of these layers are children of the table itself. \code{add_layer} isolates the construction
+of an individual layer and allows the user to construct that layer and insert it back into the
+parent. The syntax for this is intuitive and allows for tidy piping. Simply pipe the current
+table object in, and write the code to construct your layer within the \code{layer} parameter.
+
+\code{add_layers} is another approach to attaching layers to a \code{tplyr_table}. Instead of
+constructing the entire table at once, \code{add_layers} allows you to construct layers as
+different objects. These layers can then be attached into the \code{tplyr_table} all at
+once.
+
+\code{add_layer} and \code{add_layers} both additionally allow you to name the layers as you
+attach them. This is helpful when using functions like \code{\link{get_numeric_data}} or
+\code{\link{get_stats_data}} when you can access information from a layer directly.
+\code{add_layer} has a name parameter, and layers can be named in \code{add_layers} by
+submitting the layer as a named argument.
 }
 \examples{
 # Load in pipe

@@ -11,8 +11,8 @@ add_total_row(e)
 }
 \description{
 Adding a total row creates an additional observation in the count summary that presents the total counts
-(i.e. the n's that are) summarized by the \code{by} group variables and the columns (\code{treat_var} along with
-any additional columns set by the \code{cols} argument.)
+(i.e. the n's that are summarized). This is calculated by the \code{by} group variables and the columns
+(\code{treat_var} along with any additional columns set by the \code{cols} argument).
 }
 \examples{
 # Load in Pipe

@@ -26,9 +26,6 @@ Once this process is complete, any post-processing necessary within the table en
 delivered. Metadata and traceability information are kept within each of the layer environments, which allows an investigation into the
 source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
 a layer using \code{\link{get_numeric_data}}.
-
-In future releases, Tplyr will have options to examine consistency across layers and make formatting
-decisions for consistency (i.e. decimal alignment).
 }
 \examples{
 # Load in Pipe
@@ -36,30 +33,12 @@ library(magrittr)
 
 tplyr_table(iris, Species) \%>\%
   add_layer(
-    group_desc(Sepal.Length, by = "Sepal Length") \%>\%
-      set_format_strings(
-        "n"        = f_str("xx", n),
-        "Mean (SD)"= f_str("xx.x", mean),
-        "SD"       = f_str("xx.xx", sd),
-        "Median"   = f_str("xx.x", median),
-        "Q1, Q3"   = f_str("xx, xx", q1, q3),
-        "Min, Max" = f_str("xx, xx", min, max),
-        "Missing"  = f_str("xx", missing)
-      )
+    group_desc(Sepal.Length, by = "Sepal Length")
   ) \%>\%
-    add_layer(
-      group_desc(Sepal.Width, by = "Sepal Width")\%>\%
-        set_format_strings(
-          "n"        = f_str("xx", n),
-          "Mean (SD)"= f_str("xx.x", mean),
-          "SD"       = f_str("xx.xx", sd),
-          "Median"   = f_str("xx.x", median),
-         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-          "Min, Max" = f_str("xx, xx", min, max),
-          "Missing"  = f_str("xx", missing)
-        )
-    ) \%>\%
-    build()
+  add_layer(
+    group_desc(Sepal.Width, by = "Sepal Width")
+  ) \%>\%
+  build()
 
 }
 \seealso{

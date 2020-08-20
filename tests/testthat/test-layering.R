@@ -1,13 +1,11 @@
 context("layering.R")
 
-tplyr_debug(FALSE)
-
-## group_<tpye> family of functions ----
+## group_<type> family of functions ----
 
 test_that("`group_<type>` functions output layers of appropriate type", {
   t <- tplyr_table(iris, Sepal.Width)
   expect_s3_class(group_count(t, target_var=Species), 'count_layer')
-  expect_s3_class(group_desc(t, target_var=Species), 'desc_layer')
+  expect_s3_class(group_desc(t, target_var=Sepal.Length), 'desc_layer')
   expect_s3_class(group_shift(t, target_var=Species), 'shift_layer')
 })
 
@@ -15,7 +13,7 @@ test_that("`group_<type>` function pass parameters through appropriately", {
   t <- tplyr_table(iris, Sepal.Width)
   # Define layers with parameter
   l1 <- group_count(t, target_var=Species, by=Sepal.Width, where=Species == 'something')
-  l2 <- group_desc(t, target_var=Species, by=Sepal.Width, where=Species == 'something')
+  l2 <- group_desc(t, target_var=Sepal.Length, by=Sepal.Width, where=Species == 'something')
   l3 <- group_shift(t, target_var=Species, by=Sepal.Width, where=Species == 'something')
 
   # Check values of `by`
@@ -34,11 +32,11 @@ test_that("All parameters must be provided", {
   t <- tplyr_table(iris, Sepal.Width)
   expect_error(add_layer(), "`parent` parameter must be provided")
   expect_error(add_layer(t), "`layer` parameter must be provided")
-  expect_silent(add_layer(t, group_desc(target_var=Species)))
+  expect_silent(add_layer(t, group_desc(target_var=Sepal.Length)))
 })
 
 test_that("Parent argument is a valid class (pass through to `tplyr_layer`)", {
-  expect_error(add_layer(iris, group_desc(target_var=Species)),
+  expect_error(add_layer(iris, group_desc(target_var=Sepal.Length)),
                "Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.")
 })
 
@@ -46,14 +44,14 @@ test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
   expect_silent({
     t <- tplyr_table(iris, Sepal.Width) %>%
       add_layer(
-        group_desc(target_var=Species)
+        group_desc(target_var=Sepal.Length)
       )
   })
 
   expect_error({
     t <- tplyr_table(iris, Sepal.Width) %>%
       add_layer(
-        group_desc(target_var=Species) %>%
+        group_desc(target_var=Sepal.Length) %>%
         print()
       )
   }, "Functions called within `add_layer` must be part of `Tplyr`")
@@ -63,21 +61,21 @@ test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
 test_that("`add_layer` attaches layer object into parent", {
   t <- tplyr_table(iris, Sepal.Width) %>%
     add_layer(
-      group_desc(target_var=Species)
+      group_desc(target_var=Sepal.Length)
     )
 
   expect_true(length(t$layers) == 1)
   expect_s3_class(t$layers[[1]], 'tplyr_layer')
-  expect_equal(t$layers[[1]]$target_var, vars(Species))
+  expect_equal(t$layers[[1]]$target_var, vars(Sepal.Length))
 })
 
 test_that("Using `add_layer` within `add_layer` adds child layers into a layer object", {
   # Make a layer with a subgroup
   t <- tplyr_table(iris, Sepal.Width) %>%
     add_layer(
-      group_desc(target_var=Species) %>%
+      group_desc(target_var=Sepal.Length) %>%
         add_layer(
-          group_desc(target_var=Species)
+          group_desc(target_var=Sepal.Length)
         )
     )
 
@@ -126,7 +124,5 @@ test_that("Layers accept names when specified", {
   expect_equal(names(t$layers), "Test")
 
 })
-
-
 
 

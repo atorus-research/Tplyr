@@ -19,17 +19,20 @@ get_numeric_data(x, layer = NULL, where = TRUE, ...)
 Numeric data from the Tplyr layer
 }
 \description{
-It may be desirable to access the numeric data from a tplyr object directly, and these objects provide
-a method of accessing that directly.
+\code{get_numeric_data} provides access to the un-formatted numeric data for
+each of the layers within a \code{tplyr_table}, with options to allow you to
+extract distinct layers and filter as desired.
 }
 \details{
-When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers. The data will be
-returned to the user in a list of data frames. If the data has already been processed (i.e. \code{build} has
-been run), the numeric data is already available and will simply be returned. Otherwise, the numeric portion of the layer will
-be processed.
+When used on a \code{tplyr_table} object, this method will aggregate the
+numeric data from all Tplyr layers. The data will be returned to the user in
+a list of data frames. If the data has already been processed (i.e.
+\code{build} has been run), the numeric data is already available and will be
+returned without reprocessing. Otherwise, the numeric portion of the layer
+will be processed.
 
-Using the layer and where parameters, data for a specific layer can be extracted and subset, making it
-simple to directly access data of interest. This is most clear when layers are given text names
+Using the layer and where parameters, data for a specific layer can be
+extracted and subset. This is most clear when layers are given text names
 instead of using a layer index, but a numeric index works as well.
 }
 \examples{
@@ -44,7 +47,7 @@ t <- tplyr_table(mtcars, gear) \%>\%
            group_count(cyl)
  )
 
- # Return a list of the numeric dataframes
+ # Return a list of the numeric data frames
  get_numeric_data(t)
 
  # Get the data from a specific layer

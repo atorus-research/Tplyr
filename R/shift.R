@@ -8,6 +8,18 @@ process_summaries.shift_layer <- function(x, ...) {
                 all(c("row", "column") %in% names(target_var)),
                 msg = "target_vars passed to a shift layer must be named.")
 
+    # Subset the local built_target based on where
+    # Catch errors
+    # Puting this here to make clear it happens up-front in the layer
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_shift `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
+
   }, envir = x)
 
   process_shift_denoms(x)
@@ -22,9 +34,8 @@ process_summaries.shift_layer <- function(x, ...) {
 process_shift_n <- function(x) {
 
   evalq({
+
     numeric_data <- built_target %>%
-      # Filter out based on where
-      filter(!!where) %>%
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!unname(target_var), !!!cols) %>%
       tally(name = "n") %>%
@@ -53,7 +64,7 @@ process_shift_total <- function(x) {
   evalq({
     if(is.null(denoms_by)) denoms_by <- c(treat_var, by, cols)
 
-    numeric_data %<>%
+    numeric_data <- numeric_data %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df))
 

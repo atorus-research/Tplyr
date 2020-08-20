@@ -17,9 +17,6 @@
 #' source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
 #' a layer using \code{\link{get_numeric_data}}.
 #'
-#' In future releases, Tplyr will have options to examine consistency across layers and make formatting
-#' decisions for consistency (i.e. decimal alignment).
-#'
 #' @param x A \code{tplyr_table} object
 #'
 #' @return An executed \code{tplyr_table}
@@ -31,34 +28,17 @@
 #'
 #' tplyr_table(iris, Species) %>%
 #'   add_layer(
-#'     group_desc(Sepal.Length, by = "Sepal Length") %>%
-#'       set_format_strings(
-#'         "n"        = f_str("xx", n),
-#'         "Mean (SD)"= f_str("xx.x", mean),
-#'         "SD"       = f_str("xx.xx", sd),
-#'         "Median"   = f_str("xx.x", median),
-#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'         "Min, Max" = f_str("xx, xx", min, max),
-#'         "Missing"  = f_str("xx", missing)
-#'       )
+#'     group_desc(Sepal.Length, by = "Sepal Length")
 #'   ) %>%
-#'     add_layer(
-#'       group_desc(Sepal.Width, by = "Sepal Width")%>%
-#'         set_format_strings(
-#'           "n"        = f_str("xx", n),
-#'           "Mean (SD)"= f_str("xx.x", mean),
-#'           "SD"       = f_str("xx.xx", sd),
-#'           "Median"   = f_str("xx.x", median),
-#'          "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'           "Min, Max" = f_str("xx, xx", min, max),
-#'           "Missing"  = f_str("xx", missing)
-#'         )
-#'     ) %>%
-#'     build()
+#'   add_layer(
+#'     group_desc(Sepal.Width, by = "Sepal Width")
+#'   ) %>%
+#'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
 build <- function(x) {
-  UseMethod("build")
+
+    UseMethod("build")
 }
 
 #' tplyr_table S3 method
@@ -66,32 +46,34 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  # Store the default options
   op <- options()
 
-  # Reset the scientific notation presentation settings temporarily
-  options('scipen' = getOption('tplyr.scipen'))
+  tryCatch({
+    # Override scipen with Typlr option
+    options('scipen' = getOption('tplyr.scipen')) # Override scipen
 
-  # Table Pre build
-  treatment_group_build(x)
+    # Table Pre build
+    treatment_group_build(x)
 
-  x <- build_header_n(x)
+    x <- build_header_n(x)
 
-  # Process Layer summaries
-  map(x$layers, process_summaries)
+    # Process Layer summaries
+    map(x$layers, process_summaries)
 
-  # Get table formatting info
-  formatting_meta <- fetch_formatting_info(x)
+    # Get table formatting info
+    formatting_meta <- fetch_formatting_info(x)
 
-  # Format layers/table and pivot. process_formatting should return the built table!
-  output_list <- purrr::map(x$layers, process_formatting)
+    # Format layers/table and pivot. process_formatting should return the built table!
+    output_list <- purrr::map(x$layers, process_formatting)
 
-  output <- output_list %>%
-    map2_dfr(seq_along(output_list), add_layer_index) %>%
-    select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+    output <- output_list %>%
+      map2_dfr(seq_along(output_list), add_layer_index) %>%
+      select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
 
-  # Set options back to defaults
-  options(op)
+  }, finally = {
+    # Set options back to defaults
+    options(op)
+  })
 
   output
 }
@@ -125,11 +107,12 @@ prepare_format_metadata <- function(x) {
   UseMethod("prepare_format_metadata")
 }
 
-#' Placeholder function to fetch table formatting data from layers
+#' Fetch table formatting info from layers
 #'
 #' @param x A tplyr_table object
 #'
 #' @return The data used to format layers. Structure currently TBD
+#' @noRd
 fetch_formatting_info <- function(x) {
 
   # Get the max length of f_str objects in sub_layers

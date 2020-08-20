@@ -24,3 +24,23 @@ test_that("tplyr_table throws error when passed a bad table argument", {
   expect_error(tplyr_table(matrix(a = 1:10, b = 11:20), a))
   expect_silent(tplyr_table(data.frame(a = 1:10, b = 11:20), a))
 })
+
+test_that("Table level where clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear, where = bad == code) %>%
+    add_layer(
+      group_desc(drat)
+    )
+
+  expect_error(build(t), "tplyr_table `where` condition `bad == code` is invalid.")
+})
+
+test_that("Population data where clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    set_pop_data(mtcars) %>%
+    set_pop_where(bad == code) %>%
+    add_layer(
+      group_desc(drat)
+    )
+
+  expect_error(build(t), "Population data `pop_where` condition `bad == code` is invalid.")
+})

@@ -1,15 +1,18 @@
 #' Retrieve the numeric data from a tplyr objects
 #'
-#' It may be desirable to access the numeric data from a tplyr object directly, and these objects provide
-#' a method of accessing that directly.
+#' \code{get_numeric_data} provides access to the un-formatted numeric data for
+#' each of the layers within a \code{tplyr_table}, with options to allow you to
+#' extract distinct layers and filter as desired.
 #'
-#' When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers. The data will be
-#' returned to the user in a list of data frames. If the data has already been processed (i.e. \code{build} has
-#' been run), the numeric data is already available and will simply be returned. Otherwise, the numeric portion of the layer will
-#' be processed.
+#' When used on a \code{tplyr_table} object, this method will aggregate the
+#' numeric data from all Tplyr layers. The data will be returned to the user in
+#' a list of data frames. If the data has already been processed (i.e.
+#' \code{build} has been run), the numeric data is already available and will be
+#' returned without reprocessing. Otherwise, the numeric portion of the layer
+#' will be processed.
 #'
-#' Using the layer and where parameters, data for a specific layer can be extracted and subset, making it
-#' simple to directly access data of interest. This is most clear when layers are given text names
+#' Using the layer and where parameters, data for a specific layer can be
+#' extracted and subset. This is most clear when layers are given text names
 #' instead of using a layer index, but a numeric index works as well.
 #'
 #' @param x A tplyr_table or tplyr_layer object
@@ -32,7 +35,7 @@
 #'            group_count(cyl)
 #'  )
 #'
-#'  # Return a list of the numeric dataframes
+#'  # Return a list of the numeric data frames
 #'  get_numeric_data(t)
 #'
 #'  # Get the data from a specific layer
@@ -113,20 +116,23 @@ get_numeric_data.tplyr_layer <- function(x, layer=NULL, where=TRUE, ...) {
 #' Get statistics data
 #'
 #' Like the layer numeric data, Tplyr also stores the numeric data produced from
-#' statistics like risk difference. This helper function makes it easy to obtain
-#' that data from the environment
+#' statistics like risk difference. This helper function gives you access to
+#' obtain that data from the environment
 #'
-#' When used on a \code{tplyr_table} object, this method will aggregate the numeric data from all Tplyr layers
-#' and calculate all statistics. The data will be returned to the user in a list of data frames.
-#' If the data has already been processed (i.e. \code{build} has been run), the numeric data is already
-#' available and the statistic data will simply be returned. Otherwise, the numeric portion of the layer will
-#' be processed.
+#' When used on a \code{tplyr_table} object, this method will aggregate the
+#' numeric data from all Tplyr layers and calculate all statistics. The data
+#' will be returned to the user in a list of data frames. If the data has
+#' already been processed (i.e. \code{build} has been run), the numeric data is
+#' already available and the statistic data will simply be returned. Otherwise,
+#' the numeric portion of the layer will be processed.
 #'
-#' Using the layer, where, and statistic parameters parameters, data for a specific layer statistic can be
-#' extracted and subset, making it simple to directly access data of interest. This is most clear when
-#' layers are given text names instead of using a layer index, but a numeric index works as well. If just
-#' a statistic is specified, that statistic will be collected and returned in a list of data frames, allowing you to
-#' grab, for example, just the risk difference statistics across all layers.
+#' Using the layer, where, and statistic parameters, data for a specific layer
+#' statistic can be extracted and subset, allowing you to directly access data
+#' of interest. This is most clear when layers are given text names instead of
+#' using a layer index, but a numeric index works as well. If just a statistic
+#' is specified, that statistic will be collected and returned in a list of data
+#' frames, allowing you to grab, for example, just the risk difference
+#' statistics across all layers.
 #'
 #' @param x A tplyr_table or tplyr_layer object
 #' @param layer Layer name or index to select out specifically
@@ -159,15 +165,16 @@ get_numeric_data.tplyr_layer <- function(x, layer=NULL, where=TRUE, ...) {
 #'  # Returns a list of lists, containing stats data from each layer
 #'  get_stats_data(t)
 #'
-#'  # Returns just the riskdiff statistics from each layer - NULL for layers
-#'  # without riskdiff
+#'  # Returns just the riskdiff statistics from each layer - NULL
+#'  # for layers without riskdiff
 #'  get_stats_data(t, statistic="riskdiff")
 #'
 #'  # Return the statistic data for just the "am" layer - a list
 #'  get_stats_data(t, layer="am")
 #'  get_stats_data(t, layer=3)
 #'
-#'  # Return the statistic data for just the "am" and "cyl", layer - a list of lists
+#'  # Return the statistic data for just the "am" and "cyl", layer - a
+#'  # list of lists
 #'  get_stats_data(t, layer=c("am", "cyl"))
 #'  get_stats_data(t, layer=c(3, 2))
 #'

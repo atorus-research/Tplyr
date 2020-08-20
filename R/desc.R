@@ -25,7 +25,16 @@ process_summaries.desc_layer <- function(x, ...) {
     # Get the row labels out from the format strings list
     row_labels <- name_translator(format_strings)
 
-
+    # Subset the local built_target based on where
+    # Catch errors
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_desc `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
@@ -40,8 +49,6 @@ process_summaries.desc_layer <- function(x, ...) {
       num_sums[[i]] <- built_target %>%
         # Rename the current variable to make each iteration use a generic name
         rename(.var = !!cur_var) %>%
-        # Subset by the logic specified in `where`
-        filter(!!where) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
@@ -115,11 +122,11 @@ process_formatting.desc_layer <- function(x, ...) {
         trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=c(match_exact(precision_by), 'precision_on'))
       }
 
+      # Reset the scientific notation presentation settings temporarily
       trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
                                             function(...) construct_desc_string(...,
                                                                                 .fmt_str = format_strings),
-                                            format_strings=format_strings
-      )
+                                            format_strings=format_strings)
 
       # String pad each of the display strings to match the longest value across layers
       # TODO: Introduce auto-padding after alhpa release
@@ -162,6 +169,7 @@ process_formatting.desc_layer <- function(x, ...) {
 #' @param e the environment summaries are stored in.
 #'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
+#' @noRd
 get_summaries <- function(e = caller_env()) {
 
   # Define the default list of summaries

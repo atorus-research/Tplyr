@@ -11,6 +11,32 @@
 #'
 #' @return The modified layer object
 #' @export
+#' @examples
+#'
+#' # Default has matrix of treatment group, additional columns,
+#' # and by variables sum to 1
+#' tplyr_table(mtcars, am) %>%
+#'   add_layer(
+#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
+#'   ) %>%
+#'   build()
+#'
+#' tplyr_table(mtcars, am) %>%
+#'   add_layer(
+#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
+#'       set_denoms_by(cyl, gear) # Row % sums to 1
+#'   ) %>%
+#'   build()
+#'
+#' tplyr_table(mtcars, am) %>%
+#'   add_layer(
+#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
+#'       set_denoms_by(cyl, gear, am) # % within treatment group sums to 1
+#'   ) %>%
+#'   build()
 set_denoms_by <- function(x, ...) {
   UseMethod("set_denoms_by")
 }
