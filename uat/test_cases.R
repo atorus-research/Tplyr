@@ -1274,15 +1274,7 @@ test_that('T25',{
         group_desc(AGE, by = RACE_FACTOR) %>%
           set_format_strings(
             'n' = f_str('xx', n, empty = "NA"),
-            'mean' = f_str('xx.x', mean, empty = "N/A"),
-            'median' = f_str('xx.x', median, empty = NA),
-            'sd' = f_str('xx.xx', sd),
-            'var' = f_str('xx.xx', var),
-            'min' = f_str('xx', min),
-            'max' = f_str('xx', max),
-            'iqr' = f_str('xx.x', iqr),
-            'q1' = f_str('xx.x', q1),
-            'q3' = f_str('xx.x', q3)
+            'mean' = f_str('xx.x', mean, empty = "N/A")
           )
       )
 
@@ -1304,11 +1296,17 @@ test_that('T25',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(,label = "T25.1")
+  t25_1 <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+    summarise(n=n(), mean = round(mean(AGE),1)) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE_FACTOR, fill=list(n="NA",mean="N/A")) %>%
+    filter(TRT01P == "Placebo") %>%
+    pivot_longer(cols=c(n,mean))
+  testthat::expect_equal(t25_1$value, trimws(test_25$var1_Placebo),label = "T25.1")
   #manual check(s)
 
-
   #clean up working directory
+  rm(t25_1)
   rm(test_25)
 })
 
