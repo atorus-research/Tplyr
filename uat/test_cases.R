@@ -1255,7 +1255,55 @@ test_that('T24',{
 })
 
 #test 25 ----
-# f_str(empty = "NA")
+test_that('T25',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE, by = RACE_FACTOR) %>%
+          set_format_strings(
+            'n' = f_str('xx', n, empty = "NA"),
+            'mean' = f_str('xx.x', mean, empty = "N/A"),
+            'median' = f_str('xx.x', median, empty = "TEST"),
+            'sd' = f_str('xx.xx', sd),
+            'var' = f_str('xx.xx', var),
+            'min' = f_str('xx', min),
+            'max' = f_str('xx', max),
+            'iqr' = f_str('xx.x', iqr),
+            'q1' = f_str('xx.x', q1),
+            'q3' = f_str('xx.x', q3)
+          )
+      )
+
+    build(t)
+    test_25 <- build(t)
+
+    # output table to check attributes
+    save(test_25, file = "~/Tplyr/uat/output/test_25.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_25)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_25.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(label = "T25.1")
+  #manual check(s)
+
+
+  #clean up working directory
+  rm(test_25)
+})
 
 #test 26 ----
 test_that('T26',{
