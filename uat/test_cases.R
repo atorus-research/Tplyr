@@ -15,13 +15,22 @@ library(rlang)
 
 #insert code applicable to all tests i.e. functions or data
 adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
+adsl$RACE_FACTOR <- factor(adsl$RACE, c("WHITE", "BLACK OR AFRICAN AMERICAN",
+                                        "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"))
+
 adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
+
 advs <- haven::read_xpt("~/Tplyr/uat/input/advs.xpt")
+
 adlb <- haven::read_xpt("~/Tplyr/uat/input/adlbc.xpt")
+adlb$ANRIND_FACTOR <- factor(adlb$ANRIND, c("L","N","H"))
+adlb$BNRIND_FACTOR <- factor(adlb$BNRIND, c("L","N","H"))
 
 #no updates needed - initializes vur which is used to determine which parts of code to execute during testing
-vur <- NULL
-if(file.exists("~/Tplyr/uat/references/output/vur_auto.Rds")) vur <- readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")
+#vur <- NULL
+vur <- TRUE
+#if(file.exists("~/Tplyr/uat/references/output/vur_auto.Rds")) vur <- readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")
+
 
 #test 1 ----
 test_that('T1',{
@@ -93,7 +102,7 @@ test_that('T3',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_total_group() %>%
-      add_treat_group('Total Xanomeline', c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+      add_treat_grps('Total Xanomeline' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
       add_layer(group_count(AGEGR1))
     build(t)
     test_3 <- header_n(t)
@@ -171,7 +180,7 @@ test_that('T5',{
       set_pop_data(adsl) %>%
       set_pop_treat_var(TRT01P) %>%
       add_layer(
-        group_desc(AEDECOD, by="Preferred Term", where = SAFFL == "Y")
+        group_count(AEDECOD, by="Preferred Term", where = SAFFL == "Y")
       )
 
     # output table to check attributes
@@ -389,8 +398,8 @@ test_that('T9',{
 t <- tplyr_table(adsl, TRT01P) %>%
   add_layer(
     group_count(RACE) %>%
-      set_missing_count(f_str("xx ", n), string = c(Missing = 'AMERICAN INDIAN OR ALASKA NATIVE', Unknown = 'WHITE')) %>%
-      set_denom_ignore('AMERICAN INDIAN OR ALASKA NATIVE')
+      set_missing_count(f_str("xx ", n), string = c(Missing = '')) %>%
+      set_denom_ignore('')
   ) %>%
   build()
 
@@ -401,8 +410,6 @@ test_that('T11',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    adsl$RACE_FACTOR <- factor(adsl$RACE, c("WHITE", "BLACK OR AFRICAN AMERICAN",
-                                            "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"))
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(RACE_FACTOR)
@@ -723,14 +730,14 @@ test_that('T17',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
+
     t <- tplyr_table(adsl, TRT01A) %>%
       add_layer(
         group_count(RACE) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       )
-
-    build(t)
-    test_17 <- t$layers[[1]]$stats[[1]]$stats_numeric_data
+    suppressWarnings( build(t))
+    test_17 <- get_stats_data(t)[[1]]$riskdiff
 
 
     # output table to check attributes
@@ -1268,7 +1275,7 @@ test_that('T25',{
           set_format_strings(
             'n' = f_str('xx', n, empty = "NA"),
             'mean' = f_str('xx.x', mean, empty = "N/A"),
-            'median' = f_str('xx.x', median, empty = "TEST"),
+            'median' = f_str('xx.x', median, empty = NA),
             'sd' = f_str('xx.xx', sd),
             'var' = f_str('xx.xx', var),
             'min' = f_str('xx', min),
@@ -1297,7 +1304,7 @@ test_that('T25',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(label = "T25.1")
+  testthat::expect_equal(,label = "T25.1")
   #manual check(s)
 
 
@@ -1439,9 +1446,6 @@ test_that('T29',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-
-    adlb$ANRIND_FACTOR <- factor(adlb$ANRIND, c("L","N","H"))
-    adlb$BNRIND_FACTOR <- factor(adlb$BNRIND, c("L","N","H"))
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
         group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
