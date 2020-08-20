@@ -1,6 +1,8 @@
 ---
 title: "sort"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{sort}
   %\VignetteEngine{knitr::rmarkdown}
@@ -16,7 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(Tplyr)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 ```
 
 
@@ -30,9 +32,7 @@ t <- tplyr_table(mtcars, gear) %>%
   add_total_group() %>%
   add_treat_grps(High = c(4, 5)) %>%
   add_layer(
-    group_count(cyl, by = am) %>%
-      set_order_count_method("bycount") %>%
-      set_ordering_cols(Total)
+    group_count(cyl, by = am)
   ) %>%
   add_layer(
     group_desc(mpg, by = am)
@@ -40,7 +40,6 @@ t <- tplyr_table(mtcars, gear) %>%
   build()
 
 t
-
 ```
 
 ## Sorting Table Columns
@@ -57,7 +56,6 @@ To drop the ordering helpers, you can easily subtract them with dplyr and tidyse
 ```{r}
 t %>% 
   select(-starts_with("ord_"))
-
 ```
 Or you can reorder columns, in this example total is moved to the first column.
 ```{r}
@@ -66,17 +64,105 @@ t %>%
 ```
 
 ## Sorting the Layers
-### Arranging the Table
+Layers are binded together to create the table so they will output in the order they are added to the table. If you have a need to reorder them, the `ord_layer_index` column allows you to do this or drop layers altogether.
+```{r}
+t %>%
+  arrange(desc(ord_layer_index))
+```
 
 ## Sorting the 'by' varaibles
+The variables passed as 'by' variables can be sorted with their respective ordering helper column. The sort values are calculated depending on the attributes that variable has in the 'target' dataset.
+1) If the variable has a VARN variable in the 'target' dataset, that is, `<by>N %in% names(target)` is TRUE, the values in the ordering helper column will be the values of that VARN variable for that 'by' value.
+2) If the 'by' variable is a factor, the values of the ordering column will be the index of the levels.
+3) If neither 1 or 2 are true, the values in the ordering column will be an index based on an alphabetical sorting.
+
 ### VARN
+By adding the variable 'amN', the 'ord_layer_1' will output using those values. This is especially useful in the case of SDTM variables like VISIT and VISITN where ordering is important but ordering alphabetically would produce incorrect ordering.
+```{r}
+mtcars$amN <- mtcars$am + 100
+byvarn_t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl, by = am)
+  ) %>%
+  build()
+mtcars$amN <- NULL
+
+byvarn_t
+```
 ### Factor
+If there is no succinct way to order the variables alphabetically or with a VARN variable, Tplyr can use a factor in the target dataset to order the dataset and create the ordering helper column. Internally, Tplyr uses a `tidyr::pivot_wider()` to create the output which will arrange the rows automatically. The ordering helper is still provided in case the table needs to be sorted after the fact and to not rely on a dependency for this functionality.
+```{r}
+mtcars$am <- factor(mtcars$am, c(1, 0))
+byfact_t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl, by = am)
+  ) %>%
+  build()
+
+byfact_t
+```
 ### Alphabetical
+If the target doesn't have a VARN variable in the target dataset, and isn't a factor, it is converted to a factor and sorted as it if it was a factor. Coercing it to a factor implicitly orders it alphabetically.
 
-## Sorting 'Desc' Targets
+## Sorting 'Desc' Summaries
+'Desc' summaries are indexed in the order they are passed to `set_custom_summaries()` or found in the `tplyr.desc_layer_default_formats` option. A user can change the order easily in these places, or reorder it after the fact with `dplyr::recode()`.
 
-## Sorting 'Count' and 'Shift' Targets
+```{r}
+t %>%
+  filter(ord_layer_index == 2)
+```
+
+
+## Sorting 'Count' Target Values
+The order counts should be displayed in a table can be deceptively complex. Tplyr offers three different methods of sorting the values of a target variable in a count layer. The function `set_order_count_method()` can be used to change how a count layer is sorted.
+1) Sorting a count layer defaults to sorting the target variable as a factor. This allows for easy custom sorting or will coerce it to a factor and sort automatically.
+2) Similar to a 'by' variable, a count target can be sorted with a VARN variable.
+3) Many tables require counts to be sorted based on the counts of a particular group. Tplyr can populate the ordering column based on the numeric value of any column. The function `set_ordering_cols()` and `set_numeric_result_order_var()` specify the column, and numeric value the ordering column should be based on.
+
 ### bycount
+A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with `set_ordering_cols()` which takes the unquoted value of the treatment group and any 'cols' value to select the column ordering should be done by. If multiple types of counts are used in the layer, `set_numeric_result_order_var()` can be used to select which should be used in ordering.
+```{r}
+bycount_t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols("5")
+  ) %>%
+  build()
+
+bycount_t
+```
+
 ### byvarn
-### by factor
+If the target variable has a corresponding VARN variable, this VARN variable can also be used in the ordering column.
+```{r}
+mtcars$cylN <- mtcars$cyl + 50
+byvarn_t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_order_count_method("byvarn")
+  ) %>%
+  build()
+mtcars$cylN <- NULL
+
+byvarn_t
+```
+
+### byfactor
+If no method for ordering is passed the target variable is treated as a factor(coerced if necessary) and indexed in the order the factor levels are presented.
+```{r}
+mtcars$cyl <- factor(mtcars$cyl, c(5, 3, 4))
+# Warnings suppressed to remove 'forcats' implicit NA warning
+suppressWarnings({
+  byfact_t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        # This is the default and not needed
+        set_order_count_method("byfactor")
+    ) %>% 
+    build(.)
+})
+
+byfact_t
+```
 
