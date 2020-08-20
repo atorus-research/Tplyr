@@ -83,9 +83,9 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
   evalq({
 
-    # Set a default format string
+    # Grab the default format string
     if (!"riskdiff" %in% names(format_strings)) {
-      format_strings[['riskdiff']] <- f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+      format_strings[['riskdiff']] <- gather_defaults(env_parent())[['riskdiff']]
     }
 
     # Grab the format string object
@@ -115,12 +115,20 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
                                        by=c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'))
 
     if (length(cols) > 0) {
+      # If only one comparison was made, the columns won't prefix with the transposed variable name
+      # So trick it by introducing a column I can drop later. Not great, but functional
+      formatted_statistic_data['rdiffx'] <- ''
+
       # Pivot by column
       formatted_statistic_data <- formatted_statistic_data %>%
         pivot_wider(id_cols=c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
                     names_from = match_exact(cols),
                     names_sep = "_",
                     values_from=starts_with('rdiff'))
+
+      # Drop the dummied columns
+      formatted_statistic_data <- formatted_statistic_data %>% select(-starts_with('rdiffx'))
+
     }
 
     formatted_statistic_data

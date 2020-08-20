@@ -35,17 +35,18 @@
 #' #>  Error: Argument `my_param` in function `fun2` does not inherit numeric.
 #' #>  Classes: tbl_df, tbl, data.frame
 #' }
+#' @noRd
 assert_has_class <- function(x, should_be) {
   # Get the name of the parameter being checked
   param <- enexpr(x)
 
-  # Is the argument the class that it shoudl be?
+  # Is the argument the class that it should be?
   if (class(x) != should_be){
     # Grab the trace back into an object
     trc <- trace_back()
     # Look at the length of the traceback
-    max_length <- max(trc$indices)
-    # If it's >1 we're innside a function, so grab the name
+    max_length <- length(trc$calls)
+    # If it's >1 we're inside a function, so grab the name
     if (max_length > 1){
       # Pull the name out of the call stack
       cname <- call_name(trc$calls[[max_length - 1]])
@@ -67,8 +68,7 @@ assert_has_class <- function(x, should_be) {
 #' @param x Object to be inspected
 #' @param should_have Expected class that object should inherit
 #'
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 assert_inherits_class <- function(x, should_have) {
   # Get the name of the parameter being checked
   param <- enexpr(x)
@@ -105,9 +105,8 @@ assert_inherits_class <- function(x, should_have) {
 #' @param envir Environment containing the dataset \code{target} from which names will be checked against
 #' @param allow_character Whether or not character strings are allows in an entry
 #'
-#' @return Returns nothing, raises errors when assertations aren't met
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @return Returns nothing, raises errors when assertions aren't met
+#' @noRd
 assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_character=TRUE) {
 
   # Get the parameter name that was entered
@@ -140,7 +139,7 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
     for (v in quo_list) {
 
       if (class(quo_get_expr(v)) == "name") {
-        vname <- as_label(quo_get_expr(v))
+        vname <- as_name(quo_get_expr(v))
         assert_that(vname %in% vnames,
                     msg = paste0("`", param, "` variable `",vname, "` does not exist in target dataset"))
       }
@@ -160,8 +159,7 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
 #' @param allow_character Whether or not character strings are allows in an entry
 #'
 #' @return Unpacked quosure.
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 unpack_vars <- function(quo_list, allow_character=TRUE) {
 
   # Return quo_list if it's empty
@@ -203,8 +201,7 @@ unpack_vars <- function(quo_list, allow_character=TRUE) {
 #'
 #' @param quo_var A quosure object to check
 #'
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 is_null_or_call <- function(quo_var) {
   quo_is_null(quo_var) || class(quo_get_expr(quo_var)) == "call"
 }
@@ -213,24 +210,21 @@ is_null_or_call <- function(quo_var) {
 #'
 #' @param quo_var A quosure object to check
 #'
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 is_logical_or_call <- function(quo_var) {
   is_logical(quo_get_expr(quo_var)) || is_call(quo_get_expr(quo_var))
 }
 
 #' @param object Object to check if its a layer
 #'
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 assert_is_layer <- function(object) {
  assert_inherits_class(object, "tplyr_layer")
 }
 
 #' @param object Object to check if its a layer
 #'
-#' @family Custom Assertions
-#' @rdname custom_assertions
+#' @noRd
 assert_is_table <- function(object) {
   assert_inherits_class(object, "tplyr_table")
 }
@@ -254,6 +248,7 @@ assert_is_table <- function(object) {
 #'
 #' q <- quo(x + y)
 #' quo_class(q)
+#' @noRd
 quo_class <- function(q) {
   assert_that(is_quosure(q), msg = "Object `q` is not a quosure")
   class(quo_get_expr(q))

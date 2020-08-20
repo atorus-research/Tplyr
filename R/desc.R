@@ -7,16 +7,14 @@
 #' @noRd
 process_summaries.desc_layer <- function(x, ...) {
 
+  # If format strings weren't provided, then grab the defaults
   if (!has_format_strings(x)) {
-    x <- set_format_strings(x,
-      "n"        = f_str("xx", n),
-      "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
-      "Median"   = f_str("xx.x", median),
-      "Q1, Q3"   = f_str("xx, xx", q1, q3),
-      "Min, Max" = f_str("xx, xx", min, max),
-      "Missing"  = f_str("xx", missing)
-    )
+    # Grab the defaults available at the table or option level
+    params <- gather_defaults(x)
+    # Place the formats
+    x <- do.call('set_format_strings', append(x, params))
   }
+
   # Execute in the layer environment
   evalq({
     # trans_sums is the data that will pass forward to be formatted
@@ -27,7 +25,16 @@ process_summaries.desc_layer <- function(x, ...) {
     # Get the row labels out from the format strings list
     row_labels <- name_translator(format_strings)
 
-
+    # Subset the local built_target based on where
+    # Catch errors
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_desc `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
 
     # Extract the list of summaries that need to be performed
     for (i in seq_along(target_var)) {
@@ -42,12 +49,13 @@ process_summaries.desc_layer <- function(x, ...) {
       num_sums[[i]] <- built_target %>%
         # Rename the current variable to make each iteration use a generic name
         rename(.var = !!cur_var) %>%
-        # Subset by the logic specified in `where`
-        filter(!!where) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
-        summarize(!!!summaries)
+        summarize(!!!summaries) %>%
+        ungroup() %>%
+        # Fill in any missing treat/col combinations
+        complete(!!treat_var, !!!by, !!!cols)
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums[[i]] %>%
@@ -60,9 +68,17 @@ process_summaries.desc_layer <- function(x, ...) {
            row_label = row_labels[[stat]]
         )
 
+      # If precision is required, then create the variable identifier
+      if (need_prec_table) {
+        trans_sums[[i]] <- trans_sums[[i]] %>%
+          mutate(
+            precision_on = as_name(precision_on)
+          )
+      }
+
       # Numeric data needs the variable names replaced and add summary variable name
       num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
-        mutate(summary_var = as_label(cur_var)) %>%
+        mutate(summary_var = as_name(cur_var)) %>%
         select(summary_var, everything())
 
       # Clean up loop
@@ -103,14 +119,14 @@ process_formatting.desc_layer <- function(x, ...) {
 
       if (need_prec_table) {
         # Merge the precision data on
-        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=match_exact(precision_by))
+        trans_sums[[i]] <- left_join(trans_sums[[i]], prec, by=c(match_exact(precision_by), 'precision_on'))
       }
 
+      # Reset the scientific notation presentation settings temporarily
       trans_sums[[i]]['display_string'] <- pmap_chr(trans_sums[[i]],
                                             function(...) construct_desc_string(...,
                                                                                 .fmt_str = format_strings),
-                                            format_strings=format_strings
-      )
+                                            format_strings=format_strings)
 
       # String pad each of the display strings to match the longest value across layers
       # TODO: Introduce auto-padding after alhpa release
@@ -119,7 +135,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
-      # then also tranpose by cols.
+      # then also transpose by cols.
       form_sums[[i]] <- trans_sums[[i]] %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
@@ -153,6 +169,7 @@ process_formatting.desc_layer <- function(x, ...) {
 #' @param e the environment summaries are stored in.
 #'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
+#' @noRd
 get_summaries <- function(e = caller_env()) {
 
   # Define the default list of summaries
@@ -188,6 +205,13 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
 
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]
+
+  # If all the values summarized are NA then return the empty string
+  if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
+    if ('.overall' %in% names(fmt$empty)) {
+      return(fmt$empty['.overall'])
+    }
+  }
 
   # Make the autos argument
   if (fmt$auto_precision) {

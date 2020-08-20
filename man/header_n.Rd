@@ -10,17 +10,17 @@ header_n(table)
 
 header_n(x) <- value
 
-set_header_n(table, header_n)
+set_header_n(table, value)
 }
 \arguments{
 \item{table}{A \code{tplyr_table} object}
 
 \item{x}{A \code{tplyr_table} object}
 
-\item{value}{A named numeric vector. Names of vector should match treatement
+\item{value}{A named numeric vector. Names of vector should match treatment
 group names.}
 
-\item{header_n}{A named numeric vector. Names of vector should match treatement
+\item{header_n}{A named numeric vector. Names of vector should match treatment
 group names.}
 }
 \value{
@@ -29,10 +29,6 @@ For \code{tplyr_header_n} the header_n binding of the
   \code{set_tplyr_header_n} the modified object.
 }
 \description{
-\strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
-This is coming in future releases.
-}
-\details{
 When the header or table body relies on population count data, the header_n
 binding is used for display and calculations.
 }

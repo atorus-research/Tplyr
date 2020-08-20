@@ -19,9 +19,9 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-adsl <- haven::read_xpt("adsl.xpt")
-adae <- haven::read_xpt("adae.xpt")
-adlb <- haven::read_xpt("adlbc.xpt")
+load("adae.Rdata")
+load("adlb.Rdata")
+load("adsl.Rdata")
 ```
 
 # The Beta Release

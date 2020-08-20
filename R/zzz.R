@@ -1,20 +1,20 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
-#' @importFrom rlang call_modify call_standardise call_name call_args as_label is_call as_label current_env quo_name trace_back is_function
+#' @importFrom rlang call_modify call_standardise call_name call_args is_call current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names env_bind_active
+#' @importFrom rlang quos quo env_names env_bind_active as_label
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
 #' @importFrom stringr str_sub str_extract
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>% %<>%
+#' @importFrom magrittr %>% extract
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select
-#' @importFrom tibble tibble rownames_to_column
+#' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
 NULL
@@ -23,28 +23,99 @@ NULL
 #'
 #' \lifecycle{experimental}
 #'
-#' 'Tplyr' is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can
-#' often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around
-#' continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting
-#' this process away, 'Tplyr' allows you to rapidly build these tables without worrying about the underlying data manipulation
+#' 'Tplyr' is a package dedicated to simplifying the data manipulation necessary
+#' to create clinical reports. Clinical data summaries can often be broken down
+#' into two factors - counting discrete variables (or counting shifts in state),
+#' and descriptive statistics around a continuous variable. Many of the reports
+#' that go into a clinical report are made up of these two scenarios. By
+#' abstracting this process away, 'Tplyr' allows you to rapidly build these
+#' tables without worrying about the underlying data manipulation.
 #'
-#' 'Tplyr' takes this process a few steps further by abstracting away all of the programming that goes into proper presentation, which
-#' is where even more of the time is spent when programming these reports. For example, 'Tplyr' allows you to easily control:
+#' 'Tplyr' takes this process a few steps further by abstracting away most of
+#' the programming that goes into proper presentation, which is where a great
+#' deal of programming time is spent. For example, 'Tplyr' allows you to easily
+#' control:
 #'
-#' \describe{
-#' \item{\strong{Denominators}}{n (\%) counts often vary based on the summary being performed. 'Tplyr' allows you to easily control what denominators
-#' are used based on a few common scenarios, or additionally you can provide a custom dataset used in calculation
-#' \strong{NOTE:} This feature is still being developed and is not yet implemented}
-#' \item{\strong{String formatting}}{Different reports warrant different presentation of your strings. Programming this can get tedious, as you always
-#' want to make sure that your decimals properly align. 'Tplyr' abstracts this process away and provides you with a simple format to specify
-#' how you want your data presented}
-#' \item{\strong{Treatment groups}}{Need a total column? Need to group summaries of multiple treatments? 'Tplyr' makes this simple to add additional
-#' treatment groups into your report}
-#' }
+#' \describe{ \item{\strong{String formatting}}{Different reports warrant
+#' different presentation of your strings. Programming this can get tedious, as
+#' you typically want to make sure that your decimals properly align. 'Tplyr'
+#' abstracts this process away and provides you with a simple interface to
+#' specify how you want your data presented} \item{\strong{Treatment
+#' groups}}{Need a total column? Need to group summaries of multiple treatments?
+#' 'Tplyr' makes it simple to add additional treatment groups into your report}
+#' \item{\strong{Denominators}}{n (\%) counts often vary based on the summary
+#' being performed. 'Tplyr' allows you to easily control what denominators are
+#' used based on a few common scenarios} \item{\strong{Sorting}}{Summarizing
+#' data is one thing, but ordering it for presentation. Tplyr automatically
+#' derives sorting variable to give you the data you need to order your table
+#' properly. This process is flexible so you can easily get what you want by
+#' leveraging your data or characteristics of R.} }
 #'
-#' Furthermore, 'Tplyr' was built to be extensible. A common pitfall in creating these solutions is over-automation. Some utilities just do
-#' to much, but don't solve all of the problems. We know we won't handle every scenario - and therefore we've left channels open for you to
-#' add your own touches where necessary.
+#' Another powerful aspect of 'Tplyr' are the objects themselves. 'Tplyr' does
+#' more than format your data. Metadata about your table is kept under the hood,
+#' and functions allow you to access information that you need. For example,
+#' 'Tplyr' allows you to calculate and access the raw numeric data of
+#' calculations as well, and easily pick out just the pieces of information that
+#' you need.
+#'
+#' Lastly, 'Tplyr' was built to be flexible, yet intuitive. A common pitfall of
+#' building tools like this is over automation. By doing to much, you end up not
+#' doing enough. 'Tplyr' aims to hit the sweet spot in between. Additionally, we
+#' designed our function interfaces to be clean. Modifier functions offer you
+#' flexibility when you need it, but defaults can be set to keep the code
+#' concise. This allows you to quickly assemble your table, and easily make
+#' changes where necessary.
+#'
+#' @examples
+#' # Load in pipe
+#' library(magrittr)
+#'
+#' # Use just the defaults
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(mpg, by=cyl) %>%
+#'   ) %>%
+#'   add_layer(
+#'     group_count(carb, by=cyl) %>%
+#'   ) %>%
+#'   build()
+#'
+#' # Customize and modify
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(mpg, by=cyl) %>%
+#'       set_format_strings(
+#'         "n"         = f_str("xx", n),
+#'         "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd, empty='NA'),
+#'         "Median"    = f_str("a.a+1", median),
+#'         "Q1, Q3"    = f_str("a, a", q1, q3, empty=c(.overall='NA')),
+#'         "Min, Max"  = f_str("a, a", min, max),
+#'         "Missing"   = f_str("xx", missing)
+#'       )
+#'   ) %>%
+#'   add_layer(
+#'     group_count(carb, by=cyl) %>%
+#'       add_risk_diff(
+#'         c('5', '3'),
+#'         c('4', '3')
+#'       ) %>%
+#'       set_format_strings(
+#'         n_counts = f_str('xx (xx%)', n, pct),
+#'         riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+#'       ) %>%
+#'       set_order_count_method("bycount") %>%
+#'       set_ordering_cols('4') %>%
+#'       set_result_order_var(pct)
+#'   ) %>%
+#'   build()
+#'
+#' # A Shift Table
+#' tplyr_table(mtcars, am) %>%
+#'   add_layer(
+#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'     set_format_strings(f_str("xxx (xx.xx%)", n, pct))
+#'   ) %>%
+#'   build()
 #'
 #' @docType package
 #' @name tplyr
@@ -52,7 +123,33 @@ NULL
 
 # Default options ----
 tplyr_default_options <- list(
-  tplyr.debug = FALSE
+  # Debug (deprecated)
+  tplyr.debug = FALSE,
+
+  # Count layer defaults
+  tplyr.count_layer_default_formats =
+    list(n_counts = f_str("a (xxx.x%)", n, pct),
+         riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+         ),
+
+  # Desc layer defaults
+  tplyr.desc_layer_default_formats =
+    list("n"        = f_str("xx", n),
+         "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
+         "Median"   = f_str("xx.x", median),
+         "Q1, Q3"   = f_str("xx, xx", q1, q3),
+         "Min, Max" = f_str("xx, xx", min, max),
+         "Missing"  = f_str("xx", missing)
+         ),
+
+  # Precision caps for decimal and integer precision
+  tplyr.precision_cap = c('int' = 99, 'dec'=99),
+
+  # Custom summaries
+  tplyr.custom_summaries = NULL,
+
+  # Set to avoid printing in scientific notation
+  tplyr.scipen = 1000
 )
 
 # Carry out process on load ----
@@ -88,6 +185,7 @@ display_string <- NULL
 built_target <- NULL
 table_where <- NULL
 distinct_by <- NULL
+distinct_stat <- NULL
 summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
@@ -133,3 +231,18 @@ need_prec_table <- NULL
 precision_by <- NULL
 precision_on <- NULL
 cap <- NULL
+..index <- NULL
+denoms_by <- NULL
+.distinct_n <- NULL
+count_layer_formats <- NULL
+desc_layer_formats <- NULL
+denoms_df <- NULL
+is_built_nest <- FALSE
+by_saved <- NULL
+target_var_saved <- NULL
+indentation_length <- NULL
+missing_count_string <- NULL
+missing_string <- NULL
+denom_ignore <- NULL
+denoms_distinct_df <- NULL
+missing_name <- NULL

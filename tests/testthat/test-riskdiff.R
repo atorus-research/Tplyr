@@ -204,6 +204,7 @@ test_that("Make sure display values accurately reflect prop.test results", {
   # Run a manual prop test from the manually checked values
   carb_1 <- suppressWarnings(prop.test(c(4, 3), c(12, 15)))
   carb_2 <- suppressWarnings(prop.test(c(4, 4), c(12, 15)))
+  carb_3 <- suppressWarnings(prop.test(c(0, 3), c(12, 15)))
   carb_4 <- suppressWarnings(prop.test(c(4, 5), c(12, 15)))
 
   # Get the values for carb == 1
@@ -216,6 +217,11 @@ test_that("Make sure display values accurately reflect prop.test results", {
     c(carb_2$estimate[1], carb_2$estimate[2], carb_2$estimate[1] - carb_2$estimate[2], carb_2$conf.int[1], carb_2$conf.int[2])
   )
 
+  # Get the values for carb == 3
+  carb_3_res <- unname(
+    c(carb_3$estimate[1], carb_3$estimate[2], carb_3$estimate[1] - carb_3$estimate[2], carb_3$conf.int[1], carb_3$conf.int[2])
+  )
+
   # Get the values for carb == 4
   carb_4_res <- unname(
     c(carb_4$estimate[1], carb_4$estimate[2], carb_4$estimate[1] - carb_4$estimate[2], carb_4$conf.int[1], carb_4$conf.int[2])
@@ -223,35 +229,38 @@ test_that("Make sure display values accurately reflect prop.test results", {
 
   expect_equal(results[[1]], carb_1_res, tolerance = .000001)
   expect_equal(results[[2]], carb_2_res, tolerance = .000001)
-  expect_equal(results[[3]], carb_4_res, tolerance = .000001)
+  expect_equal(results[[3]], carb_3_res, tolerance = .000001)
+  expect_equal(results[[4]], carb_4_res, tolerance = .000001)
 })
 
 test_that("Distinct or non-distinct values are chosen properly", {
+  load(file='../../vignettes/adae.Rdata')
+
   ## Two group comparisons with default options applied
-  t1 <- tplyr_table(mtcars, gear)
-  t2 <- tplyr_table(mtcars, gear)
-  t3 <- tplyr_table(mtcars, gear)
+  t1 <- tplyr_table(adae, TRTA)
+  t2 <- tplyr_table(adae, TRTA)
+  t3 <- tplyr_table(adae, TRTA)
 
   # No distinct variables
-  l1 <- group_count(t1, carb) %>%
-    add_risk_diff(c('4','3'))
+  l1 <- group_count(t1, AEBODSYS) %>%
+    add_risk_diff(c('Xanomeline High Dose', 'Placebo'))
 
   # Distinct variables - and use them
-  l2 <- group_count(t2, carb) %>%
-    add_risk_diff(c('4','3')) %>%
+  l2 <- group_count(t2, AEBODSYS) %>%
+    add_risk_diff(c('Xanomeline High Dose', 'Placebo')) %>%
     set_distinct_by(cyl)
 
   # Distinct variables, don't use them
-  l3 <- group_count(t3, carb) %>%
-    add_risk_diff(c('4','3'), distinct=FALSE) %>%
+  l3 <- group_count(t3, AEBODSYS) %>%
+    add_risk_diff(c('Xanomeline High Dose', 'Placebo'), distinct=FALSE) %>%
     set_distinct_by(cyl)
 
   dat1 <- suppressWarnings(add_layers(t1, l1) %>% build())
   dat2 <- suppressWarnings(add_layers(t2, l2) %>% build())
   dat3 <- suppressWarnings(add_layers(t3, l3) %>% build())
 
-  expect_true(all(dat1$rdiff_4_3 == dat3$rdiff_4_3))
-  expect_true(!all(dat1$rdiff_4_3 == dat2$rdiff_4_3))
-  expect_true(!all(dat2$rdiff_4_3 == dat3$rdiff_4_3))
+  expect_true(all(dat1$`rdiff_Xanomeline High Dose_Placebo` == dat3$`rdiff_Xanomeline High Dose_Placebo`))
+  expect_true(!all(dat1$`rdiff_Xanomeline High Dose_Placebo` == dat2$`rdiff_Xanomeline High Dose_Placebo`))
+  expect_true(!all(dat2$`rdiff_Xanomeline High Dose_Placebo` == dat3$`rdiff_Xanomeline High Dose_Placebo`))
 
 })

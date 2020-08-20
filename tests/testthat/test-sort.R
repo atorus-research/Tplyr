@@ -97,7 +97,8 @@ test_that("A group_count layer can be ordered properly by a VARN", {
 test_that("A nested group_count layer can be ordered properly", {
   iris$treat <- rep(c("Group1", "Group2"), 75)
   iris$grp <- rep(c("A", "B", "C", "D", "E", "F"), each = 25)
-  iris %<>% mutate_all(as.character)
+  iris <- iris %>%
+    mutate_all(as.character)
 
   t <- tplyr_table(iris, treat) %>%
     add_layer(
@@ -105,7 +106,7 @@ test_that("A nested group_count layer can be ordered properly", {
     )
   b_t <- build(t)
 
-  expect_equivalent(b_t[, 6], tibble(ord_layer_2 = rep(c(Inf, 13, 12), 3)))
+  expect_equivalent(b_t[, 6], tibble(ord_layer_1 = as.integer(rep(c( 1, 2, 3), each = 3))))
 })
 
 test_that("A group_desc layer can be ordered properly", {
@@ -122,7 +123,74 @@ test_that("A group_desc layer can be ordered properly", {
 
   expect_equivalent(b_t[, 1], tibble(row_label1 = rep(c("4", "6", "8"), each = 2)))
   expect_equivalent(b_t[, 2], tibble(row_label2 = rep(c("n", "Mean (SD)"), 3)))
-  expect_equivalent(b_t[, 7], tibble(ord_layer_1 = as.numeric(rep(c(1, 2, 3), each = 2))))
+  expect_equivalent(b_t[, 7], tibble(ord_layer_1 = as.integer(rep(c(1, 2, 3), each = 2))))
   expect_equivalent(b_t[, 8], tibble(ord_layer_2 = 1:6))
 
 })
+
+##### Nested
+adsl <- haven::read_xpt("adsl.xpt")
+adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
+adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
+adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+  add_total_group() %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_layer(
+    group_count(vars(EOSSTT, DCDECOD)) %>%
+      set_ordering_cols(Placebo, `65-80`) %>%
+      set_result_order_var(n) %>%
+      set_order_count_method(c("byvarn", "byvarn"))
+  )
+adsl_1 <- build(adsl1)
+byvarn_out <- c(101, 101, 102, 102,
+                 102, 102, 102, 102,
+                 102, 102, 102)
+byvarn_in <- c(Inf, 102, Inf, 101,
+                103, 104, 105, 106,
+                107, 108, 109)
+
+adsl2 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+  add_total_group() %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_layer(
+    group_count(vars(EOSSTT, DCDECOD)) %>%
+      set_ordering_cols(Placebo, `65-80`) %>%
+      set_result_order_var(n) %>%
+      set_order_count_method(c("bycount", "bycount"))
+  )
+adsl_2 <- build(adsl2)
+bycount_out <- c(30, 30, 12, 12,
+                  12, 12, 12, 12,
+                  12, 12, 12)
+bycount_in <- c(Inf, 30, Inf, 2,
+                 1, 0, 0, 0,
+                 1, 1, 7)
+
+adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+  add_total_group() %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_layer(
+    group_count(vars(EOSSTT, DCDECOD)) %>%
+      set_ordering_cols(Placebo, `65-80`) %>%
+      set_result_order_var(n) %>%
+      set_order_count_method(c("byfactor", "byfactor"))
+  )
+adsl_3 <- build(adsl3)
+byfactor_out <- c(101, 101, 102, 102,
+                   102, 102, 102, 102,
+                   102, 102, 102)
+byfactor_in <- c(Inf, 1, Inf, 1,
+                  2, 3, 4, 5,
+                  6, 7, 8)
+
+test_that("Nested count layers are ordered properly", {
+
+  expect_equivalent(adsl_1$ord_layer_1, byvarn_out)
+  expect_equivalent(adsl_1$ord_layer_2, byvarn_in)
+  expect_equivalent(adsl_2$ord_layer_1, bycount_out)
+  expect_equivalent(adsl_2$ord_layer_2, bycount_in)
+  expect_equivalent(adsl_3$ord_layer_1, byfactor_out)
+  expect_equivalent(adsl_3$ord_layer_2, byfactor_in)
+
+})
+

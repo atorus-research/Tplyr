@@ -8,9 +8,9 @@ test_that("tplyr_table returns a class of tplyr_table and environment", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
   expect_s3_class(tab, "tplyr_table")
   expect_s3_class(tab, "environment")
-  expect_setequal(env_names(tab), c("target", "pop_data", "pop_where", "cols", "table_where",
-                                    "treat_var", "pop_treat_var",
-                                    "treat_grps", "layers"))
+  expect_setequal(env_names(tab), c("target", "count_layer_formats", "pop_data", "pop_where", "cols",
+                                    "table_where", "desc_layer_formats", "treat_var", "pop_treat_var",
+                                    "layers", "treat_grps"))
 
 })
 
@@ -23,4 +23,24 @@ test_that("tplyr_table comes with empty list binded on 'layers'", {
 test_that("tplyr_table throws error when passed a bad table argument", {
   expect_error(tplyr_table(matrix(a = 1:10, b = 11:20), a))
   expect_silent(tplyr_table(data.frame(a = 1:10, b = 11:20), a))
+})
+
+test_that("Table level where clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear, where = bad == code) %>%
+    add_layer(
+      group_desc(drat)
+    )
+
+  expect_error(build(t), "tplyr_table `where` condition `bad == code` is invalid.")
+})
+
+test_that("Population data where clauses with invalid syntax give informative error", {
+  t <- tplyr_table(mtcars, gear) %>%
+    set_pop_data(mtcars) %>%
+    set_pop_where(bad == code) %>%
+    add_layer(
+      group_desc(drat)
+    )
+
+  expect_error(build(t), "Population data `pop_where` condition `bad == code` is invalid.")
 })

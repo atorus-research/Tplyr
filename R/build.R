@@ -17,9 +17,6 @@
 #' source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
 #' a layer using \code{\link{get_numeric_data}}.
 #'
-#' In future releases, Tplyr will have options to examine consistency across layers and make formatting
-#' decisions for consistency (i.e. decimal alignment).
-#'
 #' @param x A \code{tplyr_table} object
 #'
 #' @return An executed \code{tplyr_table}
@@ -31,34 +28,17 @@
 #'
 #' tplyr_table(iris, Species) %>%
 #'   add_layer(
-#'     group_desc(Sepal.Length, by = "Sepal Length") %>%
-#'       set_format_strings(
-#'         "n"        = f_str("xx", n),
-#'         "Mean (SD)"= f_str("xx.x", mean),
-#'         "SD"       = f_str("xx.xx", sd),
-#'         "Median"   = f_str("xx.x", median),
-#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'         "Min, Max" = f_str("xx, xx", min, max),
-#'         "Missing"  = f_str("xx", missing)
-#'       )
+#'     group_desc(Sepal.Length, by = "Sepal Length")
 #'   ) %>%
-#'     add_layer(
-#'       group_desc(Sepal.Width, by = "Sepal Width")%>%
-#'         set_format_strings(
-#'           "n"        = f_str("xx", n),
-#'           "Mean (SD)"= f_str("xx.x", mean),
-#'           "SD"       = f_str("xx.xx", sd),
-#'           "Median"   = f_str("xx.x", median),
-#'          "Q1, Q3"   = f_str("xx, xx", q1, q3),
-#'           "Min, Max" = f_str("xx, xx", min, max),
-#'           "Missing"  = f_str("xx", missing)
-#'         )
-#'     ) %>%
-#'     build()
+#'   add_layer(
+#'     group_desc(Sepal.Width, by = "Sepal Width")
+#'   ) %>%
+#'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
 build <- function(x) {
-  UseMethod("build")
+
+    UseMethod("build")
 }
 
 #' tplyr_table S3 method
@@ -66,25 +46,35 @@ build <- function(x) {
 #' @export
 build.tplyr_table <- function(x) {
 
-  # Table Pre build
-  treatment_group_build(x)
+  op <- options()
 
-  x <- build_header_n(x)
+  tryCatch({
+    # Override scipen with Typlr option
+    options('scipen' = getOption('tplyr.scipen')) # Override scipen
 
-  # Process Layer summaries
-  map(x$layers, process_summaries)
+    # Table Pre build
+    treatment_group_build(x)
 
-  # Get table formatting info
-  formatting_meta <- fetch_formatting_info(x)
+    x <- build_header_n(x)
 
-  # Format layers/table and pivot. process_formatting should return the built table!
-  output_list <- purrr::map(x$layers, process_formatting)
+    # Process Layer summaries
+    map(x$layers, process_summaries)
 
-  output <- output_list %>%
-    map2_dfr(seq_along(output_list), add_layer_index) %>%
-    select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+    # Get table formatting info
+    formatting_meta <- fetch_formatting_info(x)
 
-  # Rearange columns. Currently just alphabetical
+    # Format layers/table and pivot. process_formatting should return the built table!
+    output_list <- purrr::map(x$layers, process_formatting)
+
+    output <- output_list %>%
+      map2_dfr(seq_along(output_list), add_layer_index) %>%
+      select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+
+  }, finally = {
+    # Set options back to defaults
+    options(op)
+  })
+
   output
 }
 
@@ -112,105 +102,24 @@ process_formatting <- function(x, ...) {
   UseMethod("process_formatting")
 }
 
+#' @noRd
+prepare_format_metadata <- function(x) {
+  UseMethod("prepare_format_metadata")
+}
 
-#' Placeholder function to fetch table formatting data from layers
+#' Fetch table formatting info from layers
 #'
 #' @param x A tplyr_table object
 #'
 #' @return The data used to format layers. Structure currently TBD
+#' @noRd
 fetch_formatting_info <- function(x) {
 
   # Get the max length of f_str objects in sub_layers
-  max_layer_length <- max(map_int(x$layers, ~ env_get(.x, "max_length")))
+  max_layer_length <- max(map_int(x$layers, ~ env_get(.x, "max_length")), inherit = TRUE)
   # Get the max length of n counts only, not including f_str formatting
   max_n_width <- max(map_dbl(x$layers, ~ ifelse(inherits(.x, 'count_layer'), .x$n_width, 0L)))
 
   env_bind(x, max_layer_length = max_layer_length)
   env_bind(x, max_n_width = max_n_width)
 }
-
-
-######################################################################################
-######## Saving the below for posterity but I don't think its needed anymore #########
-######################################################################################
-
-
-#' #' count_layer S3 method
-#' #' @noRd
-#' build.count_layer <- function(x) {
-#'
-#'   target_var_length <- length(env_get(x, "target_var"))
-#'
-#'     if(target_var_length == 2) {
-#'
-#'
-#'
-#'       # Begin with the layer itself and process the first target vars values one by one
-#'       layer_output <- map_dfr(unlist(get_target_levels(x, env_get(x, "target_var")[[1]])),
-#'                               bind_nested_count_layer, x = x)
-#'
-#'       # Build the sub-layers
-#'       sublayer_output <- map(x$layers, build)
-#'
-#'       # Feed the output up
-#'       #layer_output <- process_count_layer(x)
-#'
-#'       # TODO: Some combination process
-#'       output <- layer_output
-#'       output
-#'
-#'       # If there are not two, and not one, fail. TODO: move this into compatibility
-#'     } else if (target_var_length != 1) {
-#'       abort("target_var can only contain one or two target_variables.
-#'             Other amounts are not currently implemented.")
-#'
-#'       # If there is just one no need for logic
-#'     } else {
-#'
-#'       # Build the sub-layers
-#'       sublayer_output <- map(x$layers, build)
-#'
-#'       # Feed the output up
-#'       layer_output <- process_count_layer(x)
-#'
-#'       # TODO: Some combination process
-#'       output <- layer_output
-#'       output
-#'     }
-#' }
-#'
-#' #' desc_layer S3 method
-#' #' @noRd
-#' #' @export
-#' build.desc_layer <- function(x) {
-#'
-#'   # Build the sub-layers
-#'   sublayer_output <- map(x$layers, build)
-#'
-#'   # Feed the output up
-#'   layer_output <- process_desc_layer(x)
-#'
-#'   # TODO: Some combination process
-#'   output <- layer_output
-#'   output
-#' }
-#'
-#' #' shift_layer S3 method
-#' #' @noRd
-#' build.shift_layer <- function(x) {
-#'
-#'   # Build the sub-layers
-#'   sublayer_output <- map(x$layers, build)
-#'
-#'   # Feed the output up
-#'   layer_output <- process_shift_layer(x)
-#'
-#'   # TODO: Some combination process
-#'   output <- layer_output
-#'   output
-#' }
-
-
-
-
-

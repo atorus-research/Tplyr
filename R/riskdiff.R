@@ -3,23 +3,21 @@
 #' Add risk difference to a count layer
 #'
 #' A very common requirement for summary tables is to calculate the risk difference between treatment
-#' groups. \code{add_risk_diff} allows you to do just this. The underlying risk difference calculations
+#' groups. \code{add_risk_diff} allows you to do this. The underlying risk difference calculations
 #' are performed using the Base R function \code{\link{prop.test}} - so prior to using this function,
-#' be sure to familiarize yourself with its functionality. See the Details section for more information
-#' on using \code{add_risk_diff}.
+#' be sure to familiarize yourself with its functionality.
 #'
 #' \code{add_risk_diff} can only be attached to a count layer, so the count layer must be constructed
 #' first. \code{add_risk_diff} allows you to compare the difference between treatment group, so all
-#' comparisons will be based upon the values within the specified \code{treat_var} in your
+#' comparisons should be based upon the values within the specified \code{treat_var} in your
 #' \code{tplyr_table} object.
 #'
 #' Comparisons are specified by providing two-element character vectors. You can provide as many of
 #' these groups as you want. You can also use groups that have been constructed using
 #' \code{\link{add_treat_group}} or \code{\link{add_total_group}}. The first element provided will be considered
 #' the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
-#' the 'comparison'. So, if you'd like to see the risk difference of 'T1 - Placebo', you would specify
-#' this as \code{c('T1', 'Placebo')}. The left side you can consider the 'comparison', and the right hand side the
-#' 'reference'.
+#' the 'comparison'. So if you'd like to see the risk difference of 'T1 - Placebo', you would specify
+#' this as \code{c('T1', 'Placebo')}.
 #'
 #' Tplyr forms your two-way table in the background, and then runs \code{\link{prop.test}} appropriately.
 #' Similar to way that the display of layers are specified, the exact values and format of how you'd like
@@ -38,6 +36,7 @@
 #'
 #' Use these variable names when forming your \code{\link{f_str}} objects. The default presentation, if no
 #' string format is specified, will be:
+#'
 #'   \code{f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)}
 #'
 #' Note - within Tplyr, you can account for negatives by allowing an extra space within your integer
@@ -46,20 +45,20 @@
 #' If columns are specified on a Tplyr table, risk difference comparisons still only take place between
 #' groups within the \code{treat_var} variable - but they are instead calculated treating the \code{cols}
 #' variables as by variables. Just like the tplyr layers themselves, the risk difference will then be transposed
-#' and will display each risk difference as separate variables by each of the \code{cols} variables.
+#' and display each risk difference as separate variables by each of the \code{cols} variables.
 #'
 #' If \code{distinct} is TRUE (the default), all calculations will take place on the distinct counts, if
 #' they are available. Otherwise, non-distinct counts will be used.
 #'
 #' One final note - \code{\link{prop.test}} may throw quite a few warnings. This is natural, because it
 #' alerts you when there's not enough data for the approximations to be correct. This may be unnerving
-#' coming from a SAS programming world, but R is just trying to alert you that the values provided
+#' coming from a SAS programming world, but this is R is trying to alert you that the values provided
 #' don't have enough data to truly be statistically accurate.
 #'
 #' @param layer Layer upon which the risk difference will be attached
 #' @param ... Comparison groups, provided as character vectors where the first group is the comparison,
 #' and the second is the reference
-#' @param args Arguments that are passed directly into \code{\link{prop.test}}
+#' @param args Arguments passed directly into \code{\link{prop.test}}
 #' @param distinct Logical - Use distinct counts (if available).
 #'
 #' @export
@@ -140,7 +139,7 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
     )
 
   # Add to the stats container
-  layer$stats <- append(layer$stats, rd)
+  layer$stats <- append(layer$stats, list(riskdiff = rd))
 
   layer
 }
@@ -163,9 +162,9 @@ prep_two_way <- function(comp) {
   evalq({
 
     # Make sure that the comparisons issued actually exist within the data
-    invalid_groups <- comp[!comp %in% unique(numeric_data[as_label(treat_var)])[[1]]]
+    invalid_groups <- comp[!comp %in% unique(numeric_data[as_name(treat_var)])[[1]]]
     assert_that(length(invalid_groups) == 0,
-                msg = paste0("There are no records for the following groups within the variable ", as_label(treat_var),
+                msg = paste0("There are no records for the following groups within the variable ", as_name(treat_var),
                              ": ", paste(invalid_groups, collapse=", ")))
 
     two_way <- numeric_data

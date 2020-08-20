@@ -82,7 +82,7 @@ match_exact <- function(var_list) {
   # Should have been a list of quosures on input
   assert_inherits_class(var_list, "quosures")
   # Return the variable names as a character string in appropriate tidyselect format
-  out <- map_chr(var_list, as_label)
+  out <- map_chr(var_list, as_label) # as_label is needed here vs as_name
   unname(out[out != 'NULL']) # Exclude NULL quosures and remove names
 }
 
@@ -138,9 +138,18 @@ get_target_levels <- function(e, x) {
 
 #' Replace repeating row label variables with blanks in preparation for display.
 #'
+#' Depending on the display package being used, row label values may need to be
+#' blanked out if they are repeating. This gives the data frame supporting the
+#' table the appearance of the grouping variables being grouped together
+#' in blocks. \code{apply_row_masks} does this work by blanking out the value
+#' of any row_label variable where the current value is not equal to the value
+#' before it. Note - \code{apply_row_masks} assumes that the data frame has
+#' already be sorted and therefore should only be applied once the data frame is in
+#' its final sort sequence.
+#'
 #' @param dat Data.frame / tibble to mask repeating row_labels
 #'
-#' @return tibble with blanked out rows where appropriate
+#' @return tibble with blanked out rows where values are repeating
 #' @export
 apply_row_masks <- function(dat) {
   # Get the row labels that need to be masked
@@ -159,73 +168,6 @@ apply_row_masks <- function(dat) {
   dat <- dat %>% select(-mask)
   dat
 }
-
-#' Create a table based on a count layer with two target_vars
-#'
-#' This is intended to be called in the count build
-#'
-#' @param target_var_1_i A single value contained in the first target variable
-#' @param x The count layer
-#'
-#' @noRd
-bind_nested_count_layer <- function(target_var_1_i, x) {
-
-  indentation <- env_get(x, "indentation", default = "\t", inherit = TRUE)
-  # Logic for it its inheriting from the global environment
-  indentation <- ifelse(is.null(indentation), "\t", indentation)
-
-  # This contains the subset of the first target variable.
-  # If nest_counts is true. the first treat_var is added in the by so it appears
-  # in its own column
-    inner_layer <- process_summaries(group_count(x, target_var = !!get_target_var(x)[[2]],
-                                                 by = vars(!!!get_by(x), !!get_target_var(x)[[1]]), cols = vars(!!!env_get(x, "cols")),
-                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i) %>%
-                                       # Set the value for how to prefix the inner layer
-                                       set_count_row_prefix(indentation))
-
-
-    # Process the formatting here to get the metadata. We just need the number of rows
-    inner_layer_form <- inner_layer$numeric_data %>%
-      # Pivot table
-      pivot_wider(id_cols = c(match_exact(get_by(x)), "summary_var", match_exact(head(get_target_var(x), -1))),
-                  names_from = c(!!env_get(x, "treat_var", inherit = TRUE), match_exact(env_get(x, "cols", inherit = TRUE))),
-                  values_from = n,
-                  names_prefix = "var1_")
-
-
-    # This should be a single row with the total of target_var 1
-    outer_layer <- process_summaries(group_count(x, target_var = !!get_target_var(x)[[1]],
-                                                 by = vars(!!!get_by(x)), cols = vars(!!!env_get(x, "cols")),
-                                                 where = !!get_where(x) & !!get_target_var(x)[[1]] == !!target_var_1_i))
-
-    outer_layer$numeric_data <- outer_layer$numeric_data %>%
-      mutate(!!env_get(x, "target_var")[[1]] := !!target_var_1_i)
-
-    # Add the index for this part of the layer
-    save_nested_layer_order(x, nrow(inner_layer_form) + 1)
-
-    # Bind these two to gether and add a row mask
-    bind_rows(outer_layer$numeric_data, inner_layer$numeric_data)
-}
-
-#' Bind an index for a nested count for use in sorting.
-#' @noRd
-save_nested_layer_order <- function(x, num_rows) {
-
-  # Number to add as the sorting column
-  current_nest <- env_get(x, "current_nest", default = 0) + 1
-
-  # Pull current index vector
-  nest_sort_index <- env_get(x, "nest_sort_index", default = numeric(0))
-
-  # Append current nest level to vecotr
-  env_bind(x, nest_sort_index = append(nest_sort_index, rep(current_nest, num_rows)))
-
-  # add new current nest value
-  env_bind(x, current_nest = current_nest)
-
-}
-
 
 #' Take a list of quosures and pull out things that aren't symbols
 #'
@@ -254,4 +196,21 @@ get_max_length <- function(lay) {
 
   # return greatest between sub layers and current layer
   max(max_, lay$format_strings$size)
+}
+
+#' Clean variable attributes
+#'
+#' @param dat Dataframe to strip of variable attributes
+#'
+#' @return Dataframe with variable attributes removed, except for factor levels
+#' @noRd
+clean_attr <- function(dat) {
+  for (n in names(dat)) {
+    for (a in names(attributes(dat[[n]]))) {
+      if (!a  %in% c('levels', 'class', 'names', 'row.names', 'groups')) {
+        attr(dat[[n]], a) <- NULL
+      }
+    }
+  }
+  dat
 }

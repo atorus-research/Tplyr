@@ -2,9 +2,6 @@
 
 #' Return or set header_n binding
 #'
-#' \strong{NOTE:} Tplyr does not currently actively use the header_n object within derivations.
-#' This is coming in future releases.
-#'
 #' When the header or table body relies on population count data, the header_n
 #' binding is used for display and calculations.
 #'
@@ -22,11 +19,11 @@
 #' @export
 #' @rdname header_n
 header_n <- function(table) {
-  rlang::env_get(table, "header_n")
+  env_get(table, "header_n")
 }
 
 #' @param x A \code{tplyr_table} object
-#' @param value A named numeric vector. Names of vector should match treatement
+#' @param value A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
@@ -35,36 +32,39 @@ header_n <- function(table) {
   set_header_n(x, value)
 }
 
-#' @param header_n A named numeric vector. Names of vector should match treatement
+#' @param header_n A named numeric vector. Names of vector should match treatment
 #'   group names.
 #'
 #' @export
 #' @rdname header_n
-set_header_n <- function(table, header_n) {
-  assert_that(is.numeric(header_n),
+set_header_n <- function(table, value) {
+  assert_that(is.numeric(value),
                           msg = "header_n argument must be numeric")
 
-  assert_that(!is.null(names(header_n)),
+  assert_that(!is.null(names(value)),
               msg = "header_n argument must be named")
 
-  rlang::env_bind(table, header_n = header_n)
+  env_bind(table, header_n = value)
 
   table
 }
 
 #' Return or set population data bindings
 #'
-#' The population data is used when calculating N counts in the column headers,
-#' as well as determining denominators for percent calculations in the table
-#' body.
+#' The population data is used to gather information that may not be available
+#' from the target dataset. For example, missing treatment groups, population N
+#' counts, and proper N counts for denominators will be provided through the
+#' population dataset. The population dataset defaults to the target dataset
+#' unless otherwise specified using \code{set_pop_data}.
 #'
 #' @param table A \code{tplyr_table} object
 #' @param pop_data A \code{data.frame} object containing the population level
 #'   information.
 #'
-#' @return For \code{tplyr_pop_data} the pop_data binding of the \code{tplyr_table}
-#'   object. For \code{tplyr_pop_data<-} nothing is returned, the pop_data binding
-#'   is set silently. For \code{set_tplyr_pop_data} the modified object.
+#' @return For \code{tplyr_pop_data} the pop_data binding of the
+#'   \code{tplyr_table} object. For \code{tplyr_pop_data<-} nothing is returned,
+#'   the pop_data binding is set silently. For \code{set_tplyr_pop_data} the
+#'   modified object.
 #'
 #' @examples
 #' tab <- tplyr_table(iris, Species)
@@ -74,7 +74,7 @@ set_header_n <- function(table, header_n) {
 #' @export
 #' @rdname pop_data
 pop_data <- function(table) {
-  rlang::env_get(table, "pop_data")
+  env_get(table, "pop_data")
 }
 
 #' @param x A \code{tplyr_table} object
@@ -100,7 +100,7 @@ set_pop_data <- function(table, pop_data) {
                                        class(pop_data),
                                        "' was passed."))
   attr(pop_data, "pop_data_name") <- pop_data_name
-  rlang::env_bind(table, pop_data = pop_data)
+  env_bind(table, pop_data = pop_data)
 
   table
 }
@@ -121,7 +121,7 @@ set_pop_data <- function(table, pop_data) {
 #' @export
 #' @rdname treat_var
 treat_var <- function(table) {
-  rlang::env_get(table, "treat_var")
+  env_get(table, "treat_var")
 }
 
 #' @param treat_var Variable containing treatment group assignments. Supply unquoted.
@@ -129,26 +129,31 @@ treat_var <- function(table) {
 #' @export
 #' @rdname treat_var
 set_treat_var <- function(table, treat_var) {
-  treat_var <- rlang::enquo(treat_var)
+  treat_var <- enquo(treat_var)
 
   assert_that(!quo_is_missing(treat_var),
                           msg = "A treat_var argument must be supplied")
 
-  assert_that(class(rlang::quo_get_expr(treat_var)) == "name",
-                          as_label(rlang::quo_get_expr(treat_var)) %in% names(table$target),
+  assert_that(class(quo_get_expr(treat_var)) == "name",
+                          as_name(quo_get_expr(treat_var)) %in% names(table$target),
                           msg = "treat_var column not found in target dataset")
 
-  rlang::env_bind(table, treat_var = treat_var)
+  env_bind(table, treat_var = treat_var)
 
   table
 }
 
 #' Return or set pop_treat_var binding
 #'
+#' The treatment variable used in the target data may be different than the
+#' variable within the population dataset. \code{set_pop_treat_var} allows you
+#' to change this.
+#'
 #' @param table A \code{tplyr_table} object
 #'
-#' @return For \code{tplyr_pop_treat_var} the pop_treat_var binding of the \code{tplyr_table}
-#'   object. For \code{set_tplyr_pop_treat_var} the modified object.
+#' @return For \code{tplyr_pop_treat_var} the pop_treat_var binding of the
+#'   \code{tplyr_table} object. For \code{set_tplyr_pop_treat_var} the modified
+#'   object.
 #'
 #' @examples
 #' tab <- tplyr_table(iris, Species)
@@ -159,7 +164,7 @@ set_treat_var <- function(table, treat_var) {
 #' @rdname pop_treat_var
 #' @export
 pop_treat_var <- function(table) {
-  rlang::env_get(table, "pop_treat_var")
+  env_get(table, "pop_treat_var")
 }
 
 #' @param pop_treat_var Variable containing treatment group assignments within the \code{pop_data} binding. Supply unquoted.
@@ -167,73 +172,21 @@ pop_treat_var <- function(table) {
 #' @rdname pop_treat_var
 #' @export
 set_pop_treat_var <- function(table, pop_treat_var) {
-  pop_treat_var <- rlang::enquo(pop_treat_var)
+  pop_treat_var <- enquo(pop_treat_var)
 
-  assert_that(class(rlang::quo_get_expr(pop_treat_var)) == "name",
-                          as_label(rlang::quo_get_expr(pop_treat_var)) %in% names(table$pop_data),
+  assert_that(class(quo_get_expr(pop_treat_var)) == "name",
+                          as_name(quo_get_expr(pop_treat_var)) %in% names(table$pop_data),
                           msg = paste0("pop_treat_var passed to tplyr_table is not a column of pop_data"))
 
-  rlang::env_bind(table, pop_treat_var = pop_treat_var)
+  env_bind(table, pop_treat_var = pop_treat_var)
 
   table
 }
 
-#' Return or set treatment groups binding
-#'
-#' Treatment groups are used to create additional groups that will be analyzed. For example,
-#' you could create a group of treated subjects vs. placebo in a trial with multiple treatment arms.
-#' These groups are constructed by supplying the assigned name to be used in the data, and then the
-#' which the larger group will be constructed from (i.e. given Placebo, T1, and T2 - Treated would be c('T1', 'T2'))
-#'
-#' @param table A tplyr_table object
-#'
-#' @return For \code{treat_grps} the treat_grp binding of the \code{tplyr_talbe}
-#'   object. For \code{treat_grps<-} and \code{set_treat_grps} the modified
-#'   object. \code{add_treat_group} adds a treatment group without removing others.
-#'
-#' @examples
-#' tab <- tplyr_table(iris, Species)
-#'
-#' add_treat_group(tab, "v-species", c('versicolor', 'virigina'))
-#'
 #' @export
 #' @rdname treat_grps
 treat_grps <- function(table) {
   env_get(table, "treat_grps")
-}
-
-#' @param group_name A character vector with the treatment group names to be assigned
-#' @param groupings A character vector specifiying the treatment variable values to be used to construct the assigned group
-#'
-#' @export
-#' @rdname treat_grps
-set_treat_grps <- function(table, group_name, groupings) {
-  assert_that(is.character(group_name), is.character(groupings),
-              msg = "'group_name' and 'groupings' argument passed to set_treat_grps must be a character")
-
-  # Name a list to bind to the environment
-  a_list <- list(groupings)
-  names(a_list) <- group_name
-
-  rlang::env_bind(table, treat_grps = a_list)
-
-  table
-}
-
-#' @export
-#' @rdname treat_grps
-add_treat_group <- function(table, group_name, groupings) {
-  # Get existing treatment groups
-  a_list <- env_get(table, "treat_grps", default = NULL)
-
-  # Append new treatment group to existing treatment groups
-  new_list <- list(groupings)
-  names(new_list) <- group_name
-  a_list <- append(a_list, new_list)
-
-  env_bind(table, treat_grps = a_list)
-
-  table
 }
 
 #' Set or return where binding for layer or table
@@ -266,7 +219,8 @@ get_where.tplyr_table <- function(obj) {
   env_get(obj, "table_where")
 }
 
-#' @param where An expression (i.e. syntax) to be used to subset the data. Supply as programming logic (i.e. x < 5 & y == 10)
+#' @param where An expression (i.e. syntax) to be used to subset the data.
+#'   Supply as programming logic (i.e. x < 5 & y == 10)
 #'
 #' @export
 #' @rdname where
@@ -304,4 +258,64 @@ set_pop_where <- function(obj, where) {
 #' @rdname where
 get_pop_where <- function(obj) {
   env_get(obj, "pop_where")
+}
+
+#' Get or set the default format strings for descriptive statistics layers
+#'
+#' Tplyr provides you with the ability to set table-wide defaults of format
+#' strings. You may wish to reuse the same format strings across numerous
+#' layers. \code{set_desc_layer_formats} and \code{set_count_layer_formats}
+#' allow you to apply your desired format strings within the entire scope of the
+#' table.
+#'
+#' For descriptive statistic layers, you can also use \code{set_format_strings}
+#' and \code{set_desc_layer_formats} together within a table, but not within the
+#' same layer. In the absence of specified format strings, first the table will
+#' be checked for any available defaults, and otherwise the
+#' \code{tplyr.desc_layer_default_formats} option will be used.
+#' \code{set_format_strings} will always take precedence over either. Defaults
+#' cannot be combined between \code{set_format_strings},
+#' \code{set_desc_layer_formats}, and the
+#' \code{tplyr.desc_layer_default_formats} because the order of presentation of
+#' results is controlled by the format strings, so relying on combinations of
+#' these setting would not be intuitive.
+#'
+#' For count layers, you can override the \code{n_counts} or \code{riskdiff}
+#' format strings separately, and the narrowest scope available will be used
+#' from layer, to table, to default options.
+#'
+#' @param obj A tplyr_table object
+#'
+#' @export
+#' @rdname table_format_defaults
+get_desc_layer_formats <- function(obj) {
+  # Bind the formats into the table
+  env_get(obj, 'desc_layer_formats')
+}
+
+#' @param ... formats to pass forward
+#'
+#' @export
+#' @rdname table_format_defaults
+set_desc_layer_formats <- function(obj, ...) {
+  # Bind the formats into the table
+  env_bind(obj, desc_layer_formats = list(...))
+  obj
+}
+
+#' @export
+#' @rdname table_format_defaults
+get_count_layer_formats <- function(obj) {
+  # Bind the formats into the table
+  env_get(obj, 'count_layer_formats')
+}
+
+#' @param ... formats to pass forward
+#'
+#' @export
+#' @rdname table_format_defaults
+set_count_layer_formats <- function(obj, ...) {
+  # Bind the formats into the table
+  env_bind(obj, count_layer_formats = list(...))
+  obj
 }

@@ -30,7 +30,8 @@ get_pop_where(obj)
 \arguments{
 \item{obj}{A \code{tplyr_layer} or \code{tplyr_table} object.}
 
-\item{where}{An expression (i.e. syntax) to be used to subset the data. Supply as programming logic (i.e. x < 5 & y == 10)}
+\item{where}{An expression (i.e. syntax) to be used to subset the data.
+Supply as programming logic (i.e. x < 5 & y == 10)}
 }
 \value{
 For \code{where}, the where binding of the supplied object.
