@@ -16,10 +16,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r, include = FALSE, setup}
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
+library(kableExtra)
 load("adsl.Rdata")
 load("adae.Rdata")
 load("adlb.Rdata")
@@ -27,7 +28,7 @@ load("adlb.Rdata")
 
 # Frequency Tables
 
-Tplyr is designed to be a flexible method for creating tables displaying the frequency of discrete values in a target dataset. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
+Tplyr is designed for flexible functionality when designing tables. When designing the display of the frequency of discrete values in a target dataset `group_count()` and `group_shift()` both offer methods for intiutive design. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
 
 ### A simple example
 
@@ -36,7 +37,7 @@ Here is an example of a table you could see in a statistical report. This table 
 ```{r}
 t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   add_total_group() %>%
-  add_treat_grps(Treatment = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
+  add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
   add_layer(
     group_count(DCDECOD) %>%
       set_order_count_method("bycount") %>%
@@ -44,11 +45,11 @@ t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   ) %>%
   build() %>%
   arrange(desc(ord_layer_1)) %>%
-  apply_row_masks() %>%
   select(starts_with("row"), var1_Placebo, `var1_Xanomeline Low Dose`,
-         `var1_Xanomeline High Dose`, var1_Treatment, var1_Total)
+         `var1_Xanomeline High Dose`, var1_Treated, var1_Total)
 
-kable(t, align = "lrrrrr")
+kable(t, "html") %>%
+  column_spec(6, "3cm")
 ```
 
 ## Percentages
@@ -113,30 +114,6 @@ t <- tplyr_table(adae, TRTA) %>%
   build() %>%
   filter(ord_layer_1 == 1) %>%
   apply_row_masks()
-
-kable(t)
-```
-
-## Risk Differences
-
-Tplyr has helper functions for creating risk differences between treatment groups. The `add_risk_diff()` function adds a risk difference column to the table by using `stats::prop.test()` function in R. The two-way tables are constructed and used in the background. 
-
-Risk differences can be formatted with a call to `set_format_strings()` by naming the argument 'riskdiff'. If both counts and risk differences have custom strings, the count f_str object can be named 'n_counts'.
-
-```{r}
-suppressWarnings({
-  t <- tplyr_table(adae, TRTA) %>%
-    add_treat_grps(Treatment = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
-    add_layer(
-      group_count(vars(AEBODSYS, AEDECOD)) %>%
-        add_risk_diff(c("Placebo", "Treatment")) %>%
-        set_format_strings(riskdiff = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', comp, ref, dif, low, high))
-    ) %>%
-    
-    build() %>%
-    filter(ord_layer_1 == 1) %>%
-    apply_row_masks()
-})
 
 kable(t)
 ```
