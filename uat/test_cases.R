@@ -394,14 +394,50 @@ test_that('T9',{
 
 
 #test 10 ----
-#HOLD FOR MISSING COUNTS
-t <- tplyr_table(adsl, TRT01P) %>%
-  add_layer(
-    group_count(RACE) %>%
-      set_missing_count(f_str("xx ", n), string = c(Missing = '')) %>%
-      set_denom_ignore('')
-  ) %>%
-  build()
+test_that('T10',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(DCSREAS) %>%
+          set_missing_count(f_str("xx", n), string = c(Missing = '')) %>%
+          set_denom_ignore('')
+      )
+
+    test_10 <- build(t)
+
+    # output table to check attributes
+    save(test_10, file = "~/Tplyr/uat/output/test_10.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_10)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_10.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t10_tots <- filter(adsl, DCSREAS != "") %>%
+    group_by(TRT01P) %>%
+    summarise(total = n())
+  t10_1 <- group_by(adsl, TRT01P, DCSREAS) %>%
+    summarise(n = n()) %>%
+    left_join(t10_tots, by="TRT01P") %>%
+    mutate(pct = n / total *100) %>%
+    mutate(col = ifelse(DCSREAS == "", sprintf("%2s",n), paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),"%)"))) %>%
+    filter(TRT01P == "Placebo")
+  testthat::expect_equal(t10_1$col,test_10$var1_Placebo,label = "T10.1")
+  #clean up working directory
+  rm(t10_1)
+  rm(test_10)
+})
 
 #test 11 ----
 test_that('T11',{
@@ -1530,6 +1566,217 @@ test_that('T30',{
   rm(t30_tots)
   rm(t30_1)
   rm(test_30)
+})
+
+
+#test 31 ----
+test_that('T31',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+      )
+
+    test_31 <- build(t)
+
+    # output table to check attributes
+    save(test_31, file = "~/Tplyr/uat/output/test_31.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_31)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_31.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t31_tots <- filter(adlb) %>%
+    group_by(TRTA) %>%
+    summarise(total=n())
+  t31_1 <- filter(adlb) %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t31_tots, by="TRTA") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t31_1$col,test_31$var1_Placebo_N,label = "T31.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t31_tots)
+  rm(t31_1)
+  rm(test_31)
+})
+
+
+#test 32 ----
+test_that('T32',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+      )
+
+    test_32 <- build(t)
+
+    # output table to check attributes
+    save(test_32, file = "~/Tplyr/uat/output/test_32.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_32)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_32.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t32_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA) %>%
+    summarise(total=n())
+  t32_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t32_tots, by="TRTA") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t32_1$col,test_32$var1_Placebo_N,label = "T32.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t32_tots)
+  rm(t32_1)
+  rm(test_32)
+})
+
+
+#test 33 ----
+test_that('T33',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND),
+                    where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+      )
+
+    test_33 <- build(t)
+
+    # output table to check attributes
+    save(test_33, file = "~/Tplyr/uat/output/test_33.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_33)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_33.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t33_tots <- group_by(adsl, TRT01P)%>%
+    summarise(total=n())
+  t33_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    merge(t33_tots, by.x="TRTA", by.y="TRT01P") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t33_1$col,test_33$var1_Placebo_N,label = "T33.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t33_tots)
+  rm(t33_1)
+  rm(test_33)
+})
+
+
+#test 34 ----
+test_that('T34',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct)) %>%
+          set_denoms_by(TRTA, PARAMCD, AVISIT)
+      )
+
+    test_34 <- build(t)
+
+    # output table to check attributes
+    save(test_34, file = "~/Tplyr/uat/output/test_34.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_34)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_34.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t34_tots <- filter(adlb) %>%
+    group_by(TRTA, PARAMCD, AVISIT) %>%
+    summarise(total=n())
+  t34_1 <- filter(adlb) %>%
+    group_by(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t34_tots, by=c("TRTA", "PARAMCD", "AVISIT")) %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t34_1$col,test_34$var1_Placebo_N,label = "T34.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t34_tots)
+  rm(t34_1)
+  rm(test_34)
 })
 
 #clean up ----
