@@ -19,150 +19,221 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
+library(knitr)
+load("adsl.Rdata")
+load("adae.Rdata")
 ```
-
 
 # Sorting a Tplyr Table
 Keeping with Tplyr's design philosophy, the user can sort that table in any way they need. Columns and rows are designed so they can be arranged easily at output without any additional processing.
 
-In this example, the `t` table will output with method for sorting the layers, the `am` variable, and the values of the calculations.
+In this example, the `t` table will output with method for sorting the layers, the `SEX` variable, and the values of the calculations.
 
 ```{r}
-t <- tplyr_table(mtcars, gear) %>%
+t <- tplyr_table(adsl, TRT01A) %>%
   add_total_group() %>%
-  add_treat_grps(High = c(4, 5)) %>%
+  add_treat_grps(Treatment = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
   add_layer(
-    group_count(cyl, by = am)
+    group_count(EOSSTT, by = SEX)
   ) %>%
   add_layer(
-    group_desc(mpg, by = am)
+    group_desc(HEIGHTBL, by = SEX)
   ) %>%
   build()
 
-t
+kable(t)
 ```
 
 ## Sorting Table Columns
-### Column Naming Conventions
-Built Tplyr tables output with three types of columns:
-* row_label_<n> - Row labels are the context for the data displayed in each row. It contains the combinations of 'by' variables, target_variables (Count and Shift), and summary names (Desc). <n> represents the index of the label. Indexes are ordered as, grouping 'target' variable (nested count), 'by' variables in the order they are presented, name of summaries (Desc), and 'target' variable (count).
-* var<n>_<grp> - Variable columns contain the actual derivations performed on the data. <n> represents the 'target' variable (Desc), and <grp> represents the combination of treatment group and 'cols' value.
-* ord_<x> - Ordering helpers are columns that can be used to arrange the rows of the table. One for each Row Label, plus a column for the layers output from the build and they can be used to order the table in several ways.
+
+### Ordering Helpers
+Ordering helpers are columns that can be used to arrange the rows of the table. One for each Row Label, plus a column for the layers output from the build and they can be used to order the table in several ways.
+
+In the example above, the `t` table outputs with three columns
+
+* ord_layer_index indexes the layer itself.
+* ord_layer_1 indexes the first by variable, `SEX`. No options were presented so sorting was done alphabetically.
+* ord_layer_2 indexes the values of the `EOSSTT` variable in the count layer, and the names of the summaries in the desc layer.
+
+```{r}
+kable(
+  t %>%
+    select(starts_with("ord"))
+)
+```
 
 ### Reordering and Droping Columns
 The functions `dplyr::select()`, `dplyr::relocate()`, `magrittr::extract()`, and `[` can all be used to reorder, drop, and sort columns however a user needs too.
 
 To drop the ordering helpers, you can easily subtract them with dplyr and tidyselect.
 ```{r}
-t %>% 
-  select(-starts_with("ord_"))
+kable(t %>% 
+  select(-starts_with("ord_")))
 ```
+
 Or you can reorder columns, in this example total is moved to the first column.
+
 ```{r}
-t %>%
-  select( starts_with("row"), var1_Total, starts_with("var1"))
+kable(t %>%
+  select( starts_with("row"), var1_Total, starts_with("var1")))
 ```
 
 ## Sorting the Layers
 Layers are binded together to create the table so they will output in the order they are added to the table. If you have a need to reorder them, the `ord_layer_index` column allows you to do this or drop layers altogether.
+
 ```{r}
-t %>%
-  arrange(desc(ord_layer_index))
+kable(t %>%
+        select(starts_with("row"), starts_with("ord")) %>%
+      arrange(desc(ord_layer_index)))
 ```
 
 ## Sorting the 'by' varaibles
-The variables passed as 'by' variables can be sorted with their respective ordering helper column. The sort values are calculated depending on the attributes that variable has in the 'target' dataset.
-1) If the variable has a VARN variable in the 'target' dataset, that is, `<by>N %in% names(target)` is TRUE, the values in the ordering helper column will be the values of that VARN variable for that 'by' value.
-2) If the 'by' variable is a factor, the values of the ordering column will be the index of the levels.
-3) If neither 1 or 2 are true, the values in the ordering column will be an index based on an alphabetical sorting.
+The variables passed as 'by' variables can be sorted with their respective ordering helper column. The sort values are calculated depending on the attributes that variable has in the 'target' dataset. The ordering index will calculate based on the first applicable method below.
+
+1. If the variable has a VARN variable in the 'target' dataset, that is, `<by>N %in% names(target)` is TRUE, the values in the ordering helper column will be the values of that VARN variable for that 'by' value.
+2. If the 'by' variable is a factor, the values of the ordering column will be the index of the levels.
+3. If neither 1 or 2 are true, the values in the ordering column will be an index based on an alphabetical sorting.
 
 ### VARN
 By adding the variable 'amN', the 'ord_layer_1' will output using those values. This is especially useful in the case of SDTM variables like VISIT and VISITN where ordering is important but ordering alphabetically would produce incorrect ordering.
-```{r}
-mtcars$amN <- mtcars$am + 100
-byvarn_t <- tplyr_table(mtcars, gear) %>%
-  add_layer(
-    group_count(cyl, by = am)
-  ) %>%
-  build()
-mtcars$amN <- NULL
 
-byvarn_t
+```{r}
+byvarn_t <- tplyr_table(adsl, TRT01A) %>%
+  add_layer(
+    group_count(EOSSTT, by = RACE)
+  ) %>%
+  build() %>%
+  select(row_label1, ord_layer_1)
+
+kable(byvarn_t)
 ```
+
 ### Factor
-If there is no succinct way to order the variables alphabetically or with a VARN variable, Tplyr can use a factor in the target dataset to order the dataset and create the ordering helper column. Internally, Tplyr uses a `tidyr::pivot_wider()` to create the output which will arrange the rows automatically. The ordering helper is still provided in case the table needs to be sorted after the fact and to not rely on a dependency for this functionality.
-```{r}
-mtcars$am <- factor(mtcars$am, c(1, 0))
-byfact_t <- tplyr_table(mtcars, gear) %>%
-  add_layer(
-    group_count(cyl, by = am)
-  ) %>%
-  build()
+If there is no succinct way to order the variables alphabetically or with a VARN variable, Tplyr can use a factor in the target dataset to order the dataset and create the ordering helper column. Internally, Tplyr uses a `tidyr::pivot_wider()` to create the output which will arrange the rows automatically. The ordering helper is still provided for clarity, cross-language support, to not rely on a dependency for this functionality, and to preserve the factor levels for the row labels.
 
-byfact_t
+```{r}
+adsl$ETHNIC <- factor(adsl$ETHNIC, c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO"))
+byfact_t <- tplyr_table(adsl, TRT01A) %>%
+  add_layer(
+    group_count(EOSSTT, by = ETHNIC)
+  ) %>%
+  build() %>%
+  select(row_label1, ord_layer_1)
+
+kable(byfact_t)
 ```
+
 ### Alphabetical
-If the target doesn't have a VARN variable in the target dataset, and isn't a factor, it is converted to a factor and sorted as it if it was a factor. Coercing it to a factor implicitly orders it alphabetically.
+If the target doesn't have a VARN variable in the target dataset, and isn't a factor, it is sorted alphabetically.
 
 ## Sorting 'Desc' Summaries
 'Desc' summaries are indexed in the order they are passed to `set_custom_summaries()` or found in the `tplyr.desc_layer_default_formats` option. A user can change the order easily in these places, or reorder it after the fact with `dplyr::recode()`.
 
 ```{r}
-t %>%
-  filter(ord_layer_index == 2)
+kable(t %>%
+        select(starts_with("row"), starts_with("ord")) %>%
+        filter(ord_layer_index == 2))
 ```
-
 
 ## Sorting 'Count' Target Values
 The order counts should be displayed in a table can be deceptively complex. Tplyr offers three different methods of sorting the values of a target variable in a count layer. The function `set_order_count_method()` can be used to change how a count layer is sorted.
-1) Sorting a count layer defaults to sorting the target variable as a factor. This allows for easy custom sorting or will coerce it to a factor and sort automatically.
-2) Similar to a 'by' variable, a count target can be sorted with a VARN variable.
-3) Many tables require counts to be sorted based on the counts of a particular group. Tplyr can populate the ordering column based on the numeric value of any column. The function `set_ordering_cols()` and `set_numeric_result_order_var()` specify the column, and numeric value the ordering column should be based on.
+
+1. Sorting a count layer defaults to sorting the target variable as a factor. This allows for easy custom sorting or will coerce it to a factor and sort automatically.
+2. Similar to a 'by' variable, a count target can be sorted with a VARN variable.
+3. Many tables require counts to be sorted based on the counts of a particular group. Tplyr can populate the ordering column based on the numeric value of any column. The function `set_ordering_cols()` and `set_numeric_result_order_var()` specify the column, and numeric value the ordering column should be based on.
 
 ### bycount
-A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with `set_ordering_cols()` which takes the unquoted value of the treatment group and any 'cols' value to select the column ordering should be done by. If multiple types of counts are used in the layer, `set_numeric_result_order_var()` can be used to select which should be used in ordering.
-```{r}
-bycount_t <- tplyr_table(mtcars, gear) %>%
-  add_layer(
-    group_count(cyl) %>%
-      set_order_count_method("bycount") %>%
-      set_ordering_cols("5")
-  ) %>%
-  build()
+A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with `set_ordering_cols()` which takes the value of the treatment group and any 'cols' value to select the column ordering should be done by.
 
-bycount_t
+If multiple types of counts are used in the layer, `set_numeric_result_order_var()` can be used to select which should be used in ordering.
+
+Here the treatment groups as well as the age groups will appear as columns. The `set_ordering_cols()` call sets the sorting group as the Placebo + >80 group to order on. The `set_result_order_var()` changes the numeric variable to output.
+
+```{r}
+bycount_t <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+  add_layer(
+    group_count(EOSSTT) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols(Placebo, `>80`) %>%
+      set_result_order_var(pct)
+  ) %>%
+  build() %>%
+  select(`var1_Placebo_>80`, ord_layer_1)
+
+kable(bycount_t)
+```
+
+`set_result_order_var()` can also be used when there are distinct counts. In the example `ord_layer_1` is presented with the distinct counts rather than the event counts.
+
+```{r}
+adae_t <- tplyr_table(adae, TRTA) %>%
+  set_pop_data(adsl) %>%
+  set_pop_treat_var(TRT01A) %>%
+  add_total_group() %>%
+  add_layer(
+    group_count(AEBODSYS) %>%
+      set_distinct_by(USUBJID) %>%
+      set_format_strings(f_str("xx (xx.xx%) [xxx]", distinct, pct, n)) %>%
+      set_order_count_method("bycount") %>%
+      set_result_order_var(distinct_n)
+  ) %>%
+  build() %>%
+  select(starts_with("row"), var1_Placebo, starts_with("ord"))
+
+kable(adae_t)
+
 ```
 
 ### byvarn
 If the target variable has a corresponding VARN variable, this VARN variable can also be used in the ordering column.
+
 ```{r}
-mtcars$cylN <- mtcars$cyl + 50
-byvarn_t <- tplyr_table(mtcars, gear) %>%
+byvarn_t <- tplyr_table(adsl, TRT01A) %>%
   add_layer(
-    group_count(cyl) %>%
+    group_count(RACE) %>%
       set_order_count_method("byvarn")
   ) %>%
-  build()
-mtcars$cylN <- NULL
+  build() %>%
+  select(row_label1, ord_layer_1)
 
-byvarn_t
+kable(byvarn_t)
 ```
 
 ### byfactor
 If no method for ordering is passed the target variable is treated as a factor(coerced if necessary) and indexed in the order the factor levels are presented.
+
 ```{r}
-mtcars$cyl <- factor(mtcars$cyl, c(5, 3, 4))
+adsl$AGEGR1 <- factor(adsl$AGEGR1, c("<65", "65-80", ">80"))
 # Warnings suppressed to remove 'forcats' implicit NA warning
 suppressWarnings({
-  byfact_t <- tplyr_table(mtcars, gear) %>%
+  byfact_t <- tplyr_table(adsl, TRT01A) %>%
     add_layer(
-      group_count(cyl) %>%
+      group_count(AGEGR1) %>%
         # This is the default and not needed
         set_order_count_method("byfactor")
     ) %>% 
-    build(.)
+    build() %>%
+    select(row_label1, ord_layer_1)
 })
 
-byfact_t
+kable(byfact_t)
+```
+
+### Nested Sorting
+
+Sorting a nested count layer can be sorted with a mix of sorting methods. 'byfactor', 'bycount', and 'byvarn' can be used for both the first(grouping) and second(grouped) variables. In the example below, `EOSSTT` is sorted 'byfactor' which implicitly sorts alphabetically. `DCDECOD` is sorted 'bycount' which defaults to sorting by the 'Placebo' column. 
+
+`ord_layer_2` contains the numeric values of the Placebo column, except for the "grouping" variables which is set to `Inf` to ensure it is always sorted at the top.
+
+```{r}
+nested <- tplyr_table(adsl, TRT01A) %>%
+  add_layer(
+    group_count(vars(EOSSTT, DCDECOD)) %>%
+      set_order_count_method(c("byfactor", "bycount"))
+  ) %>%
+  build() %>%
+  select(starts_with("row"), starts_with("ord"))
+
+kable(nested)
 ```
 
