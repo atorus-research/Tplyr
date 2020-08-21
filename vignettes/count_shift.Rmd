@@ -119,7 +119,27 @@ kable(t)
 
 ## Risk Differences
 
+Tplyr has helper functions for creating risk differences between treatment groups. The `add_risk_diff()` function adds a risk difference column to the table by using `stats::prop.test()` function in R. The two-way tables are constructed and used in the background. 
 
+Risk differences can be formatted with a call to `set_format_strings()` by naming the argument 'riskdiff'. If both counts and risk differences have custom strings, the count f_str object can be named 'n_counts'.
+
+```{r}
+suppressWarnings({
+  t <- tplyr_table(adae, TRTA) %>%
+    add_treat_grps(Treatment = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        add_risk_diff(c("Placebo", "Treatment")) %>%
+        set_format_strings(riskdiff = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', comp, ref, dif, low, high))
+    ) %>%
+    
+    build() %>%
+    filter(ord_layer_1 == 1) %>%
+    apply_row_masks()
+})
+
+kable(t)
+```
 
 ## Shifted Count Tables
 Several tables include performing frequencies based on a shift of a baseline reference value. This is very common in laboratory tests where baseline references are compared with future references. These tables are a special case of count layers, but a method is provided that is intuitive and more efficient.
