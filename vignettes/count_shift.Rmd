@@ -26,9 +26,13 @@ load("adlb.Rdata")
 ```
 
 # Frequency Tables
+
 Tplyr is designed to be a flexible method for creating tables displaying the frequency of discrete values in a target dataset. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
 
 ### A simple example
+
+Here is an example of a table you could see in a statistical report. This table demonstrates the frequency of dispositions accross treatment groups sorted descending by the total occurrences on the study.
+
 ```{r}
 t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   add_total_group() %>%
@@ -42,9 +46,10 @@ t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   build() %>%
   arrange(desc(ord_layer_1)) %>%
   apply_row_masks() %>%
-  select(-starts_with("ord"))
+  select(starts_with("row"), var1_Placebo, `var1_Xanomeline Low Dose`,
+         `var1_Xanomeline High Dose`, var1_Treatment, var1_Total)
 
-kable(t)
+kable(t, align = "lrrrrr")
 ```
 
 ## Percentages
@@ -54,6 +59,7 @@ Frequencies can be displayed along with percentages showing the relative value o
   * `set_denom_ignore()` defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator.
 
 ## Distinct Versus Event Counts
+
 Several tables may not count the number of each value, but instead the distinct number of some other variable. For example, adverse event counts will display the number of subject that have an adverse event as well as the number of adverse events as a whole. The `set_distinct_by()` function sets the the variable to calculate the distinct count.
 
 ```{r}
@@ -71,9 +77,29 @@ kable(t)
 ```
 
 ## Missing Counts
+
 In many frequency tables, missing counts are displayed without percentages. Tplyr can support different displays for missing values. The `set_missing_count()` function can take a new `f_str` object to display the missing values, as well as a named string to determine what missing is defined as.
 
+The example below demonstrates a table where "missing" is defined as the string 'SEVERE'. It also ignores that value in the denominator using `set_denom_ignore()`. In the high treatment group, the two percentages sum to 100% even though there are values missing.
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(AESEV) %>%
+      set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
+      # AESEV of SEVERE is used to demonstrate missing
+      set_missing_count(f_str("xxx", n), string = "SEVERE")  %>%
+      set_denom_ignore("SEVERE")
+    
+  ) %>%
+  build()
+
+kable(t)
+
+```
+
 ## Nested Counts
+
 In certain tables, one variable is a grouping factor of another. Just using a 'target' variable and a 'by' variable here isn't sufficient, that would produce every combination of the 'by' and 'target' variables. Tplyr allows you to pass two variables as 'target' variables using `dplyr::vars()`. The first variable is treated as the 'grouping' variable and the values of the second variable are 'nested' into the first variable. 
 
 ```{r}
@@ -82,19 +108,25 @@ t <- tplyr_table(adae, TRTA) %>%
     group_count(vars(AEBODSYS, AEDECOD))
   ) %>%
   build() %>%
-  apply_row_masks() %>%
-  head()
+  filter(ord_layer_1 == 1) %>%
+  apply_row_masks()
 
 kable(t)
 ```
 
 ## Risk Differences
 
+
+
 ## Shifted Count Tables
 Several tables include performing frequencies based on a shift of a baseline reference value. This is very common in laboratory tests where baseline references are compared with future references.
 
+This example uses a randomly sampled adlb dataset which causes the table to appear sparse but the structure is demonstrated. The `LBNRIND` and `BNRIND` are updated to a factor to ensure they appear in the table output. If this wasn't done only 'NORMAL' and 'N' would appear in the dataset.
+
 ```{r}
-t <- tplyr_table(adlb, TRTA, where = !is.na(LBNRIND)) %>%
+adlb$LBNRIND <- factor(adlb$LBNRIND, c("NORMAL", "HIGH"))
+adlb$BNRIND <- factor(adlb$BNRIND, c("N", "H"))
+t <- tplyr_table(adlb, TRTA, where = !is.na(LBNRIND) & VISIT == "WEEK 4") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT))
   ) %>%
