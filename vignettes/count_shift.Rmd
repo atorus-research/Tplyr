@@ -1,0 +1,113 @@
+---
+title: "Count and Shift Tables"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Count and Shift Tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Tplyr)
+library(dplyr, warn.conflicts = FALSE)
+library(knitr)
+load("adsl.Rdata")
+load("adae.Rdata")
+load("adlb.Rdata")
+```
+
+# Frequency Tables
+Tplyr is designed to be a flexible method for creating tables displaying the frequency of discrete values in a target dataset. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
+
+### A simple example
+```{r}
+t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
+  add_total_group() %>%
+  add_treat_grps(Treatment = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
+  add_layer(
+    group_count(DCDECOD) %>%
+      set_format_strings(f_str("xxx", n)) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols(Total)
+  ) %>%
+  build() %>%
+  arrange(desc(ord_layer_1)) %>%
+  apply_row_masks() %>%
+  select(-starts_with("ord"))
+
+kable(t)
+```
+
+## Percentages
+Frequencies can be displayed along with percentages showing the relative value of the count to the column. There are several parameters to define the denominator used in the calculation.
+
+  * `set_denoms_by()` sets the variables to be used in the denominator calculation. This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This function allows users to specify any variable passed in the table or layer, meaning denominators can be specified by any combination of variables. This is particularly useful for shift layers that use a combination of row and column variables.
+  * `set_denom_ignore()` defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator.
+
+## Distinct Versus Event Counts
+Several tables may not count the number of each value, but instead the distinct number of some other variable. For example, adverse event counts will display the number of subject that have an adverse event as well as the number of adverse events as a whole. The `set_distinct_by()` function sets the the variable to calculate the distinct count.
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(AEBODSYS) %>%
+      set_distinct_by(USUBJID) %>%
+      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, pct, n))
+  ) %>%
+  build() %>%
+  head()
+
+kable(t)
+
+```
+
+## Missing Counts
+In many frequency tables, missing counts are displayed without percentages. Tplyr can support different displays for missing values. The `set_missing_count()` function can take a new `f_str` object to display the missing values, as well as a named string to determine what missing is defined as.
+
+## Nested Counts
+In certain tables, one variable is a grouping factor of another. Just using a 'target' variable and a 'by' variable here isn't sufficient, that would produce every combination of the 'by' and 'target' variables. Tplyr allows you to pass two variables as 'target' variables using `dplyr::vars()`. The first variable is treated as the 'grouping' variable and the values of the second variable are 'nested' into the first variable. 
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD))
+  ) %>%
+  build() %>%
+  apply_row_masks() %>%
+  head()
+
+kable(t)
+```
+
+## Risk Differences
+
+## Shifted Count Tables
+Several tables include performing frequencies based on a shift of a baseline reference value. This is very common in laboratory tests where baseline references are compared with future references.
+
+```{r}
+t <- tplyr_table(adlb, TRTA, where = !is.na(LBNRIND)) %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT))
+  ) %>%
+  build() %>%
+  head()
+
+kable(t)
+```
+
+
+# References
+[Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
+
+[Analyses and Displays Associated with Demographics, Disposition, and Medications](https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf)
+
+[Analyses and Displays Associated with Measures of Central Tendency](http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf)
