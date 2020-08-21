@@ -79,6 +79,13 @@ Format strings are one of the most powerful components of 'Tplyr'.
   \code{\link{set_format_strings}} for some more notes about layers specific
   implementation.
 }
+\section{Allowable Values}{
+
+  Count and shift layers frequencies and percentages can be specified with
+  'n' and 'pct' respectively. Distinct values can also be presented in count
+  layers with the arguments 'distinct' and 'distinct_total'.
+}
+
 \examples{
 
 f_str("xx.x (xx.x)", mean, sd)

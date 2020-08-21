@@ -55,6 +55,11 @@
 #'   \code{\link{set_format_strings}} for some more notes about layers specific
 #'   implementation.
 #'
+#' @section Allowable Values:
+#'   Count and shift layers frequencies and percentages can be specified with
+#'   'n' and 'pct' respectively. Distinct values can also be presented in count
+#'   layers with the arguments 'distinct' and 'distinct_total'.
+#'
 #' @param format_string The desired display format. X's indicate digits. On the
 #'   left, the number of x's indicates the integer length. On the right, the
 #'   number of x's controls decimal precision and rounding. Variables are
@@ -210,25 +215,28 @@ parse_fmt <- function(x) {
 #'   If you are additionally supplying a statistic, like risk difference using
 #'   \code{\link{add_risk_diff}}, you specify the count formats using the name
 #'   'n_counts'. The risk difference formats would then be specified using the
-#'   name "riskdiff". In a descriptive statistic layer,
-#'   \code{set_format_strings} allows you to do a couple more things: \itemize{
+#'   name 'riskdiff'. In a descriptive statistic layer,
+#'   \code{set_format_strings} allows you to do a couple more things:
+#'   \itemize{
 #'   \item{By naming parameters with character strings, those character strings
-#'   become a row label in the resulting data frame} \item{The actual summaries
-#'   that are performed come from the variable names used within the
-#'   \code{\link{f_str}} calls} \item{Using multiple summaries (declared by your
-#'   \code{\link{f_str}} calls), multiple summary values can appear within the
-#'   same line. For example, to present "Mean (SD)" like displays.} \item{Format
-#'   strings in the desc layer also allow you to configure how empty values
-#'   should be presented. In the \code{f_str} call, use the \code{empty}
-#'   parameter to specify how missing values should present. A single element
-#'   character vector should be provided. If the vector is unnamed, that value
-#'   will be used in the format string and fill the space similar to how the
-#'   numbers will display. Meaning - if your empty string is 'NA' and your
-#'   format string is 'xx (xxx)', the empty values will populate as 'NA ( NA)'.
-#'   If you name the character vector in the 'empty' parameter '.overall', like
-#'   \code{empty = c(.overall='')}, then that exact string will fill the value
-#'   instead. For example, providing 'NA' will instead create the formatted
-#'   string as 'NA' exactly.}}
+#'   become a row label in the resulting data frame}
+#'   \item{The actual summaries that are performed come from the variable names
+#'   used within the \code{\link{f_str}} calls}
+#'   \item{Using multiple summaries (declared by your \code{\link{f_str}}
+#'   calls), multiple summary values can appear within the same line. For
+#'   example, to present "Mean (SD)" like displays.}
+#'   \item{Format strings in the desc layer also allow you to configure how
+#'   empty values should be presented. In the \code{f_str} call, use the
+#'   \code{empty} parameter to specify how missing values should present. A
+#'   single element character vector should be provided. If the vector is
+#'   unnamed, that value will be used in the format string and fill the space
+#'   similar to how the numbers will display. Meaning - if your empty string is
+#'   'NA' and your format string is 'xx (xxx)', the empty values will populate
+#'   as 'NA ( NA)'. If you name the character vector in the 'empty' parameter
+#'   '.overall', like \code{empty = c(.overall='')}, then that exact string will
+#'   fill the value instead. For example, providing 'NA' will instead create the
+#'   formatted string as 'NA' exactly.}
+#'   }
 #'
 #'   See the \code{\link{f_str}} documentation for more details about how this
 #'   implementation works.
@@ -357,7 +365,7 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 #' Set Count Layer String Format
 #'
 #' @param e Layer on which to bind format strings
-#' @param ... Named parmeters containing calls to \code{f_str} to set the format strings
+#' @param ... Named parameters containing calls to \code{f_str} to set the format strings
 #'
 #' @return Returns the modified layer object.
 #' @export
@@ -367,7 +375,6 @@ set_format_strings.count_layer <- function(e, ...) {
   # Catch the arguments from the function call so useful errors can be thrown
   check <- enquos(...)
 
-  # Make sure that all of the attachments were `f_str` objects
   # Make sure that all of the attachments were `f_str` objects
   for (i in seq_along(check)) {
 

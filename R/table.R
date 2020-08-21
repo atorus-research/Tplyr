@@ -77,7 +77,8 @@ new_tplyr_table <- function(target, treat_var, where, cols) {
     set_where(!!where) %>%
     set_pop_where(!!where) %>%
     set_desc_layer_formats() %>%
-    set_count_layer_formats()
+    set_count_layer_formats() %>%
+    set_shift_layer_formats()
 }
 
 #' Validate tplyr_table target dataset
