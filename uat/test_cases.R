@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/19/2020
+#' 8/21/2020
 
 #setup ----
 #insert any necessary libraries
@@ -1777,6 +1777,84 @@ test_that('T34',{
   rm(t34_tots)
   rm(t34_1)
   rm(test_34)
+})
+
+
+#test 35 ----
+test_that('T35',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE, by = "Race")
+      )
+
+    test_35 <- build(t)
+
+    # output table to check attributes
+    save(test_35, file = "~/Tplyr/uat/output/test_35.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_35)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_35.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(replicate(n = length(unique(adsl$RACE)), "Race", simplify = TRUE ),
+                         test_35$row_label1,
+                         label = "T35.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_35)
+})
+
+
+#test 36 ----
+test_that('T36',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(vars(ETHNIC, RACE), by = vars("Ethnicity","Race"))
+      )
+
+    test_36 <- build(t)
+
+    # output table to check attributes
+    save(test_36, file = "~/Tplyr/uat/output/test_36.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_36)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_36.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(,
+                         list(test_36$row_label1, test_36$row_label2),
+                         label = "T36.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_36)
 })
 
 #clean up ----
