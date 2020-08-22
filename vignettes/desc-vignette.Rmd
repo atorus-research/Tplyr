@@ -1,0 +1,129 @@
+---
+title: "Descriptive Statistic Layers"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Descriptive Statistic Layers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(tidyverse) 
+library(magrittr)
+library(Tplyr)
+library(knitr)
+load("adae.Rdata")
+load("adlb.Rdata")
+load("adsl.Rdata")
+```
+
+## Built-in Summaries
+
+```{r varnames, echo=FALSE}
+x <- data.frame(
+  Statistic = c('N', 'Mean', "Standard Deviation", "Median", "Variance", "Minimum",
+                "Maximum", "Interquartile Range", "Q1", "Q3", "Missing"),
+  `Variable Names` = c("n", "mean", "sd", "median", "variance", "min", "max", "iqr", "q1", "q3", "missing")
+)
+
+x %>% 
+  kable(align="cc")
+
+```
+
+## Notes About Built-in's
+
+## Formatting
+
+## Custom Summaries
+
+You can see that there was a lot of attention given to counting over the past three weeks - but descriptive statistics weren't neglected either. Let's start simple - custom summaries no work properly on multi-variable summaries:
+
+```{r multi-custom}
+tplyr_table(adsl, TRT01P) %>%
+  add_layer(
+    group_desc(vars(AGE, HEIGHTBL), by = "Sepal Length") %>%
+      set_custom_summaries(
+        geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))
+      ) %>%
+      set_format_strings(
+        'Geometric Mean (SD)' = f_str('xx.xx (xx.xxx)', geometric_mean, sd)
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+
+```
+
+Not much more to it! Just use `.var` instead of the a distinct variable name. 
+
+## Auto Precision
+
+The more interesting development for descriptive statistics was the addition of auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. Particularly when working with labs results, different tests may have difference necessities for decimal precision depending on the numeric range of the tests, the units the data are collected in, etc. So it is common practice to vary the precision of the data being presented based on the data collected. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, for standard deviation +2. 
+
+Tplyr now handles these cases, and in Tplyr style, it's intuitive and easy to control. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. Now - if you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
+
+```{r autoprecision1}
+
+tplyr_table(adlb, TRTA) %>% 
+  add_layer(
+    group_desc(AVAL, by = PARAMCD) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd)
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+
+```
+
+As you can see, the decimal precision is now varying depending on the test being performed. Notice that both the integer and the decimal side of each number fluctuate as well. Tpylr collects both the integer and decimal precision, and you can specify both separately. For example, you could use `x`'s to specify a default number of spaces for your integers that are used consistently across by variables, but vary the decimal precision based on collected data. You can also increment the number of spaces for both integer and decimal separately. 
+
+But - this is kind of ugly, isn't it? Do we really need all 5 decimal places collected for CA? For this reason, you're able to set a cap on the precision that's displayed:
+
+```{r autoprecision2}
+tplyr_table(adlb, TRTA) %>% 
+  add_layer(
+    group_desc(AVAL, by = PARAMCD) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        cap = c(int=3, dec=2)
+      )
+  ) %>% 
+  build() %>% 
+  head() %>% 
+  kable()
+
+```
+
+Now that looks better. The `cap` argument is part of `set_format_strings`. You need to specify the integer and decimal caps separately. Note that integer precision might not behave like you expect - it doesn't make sense to truncate an integer if it's value is too high, so if the integer exceeds the allotted space, then the length of the string will increase and the full value will be displayed. But values that are short enough will only pad to the capped number of spaces. We plan to implement a warning in future releases if integers exceed the set display space allocation. 
+
+This was a basic situation, but if you're paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don't want that? What about multiple summary variable? How do we determine precision then? We have modifier functions for this:
+
+```{r precision3}
+tplyr_table(adlb, TRTA, where = SAFFL=='Y' & AVISIT != '') %>% 
+  add_layer(
+    group_desc(vars(AVAL, CHG, BASE), by = vars(AVISIT,PARAMCD)) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        cap = c(int=3, dec=2)
+      ) %>% 
+      set_precision_on(AVAL) %>% 
+      set_precision_by(PARAMCD)
+  ) %>%
+  build() %>% 
+  head() %>% 
+  kable()
+
+```
+
+Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? `set_precision_on` allows you to specify this, where the `precision_on` variable must be one of the variables within `target_var`. Similarly, `set_precision_by` changes the `by` variables used to determine collected precision. If no `precision_on` variable is specified, the first variable in `target_var` is used. If not `precision_by` variables are specified, then the default `by` variables are used.
