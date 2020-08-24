@@ -1,8 +1,8 @@
 ---
-title: "Tplyr (Alpha Release)"
+title: "README"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Tplyr (alpha release)}
+  %\VignetteIndexEntry{README}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
