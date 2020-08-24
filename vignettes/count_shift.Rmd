@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Count and Shift Tables}
+  %\VignetteIndexEntry{Count_and_Shift_Tables}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,11 +28,11 @@ load("adlb.Rdata")
 
 # Frequency Tables
 
-Tplyr is designed for flexible functionality when designing tables. When designing the display of the frequency of discrete values in a target dataset `group_count()` and `group_shift()` both offer methods for intiutive design. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
+Tplyr is designed for flexible functionality when designing tables. When designing the display of the frequency of discrete values in a target dataset `group_count()` and `group_shift()` both offer methods for intuitive design. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.
 
 ### A simple example
 
-Here is an example of a table you could see in a statistical report. This table demonstrates the frequency of dispositions accross treatment groups sorted descending by the total occurrences on the study.
+Here is an example of a table you could see in a statistical report. This table demonstrates the frequency of dispositions across treatment groups sorted descending by the total occurrences on the study.
 
 ```{r}
 t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
@@ -55,54 +55,56 @@ kable(t, "html") %>%
 ## Percentages
 Frequencies can be displayed along with percentages showing the relative value of the count to the column. There are several parameters to define the denominator used in the calculation.
 
-  * `set_denoms_by()` sets the variables to be used in the denominator calculation. This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This function allows users to specify any variable passed in the table or layer, meaning denominators can be specified by any combination of variables. This is particularly useful for shift layers that use a combination of row and column variables.
+  * `set_denoms_by()` function allows users calculate denominators using any variable within the by, cols, treatment, or target variables.  This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This function allows users to specify any variable passed in the table or layer, meaning denominators can be specified by any combination of variables. This is particularly useful for shift layers that use a combination of row and column variables.
   * `set_denom_ignore()` defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator.
   
 Examples with percentages can be seen below.
 
 ## Distinct Versus Event Counts
 
-Several tables may not count the number of each value, but instead the distinct number of some other variable. For example, adverse event counts will display the number of subject that have an adverse event as well as the number of adverse events as a whole. The `set_distinct_by()` function sets the the variable to calculate the distinct count.
+Several tables may not count the number of each occurrences, but instead the distinct number of some other variable in the data. For example, adverse event counts will display the number of subjects that have an adverse event as well as the number of adverse events as a whole. The `set_distinct_by` function sets the variables used to calculate the distinct occurrences of some value using the specified 'by' variables.
 
 ```{r}
 t <- tplyr_table(adae, TRTA) %>%
   add_layer(
     group_count(AEBODSYS) %>%
       set_distinct_by(USUBJID) %>%
-      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, pct, n))
+      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, distinct_pct, n))
   ) %>%
   build() %>%
   head()
 
 kable(t)
-
 ```
+
+The table above displaces first the number of subjects who had a the specified adverse event, and th proportion of subjects in that treatment group who experienced the event. Within the brackets, the total number of occurrences of that event are displayed.
 
 ## Missing Counts
 
-In many frequency tables, missing counts are displayed without percentages. Tplyr can support different displays for missing values. The `set_missing_count()` function can take a new `f_str` object to display the missing values, as well as a named string to determine what missing is defined as.
+In many frequency tables, missing counts are displayed without percentages. Tplyr can support different displays for missing values. The `set_missing_count()` function can take a new `f_str` object to display the missing values, as well as a named string to determine what missing is defined as. When a named string is passed in the string argument, the missing row label will use that instead of "missing".
 
-The example below demonstrates a table where "missing" is defined as the string 'SEVERE'. It also ignores that value in the denominator using `set_denom_ignore()`. In the high treatment group, the two percentages sum to 100% even though there are values missing.
+The example below 50 random values are removed and NA is specified as the missing string. It also ignores that value in the denominator using `set_denom_ignore()`.
 
 ```{r}
-t <- tplyr_table(adae, TRTA) %>%
+adae2 <- adae
+adae2[sample(200, 50), "AESEV"] <- NA
+t <- tplyr_table(adae2, TRTA) %>%
   add_layer(
     group_count(AESEV) %>%
       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
       # AESEV of SEVERE is used to demonstrate missing
-      set_missing_count(f_str("xxx", n), string = "SEVERE")  %>%
-      set_denom_ignore("SEVERE")
+      set_missing_count(f_str("xxx", n), string = c(MISSING = "NA"))  %>%
+      set_denom_ignore("NA")
     
   ) %>%
-  build()
-
-kable(t)
+  build() %>%
+  kable()
 
 ```
 
 ## Nested Counts
 
-In certain tables, one variable is a grouping factor of another. Just using a 'target' variable and a 'by' variable here isn't sufficient, that would produce every combination of the 'by' and 'target' variables. Tplyr allows you to pass two variables as 'target' variables using `dplyr::vars()`. The first variable is treated as the 'grouping' variable and the values of the second variable are 'nested' into the first variable. 
+In certain tables, one variable is a grouping factor of another. Just using a 'target' variable and a 'by' variable here isn't sufficient, that would produce every combination of the 'by' and 'target' variables. Tplyr allows you to pass two variables as 'target' variables using `dplyr::vars()`. The first variable is treated as the 'grouping' variable and the values of the second variable are 'nested' into the first variable and counts are created for both groups separately. 
 
 This example is filter to display only the first group. Note that the only "AEDECOD" values here are values where 'AEBODSYS' are "CARDIAC DISORDERS".
 
@@ -113,31 +115,8 @@ t <- tplyr_table(adae, TRTA) %>%
   ) %>%
   build() %>%
   filter(ord_layer_1 == 1) %>%
-  apply_row_masks()
-
-kable(t)
+  kable()
 ```
-
-## Shifted Count Tables
-Several tables include performing frequencies based on a shift of a baseline reference value. This is very common in laboratory tests where baseline references are compared with future references. These tables are a special case of count layers, but a method is provided that is intuitive and more efficient.
-
-Constructing a shift layer is similar to constructing a count layer, however the reference values are passed using `dplyr::vars()` and named as 'row' and 'column.'
-
-This example uses a randomly sampled adlb dataset which causes the table to appear sparse but the structure is demonstrated. The `LBNRIND` and `BNRIND` are updated to a factor to ensure they appear in the table output. If this wasn't done only 'NORMAL' and 'N' would appear in the dataset.
-
-```{r}
-adlb$LBNRIND <- factor(adlb$LBNRIND, c("NORMAL", "HIGH"))
-adlb$BNRIND <- factor(adlb$BNRIND, c("N", "H"))
-t <- tplyr_table(adlb, TRTA, where = !is.na(LBNRIND) & VISIT == "WEEK 4") %>%
-  add_layer(
-    group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT))
-  ) %>%
-  build() %>%
-  head()
-
-kable(t)
-```
-
 
 # References
 [Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
