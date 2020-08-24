@@ -1,5 +1,5 @@
 ---
-title: "sort"
+title: "Sorting a Tplyr Table"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -227,7 +227,7 @@ tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   kable()
 ```
 
-`set_result_order_var()` can also be used when there are multiple numbers presented in the summary within one cell. In the example `ord_layer_1` is presented with the distinct counts rather than the event counts.
+`set_result_order_var()` can also be used when there are multiple numbers presented in the summary within one cell. In the example below `ord_layer_1` is presented with the distinct counts rather than the event counts.
 
 ```{r}
 tplyr_table(adae, TRTA) %>%
