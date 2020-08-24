@@ -97,7 +97,7 @@ assert_inherits_class <- function(x, should_have) {
   }
 }
 
-#' Assert that variabes not passed as strings are present in target dataset
+#' Assert that variables not passed as strings are present in target dataset
 #'
 #' @param quo_list A variable that can be a string, variable, or combination of
 #'   those using dplyr::vars

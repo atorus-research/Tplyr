@@ -18,6 +18,7 @@ t11 <- tplyr_table(mtcars, gear)
 t12 <- tplyr_table(mtcars, gear)
 t13 <- tplyr_table(mtcars, gear)
 t14 <- tplyr_table(mtcars, gear)
+t15 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -56,6 +57,8 @@ c12 <- group_count(t12, cyl) %>%
 c13 <- group_count(t13, vars(cyl, grp), by = "Test")
 c14 <- group_count(t14, vars(cyl, grp)) %>%
   set_outer_sort_position("asc")
+c15 <- group_count(t15, cyl) %>%
+  set_distinct_by(vars(am, vs))
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -71,6 +74,7 @@ t11 <- add_layers(t11, c11)
 t12 <- add_layers(t12, c12)
 t13 <- add_layers(t13, c13)
 t14 <- add_layers(t14, c14)
+t15 <- add_layers(t15, c15)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -130,10 +134,11 @@ test_that("Count layers are built as expected", {
 
   expect_equal(c4$format_strings$n_counts, f_str("xxx", n))
   expect_equal(c5$include_total_row, TRUE)
-  expect_equal(c6$distinct_by, quo(cyl))
-  expect_equal(c8$distinct_by, quo(am))
+  expect_equal(c6$distinct_by, quos(cyl))
+  expect_equal(c8$distinct_by, quos(am))
   expect_equal(c9$indentation, "")
   expect_equal(c10$count_row_prefix, "abc")
+  expect_equal(c15$distinct_by, quos(am, vs))
 })
 
 test_that("Count layers are summarized without errors and warnings", {
@@ -154,6 +159,7 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t12))
   expect_silent(build(t13))
   expect_silent(build(t14))
+  expect_silent(build(t15))
 })
 
 test_that("Count layers are processed as expected", {

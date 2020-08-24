@@ -48,3 +48,19 @@ gather_defaults.count_layer <- function(x) {
   # Append together - table will be preferred over option when indexing
   append(table_settings, opt_settings)
 }
+
+#' Shift layer format string option extraction
+#'
+#' @param x A shift layer
+#'
+#' @return The default format strings
+#' @noRd
+gather_defaults.shift_layer <- function(x) {
+  # Get the defaults set within options
+  opt_settings <- getOption('tplyr.shift_layer_default_formats')
+  # Get the table defaults if they're available
+  table_settings <- evalq(shift_layer_formats, envir=x)
+
+  # Append together - table will be preferred over option when indexing
+  append(table_settings, opt_settings)
+}

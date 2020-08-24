@@ -214,7 +214,7 @@ tplyr_table(adsl, TRT01A) %>%
   add_total_group() %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
-      set_outer_sort_position(FALSE)
+      set_outer_sort_position("asc")
   ) %>%
   build() %>%
   select(starts_with("ord"), starts_with("row")) %>%

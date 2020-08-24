@@ -72,7 +72,7 @@ set_total_row_label <- function(e, total_row_label) {
 #' \code{pct}, \code{distinct}, and \code{distinct_pct}.
 #'
 #' @param e A count_layer object
-#' @param distinct_by A variable to get the distinct
+#' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
 #' @export
@@ -88,7 +88,10 @@ set_total_row_label <- function(e, total_row_label) {
 #'   ) %>%
 #'   build()
 set_distinct_by <- function(e, distinct_by) {
-  distinct_by <- enquo(distinct_by)
+
+  distinct_by <- unpack_vars(enquos(distinct_by))
+
+  assert_quo_var_present(distinct_by, envir = e)
 
   env_bind(e, distinct_by = distinct_by)
 
