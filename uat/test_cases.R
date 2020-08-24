@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/21/2020
+#' 8/24/2020
 
 #setup ----
 #insert any necessary libraries
@@ -1855,6 +1855,122 @@ test_that('T36',{
 
   #clean up working directory
   rm(test_36)
+})
+
+
+#test 37 ----
+test_that('T37',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      add_layer(
+        group_desc(AGE)
+      ) %>%
+      add_layer(
+        group_desc(CUMDOSE)
+      ) %>%
+      add_layer(
+        group_count(ETHNIC)
+      )
+
+    test_37 <- build(t)
+
+    # output table to check attributes
+    save(test_37, file = "~/Tplyr/uat/output/test_37.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_37)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_37.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t37_denoms <- filter(adsl, TRT01P == "Placebo") %>%
+    group_by(TRT01P) %>%
+    summarise(total = n())
+
+  t37_race <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, fill=list(n = 0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    left_join(t37_denoms, by="TRT01P") %>%
+    mutate(pct = n / total *100) %>%
+    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%) ")) %>%
+    mutate(label = RACE) %>%
+    select(label, col)
+
+  t37_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, ETHNIC, fill=list(n = 0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    left_join(t37_denoms, by="TRT01P") %>%
+    mutate(pct = n / total *100) %>%
+    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%) ")) %>%
+    mutate(label = ETHNIC) %>%
+    select(label, col)
+
+  t37_age <- filter(adsl, TRT01P == "Placebo") %>%
+    summarise(n=n(),
+              mean=mean(AGE),
+              median=median(AGE),
+              sd=sd(AGE),
+              min=min(AGE),
+              max=max(AGE),
+              q1=quantile(AGE)[[2]],
+              q3=quantile(AGE)[[4]]) %>%
+    mutate(col_n = sprintf("%2s", n)) %>%
+    mutate(col_meansd = paste0(sprintf("%4.1f", mean)," (",sprintf("%5.2f", sd),")")) %>%
+    mutate(col_median = sprintf("%4.1f", median)) %>%
+    mutate(col_q1q3 = paste0(sprintf("%2.0f", q1),", ",sprintf("%2.0f", q3))) %>%
+    mutate(col_minmax = paste0(sprintf("%2.0f", min),", ",sprintf("%2.0f", max))) %>%
+    pivot_longer(cols = c(col_n,col_meansd,col_median,col_q1q3,col_minmax),
+                 names_to = "label", values_to = "col") %>%
+    select(label, col)
+
+  t37_cumdose <- filter(adsl, TRT01P == "Placebo") %>%
+    summarise(n=n(),
+              mean=mean(CUMDOSE),
+              median=median(CUMDOSE),
+              sd=sd(CUMDOSE),
+              min=min(CUMDOSE),
+              max=max(CUMDOSE),
+              q1=quantile(CUMDOSE)[[2]],
+              q3=quantile(CUMDOSE)[[4]]) %>%
+    mutate(col_n = sprintf("%2s", n)) %>%
+    mutate(col_meansd = paste0(sprintf("%4.1f", mean)," (",sprintf("%5.2f", sd),")")) %>%
+    mutate(col_median = sprintf("%4.1f", median)) %>%
+    mutate(col_q1q3 = paste0(sprintf("%2.0f", q1),", ",sprintf("%2.0f", q3))) %>%
+    mutate(col_minmax = paste0(sprintf("%2.0f", min),", ",sprintf("%2.0f", max))) %>%
+    pivot_longer(cols = c(col_n,col_meansd,col_median,col_q1q3,col_minmax),
+                 names_to = "label", values_to = "col") %>%
+    select(label, col)
+
+  t37_1 <- rbind(t37_race, t37_age, t37_cumdose, t37_ethnic)
+
+  testthat::expect_equal(t37_1$col, filter(test_37, row_label1 != 'Missing')$var1_Placebo,label = "T37.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t37_denoms)
+  rm(t37_race)
+  rm(t37_ethnic)
+  rm(t37_age)
+  rm(t37_cumdose)
+  rm(t37_1)
+  rm(test_37)
 })
 
 #clean up ----
