@@ -190,7 +190,7 @@ tplyr_table(adsl, TRT01A) %>%
   kable()
 ```
 
-One sort method can be passed which will be used by both variables. In this example both `EOSSTT` and `DCDECOD` will be sorted by the count in the 'Total' column.
+One sort method can be passed which will be used by both variables. In this example both `EOSSTT` and `DCDECOD` will be sorted by the count in the 'Total' column. When both the inside and outside variable use "bycount", the parameters entered to `set_ordering_cols` and `set_result_order_var` will apply to both variables.
 
 ```{r}
 tplyr_table(adsl, TRT01A) %>%
