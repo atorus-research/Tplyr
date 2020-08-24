@@ -446,13 +446,17 @@ set_denom_ignore <- function(e, ...) {
 #' Set the value of a outer nested count layer to Inf or -Inf
 #'
 #' @param e A count layer
-#' @param outer_inf A logical value. If the value is set to TRUE. The outer
-#'   count layer is set to Inf, if it is false it is set to -Inf.
+#' @param outer_inf Either 'asc' or 'desc'. If desc the final ordering helper
+#'   will be set to Inf, if 'asc' the ordering helper is set to -Inf.
 #'
 #' @return The modified count layer.
 #' @export
-set_outer_inf <- function(e, outer_inf) {
-  assert_has_class(outer_inf, "logical")
+set_outer_sort_position <- function(e, outer_sort_position) {
+
+  assert_that(outer_sort_position %in% c("asc", "desc"),
+              msg = "outer_sort_position must be 'asc' 'desc'")
+
+  outer_inf <- outer_sort_position == "desc"
 
   env_bind(e, outer_inf = outer_inf)
 

@@ -55,7 +55,7 @@ c12 <- group_count(t12, cyl) %>%
   set_distinct_by(am)
 c13 <- group_count(t13, vars(cyl, grp), by = "Test")
 c14 <- group_count(t14, vars(cyl, grp)) %>%
-  set_outer_inf(FALSE)
+  set_outer_sort_position("asc")
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -277,6 +277,6 @@ test_that("Nested count layers can be built with text by variables", {
   expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
 })
 
-test_that("set_outer_inf works as expected", {
+test_that("set_outer_sort_position works as expected", {
   expect_equal(c14$formatted_data$ord_layer_2, rep(c(-Inf, 1, 2), 3))
 })
