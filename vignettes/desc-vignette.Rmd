@@ -177,9 +177,9 @@ tplyr_table(adsl, TRT01P) %>%
 But now, let's overwrite `mean` using a custom summary. Let's use a trimmed mean instead, taking 20% of observations off of both ends.
 
 ```{r custom_options_trimmed}
-options(tplyr.custom_summaries = 
+options('tplyr.custom_summaries' = 
           rlang::quos(
-            mean = mean(.var, na.rm=TRUE, trim=0.2)
+            mean = mean(.var, na.rm=TRUE, trim=0.4)
           )
         )
 
