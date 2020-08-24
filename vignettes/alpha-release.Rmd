@@ -361,7 +361,7 @@ First up, it's common to have to present a total group, or a treated group vs. t
 ```{r treatment_groups}
 tplyr_table(adsl, TRT01P) %>% 
   add_total_group() %>% 
-  add_treat_group('Treated', c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
+  add_treat_grps(Treated = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories")
   ) %>% 
