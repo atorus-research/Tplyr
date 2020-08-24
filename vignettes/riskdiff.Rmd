@@ -107,7 +107,7 @@ t <- tplyr_table(adae, TRTA) %>%
       add_risk_diff(
         c('Xanomeline High Dose', 'Placebo'),
         c('Xanomeline Low Dose', 'Placebo'),
-        args = list(conf.level=0.95, alternative='less', correct=FALSE)
+        args = list(conf.level=0.90, alternative='less', correct=FALSE)
       ) %>% 
       set_format_strings(
         'n_counts' = f_str('xx (xx.x) [x]', distinct, distinct_pct, n),
@@ -122,6 +122,13 @@ suppressWarnings(build(t)) %>%
 
 ```
 
+As seen above, using the `args` argument, we:
+
+- Changed the confidence interval level to 90% instead of the default 95%
+- Switched the alternative hypothesis of `prop.test` to "less" instead of the default "two.sided"
+- Turned off the Yates' continuity correction
+
+For more information on these parameters, see the documentation for `prop.test`. 
 
 ## Other notes
 
