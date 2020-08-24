@@ -197,7 +197,7 @@ process_count_distinct_n <- function(x) {
       # Distinct based on the current distinct_by, target_var, and treat_var
       # treat_var is added because duplicates would be created when there are
       # treatment group totals
-      distinct(!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
+      distinct(!!!distinct_by, !!treat_var, !!!target_var, .keep_all = TRUE) %>%
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
@@ -527,7 +527,7 @@ process_count_denoms <- function(x) {
 
     if(!is.null(distinct_by)) {
       denoms_distinct_df <- denom_target %>%
-        distinct(!!distinct_by, .keep_all = TRUE) %>%
+        distinct(!!!distinct_by, .keep_all = TRUE) %>%
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
         complete(!!!cols, !!treat_var) %>%
