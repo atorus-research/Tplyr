@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r include = FALSE, setup}
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
@@ -25,7 +25,7 @@ load("adae.Rdata")
 ```
 
 # Sorting a Tplyr Table
-Keeping with Tplyr's design philosophy, the user can sort that table in any way they need. Columns and rows are designed so they can be arranged easily at output without any additional processing.
+With sorting functions available in R, like `dplyr::arrange`. You should have all the data you need to arrange records how you wish.
 
 In this example, the `t` table will output with method for sorting the layers, the `SEX` variable, and the values of the calculations.
 
@@ -210,7 +210,7 @@ tplyr_table(adsl, TRT01A) %>%
 ### bycount
 A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with `set_ordering_cols()` which takes the value of the treatment group and any 'cols' value to select the column ordering should be done by.
 
-If multiple types of counts are used in the layer, `set_numeric_result_order_var()` can be used to select which should be used in ordering.
+If multiple types of counts are used in the layer, `set_result_order_var()` can be used to select which should be used in ordering.
 
 Here the treatment groups as well as the age groups will appear as columns. The `set_ordering_cols()` call sets the sorting group as the Placebo + >80 group to order on. The `set_result_order_var()` changes the numeric variable to output.
 
