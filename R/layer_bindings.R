@@ -39,7 +39,7 @@ set_target_var <- function(layer, target_var) {
 #'
 #' @param layer A \code{tplyr_layer} object
 #'
-#' @return For \code{get_by}, the by binding of the supplied layer. For
+#' @return For \code{get_by}, the \code{by} binding of the supplied layer. For
 #'   \code{set_by} the modified layer environment.
 #' @export
 #' @rdname by
@@ -93,15 +93,16 @@ set_where.tplyr_layer <- function(obj, where) {
 
 #' Set or return precision_by layer binding
 #'
-#' The precision_by variables are used to collect the integer and decimal precision
-#' when auto-precision is used. These by variables are used to group the input data
-#' and identify the maximum precision available within the dataset for each
-#' by group. The precision_by variables must be a subset of the by variables
+#' The precision_by variables are used to collect the integer and decimal
+#' precision when auto-precision is used. These by variables are used to group
+#' the input data and identify the maximum precision available within the
+#' dataset for each by group. The precision_by variables must be a subset of the
+#' by variables
 #'
 #' @param layer A \code{tplyr_layer} object
 #'
-#' @return For \code{get_precision_by}, the precision_by binding of the supplied layer. For
-#'   \code{set_precision_by} the modified layer environment.
+#' @return For \code{get_precision_by}, the precision_by binding of the supplied
+#'   layer. For \code{set_precision_by} the modified layer environment.
 #' @export
 #' @rdname precision_by
 #'
@@ -121,7 +122,7 @@ get_precision_by <- function(layer) {
 #'   using \code{dplyr::vars}.
 #'
 #' @export
-#' @rdname by
+#' @rdname precision_by
 set_precision_by <- function(layer, precision_by) {
   precision_by <- enquos(precision_by)
 
@@ -138,13 +139,14 @@ set_precision_by <- function(layer, precision_by) {
 
 #' Set or return precision_on layer binding
 #'
-#' The precision_on variable is the variable used to establish numeric precision.
-#' This variable must be included in the list of \code{target_var} variables.
+#' The precision_on variable is the variable used to establish numeric
+#' precision. This variable must be included in the list of \code{target_var}
+#' variables.
 #'
 #' @param layer A \code{tplyr_layer} object
 #'
-#' @return For \code{get_precision_on}, the precision_on binding of the supplied layer. For
-#'   \code{set_precision_on} the modified layer environment.
+#' @return For \code{get_precision_on}, the precision_on binding of the supplied
+#'   layer. For \code{set_precision_on} the modified layer environment.
 #' @export
 #' @rdname precision_on
 #'
@@ -160,8 +162,8 @@ get_precision_on <- function(layer) {
   env_get(layer, "precision_on")
 }
 
-#' @param precision_on A string, a variable name, or a list of variable names supplied
-#'   using \code{dplyr::vars}.
+#' @param precision_on A string, a variable name, or a list of variable names
+#'   supplied using \code{dplyr::vars}.
 #'
 #' @export
 #' @rdname precision_on

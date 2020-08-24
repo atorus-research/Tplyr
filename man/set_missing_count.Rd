@@ -21,3 +21,14 @@ The modified layer
 If there is a special way NA or missing values should be counted, this binding
 will display the values in a different way.
 }
+\examples{
+mtcars[mtcars$cyl == 6, "cyl"] <- NA
+mtcars[mtcars$cyl == 8, "cyl"] <- NA
+tplyr_table(mtcars, gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) \%>\%
+      set_denom_ignore("Unknown", "NA")
+  ) \%>\%
+  build()
+}

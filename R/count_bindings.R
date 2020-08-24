@@ -3,8 +3,8 @@
 #' Add a Total row into a count summary.
 #'
 #' Adding a total row creates an additional observation in the count summary that presents the total counts
-#' (i.e. the n's that are) summarized by the \code{by} group variables and the columns (\code{treat_var} along with
-#' any additional columns set by the \code{cols} argument.)
+#' (i.e. the n's that are summarized). This is calculated by the \code{by} group variables and the columns
+#' (\code{treat_var} along with any additional columns set by the \code{cols} argument).
 #'
 #' @param e A layer object
 #'
@@ -61,8 +61,15 @@ set_total_row_label <- function(e, total_row_label) {
 
 #' Set counts to be distinct by some grouping variable.
 #'
-#' Occasionally summaries call for counting distint values within a group. \code{set_distinct_by}
-#' will update a count layer to only count distinct values by the specified variables.
+#' In some situations, count summaries may want to see distinct counts by a
+#' variable like subject. For example, the number of subjects in a population
+#' who had a particular adverse event. \code{set_distinct_by} allows you to set
+#' the by variables used to determine a distinct count.
+#'
+#' When a \code{distinct_by} value is set, distinct counts will be used by
+#' default. If you wish to combine distinct and not distinct counts, you can
+#' choose which to display in your \code{\link{f_str}} objects using \code{n},
+#' \code{pct}, \code{distinct}, and \code{distinct_pct}.
 #'
 #' @param e A count_layer object
 #' @param distinct_by A variable to get the distinct
@@ -96,6 +103,7 @@ set_distinct_by <- function(e, distinct_by) {
 #' @param count_row_prefix A character to prefix the row labels
 #'
 #' @return The modified count_layer environment
+#' @noRd
 set_count_row_prefix <- function(e, count_row_prefix) {
 
   assert_inherits_class(count_row_prefix, "character")
@@ -158,43 +166,48 @@ set_nest_count <- function(e, nest_count) {
 
 #' Set the ordering logic for the count layer
 #'
-#' @description
-#' The sorting of a table can greatly vary depending on the situation at hand.
-#' For count layers, when creating tables like adverse event summaries, you may
-#' wish to order the table by decending occurrence within a particular treatment
-#' group. But in other situations, such as AEs of special interest, or subject
-#' disposition, there may be a specific order you wish to display values. Tplyr
-#' offers solutions to each of these situations.
+#' @description The sorting of a table can greatly vary depending on the
+#'   situation at hand. For count layers, when creating tables like adverse
+#'   event summaries, you may wish to order the table by descending occurrence
+#'   within a particular treatment group. But in other situations, such as AEs
+#'   of special interest, or subject disposition, there may be a specific order
+#'   you wish to display values. Tplyr offers solutions to each of these
+#'   situations.
 #'
-#' Instead of allowing you to specify a custom sort order, Tplyr instead provides you
-#' with order variables that can be used to sort your table after the data are summarized.
-#' Tplyr has a default order in which the table will be returned, but the order variables
-#' will always persist. This allows you to use powerful sorting functions like
-#' \code{\link[dplyr]{arrange}} to get your desired order, and in double programming
-#' situations, helps your validator understand the how you acheived a particular sort
-#' order and where discrepancies may be coming from.
+#'   Instead of allowing you to specify a custom sort order, Tplyr instead
+#'   provides you with order variables that can be used to sort your table after
+#'   the data are summarized. Tplyr has a default order in which the table will
+#'   be returned, but the order variables will always persist. This allows you
+#'   to use powerful sorting functions like \code{\link[dplyr]{dplyr::arrange}}
+#'   to get your desired order, and in double programming situations, helps your
+#'   validator understand the how you achieved a particular sort order and where
+#'   discrepancies may be coming from.
 #'
-#' When creating order variables for a layer, for each 'by' variable, Tplyr will search
-#' for a <VAR>N version of that variable (i.e. VISIT <-> VISITN, PARAM <-> PARAMN).
-#' If available, this variable will be used for sorting. If not available, Tplyr will
-#' created a new ordered factor version of that variable to use in alphanumeric
-#' sorting. This makes it easy for the user to control a custom sorting order.
-#' Simply leave an existing <VAR>N variable in your dataset if it exists, or create
-#' one based on the order in which you wish to sort - no custom functions in
-#' Tplyr required.
+#'   When creating order variables for a layer, for each 'by' variable Tplyr
+#'   will search for a <VAR>N version of that variable (i.e. VISIT <-> VISITN,
+#'   PARAM <-> PARAMN). If available, this variable will be used for sorting. If
+#'   not available, Tplyr will created a new ordered factor version of that
+#'   variable to use in alphanumeric sorting. This allows the user to control a
+#'   custom sorting order by leaving an existing <VAR>N variable in your dataset
+#'   if it exists, or create one based on the order in which you wish to sort -
+#'   no custom functions in Tplyr required.
 #'
-#' Ordering of results is where things start to differ. Different situations
-#' call for different methods. Descriptive statistics layers keep it simple - the
-#' order in which you input your formats using \code{\link{set_format_strings}} is
-#' the order in which the results will appear (with an order variable added).
-#' For count layers, Tplyr offers three solutions: If the target variable is a
-#' factor, use the factor orders. Separately, if there is a <VAR>N version
-#' of your target variable use that. Finally, you can use a specific data point
-#' from your results columns. The result column can often have multiple datapoints,
-#' between the n counts, percent, distinct n, and distinct percent. Tplyr allows you
-#' to choose which of these values will be used when creating the order columns
-#' for a specified result column (i.e. based on the \code{treat_var} and \code{cols}
-#' arguments). See the 'Sorting a Table' section for more information.
+#'   Ordering of results is where things start to differ. Different situations
+#'   call for different methods. Descriptive statistics layers keep it simple -
+#'   the order in which you input your formats using
+#'   \code{\link{set_format_strings}} is the order in which the results will
+#'   appear (with an order variable added). For count layers, Tplyr offers three
+#'   solutions: If there is a <VAR>N version of your target variable, use that.
+#'   If not, if the target variable is a factor, use the factor orders. Finally,
+#'   you can use a specific data point from your results columns. The result
+#'   column can often have multiple data points, between the n counts, percent,
+#'   distinct n, and distinct percent. Tplyr allows you to choose which of these
+#'   values will be used when creating the order columns for a specified result
+#'   column (i.e. based on the \code{treat_var} and \code{cols} arguments). See
+#'   the 'Sorting a Table' section for more information.
+#'
+#'   Shift layers sort very similarly to count layers, but to order your row
+#'   shift variable, use an ordered factor.
 #'
 #' @param e A \code{group_count} layer
 #' @param order_count_method The logic determining how the rows in the final
@@ -202,56 +215,46 @@ set_nest_count <- function(e, nest_count) {
 #'   'byvarn'.
 #'
 #'
-#' @section Sorting a Table:
-#' You can pass the output of a build to reorder the columns. The function will
-#' order the columns in the order the elipsis was passed. If all of the columns
-#' aren't used, the columns that weren't selected will be moved to the end of
-#' the data.frame after the columns that were passed.
+#' @section Sorting a Table: When a table is built, the output has several
+#'   ordering(ord_) columns that are appended. The first represents the layer
+#'   index. The index is determined by the order the layer was added to the
+#'   table. Following are the indices for the by variables and the target
+#'   variable. The by variables are ordered based on:
 #'
-#' When a table is built, the output has several ordering(ord_) columns that are
-#' appended. The first represents the layer index. The index is determined by
-#' the order the layer was added to the table. The following are the indicies
-#' for the by variables and the target variable. The by variables are ordered
-#' based on:
-#' \enumerate{
-#' \item{A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if one is present.}
-#' \item{If no <VAR>N variable is present, it is ordered based on the factor
-#' present in the target dataset.}
-#' \item{If the variable is not a factor in the
-#' target dataset, it is coersed to one and ordered alphabetically.}
-#' }
+#'   \enumerate{ \item{A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if
+#'   one is present.} \item{If no <VAR>N variable is present, it is ordered
+#'   based on the factor present in the target dataset.} \item{If the variable
+#'   is not a factor in the target dataset, it is coerced to one and ordered
+#'   alphabetically.} }
 #'
-#' The target variable is ordered depending on the type of layer. See more below.
+#'   The target variable is ordered depending on the type of layer. See more
+#'   below.
 #'
-#' @section Ordering a Count Layer:
-#' There are many ways to order a count layer depending on the preferences of
-#' the table programmer. \code{Tplyr} supports sorting by a descending amount in
-#' a column in the table, sorting by a <VAR>N variable, and sorting by a custom
-#' order. These can be set using the `set_order_count_method` function.
-#' \describe{
-#' \item{Sorting by a numeric count}{A selected numeric value from a selected
-#' column will be indexed based on the descending numeric value. The numeric
-#' value extracted defaults to 'n' but can be changed with
-#' `set_result_order_var`. The column selected for sorting defaults to the
-#' first value in the treatment group variable. If there were arguments passed
-#' to the 'cols' argument in the table those must be specified with
-#' `set_ordering_columns`.}
-#' \item{Sorting by a 'varn' variable}{If the treatment variable has a <VAR>N
-#' variable. It can be indexed to that variable.}
-#' \item{Sorting by a factor(Default)}{If a factor is found for the target
-#' variable in the target dataset that is used to order, if no factor is found
-#' it is coerced to a factor and sorted alphabetically.}
-#' \item{Sorting a nested count layer}{If two variables are targeted by a count
-#' layer, two methods can be passed to `set_order_count`. If two are passed, the
-#' first is used to sort the blocks, the second is used to sort the "inside" of
-#' the blocks. If one method is passed, that will be used to sort both.}
-#' }
+#' @section Ordering a Count Layer: There are many ways to order a count layer
+#'   depending on the preferences of the table programmer. \code{Tplyr} supports
+#'   sorting by a descending amount in a column in the table, sorting by a
+#'   <VAR>N variable, and sorting by a custom order. These can be set using the
+#'   `set_order_count_method` function. \describe{ \item{Sorting by a numeric
+#'   count}{A selected numeric value from a selected column will be indexed
+#'   based on the descending numeric value. The numeric value extracted defaults
+#'   to 'n' but can be changed with `set_result_order_var`. The column selected
+#'   for sorting defaults to the first value in the treatment group variable. If
+#'   there were arguments passed to the 'cols' argument in the table those must
+#'   be specified with `set_ordering_columns`.} \item{Sorting by a 'varn'
+#'   variable}{If the treatment variable has a <VAR>N variable. It can be
+#'   indexed to that variable.} \item{Sorting by a factor(Default)}{If a factor
+#'   is found for the target variable in the target dataset that is used to
+#'   order, if no factor is found it is coerced to a factor and sorted
+#'   alphabetically.} \item{Sorting a nested count layer}{If two variables are
+#'   targeted by a count layer, two methods can be passed to `set_order_count`.
+#'   If two are passed, the first is used to sort the blocks, the second is used
+#'   to sort the "inside" of the blocks. If one method is passed, that will be
+#'   used to sort both.} }
 #'
-#' @section Ordering a Desc Layer:
-#' The order of a desc layer is mostly set during the object construction. The
-#' by variables are resolved and index with the same logic as the count layers.
-#' The target variable is ordered based on the format strings that were used
-#' when the layer was created.
+#' @section Ordering a Desc Layer: The order of a desc layer is mostly set
+#'   during the object construction. The by variables are resolved and index
+#'   with the same logic as the count layers. The target variable is ordered
+#'   based on the format strings that were used when the layer was created.
 #'
 #'
 #' @return Returns the modified layer object. The 'ord_' columns are added
@@ -381,6 +384,17 @@ set_result_order_var <- function(e, result_order_var) {
 #'
 #' @return The modified layer
 #' @export
+#'
+#' @examples
+#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+#'       set_denom_ignore("Unknown", "NA")
+#'   ) %>%
+#'   build()
 set_missing_count <- function(e, f_str, string = "NA") {
 
   assert_inherits_class(f_str, "f_str")
@@ -399,7 +413,7 @@ set_missing_count <- function(e, f_str, string = "NA") {
 #' Set values the denominator calculation will ignore
 #'
 #' This is generally used for missing values. Values like "", NA, "NA" are
-#' common ways missing values are presented in a data.frame. In certain cases,
+#' common ways missing values are presented in a data frame. In certain cases,
 #' percentages do not use "missing" values in the denominator. This function
 #' notes different values as "missing" and excludes them from the denominators.
 #'
@@ -408,6 +422,17 @@ set_missing_count <- function(e, f_str, string = "NA") {
 #'
 #' @return The modified layer object
 #' @export
+#'
+#' @examples
+#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+#'       set_denom_ignore("Unknown", "NA")
+#'   ) %>%
+#'   build()
 set_denom_ignore <- function(e, ...) {
 
   dots <- list(...)

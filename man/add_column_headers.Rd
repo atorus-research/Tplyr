@@ -22,13 +22,13 @@ When working with 'huxtable' tables, column headers can be controlled as if they
 \code{add_column_headers} eases the process of introducing these headers.
 }
 \details{
-Headers are creating by providing a single string. Columns are specified by delimitting each header with a '|' symbol.
+Headers are created by providing a single string. Columns are specified by delimitting each header with a '|' symbol.
 Instead of specifying the destination of each header, \code{add_column_headers} assumes that you have organized the columns
 of your data frame before hand. This means that after you use \code{Tplyr::build()}, if you'd like to reorganize the
-default column order (which is simply alphabetical), simply pass the build output to a \code{dplyr::select} statement
-before passing into \code{add_column_headers}.
+default column order (which is simply alphabetical), simply pass the build output to a \code{dplyr::select} or \code{dplyr::relocate}
+statement before passing into \code{add_column_headers}.
 
-Spanning headers are also supported. A spanning header is an overarching headers that sits across multiple columns.
+Spanning headers are also supported. A spanning header is an overarching header that sits across multiple columns.
 Spanning headers are introduced to \code{add_column_header} by providing the spanner text (i.e. the text that
 you'd like to sit in the top row), and then the spanned text (the bottom row) within curly brackets ('\{\}). For example,
 take the iris dataset. We have the names:
@@ -38,7 +38,7 @@ take the iris dataset. We have the names:
 If we wanted to provide a header string for this dataset, with spanners to help with categorization of
 the variables, we could provide the following string:
 
-\code{"Sepal \{Length | Width\} | Petal \{Length | Width\} | Species"}
+\code{"Sepal {Length | Width} | Petal {Length | Width} | Species"}
 }
 \section{Important note}{
 
@@ -51,7 +51,6 @@ is that the number of column match. The rest is up to you.
 There are a few features of \code{add_column_header} that are intended but not yet supported:
 \itemize{
 \item{Nested spanners are not yet supported. Only a spanning row and a bottom row can currently be created}
-\item{Integration with Tplyr objects to obtain header N information is not yet implemented, but will be in future releases}
 \item{Different delimiters and indicators for a spanned group may be used in the future. The current choices were intuitive,
 but based on feedback it could be determined that less common characters may be necessary.}
 }
@@ -59,16 +58,16 @@ but based on feedback it could be determined that less common characters may be 
 
 \section{Token Replacement}{
 
-This function has support for reading from the header_n binding on the table
+This function has support for reading values from the header_n object in a Tplyr table
 and adding them in the column headers. Note: The order of the parameters
 passed in the token is important. They should be first the treatment variable
-then any cols in the order they were passed in the table construction.
+then any \code{cols} variables in the order they were passed in the table construction.
 
 Use a double asterisk "**" at the begining to start the token and another
 double asterisk to close it. You can separate column parameters in the token
-with a single underscore For example, **group1_flag2_param3** will pull the count
-from the header_n binding for group1 in the treat_var, flag2 in the first cols
-argument, and param3 in the second cols argument.
+with a single underscore. For example, **group1_flag2_param3** will pull the count
+from the header_n binding for group1 in the \code{treat_var}, flag2 in the first \code{cols}
+argument, and param3 in the second \code{cols} argument.
 
 You can pass fewer arguments in the token to get the sum of multiple columns.
 For example, **group1** would get the sum of the group1 treat_var,

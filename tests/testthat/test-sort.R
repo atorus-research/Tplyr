@@ -134,7 +134,7 @@ adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
 adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
 adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
-  add_treat_group("T1&T2", c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%
@@ -151,7 +151,7 @@ byvarn_in <- c(Inf, 102, Inf, 101,
 
 adsl2 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
-  add_treat_group("T1&T2", c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%
@@ -168,7 +168,7 @@ bycount_in <- c(Inf, 30, Inf, 2,
 
 adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
-  add_treat_group("T1&T2", c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%

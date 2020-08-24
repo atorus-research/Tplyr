@@ -15,8 +15,16 @@ set_distinct_by(e, distinct_by)
 The layer object with
 }
 \description{
-Occasionally summaries call for counting distint values within a group. \code{set_distinct_by}
-will update a count layer to only count distinct values by the specified variables.
+In some situations, count summaries may want to see distinct counts by a
+variable like subject. For example, the number of subjects in a population
+who had a particular adverse event. \code{set_distinct_by} allows you to set
+the by variables used to determine a distinct count.
+}
+\details{
+When a \code{distinct_by} value is set, distinct counts will be used by
+default. If you wish to combine distinct and not distinct counts, you can
+choose which to display in your \code{\link{f_str}} objects using \code{n},
+\code{pct}, \code{distinct}, and \code{distinct_pct}.
 }
 \examples{
 #Load in pipe

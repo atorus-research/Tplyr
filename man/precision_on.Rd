@@ -12,16 +12,17 @@ set_precision_on(layer, precision_on)
 \arguments{
 \item{layer}{A \code{tplyr_layer} object}
 
-\item{precision_on}{A string, a variable name, or a list of variable names supplied
-using \code{dplyr::vars}.}
+\item{precision_on}{A string, a variable name, or a list of variable names
+supplied using \code{dplyr::vars}.}
 }
 \value{
-For \code{get_precision_on}, the precision_on binding of the supplied layer. For
-  \code{set_precision_on} the modified layer environment.
+For \code{get_precision_on}, the precision_on binding of the supplied
+  layer. For \code{set_precision_on} the modified layer environment.
 }
 \description{
-The precision_on variable is the variable used to establish numeric precision.
-This variable must be included in the list of \code{target_var} variables.
+The precision_on variable is the variable used to establish numeric
+precision. This variable must be included in the list of \code{target_var}
+variables.
 }
 \examples{
 # Load in pipe

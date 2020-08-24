@@ -169,6 +169,7 @@ process_formatting.desc_layer <- function(x, ...) {
 #' @param e the environment summaries are stored in.
 #'
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
+#' @noRd
 get_summaries <- function(e = caller_env()) {
 
   # Define the default list of summaries

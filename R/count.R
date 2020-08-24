@@ -281,7 +281,7 @@ prepare_format_metadata.count_layer <- function(x) {
 process_formatting.count_layer <- function(x, ...) {
   evalq({
 
-    # TODO: Move this to the layer compatibility when we implment that
+    # TODO: Move this to the layer compatibility when we implement that
     # If there is a distinct and there isn't a distinct_by, stop
     if(("distinct" %in% map(format_strings$n_counts$vars, as_name) |
         "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
@@ -349,8 +349,8 @@ process_formatting.count_layer <- function(x, ...) {
         replace_by_string_names(quos(!!!by, summary_var))
     }
 
-    # Replace String names for by and target variables. target variables are included becasue they are
-    # equivilant to by variables in a count layer
+    # Replace String names for by and target variables. target variables are included because they are
+    # equivalent to by variables in a count layer
     # replace_by_string_names(by_expr)
 
 
@@ -383,6 +383,7 @@ process_formatting.count_layer <- function(x, ...) {
 #'   must be removed
 #'
 #' @return A tibble replacing the original counts
+#' @noRd
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
                                    missing_f_str, summary_var, indentation_length) {

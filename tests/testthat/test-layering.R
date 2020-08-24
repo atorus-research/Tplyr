@@ -1,8 +1,6 @@
 context("layering.R")
 
-tplyr_debug(FALSE)
-
-## group_<tpye> family of functions ----
+## group_<type> family of functions ----
 
 test_that("`group_<type>` functions output layers of appropriate type", {
   t <- tplyr_table(iris, Sepal.Width)
