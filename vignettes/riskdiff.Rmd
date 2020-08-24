@@ -31,7 +31,7 @@ Tplyr does not support, nor do we intended to support, a wide array of statistic
 
 Our current implementation of risk difference is solely built on top of the base R function `prop.test`. For any and all questions about this method, please review the `prop.test` documentation within R. 
 
-Risk difference is built on top of count layers, as it's a comparison of proportions. To add risk difference into a count layer, you simply use the function `add_risk_diff`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
+Risk difference is built on top of count layers, as it's a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function `add_risk_diff`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
 
 ```{r riskdiff1}
 t <- tplyr_table(adae, TRTA) %>% 
