@@ -16,6 +16,7 @@ t9 <- tplyr_table(mtcars, gear)
 t10 <- tplyr_table(mtcars, gear)
 t11 <- tplyr_table(mtcars, gear)
 t12 <- tplyr_table(mtcars, gear)
+t13 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -49,9 +50,9 @@ c11 <- group_count(t11, cyl) %>%
 # Change numeric extraction value
 c12 <- group_count(t12, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
-  set_result_order_var(distinct_n)
-
-
+  set_result_order_var(distinct_n) %>%
+  set_distinct_by(am)
+c13 <- group_count(t13, vars(cyl, grp), by = "Test")
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -65,6 +66,7 @@ t9 <- add_layers(t9, c9)
 t10 <- add_layers(t10, c10)
 t11 <- add_layers(t11, c11)
 t12 <- add_layers(t12, c12)
+t13 <- add_layers(t13, c13)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -98,7 +100,7 @@ test_that("Count layers are built as expected", {
                                "ordering_cols"))
   expect_setequal(names(c12), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
-                               "format_strings", "result_order_var"))
+                               "format_strings", "result_order_var", "distinct_by"))
 
   expect_equal(c1$by, quos())
   expect_equal(c2$by, quos(am))
@@ -144,6 +146,9 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t8))
   expect_silent(build(t9))
   expect_silent(build(t10))
+  expect_silent(build(t11))
+  expect_silent(build(t12))
+  expect_silent(build(t13))
 })
 
 test_that("Count layers are processed as expected", {
@@ -259,3 +264,10 @@ test_that("Count layer clauses with invalid syntax give informative error", {
   expect_error(build(t), "group_count `where` condition `bad == code` is invalid.")
 })
 
+
+test_that("Nested count layers can be built with text by variables", {
+  expect_equal(dim(c13$numeric_data), c(27, 6))
+  expect_equal(dim(c13$formatted_data), c(9, 9))
+
+  expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
+})
