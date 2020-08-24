@@ -93,6 +93,9 @@ set_distinct_by <- function(e, distinct_by) {
 
   assert_quo_var_present(distinct_by, envir = e)
 
+  assert_inherits_class(quo_get_expr(distinct_by), "name")
+  assert_quo_var_present(vars(!!distinct_by), envir = e, allow_character = FALSE)
+
   env_bind(e, distinct_by = distinct_by)
 
   e
