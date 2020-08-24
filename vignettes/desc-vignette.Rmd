@@ -149,7 +149,7 @@ tplyr_table(adsl, TRT01P) %>%
       )
   ) %>% 
   build() %>% 
-  select(-starts_with("ord"))
+  select(-starts_with("ord")) %>% 
   kable()
 
 ```
@@ -196,13 +196,71 @@ Note that the table code used to produce the output is the same. Now 'Tplyr' use
 
 ## Formatting 
 
+A lot of the nuance to formatting descriptive statistics layers has already been covered above, but there are a couple more tricks to getting the most out of 'Tplyr'. One of these tricks is filling empty values. 
 
+By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out. 
 
-## Auto Precision
+```{r missing}
+adlb_2 <- adlb %>% 
+  filter(TRTA != "Placebo")
 
-The more interesting development for descriptive statistics was the addition of auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. Particularly when working with labs results, different tests may have difference necessities for decimal precision depending on the numeric range of the tests, the units the data are collected in, etc. So it is common practice to vary the precision of the data being presented based on the data collected. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, for standard deviation +2. 
+tplyr_table(adlb_2, TRTA) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01P) %>% 
+  add_layer(
+    group_desc(AVAL, by=PARAMCD) %>% 
+      set_format_strings('Mean (SD)' = f_str('xxx (xxx)', mean, sd))
+  ) %>% 
+  build() %>% 
+  head() %>% 
+  select(-starts_with("ord")) %>% 
+  kable()
 
-Tplyr now handles these cases, and in Tplyr style, it's intuitive and easy to control. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. Now - if you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
+```
+
+Note how the entire example above has the `var1_Placebo` records missing. 'Tplyr' gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the f_str object using the `empty` parameter
+
+```{r missing1}
+adlb_2 <- adlb %>% 
+  filter(TRTA != "Placebo")
+
+tplyr_table(adlb_2, TRTA) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01P) %>% 
+  add_layer(
+    group_desc(AVAL, by=PARAMCD) %>% 
+      set_format_strings('Mean (SD)' = f_str('xxx.xx (xxx.xxx)', mean, sd, empty=c(.overall="MISSING")))
+  ) %>% 
+  build() %>% 
+  head() %>% 
+  select(-starts_with("ord")) %>% 
+  kable()
+```
+
+Notice that the `empty` parameter here is a named character vector. The name used is '.overall'. When you name this vector, 'Tplyr' know to fill the entire space when both elements are empty. But you may not _want_ to fill the entire space. In the example above, both mean and standard deviation. are missing for Placebo, but other results are just missing standard deviation, which can happen if there's only one record in the group. Here, if you don't name the `empty` parameter, 'Tplyr' instead fits your specified 'empty' string into the formatted text, and aligns the data properly (assuming your string fits).
+
+```{r missing2}
+adlb_2 <- adlb %>% 
+  filter(TRTA != "Placebo")
+
+tplyr_table(adlb_2, TRTA) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01P) %>% 
+  add_layer(
+    group_desc(AVAL, by=PARAMCD) %>% 
+      set_format_strings('Mean (SD)' = f_str('xxx.xx (xxx.xxx)', mean, sd, empty=c("NA")))
+  ) %>% 
+  build() %>% 
+  head() %>% 
+  select(-starts_with("ord")) %>% 
+  kable()
+```
+
+### Auto Precision
+
+You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, for standard deviation +2. 
+
+'Tplyr' has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
 
 ```{r autoprecision1}
 
@@ -214,13 +272,14 @@ tplyr_table(adlb, TRTA) %>%
       )
   ) %>% 
   build() %>% 
+  head(20) %>% 
   kable()
 
 ```
 
 As you can see, the decimal precision is now varying depending on the test being performed. Notice that both the integer and the decimal side of each number fluctuate as well. Tpylr collects both the integer and decimal precision, and you can specify both separately. For example, you could use `x`'s to specify a default number of spaces for your integers that are used consistently across by variables, but vary the decimal precision based on collected data. You can also increment the number of spaces for both integer and decimal separately. 
 
-But - this is kind of ugly, isn't it? Do we really need all 5 decimal places collected for CA? For this reason, you're able to set a cap on the precision that's displayed:
+But - this is kind of ugly, isn't it? Do we really need all 6 decimal places collected for CA? For this reason, you're able to set a cap on the precision that's displayed:
 
 ```{r autoprecision2}
 tplyr_table(adlb, TRTA) %>% 
@@ -232,7 +291,7 @@ tplyr_table(adlb, TRTA) %>%
       )
   ) %>% 
   build() %>% 
-  head() %>% 
+  head(20) %>% 
   kable()
 
 ```
@@ -242,11 +301,11 @@ Now that looks better. The `cap` argument is part of `set_format_strings`. You n
 This was a basic situation, but if you're paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don't want that? What about multiple summary variable? How do we determine precision then? We have modifier functions for this:
 
 ```{r precision3}
-tplyr_table(adlb, TRTA, where = SAFFL=='Y' & AVISIT != '') %>% 
+tplyr_table(adlb, TRTA) %>% 
   add_layer(
-    group_desc(vars(AVAL, CHG, BASE), by = vars(AVISIT,PARAMCD)) %>% 
+    group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
       set_format_strings(
-        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd, empty="NA"),
         cap = c(int=3, dec=2)
       ) %>% 
       set_precision_on(AVAL) %>% 
