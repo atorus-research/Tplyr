@@ -149,7 +149,10 @@ tplyr_default_options <- list(
   tplyr.custom_summaries = NULL,
 
   # Set to avoid printing in scientific notation
-  tplyr.scipen = 1000
+  tplyr.scipen = 1000,
+
+  # Quantile algorithm setting
+  tplyr.quantile_type = 7
 )
 
 # Carry out process on load ----
