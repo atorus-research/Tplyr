@@ -13,7 +13,7 @@ get_custom_summaries <- function(e) {
 
   # If the custom_summaries object exists in the layer environment then grab it
   if (exists("custom_summaries", envir=e)){
-    cust_sums <- append(env_get(e, "custom_summaries"), cust_sums)
+    cust_sums <- append(env_get(e, "custom_summaries"), cust_sums, after=0)
   }
 
   # Check to make sure all the summaries are named
