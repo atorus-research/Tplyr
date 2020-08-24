@@ -98,7 +98,11 @@ tplyr_table(adsl, TRT01P) %>%
   kable()
 ```
 
-This next example demonstrates using quantile algorithm Type 3, which matches the SAS definition.
+This next example demonstrates using quantile algorithm Type 3, which matches the SAS definition of:
+
+$$
+\textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
+$$
 
 ```{r quantile_types_sas}
 options(tplyr.quantile_type = 3)
@@ -118,9 +122,20 @@ options(tplyr.quantile_type=7)
 
 It's up to you to determine which algorithm you should use - but we found it necessary to provide you with the flexibility to change this within the default summaries.
 
+But what if Tplyr doesn't offer you the summaries that you need? 
+
 ## Custom Summaries
 
-You can see that there was a  lot of attention given to counting over the past three weeks - but descriptive statistics weren't neglected either. Let's start simple - custom summaries no work properly on multi-variable summaries:
+We understand that our defaults may not cover every descriptive statistic that you'd like to see. That's why we've opened to door to creating custom summaries. Custom summaries allow you to provide any function you'd like into a desc layer. You can focus on the derivation and how to calculate the number you want to see. Tplyr can consume this function, and use all the existing tools within Tplyr to produce the string formatted result alongside any of the default summaries we provide as well. 
+
+Custom summaries may be provided in two ways: 
+
+- Through the `tplyr.custom_summaries` option set at your session level
+- Through the function `set_custom_summaries` at the layer level
+
+As with any other setting in Tplyr, the layer setting will always take precedence over any other setting. 
+
+Let's look at an example.
 
 ```{r multi-custom}
 tplyr_table(adsl, TRT01P) %>%
@@ -139,9 +154,49 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-Not much more to it! Just use `.var` instead of the a distinct variable name. 
+Here, a few important things are demonstrated:
+
+- This is a multi-variable descriptive statistics layer. Both `AGE` and `HEIGHTBL` are being summarized in the same layer. AGE results go to the `var1_` variables and `HEIGHTBL` results go to the `var2_` variables.
+- The parameter names in `set_custom_summaries`, or names on the left side of the equals, flow into `set_format_strings` in the `f_str` calls. Just like the default summaries, `geometric_mean` becomes the name that you refer to in order to use the geometric mean derivation in a summary. 
+- In geometric mean, the target variable that you're summarizing is referred to as `.var`. This may not seem intuitive. The reason we have to use `.var` is so that, like in this example, the custom function can be applied to each of the separate target variables. 
+
+Another note about custom summaries is that you're able to overwrite the default summaries built into Tplyr as well. Don't like the default summary functions that we provide? Use the `tplyr.custom_summaries` option to overwrite them in your session, and add any new ones that you would like to include.
+
+For example, here we use the Tplyr default mean.
+
+```{r custom_options}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE) %>% 
+      set_format_strings("Mean" = f_str('xx.xx', mean))
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+But now, let's overwrite `mean` using a custom summary. Let's use a trimmed mean instead, taking 20% of observations off of both ends.
+
+```{r custom_options_trimmed}
+options(tplyr.custom_summaries = 
+          rlang::quos(
+            mean = mean(.var, na.rm=TRUE, trim=0.2)
+          )
+        )
+
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE) %>% 
+      set_format_strings("Mean" = f_str('xx.xx', mean))
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
 
 ## Formatting 
+
+
 
 ## Auto Precision
 
