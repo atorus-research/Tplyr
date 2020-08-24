@@ -442,3 +442,19 @@ set_denom_ignore <- function(e, ...) {
   e
 
 }
+
+#' Set the value of a outer nested count layer to Inf or -Inf
+#'
+#' @param e A count layer
+#' @param outer_inf A logical value. If the value is set to TRUE. The outer
+#'   count layer is set to Inf, if it is false it is set to -Inf.
+#'
+#' @return The modified count layer.
+#' @export
+set_outer_inf <- function(e, outer_inf) {
+  assert_has_class(outer_inf, "logical")
+
+  env_bind(e, outer_inf = outer_inf)
+
+  e
+}

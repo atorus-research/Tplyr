@@ -17,6 +17,7 @@ t10 <- tplyr_table(mtcars, gear)
 t11 <- tplyr_table(mtcars, gear)
 t12 <- tplyr_table(mtcars, gear)
 t13 <- tplyr_table(mtcars, gear)
+t14 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -53,6 +54,8 @@ c12 <- group_count(t12, cyl) %>%
   set_result_order_var(distinct_n) %>%
   set_distinct_by(am)
 c13 <- group_count(t13, vars(cyl, grp), by = "Test")
+c14 <- group_count(t14, vars(cyl, grp)) %>%
+  set_outer_inf(FALSE)
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -67,6 +70,7 @@ t10 <- add_layers(t10, c10)
 t11 <- add_layers(t11, c11)
 t12 <- add_layers(t12, c12)
 t13 <- add_layers(t13, c13)
+t14 <- add_layers(t14, c14)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -149,6 +153,7 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t11))
   expect_silent(build(t12))
   expect_silent(build(t13))
+  expect_silent(build(t14))
 })
 
 test_that("Count layers are processed as expected", {
@@ -270,4 +275,8 @@ test_that("Nested count layers can be built with text by variables", {
   expect_equal(dim(c13$formatted_data), c(9, 9))
 
   expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
+})
+
+test_that("set_outer_inf works as expected", {
+  expect_equal(c14$formatted_data$ord_layer_2, rep(c(-Inf, 1, 2), 3))
 })

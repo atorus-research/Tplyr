@@ -207,6 +207,20 @@ tplyr_table(adsl, TRT01A) %>%
 
 ```
 
+By default the ordering helper for the grouping rows is set to Inf to ensure they are always at the top after being sorted. If you need to sort the outer rows on the bottom, or sort the other values in a descending order, the function `set_outer_inf()` allows you to change this behavior and set the ordering helper to -Inf.
+
+```{r}
+tplyr_table(adsl, TRT01A) %>%
+  add_total_group() %>%
+  add_layer(
+    group_count(vars(EOSSTT, DCDECOD)) %>%
+      set_outer_inf(FALSE)
+  ) %>%
+  build() %>%
+  select(starts_with("ord"), starts_with("row")) %>%
+  kable()
+```
+
 ### bycount
 A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with `set_ordering_cols()` which takes the value of the treatment group and any 'cols' value to select the column ordering should be done by.
 
