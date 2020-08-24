@@ -171,6 +171,24 @@ suppressWarnings({
 })
 ```
 
+In this example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.
+
+```{r}
+suppressWarnings({
+  tplyr_table(adlb, TRTA, where = !is.na(LBNRIND) & VISIT == "WEEK 4") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT)) %>%
+      set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
+      set_denoms_by(BNRIND, PARAM, VISIT) # Each row made by LBNRIND, TRTA
+  ) %>%
+  build() %>%
+  head() %>%
+  kable()
+})
+```
+
+These are a few examples however you can pass any combination of variables used in the table or layer so any one of the 32 combinations of the five variables used in the example above could be used to calculate the denominators. 
+
 # References
 [Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
 
