@@ -93,9 +93,6 @@ set_distinct_by <- function(e, distinct_by) {
 
   assert_quo_var_present(distinct_by, envir = e)
 
-  assert_inherits_class(quo_get_expr(distinct_by), "name")
-  assert_quo_var_present(vars(!!distinct_by), envir = e, allow_character = FALSE)
-
   env_bind(e, distinct_by = distinct_by)
 
   e
@@ -447,4 +444,24 @@ set_denom_ignore <- function(e, ...) {
 
   e
 
+}
+
+#' Set the value of a outer nested count layer to Inf or -Inf
+#'
+#' @param e A count layer
+#' @param outer_inf Either 'asc' or 'desc'. If desc the final ordering helper
+#'   will be set to Inf, if 'asc' the ordering helper is set to -Inf.
+#'
+#' @return The modified count layer.
+#' @export
+set_outer_sort_position <- function(e, outer_sort_position) {
+
+  assert_that(outer_sort_position %in% c("asc", "desc"),
+              msg = "outer_sort_position must be 'asc' 'desc'")
+
+  outer_inf <- outer_sort_position == "desc"
+
+  env_bind(e, outer_inf = outer_inf)
+
+  e
 }

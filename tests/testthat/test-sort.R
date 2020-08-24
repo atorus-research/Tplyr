@@ -124,7 +124,7 @@ test_that("A group_desc layer can be ordered properly", {
   expect_equivalent(b_t[, 1], tibble(row_label1 = rep(c("4", "6", "8"), each = 2)))
   expect_equivalent(b_t[, 2], tibble(row_label2 = rep(c("n", "Mean (SD)"), 3)))
   expect_equivalent(b_t[, 7], tibble(ord_layer_1 = as.integer(rep(c(1, 2, 3), each = 2))))
-  expect_equivalent(b_t[, 8], tibble(ord_layer_2 = 1:6))
+  expect_equivalent(b_t[, 8], tibble(ord_layer_2 = as.integer(rep(c(1, 2), 3))))
 
 })
 

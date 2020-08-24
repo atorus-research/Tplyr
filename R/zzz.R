@@ -249,3 +249,4 @@ missing_string <- NULL
 denom_ignore <- NULL
 denoms_distinct_df <- NULL
 missing_name <- NULL
+outer_inf <- NULL
