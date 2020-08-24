@@ -21,32 +21,106 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
 load("adlb.Rdata")
 load("adsl.Rdata")
 ```
 
+Descriptive statistics in 'Tplyr' are created using `group_desc` function when creating a layer. While `group_desc` allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from `set_format_strings` where the actual summaries are declared. 
+
+```{r intro}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
+      set_format_strings(
+        "n"        = f_str("xx", n),
+        "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
+        "Median"   = f_str("xx.x", median),
+        "Q1, Q3"   = f_str("xx, xx", q1, q3),
+        "Min, Max" = f_str("xx, xx", min, max),
+        "Missing"  = f_str("xx", missing)
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+
+```
+
+The settings above are actually the 'Tplyr' default, so if these are the results you desire, then there's no need to use `set_format_strings` at all - and just the `group_desc` call can be used. But let's walk through this call to `set_format_strings` to understand in detail what's going on:
+
+1) The quotes strings on the left of the '=', to name each parameter, become the row label in the output. This allows you to define in `set_format_strings` some custom text to explain the summary that is presented on the associated row. This text is fully in your control.
+2) On the right side of each equals is a call to `f_str`. As explained in the 'Getting Started' vignette, this is an object that captures a lot of metadata to understand how the strings should be presented. 
+3) Within the `f_str` call, you see x's in quotes. This defines how you'd like the numbers formatted from the resulting summaries. The number of x's you use on the left side of a decimal control the space allotted for an integer, and the right side controls the decimal precision. Decimals are rounded prior to string formatting - so no need to worry about that. Note that this forcefully sets the decimal and integer precision - 'Tplyr' can automatically determine this for you as well, but more on that later.
+4) After the x's there are unquoted variable names. This is where you specify the actual summaries that will be performed. Notice that some `f_str` calls have two summaries specified. This allows you to put two summaries in the same string and present them on the same line. 
+
+But where do these summary names come from? And which ones does 'Tplyr' have? 
+
 ## Built-in Summaries
+
+We've built a number of default summaries into 'Tplyr', which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to 'Tplyr' are listed below. In the second column are the names that you would use within an `f_str` call to use them. In the third column, we have the syntax used to make the function call.
 
 ```{r varnames, echo=FALSE}
 x <- data.frame(
   Statistic = c('N', 'Mean', "Standard Deviation", "Median", "Variance", "Minimum",
                 "Maximum", "Interquartile Range", "Q1", "Q3", "Missing"),
-  `Variable Names` = c("n", "mean", "sd", "median", "variance", "min", "max", "iqr", "q1", "q3", "missing")
+  `Variable Names` = c("n", "mean", "sd", "median", "variance", "min", "max", "iqr", "q1", "q3", "missing"),
+  `Function Call` = c("n()", "mean(.var, na.rm=TRUE)", "sd(.var, na.rm=TRUE)", "median(.var, na.rm=TRUE)",
+                      "var(.var, na.rm=TRUE)", "min(.var, na.rm=TRUE)", "max(.var, na.rm=TRUE)", 
+                      "IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')",
+                      "quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[2]]", 
+                      "quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[4]]", 
+                      "sum(is.na(.var))")
 )
 
 x %>% 
-  kable(align="cc")
+  kable(align="ccl", col.names=c('Statistic', 'Variable Names', 'Function Call'))
 
 ```
 
-## Notes About Built-in's
+### Notes About Built-in's
 
-## Formatting
+Note that the only non-default option being used in any of the function calls above is `na.rm=TRUE`. For most of the functions, this is likely fine - but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:
+
+$$
+m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
+$$
+That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the `tplyr.quantile_type` option. If you're intending to match the SAS definition, you can use Type 3. For more information, see the `quantile` documentation. 
+
+The example below demonstrates using the default quantile algorithm in R
+
+```{r quantile_types_default}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(CUMDOSE) %>% 
+      set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
+  ) %>% 
+  build() %>%
+  select(-starts_with("ord")) %>% 
+  kable()
+```
+
+This next example demonstrates using quantile algorithm Type 3, which matches the SAS definition.
+
+```{r quantile_types_sas}
+options(tplyr.quantile_type = 3)
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(CUMDOSE) %>% 
+      set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
+  ) %>% 
+  build() %>% 
+    select(-starts_with("ord")) %>% 
+  kable()
+```
+
+```{r echo=FALSE}
+options(tplyr.quantile_type=7)
+```
+
+It's up to you to determine which algorithm you should use - but we found it necessary to provide you with the flexibility to change this within the default summaries.
 
 ## Custom Summaries
 
-You can see that there was a lot of attention given to counting over the past three weeks - but descriptive statistics weren't neglected either. Let's start simple - custom summaries no work properly on multi-variable summaries:
+You can see that there was a  lot of attention given to counting over the past three weeks - but descriptive statistics weren't neglected either. Let's start simple - custom summaries no work properly on multi-variable summaries:
 
 ```{r multi-custom}
 tplyr_table(adsl, TRT01P) %>%
@@ -60,11 +134,14 @@ tplyr_table(adsl, TRT01P) %>%
       )
   ) %>% 
   build() %>% 
+  select(-starts_with("ord"))
   kable()
 
 ```
 
 Not much more to it! Just use `.var` instead of the a distinct variable name. 
+
+## Formatting 
 
 ## Auto Precision
 
