@@ -32,21 +32,19 @@ A `Tplyr` table is constructed of two main objects, a `table_table` object and `
 
 ## The `tplyr_table` Object
 
-The `tplyr_table` object is the main container upon which a `tplyr` table is constructed. `tplyr` tables are made up of
-one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table` object contains
-those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.
+The `tplyr_table` object is the conceptual "table" that contains the all of the logic necessary to construct and display the data. `tplyr` tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table` object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.
 
 When a `tplyr_table` is created, it will contain the following bindings:
 
 - target - The dataset upon which summaries will be performed
 - count_layer_formats - default formats to be used on count layers in the table
 - shift_layer_formats - default formats to be used on shift layers in the table
-- desc_layer_formats - default formats to be used on shift layers in the table
+- desc_layer_formats - default formats to be used on desc layers in the table
 - pop_data - The data containing population information. This defaults to the target dataset
 - cols - A categorical variable to present summaries grouped by column (in addition to `treat_var`)
 - table_where - The `where` parameter provided, used to subset the `target` data
 - treat_var - Variable used to distinguish treatment groups.
-- header_n - Default header N values based on `treat_var`
+- header_n - Default header N values based on `treat_var` and any `cols` variables
 - pop_treat_var - The treatment variable for `pop_data` (if different)
 - layers - The container for individual layers of a `tplyr_table`
 - treat_grps - Additional treatment groups to be added to the summary (i.e. Total)
@@ -64,7 +62,7 @@ t
 Users of `Tplyr` interface with `tplyr_layer` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `desc` layers create descriptive statistics, and `shift` layers summaries the counts for different changes in states.
 
 - **Count Layers**
-  - Count layers allow you to easily create summaries based on counting values with a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurences of that adverse event.
+  - Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurences of that adverse event.
 - **Descriptive Statistics Layers**
   - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into `tplyr` already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings`, and you can also add your own summaries using `set_custom_summaries`. This allows you to easily implement any additional summary statistics you want presented.
 - **Shift Layers**
