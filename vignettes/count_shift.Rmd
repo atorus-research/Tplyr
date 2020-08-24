@@ -147,7 +147,9 @@ suppressWarnings({
   add_layer(
     group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT)) %>%
       set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
-      set_denoms_by(TRTA, LBNRIND) # This is what it normally defaults to
+      # This is what it normally defaults to, the 3x3 box formed by the target variables
+      set_denoms_by(TRTA, PARAM, VISIT) 
+    
   ) %>%
   build() %>%
   head() %>%
@@ -155,7 +157,9 @@ suppressWarnings({
 })
 ```
 
-In the example above, the denominators were based on the column variables, `TRTA` and `LBNRIND`. In this example, the denominators are based on the 3 x 3 "box" formed by the baseline and reference variables.
+In the example above, the denominators were based on the by and treatment variables, `TRTA`, `PARAM` and `VISIT`. In this example, the denominators are based on the 3 x 3 "box" formed by the baseline and reference variables.
+
+Below, the denominators are changed to be based on the column instead of the 3 x 3 box. By passing the column variables, `TRTA` and `LBNRIND` the layer will use those denominator when determining the percentages.
 
 ```{r}
 suppressWarnings({
@@ -163,7 +167,7 @@ suppressWarnings({
   add_layer(
     group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, VISIT)) %>%
       set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
-      set_denoms_by(TRTA, PARAM, VISIT) # 3 x 3 box made by BNRIND, LBNRIND
+      set_denoms_by(TRTA, LBNRIND) # Use the column total as the denominator
   ) %>%
   build() %>%
   head() %>%
