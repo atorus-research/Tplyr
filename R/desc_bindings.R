@@ -9,7 +9,7 @@
 get_custom_summaries <- function(e) {
 
   # Grab any custom summaries set within an option
-  cust_sums <- append(list(), getOption('tplyr.custom_summaries'))
+  cust_sums <- append(list(), as.list(getOption('tplyr.custom_summaries')))
 
   # If the custom_summaries object exists in the layer environment then grab it
   if (exists("custom_summaries", envir=e)){
