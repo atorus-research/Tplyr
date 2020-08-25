@@ -128,7 +128,7 @@ tplyr_default_options <- list(
 
   # Count layer defaults
   tplyr.count_layer_default_formats =
-    list(n_counts = f_str("a (xxx.x%)", n, pct),
+    list(n_counts = f_str("a (xxx.x%)", distinct, distinct_pct),
          riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
          ),
 
