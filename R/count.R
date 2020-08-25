@@ -167,7 +167,21 @@ process_count_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
-      ungroup() %>%
+      ungroup()
+
+    # If there is a missing_count_string, but its not in the dataset
+    if(!is.null(missing_count_string) &&
+
+       !((missing_string %in% unique(built_target[, as_name(target_var[[1]])])) ||
+        any(is.na(built_target[, as_name(target_var[[1]])])))) {
+      # This adds the missing string as a factor to the tallies. This is needed
+      # to make sure the missing row is added even if there are no missing values.
+      summary_stat <- summary_stat %>%
+        mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
+                                           c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+    }
+
+    summary_stat <- summary_stat %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, total = 0)) %>%
@@ -201,9 +215,21 @@ process_count_distinct_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
-      ungroup() %>%
-      # complete all combinations of factors to include combinations that don't exist.
-      # add 0 for combinations that don't exist
+      ungroup()
+
+      if(!is.null(missing_count_string) &&
+         !(missing_string %in% unique(build_target[, as_name(target_var[[1]])]) ||
+           any(is.na(built_target[, as_name(target_var[[1]])])))) {
+        # This adds the missing string as a factor to the tallies. This is needed
+        # to make sure the missing row is added even if there are no missing values.
+        distinct_stat <- distinct_stat %>%
+          mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
+                                             c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+      }
+
+    # complete all combinations of factors to include combinations that don't exist.
+    # add 0 for combinations that don't exist
+    distinct_stat <- distinct_stat %>%
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
