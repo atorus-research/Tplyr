@@ -771,9 +771,21 @@ test_that('T17',{
       add_layer(
         group_count(RACE) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'),
+                        args = list(conf.level = 0.9, correct=FALSE, alternative='less'))
       )
-    suppressWarnings( build(t))
-    test_17 <- get_stats_data(t)[[1]]$riskdiff
+
+    t2 <- tplyr_table(adsl, TRT01A, cols=SEX) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      )
+    suppressWarnings(build(t))
+    suppressWarnings(build(t2))
+    test_17 <- c(get_stats_data(t), get_stats_data(t2))
 
 
     # output table to check attributes
@@ -781,6 +793,7 @@ test_that('T17',{
 
     #clean up working directory
     rm(t)
+    rm(t2)
     rm(test_17)
 
     #load output for checks
@@ -795,21 +808,43 @@ test_that('T17',{
   cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
   tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
   cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
-  t17 <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
-  testthat::expect_equal(t17$estimate[[1]] - t17$estimate[[2]],
-                         filter(test_17, summary_var == 'WHITE' & measure == 'dif')[[3]],
+  t17_noarg <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
+  t17_args <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p), conf.level = 0.9, correct=FALSE, alternative='less')
+  tot_t2 <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & SEX == "F"), n=n())[[1]]
+  cnt_t2 <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
+  tot_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & SEX == "F"), n=n())[[1]]
+  cnt_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
+  t17_noarg2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t2,tot_p2))
+  testthat::expect_equal(t17_noarg$estimate[[1]] - t17_noarg$estimate[[2]],
+                         filter(test_17[[1]]$riskdiff, summary_var == 'WHITE' & measure == 'dif')[[3]],
                          label = "T17.1")
-  testthat::expect_equal(c(t17$conf.int[1], t17$conf.int[2]),
-                         c(filter(test_17, summary_var == 'WHITE' & measure == 'low')[[3]],
-                           filter(test_17, summary_var == 'WHITE' & measure == 'high')[[3]]),
+  testthat::expect_equal(c(t17_noarg$conf.int[1], t17_noarg$conf.int[2]),
+                         c(filter(test_17[[1]]$riskdiff, summary_var == 'WHITE' & measure == 'low')[[3]],
+                           filter(test_17[[1]]$riskdiff, summary_var == 'WHITE' & measure == 'high')[[3]]),
                          label = "T17.2")
+  testthat::expect_equal(c(t17_args$estimate[[1]] - t17_args$estimate[[2]], t17_args$conf.int[1], t17_args$conf.int[2]),
+                         c(filter(test_17[[2]]$riskdiff, summary_var == 'WHITE' & measure == 'dif')[[3]],
+                           filter(test_17[[2]]$riskdiff, summary_var == 'WHITE' & measure == 'low')[[3]],
+                           filter(test_17[[2]]$riskdiff, summary_var == 'WHITE' & measure == 'high')[[3]]),
+                         label = "T17.3")
+  testthat::expect_equal(c(t17_noarg2$estimate[[1]] - t17_noarg2$estimate[[2]], t17_noarg2$conf.int[1], t17_noarg2$conf.int[2]),
+                         c(filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'dif')[[4]],
+                           filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'low')[[4]],
+                           filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'high')[[4]]),
+                         label = "T17.4")
 
   #clean up working directory
   rm(tot_p)
   rm(cnt_p)
   rm(tot_t)
   rm(cnt_t)
-  rm(t17)
+  rm(t17_noarg)
+  rm(t17_args)
+  rm(tot_p2)
+  rm(cnt_p2)
+  rm(tot_t2)
+  rm(cnt_t2)
+  rm(t17_noarg2)
   rm(test_17)
 })
 
@@ -2152,6 +2187,84 @@ test_that('T41',{
   #clean up working directory
   rm(t41_1)
   rm(test_41)
+})
+
+
+#test 42 ----
+test_that('T42',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(ETHNIC, by=RACE)
+      ) %>%
+      add_layer(
+        group_count(ETHNIC, by=SEX)
+      )
+
+    test_42 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
+
+    # output table to check attributes
+    save(test_42, file = "~/Tplyr/uat/output/test_42.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_42)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_42.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t42_racesort <- distinct(adsl, RACE, RACEN) %>%
+    mutate(sorter = as.numeric(RACEN)) %>%
+    select(RACE,sorter)
+  t42_sexsort <- distinct(adsl, SEX) %>%
+    mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
+    select(SEX,sorter)
+
+  t42_byrace <- group_by(adsl, TRT01P, RACE, ETHNIC) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, ETHNIC ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = RACE) %>%
+    left_join(t42_racesort, by="RACE") %>%
+    select(label, ETHNIC, sorter)  %>%
+    mutate(ord_layer = 1)
+
+  t42_bysex <- group_by(adsl, TRT01P, SEX, ETHNIC) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, SEX, ETHNIC ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = SEX) %>%
+    left_join(t42_sexsort, by="SEX") %>%
+    select(label, ETHNIC, sorter) %>%
+    mutate(ord_layer = 2)
+
+  t42_1 <- rbind(t42_byrace, t42_bysex)%>%
+    arrange(ord_layer, sorter)
+
+  testthat::expect_equal(c(t42_1$label, t42_1$sorter),
+                         c(test_42$row_label1, test_42$ord_layer_1),
+                         label = "T41.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t42_racesort)
+  rm(t42_sexsort)
+  rm(t42_byrace)
+  rm(t42_bysex)
+  rm(t42_1)
+  rm(test_42)
 })
 
 #clean up ----
