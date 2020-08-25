@@ -78,6 +78,10 @@ Format strings are one of the most powerful components of 'Tplyr'.
   custom summaries declared using \code{\link{set_custom_summaries}}. See
   \code{\link{set_format_strings}} for some more notes about layers specific
   implementation.
+
+  Count and shift layers frequencies and percentages can be specified with
+  'n' and 'pct' respectively. Distinct values can also be presented in count
+  layers with the arguments 'distinct' and 'distinct_total'.
 }
 \examples{
 

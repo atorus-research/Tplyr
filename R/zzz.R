@@ -142,6 +142,9 @@ tplyr_default_options <- list(
          "Missing"  = f_str("xx", missing)
          ),
 
+  # Shift layer defaults
+  tplyr.shift_layer_default_formats = list(f_str("a", n)),
+
   # Precision caps for decimal and integer precision
   tplyr.precision_cap = c('int' = 99, 'dec'=99),
 
@@ -249,3 +252,4 @@ missing_string <- NULL
 denom_ignore <- NULL
 denoms_distinct_df <- NULL
 missing_name <- NULL
+outer_inf <- NULL
