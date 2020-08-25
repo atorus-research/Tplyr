@@ -5,6 +5,8 @@
 \alias{set_desc_layer_formats}
 \alias{get_count_layer_formats}
 \alias{set_count_layer_formats}
+\alias{get_shift_layer_formats}
+\alias{set_shift_layer_formats}
 \title{Get or set the default format strings for descriptive statistics layers}
 \usage{
 get_desc_layer_formats(obj)
@@ -14,11 +16,17 @@ set_desc_layer_formats(obj, ...)
 get_count_layer_formats(obj)
 
 set_count_layer_formats(obj, ...)
+
+get_shift_layer_formats(obj)
+
+set_shift_layer_formats(obj, ...)
 }
 \arguments{
 \item{obj}{A tplyr_table object}
 
 \item{...}{formats to pass forward}
+
+\item{f_str}{format to pass forward}
 }
 \description{
 Tplyr provides you with the ability to set table-wide defaults of format

@@ -15,7 +15,7 @@ set_format_strings(e, ...)
 \arguments{
 \item{e}{Layer on which to bind format strings}
 
-\item{...}{Named parmeters containing calls to \code{f_str} to set the format strings}
+\item{...}{Named parameters containing calls to \code{f_str} to set the format strings}
 
 \item{cap}{A named character vector containing an 'int' element for the cap
 on integer precision, and a 'dec' element for the cap on decimal precision.}
@@ -46,25 +46,28 @@ Format strings are one of the most powerful components of 'Tplyr'.
   If you are additionally supplying a statistic, like risk difference using
   \code{\link{add_risk_diff}}, you specify the count formats using the name
   'n_counts'. The risk difference formats would then be specified using the
-  name "riskdiff". In a descriptive statistic layer,
-  \code{set_format_strings} allows you to do a couple more things: \itemize{
+  name 'riskdiff'. In a descriptive statistic layer,
+  \code{set_format_strings} allows you to do a couple more things:
+  \itemize{
   \item{By naming parameters with character strings, those character strings
-  become a row label in the resulting data frame} \item{The actual summaries
-  that are performed come from the variable names used within the
-  \code{\link{f_str}} calls} \item{Using multiple summaries (declared by your
-  \code{\link{f_str}} calls), multiple summary values can appear within the
-  same line. For example, to present "Mean (SD)" like displays.} \item{Format
-  strings in the desc layer also allow you to configure how empty values
-  should be presented. In the \code{f_str} call, use the \code{empty}
-  parameter to specify how missing values should present. A single element
-  character vector should be provided. If the vector is unnamed, that value
-  will be used in the format string and fill the space similar to how the
-  numbers will display. Meaning - if your empty string is 'NA' and your
-  format string is 'xx (xxx)', the empty values will populate as 'NA ( NA)'.
-  If you name the character vector in the 'empty' parameter '.overall', like
-  \code{empty = c(.overall='')}, then that exact string will fill the value
-  instead. For example, providing 'NA' will instead create the formatted
-  string as 'NA' exactly.}}
+  become a row label in the resulting data frame}
+  \item{The actual summaries that are performed come from the variable names
+  used within the \code{\link{f_str}} calls}
+  \item{Using multiple summaries (declared by your \code{\link{f_str}}
+  calls), multiple summary values can appear within the same line. For
+  example, to present "Mean (SD)" like displays.}
+  \item{Format strings in the desc layer also allow you to configure how
+  empty values should be presented. In the \code{f_str} call, use the
+  \code{empty} parameter to specify how missing values should present. A
+  single element character vector should be provided. If the vector is
+  unnamed, that value will be used in the format string and fill the space
+  similar to how the numbers will display. Meaning - if your empty string is
+  'NA' and your format string is 'xx (xxx)', the empty values will populate
+  as 'NA ( NA)'. If you name the character vector in the 'empty' parameter
+  '.overall', like \code{empty = c(.overall='')}, then that exact string will
+  fill the value instead. For example, providing 'NA' will instead create the
+  formatted string as 'NA' exactly.}
+  }
 
   See the \code{\link{f_str}} documentation for more details about how this
   implementation works.

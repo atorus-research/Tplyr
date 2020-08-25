@@ -72,7 +72,7 @@ set_total_row_label <- function(e, total_row_label) {
 #' \code{pct}, \code{distinct}, and \code{distinct_pct}.
 #'
 #' @param e A count_layer object
-#' @param distinct_by A variable to get the distinct
+#' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
 #' @export
@@ -88,7 +88,10 @@ set_total_row_label <- function(e, total_row_label) {
 #'   ) %>%
 #'   build()
 set_distinct_by <- function(e, distinct_by) {
-  distinct_by <- enquo(distinct_by)
+
+  distinct_by <- unpack_vars(enquos(distinct_by))
+
+  assert_quo_var_present(distinct_by, envir = e)
 
   env_bind(e, distinct_by = distinct_by)
 
@@ -441,4 +444,24 @@ set_denom_ignore <- function(e, ...) {
 
   e
 
+}
+
+#' Set the value of a outer nested count layer to Inf or -Inf
+#'
+#' @param e A count layer
+#' @param outer_inf Either 'asc' or 'desc'. If desc the final ordering helper
+#'   will be set to Inf, if 'asc' the ordering helper is set to -Inf.
+#'
+#' @return The modified count layer.
+#' @export
+set_outer_sort_position <- function(e, outer_sort_position) {
+
+  assert_that(outer_sort_position %in% c("asc", "desc"),
+              msg = "outer_sort_position must be 'asc' 'desc'")
+
+  outer_inf <- outer_sort_position == "desc"
+
+  env_bind(e, outer_inf = outer_inf)
+
+  e
 }

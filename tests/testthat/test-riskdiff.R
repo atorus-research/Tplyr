@@ -235,6 +235,7 @@ test_that("Make sure display values accurately reflect prop.test results", {
 
 test_that("Distinct or non-distinct values are chosen properly", {
   load(file='../../vignettes/adae.Rdata')
+  # load(file='vignettes/adae.Rdata')
 
   ## Two group comparisons with default options applied
   t1 <- tplyr_table(adae, TRTA)
@@ -248,12 +249,12 @@ test_that("Distinct or non-distinct values are chosen properly", {
   # Distinct variables - and use them
   l2 <- group_count(t2, AEBODSYS) %>%
     add_risk_diff(c('Xanomeline High Dose', 'Placebo')) %>%
-    set_distinct_by(cyl)
+    set_distinct_by(USUBJID)
 
   # Distinct variables, don't use them
   l3 <- group_count(t3, AEBODSYS) %>%
     add_risk_diff(c('Xanomeline High Dose', 'Placebo'), distinct=FALSE) %>%
-    set_distinct_by(cyl)
+    set_distinct_by(USUBJID)
 
   dat1 <- suppressWarnings(add_layers(t1, l1) %>% build())
   dat2 <- suppressWarnings(add_layers(t2, l2) %>% build())
