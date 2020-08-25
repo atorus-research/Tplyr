@@ -123,8 +123,6 @@ NULL
 
 # Default options ----
 tplyr_default_options <- list(
-  # Debug (deprecated)
-  tplyr.debug = FALSE,
 
   # Count layer defaults
   tplyr.count_layer_default_formats =
@@ -134,12 +132,12 @@ tplyr_default_options <- list(
 
   # Desc layer defaults
   tplyr.desc_layer_default_formats =
-    list("n"        = f_str("xx", n),
-         "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
-         "Median"   = f_str("xx.x", median),
-         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-         "Min, Max" = f_str("xx, xx", min, max),
-         "Missing"  = f_str("xx", missing)
+    list("n"        = f_str("xxx", n),
+         "Mean (SD)"= f_str("a.a+1 (a.a+2)", mean, sd),
+         "Median"   = f_str("a.a+1", median),
+         "Q1, Q3"   = f_str("a.a+1, a.a+1", q1, q3),
+         "Min, Max" = f_str("a.a, a.a", min, max),
+         "Missing"  = f_str("xxx", missing)
          ),
 
   # Shift layer defaults
