@@ -11,8 +11,5 @@ articles:
   readme: readme.html
   riskdiff: riskdiff.html
   sort: sort.html
-  test: test.html
-  tplyr: tplyr.html
-  tplyr_internals: tplyr_internals.html
-last_built: 2020-08-25T14:48Z
+last_built: 2020-08-25T15:04Z
 
