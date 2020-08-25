@@ -140,7 +140,7 @@ add_layers <- function(parent, ...) {
 #'   tables like Adverse Events where you want to see the Preferred Terms within
 #'   Body Systems, all in one layer. Further control over denominators is
 #'   available using the function \code{\link{set_denoms_by}} and distinct
-#'   counts can be set using \code{\link{set_distinct_by}}}. \item{Descriptive
+#'   counts can be set using \code{\link{set_distinct_by}}} \item{Descriptive
 #'   Statistics Layers}{Descriptive statistics layers perform summaries on
 #'   continuous variables. There are a number of summaries built into Tplyr
 #'   already that you can perform, including n, mean, median, standard

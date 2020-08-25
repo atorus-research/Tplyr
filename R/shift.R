@@ -77,6 +77,7 @@ prepare_format_metadata.shift_layer <- function(x) {
   evalq({
 
     if(is.null(format_strings)) format_strings <- f_str("a", n)
+    else format_strings <- gather_defaults(environment())[[1]]
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
