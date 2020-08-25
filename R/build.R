@@ -68,6 +68,7 @@ build.tplyr_table <- function(x) {
 
     output <- output_list %>%
       map2_dfr(seq_along(output_list), add_layer_index) %>%
+      ungroup() %>%
       select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
 
   }, finally = {
