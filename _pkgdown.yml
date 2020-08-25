@@ -3,6 +3,13 @@ destination: docs
 template:
   params:
     bootswatch: yeti
+  opengraph:
+    image:
+      src: man/figures/Atorus_Stickers_vF_Tplyr.png
+      alt: "Tplyr Hex Sticker"
+    twitter:
+      creator: "@AtorusR"
+      card: summary_large_image
 
 reference:
 - title: Build
@@ -54,3 +61,20 @@ reference:
   - apply_row_masks
   - get_numeric_data
   - get_stats_data
+
+articles:
+- title: Layer Vignettes
+  navbar: Layer Vignettes
+  contents:
+  - desc-vignette
+  - count_shift
+- title: Helper Vignettes
+  navbar: Helpers
+  contents:
+  - riskdiff
+  - sort
+- title: Release Vignettes
+  navbar: Release Vignettes
+  contents:
+  - alpha-release
+  - beta-release
