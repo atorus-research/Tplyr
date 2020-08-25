@@ -174,16 +174,16 @@ get_summaries <- function(e = caller_env()) {
 
   # Define the default list of summaries
   summaries <- exprs(
-    n       = n()                             ,
-    mean    = mean(.var, na.rm=TRUE)         ,
-    sd      = sd(.var, na.rm=TRUE)           ,
-    median  = median(.var, na.rm=TRUE)       ,
-    var     = var(.var, na.rm=TRUE)          ,
-    min     = min(.var, na.rm=TRUE)          ,
-    max     = max(.var, na.rm=TRUE)          ,
-    iqr     = IQR(.var, na.rm=TRUE)          ,
-    q1      = quantile(.var, na.rm=TRUE)[[2]],
-    q3      = quantile(.var, na.rm=TRUE)[[4]],
+    n       = n(),
+    mean    = mean(.var, na.rm=TRUE),
+    sd      = sd(.var, na.rm=TRUE),
+    median  = median(.var, na.rm=TRUE),
+    var     = var(.var, na.rm=TRUE),
+    min     = min(.var, na.rm=TRUE),
+    max     = max(.var, na.rm=TRUE),
+    iqr     = IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')),
+    q1      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[2]],
+    q3      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[4]],
     missing = sum(is.na(.var))
   )
 
