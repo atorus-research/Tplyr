@@ -1465,7 +1465,7 @@ test_that('T28',{
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, RACE, SEX, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t28_1$n,test_28$n,label = "T27.1")
+  testthat::expect_equal(t28_1$n,test_28$n,label = "T28.1")
   #manual check(s)
 
   #clean up working directory
@@ -2010,8 +2010,8 @@ test_that('T38',{
   skip_if(is.null(vur))
   #programmatic check(s)
   testthat::expect_equal(c(c("WHITE", "BLACK OR AFRICAN AMERICAN","AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
-                           c(1,2,3,4)),
-                         c(test_38$row_label1,test_38$ord_layer_1),
+                           c(1, 2, 3, 4)),
+                         c(test_38$row_label1, test_38$ord_layer_1),
                          label = "T38.1")
   #manual check(s)
 
@@ -2060,13 +2060,98 @@ test_that('T39',{
     arrange(desc(n))
 
   testthat::expect_equal(c(t39_1$RACE, t39_1$n),
-                         c(test_39$row_label1,test_39$ord_layer_1),
+                         c(test_39$row_label1, test_39$ord_layer_1),
                          label = "T39.1")
   #manual check(s)
 
   #clean up working directory
   rm(t39_1)
   rm(test_39)
+})
+
+
+#test 40 ----
+test_that('T40',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      )
+
+    test_40 <- build(t) %>%
+      arrange(ord_layer_index, row_label1)
+
+    # output table to check attributes
+    save(test_40, file = "~/Tplyr/uat/output/test_40.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_40)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_40.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(sort(unique(adsl$RACE)),
+                         test_40$row_label1,
+                         label = "T40.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_40)
+})
+
+
+#test 41 ----
+test_that('T41',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_order_count_method("byvarn")
+      )
+
+    test_41 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
+
+    # output table to check attributes
+    save(test_41, file = "~/Tplyr/uat/output/test_41.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_41)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_41.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t41_1 <- distinct(adsl, RACE, RACEN) %>%
+    arrange(RACEN)
+
+  testthat::expect_equal(c(t41_1$RACE, t41_1$RACEN),
+                         c(test_41$row_label1, test_41$ord_layer_1),
+                         label = "T41.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t41_1)
+  rm(test_41)
 })
 
 #clean up ----
