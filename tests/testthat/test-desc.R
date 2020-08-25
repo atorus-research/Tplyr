@@ -82,19 +82,19 @@ test_that("group_desc are processed as expected", {
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
   expect_setequal(names(d2), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
   expect_setequal(names(d3), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
   expect_setequal(names(d4), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
@@ -106,7 +106,7 @@ test_that("group_desc are processed as expected", {
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
   expect_setequal(names(d6), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
@@ -118,13 +118,13 @@ test_that("group_desc are processed as expected", {
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
   expect_setequal(names(d7), c("where", "need_prec_table", "built_target",
                                "summary_vars", "formatted_data", "trans_vars",
                                "target_var", "keep_vars", "cap", "precision_on",
                                "max_length", "layers", "row_labels", "by",
                                "precision_by", "stats", "numeric_data",
-                               "format_strings"))
+                               "format_strings", "prec"))
 
   expect_equal(dim(d1$numeric_data), c(27, 4))
   expect_equal(dim(d2$numeric_data), c(54, 5))
