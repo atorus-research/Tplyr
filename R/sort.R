@@ -226,8 +226,9 @@ add_order_columns.desc_layer <- function(x) {
 
     # This adds a column for each by variable and the target variable.
     walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
-      if (!is.name(quo_get_expr(a_by))) return()
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+      # Otherwise determine data order
       formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
     })
 
@@ -246,8 +247,9 @@ add_order_columns.shift_layer <- function(x) {
 
     # This adds a column for each by variable and the target variable.
     walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
-      if (!is.name(quo_get_expr(a_by))) return()
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+      # Otherwise determine data order
       formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
     })
 
