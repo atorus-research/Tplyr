@@ -382,7 +382,7 @@ test_that('Custom summaries set within options are available for build', {
 
   op <- options()
 
-  options('tplyr.custom_summaries' =
+  options(tplyr.custom_summaries =
             quos(geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var)))
           )
 
@@ -395,12 +395,43 @@ test_that('Custom summaries set within options are available for build', {
         )
     )
 
-  dat <- suppressWarnings(build(t))
+  dat <- build(t)
 
   # Test
   expect_equal(dat$var1_3, c("3.12", ""))
 
   options(op)
+})
+
+test_that("Quantile switch works properly", {
+
+  op <- options()
+  expect_equal(getOption('tplyr.quantile_type'), 7)
+
+  dat1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(disp) %>%
+        set_format_strings(x = f_str('xx, xx, xx', iqr, q1, q3))
+    ) %>%
+    get_numeric_data(layer=1)
+
+  res1 <- c(104.200, 275.800, 380.000,  81.075,  78.925, 160.000, 180.700, 120.300, 301.000)
+  expect_equal(dat1$value, res1)
+
+  options('tplyr.quantile_type' = 3)
+
+  dat2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(disp) %>%
+        set_format_strings(x = f_str('xx, xx, xx', iqr, q1, q3))
+    ) %>%
+    get_numeric_data(layer=1)
+
+  res2 <- c(84.2, 275.8, 360.0,  81.3,  78.7, 160.0, 205.9,  95.1, 301.0)
+  expect_equal(dat2$value, res2)
+
+  expect_true(!all(dat1$value != dat2$value))
+
 })
 
 ### Shift Layer Defaults ----
@@ -439,4 +470,5 @@ test_that("Shift layer defaults can be overridden", {
   expect_equal(gather_defaults(s1)[[1]], f_str("a", n))
   expect_equal(s1$format_strings, f_str("xx (xx.xx%)", n, pct))
 })
+
 options(op)

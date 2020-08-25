@@ -496,7 +496,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 
   # Empty return string
   if (is.na(val)) {
-    return(format(fmt$empty[1], width = (int_len+decimals)))
+    return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
   }
 
   # Form the string
