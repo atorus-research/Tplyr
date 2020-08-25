@@ -1706,14 +1706,18 @@ test_that('T33',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t33_tots <- group_by(adsl, TRT01P)%>%
+  t33_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2") %>%
+    select(TRTA, USUBJID) %>%
+    distinct(TRTA, USUBJID) %>%
+    merge(adsl, by.x=c("USUBJID", "TRTA"), by.y=c("USUBJID", "TRT01P"), all.y = FALSE) %>%
+    group_by(TRTA) %>%
     summarise(total=n())
   t33_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    merge(t33_tots, by.x="TRTA", by.y="TRT01P") %>%
+    merge(t33_tots, by.x="TRTA", by.y="TRTA") %>%
     mutate(pct = n / total * 100) %>%
     mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
     filter(TRTA == "Placebo" & BNRIND == "N")
@@ -1971,6 +1975,98 @@ test_that('T37',{
   rm(t37_cumdose)
   rm(t37_1)
   rm(test_37)
+})
+
+
+#test 38 ----
+test_that('T38',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE_FACTOR) %>%
+          set_order_count_method("byfactor")
+      )
+
+    test_38 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
+
+    # output table to check attributes
+    save(test_38, file = "~/Tplyr/uat/output/test_38.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_38)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_38.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(c(c("WHITE", "BLACK OR AFRICAN AMERICAN","AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
+                           c(1,2,3,4)),
+                         c(test_38$row_label1,test_38$ord_layer_1),
+                         label = "T38.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_38)
+})
+
+
+#test 39 ----
+test_that('T39',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
+      )
+
+    test_39 <- build(t) %>%
+      arrange(ord_layer_index, desc(ord_layer_1))
+
+    # output table to check attributes
+    save(test_39, file = "~/Tplyr/uat/output/test_39.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_39)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_39.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t39_1 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, fill = list(n=0)) %>%
+    filter(TRT01P == "Xanomeline High Dose") %>%
+    arrange(desc(n))
+
+  testthat::expect_equal(c(t39_1$RACE, t39_1$n),
+                         c(test_39$row_label1,test_39$ord_layer_1),
+                         label = "T39.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t39_1)
+  rm(test_39)
 })
 
 #clean up ----
