@@ -118,7 +118,7 @@ NULL
 #'   build()
 #'
 #' @docType package
-#' @name tplyr
+#' @name Tplyr
 "_PACKAGE"
 
 # Default options ----

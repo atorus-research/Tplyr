@@ -1,0 +1,18 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  Advanced_Tables_with_tplyr: Advanced_Tables_with_tplyr.html
+  alpha-release: alpha-release.html
+  beta-release: beta-release.html
+  count_shift: count_shift.html
+  desc-vignette: desc-vignette.html
+  getting-started: getting-started.html
+  readme: readme.html
+  riskdiff: riskdiff.html
+  sort: sort.html
+  test: test.html
+  tplyr: tplyr.html
+  tplyr_internals: tplyr_internals.html
+last_built: 2020-08-25T14:48Z
+
