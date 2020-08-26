@@ -151,7 +151,7 @@ get_target_levels <- function(e, x) {
 #'
 #' @return tibble with blanked out rows where values are repeating
 #' @export
-apply_row_masks <- function(dat) {
+apply_row_masks <- function(dat, row_breaks=FALSE) {
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
 
@@ -166,6 +166,29 @@ apply_row_masks <- function(dat) {
   }
   # Drop the dummied mask variable
   dat <- dat %>% select(-mask)
+
+  # Break rows if specified
+  if (row_breaks) {
+
+    assert_that("ord_layer_index" %in% names(dat),
+                msg = paste0("If row_breaks is specified, `ord_layer_index` must still be included in the input data frame.\n",
+                            "Remember to sort prior to using `apply_row_masks`."))
+
+    # Create the breaks dataframe
+    breaks <- dat %>%
+      distinct(ord_layer_index) %>%
+      mutate(ord_break = 2)
+
+    # Add in a sorting variable to the data
+    dat <- dat %>%
+      mutate(ord_break = 1)
+
+    # bind and fill the NAs
+    dat <- bind_rows(dat, breaks) %>%
+      arrange(ord_layer_index, ord_break) %>%
+      mutate_if(is.character, ~replace_na(., ""))
+  }
+
   dat
 }
 

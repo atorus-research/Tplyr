@@ -95,8 +95,9 @@ Now that we have our data, let's make sure it's in the right order. Additionally
 ```{r presentation_prep}
 dat <- dat %>% 
   arrange(ord_layer_index, ord_layer_1, ord_layer_2) %>% 
-  select(starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`, var1_Total) %>% 
-  apply_row_masks() %>% 
+  # select(starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`, var1_Total) %>% 
+  apply_row_masks(row_breaks = TRUE) %>% 
+  select(starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`, var1_Total) %>%
   add_column_headers(
     paste0(" | | Placebo\\line(N=**Placebo**)| Xanomeline Low Dose\\line(N=**Xanomeline Low Dose**) ", 
            "| Xanomeline High Dose\\line(N=**Xanomeline High Dose**) | Total\\line(N=**Total**)"), 
