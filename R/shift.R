@@ -146,7 +146,7 @@ construct_shift_string <- function(.n, .total, shift_fmt, max_layer_length, max_
   # Put the vector strings together. Only include parts of str_all that aren't null
   string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
 
-  string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
+  string_ <- pad_formatted_data(string_, 0, max_n_width)
 
   string_
 }

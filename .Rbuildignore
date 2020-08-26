@@ -7,3 +7,11 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
+^vignettes/alpha-release\.Rmd$
+^vignettes/beta-release\.Rmd$
+^vignettes/count_shift\.Rmd$
+^vignettes/desc-vignette\.Rmd$
+^vignettes/options-vignette\.Rmd$
+^vignettes/readme\.Rmd$
+^vignettes/sort\.Rmd$
+^vignettes/styled-table\.Rmd$
