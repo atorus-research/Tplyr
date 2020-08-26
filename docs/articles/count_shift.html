@@ -83,6 +83,12 @@
     <li>
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
+    <li>
+      <a href="../articles/options-vignette.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Release Vignettes</li>
     <li>
@@ -402,19 +408,18 @@ ord_layer_index
 ord_layer_1
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-CARDIAC DISORDERS
+SKIN AND SUBCUTANEOUS TISSUE DISORDERS
 </td>
 <td style="text-align:left;">
-4 (12.50%) [ 5]
+21 (100.00%) [ 47]
 </td>
 <td style="text-align:left;">
-6 (13.95%) [ 6]
+42 (100.00%) [111]
 </td>
 <td style="text-align:left;">
-5 (10.00%) [ 6]
+42 (100.00%) [118]
 </td>
 <td style="text-align:right;">
 1
@@ -422,108 +427,7 @@ CARDIAC DISORDERS
 <td style="text-align:right;">
 1
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CONGENITAL, FAMILIAL AND GENETIC DISORDERS
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:left;">
-1 ( 2.33%) [ 1]
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GASTROINTESTINAL DISORDERS
-</td>
-<td style="text-align:left;">
-6 (18.75%) [ 6]
-</td>
-<td style="text-align:left;">
-4 ( 9.30%) [ 6]
-</td>
-<td style="text-align:left;">
-3 ( 6.00%) [ 3]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
-</td>
-<td style="text-align:left;">
-9 (28.12%) [ 11]
-</td>
-<td style="text-align:left;">
-15 (34.88%) [ 21]
-</td>
-<td style="text-align:left;">
-18 (36.00%) [ 21]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IMMUNE SYSTEM DISORDERS
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:left;">
-1 ( 2.00%) [ 1]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-INFECTIONS AND INFESTATIONS
-</td>
-<td style="text-align:left;">
-5 (15.62%) [ 5]
-</td>
-<td style="text-align:left;">
-4 ( 9.30%) [ 4]
-</td>
-<td style="text-align:left;">
-3 ( 6.00%) [ 3]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-6
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <p>The table above displaces first the number of subjects who had a the specified adverse event, and th proportion of subjects in that treatment group who experienced the event. Within the brackets, the total number of occurrences of that event are displayed.</p>
 </div>
@@ -573,7 +477,52 @@ INFECTIONS AND INFESTATIONS
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  <span class="fu">kable</span>()
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+
+<span class="co">#&gt; Warning: Factor `TRTA` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Factor `LBNRIND` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span></pre></body></html></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -586,22 +535,7 @@ row_label2
 row_label3
 </th>
 <th style="text-align:left;">
-var1_Placebo_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Placebo_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_HIGH
+var1_NA_NA
 </th>
 <th style="text-align:right;">
 ord_layer_index
@@ -613,31 +547,15 @@ ord_layer_1
 ord_layer_2
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-Alkaline Phosphatase (U/L)
+NA
 </td>
 <td style="text-align:left;">
-WEEK 4
+NA
 </td>
 <td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-1
+NA
 </td>
 <td style="text-align:left;">
 0
@@ -646,203 +564,12 @@ N
 1
 </td>
 <td style="text-align:right;">
-22
+35
 </td>
 <td style="text-align:right;">
-1
+NA
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Alkaline Phosphatase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In count layers most(but not all) tables have their percentages relative to the columns, each column sums to 100%. In shift layers, most percentages are relative to the “box” that is formed from the baseline and reference group for each treatment group. To support this, Tplyr allows you to pass the variables that the percentage denominators should be in reference too.</p>
 <p>The <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions can be passed unquoted variables names that were used in the table/layer construction. This will change the denominator of the percentages for the table.</p>
@@ -871,22 +598,7 @@ row_label2
 row_label3
 </th>
 <th style="text-align:left;">
-var1_Placebo_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Placebo_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_HIGH
+var1_NA_NA
 </th>
 <th style="text-align:right;">
 ord_layer_index
@@ -898,31 +610,15 @@ ord_layer_1
 ord_layer_2
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-Alkaline Phosphatase (U/L)
+NA
 </td>
 <td style="text-align:left;">
-WEEK 4
+NA
 </td>
 <td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-1 (100.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (100.00%)
+NA
 </td>
 <td style="text-align:left;">
 0 ( 0.00%)
@@ -931,203 +627,12 @@ N
 1
 </td>
 <td style="text-align:right;">
-22
+35
 </td>
 <td style="text-align:right;">
-1
+NA
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Alkaline Phosphatase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (100.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (100.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. In this example, the denominators are based on the 3 x 3 “box” formed by the baseline and reference variables.</p>
 <p>Below, the denominators are changed to be based on the column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>LBNRIND</code> the layer will use those denominator when determining the percentages.</p>
@@ -1154,22 +659,7 @@ row_label2
 row_label3
 </th>
 <th style="text-align:left;">
-var1_Placebo_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Placebo_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_HIGH
+var1_NA_NA
 </th>
 <th style="text-align:right;">
 ord_layer_index
@@ -1181,31 +671,15 @@ ord_layer_1
 ord_layer_2
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-Alkaline Phosphatase (U/L)
+NA
 </td>
 <td style="text-align:left;">
-WEEK 4
+NA
 </td>
 <td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-1 (25.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (11.11%)
+NA
 </td>
 <td style="text-align:left;">
 0 ( 0.00%)
@@ -1214,203 +688,12 @@ N
 1
 </td>
 <td style="text-align:right;">
-22
+35
 </td>
 <td style="text-align:right;">
-1
+NA
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Alkaline Phosphatase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (16.67%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-1 (11.11%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <p>In this example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>({
@@ -1436,22 +719,7 @@ row_label2
 row_label3
 </th>
 <th style="text-align:left;">
-var1_Placebo_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Placebo_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose_HIGH
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_NORMAL
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose_HIGH
+var1_NA_NA
 </th>
 <th style="text-align:right;">
 ord_layer_index
@@ -1463,183 +731,15 @@ ord_layer_1
 ord_layer_2
 </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td style="text-align:left;">
-Alkaline Phosphatase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
+NA
 </td>
 <td style="text-align:left;">
-H
+NA
 </td>
 <td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-22
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aspartate Aminotransferase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bilirubin (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Calcium (mmol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-30
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
+NA
 </td>
 <td style="text-align:left;">
 0 ( 0.00%)
@@ -1651,48 +751,9 @@ H
 35
 </td>
 <td style="text-align:right;">
-1
+NA
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatinine (umol/L)
-</td>
-<td style="text-align:left;">
-WEEK 4
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-27
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 <p>These are a few examples however you can pass any combination of variables used in the table or layer so any one of the 32 combinations of the five variables used in the example above could be used to calculate the denominators.</p>
 </div>
