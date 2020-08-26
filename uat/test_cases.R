@@ -1867,7 +1867,7 @@ test_that('T36',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(vars(ETHNIC, RACE), by = vars("Ethnicity","Race"))
+        group_count(RACE, by = vars("Ethnicity", ETHNIC, "Race"))
       )
 
     test_36 <- build(t)
@@ -1887,12 +1887,17 @@ test_that('T36',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(,
-                         list(test_36$row_label1, test_36$row_label2),
+  t36_1 <- distinct(adsl, ETHNIC, RACE) %>%
+    complete(ETHNIC, RACE) %>%
+    mutate(ethnic_text = "Ethnicity") %>%
+    mutate(race_text = "Race")
+  testthat::expect_equal(c(t36_1$ethnic_text, t36_1$ETHNIC, t36_1$race_texwellt, t36_1$RACE),
+                         c(test_36$row_label1, test_36$row_label2, test_36$row_label3, test_36$row_label4),
                          label = "T36.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t36_1)
   rm(test_36)
 })
 
