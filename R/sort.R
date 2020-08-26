@@ -292,7 +292,8 @@ add_order_columns.shift_layer <- function(x) {
       )
 
       # The logic is the same now for a byvarn so reuse that function
-      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
+      formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
 
     }
 
