@@ -430,7 +430,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr></tbody>
 </table>
 <p>But now, let’s overwrite <code>mean</code> using a custom summary. Let’s use a trimmed mean instead, taking 20% of observations off of both ends.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="st">'tplyr.custom_summaries'</span> <span class="kw">=</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">tplyr.custom_summaries</span> <span class="kw">=</span>
           <span class="kw pkg">rlang</span><span class="kw ns">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span>(
             <span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">.var</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">trim</span><span class="kw">=</span><span class="fl">0.4</span>)
           )

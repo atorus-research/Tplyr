@@ -234,7 +234,7 @@ test_that("Make sure display values accurately reflect prop.test results", {
 })
 
 test_that("Distinct or non-distinct values are chosen properly", {
-  load(file='../../vignettes/adae.Rdata')
+  load(file='adae.Rdata')
   # load(file='vignettes/adae.Rdata')
 
   ## Two group comparisons with default options applied

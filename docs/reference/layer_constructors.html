@@ -131,6 +131,12 @@ based summaries, descriptive statistics summaries, or shift count summaries — 
     <li>
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
+    <li>
+      <a href="../articles/options-vignette.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Release Vignettes</li>
     <li>
@@ -195,12 +201,12 @@ based summaries, descriptive statistics summaries, or shift count summaries</h1>
       <td><p>Symbol. Required, The variable name(s) on which the summary
 is to be performed. Must be a variable within the target dataset. Enter
 unquoted - i.e. target_var = AEBODSYS. You may also provide multiple
-variables with <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>dplyr::vars</a></code>.</p></td>
+variables with <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></code>.</p></td>
     </tr>
     <tr>
       <th>by</th>
       <td><p>A string, a variable name, or a list of variable names supplied
-using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>dplyr::vars</a></code></p></td>
+using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></code></p></td>
     </tr>
     <tr>
       <th>where</th>
@@ -252,7 +258,7 @@ performing a summary.</p></td>
   counts (n) and percentages (pct) are supported and can be specified with
   the <code><a href='set_format_strings.html'>set_format_strings</a></code> function. To allow for flexibility
   when defining percentages, you can define the denominator using the
-  <code>set_denom_by</code> function. This function takes variable names and
+  <code><a href='set_denoms_by.html'>set_denoms_by</a></code> function. This function takes variable names and
   uses those to determine the denominator for the counts.</p></dd> 
 </dl>
 

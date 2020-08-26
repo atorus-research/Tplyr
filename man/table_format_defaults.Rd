@@ -25,8 +25,6 @@ set_shift_layer_formats(obj, ...)
 \item{obj}{A tplyr_table object}
 
 \item{...}{formats to pass forward}
-
-\item{f_str}{format to pass forward}
 }
 \description{
 Tplyr provides you with the ability to set table-wide defaults of format

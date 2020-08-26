@@ -72,6 +72,8 @@ articles:
   contents:
   - riskdiff
   - sort
+  - options-vignette
+  - styled-table
 - title: Release Vignettes
   navbar: Release Vignettes
   contents:
