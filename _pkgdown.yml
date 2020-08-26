@@ -13,25 +13,25 @@ template:
 
 reference:
 - title: Build
-  desc: Build desc
+  desc: High-level functions to create and build a table
 - contents:
   - build
   - tplyr_table
 - title: Layers and layering
-  desc: add layers and layer them
+  desc: Creating layers and adding them to the table
 - contents:
   - add_layer
   - add_layers
   - starts_with("group")
 - title: Formatting
-  desc: add Formatting
+  desc: Customizing the dispaly as a table
 - contents:
   - f_str
   - ends_with("formats")
   - set_format_strings
   - set_missing_count
 - title: Sorting
-  desc: sorting stuff
+  desc: Sorting and customizing table order
 - contents:
   - set_order_count_method
   - set_ordering_cols
@@ -56,7 +56,6 @@ reference:
 - contents:
   - add_column_headers
 - title: Helper functions
-  desc: functions to help
 - contents:
   - apply_row_masks
   - get_numeric_data
