@@ -2457,5 +2457,236 @@ test_that('T44',{
   rm(test_44)
 })
 
+#test 45 ----
+test_that('T45',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      set_count_layer_formats(n_counts = f_str('xxxx (xxx.x%)',n,pct)) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      add_layer(
+        group_count(SEX) %>%
+          set_format_strings(n_counts = f_str('[xxx]',n))
+      )
+
+    test_45 <- build(t)
+
+    # output table to check attributes
+    save(test_45, file = "~/Tplyr/uat/output/test_45.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_45)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_45.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t45_tots <- group_by(adsl, TRT01P) %>%
+    summarise(total = n())
+
+  t45_1 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, fill = list(n=0)) %>%
+    left_join(t45_tots, by="TRT01P") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    select(col, TRT01P, RACE) %>%
+    pivot_wider(values_from = col, names_from = TRT01P)
+
+  t45_2 <- group_by(adsl, TRT01P, SEX) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, SEX, fill = list(n=0)) %>%
+    mutate(col = paste0('[',sprintf("%3s",n),']')) %>%
+    select(col, TRT01P, SEX) %>%
+    pivot_wider(values_from = col, names_from = TRT01P)
+
+  testthat::expect_equal(t45_1$Placebo,
+                         filter(test_45, ord_layer_index == 1)$var1_Placebo,
+                         label = "T45.1")
+  testthat::expect_equal(t45_2$Placebo,
+                         filter(test_45, ord_layer_index == 2)$var1_Placebo,
+                         label = "T45.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t45_tots)
+  rm(t45_1)
+  rm(t45_2)
+  rm(test_45)
+})
+
+#test 46 ----
+test_that('T46',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      set_desc_layer_formats(meansd = f_str('xxx.x (xxx.xx)',mean, sd),
+                             quartiles = f_str('xxx.x (xxx.x, xxx.x)',iqr, q1, q3)
+                             )%>%
+      add_layer(
+        group_desc(CUMDOSE)
+      ) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            n = f_str('xxx',n),
+            meansdvar = f_str('xxx.x (xxx.xx) [xxx.xx]',mean, sd, var),
+            medianquarts = f_str('xxx.x (xxx.x, xxx.x)',median, q1, q3)
+          )
+      )
+
+    test_46 <- build(t)
+
+    # output table to check attributes
+    save(test_46, file = "~/Tplyr/uat/output/test_46.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_46)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_46.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t46_1 <- group_by(adsl, TRT01P) %>%
+    summarise(mean = mean(CUMDOSE),
+              sd = sd(CUMDOSE),
+              iqr = IQR(CUMDOSE),
+              q1 = quantile(CUMDOSE)[[2]],
+              q3 = quantile(CUMDOSE)[[4]]
+              ) %>%
+    mutate(meansd = paste0(sprintf("%5.1f", mean), ' (',sprintf("%6.2f", sd), ')'))%>%
+    mutate(quartiles = paste0(sprintf("%5.1f", iqr), ' (',sprintf("%6.1f", q1),', ',sprintf("%6.1f", q3), ')')) %>%
+    pivot_longer(cols = c(meansd, quartiles), values_to = "stat") %>%
+    select(TRT01P, name, stat) %>%
+    pivot_wider(values_from = stat, names_from = TRT01P)
+
+  t46_2 <- group_by(adsl, TRT01P) %>%
+    summarise(n = n(),
+              mean = mean(AGE),
+              sd = sd(AGE),
+              var = var(AGE),
+              med = median(AGE),
+              q1 = quantile(AGE)[[2]],
+              q3 = quantile(AGE)[[4]]
+    ) %>%
+    mutate(n = sprintf("%3s", n)) %>%
+    mutate(meansdvar = paste0(sprintf("%5.1f", mean), ' (',sprintf("%6.2f", sd), ') [',sprintf("%6.2f",var),']')) %>%
+    mutate(medianquarts = paste0(sprintf("%5.1f", med), ' (',sprintf("%5.1f", q1),', ',sprintf("%5.1f", q3), ')')) %>%
+    pivot_longer(cols = c(n, meansdvar, medianquarts), values_to = "stat") %>%
+    select(TRT01P, name, stat) %>%
+    pivot_wider(values_from = stat, names_from = TRT01P)
+
+  testthat::expect_equal(t46_1$`Xanomeline High Dose`,
+                         filter(test_46, ord_layer_index == 1)$`var1_Xanomeline High Dose`,
+                         label = "T46.1")
+  testthat::expect_equal(t46_2$Placebo,
+                         filter(test_46, ord_layer_index == 2)$var1_Placebo,
+                         label = "T46.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t46_1)
+  rm(t46_2)
+  rm(test_46)
+})
+
+#test 47 ----
+test_that('T47',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+      set_shift_layer_formats(f_str('xxxx (xxx.x%)',n,pct)) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND))
+      ) %>%
+      add_layer(
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+          set_format_strings(f_str("xxx",n))
+      )
+
+    test_47 <- build(t)
+
+    # output table to check attributes
+    save(test_47, file = "~/Tplyr/uat/output/test_47.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_47)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_47.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t47_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND) %>%
+    summarise(total = n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, fill = list(total = 0))
+
+  t47_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND, ANRIND) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, ANRIND, fill = list(n=0)) %>%
+    left_join(t47_tots, by=c("TRTA", "BNRIND")) %>%
+    mutate(pct = ifelse(total > 0, n / total * 100, 0)) %>%
+    mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    select(col, TRTA, BNRIND, ANRIND) %>%
+    pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
+
+  t47_2 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND, ANRIND) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, ANRIND, fill = list(n=0)) %>%
+    mutate(col = sprintf("%3s",n)) %>%
+    select(col, TRTA, BNRIND, ANRIND) %>%
+    pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
+
+
+  testthat::expect_equal(c(t47_1$Placebo_H,t47_1$Placebo_N),
+                         c(filter(test_47, ord_layer_index == 1)$var1_Placebo_H,
+                           filter(test_47, ord_layer_index == 1)$var1_Placebo_N),
+                         label = "T47.1")
+  testthat::expect_equal(c(t47_2$Placebo_H,t47_2$Placebo_N),
+                         c(filter(test_47, ord_layer_index == 2)$var1_Placebo_H,
+                           filter(test_47, ord_layer_index == 2)$var1_Placebo_N),
+                         label = "T47.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t47_tots)
+  rm(t47_1)
+  rm(t47_2)
+  rm(test_47)
+})
+
 #clean up ----
 rm(vur)
