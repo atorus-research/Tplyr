@@ -7,8 +7,10 @@ articles:
   beta-release: beta-release.html
   count_shift: count_shift.html
   desc-vignette: desc-vignette.html
+  options-vignette: options-vignette.html
   readme: readme.html
   riskdiff: riskdiff.html
   sort: sort.html
-last_built: 2020-08-26T13:14Z
+  styled-table: styled-table.html
+last_built: 2020-08-26T15:06Z
 

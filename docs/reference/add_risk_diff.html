@@ -128,6 +128,12 @@ be sure to familiarize yourself with its functionality." />
     <li>
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
+    <li>
+      <a href="../articles/options-vignette.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Release Vignettes</li>
     <li>
@@ -203,7 +209,7 @@ comparisons should be based upon the values within the specified <code>treat_var
 <code>tplyr_table</code> object.</p>
 <p>Comparisons are specified by providing two-element character vectors. You can provide as many of
 these groups as you want. You can also use groups that have been constructed using
-<code>add_treat_group</code> or <code><a href='treat_grps.html'>add_total_group</a></code>. The first element provided will be considered
+<code><a href='treat_grps.html'>add_treat_grps</a></code> or <code><a href='treat_grps.html'>add_total_group</a></code>. The first element provided will be considered
 the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
 the 'comparison'. So if you'd like to see the risk difference of 'T1 - Placebo', you would specify
 this as <code><a href='https://rdrr.io/r/base/c.html'>c('T1', 'Placebo')</a></code>.</p>

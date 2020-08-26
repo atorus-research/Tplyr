@@ -177,8 +177,8 @@ process_count_n <- function(x) {
       # This adds the missing string as a factor to the tallies. This is needed
       # to make sure the missing row is added even if there are no missing values.
       summary_stat <- summary_stat %>%
-        mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
-                                           c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+        mutate(!!target_var[[1]] := fct_expand(.data[[as_name(target_var[[1]])]],
+                                               missing_string))
     }
 
     summary_stat <- summary_stat %>%
@@ -218,13 +218,13 @@ process_count_distinct_n <- function(x) {
       ungroup()
 
       if(!is.null(missing_count_string) &&
-         !(missing_string %in% unique(build_target[, as_name(target_var[[1]])]) ||
+         !(missing_string %in% unique(built_target[, as_name(target_var[[1]])]) ||
            any(is.na(built_target[, as_name(target_var[[1]])])))) {
         # This adds the missing string as a factor to the tallies. This is needed
         # to make sure the missing row is added even if there are no missing values.
         distinct_stat <- distinct_stat %>%
-          mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
-                                             c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+          mutate(!!target_var[[1]] := fct_expand(.data[[as_name(target_var[[1]])]],
+                                                 missing_string))
       }
 
     # complete all combinations of factors to include combinations that don't exist.

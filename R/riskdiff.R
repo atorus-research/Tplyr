@@ -14,7 +14,7 @@
 #'
 #' Comparisons are specified by providing two-element character vectors. You can provide as many of
 #' these groups as you want. You can also use groups that have been constructed using
-#' \code{\link{add_treat_group}} or \code{\link{add_total_group}}. The first element provided will be considered
+#' \code{\link{add_treat_grps}} or \code{\link{add_total_group}}. The first element provided will be considered
 #' the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
 #' the 'comparison'. So if you'd like to see the risk difference of 'T1 - Placebo', you would specify
 #' this as \code{c('T1', 'Placebo')}.

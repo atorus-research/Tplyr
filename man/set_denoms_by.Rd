@@ -21,13 +21,14 @@ can be calculated on any variables passed to target_var, treat_var, by, or
 cols.
 }
 \examples{
+library(magrittr)
 
 # Default has matrix of treatment group, additional columns,
 # and by variables sum to 1
 tplyr_table(mtcars, am) \%>\%
   add_layer(
     group_shift(vars(row=gear, column=carb), by=cyl) \%>\%
-      set_format_strings(f_str("xxx (xx.xx\%)", n, pct)) \%>\%
+      set_format_strings(f_str("xxx (xx.xx\%)", n, pct))
   ) \%>\%
   build()
 

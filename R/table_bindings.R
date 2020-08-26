@@ -327,8 +327,6 @@ get_shift_layer_formats <- function(obj) {
   env_get(obj, 'shift_layer_formats')
 }
 
-#' @param f_str format to pass forward
-#'
 #' @export
 #' @rdname table_format_defaults
 set_shift_layer_formats <- function(obj, ...) {

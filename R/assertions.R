@@ -235,7 +235,6 @@ assert_is_table <- function(object) {
 #' @param q A quosure
 #'
 #' @return The class of quosure \code{q}
-#' @export
 #'
 #' @examples
 #' library(rlang)
