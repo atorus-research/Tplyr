@@ -248,7 +248,7 @@ test_that('Default count level options pass forward', {
 
   dat <- suppressWarnings(build(t))
 
-  expected <- c("15", " 3.1 ( 0.27)", " 3.1", " 3,  3", " 3,  4", " 0")
+  expected <- c(" 15", "3.133 (0.2737)", "3.080", "3.035, 3.180", "2.76, 3.73", "  0")
 
   expect_equal(dat$var1_3, expected)
 
