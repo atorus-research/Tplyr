@@ -59,10 +59,10 @@ library(magrittr)
 # Use just the defaults
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
-    group_desc(mpg, by=cyl) \%>\%
+    group_desc(mpg, by=cyl)
   ) \%>\%
   add_layer(
-    group_count(carb, by=cyl) \%>\%
+    group_count(carb, by=cyl)
   ) \%>\%
   build()
 

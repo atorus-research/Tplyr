@@ -112,7 +112,7 @@ t <- tplyr_table(adae, TRTA, where= SAFFL == "Y") %>%
 
 build(t) %>% 
   select(-starts_with('ord')) %>% 
-  add_column_headers(' | Placebo N=(**Placebo**) | Xan.Low N=(**`Xanomeline High Dose`**) | Xan.High N=(**`Xanomeline Low Dose`**)',
+  add_column_headers(' | Placebo N=(**Placebo**) | Xan.Low N=(**Xanomeline High Dose**) | Xan.High N=(**Xanomeline Low Dose**)',
                      header_n(t)) %>% 
   head() %>% 
   kable()

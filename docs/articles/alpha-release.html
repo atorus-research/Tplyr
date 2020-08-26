@@ -83,6 +83,12 @@
     <li>
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
+    <li>
+      <a href="../articles/options-vignette.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Release Vignettes</li>
     <li>
@@ -166,15 +172,15 @@
 <span class="co">#&gt; # A tibble: 9 x 8</span>
 <span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Age (year… n          "86"         "84"             "84"            </span>
+<span class="co">#&gt; 1 Age (year… n          " 86"        " 84"            " 84"           </span>
 <span class="co">#&gt; 2 Age (year… Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
 <span class="co">#&gt; 3 Age (year… Median     "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 4 Age (year… Q1, Q3     "69, 82"     "71, 80"         "71, 82"        </span>
+<span class="co">#&gt; 4 Age (year… Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
 <span class="co">#&gt; 5 Age (year… Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 6 Age (year… Missing    " 0"         " 0"             " 0"            </span>
-<span class="co">#&gt; 7 Age Categ… &lt;65        "14 ( 16.3%… "11 ( 13.1%) "   " 8 (  9.5%) "  </span>
-<span class="co">#&gt; 8 Age Categ… &gt;80        "30 ( 34.9%… "18 ( 21.4%) "   "29 ( 34.5%) "  </span>
-<span class="co">#&gt; 9 Age Categ… 65-80      "42 ( 48.8%… "55 ( 65.5%) "   "47 ( 56.0%) "  </span>
+<span class="co">#&gt; 6 Age (year… Missing    "  0"        "  0"            "  0"           </span>
+<span class="co">#&gt; 7 Age Categ… &lt;65        "14 ( 16.3%… "11 ( 13.1%)"    " 8 (  9.5%)"   </span>
+<span class="co">#&gt; 8 Age Categ… &gt;80        "30 ( 34.9%… "18 ( 21.4%)"    "29 ( 34.5%)"   </span>
+<span class="co">#&gt; 9 Age Categ… 65-80      "42 ( 48.8%… "55 ( 65.5%)"    "47 ( 56.0%)"   </span>
 <span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
 <span class="co">#&gt; #   ord_layer_2 &lt;dbl&gt;</span></pre></body></html></div>
 <div id="the-tldr-before-the-nitty-gritty" class="section level2">
@@ -261,8 +267,8 @@
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">cnt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">t</span>, <span class="no">AGEGR1</span>)
 <span class="no">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x55e163169228 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55e15eb6ed00 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x55857c5e86d8 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x558577e3d9f0 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
@@ -272,8 +278,8 @@
 <span class="no">dsc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">t</span>, <span class="no">AGE</span>)
 <span class="no">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x55e1632c3638 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55e15eb6ed00 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x55857c743218 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x558577e3d9f0 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
@@ -461,12 +467,12 @@
 <span class="co">#&gt; # A tibble: 6 x 8</span>
 <span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Age (year… n          "86"         "84"             "84"            </span>
+<span class="co">#&gt; 1 Age (year… n          " 86"        " 84"            " 84"           </span>
 <span class="co">#&gt; 2 Age (year… Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
 <span class="co">#&gt; 3 Age (year… Median     "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 4 Age (year… Q1, Q3     "69, 82"     "71, 80"         "71, 82"        </span>
+<span class="co">#&gt; 4 Age (year… Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
 <span class="co">#&gt; 5 Age (year… Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 6 Age (year… Missing    " 0"         " 0"             " 0"            </span>
+<span class="co">#&gt; 6 Age (year… Missing    "  0"        "  0"            "  0"           </span>
 <span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
 <span class="co">#&gt; #   ord_layer_2 &lt;int&gt;</span></pre></body></html></div>
 <p>To override these defaults, just specify the summaries that you want to be performed using <code>set_format_strings</code> as described above. But what if <code>Tplyr</code> doesn’t have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where <code>set_custom_summaries</code> comes into play. Let’s say you want to derive a geometric mean.</p>
@@ -497,12 +503,12 @@
 <span class="co">#&gt; # A tibble: 6 x 11</span>
 <span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Age and A… n          "86"         "84"             "84"            </span>
+<span class="co">#&gt; 1 Age and A… n          " 86"        " 84"            " 84"           </span>
 <span class="co">#&gt; 2 Age and A… Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
 <span class="co">#&gt; 3 Age and A… Median     "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 4 Age and A… Q1, Q3     "69, 82"     "71, 80"         "71, 82"        </span>
+<span class="co">#&gt; 4 Age and A… Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
 <span class="co">#&gt; 5 Age and A… Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 6 Age and A… Missing    " 0"         " 0"             " 0"            </span>
+<span class="co">#&gt; 6 Age and A… Missing    "  0"        "  0"            "  0"           </span>
 <span class="co">#&gt; # … with 6 more variables: var2_Placebo &lt;chr&gt;, `var2_Xanomeline High</span>
 <span class="co">#&gt; #   Dose` &lt;chr&gt;, `var2_Xanomeline Low Dose` &lt;chr&gt;, ord_layer_index &lt;int&gt;,</span>
 <span class="co">#&gt; #   ord_layer_1 &lt;int&gt;, ord_layer_2 &lt;int&gt;</span></pre></body></html></div>
@@ -551,15 +557,15 @@
 <span class="co">#&gt;    row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
 <span class="co">#&gt;  1 CARDIAC D… "CARDIAC … " 5 ( 10.6%… " 6 (  7.8%)"    " 6 (  7.9%)"   </span>
-<span class="co">#&gt;  2 CARDIAC D… "\tATRIAL… " 0 (  0.0%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
-<span class="co">#&gt;  3 CARDIAC D… "\tATRIAL… " 0 (  0.0%… " 1 (  1.3%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt;  4 CARDIAC D… "\tATRIAL… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt;  5 CARDIAC D… "\tBUNDLE… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt;  6 CARDIAC D… "\tCARDIA… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt;  7 CARDIAC D… "\tMYOCAR… " 0 (  0.0%… " 1 (  1.3%)"    " 2 (  2.6%)"   </span>
-<span class="co">#&gt;  8 CARDIAC D… "\tSINUS … " 0 (  0.0%… " 3 (  3.9%)"    " 1 (  1.3%)"   </span>
-<span class="co">#&gt;  9 CARDIAC D… "\tSUPRAV… " 1 (  2.1%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
-<span class="co">#&gt; 10 CARDIAC D… "\tSUPRAV… " 0 (  0.0%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
+<span class="co">#&gt;  2 CARDIAC D… "   ATRIA… " 0 (  0.0%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
+<span class="co">#&gt;  3 CARDIAC D… "   ATRIA… " 0 (  0.0%… " 1 (  1.3%)"    " 0 (  0.0%)"   </span>
+<span class="co">#&gt;  4 CARDIAC D… "   ATRIA… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
+<span class="co">#&gt;  5 CARDIAC D… "   BUNDL… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
+<span class="co">#&gt;  6 CARDIAC D… "   CARDI… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
+<span class="co">#&gt;  7 CARDIAC D… "   MYOCA… " 0 (  0.0%… " 1 (  1.3%)"    " 2 (  2.6%)"   </span>
+<span class="co">#&gt;  8 CARDIAC D… "   SINUS… " 0 (  0.0%… " 3 (  3.9%)"    " 1 (  1.3%)"   </span>
+<span class="co">#&gt;  9 CARDIAC D… "   SUPRA… " 1 (  2.1%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
+<span class="co">#&gt; 10 CARDIAC D… "   SUPRA… " 0 (  0.0%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
 <span class="co">#&gt; # … with 94 more rows, and 3 more variables: ord_layer_index &lt;int&gt;,</span>
 <span class="co">#&gt; #   ord_layer_1 &lt;int&gt;, ord_layer_2 &lt;dbl&gt;</span></pre></body></html></div>
 <p>Note that the nesting of variables happens automatically.</p>
@@ -637,12 +643,12 @@
 <span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
 <span class="co">#&gt; 1 ""         Statistic  "Placebo"    "Xanomeline (Hi… "Xanomeline (Lo…</span>
-<span class="co">#&gt; 2 "Age (Yea… n          "86"         "84"             "84"            </span>
+<span class="co">#&gt; 2 "Age (Yea… n          " 86"        " 84"            " 84"           </span>
 <span class="co">#&gt; 3 "Age (Yea… Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
 <span class="co">#&gt; 4 "Age (Yea… Median     "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 5 "Age (Yea… Q1, Q3     "69, 82"     "71, 80"         "71, 82"        </span>
+<span class="co">#&gt; 5 "Age (Yea… Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
 <span class="co">#&gt; 6 "Age (Yea… Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 7 "Age (Yea… Missing    " 0"         " 0"             " 0"            </span>
+<span class="co">#&gt; 7 "Age (Yea… Missing    "  0"        "  0"            "  0"           </span>
 <span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;chr&gt;, ord_layer_1 &lt;chr&gt;,</span>
 <span class="co">#&gt; #   ord_layer_2 &lt;chr&gt;</span></pre></body></html></div>
 <p>Columns are separated with the bar character (|). Nesting is done by adding text in curly brackets (i.e. {}).</p>
@@ -660,12 +666,12 @@
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
 <span class="co">#&gt; 1 ""         ""         "Age"        ""               ""              </span>
 <span class="co">#&gt; 2 ""         "Statisti… "Placebo"    "Xanomeline (Hi… "Xanomeline (Lo…</span>
-<span class="co">#&gt; 3 "Age and … "n"        "86"         "84"             "84"            </span>
+<span class="co">#&gt; 3 "Age and … "n"        " 86"        " 84"            " 84"           </span>
 <span class="co">#&gt; 4 "Age and … "Mean (SD… "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
 <span class="co">#&gt; 5 "Age and … "Median"   "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 6 "Age and … "Q1, Q3"   "69, 82"     "71, 80"         "71, 82"        </span>
+<span class="co">#&gt; 6 "Age and … "Q1, Q3"   "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
 <span class="co">#&gt; 7 "Age and … "Min, Max" "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 8 "Age and … "Missing"  " 0"         " 0"             " 0"            </span>
+<span class="co">#&gt; 8 "Age and … "Missing"  "  0"        "  0"            "  0"           </span>
 <span class="co">#&gt; # … with 6 more variables: var2_Placebo &lt;chr&gt;, `var2_Xanomeline High</span>
 <span class="co">#&gt; #   Dose` &lt;chr&gt;, `var2_Xanomeline Low Dose` &lt;chr&gt;, ord_layer_index &lt;chr&gt;,</span>
 <span class="co">#&gt; #   ord_layer_1 &lt;chr&gt;, ord_layer_2 &lt;chr&gt;</span></pre></body></html></div>
@@ -721,25 +727,25 @@
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Sex</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">F</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">53 ( 62%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">40 ( 48%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">50 ( 60%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">143 ( 56%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">53 ( 62%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">40 ( 48%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">50 ( 60%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">143 ( 56%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">M</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">33 ( 38%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">44 ( 52%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">34 ( 40%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">111 ( 44%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">33 ( 38%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">44 ( 52%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">34 ( 40%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">111 ( 44%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Age Categories</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">n</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">86</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">84</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">84</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 86</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 84</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 84</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">254</td>
 </tr>
 <tr>
@@ -761,10 +767,10 @@
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Q1, Q3</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">69, 82</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">71, 80</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">71, 82</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">70, 81</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">69.2, 81.8</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">70.8, 80.0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">71.0, 82.0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">70.0, 81.0</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
@@ -777,98 +783,98 @@
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Missing</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Race</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">AMERICAN INDIAN OR ALASKA NATIVE</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0 (  0%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1 (  1%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0 (  0%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1 (  0%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0 (  0%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1 (  1%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0 (  0%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1 (  0%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">BLACK OR AFRICAN AMERICAN</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 8 (  9%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 9 ( 11%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 6 (  7%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">23 (  9%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 8 (  9%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 9 ( 11%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 6 (  7%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">23 (  9%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">WHITE</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 91%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">74 ( 88%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 93%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">230 ( 91%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 91%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">74 ( 88%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 93%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">230 ( 91%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Ethnicity</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">HISPANIC OR LATINO</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 3 (  3%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 3 (  4%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 6 (  7%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">12 (  5%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 3 (  3%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 3 (  4%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 6 (  7%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">12 (  5%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">NOT HISPANIC OR LATINO</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">83 ( 97%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">81 ( 96%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 93%)  </td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">242 ( 95%)  </td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">83 ( 97%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">81 ( 96%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">78 ( 93%)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">242 ( 95%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Weight</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">n</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">86</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">84</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">84</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 86</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 84</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 84</td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">254</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Mean (SD)</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">62.8 (12.77)</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">70.0 (14.65)</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">67.3 (14.12)</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">66.6 (14.13)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 62.76 ( 12.772)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 70.00 ( 14.653)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 67.28 ( 14.124)</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 66.65 ( 14.131)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Median</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">60.5</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">69.2</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">64.9</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">66.7</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 60.55</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 69.20</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 64.90</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 66.70</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Q1, Q3</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">54, 74</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">57, 80</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">56, 77</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">55, 77</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 53.62,  74.18</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 56.98,  80.30</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 56.05,  77.45</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 55.30,  77.10</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Min, Max</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">34, 86</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">42, 108</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">45, 106</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">34, 108</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 34.0,  86.2</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 41.7, 108.0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 45.4, 106.1</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 34.0, 108.0</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">Missing</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 0</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1</td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 1</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  1</td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  1</td>
 </tr>
 </table>
 <p>And just like that - you have a huxtable table ready to go.</p>

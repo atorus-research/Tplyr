@@ -17,6 +17,7 @@
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
+#' @importFrom forcats fct_expand
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -73,10 +74,10 @@ NULL
 #' # Use just the defaults
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
-#'     group_desc(mpg, by=cyl) %>%
+#'     group_desc(mpg, by=cyl)
 #'   ) %>%
 #'   add_layer(
-#'     group_count(carb, by=cyl) %>%
+#'     group_count(carb, by=cyl)
 #'   ) %>%
 #'   build()
 #'
@@ -251,3 +252,5 @@ denom_ignore <- NULL
 denoms_distinct_df <- NULL
 missing_name <- NULL
 outer_inf <- NULL
+shift_layer_formats <- NULL
+.tmp_name <- NULL
