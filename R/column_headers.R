@@ -311,7 +311,7 @@ make_header_row <- function(s, names, df) {
                             end = nchar(string_arg) - 2)
 
       # Split the placeholder on underscore and parse it as an expression
-      split_args <- parse(text = str_split(string_arg, "_", simplify = TRUE))
+      split_args <- parse(text =  paste0("`", str_split(string_arg, "_", simplify = TRUE), "`"))
 
       # Evaluate the function in the text. Might want to add more tests to
       # header_n_value in case weird things are passed

@@ -2,7 +2,7 @@
 title: "README"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{README}
+  %\VignetteIndexEntry{readme}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

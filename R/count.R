@@ -87,7 +87,7 @@ process_nested_count_target <- function(x) {
 
   evalq({
 
-    if(is.null(indentation)) indentation <- "\t"
+    if(is.null(indentation)) indentation <- "   "
 
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
                                                  by = vars(!!!by), where = !!where))
@@ -167,7 +167,21 @@ process_count_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
-      ungroup() %>%
+      ungroup()
+
+    # If there is a missing_count_string, but its not in the dataset
+    if(!is.null(missing_count_string) &&
+
+       !((missing_string %in% unique(built_target[, as_name(target_var[[1]])])) ||
+        any(is.na(built_target[, as_name(target_var[[1]])])))) {
+      # This adds the missing string as a factor to the tallies. This is needed
+      # to make sure the missing row is added even if there are no missing values.
+      summary_stat <- summary_stat %>%
+        mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
+                                           c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+    }
+
+    summary_stat <- summary_stat %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(n = 0, total = 0)) %>%
@@ -201,9 +215,21 @@ process_count_distinct_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
-      ungroup() %>%
-      # complete all combinations of factors to include combinations that don't exist.
-      # add 0 for combinations that don't exist
+      ungroup()
+
+      if(!is.null(missing_count_string) &&
+         !(missing_string %in% unique(build_target[, as_name(target_var[[1]])]) ||
+           any(is.na(built_target[, as_name(target_var[[1]])])))) {
+        # This adds the missing string as a factor to the tallies. This is needed
+        # to make sure the missing row is added even if there are no missing values.
+        distinct_stat <- distinct_stat %>%
+          mutate(!!target_var[[1]] := factor(.data[[as_name(target_var[[1]])]],
+                                             c(unique(.data[[as_name(target_var[[1]])]]), missing_string)))
+      }
+
+    # complete all combinations of factors to include combinations that don't exist.
+    # add 0 for combinations that don't exist
+    distinct_stat <- distinct_stat %>%
       complete(!!treat_var, !!!by, !!!target_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
@@ -259,6 +285,29 @@ prepare_format_metadata.count_layer <- function(x) {
       format_strings[['n_counts']] <- gather_defaults(environment())[['n_counts']]
     }
 
+    # If there is both n & distinct, or pct and distinct_pct there has to be a
+    # distinct_by
+    # If both distinct and n
+    if(((("distinct" %in% map(format_strings$n_counts$vars, as_name) &
+         "n" %in% map(format_strings$n_counts$vars, as_name)) |
+        # or both distinct_pct and pct
+        ("distinct_pct" %in% map(format_strings$n_counts$vars, as_name) &
+         "pct" %in% map(format_strings$n_counts$vars, as_name))) &
+        # AND distinct_by is null
+        is.null(distinct_by))) {
+      stop("You can't use distinct and non-distinct parameters without specifying a distinct_by")
+    }
+
+    # If distinct_by isn't there, change distinct and distinct_pct
+    if(is.null(distinct_by) & "distinct" %in% map(format_strings$n_counts$vars, as_name)) {
+      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct")
+      format_strings$n_counts$vars[[distinct_ind]] <- expr(n)
+    }
+    if(is.null(distinct_by) & "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) {
+      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_pct")
+      format_strings$n_counts$vars[[distinct_ind]] <- expr(pct)
+    }
+
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
 
@@ -280,14 +329,6 @@ prepare_format_metadata.count_layer <- function(x) {
 #' @export
 process_formatting.count_layer <- function(x, ...) {
   evalq({
-
-    # TODO: Move this to the layer compatibility when we implement that
-    # If there is a distinct and there isn't a distinct_by, stop
-    if(("distinct" %in% map(format_strings$n_counts$vars, as_name) |
-        "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) &
-       is.null(distinct_by)) {
-      stop("You can't use distinct without specifying a distinct_by")
-    }
 
     # Calculate the indentation length. This is needed if there are missing
     #values in a nested count layer. Length is sent to string construction and
@@ -325,16 +366,8 @@ process_formatting.count_layer <- function(x, ...) {
 
     if(is_built_nest) {
 
-      if(!is.null(nest_count) && nest_count) {
-        formatted_data <- formatted_data %>%
-          mutate(!!as_name(by[[1]]) := NULL) %>%
-          replace_by_string_names(quos(!!!by, summary_var))
-
-      } else {
         formatted_data <- formatted_data %>%
           replace_by_string_names(quos(!!!by, summary_var))
-
-      }
 
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
@@ -441,7 +474,8 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   }
 
 
-  string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
+  # Left pad set to 0 so it won't pad to the left anymore.
+  string_ <- pad_formatted_data(string_, 0, max_n_width)
 
   string_
 }

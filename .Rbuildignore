@@ -3,3 +3,6 @@
 ^azure-pipelines\.yml$
 ^\.github$
 ^\.travis\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

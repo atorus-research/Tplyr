@@ -170,7 +170,7 @@ add_order_columns.count_layer <- function(x) {
       })
 
       # Used to remove the prefix. String is encoded to get controlled characters i.e. \t
-      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 2)
+      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 3)
 
       # Only the outer columns
       filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
@@ -197,6 +197,16 @@ add_order_columns.count_layer <- function(x) {
                                  filter_logic = filter_logic,
                                  indentation = indentation,
                                  outer_inf = outer_inf))
+
+      if (!is.null(nest_count) && nest_count) {
+        # If the table nest should be collapsed into one row.
+        row_label_names <- vars_select(names(formatted_data), starts_with("row"))
+        # Remove first row
+        formatted_data[, 1] <- NULL
+        # Rename row labels
+        names(formatted_data)[length(by)] <- head(row_label_names, -1)
+
+      }
 
       # If it isn't a nested count layer
     } else {
@@ -557,7 +567,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   #Same idea here, remove prefix
   filtered_group_data <- group_data[-1, ] %>%
     mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
-                                                             indentation_length))
+                                                             indentation_length + 1))
 
   # The first row is always the first thing in the order so make it Inf
   group_data[1, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
