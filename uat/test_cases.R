@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/24/2020
+#' 8/26/2020
 
 #setup ----
 #insert any necessary libraries
@@ -814,7 +814,7 @@ test_that('T17',{
   cnt_t2 <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
   tot_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & SEX == "F"), n=n())[[1]]
   cnt_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
-  t17_noarg2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t2,tot_p2))
+  suppressWarnings(t17_noarg2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t2,tot_p2)))
   testthat::expect_equal(t17_noarg$estimate[[1]] - t17_noarg$estimate[[2]],
                          filter(test_17[[1]]$riskdiff, summary_var == 'WHITE' & measure == 'dif')[[3]],
                          label = "T17.1")
@@ -1891,7 +1891,7 @@ test_that('T36',{
     complete(ETHNIC, RACE) %>%
     mutate(ethnic_text = "Ethnicity") %>%
     mutate(race_text = "Race")
-  testthat::expect_equal(c(t36_1$ethnic_text, t36_1$ETHNIC, t36_1$race_texwellt, t36_1$RACE),
+  testthat::expect_equal(c(t36_1$ethnic_text, t36_1$ETHNIC, t36_1$race_text, t36_1$RACE),
                          c(test_36$row_label1, test_36$row_label2, test_36$row_label3, test_36$row_label4),
                          label = "T36.1")
   #manual check(s)
@@ -2231,6 +2231,7 @@ test_that('T42',{
   t42_racesort <- distinct(adsl, RACE, RACEN) %>%
     mutate(sorter = as.numeric(RACEN)) %>%
     select(RACE,sorter)
+
   t42_sexsort <- distinct(adsl, SEX) %>%
     mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
     select(SEX,sorter)
@@ -2260,7 +2261,7 @@ test_that('T42',{
 
   testthat::expect_equal(c(t42_1$label, t42_1$sorter),
                          c(test_42$row_label1, test_42$ord_layer_1),
-                         label = "T41.1")
+                         label = "T42.1")
   #manual check(s)
 
   #clean up working directory
@@ -2270,6 +2271,190 @@ test_that('T42',{
   rm(t42_bysex)
   rm(t42_1)
   rm(test_42)
+})
+
+
+#test 43 ----
+test_that('T43',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
+      )
+
+    test_43 <- build(t) %>%
+      arrange(ord_layer_index, desc(ord_layer_1), row_label1, desc(ord_layer_2), row_label2)
+
+    # output table to check attributes
+    save(test_43, file = "~/Tplyr/uat/output/test_43.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_43)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_43.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t43_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
+    mutate(total = n) %>%
+    mutate(AEDECOD = AEBODSYS)
+  t43_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
+    left_join(select(t43_aebodsys, TRTA, AEBODSYS, total), by=c("TRTA","AEBODSYS")) %>%
+    rbind(t43_aebodsys) %>%
+    pivot_wider(values_from=c(n,total), names_from = TRTA) %>%
+    arrange(desc(`total_Xanomeline High Dose`), AEBODSYS, desc(`n_Xanomeline High Dose`), AEDECOD) %>%
+    filter(n_Placebo > 0 | `n_Xanomeline Low Dose` > 0 | `n_Xanomeline High Dose` > 0) %>%
+    mutate(AEDECOD = paste0('   ',AEDECOD))
+
+  testthat::expect_equal(c(t43_1$AEBODSYS, t43_1$AEDECOD, t43_1$`total_Xanomeline High Dose`, t43_1$`n_Xanomeline High Dose`),
+                         c(test_43$row_label1, test_43$row_label2, test_43$ord_layer_1, test_43$ord_layer_2),
+                         label = "T43.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t43_aebodsys)
+  rm(t43_1)
+  rm(test_43)
+})
+
+
+#test 44 ----
+test_that('T44',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_order_count_method("byvarn")
+      ) %>%
+      add_layer(
+        group_count(ETHNIC) %>%
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
+      ) %>%
+      add_layer(
+        group_count(SEX) %>%
+          set_order_count_method("byfactor")
+      ) %>%
+      add_layer(
+        group_count(RACE_FACTOR) %>%
+          set_order_count_method("byfactor")
+      )
+
+    test_44 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
+
+    # output table to check attributes
+    save(test_44, file = "~/Tplyr/uat/output/test_44.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_44)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_44.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t44_racesort <- distinct(adsl, RACE, RACEN) %>%
+    mutate(sorter = as.numeric(RACEN)) %>%
+    select(RACE,sorter)
+
+  t44_ethnicsort <- filter(adsl, TRT01P == "Xanomeline High Dose")%>%
+    group_by(ETHNIC) %>%
+    summarise(sorter = n()) %>%
+    select(ETHNIC,sorter)
+
+  t44_sexsort <- distinct(adsl, SEX) %>%
+    mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
+    select(SEX,sorter)
+
+  t44_racefactorsort <- distinct(adsl, RACE_FACTOR) %>%
+    complete(RACE_FACTOR) %>%
+    cbind(sorter = c(1,2,3,4))
+
+  t44_race <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = RACE) %>%
+    left_join(t44_racesort, by="RACE") %>%
+    select(label, sorter)  %>%
+    mutate(ord_layer = 1)
+
+  t44_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, ETHNIC,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = ETHNIC) %>%
+    left_join(t44_ethnicsort, by="ETHNIC") %>%
+    select(label, sorter) %>%
+    mutate(ord_layer = 2)
+
+  t44_sex <- group_by(adsl, TRT01P, SEX) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, SEX,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = SEX) %>%
+    left_join(t44_sexsort, by="SEX") %>%
+    select(label, sorter) %>%
+    mutate(ord_layer = 3)
+
+  t44_racefactor <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE_FACTOR ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = RACE_FACTOR) %>%
+    left_join(t44_racefactorsort, by="RACE_FACTOR") %>%
+    select(label, sorter)  %>%
+    mutate(ord_layer = 4)
+
+  t44_1 <- rbind(t44_race, t44_ethnic, t44_sex, t44_racefactor)%>%
+    arrange(ord_layer, sorter)
+
+  testthat::expect_equal(c(t44_1$label, t44_1$sorter),
+                         c(test_44$row_label1, test_44$ord_layer_1),
+                         label = "T44.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t44_racesort)
+  rm(t44_ethnicsort)
+  rm(t44_sexsort)
+  rm(t44_racefactorsort)
+  rm(t44_race)
+  rm(t44_ethnic)
+  rm(t44_sex)
+  rm(t44_racefactor)
+  rm(t44_1)
+  rm(test_44)
 })
 
 #clean up ----
