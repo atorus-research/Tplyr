@@ -46,7 +46,7 @@ adsl <- adsl %>%
   mutate(
     SEX = recode(SEX, M = "Male", F = "Female"), 
     RACE = factor(RACE, c("AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN", "BLACK OR AFRICAN AMERICAN", 
-                          "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDE", "WHITE", "MULTIPLE"))
+                          "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER", "WHITE", "MULTIPLE"))
   )
 
 t <- tplyr_table(adsl, TRT01P) %>% 
@@ -95,7 +95,6 @@ Now that we have our data, let's make sure it's in the right order. Additionally
 ```{r presentation_prep}
 dat <- dat %>% 
   arrange(ord_layer_index, ord_layer_1, ord_layer_2) %>% 
-  # select(starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`, var1_Total) %>% 
   apply_row_masks(row_breaks = TRUE) %>% 
   select(starts_with("row_label"), var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`, var1_Total) %>%
   add_column_headers(
@@ -109,9 +108,10 @@ dat %>%
 Now you can see things coming together. In this block, we:
 
 - Sorting the data by the layer, by the row labels (which in this case are just text strings we defined), and by the results. Review the Sorting vignette to understand how each layer handles sorting in more detail.
+- The next step is a 'Tplyr' function. Essentially, **after** your data are sorted, this function will look at all of your `row_label` variables and drop any repeating values. For packages like 'huxtable', this eases the process of making your table presentation ready, so you don't need to do any cell merging once the 'huxtable' table is created. Additionally, here we set the `row_breaks` option to `TRUE`. This will insert a blank row between each of your layers, which helps improve the presentation depending on your output. It's important to note that the input dataset **must** still have the `ord_layer_index` variable attached in order for the blank rows to be added. Sorting should be done prior, and column reordering/dropping may be done after.
 - The next step is where I re-order the columns and drop off the order columns. For more information about how to get the most out of `dplyr::select()`, you can look into 'tidyselect' [here](https://tidyselect.r-lib.org/reference/select_helpers.html). This is where the `starts_with` comes.
-- The last step is a 'Tplyr' function. Essentially, **after** your data are sorted, this function will look at all of your `row_label` variables and drop any repeating values. For packages like 'huxtable', this eases the process of making your table presentation ready, so you don't need to do any cell merging once the 'huxtable' table is created.
 - Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. `add_column_headers()` does this for you by letting you just enter in a string to define your headers. But there's more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that Tplyr calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.
+
 
 ## Table Styling
 There are a lot of options of where to go next. The [gt](https://gt.rstudio.com/) package is always a good choice, and we've been using [kableExtra](https://haozhu233.github.io/kableExtra/) throughout these vignettes. At the moment, with the tools we've made available in 'Tplyr', if you're aiming to create RTF outputs (which is still a common requirement in within pharma companies), [huxtable](https://hughjonesd.github.io/huxtable/) and our package [pharmaRTF](https://github.com/atorus-research/pharmaRTF) will get you where you need to go. 
