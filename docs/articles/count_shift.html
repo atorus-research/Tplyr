@@ -83,6 +83,12 @@
     <li>
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
+    <li>
+      <a href="../articles/options-vignette.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Release Vignettes</li>
     <li>
@@ -127,11 +133,11 @@
 <div id="frequency-tables" class="section level1">
 <h1 class="hasAnchor">
 <a href="#frequency-tables" class="anchor"></a>Frequency Tables</h1>
-<p>Tplyr is designed for flexible functionality when designing tables. When designing the display of the frequency of discrete values in a target dataset <code><a href="../reference/layer_constructors.html">group_count()</a></code> and <code><a href="../reference/layer_constructors.html">group_shift()</a></code> both offer methods for intuitive design. Common types of frequency tables found in clinical reports are adverse event frequencies, demographic counts, disposition counts, and concomitant medication counts. Tplyr also has native functions that can create risk differences between groups.</p>
+<p>At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it’s not that easy. And in clinical reports, there’s quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we’ve added a good bit of flexibility into both <code><a href="../reference/layer_constructors.html">group_count()</a></code> and <code><a href="../reference/layer_constructors.html">group_shift()</a></code> to help you get what you need when creating these reports, whether you’re creating a demographics table, adverse events, of shift in lab results.</p>
 <div id="a-simple-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-simple-example" class="anchor"></a>A simple example</h3>
-<p>Here is an example of a table you could see in a statistical report. This table demonstrates the frequency of dispositions across treatment groups sorted descending by the total occurrences on the study.</p>
+<p>Let’s start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we’re sorting by descending total occurrences using the <code>Total</code> group.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="kw">Treated</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span>)) <span class="kw">%&gt;%</span>
@@ -355,13 +361,13 @@ LOST TO FOLLOW-UP
 <div id="percentages" class="section level2">
 <h2 class="hasAnchor">
 <a href="#percentages" class="anchor"></a>Percentages</h2>
-<p>Frequencies can be displayed along with percentages showing the relative value of the count to the column. There are several parameters to define the denominator used in the calculation.</p>
+<p>Counting is one thing - but a count by itself doesn’t give much context. Often frequencies in clinical reports are paired with a percentage, which allows you to understand the proportion of events/subjects to some total - but that total can prove to be complicated, which is why we’ve included a few functions to aid in giving you the necessary denominator.</p>
 <ul>
 <li>
-<code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> function allows users calculate denominators using any variable within the by, cols, treatment, or target variables. This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This function allows users to specify any variable passed in the table or layer, meaning denominators can be specified by any combination of variables. This is particularly useful for shift layers that use a combination of row and column variables.
+<code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> function allows users calculate denominators using any variable within the by, cols, treatment, or target variables. This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This is particularly useful for shift tables, which use a combination of row and column variables.
 <ul>
 <li>
-<code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator.</li>
+<code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator. For example, if your data include NAs, you can use “NA” in <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> and those will be excluded from the denominator.</li>
 </ul>
 </li>
 </ul>
@@ -370,10 +376,11 @@ LOST TO FOLLOW-UP
 <div id="distinct-versus-event-counts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#distinct-versus-event-counts" class="anchor"></a>Distinct Versus Event Counts</h2>
-<p>Several tables may not count the number of each occurrences, but instead the distinct number of some other variable in the data. For example, adverse event counts will display the number of subjects that have an adverse event as well as the number of adverse events as a whole. The <code>set_distinct_by</code> function sets the variables used to calculate the distinct occurrences of some value using the specified ‘by’ variables.</p>
+<p>Just as important as denominator flexibility is the determination of whether you should be using distinct or non-distinct counts - or some combination of both. Adverse event tables are a perfect example. Often, you’re concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn’t necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group.</p>
+<p>‘Tplyr’ allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the non-distinct counts too. The <code>set_distinct_by</code> function sets the variables used to calculate the distinct occurrences of some value using the specified ‘by’ variables.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEBODSYS</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx (xx.xx%) [xxx]"</span>, <span class="no">distinct</span>, <span class="no">distinct_pct</span>, <span class="no">n</span>))
   ) <span class="kw">%&gt;%</span>
@@ -405,87 +412,7 @@ ord_layer_1
 <tbody>
 <tr>
 <td style="text-align:left;">
-CARDIAC DISORDERS
-</td>
-<td style="text-align:left;">
-4 (12.50%) [ 5]
-</td>
-<td style="text-align:left;">
-6 (13.95%) [ 6]
-</td>
-<td style="text-align:left;">
-5 (10.00%) [ 6]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CONGENITAL, FAMILIAL AND GENETIC DISORDERS
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:left;">
-1 ( 2.33%) [ 1]
-</td>
-<td style="text-align:left;">
-0 ( 0.00%) [ 0]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GASTROINTESTINAL DISORDERS
-</td>
-<td style="text-align:left;">
-6 (18.75%) [ 6]
-</td>
-<td style="text-align:left;">
-4 ( 9.30%) [ 6]
-</td>
-<td style="text-align:left;">
-3 ( 6.00%) [ 3]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
-</td>
-<td style="text-align:left;">
-9 (28.12%) [ 11]
-</td>
-<td style="text-align:left;">
-15 (34.88%) [ 21]
-</td>
-<td style="text-align:left;">
-18 (36.00%) [ 21]
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-IMMUNE SYSTEM DISORDERS
+ABDOMINAL PAIN
 </td>
 <td style="text-align:left;">
 0 ( 0.00%) [ 0]
@@ -500,21 +427,101 @@ IMMUNE SYSTEM DISORDERS
 1
 </td>
 <td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AGITATION
+</td>
+<td style="text-align:left;">
+0 ( 0.00%) [ 0]
+</td>
+<td style="text-align:left;">
+0 ( 0.00%) [ 0]
+</td>
+<td style="text-align:left;">
+1 ( 2.00%) [ 1]
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ANXIETY
+</td>
+<td style="text-align:left;">
+0 ( 0.00%) [ 0]
+</td>
+<td style="text-align:left;">
+0 ( 0.00%) [ 0]
+</td>
+<td style="text-align:left;">
+1 ( 2.00%) [ 1]
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APPLICATION SITE DERMATITIS
+</td>
+<td style="text-align:left;">
+1 ( 3.12%) [ 1]
+</td>
+<td style="text-align:left;">
+3 ( 6.98%) [ 3]
+</td>
+<td style="text-align:left;">
+2 ( 4.00%) [ 2]
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APPLICATION SITE ERYTHEMA
+</td>
+<td style="text-align:left;">
+0 ( 0.00%) [ 0]
+</td>
+<td style="text-align:left;">
+3 ( 6.98%) [ 3]
+</td>
+<td style="text-align:left;">
+4 ( 8.00%) [ 4]
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
 5
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-INFECTIONS AND INFESTATIONS
+APPLICATION SITE IRRITATION
 </td>
 <td style="text-align:left;">
-5 (15.62%) [ 5]
+1 ( 3.12%) [ 1]
 </td>
 <td style="text-align:left;">
-4 ( 9.30%) [ 4]
+3 ( 6.98%) [ 4]
 </td>
 <td style="text-align:left;">
-3 ( 6.00%) [ 3]
+2 ( 4.00%) [ 2]
 </td>
 <td style="text-align:right;">
 1
@@ -525,12 +532,13 @@ INFECTIONS AND INFESTATIONS
 </tr>
 </tbody>
 </table>
-<p>The table above displaces first the number of subjects who had a the specified adverse event, and th proportion of subjects in that treatment group who experienced the event. Within the brackets, the total number of occurrences of that event are displayed.</p>
+<p>You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> triggered the derivation distinct_n and distinct_pct and the display of the values is then controlled by the <code><a href="../reference/f_str.html">f_str()</a></code> call in <code>set_format_strings</code>.</p>
 </div>
 <div id="missing-counts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-counts" class="anchor"></a>Missing Counts</h2>
-<p>In many frequency tables, missing counts are displayed without percentages. Tplyr can support different displays for missing values. The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code>f_str</code> object to display the missing values, as well as a named string to determine what missing is defined as. When a named string is passed in the string argument, the missing row label will use that instead of “missing”.</p>
+<p>Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator?</p>
+<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code>f_str</code> object to set the display of missing values. Additionally, using the <code>string</code> parameter you can set the value chosen to be summarized as missing, and by using a named character vector, you can control the row_label of what will be used for missing values.</p>
 <p>The example below 50 random values are removed and NA is specified as the missing string. It also ignores that value in the denominator using <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">adae2</span> <span class="kw">&lt;-</span> <span class="no">adae</span>
 <span class="no">adae2</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">200</span>, <span class="fl">50</span>), <span class="st">"AESEV"</span>] <span class="kw">&lt;-</span> <span class="fl">NA</span>
