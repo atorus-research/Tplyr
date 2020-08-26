@@ -135,7 +135,7 @@ For more information on these parameters, see the documentation for `prop.test`.
 The default of `add_risk_diff` works on the distinct counts available within the count summary. If for whatever reason you'd like to run risk difference on the non-distinct counts, switch the `distinct` argument to FALSE. `add_risk_diff` also will function on multi-level summaries no different than single level, so no concerns there either.
 
 ```{r riskdiff4}
-t <- tplyr_table(adae, TRTA, where= AEBODSYS == "CARDIAC DISORDERS") %>% 
+t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -155,7 +155,7 @@ suppressWarnings(build(t)) %>%
 Risk difference also works with the `cols` argument, but it's important to understand how the comparisons work in these situation. Here, it's still the treatment groups that are compared - but the column argument is used as a "by" variable. For example:
 
 ```{r riskdiff5}
-t <- tplyr_table(adae, TRTA, where= AEBODSYS == "CARDIAC DISORDERS", cols=SEX) %>% 
+t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
