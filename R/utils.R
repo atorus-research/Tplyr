@@ -147,7 +147,14 @@ get_target_levels <- function(e, x) {
 #' already be sorted and therefore should only be applied once the data frame is in
 #' its final sort sequence.
 #'
+#' Additionally, \code{apply_row_masks} can add row breaks for you between each layer.
+#' Row breaks are inserted as blank rows. This relies on the \code{ord_layer_index} order
+#' variable constructed in \code{build} still being attached to the dataset. An additional
+#' order variable is attached named \code{ord_break}, but the output dataset is sorted
+#' to properly insert the row breaks between layers.
+#'
 #' @param dat Data.frame / tibble to mask repeating row_labels
+#' @param row_breaks Boolean - set to TRUE to insert row breaks
 #'
 #' @return tibble with blanked out rows where values are repeating
 #' @export
