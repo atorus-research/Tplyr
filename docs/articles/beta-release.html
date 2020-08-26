@@ -99,6 +99,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -168,9 +171,9 @@
 <span class="co">#&gt; # A tibble: 3 x 2</span>
 <span class="co">#&gt;   TRTA                     n</span>
 <span class="co">#&gt;   &lt;chr&gt;                &lt;int&gt;</span>
-<span class="co">#&gt; 1 Placebo                 32</span>
-<span class="co">#&gt; 2 Xanomeline High Dose    43</span>
-<span class="co">#&gt; 3 Xanomeline Low Dose     50</span></pre></body></html></div>
+<span class="co">#&gt; 1 Placebo                 21</span>
+<span class="co">#&gt; 2 Xanomeline High Dose    42</span>
+<span class="co">#&gt; 3 Xanomeline Low Dose     42</span></pre></body></html></div>
 <p>Note also the use of the new <code>f_str</code> variable names <code>distinct</code> and <code>distinct_pct</code>. We made these names separate from <code>n</code> and <code>pct</code> to make it explicit when you want to use one type of count or the other. This further allows you to create tables where you mix and match. Consider this common AE table structure:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r">
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
@@ -194,50 +197,50 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ABDOMINAL PAIN</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%) [0]</td>
+<td align="left">1 ( 2.4%) [1]</td>
 <td align="left">0 ( 0.0%) [0]</td>
-<td align="left">1 ( 2.0%) [1]</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AGITATION</td>
+<td align="left">ALOPECIA</td>
+<td align="left">1 ( 4.8%) [1]</td>
 <td align="left">0 ( 0.0%) [0]</td>
 <td align="left">0 ( 0.0%) [0]</td>
-<td align="left">1 ( 2.0%) [1]</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%) [0]</td>
-<td align="left">0 ( 0.0%) [0]</td>
-<td align="left">1 ( 2.0%) [1]</td>
+<td align="left">1 ( 2.4%) [2]</td>
+<td align="left">5 (11.9%) [8]</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( 3.1%) [1]</td>
-<td align="left">3 ( 7.0%) [3]</td>
-<td align="left">2 ( 4.0%) [2]</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 ( 4.8%) [3]</td>
+<td align="left">0 ( 0.0%) [0]</td>
+<td align="left">0 ( 0.0%) [0]</td>
 <td align="right">1</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 ( 4.8%) [1]</td>
 <td align="left">0 ( 0.0%) [0]</td>
-<td align="left">3 ( 7.0%) [3]</td>
-<td align="left">4 ( 8.0%) [4]</td>
+<td align="left">0 ( 0.0%) [0]</td>
 <td align="right">1</td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE IRRITATION</td>
-<td align="left">1 ( 3.1%) [1]</td>
-<td align="left">3 ( 7.0%) [4]</td>
-<td align="left">2 ( 4.0%) [2]</td>
+<td align="left">DERMATITIS CONTACT</td>
+<td align="left">0 ( 0.0%) [0]</td>
+<td align="left">0 ( 0.0%) [0]</td>
+<td align="left">1 ( 2.4%) [2]</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -276,34 +279,34 @@
 <td align="left">Xan.High N=(84)</td>
 </tr>
 <tr class="even">
-<td align="left">ABDOMINAL PAIN</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 2.0%)</td>
 </tr>
 <tr class="odd">
-<td align="left">AGITATION</td>
+<td align="left">ALOPECIA</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 2.0%)</td>
 </tr>
 <tr class="even">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 2.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">5 (11.9%)</td>
 </tr>
 <tr class="odd">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( 3.1%)</td>
-<td align="left">3 ( 7.0%)</td>
-<td align="left">2 ( 4.0%)</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 ( 4.8%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">3 ( 7.0%)</td>
-<td align="left">4 ( 8.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 </tr>
 </tbody>
 </table>
@@ -675,52 +678,52 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ABDOMINAL PAIN</td>
-<td align="left">0 ( 0%) [0]</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">1 ( 1%) [1]</td>
+<td align="left">0 ( 0%) [0]</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AGITATION</td>
+<td align="left">ALOPECIA</td>
+<td align="left">1 ( 2%) [1]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">0 ( 0%) [0]</td>
-<td align="left">1 ( 1%) [1]</td>
 <td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="left">1 ( 2%) [2]</td>
+<td align="left">5 ( 7%) [8]</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">COLD SWEAT</td>
+<td align="left">1 ( 6%) [3]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">0 ( 0%) [0]</td>
-<td align="left">1 ( 1%) [1]</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 ( 2%) [1]</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="left">0 ( 0%) [0]</td>
 <td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( 2%) [1]</td>
-<td align="left">3 ( 4%) [3]</td>
-<td align="left">2 ( 3%) [2]</td>
-<td align="right">1</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
+<td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0%) [0]</td>
-<td align="left">3 ( 4%) [3]</td>
-<td align="left">4 ( 5%) [4]</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="left">1 ( 2%) [2]</td>
 <td align="right">1</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">APPLICATION SITE IRRITATION</td>
-<td align="left">1 ( 2%) [1]</td>
-<td align="left">3 ( 5%) [4]</td>
-<td align="left">2 ( 3%) [2]</td>
-<td align="right">1</td>
-<td align="right">4</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -757,63 +760,63 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">4 (11%) [5]</td>
-<td align="left">6 ( 8%) [6]</td>
-<td align="left">5 ( 8%) [6]</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">21 (100%) [47]</td>
+<td align="left">42 (100%) [111]</td>
+<td align="left">42 (100%) [118]</td>
 <td align="right">1</td>
-<td align="right">6</td>
+<td align="right">111</td>
 <td align="right">Inf</td>
 </tr>
 <tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">ATRIAL FIBRILLATION</td>
-<td align="left">0 ( 0%) [0]</td>
-<td align="left">0 ( 0%) [0]</td>
-<td align="left">1 ( 1%) [1]</td>
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">ATRIAL FLUTTER</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">1 ( 1%) [1]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="right">1</td>
-<td align="right">6</td>
+<td align="right">111</td>
 <td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">ATRIAL HYPERTROPHY</td>
-<td align="left">1 ( 2%) [1]</td>
-<td align="left">0 ( 0%) [0]</td>
-<td align="left">0 ( 0%) [0]</td>
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">BUNDLE BRANCH BLOCK RIGHT</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ALOPECIA</td>
 <td align="left">1 ( 2%) [1]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="right">1</td>
-<td align="right">6</td>
+<td align="right">111</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">CARDIAC FAILURE CONGESTIVE</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">BLISTER</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="left">1 ( 2%) [2]</td>
+<td align="left">5 ( 7%) [8]</td>
+<td align="right">1</td>
+<td align="right">111</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 ( 6%) [3]</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="left">0 ( 0%) [0]</td>
+<td align="right">1</td>
+<td align="right">111</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">DERMATITIS ATOPIC</td>
 <td align="left">1 ( 2%) [1]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="left">0 ( 0%) [0]</td>
 <td align="right">1</td>
-<td align="right">6</td>
+<td align="right">111</td>
 <td align="right">0</td>
 </tr>
 </tbody>
@@ -832,12 +835,12 @@
 <span class="co">#&gt; # A tibble: 6 x 8</span>
 <span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 CARDIAC D… "CARDIAC … " 5 ( 10.6%… " 6 (  7.8%)"    " 6 (  7.9%)"   </span>
-<span class="co">#&gt; 2 CARDIAC D… "   ATRIA… " 0 (  0.0%… " 0 (  0.0%)"    " 1 (  1.3%)"   </span>
-<span class="co">#&gt; 3 CARDIAC D… "   ATRIA… " 0 (  0.0%… " 1 (  1.3%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt; 4 CARDIAC D… "   ATRIA… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt; 5 CARDIAC D… "   BUNDL… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
-<span class="co">#&gt; 6 CARDIAC D… "   CARDI… " 1 (  2.1%… " 0 (  0.0%)"    " 0 (  0.0%)"   </span>
+<span class="co">#&gt; 1 SKIN AND … "SKIN AND… " 47 (100.0… "111 (100.0%)"   "118 (100.0%)"  </span>
+<span class="co">#&gt; 2 SKIN AND … "   ACTIN… "  0 (  0.0… "  1 (  0.9%)"   "  0 (  0.0%)"  </span>
+<span class="co">#&gt; 3 SKIN AND … "   ALOPE… "  1 (  2.1… "  0 (  0.0%)"   "  0 (  0.0%)"  </span>
+<span class="co">#&gt; 4 SKIN AND … "   BLIST… "  0 (  0.0… "  2 (  1.8%)"   "  8 (  6.8%)"  </span>
+<span class="co">#&gt; 5 SKIN AND … "   COLD … "  3 (  6.4… "  0 (  0.0%)"   "  0 (  0.0%)"  </span>
+<span class="co">#&gt; 6 SKIN AND … "   DERMA… "  1 (  2.1… "  0 (  0.0%)"   "  0 (  0.0%)"  </span>
 <span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
 <span class="co">#&gt; #   ord_layer_2 &lt;dbl&gt;</span></pre></body></html></div>
 <p>You can also change the character used to set the indentation, which defaults to <code>\t</code> for a tab.</p>
@@ -863,49 +866,49 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">5 ( 10.6%)</td>
-<td align="left">6 ( 7.8%)</td>
-<td align="left">6 ( 7.9%)</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">47 (100.0%)</td>
+<td align="left">111 (100.0%)</td>
+<td align="left">118 (100.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
 <tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">—&gt;ATRIAL FIBRILLATION</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">—&gt;ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 0.9%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.3%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">—&gt;ATRIAL FLUTTER</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">—&gt;ALOPECIA</td>
+<td align="left">1 ( 2.1%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.3%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">—&gt;ATRIAL HYPERTROPHY</td>
-<td align="left">1 ( 2.1%)</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">—&gt;BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">0 ( 0.0%)</td>
+<td align="left">2 ( 1.8%)</td>
+<td align="left">8 ( 6.8%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">—&gt;BUNDLE BRANCH BLOCK RIGHT</td>
-<td align="left">1 ( 2.1%)</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">—&gt;COLD SWEAT</td>
+<td align="left">3 ( 6.4%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -913,8 +916,8 @@
 <td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="left">CARDIAC DISORDERS</td>
-<td align="left">—&gt;CARDIAC FAILURE CONGESTIVE</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">—&gt;DERMATITIS ATOPIC</td>
 <td align="left">1 ( 2.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
@@ -957,60 +960,60 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ABDOMINAL PAIN</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( Inf%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 (100.0%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AGITATION</td>
-<td align="left">0 ( 0.0%)</td>
-<td align="left">0 ( 0.0%)</td>
+<td align="left">ALOPECIA</td>
 <td align="left">1 (100.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">0 ( 0.0%)</td>
-<td align="left">1 (100.0%)</td>
+<td align="left">1 ( Inf%)</td>
+<td align="left">1 ( Inf%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( Inf%)</td>
-<td align="left">1 ( Inf%)</td>
+<td align="left">COLD SWEAT</td>
 <td align="left">1 (100.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
-<td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( Inf%)</td>
+<td align="left">DERMATITIS ATOPIC</td>
 <td align="left">1 (100.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE IRRITATION</td>
+<td align="left">DERMATITIS CONTACT</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 <td align="left">1 ( Inf%)</td>
-<td align="left">1 ( Inf%)</td>
-<td align="left">1 (100.0%)</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
@@ -1058,60 +1061,60 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ABDOMINAL PAIN</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0) [0]</td>
+<td align="left">1 ( Inf) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 (100.0) [1]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AGITATION</td>
-<td align="left">0 ( 0.0) [0]</td>
-<td align="left">0 ( 0.0) [0]</td>
+<td align="left">ALOPECIA</td>
 <td align="left">1 (100.0) [1]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 (100.0) [1]</td>
+<td align="left">1 ( Inf) [2]</td>
+<td align="left">1 ( Inf) [8]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( Inf) [1]</td>
-<td align="left">1 ( Inf) [3]</td>
-<td align="left">1 (100.0) [2]</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 (100.0) [3]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 (100.0) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( Inf) [3]</td>
-<td align="left">1 (100.0) [4]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE IRRITATION</td>
-<td align="left">1 ( Inf) [1]</td>
-<td align="left">1 ( Inf) [4]</td>
-<td align="left">1 (100.0) [2]</td>
+<td align="left">DERMATITIS CONTACT</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">1 ( Inf) [2]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
@@ -1159,60 +1162,60 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ABDOMINAL PAIN</td>
+<td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0) [0]</td>
+<td align="left">1 ( Inf) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 (100.0) [1]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AGITATION</td>
-<td align="left">0 ( 0.0) [0]</td>
-<td align="left">0 ( 0.0) [0]</td>
+<td align="left">ALOPECIA</td>
 <td align="left">1 (100.0) [1]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">ANXIETY</td>
+<td align="left">BLISTER</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 (100.0) [1]</td>
+<td align="left">1 ( Inf) [2]</td>
+<td align="left">1 ( Inf) [8]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE DERMATITIS</td>
-<td align="left">1 ( Inf) [1]</td>
-<td align="left">1 ( Inf) [3]</td>
-<td align="left">1 (100.0) [2]</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 (100.0) [3]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">APPLICATION SITE ERYTHEMA</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 (100.0) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( Inf) [3]</td>
-<td align="left">1 (100.0) [4]</td>
+<td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
-<td align="left">APPLICATION SITE IRRITATION</td>
-<td align="left">1 ( Inf) [1]</td>
-<td align="left">1 ( Inf) [4]</td>
-<td align="left">1 (100.0) [2]</td>
+<td align="left">DERMATITIS CONTACT</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">0 ( 0.0) [0]</td>
+<td align="left">1 ( Inf) [2]</td>
 <td align="right">1</td>
 <td align="left"></td>
 <td align="left"></td>
@@ -1295,183 +1298,53 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ALB</td>
+<td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">40.8 ( 4.32)</td>
-<td align="left">39.0 ( )</td>
-<td align="left">41.0 ( 4.24)</td>
+<td align="left">5.3058 ( 2.05463)</td>
+<td align="left">4.6070 ( 1.30148)</td>
+<td align="left">6.7320 ( 2.94018)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">ALP</td>
+<td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">80.5 ( 20.07)</td>
-<td align="left"></td>
-<td align="left">77.3 ( 29.19)</td>
+<td align="left">2.180413 (0.0692494)</td>
+<td align="left">2.204333 (0.1372011)</td>
+<td align="left">2.161054 (0.0830867)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">ALT</td>
+<td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">23.0 (12.19)</td>
-<td align="left">26.5 ( 7.78)</td>
-<td align="left">18.2 ( 8.41)</td>
+<td align="left">175.8 ( 288.41)</td>
+<td align="left">108.2 ( 93.99)</td>
+<td align="left">83.1 ( 77.91)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AST</td>
+<td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">18.3 ( 4.73)</td>
-<td align="left">20.0 ( 0.00)</td>
-<td align="left">21.3 ( 2.31)</td>
+<td align="left">34.5 ( 34.77)</td>
+<td align="left">36.0 ( 48.69)</td>
+<td align="left">34.9 ( 26.99)</td>
 <td align="right">1</td>
 <td align="right">4</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">BILI</td>
-<td align="left">Mean (SD)</td>
-<td align="left">7.410 ( 0.9873)</td>
-<td align="left">11.115 ( 4.4262)</td>
-<td align="left">8.977 ( 4.7090)</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">BUN</td>
-<td align="left">Mean (SD)</td>
-<td align="left">5.7566 (0.94333)</td>
-<td align="left">6.7830 ( )</td>
-<td align="left">8.7465 (1.76706)</td>
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">CA</td>
-<td align="left">Mean (SD)</td>
-<td align="left">2.256193 (0.0718184)</td>
-<td align="left">2.270450 (0.0499000)</td>
-<td align="left">2.364012 (0.0772376)</td>
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">CHOL</td>
-<td align="left">Mean (SD)</td>
-<td align="left">5.911596 (1.0265475)</td>
-<td align="left">5.633170 (1.0838292)</td>
-<td align="left">5.921940 (1.1714323)</td>
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">CK</td>
-<td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left">80.2 ( 21.41)</td>
-<td align="left">104.0 ( 6.08)</td>
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">CL</td>
-<td align="left">Mean (SD)</td>
-<td align="left">105.3 ( 1.37)</td>
-<td align="left">104.8 ( 2.59)</td>
-<td align="left">105.0 ( 2.71)</td>
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">CREAT</td>
-<td align="left">Mean (SD)</td>
-<td align="left">110.500 ( 21.0434)</td>
-<td align="left">110.500 ( 9.2715)</td>
-<td align="left">106.080 ( 16.1396)</td>
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">GGT</td>
-<td align="left">Mean (SD)</td>
-<td align="left">10.0 ( )</td>
-<td align="left">16.3 ( 4.51)</td>
-<td align="left">14.6 ( 4.98)</td>
-<td align="right">1</td>
-<td align="right">12</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">GLUC</td>
-<td align="left">Mean (SD)</td>
-<td align="left">5.042158 (0.7516773)</td>
-<td align="left">4.940390 ( )</td>
-<td align="left">4.940390 (1.2486666)</td>
-<td align="right">1</td>
-<td align="right">13</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">K</td>
-<td align="left">Mean (SD)</td>
-<td align="left">4.21 (0.355)</td>
-<td align="left">4.47 (0.665)</td>
-<td align="left">4.23 (0.404)</td>
-<td align="right">1</td>
-<td align="right">14</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">PHOS</td>
-<td align="left">Mean (SD)</td>
-<td align="left">1.065570 (0.2739897)</td>
-<td align="left">1.227020 ( )</td>
-<td align="left">1.146295 (0.1003937)</td>
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">PROT</td>
-<td align="left">Mean (SD)</td>
-<td align="left">73.3 ( 3.21)</td>
-<td align="left">70.8 ( 4.92)</td>
-<td align="left">72.2 ( 3.77)</td>
-<td align="right">1</td>
-<td align="right">16</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">SODIUM</td>
-<td align="left">Mean (SD)</td>
-<td align="left">141.5 ( 0.71)</td>
-<td align="left">141.0 ( 0.00)</td>
-<td align="left"></td>
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">278.7063 ( 65.19585)</td>
-<td align="left">270.6340 ( 29.44110)</td>
-<td align="left">325.9504 (120.76051)</td>
+<td align="left">260.6499 ( 83.69662)</td>
+<td align="left">289.2606 ( 88.16093)</td>
+<td align="left">253.0604 ( 87.00646)</td>
 <td align="right">1</td>
-<td align="right">18</td>
+<td align="right">5</td>
 <td align="right">1</td>
 </tr>
 </tbody>
@@ -1502,63 +1375,53 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">ALB</td>
+<td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">40.8 ( 4.32)</td>
-<td align="left">39.0 ( )</td>
-<td align="left">41.0 ( 4.24)</td>
+<td align="left">5.306 ( 2.0546)</td>
+<td align="left">4.607 ( 1.3015)</td>
+<td align="left">6.732 ( 2.9402)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">ALP</td>
+<td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">80.5 ( 20.07)</td>
-<td align="left"></td>
-<td align="left">77.3 ( 29.19)</td>
+<td align="left">2.180 (0.0692)</td>
+<td align="left">2.204 (0.1372)</td>
+<td align="left">2.161 (0.0831)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">ALT</td>
+<td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">23.0 (12.19)</td>
-<td align="left">26.5 ( 7.78)</td>
-<td align="left">18.2 ( 8.41)</td>
+<td align="left">175.8 (288.41)</td>
+<td align="left">108.2 ( 93.99)</td>
+<td align="left">83.1 ( 77.91)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">AST</td>
+<td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">18.3 ( 4.73)</td>
-<td align="left">20.0 ( 0.00)</td>
-<td align="left">21.3 ( 2.31)</td>
+<td align="left">34.5 ( 34.77)</td>
+<td align="left">36.0 ( 48.69)</td>
+<td align="left">34.9 ( 26.99)</td>
 <td align="right">1</td>
 <td align="right">4</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">BILI</td>
+<td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">7.410 ( 0.9873)</td>
-<td align="left">11.115 ( 4.4262)</td>
-<td align="left">8.977 ( 4.7090)</td>
+<td align="left">260.650 ( 83.6966)</td>
+<td align="left">289.261 ( 88.1609)</td>
+<td align="left">253.060 ( 87.0065)</td>
 <td align="right">1</td>
 <td align="right">5</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">BUN</td>
-<td align="left">Mean (SD)</td>
-<td align="left">5.757 (0.9433)</td>
-<td align="left">6.783 ( )</td>
-<td align="left">8.746 (1.7671)</td>
-<td align="right">1</td>
-<td align="right">6</td>
 <td align="right">1</td>
 </tr>
 </tbody>
@@ -1599,112 +1462,112 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Baseline</td>
-<td align="left">ALB</td>
+<td align="left">Week 12</td>
+<td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">4.845 ( 1.7833)</td>
+<td align="left">4.106 ( 1.2106)</td>
+<td align="left">6.640 ( 2.5319)</td>
+<td align="left">-0.714 ( 0.7432)</td>
+<td align="left">-1.606 ( 1.4763)</td>
+<td align="left">-0.357 ( 1.7731)</td>
+<td align="left">5.559 ( 1.5266)</td>
+<td align="left">5.712 ( 2.3464)</td>
+<td align="left">6.515 ( 1.2150)</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">12</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">Baseline</td>
-<td align="left">ALP</td>
+<td align="left">Week 12</td>
+<td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">76.0 ( )</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">76.0 ( )</td>
+<td align="left">2.191 (0.0747)</td>
+<td align="left">2.181 (0.0626)</td>
+<td align="left">2.187 (0.0929)</td>
+<td align="left">-0.083 (0.0968)</td>
+<td align="left">-0.114 (0.0997)</td>
+<td align="left">-0.150 (0.0651)</td>
+<td align="left">2.275 (0.1276)</td>
+<td align="left">2.295 (0.1019)</td>
+<td align="left">2.337 (0.0700)</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">12</td>
 <td align="right">2</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Baseline</td>
-<td align="left">ALT</td>
+<td align="left">Week 12</td>
+<td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">33.0 ( )</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">33.0 ( )</td>
+<td align="left">140.0 (148.57)</td>
+<td align="left">140.1 (115.50)</td>
+<td align="left">120.0 (104.57)</td>
+<td align="left">48.1 (137.19)</td>
+<td align="left">24.9 ( 97.08)</td>
+<td align="left">25.4 ( 66.39)</td>
+<td align="left">91.9 ( 48.64)</td>
+<td align="left">115.2 ( 98.26)</td>
+<td align="left">94.6 ( 49.49)</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">12</td>
 <td align="right">3</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">Baseline</td>
-<td align="left">AST</td>
+<td align="left">Week 12</td>
+<td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">13.0 ( )</td>
-<td align="left"></td>
-<td align="left">24.0 ( )</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">13.0 ( )</td>
-<td align="left"></td>
-<td align="left">24.0 ( )</td>
+<td align="left">29.2 ( 20.69)</td>
+<td align="left">39.5 ( 55.69)</td>
+<td align="left">22.2 ( 14.96)</td>
+<td align="left">0.0 ( 8.12)</td>
+<td align="left">2.3 ( 15.15)</td>
+<td align="left">-0.2 ( 9.88)</td>
+<td align="left">29.2 ( 13.50)</td>
+<td align="left">37.2 ( 40.78)</td>
+<td align="left">22.4 ( 6.02)</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">12</td>
 <td align="right">4</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Baseline</td>
-<td align="left">BILI</td>
+<td align="left">Week 12</td>
+<td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">6.840 ( )</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">6.840 ( )</td>
+<td align="left">298.887 (105.3868)</td>
+<td align="left">304.835 ( 85.1772)</td>
+<td align="left">218.589 ( 41.6006)</td>
+<td align="left">-5.205 ( 36.4499)</td>
+<td align="left">-5.204 ( 44.2188)</td>
+<td align="left">-31.227 ( 27.2030)</td>
+<td align="left">304.091 ( 80.8351)</td>
+<td align="left">310.039 ( 62.2564)</td>
+<td align="left">249.816 ( 65.6978)</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">12</td>
 <td align="right">5</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">Baseline</td>
+<td align="left">Week 24</td>
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">9.996 ( )</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">9.996 ( )</td>
+<td align="left">6.854 ( 2.9482)</td>
+<td align="left">4.284 ( 1.2872)</td>
+<td align="left">6.604 ( 3.5160)</td>
+<td align="left">0.500 ( 2.9178)</td>
+<td align="left">-0.119 ( 0.5453)</td>
+<td align="left">0.238 ( 1.4428)</td>
+<td align="left">6.355 ( 1.6243)</td>
+<td align="left">4.403 ( 1.6098)</td>
+<td align="left">7.378 ( 2.6795)</td>
 <td align="right">1</td>
-<td align="right">0</td>
-<td align="right">6</td>
+<td align="right">24</td>
 <td align="right">1</td>
+<td align="right">2</td>
 </tr>
 </tbody>
 </table>

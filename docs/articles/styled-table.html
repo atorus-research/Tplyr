@@ -99,6 +99,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -141,7 +144,7 @@
   <span class="fu">mutate</span>(
     <span class="kw">SEX</span> <span class="kw">=</span> <span class="fu">recode</span>(<span class="no">SEX</span>, <span class="kw">M</span> <span class="kw">=</span> <span class="st">"Male"</span>, <span class="kw">F</span> <span class="kw">=</span> <span class="st">"Female"</span>),
     <span class="kw">RACE</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">RACE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"AMERICAN INDIAN OR ALASKA NATIVE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"BLACK OR AFRICAN AMERICAN"</span>,
-                          <span class="st">"NATIVE HAWAIIN OR OTHER PACIFIC ISLANDE"</span>, <span class="st">"WHITE"</span>, <span class="st">"MULTIPLE"</span>))
+                          <span class="st">"NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER"</span>, <span class="st">"WHITE"</span>, <span class="st">"MULTIPLE"</span>))
   )
 
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
@@ -675,7 +678,7 @@ BLACK OR AFRICAN AMERICAN
 Race n (%)
 </td>
 <td style="text-align:left;">
-NATIVE HAWAIIN OR OTHER PACIFIC ISLANDE
+NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
 </td>
 <td style="text-align:left;">
 0 ( 0.0%)
@@ -887,8 +890,8 @@ Missing
 <p>Now that we have our data, let’s make sure it’s in the right order. Additionally, let’s clean the data up so it’s ready to present.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="no">dat</span> <span class="kw">%&gt;%</span>
   <span class="fu">arrange</span>(<span class="no">ord_layer_index</span>, <span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/apply_row_masks.html">apply_row_masks</a></span>(<span class="kw">row_breaks</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row_label"</span>), <span class="no">var1_Placebo</span>, <span class="no">`var1_Xanomeline Low Dose`</span>, <span class="no">`var1_Xanomeline High Dose`</span>, <span class="no">var1_Total</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/apply_row_masks.html">apply_row_masks</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/add_column_headers.html">add_column_headers</a></span>(
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">" | | Placebo\\line(N=**Placebo**)| Xanomeline Low Dose\\line(N=**Xanomeline Low Dose**) "</span>,
            <span class="st">"| Xanomeline High Dose\\line(N=**Xanomeline High Dose**) | Total\\line(N=**Total**)"</span>),
@@ -992,6 +995,20 @@ Missing
 </td>
 <td style="text-align:left;">
 0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1111,6 +1128,20 @@ Missing
 </tr>
 <tr>
 <td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Age Categories n (%)
 </td>
 <td style="text-align:left;">
@@ -1184,6 +1215,20 @@ Missing
 </td>
 <td style="text-align:left;">
 0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1267,7 +1312,7 @@ ASIAN
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-NATIVE HAWAIIN OR OTHER PACIFIC ISLANDE
+NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
 </td>
 <td style="text-align:left;">
 0 ( 0.0%)
@@ -1318,6 +1363,20 @@ Missing
 </td>
 <td style="text-align:left;">
 0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1378,13 +1437,27 @@ Missing
 0
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
 </tbody>
 </table>
 <p>Now you can see things coming together. In this block, we:</p>
 <ul>
 <li>Sorting the data by the layer, by the row labels (which in this case are just text strings we defined), and by the results. Review the Sorting vignette to understand how each layer handles sorting in more detail.</li>
+<li>The next step is a ‘Tplyr’ function. Essentially, <strong>after</strong> your data are sorted, this function will look at all of your <code>row_label</code> variables and drop any repeating values. For packages like ‘huxtable’, this eases the process of making your table presentation ready, so you don’t need to do any cell merging once the ‘huxtable’ table is created. Additionally, here we set the <code>row_breaks</code> option to <code>TRUE</code>. This will insert a blank row between each of your layers, which helps improve the presentation depending on your output. It’s important to note that the input dataset <strong>must</strong> still have the <code>ord_layer_index</code> variable attached in order for the blank rows to be added. Sorting should be done prior, and column reordering/dropping may be done after.</li>
 <li>The next step is where I re-order the columns and drop off the order columns. For more information about how to get the most out of <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html">here</a>. This is where the <code>starts_with</code> comes.</li>
-<li>The last step is a ‘Tplyr’ function. Essentially, <strong>after</strong> your data are sorted, this function will look at all of your <code>row_label</code> variables and drop any repeating values. For packages like ‘huxtable’, this eases the process of making your table presentation ready, so you don’t need to do any cell merging once the ‘huxtable’ table is created.</li>
 <li>Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just enter in a string to define your headers. But there’s more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that Tplyr calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.</li>
 </ul>
 </div>
@@ -1445,6 +1518,14 @@ Missing
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 </tr>
 <tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+</tr>
+<tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Age (Years)</td>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">n</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 86</td>
@@ -1493,6 +1574,14 @@ Missing
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">  0</td>
 </tr>
 <tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+</tr>
+<tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Age Categories n (%)</td>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">&lt;65</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 14 ( 16.3%)</td>
@@ -1523,6 +1612,14 @@ Missing
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Race n (%)</td>
@@ -1558,7 +1655,7 @@ Missing
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
-<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">NATIVE HAWAIIN OR OTHER PACIFIC ISLANDE</td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">  0 (  0.0%)</td>
@@ -1579,6 +1676,14 @@ Missing
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Ethnicity n (%)</td>
@@ -1603,6 +1708,14 @@ Missing
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
 <td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"> 0</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: left; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
+<td style="vertical-align: top; text-align: center; white-space: normal; padding: 6pt 6pt 6pt 6pt; font-weight: normal;"></td>
 </tr>
 </table>
 </div>

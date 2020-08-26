@@ -4,10 +4,12 @@
 \alias{apply_row_masks}
 \title{Replace repeating row label variables with blanks in preparation for display.}
 \usage{
-apply_row_masks(dat)
+apply_row_masks(dat, row_breaks = FALSE)
 }
 \arguments{
 \item{dat}{Data.frame / tibble to mask repeating row_labels}
+
+\item{row_breaks}{Boolean - set to TRUE to insert row breaks}
 }
 \value{
 tibble with blanked out rows where values are repeating
@@ -21,4 +23,11 @@ of any row_label variable where the current value is not equal to the value
 before it. Note - \code{apply_row_masks} assumes that the data frame has
 already be sorted and therefore should only be applied once the data frame is in
 its final sort sequence.
+}
+\details{
+Additionally, \code{apply_row_masks} can add row breaks for you between each layer.
+Row breaks are inserted as blank rows. This relies on the \code{ord_layer_index} order
+variable constructed in \code{build} still being attached to the dataset. An additional
+order variable is attached named \code{ord_break}, but the output dataset is sorted
+to properly insert the row breaks between layers.
 }
