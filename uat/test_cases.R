@@ -1951,7 +1951,7 @@ test_that('T37',{
     filter(TRT01P == "Placebo") %>%
     left_join(t37_denoms, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
-    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%) ")) %>%
+    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%)")) %>%
     mutate(label = RACE) %>%
     select(label, col)
 
@@ -1962,7 +1962,7 @@ test_that('T37',{
     filter(TRT01P == "Placebo") %>%
     left_join(t37_denoms, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
-    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%) ")) %>%
+    mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%)")) %>%
     mutate(label = ETHNIC) %>%
     select(label, col)
 
@@ -1975,10 +1975,10 @@ test_that('T37',{
               max=max(AGE),
               q1=quantile(AGE)[[2]],
               q3=quantile(AGE)[[4]]) %>%
-    mutate(col_n = sprintf("%2s", n)) %>%
+    mutate(col_n = sprintf("%3s", n)) %>%
     mutate(col_meansd = paste0(sprintf("%4.1f", mean)," (",sprintf("%5.2f", sd),")")) %>%
     mutate(col_median = sprintf("%4.1f", median)) %>%
-    mutate(col_q1q3 = paste0(sprintf("%2.0f", q1),", ",sprintf("%2.0f", q3))) %>%
+    mutate(col_q1q3 = paste0(sprintf("%4.1f", q1),", ",sprintf("%4.1f", q3))) %>%
     mutate(col_minmax = paste0(sprintf("%2.0f", min),", ",sprintf("%2.0f", max))) %>%
     pivot_longer(cols = c(col_n,col_meansd,col_median,col_q1q3,col_minmax),
                  names_to = "label", values_to = "col") %>%
@@ -1993,11 +1993,11 @@ test_that('T37',{
               max=max(CUMDOSE),
               q1=quantile(CUMDOSE)[[2]],
               q3=quantile(CUMDOSE)[[4]]) %>%
-    mutate(col_n = sprintf("%2s", n)) %>%
-    mutate(col_meansd = paste0(sprintf("%4.1f", mean)," (",sprintf("%5.2f", sd),")")) %>%
-    mutate(col_median = sprintf("%4.1f", median)) %>%
-    mutate(col_q1q3 = paste0(sprintf("%2.0f", q1),", ",sprintf("%2.0f", q3))) %>%
-    mutate(col_minmax = paste0(sprintf("%2.0f", min),", ",sprintf("%2.0f", max))) %>%
+    mutate(col_n = sprintf("%3s", n)) %>%
+    mutate(col_meansd = paste0(sprintf("%7.1f", mean)," (",sprintf("%8.2f", sd),")")) %>%
+    mutate(col_median = sprintf("%7.1f", median)) %>%
+    mutate(col_q1q3 = paste0(sprintf("%7.1f", q1),", ",sprintf("%7.1f", q3))) %>%
+    mutate(col_minmax = paste0(sprintf("%5.0f", min),", ",sprintf("%5.0f", max))) %>%
     pivot_longer(cols = c(col_n,col_meansd,col_median,col_q1q3,col_minmax),
                  names_to = "label", values_to = "col") %>%
     select(label, col)
@@ -2317,11 +2317,11 @@ test_that('T43',{
     ungroup() %>%
     complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
     left_join(select(t43_aebodsys, TRTA, AEBODSYS, total), by=c("TRTA","AEBODSYS")) %>%
-    rbind(t43_aebodsys) %>%
+    rbind(mutate(t43_aebodsys, n=Inf)) %>%
     pivot_wider(values_from=c(n,total), names_from = TRTA) %>%
     arrange(desc(`total_Xanomeline High Dose`), AEBODSYS, desc(`n_Xanomeline High Dose`), AEDECOD) %>%
     filter(n_Placebo > 0 | `n_Xanomeline Low Dose` > 0 | `n_Xanomeline High Dose` > 0) %>%
-    mutate(AEDECOD = paste0('   ',AEDECOD))
+    mutate(AEDECOD = ifelse(AEBODSYS == AEDECOD, AEDECOD, paste0('   ',AEDECOD)))
 
   testthat::expect_equal(c(t43_1$AEBODSYS, t43_1$AEDECOD, t43_1$`total_Xanomeline High Dose`, t43_1$`n_Xanomeline High Dose`),
                          c(test_43$row_label1, test_43$row_label2, test_43$ord_layer_1, test_43$ord_layer_2),
