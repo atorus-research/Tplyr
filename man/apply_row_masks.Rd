@@ -14,7 +14,7 @@ apply_row_masks(dat, row_breaks = FALSE, ...)
 \item{...}{Variable used to determine where row-breaks should be inserted.
 Breaks will be inserted when this group of variables changes values. This
 is determined by dataset order, so sorting should be done prior to using
-\code{apply_row_masks}.}
+\code{apply_row_masks}. If left empty, \code{ord_layer_index} will be used.}
 }
 \value{
 tibble with blanked out rows where values are repeating
