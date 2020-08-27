@@ -420,6 +420,15 @@ get_data_order <- function(x, formatted_col_index) {
 get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var) {
 
+  # Make sure that if distinct_n is selected by set_result_order_var, that
+  # there's a distinct variable in the numeric dataset
+  if (as_name(result_order_var) %in% c("distinct_n", "distinct_pct")) {
+    assert_that("distinct_n" %in% names(numeric_data),
+                msg = paste0("`result_order_var` is set to `", as_name(result_order_var),
+                             "` but no `distinct_by` is set. If you wish to sort by a distinct variable, ",
+                             "you must use `set_distinct_by()` to choose a variable to calculate distinct counts."))
+  }
+
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
   # Examples
