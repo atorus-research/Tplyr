@@ -187,7 +187,7 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
   if (row_breaks) {
 
     # Default to ord_layer_index
-    if (is_empty(break_by)) break_by <- quo(ord_layer_index)
+    if (is_empty(break_by)) break_by <- quos(ord_layer_index)
 
     # All the break by variables must be variable names
     assert_that(all(map_chr(map(break_by, quo_get_expr), class) == "name"),
