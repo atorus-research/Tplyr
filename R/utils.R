@@ -194,9 +194,13 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
                 msg = "All parameters submitted through `...` must be variable names")
 
     assert_that(all(map_chr(break_by, as_name) %in% names(dat)),
-                msg = paste0("If row_breaks is specified, variables submitted via `...` ",
-                             "must still be included in the input data frame.\n",
+                msg = paste0("If `row_breaks` is specified, variables submitted via `...` ",
+                             "must be `ord` variables included in the input data frame.\n",
                              "Remember to sort prior to using `apply_row_masks`."))
+
+    assert_that(all(str_starts(map_chr(break_by, as_name), "ord")),
+                msg = paste0("Break-by variables submitted via `...` must be 'Tplyr' order variables ",
+                             "that start with `ord`"))
 
     # Create the breaks dataframe
     breaks <- dat %>%
