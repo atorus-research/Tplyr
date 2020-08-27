@@ -64,5 +64,24 @@ test_that("Multiple pipes are processed appropriately", {
   expect_output(eval(quo_get_expr(r)), "NA")
 })
 
+## apply_row_masks tests ----
+test_that("Apply row masks errors trigger properly", {
 
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(am)
+    ) %>%
+    build()
+
+  # Non-variable names
+  expect_error(apply_row_masks(t, row_breaks=TRUE, x+y), "All parameters submitted through")
+  expect_error(apply_row_masks(t, row_breaks=TRUE, "hello"), "All parameters submitted through")
+  # Variable not included
+  expect_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name), "If \\`row_breaks\\` is specified, variables submitted")
+  expect_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name, ord_other_bad_name), "If \\`row_breaks\\` is specified, variables submitted")
+  # Variables submitted must be ord variables in the build dataset
+  expect_error(apply_row_masks(t, row_breaks=TRUE, row_label1), "Break-by variables submitted via")
+  expect_error(apply_row_masks(t, row_breaks=TRUE, row_label1, var1_3), "Break-by variables submitted via")
+
+})
 

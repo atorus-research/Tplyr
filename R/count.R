@@ -52,7 +52,7 @@ process_single_count_target <- function(x) {
   evalq({
 
     if(!exists("include_total_row")) include_total_row <- FALSE
-    if(!exists("total_row_label")) total_row_label <- "Total"
+    if(is.null(total_row_label)) total_row_label <- "Total"
 
 
     # The current environment should be the layer itself
