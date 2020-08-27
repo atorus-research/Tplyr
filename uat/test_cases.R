@@ -2943,5 +2943,56 @@ test_that('T51',{
   rm(test_51)
 })
 
+
+#test 52 ----
+test_that('T52',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    options('tplyr.custom_summaries' = quos(geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))))
+
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'Geometric Mean)' = f_str('xxx.xx', geometric_mean)
+          )
+      )
+
+    test_52 <- filter(build(t), row_label1 != 'Missing')
+
+    # output table to check attributes
+    save(test_52, file = "~/Tplyr/uat/output/test_52.RData")
+
+    #clean up working directory
+    options(opts)
+    rm(t)
+    rm(test_52)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_52.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t52_1 <- group_by(adsl, TRT01P) %>%
+    summarise(geometric_mean = exp(sum(log(AGE[AGE > 0]), na.rm=TRUE) / length(AGE))) %>%
+    mutate(geometric_mean = sprintf("%6.2f",geometric_mean)) %>%
+    pivot_wider(values_from = "geometric_mean",names_from = "TRT01P")
+
+  testthat::expect_equal(c(t52_1$Placebo, t52_1$`Xanomeline Low Dose`, t52_1$`Xanomeline High Dose`),
+                         c(test_52$var1_Placebo, test_52$`var1_Xanomeline Low Dose`, test_52$`var1_Xanomeline High Dose`),
+                         label = "T52.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t52_1)
+  rm(test_52)
+})
+
 #clean up ----
 rm(vur)
