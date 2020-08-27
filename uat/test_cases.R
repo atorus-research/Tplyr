@@ -3150,5 +3150,76 @@ test_that('T55',{
   rm(test_55)
 })
 
+
+#test 56 ----
+test_that('T56',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          set_format_strings(f_str('xxx', n))
+      ) %>%
+      build() %>%
+      arrange(desc(ord_layer_1), desc(ord_layer_2))
+
+    test_56 <- apply_row_masks(t, row_breaks = TRUE, ord_layer_1)
+
+    # output table to check attributes
+    save(test_56, file = "~/Tplyr/uat/output/test_56.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_56)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_56.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t56_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
+    mutate(AEDECOD = AEBODSYS)
+  t56_breaks <- select(t56_aebodsys, TRTA, AEBODSYS) %>%
+    mutate(n = -1) %>%
+    mutate(AEDECOD = "")
+  t56_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
+    rbind(t56_aebodsys) %>%
+    rbind(t56_breaks) %>%
+    pivot_wider(values_from=c(n), names_from = TRTA) %>%
+    filter(Placebo != 0 | `Xanomeline Low Dose` != 0 | `Xanomeline High Dose` != 0) %>%
+    mutate(AEDECOD = ifelse(AEDECOD == "", "", ifelse(AEBODSYS == AEDECOD, paste0('z', AEDECOD), paste0('    ',AEDECOD)))) %>%
+    arrange(AEBODSYS, desc(AEDECOD)) %>%
+    mutate(AEDECOD = substring(AEDECOD, 2)) %>%
+    mutate(AEBODSYS = ifelse(AEBODSYS == AEDECOD, AEBODSYS, "")) %>%
+    mutate(Placebo = ifelse(Placebo == -1, "", sprintf("%3s",Placebo))) %>%
+    mutate(`Xanomeline Low Dose` = ifelse(`Xanomeline Low Dose` == -1, "", sprintf("%3s",`Xanomeline Low Dose`))) %>%
+    mutate(`Xanomeline High Dose` = ifelse(`Xanomeline High Dose` == -1, "", sprintf("%3s",`Xanomeline High Dose`)))
+
+  testthat::expect_equal(c(t56_1$AEBODSYS, t56_1$AEDECOD, t56_1$Placebo,
+                           t56_1$`Xanomeline High Dose`, t56_1$`Xanomeline Low Dose`),
+                         c(test_56$row_label1, test_56$row_label2, test_56$var1_Placebo,
+                           test_56$`var1_Xanomeline High Dose`, test_56$`var1_Xanomeline Low Dose`),
+                         label = "T56.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t56_aebodsys)
+  rm(t56_breaks)
+  rm(t56_1)
+  rm(test_56)
+})
+
 #clean up ----
 rm(vur)
