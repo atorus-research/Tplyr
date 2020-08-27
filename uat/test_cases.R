@@ -3108,5 +3108,47 @@ test_that('T54',{
   rm(test_54)
 })
 
+
+#test 55 ----
+test_that('T55',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      build() %>%
+      mutate_all(as.character)
+
+
+    test_55 <- add_column_headers(t, "Race|Placebo|Xanomeline High Dose|Xanomeline Low Dose|LayerIndex|Sorter")
+
+    # output table to check attributes
+    save(test_55, file = "~/Tplyr/uat/output/test_55.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_55)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_55.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(c("Race", "Placebo","Xanomeline High Dose","Xanomeline Low Dose", "LayerIndex", "Sorter"),
+                         as.character(test_55[1,]),
+                         label = "T55.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_55)
+})
+
 #clean up ----
 rm(vur)
