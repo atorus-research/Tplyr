@@ -13,4 +13,4 @@ make_specification_rmd("~/Tplyr/uat/input/specs.csv")
 lapply(list.files("~/Tplyr/uat/test_cases.R", full.names = TRUE,
                   pattern = ".R$"), source)
 
-shiny::runApp("~/Tplyr/references/input/app.R")
+shiny::runApp("~/Tplyr/uat/references/input/app.R")

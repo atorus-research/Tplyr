@@ -245,20 +245,20 @@ make_test_case_rmd <- function(file) {
       LineType == "UpdatedDate" ~ paste("#' @section Last Update Date:\n#'", Text),
 
       # Setup
-      LineType == "Setup" ~ paste0(paste(rep(' ', Level*2), collapse=''), "+ Setup: ", Text, "\n"),
+      LineType == "Setup" ~ paste0(paste(rep(' ', 0*2), collapse=''), "+ Setup: ", Text, "\n"),
 
       # Test Cases
-      LineType == "TestCases" & is.na(CheckID) ~ paste0(paste(rep(' ', Level*2), collapse=''), "+ ", TestID, ": ", Text),
+      LineType == "Check" ~ paste0(paste(rep(' ', 1*2), collapse=''), "+ ", TestID, ": ", Text),
 
       # Test Cases
-      LineType == "TestCases" & !is.na(CheckID) ~ paste0(paste(rep(' ', Level*2), collapse=''), "+ ", TestID, ".", CheckID, ": ", Text)
+      LineType == "TestCase" ~ paste0(paste(rep(' ', 2*2), collapse=''), "+ ", TestID, ".", CheckID, ": ", Text)
     ))
 
   # Create the file text vector - need to write 'Test Cases' inbetween the headers lines and the rest of the text
   outfile <- c(
-    dat[!(dat$LineType %in% c("TestCases", "Setup")), ][['out']],
+    dat[!(dat$LineType %in% c("Check", "TestCase", "Setup")), ][['out']],
     c('', 'This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.', ''),
-    dat[dat$LineType %in% c("TestCases", "Setup"), ][['out']]
+    dat[dat$LineType %in% c("Check", "TestCase", "Setup"), ][['out']]
   )
 
   # Write the lines to each output file
@@ -290,7 +290,7 @@ make_specification_rmd <- function(file) {
       LineType == "UpdatedDate" ~ paste("#' @section Last Update Date:\n#'", Text),
 
       # Test Cases
-      LineType == "Specs" ~ paste0(paste(rep(' ', Level*2), collapse=''), "+ ", SpecID, ": ", Text)
+      LineType == "Specs" ~ paste0(paste(rep(' ', 0*2), collapse=''), "+ ", RequirementID, ": ", Text)
     ))
 
   # Create the file text vector - need to write 'Test Cases' inbetween the headers lines and the rest of the text
