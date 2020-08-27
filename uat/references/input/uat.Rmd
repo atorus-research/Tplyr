@@ -1,0 +1,184 @@
+---
+title: "pharmaRTF Validation Report"
+author: "Eli Miller"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    includes:
+      in_header: header.tex
+header-includes:
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \usepackage{float}
+- \usepackage{longtable}
+- \usepackage{booktabs}
+- \fancyhead[CO, CE]{The Header - Atorus}
+- \fancyfoot[CO, CE]{The footer - Atorus \thepage}
+vignette:  >
+  %\VignetteIndexEntry{Validate}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+\newpage
+\tableofcontents
+\newpage
+```{r setup, include=FALSE}
+library(plyr)
+library(dplyr)
+library(testthat)
+library(knitr)
+library(kableExtra)
+library(stringr)
+library(purrr)
+
+opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = TRUE,
+  echo = FALSE,
+  results = "asis",
+  message = FALSE,
+  tidy = FALSE
+)
+
+input_dir <- paste0("../../input")
+spec_path <- paste0(input_dir, "specs.csv")
+test_cases <- read.csv(paste0(input_dir, "test_cases.csv"), stringsAsFactors = FALSE)
+
+source("helper_test_code.R") # handles environment and access to test_that contents
+source("roxy_block_details.R") # scrapes roxygen block for authorship details
+```
+
+# Validation Files Information
+## Specifications
+```{r spec_author_table}
+list.files(input_dir,
+    full.names = TRUE) %>%
+  lapply(., scrape_function_specification_block) %>%
+  do.call(rbind, .) %>%
+  kable(., col.names = c("Specification Name", "Last updated by", "Last updated date"), booktabs = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header", "striped"))
+```
+
+## Test case
+```{r tc_author_table}
+list.files(test_case_dir,
+    full.names = TRUE) %>%
+  lapply(., scrape_function_specification_block) %>%
+  do.call(rbind, .) %>%
+  kable(., col.names = c("Test Case Name", "Last updated by", "Last updated date"), booktabs = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header", "striped"))
+```
+
+## Test code
+```{r test_code_author_table}
+test_code_author <- list.files(test_code_dir, pattern = ".R",
+                               ignore.case = TRUE, full.names = TRUE) %>%
+  lapply(., scrape_test_code_block) %>%
+  do.call(rbind, .)
+
+cases <- stringr::str_split(test_code_author$title, pattern = "\\.", n = 2,
+                simplify = TRUE)[,1] %>%
+  gsub(pattern = "T", replacement = "")
+
+pack_rows_count <- sapply(unique(cases), FUN = function(x){
+  which(cases == x) %>% min
+  })
+
+pack_rows_index <- c(pack_rows_count[-1] - pack_rows_count[-length(pack_rows_count)],
+                     length(cases) - pack_rows_count[length(pack_rows_count)] + 1) %>%
+  magrittr::set_names(paste0("T", stringr::str_pad(unique(cases), width = 3,
+                                                   side = "left", pad = 0)))
+#Only pull one of the last updated dates
+test_code_author <- test_code_author %>%
+  filter(last_updated_date == max(last_updated_date))
+test_code_author <- test_code_author[1,]
+
+
+test_code_author %>%
+  kable(., col.names = c("Test Code Name", "Last updated by", "Last updated date"),
+        escape = FALSE, booktabs = TRUE) %>%
+  kable_styling(latex_options = c("repeat_header", "striped"))
+```
+
+***
+# Validation Results
+## Specifications
+```{r spec_1}
+scrape_spec_rmd(file.path(input_dir, "specification.Rmd"))
+```
+
+\newpage
+
+\blandscape
+
+## Matrix
+```{r matrix, results="asis"} 
+
+# THis looks a little gross
+spec_df <- read.csv("specs.csv")
+spec_df <- spec_df[spec_df$SpecID != "", ]
+
+specs_tested <- test_cases[test_cases$Specs.Tested != "", ]
+specs_tested_l <- str_split(specs_tested$Specs.Tested, ":")
+
+#number of specs(columns)
+nspecs <- nrow(spec_df)
+#number of tests(rows)
+ntests <- nrow(specs_tested)
+
+temp <- lapply(specs_tested_l, function(x) {
+  ifelse(spec_df$SpecID %in% x, "X", "")
+})
+
+final <- data.frame(matrix(unlist(temp), ncol = nspecs, nrow = ntests, byrow = TRUE),
+                    row.names = specs_tested$TestID)
+
+names(final) <- spec_df$SpecID
+
+max_cols_to_display <- 26
+# max_cols_to_display <- ceiling(ncol(final)/2)
+for(i in seq(ceiling(ncol(final)/max_cols_to_display))) {
+  start <- 1 + (i-1) *max_cols_to_display
+  end <- ifelse(i * max_cols_to_display > ncol(final), ncol(final), i*max_cols_to_display)
+
+  cat(kable(final[,seq(start, end)], "latex", longtable = TRUE, booktabs = TRUE) %>%
+      kable_styling(latex_options = c("repeat_header", "striped"), position = "left"))
+}
+
+
+# kable(final, format = "latex", longtable = TRUE, booktabs = TRUE) %>%
+#   kable_styling(full_width = "F", font_size = 5, latex_options = c("repeat_header")) %>%
+#   landscape()
+
+```
+
+\elandscape
+
+\newpage
+
+## Test Cases
+```{r test_case_1, out.width='0.5\\textwidth'}
+scrape_spec_rmd(file.path(test_case_dir, "test_cases.Rmd"))
+```
+
+## Test Cases Results
+
+```{r specfunction1}
+eval_test_code(file.path(test_code_dir, "test_cases.R"))
+```
+
+***
+# System Information
+```{r sys_info}
+sessionInfo()
+```
+
+# Manual Check Completion History
+```{r log_info}
+kable(readRDS("Validation/vur_auto.Rds")[, c("ID", "OutputFile", "Response", "Log")],
+      format = "latex", row.names = FALSE, longtable = TRUE, booktabs = TRUE,
+      col.names = c("Check", "Output File Reviewed", "Response", "Log")) %>%
+  kable_styling(latex_options = c("repeat_header", "striped"))
+
+```
