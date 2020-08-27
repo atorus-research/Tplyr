@@ -140,25 +140,34 @@ get_target_levels <- function(e, x) {
 #'
 #' Depending on the display package being used, row label values may need to be
 #' blanked out if they are repeating. This gives the data frame supporting the
-#' table the appearance of the grouping variables being grouped together
-#' in blocks. \code{apply_row_masks} does this work by blanking out the value
-#' of any row_label variable where the current value is not equal to the value
+#' table the appearance of the grouping variables being grouped together in
+#' blocks. \code{apply_row_masks} does this work by blanking out the value of
+#' any row_label variable where the current value is not equal to the value
 #' before it. Note - \code{apply_row_masks} assumes that the data frame has
-#' already be sorted and therefore should only be applied once the data frame is in
-#' its final sort sequence.
+#' already be sorted and therefore should only be applied once the data frame is
+#' in its final sort sequence.
 #'
-#' Additionally, \code{apply_row_masks} can add row breaks for you between each layer.
-#' Row breaks are inserted as blank rows. This relies on the \code{ord_layer_index} order
-#' variable constructed in \code{build} still being attached to the dataset. An additional
-#' order variable is attached named \code{ord_break}, but the output dataset is sorted
-#' to properly insert the row breaks between layers.
+#' Additionally, \code{apply_row_masks} can add row breaks for you between each
+#' layer. Row breaks are inserted as blank rows. This relies on the "break by"
+#' variables (submitted via \code{...}) constructed in \code{build} still being
+#' attached to the dataset. An additional order variable is attached named
+#' \code{ord_break}, but the output dataset is sorted to properly insert the row
+#' breaks between layers.
 #'
 #' @param dat Data.frame / tibble to mask repeating row_labels
 #' @param row_breaks Boolean - set to TRUE to insert row breaks
+#' @param ... Variable used to determine where row-breaks should be inserted.
+#'   Breaks will be inserted when this group of variables changes values. This
+#'   is determined by dataset order, so sorting should be done prior to using
+#'   \code{apply_row_masks}.
 #'
 #' @return tibble with blanked out rows where values are repeating
 #' @export
-apply_row_masks <- function(dat, row_breaks=FALSE) {
+apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
+
+  # Capture the break_by variables
+  break_by <- enquos(...)
+
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
 
@@ -177,13 +186,21 @@ apply_row_masks <- function(dat, row_breaks=FALSE) {
   # Break rows if specified
   if (row_breaks) {
 
-    assert_that("ord_layer_index" %in% names(dat),
-                msg = paste0("If row_breaks is specified, `ord_layer_index` must still be included in the input data frame.\n",
-                            "Remember to sort prior to using `apply_row_masks`."))
+    # Default to ord_layer_index
+    if (is_empty(break_by)) break_by <- quo(ord_layer_index)
+
+    # All the break by variables must be variable names
+    assert_that(all(map_chr(map(break_by, quo_get_expr), class) == "name"),
+                msg = "All parameters submitted through `...` must be variable names")
+
+    assert_that(all(map_chr(break_by, as_name) %in% names(dat)),
+                msg = paste0("If row_breaks is specified, variables submitted via `...` ",
+                             "must still be included in the input data frame.\n",
+                             "Remember to sort prior to using `apply_row_masks`."))
 
     # Create the breaks dataframe
     breaks <- dat %>%
-      distinct(ord_layer_index) %>%
+      distinct(!!!break_by) %>%
       mutate(ord_break = 2)
 
     # Add in a sorting variable to the data
@@ -192,7 +209,7 @@ apply_row_masks <- function(dat, row_breaks=FALSE) {
 
     # bind and fill the NAs
     dat <- bind_rows(dat, breaks) %>%
-      arrange(ord_layer_index, ord_break) %>%
+      arrange(!!!break_by, ord_break) %>%
       mutate_if(is.character, ~replace_na(., ""))
   }
 
