@@ -2994,5 +2994,119 @@ test_that('T52',{
   rm(test_52)
 })
 
+
+#test 53 ----
+test_that('T53',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    options('tplyr.scipen' = -3)
+
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c("Xanomeline High Dose", "Placebo"))
+      )
+
+    test_53 <- suppressWarnings(build(t))
+
+    # output table to check attributes
+    save(test_53, file = "~/Tplyr/uat/output/test_53.RData")
+
+    #clean up working directory
+    options(opts)
+    rm(t)
+    rm(test_53)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_53.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  options("scipen" = -3)
+  tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose"), n=n())[[1]]
+  cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
+  tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
+  cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
+  testvals <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
+  t53_1 = paste0(format(round(testvals$estimate[[1]] - testvals$estimate[[2]],3),nsmall = 3), ' (',
+                 format(round(testvals$conf.int[[1]],3),nsmall = 3), ', ',
+                 format(round(testvals$conf.int[[2]],3),nsmall = 3), ')'
+                 )
+
+  testthat::expect_equal(t53_1,
+                         filter(test_53,row_label1 == 'WHITE')$`rdiff_Xanomeline High Dose_Placebo`,
+                         label = "T53.1")
+  #manual check(s)
+
+  #clean up working directory
+  options("scipen" = 0)
+  rm(tot_t)
+  rm(cnt_t)
+  rm(tot_p)
+  rm(cnt_p)
+  rm(testvals)
+  rm(t53_1)
+  rm(test_53)
+})
+
+
+#test 54 ----
+test_that('T54',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    options('tplyr.quantile_type' = 3)
+
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(CUMDOSE) %>%
+          set_format_strings(
+            'Quartiles' = f_str('xxx.x, xxx.x', q1, q3)
+          )
+      )
+
+    test_54 <- filter(build(t), row_label1 != 'Missing')
+
+    # output table to check attributes
+    save(test_54, file = "~/Tplyr/uat/output/test_54.RData")
+
+    #clean up working directory
+    options(opts)
+    rm(t)
+    rm(test_54)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_54.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t54_1 <- group_by(adsl, TRT01P) %>%
+    summarise(q1 = quantile(CUMDOSE, type = 3)[[2]],
+              q3 = quantile(CUMDOSE, type = 3)[[4]]) %>%
+    mutate(col = paste0(sprintf("%5.1f", q1), ', ', sprintf("%5.1f", q3))) %>%
+    select(TRT01P, col) %>%
+    pivot_wider(values_from = "col",names_from = "TRT01P")
+
+  testthat::expect_equal(c(t54_1$Placebo, t54_1$`Xanomeline Low Dose`, t54_1$`Xanomeline High Dose`),
+                         c(test_54$var1_Placebo, test_54$`var1_Xanomeline Low Dose`, test_54$`var1_Xanomeline High Dose`),
+                         label = "T54.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t54_1)
+  rm(test_54)
+})
+
 #clean up ----
 rm(vur)
