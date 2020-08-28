@@ -51,7 +51,7 @@ process_summaries.count_layer <- function(x, ...) {
 process_single_count_target <- function(x) {
   evalq({
 
-    if(!exists("include_total_row")) include_total_row <- FALSE
+    if(is.null(include_total_row)) include_total_row <- FALSE
     if(is.null(total_row_label)) total_row_label <- "Total"
 
 

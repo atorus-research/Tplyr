@@ -254,3 +254,4 @@ missing_name <- NULL
 outer_inf <- NULL
 shift_layer_formats <- NULL
 .tmp_name <- NULL
+include_total_row <- NULL
