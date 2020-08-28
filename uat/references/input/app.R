@@ -27,7 +27,7 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     vur <- reactiveValues(df = {
-        df <- read.csv("~/Tplyr/uat/test_cases.csv")
+        df <- read.csv("~/Tplyr/uat/input/test_cases.csv")
         df <- df[df$CheckType == "visual",]
         df$Response <- FALSE
         df$Log <- NA
@@ -63,7 +63,7 @@ server <- function(input, output) {
         saveRDS(vur$df, "~/Tplyr/uat/references/output/vur_auto.Rds")
         showModal(modalDialog("Validation User Responses written"))
         rmarkdown::render("~/Tplyr/uat/references/input/uat.Rmd", "pdf_document")
-        # file.remove("~/pharmaRTF/vignettes/Validation/vur_auto.Rds")
+        # file.remove("~/Tplyr/uat/references/output/vur_auto.Rds")
     })
 
     output$UserDf <- renderTable(vur$df[, c("ID", "Text", "OutputFile", "Response")])
@@ -76,19 +76,19 @@ server <- function(input, output) {
                length(vur$df$Response))
     })
 
-    # observeEvent(input$openButton, {
-    #     filePath <- paste0(getwd(),
-    #                        "/Test_Case_Code/rtf-test-files/",
-    #                        vur$df[((input$nextButton - input$backButton + input$sendButton) %% nrow(vur$df)) + 1,
-    #                               "OutputFile"]
-    #     )
-    #     if(file.exists(filePath)){
-    #         showModal(modalDialog("This doesn't work yet"))
-    #         # system(filePath)
-    #     } else {
-    #         showModal(modalDialog("RTF File Not found"))
-    #     }
-    # })
+     observeEvent(input$openButton, {
+         filePath <- paste0("~/Tplyr/uat/output/",
+                            vur$df[((input$nextButton - input$backButton + input$sendButton) %% nrow(vur$df)) + 1,
+                                   "OutputFile"]
+         )
+         print(filePath)
+         if(file.exists(filePath)){
+             # showModal(modalDialog("This doesn't work yet"))
+             system(filePath)
+         } else {
+             showModal(modalDialog("RTF File Not found"))
+         }
+     })
 }
 
 shinyApp(ui = ui, server = server)

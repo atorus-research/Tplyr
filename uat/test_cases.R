@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/27/2020
+#' 8/28/2020
 
 #setup ----
 #insert any necessary libraries
@@ -29,9 +29,8 @@ adlb$BNRIND_FACTOR <- factor(adlb$BNRIND, c("L","N","H"))
 opts = options()
 
 #no updates needed - initializes vur which is used to determine which parts of code to execute during testing
-#vur <- NULL
-vur <- TRUE
-#if(file.exists("~/Tplyr/uat/references/output/vur_auto.Rds")) vur <- readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")
+vur <- NULL
+if(file.exists("~/Tplyr/uat/references/output/vur_auto.Rds")) vur <- readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")
 
 
 #test 1 ----
@@ -3221,5 +3220,67 @@ test_that('T56',{
   rm(test_56)
 })
 
+#test 57 ----
+test_that('T57',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_total_group() %>%
+      add_treat_grps('Total Xanomeline' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+      add_layer(
+        group_count(SEX, by = "Sex")
+      ) %>%
+      add_layer(
+        group_desc(AGE, by = "Age")
+      ) %>%
+      add_layer(
+        group_count(RACE_FACTOR, by = "Race")
+      ) %>%
+      add_layer(
+        group_count(ETHNIC, by = "Ethnicity")
+      ) %>%
+      add_layer(
+        group_desc(WEIGHTBL, by = "Baseline Weight")
+      )
+
+    built <- build(t) %>%
+      apply_row_masks() %>%
+      select(starts_with("row"),"var1_Placebo",starts_with("var1_X"),"var1_Total Xanomeline","var1_Total") %>%
+      add_column_headers("Parameter |  | Placebo | Xanomeline Low Dose | Xanomeline High Dose |
+                         Total | Total Xanomeline")
+
+    hux <- huxtable::as_hux(built) %>%
+      huxtable::set_width(1.5) %>%
+      huxtable::map_align(huxtable::by_cols("left","left","center","center","center","center","center"))
+
+    test_57 <- pharmaRTF::rtf_doc(hux) %>%
+      pharmaRTF::add_titles(pharmaRTF::hf_line("Demographics Summary", bold=TRUE))
+
+    # output table to check attributes
+    pharmaRTF::write_rtf(test_57, file = "~/Tplyr/uat/output/test_57.rtf")
+
+    #clean up working directory
+    rm(t)
+    rm(built)
+    rm(hux)
+    rm(test_57)
+
+    #load output for checks
+  } else {
+
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  #manual check(s)
+  expect_true(vur[vur$ID == "T57.1", "Response"])
+
+  #clean up working directory
+
+})
 #clean up ----
 rm(vur)

@@ -1,6 +1,6 @@
 ﻿LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,8/24/2020,,
+UpdatedDate,,,,8/28/2020,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -141,3 +141,9 @@ TestCase,BO,T53,,Option for setting scipen internal option can be specified by t
 Check,,T53,1,Check that scientific notation supplied is displayed correctly in the table,programmatic,test_53.RData
 TestCase,BP,T54,,Option for setting quantile algorithm choice can be specified by the user,,
 Check,,T54,1,Check that the quantile algorithm supplied is used in table q1 and q3 calculation,programmatic,test_54.RData
+TestCase,BQ,T55,,Column headers can be added to the output object,,
+Check,,T55,1,Check that column headers added match those in the output object,programmatic,test_55.RData
+TestCase,BR:BS,T56,,Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion,,
+Check,,T56,1,Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion,programmatic,test_56.RData
+TestCase,BT,T57,,A table object is returned in a format that is ready to be cosmetically prepared,,
+Check,,T57,1,Check that the table object can be easily cosmetically prepared ,visual,test_57.rtf

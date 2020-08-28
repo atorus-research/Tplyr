@@ -5,6 +5,7 @@
 eval_test_code <- function(one_file) {
   # each test code file (in spec_testing) is run in a new, clean environment
   test_env <- new.env()
+  print(getwd())
 
   # Get the testthat reults (via reporter)
   # Used for obtaining the Pass/Fail variable

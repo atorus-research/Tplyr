@@ -1,6 +1,6 @@
 ﻿LineType,RequirementID,Text
 UpdatedBy,,Nathan Kosiba
-UpdatedDate,,8/27/2020
+UpdatedDate,,8/28/2020
 Specs,A,Population data can be specified by the user
 Specs,B,Treatment variable can be manually specified for population data
 Specs,C,Population data subset can be specified on user specified conditions
@@ -71,4 +71,5 @@ Specs,BO,Option for setting scipen internal option can be specified by the user
 Specs,BP,Option for setting quantile algorithm choice can be specified by the user
 Specs,BQ,Column headers can be added to the output object
 Specs,BR,Row breaks can be added between sections based on grouping variables
-Specs,BS,A table object is returned in a format that is ready to be cosmetically prepared
+Specs,BS,Row labels can be masked in a hierarchical fashion 
+Specs,BT,A table object is returned in a format that is ready to be cosmetically prepared

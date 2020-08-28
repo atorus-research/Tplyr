@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/24/2020
+#' 8/28/2020
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -146,3 +146,9 @@ This section contains details of each test executed. Checks verifying each test 
   + T53: Check that scientific notation supplied is displayed correctly in the table
     + T54.NA: Option for setting quantile algorithm choice can be specified by the user
   + T54: Check that the quantile algorithm supplied is used in table q1 and q3 calculation
+    + T55.NA: Column headers can be added to the output object
+  + T55: Check that column headers added match those in the output object
+    + T56.NA: Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion
+  + T56: Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion
+    + T57.NA: A table object is returned in a format that is ready to be cosmetically prepared
+  + T57: Check that the table object can be easily cosmetically prepared 

@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/27/2020
+#' 8/28/2020
 + A: Population data can be specified by the user
 + B: Treatment variable can be manually specified for population data
 + C: Population data subset can be specified on user specified conditions
@@ -72,4 +72,5 @@
 + BP: Option for setting quantile algorithm choice can be specified by the user
 + BQ: Column headers can be added to the output object
 + BR: Row breaks can be added between sections based on grouping variables
-+ BS: A table object is returned in a format that is ready to be cosmetically prepared
++ BS: Row labels can be masked in a hierarchical fashion 
++ BT: A table object is returned in a format that is ready to be cosmetically prepared
