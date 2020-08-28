@@ -1,6 +1,6 @@
 ---
-title: "pharmaRTF Validation Report"
-author: "Eli Miller"
+title: "Tplyr Validation Report"
+author: "Nathan Kosiba"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
@@ -12,8 +12,8 @@ header-includes:
 - \usepackage{float}
 - \usepackage{longtable}
 - \usepackage{booktabs}
-- \fancyhead[CO, CE]{The Header - Atorus}
-- \fancyfoot[CO, CE]{The footer - Atorus \thepage}
+- \fancyhead[CO, CE]{Atorus Research}
+- \fancyfoot[CO, CE]{Tplyr UAT \thepage}
 vignette:  >
   %\VignetteIndexEntry{Validate}
   %\VignetteEngine{knitr::rmarkdown}
@@ -42,7 +42,7 @@ opts_chunk$set(
 )
 
 input_dir <- paste0("../../")
-ref_dir <- paste0(input_dir, "/references/output")
+ref_dir <- paste0(input_dir, "references/output")
 spec_path <- paste0(input_dir, "/input/specs.csv")
 test_cases <- read.csv(paste0(input_dir, "/input/test_cases.csv"), stringsAsFactors = FALSE)
 
@@ -54,7 +54,7 @@ source("roxy_block_details.R") # scrapes roxygen block for authorship details
 ## Specifications
 ```{r spec_author_table}
 list.files(ref_dir,
-    full.names = TRUE) %>%
+    full.names = TRUE, pattern = "specification.Rmd") %>%
   lapply(., scrape_function_specification_block) %>%
   do.call(rbind, .) %>%
   kable(., col.names = c("Specification Name", "Last updated by", "Last updated date"), booktabs = TRUE) %>%
@@ -63,8 +63,8 @@ list.files(ref_dir,
 
 ## Test case
 ```{r tc_author_table}
-list.files(test_case_dir,
-    full.names = TRUE) %>%
+list.files(ref_dir,
+    full.names = TRUE, pattern = "test_cases.Rmd") %>%
   lapply(., scrape_function_specification_block) %>%
   do.call(rbind, .) %>%
   kable(., col.names = c("Test Case Name", "Last updated by", "Last updated date"), booktabs = TRUE) %>%
@@ -73,8 +73,7 @@ list.files(test_case_dir,
 
 ## Test code
 ```{r test_code_author_table}
-test_code_author <- list.files(test_code_dir, pattern = ".R",
-                               ignore.case = TRUE, full.names = TRUE) %>%
+test_code_author <- "~/Tplyr/uat/test_cases.R" %>%
   lapply(., scrape_test_code_block) %>%
   do.call(rbind, .)
 
@@ -106,7 +105,7 @@ test_code_author %>%
 # Validation Results
 ## Specifications
 ```{r spec_1}
-scrape_spec_rmd(file.path(input_dir, "specification.Rmd"))
+scrape_spec_rmd("~/Tplyr/uat/references/output/specification.Rmd")
 ```
 
 \newpage
@@ -117,11 +116,11 @@ scrape_spec_rmd(file.path(input_dir, "specification.Rmd"))
 ```{r matrix, results="asis"} 
 
 # THis looks a little gross
-spec_df <- read.csv("specs.csv")
-spec_df <- spec_df[spec_df$SpecID != "", ]
+spec_df <- read.csv("~/Tplyr/uat/input/specs.csv")
+spec_df <- spec_df[spec_df$RequirementID != "", ]
 
-specs_tested <- test_cases[test_cases$Specs.Tested != "", ]
-specs_tested_l <- str_split(specs_tested$Specs.Tested, ":")
+specs_tested <- test_cases[test_cases$ReqsTested != "", ]
+specs_tested_l <- str_split(specs_tested$ReqsTested, ":")
 
 #number of specs(columns)
 nspecs <- nrow(spec_df)
@@ -129,13 +128,13 @@ nspecs <- nrow(spec_df)
 ntests <- nrow(specs_tested)
 
 temp <- lapply(specs_tested_l, function(x) {
-  ifelse(spec_df$SpecID %in% x, "X", "")
+  ifelse(spec_df$RequirementID %in% x, "X", "")
 })
 
 final <- data.frame(matrix(unlist(temp), ncol = nspecs, nrow = ntests, byrow = TRUE),
                     row.names = specs_tested$TestID)
 
-names(final) <- spec_df$SpecID
+names(final) <- spec_df$RequirementID
 
 max_cols_to_display <- 26
 # max_cols_to_display <- ceiling(ncol(final)/2)
@@ -160,13 +159,13 @@ for(i in seq(ceiling(ncol(final)/max_cols_to_display))) {
 
 ## Test Cases
 ```{r test_case_1, out.width='0.5\\textwidth'}
-scrape_spec_rmd(file.path(test_case_dir, "test_cases.Rmd"))
+scrape_spec_rmd("~/Tplyr/uat/references/output/test_cases.Rmd")
 ```
 
 ## Test Cases Results
 
 ```{r specfunction1}
-eval_test_code(file.path(test_code_dir, "test_cases.R"))
+eval_test_code("~/Tplyr/uat/test_cases.R")
 ```
 
 ***
@@ -177,7 +176,7 @@ sessionInfo()
 
 # Manual Check Completion History
 ```{r log_info}
-kable(readRDS("Validation/vur_auto.Rds")[, c("ID", "OutputFile", "Response", "Log")],
+kable(readRDS("~/Tplyr/uat/references/output/vur_auto.Rds")[, c("ID", "OutputFile", "Response", "Log")],
       format = "latex", row.names = FALSE, longtable = TRUE, booktabs = TRUE,
       col.names = c("Check", "Output File Reviewed", "Response", "Log")) %>%
   kable_styling(latex_options = c("repeat_header", "striped"))
