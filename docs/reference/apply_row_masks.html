@@ -148,6 +148,9 @@ its final sort sequence." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -185,7 +188,7 @@ already be sorted and therefore should only be applied once the data frame is in
 its final sort sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>apply_row_masks</span>(<span class='no'>dat</span>)</pre>
+    <pre class="usage"><span class='fu'>apply_row_masks</span>(<span class='no'>dat</span>, <span class='kw'>row_breaks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,11 +197,22 @@ its final sort sequence.</p>
       <th>dat</th>
       <td><p>Data.frame / tibble to mask repeating row_labels</p></td>
     </tr>
+    <tr>
+      <th>row_breaks</th>
+      <td><p>Boolean - set to TRUE to insert row breaks</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>tibble with blanked out rows where values are repeating</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Additionally, <code>apply_row_masks</code> can add row breaks for you between each layer.
+Row breaks are inserted as blank rows. This relies on the <code>ord_layer_index</code> order
+variable constructed in <code>build</code> still being attached to the dataset. An additional
+order variable is attached named <code>ord_break</code>, but the output dataset is sorted
+to properly insert the row breaks between layers.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
