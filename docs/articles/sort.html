@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -91,12 +91,6 @@
     </li>
     <li class="divider">
     <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="../articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="../articles/beta-release.html">Tplyr (Beta Release)</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -136,11 +130,11 @@
 <div id="sorting-a-tplyr-table" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sorting-a-tplyr-table" class="anchor"></a>Sorting a Tplyr Table</h1>
-<p>With sorting functions available in R, like <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">dplyr::arrange</a></code>. You should have all the data you need to arrange records how you wish.</p>
-<p>In this example, the <code>t</code> table will output with method for sorting the layers, the <code>SEX</code> variable, and the values of the calculations.</p>
+<p>At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by ‘Tplyr’</p>
+<p>Let’s start by looking at an example.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="kw">Treatment</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="kw">Treated</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">SEX</span>)
   ) <span class="kw">%&gt;%</span>
@@ -156,7 +150,7 @@
 <th align="left">row_label2</th>
 <th align="left">var1_Placebo</th>
 <th align="left">var1_Total</th>
-<th align="left">var1_Treatment</th>
+<th align="left">var1_Treated</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 <th align="right">ord_layer_index</th>
@@ -358,23 +352,38 @@
 </tr>
 </tbody>
 </table>
+<p>In this table, we have:</p>
+<ul>
+<li>Added a total treatment group</li>
+<li>Added a ‘Treated’ group made up of the two treated cohorts</li>
+<li>Created a count layer for “End of Study Status”, reported by sex</li>
+<li>Created a descriptive statistics layer for Height at Baseline, reported by sex.</li>
+</ul>
+<p>Now let’s dig in.</p>
 <div id="sorting-table-columns" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sorting-table-columns" class="anchor"></a>Sorting Table Columns</h2>
 <div id="ordering-helpers" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ordering-helpers" class="anchor"></a>Ordering Helpers</h3>
-<p>Ordering helpers are columns that can be used to arrange the rows of the table. One for each Row Label, plus a column for the layers output from the build and they can be used to order the table in several ways.</p>
+<p>Ordering helpers are columns added into ‘Tplyr’ tables to make sure that you can sort the display to your preference. In general, ‘Tplyr’ will create:</p>
+<ul>
+<li>One order variable to order layers</li>
+<li>One order variable for each by variable</li>
+<li>At least one order variable for the target variables</li>
+</ul>
 <p>In the example above, the <code>t</code> table outputs with three columns</p>
 <ul>
-<li>ord_layer_index indexes the layer itself.</li>
-<li>ord_layer_1 indexes the first by variable, <code>SEX</code>. No options were presented so sorting was done alphabetically.</li>
-<li>ord_layer_2 indexes the values of the <code>EOSSTT</code> variable in the count layer, and the names of the summaries in the desc layer.</li>
+<li>
+<code>ord_layer_index</code> indexes the layer itself.</li>
+<li>
+<code>ord_layer_1</code> indexes the first by variable, <code>SEX</code>. No options were presented so sorting was done alphabetically.</li>
+<li>
+<code>ord_layer_2</code> indexes the values of the <code>EOSSTT</code> variable in the count layer, and the names of the summaries in the desc layer.</li>
 </ul>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu">kable</span>(
-  <span class="no">t</span> <span class="kw">%&gt;%</span>
-    <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"ord"</span>))
-)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">ord_layer_index</th>
@@ -468,17 +477,18 @@
 <div id="reordering-and-droping-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reordering-and-droping-columns" class="anchor"></a>Reordering and Droping Columns</h3>
-<p>The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code>dplyr::relocate()</code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder, drop, and sort columns however a user needs too.</p>
+<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code>dplyr::relocate()</code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
 <p>To drop the ordering helpers, you can easily subtract them with dplyr and tidyselect.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">t</span> <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
 <th align="left">var1_Placebo</th>
 <th align="left">var1_Total</th>
-<th align="left">var1_Treatment</th>
+<th align="left">var1_Treated</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -629,16 +639,17 @@
 </tr>
 </tbody>
 </table>
-<p>Or you can reorder columns, in this example total is moved to the first column.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">t</span> <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>( <span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="no">var1_Total</span>, <span class="fu">starts_with</span>(<span class="st">"var1"</span>)))</pre></body></html></div>
+<p>Or you can reorder columns. In this example the “Total” result column is moved to the front of the results.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>( <span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="no">var1_Total</span>, <span class="fu">starts_with</span>(<span class="st">"var1"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
 <th align="left">var1_Total</th>
 <th align="left">var1_Placebo</th>
-<th align="left">var1_Treatment</th>
+<th align="left">var1_Treated</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -786,6 +797,16 @@
 <td align="left">0</td>
 <td align="left">0</td>
 <td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">For more info</td>
+<td align="left">rmation, it’s w</td>
+<td align="left">ell worth your time</td>
+<td align="left">to familiarize you</td>
+<td align="left">rself with the [sel</td>
+<td align="left">ect helpers](<a href="https://dplyr.t" class="uri">https://dplyr.t</a>
+</td>
+<td align="left">idyverse.org/reference/select.html) that work with ‘dplyr’.</td>
 </tr>
 </tbody>
 </table>
@@ -794,10 +815,11 @@
 <div id="sorting-the-layers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sorting-the-layers" class="anchor"></a>Sorting the Layers</h2>
-<p>Layers are binded together to create the table so they will output in the order they are added to the table. If you have a need to reorder them, the <code>ord_layer_index</code> column allows you to do this or drop layers altogether.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">t</span> <span class="kw">%&gt;%</span>
-        <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-      <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_index</span>)))</pre></body></html></div>
+<p>Layers are one of the fundamental building blocks of ‘Tplyr’. Each layer executes independently, and at the end of a build they’re bound together. The <code>ord_layer_index</code> variable allows you differentiate and sort layers after the table is built. Layers are indexed in the order in which they were added to the table using <code><a href="../reference/layer_attachment.html">add_layer()</a></code> or <code><a href="../reference/layer_attachment.html">add_layers()</a></code>. For example, let’s say you wanted to reverse the order of the layers.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_index</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -925,52 +947,85 @@
 <div id="sorting-the-by-varaibles" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sorting-the-by-varaibles" class="anchor"></a>Sorting the ‘by’ varaibles</h2>
-<p>The variables passed as ‘by’ variables can be sorted with their respective ordering helper column. The sort values are calculated depending on the attributes that variable has in the ‘target’ dataset. The ordering index will calculate based on the first applicable method below.</p>
+<p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see the vignette(“Count_and_Shift_Tables”)).</p>
+<p>These order variables will calculate based on the first applicable method below.</p>
 <ol style="list-style-type: decimal">
-<li>If the variable has a VARN variable in the ‘target’ dataset, that is, <code>&lt;by&gt;N %in% names(target)</code> is TRUE, the values in the ordering helper column will be the values of that VARN variable for that ‘by’ value.</li>
-<li>If the ‘by’ variable is a factor, the values of the ordering column will be the index of the levels.</li>
-<li>If neither 1 or 2 are true, the values in the ordering column will be an index based on an alphabetical sorting.</li>
+<li>If the variable has a VARN variable in the ‘target’ dataset, (i.e. AVISIT has AVISITN, or PARAM has PARAMN), that variable will be extracted and used as the ordering variable associated with that row label.</li>
+<li>If the <code>by</code> variable is a factor, the values of the ordering column will be associated with the factor levels.</li>
+<li>If neither 1 or 2 are true, the values in the ordering column will be based on an alphabetical sorting. The resulting column will be numeric.</li>
 </ol>
 <div id="varn" class="section level3">
 <h3 class="hasAnchor">
 <a href="#varn" class="anchor"></a>VARN</h3>
-<p>By adding the variable ‘amN’, the ‘ord_layer_1’ will output using those values. This is especially useful in the case of SDTM variables like VISIT and VISITN where ordering is important but ordering alphabetically would produce incorrect ordering.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+<p>To demonstrate the use of VARN sorting, consider the variable RACE. In ADSL, RACE also has RACEN:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">%&gt;%</span>
+  <span class="fu">distinct</span>(<span class="no">RACEN</span>, <span class="no">RACE</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">RACEN</th>
+<th align="left">RACE</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">WHITE</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+</tr>
+</tbody>
+</table>
+<p>‘Tplyr’ will automatically figure this out for you, and pull the RACEN values into the variable <code>ord_layer_1</code>.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">RACE</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">row_label2</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
+<th align="left">row_label2</th>
 <th align="right">ord_layer_1</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
-<td align="right">6</td>
-</tr>
-<tr class="odd">
-<td align="left">BLACK OR AFRICAN AMERICAN</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">BLACK OR AFRICAN AMERICAN</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
 <td align="left">WHITE</td>
+<td align="left">COMPLETED</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">WHITE</td>
+<td align="left">DISCONTINUED</td>
 <td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">COMPLETED</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">COMPLETED</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">6</td>
 </tr>
 </tbody>
 </table>
@@ -978,196 +1033,105 @@
 <div id="factor" class="section level3">
 <h3 class="hasAnchor">
 <a href="#factor" class="anchor"></a>Factor</h3>
-<p>If there is no succinct way to order the variables alphabetically or with a VARN variable, Tplyr can use a factor in the target dataset to order the dataset and create the ordering helper column. Internally, Tplyr uses a <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">tidyr::pivot_wider()</a></code> to create the output which will arrange the rows automatically. The ordering helper is still provided for clarity, cross-language support, to not rely on a dependency for this functionality, and to preserve the factor levels for the row labels.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">ETHNIC</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">ETHNIC</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>))
+<p>If there’s no VARN variable in the target dataset, ‘Tplyr’ will then check if the variable you provided is a factor. If you’re new to R, spending some time trying to understand factor variables is quite worthwhile. Let’s look at example using the variable <code>ETHNIC</code> and see some of the advantages in practice.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">ETHNIC</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">ETHNIC</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>, <span class="st">"DUMMMY"</span>))
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">ETHNIC</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">row_label2</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">row_label1</th>
-<th align="right">ord_layer_1</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">HISPANIC OR LATINO</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">HISPANIC OR LATINO</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">NOT HISPANIC OR LATINO</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">NOT HISPANIC OR LATINO</td>
-<td align="right">2</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="alphabetical" class="section level3">
-<h3 class="hasAnchor">
-<a href="#alphabetical" class="anchor"></a>Alphabetical</h3>
-<p>If the target doesn’t have a VARN variable in the target dataset, and isn’t a factor, it is sorted alphabetically.</p>
-</div>
-</div>
-<div id="sorting-desc-summaries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sorting-desc-summaries" class="anchor"></a>Sorting ‘Desc’ Summaries</h2>
-<p>‘Desc’ summaries are indexed in the order they are passed to <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code> or found in the <code>tplyr.desc_layer_default_formats</code> option. A user can change the order easily in these places, or reorder it after the fact with <code><a href="https://dplyr.tidyverse.org/reference/recode.html">dplyr::recode()</a></code>.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">t</span> <span class="kw">%&gt;%</span>
-        <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-        <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">ord_layer_index</span> <span class="kw">==</span> <span class="fl">2</span>))</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="right">ord_layer_index</th>
 <th align="right">ord_layer_1</th>
-<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">F</td>
-<td align="left">n</td>
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">COMPLETED</td>
 <td align="right">2</td>
-<td align="right">1</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">F</td>
-<td align="left">Mean (SD)</td>
-<td align="right">2</td>
-<td align="right">1</td>
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">DISCONTINUED</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">F</td>
-<td align="left">Median</td>
-<td align="right">2</td>
-<td align="right">1</td>
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">COMPLETED</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">F</td>
-<td align="left">Q1, Q3</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td align="left">F</td>
-<td align="left">Min, Max</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">5</td>
-</tr>
-<tr class="even">
-<td align="left">F</td>
-<td align="left">Missing</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">6</td>
-</tr>
-<tr class="odd">
-<td align="left">M</td>
-<td align="left">n</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">M</td>
-<td align="left">Mean (SD)</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">M</td>
-<td align="left">Median</td>
-<td align="right">2</td>
-<td align="right">2</td>
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">DISCONTINUED</td>
 <td align="right">3</td>
 </tr>
-<tr class="even">
-<td align="left">M</td>
-<td align="left">Q1, Q3</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">4</td>
-</tr>
 <tr class="odd">
-<td align="left">M</td>
-<td align="left">Min, Max</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">5</td>
+<td align="left">DUMMMY</td>
+<td align="left">COMPLETED</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">M</td>
-<td align="left">Missing</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">6</td>
+<td align="left">DUMMMY</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
+<p>Factor variables have ‘levels’. These levels are essentially what the VARN variables are trying to achieve - they specify the order of the different values within the associated variable. The variable we set above specifies that “HISPANIC OR LATINO” should sort first, then “NOT HISPANIC OR LATINO”, and finally “DUMMY”. Notice how they’re not alphabetical?</p>
+<p>A highly advantageous aspect of using factor variables in ‘Tplyr’ is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:</p>
+<pre><code>adsl$ETHNIC &lt;- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))</code></pre>
+<p>This is converting the variable <code>ETHNIC</code> to a factor, then setting the factor levels. But it doesn’t <em>change</em> any of the values in the dataset - there are no values of “dummy” within <code>ETHNIC</code> in ADSL. Yet in the output built above, you see rows for “DUMMY”. By using factors, you can insert rows into your ‘Tplyr’ table that don’t exist in the data. This is particularly helpful if you’re working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.</p>
 </div>
-<div id="sorting-count-target-values" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sorting-count-target-values" class="anchor"></a>Sorting ‘Count’ Target Values</h2>
-<p>The order counts should be displayed in a table can be deceptively complex. Tplyr offers three different methods of sorting the values of a target variable in a count layer. The function <code><a href="../reference/ordering.html">set_order_count_method()</a></code> can be used to change how a count layer is sorted.</p>
-<ol style="list-style-type: decimal">
-<li>Sorting a count layer defaults to sorting the target variable as a factor. This allows for easy custom sorting or will coerce it to a factor and sort automatically.</li>
-<li>Similar to a ‘by’ variable, a count target can be sorted with a VARN variable.</li>
-<li>Many tables require counts to be sorted based on the counts of a particular group. Tplyr can populate the ordering column based on the numeric value of any column. The function <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and <code>set_numeric_result_order_var()</code> specify the column, and numeric value the ordering column should be based on.</li>
-</ol>
-<div id="byvarn" class="section level3">
+<div id="alphabetical" class="section level3">
 <h3 class="hasAnchor">
-<a href="#byvarn" class="anchor"></a>byvarn</h3>
-<p>If the target variable has a corresponding VARN variable, this VARN variable can also be used in the ordering column.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+<a href="#alphabetical" class="anchor"></a>Alphabetical</h3>
+<p>Lastly, If the target doesn’t have a VARN variable in the target dataset and isn’t a factor, ‘Tplyr’ will sort the variable alphabetically. The resulting order variable will be numeric, simply numbering each of the variable values alphabetically. Nothing fancy to it!</p>
+</div>
+</div>
+<div id="sorting-descriptive-statistic-summaries" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sorting-descriptive-statistic-summaries" class="anchor"></a>Sorting Descriptive Statistic Summaries</h2>
+<p>After the <code>by</code> variables, each layer will sort results slightly differently. We’ll start with the most simple case - descriptive statistic layers. As the user, you have full control over the order in which results present using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. Results will be ordered based on the order in which you create your <code><a href="../reference/f_str.html">f_str()</a></code> objects.</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">RACE</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"byvarn"</span>)
+    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">HEIGHTBL</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
+        <span class="st">'Group 1'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.x'</span>, <span class="no">mean</span>),
+        <span class="st">'Group 2'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.x'</span>, <span class="no">median</span>),
+        <span class="st">'Group 3'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.x'</span>, <span class="no">sd</span>)
+      )
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">row_label1</th>
-<th align="right">ord_layer_1</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="left">BLACK OR AFRICAN AMERICAN</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">WHITE</td>
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
+  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="fu">starts_with</span>(<span class="st">"ord"</span>))
+<span class="co">#&gt; # A tibble: 3 x 3</span>
+<span class="co">#&gt;   row_label1 ord_layer_index ord_layer_1</span>
+<span class="co">#&gt;   &lt;chr&gt;                &lt;int&gt;       &lt;int&gt;</span>
+<span class="co">#&gt; 1 Group 1                  1           1</span>
+<span class="co">#&gt; 2 Group 2                  1           2</span>
+<span class="co">#&gt; 3 Group 3                  1           3</span></pre></body></html></div>
+<p>Each of the separate “Groups” added above were indexed based on their position in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. If you’d like to change the order, all you need to do is update your <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> call.</p>
 </div>
-<div id="byfactor" class="section level3">
+<div id="sorting-count-layers" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sorting-count-layers" class="anchor"></a>Sorting Count Layers</h2>
+<p>The order in which results appear on a frequency table can be deceptively complex and depends on the situation at hand. With this in mind, ‘Tplyr’ has 3 different methods of ordering the results of a count layer using the function <code><a href="../reference/ordering.html">set_order_count_method()</a></code>:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>“byfactor”</strong> - The default method is to sort by a factor. If the input variable is not a factor, alphabetical sorting will be used.</li>
+<li>
+<strong>“byvarn”</strong> - Similar to a ‘by’ variable, a count target can be sorted with a VARN variable existing in the target dataset.</li>
+<li>
+<strong>“bycount”</strong> - This is the most complex method. Many tables require counts to be sorted based on the counts within a particular group, like a treatment variable. Tplyr can populate the ordering column based on numeric values within any results column. This requires some more granular control, for which we’ve created the functions <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and <code>set_numeric_result_order_var()</code> to specify the column and numeric value on which the ordering column should be based.</li>
+</ol>
+<div id="byfactor-and-byvarn" class="section level3">
 <h3 class="hasAnchor">
-<a href="#byfactor" class="anchor"></a>byfactor</h3>
-<p>If no method for ordering is passed the target variable is treated as a factor(coerced if necessary) and indexed in the order the factor levels are presented.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">AGEGR1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">AGEGR1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"&lt;65"</span>, <span class="st">"65-80"</span>, <span class="st">"&gt;80"</span>))
+<a href="#byfactor-and-byvarn" class="anchor"></a>“byfactor” and “byvarn”</h3>
+<p><code>"byfactor"</code> is the default ordering method of results for count layers. Both “byfactor” and “byvarn” behave exactly like the order variables associated with <code>by</code> variables in a ‘Tplyr’ table. For “byvarn”, you must set the sort method using <code><a href="../reference/ordering.html">set_order_count_method()</a></code>.</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">AGEGR1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">AGEGR1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"&lt;65"</span>, <span class="st">"65-80"</span>, <span class="st">"&gt;80"</span>))
 <span class="co"># Warnings suppressed to remove 'forcats' implicit NA warning</span>
 <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>({
   <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
@@ -1200,13 +1164,318 @@
 </tr>
 </tbody>
 </table>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">RACE</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"byvarn"</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="right">ord_layer_1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">WHITE</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="nested-sorting" class="section level3">
+<div id="bycount" class="section level3">
 <h3 class="hasAnchor">
-<a href="#nested-sorting" class="anchor"></a>Nested Sorting</h3>
-<p>Sorting a nested count layer can be sorted with a mix of sorting methods. ‘byfactor’, ‘bycount’, and ‘byvarn’ can be used for both the first(grouping) and second(grouped) variables. In the example below, <code>EOSSTT</code> is sorted ‘byfactor’ which implicitly sorts alphabetically. <code>DCDECOD</code> is sorted ‘bycount’ which defaults to sorting by the ‘Placebo’ column.</p>
-<p><code>ord_layer_2</code> contains the numeric values of the Placebo column, except for the “grouping” variables which is set to <code>Inf</code> to ensure it is always sorted at the top.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+<a href="#bycount" class="anchor"></a>“bycount”</h3>
+<p>Using count-based sorting is where things get more complicated. There are multiple items to consider:</p>
+<ul>
+<li>What column do you want to sort by?</li>
+<li>If there are multiple numbers in the column, like n (%) [event] type tables, which number should be used to create the sort variable? We’ve create helper functions to aid in making this step more intuitive from a user perspetive, and to maintain the flexibility that you need. The two functions that you need here are <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and <code><a href="../reference/ordering.html">set_result_order_var()</a></code>.</li>
+</ul>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># This will present 3 numbers in a cell</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.x%) [x]"</span>, <span class="no">distinct</span>, <span class="no">distinct_pct</span>, <span class="no">n</span>)) <span class="kw">%&gt;%</span>
+      <span class="co"># This makes the distinct numbers available</span>
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># Choosing "bycount" ordering for the result variable</span>
+      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"bycount"</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># This will target the results column for Xanomeline High Dose, or `var1_Xanomeline High Dose`</span>
+      <span class="fu"><a href="../reference/ordering.html">set_ordering_cols</a></span>(<span class="st">"Xanomeline High Dose"</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># The number we want to pull out is the distinct N counts</span>
+      <span class="fu"><a href="../reference/ordering.html">set_result_order_var</a></span>(<span class="no">distinct_n</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_1</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">`var1_Xanomeline High Dose`</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="right">ord_layer_1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">PRURITUS</td>
+<td align="left">26 (61.9%) [38]</td>
+<td align="right">26</td>
+</tr>
+<tr class="even">
+<td align="left">ERYTHEMA</td>
+<td align="left">14 (33.3%) [22]</td>
+<td align="right">14</td>
+</tr>
+<tr class="odd">
+<td align="left">RASH</td>
+<td align="left">11 (26.2%) [18]</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">HYPERHIDROSIS</td>
+<td align="left">8 (19.0%) [10]</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN IRRITATION</td>
+<td align="left">5 (11.9%) [8]</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">RASH PRURITIC</td>
+<td align="left">2 ( 4.8%) [3]</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>In the above example, the results columns of the output table actually contain three different numbers: the distinct counts, the distinct percentage, and the non-distinct counts. We want to use distinct counts, so we choose <code>distinct_n</code>.</p>
+<p>The next question that we need to answer when sorting by counts is which result column to take counts out of. Here, we have three results columns - one for each treatment group in the dataset. We want to use the results for the treatment group “Xanomeline High Dose”, so we provide the name of the treatment group.</p>
+<p>But what if you have an additional column variable on top of the treatment groups?</p>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">cols</span><span class="kw">=</span><span class="no">SEX</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># This will present 3 numbers in a cell</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.x%) [x]"</span>, <span class="no">distinct</span>, <span class="no">distinct_pct</span>, <span class="no">n</span>)) <span class="kw">%&gt;%</span>
+      <span class="co"># This makes the distinct numbers available</span>
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># Choosing "bycount" ordering for the result variable</span>
+      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"bycount"</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># This will target the results column for Xanomeline High Dose, or `var1_Xanomeline High Dose`</span>
+      <span class="fu"><a href="../reference/ordering.html">set_ordering_cols</a></span>(<span class="st">"Xanomeline High Dose"</span>, <span class="st">"F"</span>) <span class="kw">%&gt;%</span>
+      <span class="co"># The number we want to pull out is the distinct N counts</span>
+      <span class="fu"><a href="../reference/ordering.html">set_result_order_var</a></span>(<span class="no">distinct_n</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_1</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">`var1_Xanomeline High Dose_F`</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">var1_Xanomeline High Dose_F</th>
+<th align="right">ord_layer_1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">PRURITUS</td>
+<td align="left">11 (78.6%) [14]</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">ERYTHEMA</td>
+<td align="left">7 (50.0%) [8]</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">RASH</td>
+<td align="left">3 (21.4%) [5]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">HYPERHIDROSIS</td>
+<td align="left">2 (14.3%) [2]</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">RASH PRURITIC</td>
+<td align="left">1 ( 7.1%) [1]</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN IRRITATION</td>
+<td align="left">1 ( 7.1%) [2]</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Here we’re ordering on the female subjects in the Xanomeline High Dose cohort. In <code><a href="../reference/ordering.html">set_result_order_var()</a></code>, you need to enter the values from each variable between <code>treat_var</code> and any variable entered in <code>cols</code> that you’d like to extract.</p>
+</div>
+</div>
+<div id="nested-sorting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#nested-sorting" class="anchor"></a>Nested Sorting</h2>
+<p>Nested count layers add one more piece to the puzzle. As a reminder, nested count layers are count summaries that are summarizing both a grouping variable, and a variable that’s being grouped. The best example is probably Adverse Event tables, where we want to see adverse events that occurred within different body systems.</p>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>))
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">47 (100.0%)</td>
+<td align="left">111 (100.0%)</td>
+<td align="left">118 (100.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">Inf</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ACTINIC KERATOSIS</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 0.9%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ALOPECIA</td>
+<td align="left">1 ( 2.1%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">BLISTER</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">2 ( 1.8%)</td>
+<td align="left">8 ( 6.8%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">3 ( 6.4%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 ( 2.1%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>In a layer that uses nesting, we need one more order variable - as we’re now concerned with the sorting of both the outside and inside variable. Counts are being summarized for both - so we need to know how both should be sorted. Additionally, we need to make sure that, in this case, the adverse events within a body system stay within the rows of that body system.</p>
+<p>These result variables will always be the last two order variables output by ‘Tplyr’. In the above example, <code>ord_layer_1</code> is for AEBODSYS and <code>ord_layer_2</code> is for AEDECOD. Note that <code>ord_layer_2</code> has <code>Inf</code> where <code>row_label1</code> and <code>row_label2</code> are both equal. This is the row that summarizes the <code>AEBODSYS</code> counts. By default, ‘Tplyr’ is set to assume that you will use <strong>descending</strong> sort on the order variable associated with the inside count variable (i.e. <code>AEDECOD</code>). This is because in nested count layer you will often want to sort by decending occurence of the inside target variable. If you’d like to use ascending sorting instead, we offer the function <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code>.</p>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_outer_sort_position.html">set_outer_sort_position</a></span>(<span class="st">"asc"</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="fu">starts_with</span>(<span class="st">"ord_layer"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">-Inf</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ACTINIC KERATOSIS</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">ALOPECIA</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">BLISTER</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">COLD SWEAT</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>Notice that the <code>Inf</code> has now switched to <code>-Inf</code> to ensure that the AEBODSYS row stays at the top of the group.</p>
+<p>Another consideration of nested sorting is whether or not you want to sort both result variables the same way. Do you want to sort both by counts? Or do you want to sort one alphabetically and the other by count? Or maybe one has a VARN variable associated with it? For this reason, <code><a href="../reference/ordering.html">set_order_count_method()</a></code> can take in a 2-element character vector, where the first element specifies the outside variable and the second the inside variable.</p>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">EOSSTT</span>, <span class="no">DCDECOD</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"byfactor"</span>, <span class="st">"bycount"</span>))
@@ -1302,8 +1571,9 @@
 </tr>
 </tbody>
 </table>
-<p>One sort method can be passed which will be used by both variables. In this example both <code>EOSSTT</code> and <code>DCDECOD</code> will be sorted by the count in the ‘Total’ column. When both the inside and outside variable use “bycount”, the parameters entered to <code>set_ordering_cols</code> and <code>set_result_order_var</code> will apply to both variables.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+<p>In the example above, <code>EOSTT</code> is ordered alhpabetically (recall that using “byfactor” when the variable is not a factor will do alphabetical sorting), and <code>DSDECOD</code> is ordered by count.</p>
+<p>If only one method is provided, that method will automatically be applied to both variables. So in the example below, “bycount” is appleid to both <code>EOSTT</code> and <code>DSDECOD</code>.</p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">EOSSTT</span>, <span class="no">DCDECOD</span>)) <span class="kw">%&gt;%</span>
@@ -1414,167 +1684,59 @@
 </tr>
 </tbody>
 </table>
-<p>By default the ordering helper for the grouping rows is set to Inf to ensure they are always at the top after being sorted. If you need to sort the outer rows on the bottom, or sort the other values in a descending order, the function <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code> allows you to change this behavior and set the ordering helper to -Inf.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">EOSSTT</span>, <span class="no">DCDECOD</span>)) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_outer_sort_position.html">set_outer_sort_position</a></span>(<span class="st">"asc"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"ord"</span>), <span class="fu">starts_with</span>(<span class="st">"row"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">ord_layer_index</th>
-<th align="right">ord_layer_1</th>
-<th align="right">ord_layer_2</th>
-<th align="left">row_label1</th>
-<th align="left">row_label2</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">-Inf</td>
-<td align="left">COMPLETED</td>
-<td align="left">COMPLETED</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">COMPLETED</td>
-<td align="left">COMPLETED</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">-Inf</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">DISCONTINUED</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">ADVERSE EVENT</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">DEATH</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">3</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">LACK OF EFFICACY</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">4</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">LOST TO FOLLOW-UP</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">5</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">PHYSICIAN DECISION</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">6</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">PROTOCOL VIOLATION</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">7</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">STUDY TERMINATED BY SPONSOR</td>
-</tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">8</td>
-<td align="left">DISCONTINUED</td>
-<td align="left">WITHDRAWAL BY SUBJECT</td>
-</tr>
-</tbody>
-</table>
 </div>
-<div id="bycount" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bycount" class="anchor"></a>bycount</h3>
-<p>A common way to order incidence tables is by the number of occurrences for a particular group. Any column can be selected with <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> which takes the value of the treatment group and any ‘cols’ value to select the column ordering should be done by.</p>
-<p>If multiple types of counts are used in the layer, <code><a href="../reference/ordering.html">set_result_order_var()</a></code> can be used to select which should be used in ordering.</p>
-<p>Here the treatment groups as well as the age groups will appear as columns. The <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> call sets the sorting group as the Placebo + &gt;80 group to order on. The <code><a href="../reference/ordering.html">set_result_order_var()</a></code> changes the numeric variable to output.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>, <span class="kw">cols</span> <span class="kw">=</span> <span class="no">AGEGR1</span>) <span class="kw">%&gt;%</span>
+<div id="sorting-shift-tables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sorting-shift-tables" class="anchor"></a>Sorting Shift Tables</h2>
+<p>Shift tables keep things relatively simple when it comes to sorting and use the “byfactor” method seen above. We encourage this primarily because you likely want the benefits of factor variables on a shift layer. For example, consider this table:</p>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"bycount"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_ordering_cols</a></span>(<span class="no">Placebo</span>, <span class="no">`&gt;80`</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_result_order_var</a></span>(<span class="no">pct</span>)
+    <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>))
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="no">`var1_Placebo_&gt;80`</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">var1_Placebo_&gt;80</th>
-<th align="right">ord_layer_1</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">19 ( 63.3%)</td>
-<td align="right">0.6333333</td>
-</tr>
-<tr class="even">
-<td align="left">11 ( 36.7%)</td>
-<td align="right">0.3666667</td>
-</tr>
-</tbody>
-</table>
-<p><code><a href="../reference/ordering.html">set_result_order_var()</a></code> can also be used when there are multiple numbers presented in the summary within one cell. In the example below <code>ord_layer_1</code> is presented with the distinct counts rather than the event counts.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">'var1'</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>)
+<span class="co">#&gt; # A tibble: 6 x 7</span>
+<span class="co">#&gt;   row_label1 row_label2 row_label3 ord_layer_index ord_layer_1 ord_layer_2</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Creatine … Week 12    H                        1          35          12</span>
+<span class="co">#&gt; 2 Creatine … Week 12    N                        1          35          12</span>
+<span class="co">#&gt; 3 Creatine … Week 24    H                        1          35          24</span>
+<span class="co">#&gt; 4 Creatine … Week 24    N                        1          35          24</span>
+<span class="co">#&gt; 5 Creatine … Week 8     H                        1          35           8</span>
+<span class="co">#&gt; 6 Creatine … Week 8     N                        1          35           8</span>
+<span class="co">#&gt; # … with 1 more variable: ord_layer_3 &lt;dbl&gt;</span></pre></body></html></div>
+<p>There are a few problems here:</p>
+<ul>
+<li>H sorts before N alhpabetically</li>
+<li>We’re missing the rows for “L” on most visits, even though “L” in in the data for <code>BNRIND</code>.</li>
+</ul>
+<p>Using a factor variables cleans this right up for us:</p>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEBODSYS</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.xx%) [xxx]"</span>, <span class="no">distinct</span>, <span class="no">pct</span>, <span class="no">n</span>)) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"bycount"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/ordering.html">set_result_order_var</a></span>(<span class="no">distinct_n</span>)
+    <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>))
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="no">var1_Placebo</span>, <span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">row_label1</th>
-<th align="left">var1_Placebo</th>
-<th align="right">ord_layer_index</th>
-<th align="right">ord_layer_1</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
-<td align="left">21 (100.00%) [ 47]</td>
-<td align="right">1</td>
-<td align="right">21</td>
-</tr></tbody>
-</table>
-</div>
+  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">'var1'</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>)
+<span class="co">#&gt; # A tibble: 9 x 7</span>
+<span class="co">#&gt;   row_label1 row_label2 row_label3 ord_layer_index ord_layer_1 ord_layer_2</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Creatine … Week 12    L                        1          35          12</span>
+<span class="co">#&gt; 2 Creatine … Week 12    N                        1          35          12</span>
+<span class="co">#&gt; 3 Creatine … Week 12    H                        1          35          12</span>
+<span class="co">#&gt; 4 Creatine … Week 24    L                        1          35          24</span>
+<span class="co">#&gt; 5 Creatine … Week 24    N                        1          35          24</span>
+<span class="co">#&gt; 6 Creatine … Week 24    H                        1          35          24</span>
+<span class="co">#&gt; 7 Creatine … Week 8     L                        1          35           8</span>
+<span class="co">#&gt; 8 Creatine … Week 8     N                        1          35           8</span>
+<span class="co">#&gt; 9 Creatine … Week 8     H                        1          35           8</span>
+<span class="co">#&gt; # … with 1 more variable: ord_layer_3 &lt;dbl&gt;</span></pre></body></html></div>
+<p>Now we have the nice “L”, “N”, “H” order that we’d like to see. Other sort methods on a shift table are fairly unlikely, as the matrix structure of the counts displayed by shift tables is relevant to the presentation and interpreting results.</p>
+<p>Happy sorting!</p>
 </div>
 </div>
   </div>

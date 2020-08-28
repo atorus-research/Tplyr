@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -91,12 +91,6 @@
     </li>
     <li class="divider">
     <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="../articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="../articles/beta-release.html">Tplyr (Beta Release)</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -136,28 +130,32 @@
 <div id="how-tplyr-works" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-tplyr-works" class="anchor"></a>How Tplyr Works</h1>
-<p>A <code>Tplyr</code> table is constructed of two main objects, a <code>table_table</code> object and <code>tplyr_layer</code> objects making up the different summaries that are to be performed.</p>
+<p>When you look at a summary table within a clinical report, you can often break it down into some basic pieces. Consider this output.</p>
+<div class="figure">
+<img src="demo_table.png" alt=""><p class="caption">Demographics Table</p>
+</div>
+<p>Different variables are being summarized in chunks of the table, which we refer to as “layers”. Additionally, this table really only contains a few different types of summaries, which makes many of the calculations rather redundant. This drives the motivation behind ‘Tplyr’. The containing table is encapsulated within the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object, and each section, or “layer”, within the summary table can be broken down into a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> object.</p>
 <div id="the-tplyr_table-object" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-tplyr_table-object" class="anchor"></a>The <code>tplyr_table</code> Object</h2>
-<p>The <code>tplyr_table</code> object is the conceptual “table” that contains the all of the logic necessary to construct and display the data. <code>tplyr</code> tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The <code>tplyr_table</code> object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.</p>
-<p>When a <code>tplyr_table</code> is created, it will contain the following bindings:</p>
+<a href="#the-tplyr_table-object" class="anchor"></a>The <code>tplyr_table()</code> Object</h2>
+<p>The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object is the conceptual “table” that contains the all of the logic necessary to construct and display the data. ‘Tplyr’ tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.</p>
+<p>When a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> is created, it will contain the following bindings:</p>
 <ul>
 <li>target - The dataset upon which summaries will be performed</li>
-<li>count_layer_formats - default formats to be used on count layers in the table</li>
-<li>shift_layer_formats - default formats to be used on shift layers in the table</li>
-<li>desc_layer_formats - default formats to be used on desc layers in the table</li>
-<li>pop_data - The data containing population information. This defaults to the target dataset</li>
-<li>cols - A categorical variable to present summaries grouped by column (in addition to <code>treat_var</code>)</li>
-<li>table_where - The <code>where</code> parameter provided, used to subset the <code>target</code> data</li>
-<li>treat_var - Variable used to distinguish treatment groups.</li>
+<li>count_layer_formats - Default formats to be used on count layers in the table</li>
+<li>shift_layer_formats - Default formats to be used on shift layers in the table</li>
+<li>desc_layer_formats - Default formats to be used on descriptive statistics layers in the table</li>
+<li>pop_data - The dataset containing population information. This defaults to the target dataset</li>
+<li>cols - A categorical variable in target dataset to present summaries grouped by column (in addition to the <code>treat_var</code> variable)</li>
+<li>table_where - The <code>where</code> clause provided, used to subset the <code>target</code> dataset</li>
+<li>treat_var - Variable used to distinguish treatment groups in the <code>target</code> dataset.</li>
 <li>header_n - Default header N values based on <code>treat_var</code> and any <code>cols</code> variables</li>
-<li>pop_treat_var - The treatment variable for <code>pop_data</code> (if different)</li>
-<li>layers - The container for individual layers of a <code>tplyr_table</code>
+<li>pop_treat_var - Variable used to distinguish treatment groups in <code>pop_data</code> dataset (if different than the <code>treat_var</code> variable in the <code>target</code> dataset)</li>
+<li>layers - The container for individual layers of a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>
 </li>
 <li>treat_grps - Additional treatment groups to be added to the summary (i.e. Total)</li>
 </ul>
-<p><code>tplyr_table</code> allows you a basic interface to instantiate the object. Modifier functions are available to change individual parameters catered to your analysis.</p>
+<p>The function <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> allows you a basic interface to instantiate the object. Modifier functions are available to change individual parameters catered to your analysis.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>)
 <span class="no">t</span>
 <span class="co">#&gt; *** tplyr_table ***</span>
@@ -181,18 +179,18 @@
 <div id="the-tplyr_layer-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-tplyr_layer-object" class="anchor"></a>The <code>tplyr_layer</code> Object</h2>
-<p>Users of <code>Tplyr</code> interface with <code>tplyr_layer</code> objects using the <code>group_&lt;type&gt;</code> family of functions. This family specifies the type of summary that is to be performed within a layer. <code>count</code> layers are used to create summary counts of some discrete variable. <code>desc</code> layers create descriptive statistics, and <code>shift</code> layers summaries the counts for different changes in states.</p>
+<p>Users of ‘Tplyr’ interface with <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> objects using the <code>group_&lt;type&gt;</code> family of functions. This family specifies the type of summary that is to be performed within a layer. <code>count</code> layers are used to create summary counts of some discrete variable. <code>shift</code> layers summarize the counts for different changes in states. Lastly, <code>desc</code> layers create descriptive statistics.</p>
 <ul>
 <li>
 <strong>Count Layers</strong>
 <ul>
-<li>Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you’re also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as vars(OutsideVariable, InsideVariable). This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurences of that adverse event.</li>
+<li>Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you’re also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as <code>vars(OutsideVariable, InsideVariable)</code>. This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurrences of that adverse event.</li>
 </ul>
 </li>
 <li>
 <strong>Descriptive Statistics Layers</strong>
 <ul>
-<li>Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into <code>tplyr</code> already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output ‘n’, ‘Mean (SD)’, ‘Median’, ‘Q1, Q3’, ‘Min, Max’, and ‘Missing’. You can change these summaries using <code>set_format_strings</code>, and you can also add your own summaries using <code>set_custom_summaries</code>. This allows you to easily implement any additional summary statistics you want presented.</li>
+<li>Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into ‘Tplyr’ already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output ‘n’, ‘Mean (SD)’, ‘Median’, ‘Q1, Q3’, ‘Min, Max’, and ‘Missing’. You can change these summaries using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>, and you can also add your own summaries using <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code>. This allows you to easily implement any additional summary statistics you want presented.</li>
 </ul>
 </li>
 <li>
@@ -205,8 +203,8 @@
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">cnt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">t</span>, <span class="no">AGEGR1</span>)
 <span class="no">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x5582e0bdbc48 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5582e0448f10 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x55d8c438b3f8 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d8c3c5c230 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
@@ -216,8 +214,8 @@
 <span class="no">dsc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">t</span>, <span class="no">AGE</span>)
 <span class="no">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x5582e0e7d2b0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5582e0448f10 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x55d8c4657dc8 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d8c3c5c230 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
@@ -227,8 +225,8 @@
 <span class="no">shf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="no">t</span>, <span class="fu">vars</span>(<span class="kw">row</span><span class="kw">=</span><span class="no">COMP8FL</span>, <span class="kw">column</span><span class="kw">=</span><span class="no">COMP24FL</span>))
 <span class="no">shf</span>
 <span class="co">#&gt; *** shift_layer ***</span>
-<span class="co">#&gt; Self:  shift_layer &lt; 0x5582de942178 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5582e0448f10 &gt;</span>
+<span class="co">#&gt; Self:  shift_layer &lt; 0x55d8c24d4980 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d8c3c5c230 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  COMP8FL</span>
 <span class="co">#&gt;  COMP24FL</span>
@@ -239,32 +237,32 @@
 <div id="adding-layers-to-a-table" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-layers-to-a-table" class="anchor"></a>Adding Layers to a Table</h2>
-<p>Everyone has their own style of coding - so we’ve tried to be flexible to an extent. Overall, <code>tplyr</code> is built around tidy syntax, so all of our object construction supports piping with <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> (i.e. <code>%&gt;%</code>).</p>
-<p>There are two ways to add layers to a <code>tplyr_table</code>: <code>add_layer</code> and <code>add_layers</code>. The difference is that <code>add_layer</code> allows you to construct the layer within the call to <code>add_layer</code>, whereas with <code>add_layers</code> you can attach multiple layers that have already been constructed upfront:</p>
+<p>Everyone has their own style of coding - so we’ve tried to be flexible to an extent. Overall, ‘Tplyr’ is built around tidy syntax, so all of our object construction supports piping with <a href="https://magrittr.tidyverse.org/articles/magrittr.html"><code>magrittr</code></a> (i.e. <code>%&gt;%</code>).</p>
+<p>There are two ways to add layers to a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>: <code><a href="../reference/layer_attachment.html">add_layer()</a></code> and <code><a href="../reference/layer_attachment.html">add_layers()</a></code>. The difference is that <code><a href="../reference/layer_attachment.html">add_layer()</a></code> allows you to construct the layer within the call to <code><a href="../reference/layer_attachment.html">add_layer()</a></code>, whereas with <code><a href="../reference/layer_attachment.html">add_layers()</a></code> you can attach multiple layers that have already been constructed upfront:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories n (%)"</span>)
   )</pre></body></html></div>
-<p>Within <code>add_layer</code>, the syntax to constructing the count layer for Age Categories was written on the fly. <code>add_layer</code> is special in that it also allows you to use piping to use modifier functions on the layer being constructed</p>
+<p>Within <code><a href="../reference/layer_attachment.html">add_layer()</a></code>, the syntax to constructing the count layer for Age Categories was written on the fly. <code><a href="../reference/layer_attachment.html">add_layer()</a></code> is special in that it also allows you to use piping to use modifier functions on the layer being constructed</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories n (%)"</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.x%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>()
   )</pre></body></html></div>
-<p><code>add_layers</code>, on the other hand, lets you isolate the code to construct a particular layer if you wanted to separate things out more. Some might find this cleaner to work with if you have a large number of layers being constructed.</p>
+<p><code><a href="../reference/layer_attachment.html">add_layers()</a></code>, on the other hand, lets you isolate the code to construct a particular layer if you wanted to separate things out more. Some might find this cleaner to work with if you have a large number of layers being constructed.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>)
 
 <span class="no">l1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">t</span>, <span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories n (%)"</span>)
 <span class="no">l2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">t</span>, <span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>)
 
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_attachment.html">add_layers</a></span>(<span class="no">t</span>, <span class="no">l1</span>, <span class="no">l2</span>)</pre></body></html></div>
-<p>Notice that when you construct the layers separately, you need to specify the table to which they belong. <code>add_layer</code> does this automatically. <code>tplyr_table</code> and <code>tplyr_layer</code> objects are built on environments, and the parent/child relationships are very important. This is why, even though the layer knows who its table parent is, the layers still need to be attached to the table (as the table doesn’t know who its children are). <a href="https://adv-r.hadley.nz/environments.html">Advanced R</a> does a very good job at explaining what environments in R are, their benefits, and how to use them.</p>
+<p>Notice that when you construct the layers separately, you need to specify the table to which they belong. <code><a href="../reference/layer_attachment.html">add_layer()</a></code> does this automatically. <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> and <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> objects are built on environments, and the parent/child relationships are very important. This is why, even though the layer knows who its table parent is, the layers still need to be attached to the table (as the table doesn’t know who its children are). <a href="https://adv-r.hadley.nz/environments.html">Advanced R</a> does a very good job at explaining what environments in R are, their benefits, and how to use them.</p>
 <div id="a-note-before-we-go-deeper" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-note-before-we-go-deeper" class="anchor"></a>A Note Before We Go Deeper</h3>
-<p>Notice that when you construct a <code>tplyr_table</code> or a <code>tplyr_layer</code> that what displays is a summary of information about the table or layer? That’s because when you create these objects - it constructs the metadata, but does not process the actual data. This allows you to construct and make sure the pieces of your table fit together before you do the data processing - and it gives you a container to hold all of this metadata, and use it later if necessary.</p>
-<p>To generate the data from a <code>tplyr_table</code> object, you use the function <code>build</code>:</p>
+<p>Notice that when you construct a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> or a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> that what displays is a summary of information about the table or layer? That’s because when you create these objects - it constructs the metadata, but does not process the actual data. This allows you to construct and make sure the pieces of your table fit together before you do the data processing - and it gives you a container to hold all of this metadata, and use it later if necessary.</p>
+<p>To generate the data from a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object, you use the function <code><a href="../reference/build.html">build()</a></code>:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories n (%)"</span>)
@@ -317,33 +315,99 @@
 </tr>
 </tbody>
 </table>
-<p>But there’s more you can get from <code>Tplyr</code>. It’s great to have the formatted numbers, but what about the numeric data behind the scenes? What if you want to calculate your own statistics based off of the counts? You can get that information as well using <code>get_numeric_data</code>. This returns the numeric data from each layer as a list of data frames:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/get_numeric_data.html">get_numeric_data</a></span>(<span class="no">t</span>)
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; # A tibble: 9 x 5</span>
-<span class="co">#&gt;   TRT01P               `"Age categories n (%)"` summary_var     n total</span>
-<span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;                    &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1 Placebo              Age categories n (%)     &lt;65            14    86</span>
-<span class="co">#&gt; 2 Placebo              Age categories n (%)     &gt;80            30    86</span>
-<span class="co">#&gt; 3 Placebo              Age categories n (%)     65-80          42    86</span>
-<span class="co">#&gt; 4 Xanomeline High Dose Age categories n (%)     &lt;65            11    84</span>
-<span class="co">#&gt; 5 Xanomeline High Dose Age categories n (%)     &gt;80            18    84</span>
-<span class="co">#&gt; 6 Xanomeline High Dose Age categories n (%)     65-80          55    84</span>
-<span class="co">#&gt; 7 Xanomeline Low Dose  Age categories n (%)     &lt;65             8    84</span>
-<span class="co">#&gt; 8 Xanomeline Low Dose  Age categories n (%)     &gt;80            29    84</span>
-<span class="co">#&gt; 9 Xanomeline Low Dose  Age categories n (%)     65-80          47    84</span></pre></body></html></div>
-<p>By storing pertinent information, you can get more out of a <code>Tplyr</code> objects than processed data for display. And by specifying when you want to get data out of <code>Tplyr</code>, we can save you from repeatedly processing data while your constructing your outputs - which is particularly useful when that computation starts taking time.</p>
+<p>But there’s more you can get from ‘Tplyr’. It’s great to have the formatted numbers, but what about the numeric data behind the scenes? Maybe a number looks suspicious and you need to investigate <em>how</em> you got that number. What if you want to calculate your own statistics based off of the counts? You can get that information as well using <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>. This returns the numeric data from each layer as a list of data frames:</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/get_numeric_data.html">get_numeric_data</a></span>(<span class="no">t</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table kable_wrapper"><tbody><tr>
+<td>
+<table class="table">
+<thead><tr class="header">
+<th align="left">TRT01P</th>
+<th align="left">“Age categories n (%)”</th>
+<th align="left">summary_var</th>
+<th align="right">n</th>
+<th align="right">total</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Placebo</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="right">14</td>
+<td align="right">86</td>
+</tr>
+<tr class="even">
+<td align="left">Placebo</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="right">30</td>
+<td align="right">86</td>
+</tr>
+<tr class="odd">
+<td align="left">Placebo</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">65-80</td>
+<td align="right">42</td>
+<td align="right">86</td>
+</tr>
+<tr class="even">
+<td align="left">Xanomeline High Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="right">11</td>
+<td align="right">84</td>
+</tr>
+<tr class="odd">
+<td align="left">Xanomeline High Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="right">18</td>
+<td align="right">84</td>
+</tr>
+<tr class="even">
+<td align="left">Xanomeline High Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">65-80</td>
+<td align="right">55</td>
+<td align="right">84</td>
+</tr>
+<tr class="odd">
+<td align="left">Xanomeline Low Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="right">8</td>
+<td align="right">84</td>
+</tr>
+<tr class="even">
+<td align="left">Xanomeline Low Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="right">29</td>
+<td align="right">84</td>
+</tr>
+<tr class="odd">
+<td align="left">Xanomeline Low Dose</td>
+<td align="left">Age categories n (%)</td>
+<td align="left">65-80</td>
+<td align="right">47</td>
+<td align="right">84</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr></tbody></table>
+<p>By storing pertinent information, you can get more out of a ‘Tplyr’ object than processed data for display. And by specifying when you want to get data out of ‘Tplyr’, we can save you from repeatedly processing data while your constructing your outputs - which is particularly useful when that computation starts taking time.</p>
 </div>
 </div>
 <div id="constructing-layers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#constructing-layers" class="anchor"></a>Constructing Layers</h2>
-<p>The bulk of <code>Tplyr</code> coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it’s important to discuss how <code>Tplyr</code> handles string formatting.</p>
+<p>The bulk of ‘Tplyr’ coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it’s important to discuss how ‘Tplyr’ handles string formatting.</p>
 <div id="string-formatting-in-tplyr" class="section level3">
 <h3 class="hasAnchor">
-<a href="#string-formatting-in-tplyr" class="anchor"></a>String Formatting in <code>Tplyr</code>
-</h3>
-<p>String formatting in <code>Tplyr</code> is controlled by an object called an <code>f_str</code>, which is also the name of function you use to create these formats. To set these format strings into a <code>tplyr_layer</code>, you use the function <code>set_format_strings</code>, and this usage varies slightly between layer types (which is covered in other vignettes).</p>
+<a href="#string-formatting-in-tplyr" class="anchor"></a>String Formatting in ‘Tplyr’</h3>
+<p>String formatting in ‘Tplyr’ is controlled by an object called an <code><a href="../reference/f_str.html">f_str()</a></code>, which is also the name of function you use to create these formats. To set these format strings into a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code>, you use the function <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>, and this usage varies slightly between layer types (which is covered in other vignettes).</p>
 <p>So - why is this object necessary. Consider this example:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
@@ -392,12 +456,12 @@
 </tr>
 </tbody>
 </table>
-<p>In a perfect world, the <code>f_str</code> calls wouldn’t be necessary - but in reality they allow us to infer a great deal of information from very few user inputs. In the calls that you see above:</p>
+<p>In a perfect world, the <code><a href="../reference/f_str.html">f_str()</a></code> calls wouldn’t be necessary - but in reality they allow us to infer a great deal of information from very few user inputs. In the calls that you see above:</p>
 <ul>
-<li>The row labels in the <code>row_label2</code> column are taken from the left side of each <code>=</code> in <code>set_format_strings</code>
+<li>The row labels in the <code>row_label2</code> column are taken from the left side of each <code>=</code> in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>
 </li>
-<li>The string formats, including integer length and decimal precision, and exact presentation formatting are taken from the strings within the first parameter of each <code>f_str</code> call</li>
-<li>The second and greater parameters within each <code>f_str</code> call determine the descriptive statistic summaries that will be performed. This is connected to a number of default summaries available within <code>Tplyr</code>, but you can also create your own summaries (covered in other vignettes). The default summaries that are built in include:
+<li>The string formats, including integer length and decimal precision, and exact presentation formatting are taken from the strings within the first parameter of each <code><a href="../reference/f_str.html">f_str()</a></code> call</li>
+<li>The second and greater parameters within each <code><a href="../reference/f_str.html">f_str()</a></code> call determine the descriptive statistic summaries that will be performed. This is connected to a number of default summaries available within ‘Tplyr’, but you can also create your own summaries (covered in other vignettes). The default summaries that are built in include:
 <ul>
 <li>
 <code>n</code> = Number of observations</li>
@@ -421,10 +485,10 @@
 <code>missing</code> = Count of NA values</li>
 </ul>
 </li>
-<li>When two summaries are placed on the same <code>f_str</code> call, then those two summaries are formatted into the same string. This allows you to do a <code>Mean (SD)</code> type format where both numbers appear.</li>
+<li>When two summaries are placed on the same <code><a href="../reference/f_str.html">f_str()</a></code> call, then those two summaries are formatted into the same string. This allows you to do a “Mean (SD)” type format where both numbers appear.</li>
 </ul>
-<p>This simple user input controls a significant amount of work in the back end of the data processing, and the <code>f_str</code> object allows that metadata to be collected.</p>
-<p><code>f_str</code> objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use <code>n</code>, <code>pct</code>, <code>distinct</code>, and <code>distinct_pct</code> for your parameters and specify how you would like the values displayed. Using <code>distinct</code> and <code>distinct_pct</code> must be combined with specifying a <code>distinct_by</code> variable using <code>set_distinct_by</code>.</p>
+<p>This simple user input controls a significant amount of work in the back end of the data processing, and the <code><a href="../reference/f_str.html">f_str()</a></code> object allows that metadata to be collected.</p>
+<p><code><a href="../reference/f_str.html">f_str()</a></code> objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use <code>n</code>, <code>pct</code>, <code>distinct</code>, and <code>distinct_pct</code> for your parameters and specify how you would like the values displayed. Using <code>distinct</code> and <code>distinct_pct</code> should be combined with specifying a <code>distinct_by()</code> variable using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code>.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories"</span>) <span class="kw">%&gt;%</span>
@@ -590,7 +654,7 @@
 <div id="descriptive-statistic-layers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#descriptive-statistic-layers" class="anchor"></a>Descriptive Statistic Layers</h2>
-<p>As covered under string formatting, <code>set_format_strings</code> controls a great deal of what happens within a descriptive statistics layer. Note that there are some built in defaults to what’s output:</p>
+<p>As covered under string formatting, <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> controls a great deal of what happens within a descriptive statistics layer. Note that there are some built in defaults to what’s output:</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>)
@@ -671,7 +735,7 @@
 </tr>
 </tbody>
 </table>
-<p>To override these defaults, just specify the summaries that you want to be performed using <code>set_format_strings</code> as described above. But what if <code>Tplyr</code> doesn’t have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where <code>set_custom_summaries</code> comes into play. Let’s say you want to derive a geometric mean.</p>
+<p>To override these defaults, just specify the summaries that you want to be performed using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> as described above. But what if ‘Tplyr’ doesn’t have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code> comes into play. Let’s say you want to derive a geometric mean.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Sepal Length"</span>) <span class="kw">%&gt;%</span>
@@ -706,8 +770,8 @@
 <td align="right">1</td>
 </tr></tbody>
 </table>
-<p>In <code>set_custom_summaries</code>, first you name the summary being performed. This is important - that name is what you use in the f_str call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">dplyr::summarize</a></code> - so use similar syntax. Use the variable name <code>.var</code> in your custom summary function. This is necessary because it allows a generic variable name to be used when multiple target variables are specified - and therefore the function can be applied to both target variables.</p>
-<p>Sometimes there’s a need to present multiple variables summarized side by side. <code>Tplyr</code> allows you to do this as well.</p>
+<p>In <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code>, first you name the summary being performed. This is important - that name is what you use in the <code><a href="../reference/f_str.html">f_str()</a></code> call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">dplyr::summarize()</a></code> - so use similar syntax. Use the variable name <code>.var</code> in your custom summary function. This is necessary because it allows a generic variable name to be used when multiple target variables are specified - and therefore the function can be applied to both target variables.</p>
+<p>Sometimes there’s a need to present multiple variables summarized side by side. ‘Tplyr’ allows you to do this as well.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="fu">vars</span>(<span class="no">AGE</span>, <span class="no">AVGDD</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age and Avg. Daily Dose"</span>)
@@ -809,12 +873,12 @@
 </tr>
 </tbody>
 </table>
-<p><code>Tplyr</code> summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of <code>vars</code> - in any situation where you’d like to use multiple variable names in a parameter, use <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars</a></code> to specify the variables. You can use text strings in the calls to <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars</a></code> as well.</p>
+<p>‘Tplyr’ summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> - in any situation where you’d like to use multiple variable names in a parameter, use <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> to specify the variables. You can use text strings in the calls to <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> as well.</p>
 </div>
 <div id="count-layers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#count-layers" class="anchor"></a>Count Layers</h2>
-<p>Count layers generally allow you to create n and n (%) count type summaries. There are a few extra features here as well. Let’s say that you want a total row within your counts. This can be down with <code><a href="../reference/add_total_row.html">add_total_row()</a></code>:</p>
+<p>Count layers generally allow you to create “n” and “n (%)” count type summaries. There are a few extra features here as well. Let’s say that you want a total row within your counts. This can be done with <code><a href="../reference/add_total_row.html">add_total_row()</a></code>:</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age categories"</span>) <span class="kw">%&gt;%</span>
@@ -866,7 +930,7 @@
 </tr>
 <tr class="even">
 <td align="left">Age categories</td>
-<td align="left">NA</td>
+<td align="left">Total</td>
 <td align="left">86 (100.0%)</td>
 <td align="left">84 (100.0%)</td>
 <td align="left">84 (100.0%)</td>
@@ -876,7 +940,7 @@
 </tr>
 </tbody>
 </table>
-<p>Sometimes it’s also necessary to count summaries based on distinct values. <code>Tplyr</code> allows you to do this as well with <code>set_distinct_by</code>:</p>
+<p>Sometimes it’s also necessary to count summaries based on distinct values. ‘Tplyr’ allows you to do this as well with <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code>:</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="st">'Subjects with at least one adverse event'</span>) <span class="kw">%&gt;%</span>
@@ -903,8 +967,8 @@
 <td align="left">NA</td>
 </tr></tbody>
 </table>
-<p>There’s another trick going on here - to create a summary with row label text like you see above, text strings can be used as the target variables. Here, we use this in combination with <code>set_distinct_by</code> to count distinct subjects.</p>
-<p>Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. <code>Tplyr</code> has means of making this simple for the user as well.</p>
+<p>There’s another trick going on here - to create a summary with row label text like you see above, text strings can be used as the target variables. Here, we use this in combination with <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> to count distinct subjects.</p>
+<p>Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. ‘Tplyr’ has means of making this simple for the user as well.</p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>))
@@ -986,92 +1050,112 @@
 </tr>
 </tbody>
 </table>
+<p>Here we again use <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> to specify multiple target variables. When used in a count layer, ‘Tplyr’ knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.</p>
 </div>
 <div id="shift-layers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#shift-layers" class="anchor"></a>Shift Layers</h2>
-<p>Lastly, let’s talk about shift layers. A common example of this would be looking at a subject’s lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in Tplyr is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let’s look at an example.</p>
+<p>Lastly, let’s talk about shift layers. A common example of this would be looking at a subject’s lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in ‘Tplyr’ is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let’s look at an example.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="co"># Tplyr can use factor orders to dummy values and order presentation</span>
 <span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTP</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">AVISIT</span> <span class="kw">==</span> <span class="st">"Week 2"</span> <span class="kw">&amp;</span> <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"URATE"</span>) <span class="kw">%&gt;%</span>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span><span class="kw">=</span><span class="no">BNRIND</span>, <span class="kw">column</span><span class="kw">=</span><span class="no">ANRIND</span>), <span class="kw">by</span><span class="kw">=</span><span class="no">PARAM</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx)"</span>, <span class="no">n</span>, <span class="no">pct</span>))
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx%)"</span>, <span class="no">n</span>, <span class="no">pct</span>))
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `BNRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `ANRIND` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span>
-<span class="co">#&gt; Warning: Factor `TRTP` contains implicit NA, consider using</span>
-<span class="co">#&gt; `forcats::fct_explicit_na`</span></pre></body></html></div>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_NA_NA</th>
+<th align="left">var1_Placebo_L</th>
+<th align="left">var1_Placebo_N</th>
+<th align="left">var1_Placebo_H</th>
+<th align="left">var1_Xanomeline High Dose_L</th>
+<th align="left">var1_Xanomeline High Dose_N</th>
+<th align="left">var1_Xanomeline High Dose_H</th>
+<th align="left">var1_Xanomeline Low Dose_L</th>
+<th align="left">var1_Xanomeline Low Dose_N</th>
+<th align="left">var1_Xanomeline Low Dose_H</th>
 <th align="right">ord_layer_index</th>
 <th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
 </tr></thead>
-<tbody><tr class="odd">
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">0 ( 0)</td>
+<tbody>
+<tr class="odd">
+<td align="left">Creatine Kinase (U/L)</td>
+<td align="left">L</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
 <td align="right">1</td>
-<td align="right">36</td>
-</tr></tbody>
+<td align="right">35</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Creatine Kinase (U/L)</td>
+<td align="left">N</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">27 ( 87%)</td>
+<td align="left">4 ( 13%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">17 ( 85%)</td>
+<td align="left">2 ( 10%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">14 ( 93%)</td>
+<td align="left">1 ( 7%)</td>
+<td align="right">1</td>
+<td align="right">35</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Creatine Kinase (U/L)</td>
+<td align="left">H</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">1 ( 5%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="left">0 ( 0%)</td>
+<td align="right">1</td>
+<td align="right">35</td>
+<td align="right">3</td>
+</tr>
+</tbody>
 </table>
-<p>The underlying process of shift tables is the same as count layers - we’re counting the number of occurences of something by a set of grouping variables. This differs in that Tplyr uses the <code>group_shift</code> API to use the same basic interface as other tables, but translate your target variables into the row variable and the column variable. Furthermore, there is some enhanced control over how denominators should behave that is necessary for a shift layer.</p>
+<p>The underlying process of shift tables is the same as count layers - we’re counting the number of occurrences of something by a set of grouping variables. This differs in that ‘Tplyr’ uses the <code><a href="../reference/layer_constructors.html">group_shift()</a></code> API to use the same basic interface as other tables, but translate your target variables into the row variable and the column variable. Furthermore, there is some enhanced control over how denominators should behave that is necessary for a shift layer.</p>
 </div>
 </div>
 <div id="where-to-go-from-here" class="section level1">
 <h1 class="hasAnchor">
 <a href="#where-to-go-from-here" class="anchor"></a>Where to go from here?</h1>
-<p><tbd></tbd></p>
+<p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of ‘Tplyr’.</p>
+<ul>
+<li>Learn more about descriptive statistics layers in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("desc_layers")</a></code>
+</li>
+<li>Learn more about count and shift layers in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("count_shift")</a></code>
+</li>
+<li>Learn more about calculating risk differences in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("riskdiff")</a></code>
+</li>
+<li>Learn more about sorting ‘Tplyr’ tables in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("sort")</a></code>
+</li>
+<li>Learn more about using ‘Tplyr’ options in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("tplyr_options")</a></code>
+</li>
+<li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("styled_table")</a></code>
+</li>
+</ul>
 </div>
   </div>
 

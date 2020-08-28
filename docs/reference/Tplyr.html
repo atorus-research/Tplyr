@@ -84,7 +84,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -133,12 +133,6 @@
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="../articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="../articles/beta-release.html">Tplyr (Beta Release)</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -302,7 +296,7 @@ changes where necessary.</p>
     <span class='fu'><a href='layer_constructors.html'>group_shift</a></span>(<span class='fu'>vars</span>(<span class='kw'>row</span><span class='kw'>=</span><span class='no'>gear</span>, <span class='kw'>column</span><span class='kw'>=</span><span class='no'>carb</span>), <span class='kw'>by</span><span class='kw'>=</span><span class='no'>cyl</span>) <span class='kw'>%&gt;%</span>
     <span class='fu'><a href='set_format_strings.html'>set_format_strings</a></span>(<span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xxx (xx.xx%)"</span>, <span class='no'>n</span>, <span class='no'>pct</span>))
   ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='build.html'>build</a></span>()</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 9 x 16</span><span>
+  <span class='fu'><a href='build.html'>build</a></span>()</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 9 x 17</span><span>
 #&gt;   row_label1 row_label2 var1_0_1 var1_0_2 var1_0_3 var1_0_4 var1_0_6 var1_0_8
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   
 #&gt; </span><span style='color: #555555;'>1</span><span> 4          3          </span><span style='color: #555555;'>"</span><span>  1 (3… </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( …
@@ -314,9 +308,9 @@ changes where necessary.</p>
 #&gt; </span><span style='color: #555555;'>7</span><span> 8          3          </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  4 (3… </span><span style='color: #555555;'>"</span><span>  3 (2… </span><span style='color: #555555;'>"</span><span>  5 (4… </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( …
 #&gt; </span><span style='color: #555555;'>8</span><span> 8          4          </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( …
 #&gt; </span><span style='color: #555555;'>9</span><span> 8          5          </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( … </span><span style='color: #555555;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #555555;'># … with 8 more variables: var1_1_1 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_2 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_3 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'># … with 9 more variables: var1_1_1 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_2 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_3 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
 #&gt; </span><span style='color: #555555;'>#   var1_1_4 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_6 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, var1_1_8 </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, ord_layer_index </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   ord_layer_1 </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'>#   ord_layer_1 </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, ord_layer_2 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
