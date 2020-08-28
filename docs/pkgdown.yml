@@ -3,8 +3,6 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
-  alpha-release: alpha-release.html
-  beta-release: beta-release.html
   count_shift: count_shift.html
   desc-vignette: desc-vignette.html
   options-vignette: options-vignette.html
@@ -12,5 +10,5 @@ articles:
   riskdiff: riskdiff.html
   sort: sort.html
   styled-table: styled-table.html
-last_built: 2020-08-26T20:02Z
+last_built: 2020-08-28T16:11Z
 
