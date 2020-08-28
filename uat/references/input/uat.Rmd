@@ -41,9 +41,10 @@ opts_chunk$set(
   tidy = FALSE
 )
 
-input_dir <- paste0("../../input")
-spec_path <- paste0(input_dir, "specs.csv")
-test_cases <- read.csv(paste0(input_dir, "test_cases.csv"), stringsAsFactors = FALSE)
+input_dir <- paste0("../../")
+ref_dir <- paste0(input_dir, "/references/output")
+spec_path <- paste0(input_dir, "/input/specs.csv")
+test_cases <- read.csv(paste0(input_dir, "/input/test_cases.csv"), stringsAsFactors = FALSE)
 
 source("helper_test_code.R") # handles environment and access to test_that contents
 source("roxy_block_details.R") # scrapes roxygen block for authorship details
@@ -52,7 +53,7 @@ source("roxy_block_details.R") # scrapes roxygen block for authorship details
 # Validation Files Information
 ## Specifications
 ```{r spec_author_table}
-list.files(input_dir,
+list.files(ref_dir,
     full.names = TRUE) %>%
   lapply(., scrape_function_specification_block) %>%
   do.call(rbind, .) %>%
