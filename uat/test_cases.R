@@ -126,8 +126,8 @@ test_that('T3',{
   testthat::expect_equal(c("Placebo", "Total", "Total Xanomeline", "Xanomeline High Dose", "Xanomeline Low Dose"),
                          as.vector(test_3$TRT01P), label = "T3.1")
   t3_2 <- c(nrow(filter(adsl, TRT01P == "Placebo")), nrow(adsl),
-              nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
-              nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
+            nrow(filter(adsl, TRT01P == "Xanomeline High Dose" | TRT01P == "Xanomeline Low Dose")),
+            nrow(filter(adsl, TRT01P == "Xanomeline High Dose")), nrow(filter(adsl, TRT01P == "Xanomeline Low Dose")))
   testthat::expect_equal(t3_2, test_3[[2]], label = "T3.2")
   #manual check(s)
 
@@ -435,6 +435,8 @@ test_that('T10',{
     mutate(col = ifelse(DCSREAS == "", sprintf("%2s",n), paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),"%)"))) %>%
     filter(TRT01P == "Placebo")
   testthat::expect_equal(t10_1$col,test_10$var1_Placebo,label = "T10.1")
+  #manual check(s)
+
   #clean up working directory
   rm(t10_1)
   rm(test_10)
@@ -472,6 +474,8 @@ test_that('T11',{
   testthat::expect_equal(c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
                          unique(test_11[[1]]$summary_var),
                          label = "T11.1")
+  #manual check(s)
+
   #clean up working directory
   rm(test_11)
 })
@@ -519,6 +523,7 @@ test_that('T12',{
   t12_totals <- filter(adae) %>%
     group_by(TRTA) %>%
     summarize(total=n())
+
   t12_totals_distinct <- filter(adae) %>%
     distinct(USUBJID, TRTA) %>%
     group_by(TRTA) %>%
@@ -553,6 +558,8 @@ test_that('T12',{
   testthat::expect_equal(t12_3$col_combo,
                          trimws(filter(test_12, ord_layer_index == 3)[["var1_Placebo"]]),
                          label = "T12.3")
+  #manual check(s)
+
   #clean up working directory
   rm(t12_totals)
   rm(t12_totals_distinct)
@@ -605,6 +612,8 @@ test_that('T13',{
   testthat::expect_equal(t13_2$pct,
                          mutate(filter(test_13, n != 0),pct = round((n / total) * 100, digits = 1))[['pct']],
                          label = "T13.2")
+  #manual check(s)
+
   #clean up working directory
   rm(t13_1)
   rm(t13_2)
@@ -656,6 +665,8 @@ test_that('T14',{
   testthat::expect_equal(t14_2$pct,
                          mutate(filter(test_14, n != 0),pct = round((n / total) * 100, digits = 1))[['pct']],
                          label = "T14.2")
+  #manual check(s)
+
   #clean up working directory
   rm(t14_1)
   rm(t14_2)
@@ -706,6 +717,8 @@ test_that('T15',{
   testthat::expect_equal(t15_2$pct,
                          mutate(filter(test_15, n != 0),pct = round((n / header_n) * 100, digits = 1))[['pct']],
                          label = "T15.2")
+  #manual check(s)
+
   #clean up working directory
   rm(t15_1)
   rm(t15_2)
@@ -753,6 +766,8 @@ test_that('T16',{
     filter(TRT01P == "Placebo")
 
   testthat::expect_equal(t16_1$col, test_16$var1_Placebo,label = "T16.1")
+  #manual check(s)
+
   #clean up working directory
   rm(t16_tots)
   rm(t16_1)
@@ -833,6 +848,7 @@ test_that('T17',{
                            filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'low')[[4]],
                            filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'high')[[4]]),
                          label = "T17.4")
+  #manual check(s)
 
   #clean up working directory
   rm(tot_p)
@@ -928,7 +944,6 @@ test_that('T18',{
                          label = "T18.11")
   #manual check(s)
 
-
   #clean up working directory
   rm(test_18)
 })
@@ -976,7 +991,6 @@ test_that('T19',{
                          subset(test_19, stat == 'geometric_mean' & TRT01P == 'Placebo')[['value']],
                          label = "T19.1")
   #manual check(s)
-
 
   #clean up working directory
   rm(test_19)
@@ -1045,7 +1059,6 @@ test_that('T20',{
                          label = "T20.1")
   #manual check(s)
 
-
   #clean up working directory
   rm(t20_1)
   rm(test_20)
@@ -1085,7 +1098,6 @@ test_that('T21',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-
   t21_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
                  summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
                  summarise(adsl[adsl$TRT01P == 'Placebo',],median=median(AGE))[[1]],
@@ -1102,7 +1114,6 @@ test_that('T21',{
                          test_21,
                          label = "T21.1")
   #manual check(s)
-
 
   #clean up working directory
   rm(t21_1)
@@ -1142,7 +1153,6 @@ test_that('T22',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-
   t22_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
                  summarise(adsl[adsl$TRT01P == 'Placebo',],mean=sprintf("%5.2f",round(mean(AGE),2)))[[1]],
                  summarise(adsl[adsl$TRT01P == 'Placebo',],median=sprintf("%5.2f",round(median(AGE),2)))[[1]],
@@ -1159,7 +1169,6 @@ test_that('T22',{
                          test_22,
                          label = "T22.1")
   #manual check(s)
-
 
   #clean up working directory
   rm(t22_1)
@@ -1259,7 +1268,6 @@ test_that('T23',{
                          label = "T23.1")
   #manual check(s)
 
-
   #clean up working directory
   rm(t23_dat)
   rm(t23_1)
@@ -1327,7 +1335,6 @@ test_that('T24',{
                          label = "T24.1")
   #manual check(s)
 
-
   #clean up working directory
   rm(t24_1)
   rm(test_24)
@@ -1340,7 +1347,6 @@ test_that('T25',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_desc(AGE, by = RACE_FACTOR) %>%
@@ -1349,7 +1355,6 @@ test_that('T25',{
             'mean' = f_str('xx.x', mean, empty = "N/A")
           )
       )
-
     build(t)
     test_25 <- build(t)
 
