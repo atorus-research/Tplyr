@@ -249,10 +249,10 @@ make_test_case_rmd <- function(file) {
       LineType == "Setup" ~ paste0(paste(rep(' ', 0*2), collapse=''), "+ Setup: ", Text, "\n"),
 
       # Test Cases
-      LineType == "Check" ~ paste0(paste(rep(' ', 1*2), collapse=''), "+ ", TestID, ": ", Text),
+      LineType == "TestCase" ~ paste0(paste(rep(' ', 1*2), collapse=''), "+ ", TestID, ": ", Text),
 
       # Test Cases
-      LineType == "TestCase" ~ paste0(paste(rep(' ', 2*2), collapse=''), "+ ", TestID, ".", CheckID, ": ", Text)
+      LineType == "Check" ~ paste0(paste(rep(' ', 2*2), collapse=''), "+ ", TestID, ".", CheckID, ": ", Text)
     ))
 
   # Create the file text vector - need to write 'Test Cases' inbetween the headers lines and the rest of the text
