@@ -82,7 +82,7 @@ shf
 
 ## Adding Layers to a Table
 
-Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, `tplyr` is built around tidy syntax, so all of our object construction supports piping with [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) (i.e. `%>%`). 
+Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, `tplyr` is built around tidy syntax, so all of our object construction supports piping with [magrittr](https://magrittr.tidyverse.org/articles/magrittr.html) (i.e. `%>%`). 
 
 There are two ways to add layers to a `tplyr_table`: `add_layer` and `add_layers`. The difference is that `add_layer` allows you to construct the layer within the call to `add_layer`, whereas with `add_layers` you can attach multiple layers that have already been constructed upfront:
 

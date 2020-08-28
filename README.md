@@ -6,7 +6,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 
-Tplyr Version 0.1.1
+Tplyr Version 0.1.1 <a href='https://github.com/atorus-research/Tplyr'><img src='man/figures/logo.png' align="right" height="139" /></a>
 ===================
 
 Welcome to Tplyr! This is the first full and stable release of our
@@ -107,8 +107,8 @@ you see on the page.
 Enough talking - let’s see some code. In these examples, we will be
 using data from the [PHUSE Test Data
 Factory](https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09)
-based on the [original pilot project submission
-package](https://www.cdisc.org/sdtmadam-pilot-project). Note: You can
+based on the original pilot project submission
+package(https://www.cdisc.org/sdtmadam-pilot-project). Note: You can
 see our replication of the CDISC pilot using the PHUSE Test Data Factory
 data [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
