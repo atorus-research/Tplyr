@@ -560,12 +560,22 @@ process_count_denoms <- function(x) {
 
 
     if(!is.null(distinct_by)) {
-      denoms_distinct_df <- denom_target %>%
+      # For distinct counts, we want to defer back to the
+      # population dataset. Trigger this by identifying that
+      # the population dataset was overridden
+      if (!isTRUE(all.equal(pop_data, target))) {
+        denoms_distinct_df <- built_pop_data %>%
+          rename(!!treat_var := !!pop_treat_var)
+      } else {
+        denoms_distinct_df <- denom_target
+      }
+      denoms_distinct_df <- denoms_distinct_df %>%
         distinct(!!!distinct_by, .keep_all = TRUE) %>%
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
         complete(!!!cols, !!treat_var) %>%
         ungroup()
+
     }
 
     denoms_df <- denom_target %>%
