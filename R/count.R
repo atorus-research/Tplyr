@@ -357,17 +357,11 @@ process_formatting.count_layer <- function(x, ...) {
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_")
 
-    # Process the statistical data formatting
-    formatted_stats_data <- map(stats, process_statistic_formatting)
-
-    formatted_data <- reduce(append(list(formatted_data), formatted_stats_data),
-                             full_join,
-                             by=c('summary_var', match_exact(c(by, head(target_var, -1)))))
+    # Replace the by variables and target variable names with `row_label<n>`
+    formatted_data <- formatted_data %>%
+      replace_by_string_names(quos(!!!by, summary_var))
 
     if(is_built_nest) {
-
-        formatted_data <- formatted_data %>%
-          replace_by_string_names(quos(!!!by, summary_var))
 
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
@@ -377,14 +371,20 @@ process_formatting.count_layer <- function(x, ...) {
       # The indexing looks weird but the idea is to get rid of the matrix with the '[, 1]'
       formatted_data[is.na(formatted_data[[1]]), 1] <- formatted_data[is.na(formatted_data[[1]]),
                                                                       tail(row_labels, 1)]
-    } else {
-      formatted_data <- formatted_data %>%
-        replace_by_string_names(quos(!!!by, summary_var))
     }
 
-    # Replace String names for by and target variables. target variables are included because they are
-    # equivalent to by variables in a count layer
-    # replace_by_string_names(by_expr)
+    if (!is_empty(stats)) {
+      # Process the statistical data formatting
+      formatted_stats_data <- map(stats, process_statistic_formatting) %>%
+        reduce(full_join, by=c('summary_var', match_exact(c(by, head(target_var, -1))))) %>%
+        # Replace the by variables and target variable names with `row_label<n>`
+        replace_by_string_names(quos(!!!by, summary_var))
+
+      formatted_data <- full_join(formatted_data, formatted_stats_data,
+                                  by = vars_select(names(formatted_data), starts_with("row_label")))
+    }
+
+
 
 
   }, envir = x)
