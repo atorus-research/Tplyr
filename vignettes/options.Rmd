@@ -39,7 +39,7 @@ Each of these options allows you to set these settings in one place, and every '
 
 ## Default Layer Formats
 
-Declaring string formats and summaries that need to be performed is one of the more verbose parts of Tplyr. Furthermore, this is something that will often be fairly consistent within a study, as you'll likely want to look across a consistent set of descriptive statistics, or your count/shift tables will likely require the same sort of n (%) formatting.
+Declaring string formats and summaries that need to be performed is one of the more verbose parts of 'Tplyr'. Furthermore, this is something that will often be fairly consistent within a study, as you'll likely want to look across a consistent set of descriptive statistics, or your count/shift tables will likely require the same sort of "n (%)" formatting.
 
 Using the format options is very similar to setting a string format. The only difference is that you need to enter the string formats as a named list instead of as separate parameters to a function call.
 
@@ -108,14 +108,14 @@ tplyr_table(adsl, TRT01P) %>%
 In the above output:
 
 - The descriptive statistics layer for "Age (Years)" uses the specified table default using `set_desc_layer_formats()`
-- The first count layer for "Categorical Age Groups) uses the specified table default using `set_count_layer_formats()`
+- The first count layer for "Categorical Age Groups" uses the specified table default using `set_count_layer_formats()`
 - The second count layer for "Ethnicity" uses the layer level format specified using `set_format_strings()`
 
-Each of the outputs ignores the 'Tpylr' option defaults as the defined.
+Each of the outputs ignores the 'Tpylr' option defaults.
 
 ## Precision Cap
 
-'Tplyr' defaults to avoiding capping precision. We do this because capping precision should be a concious decision, where you as the user specifically set the limit of how many decimal places are relevant to a specific result. One way to cap precision is by using the `cap` parameter within `set_format_strings()`. But perhaps you have a specific limit to what you'd like to see on any output. Here, we offer the `tplyr.precision_cap` option to set whatever cap you wish.
+'Tplyr' defaults to avoiding capping precision. We do this because capping precision should be a conscious decision, where you as the user specifically set the limit of how many decimal places are relevant to a specific result. One way to cap precision is by using the `cap` parameter within `set_format_strings()`. But perhaps you have a specific limit to what you'd like to see on any output. Here, we offer the `tplyr.precision_cap` option to set whatever cap you wish.
 
 ```{r precision_cap1}
 options(tplyr.precision_cap = c('int'=2, 'dec'=2))
@@ -143,10 +143,10 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-Both layers in the above example are summarizing the same data. The top layer is using the `tplyr.precision_cap` option set above, which limits to 2 integer place and 2 decimal places. Recall a few things about auto precision:
+Both layers in the above example are summarizing the same data. The top layer is using the `tplyr.precision_cap` option set above, which limits to 2 integer place and 2 decimal places. To bottom layer applies its own cap to override the option. Recall a few things about auto precision:
 
 - Integers will not be truncated - rather, the auto precision will default how much padding should be applied. If the number exceeds that number of spaces, then the length will be extended (i.e. if 2 integer places are allotted, 100 will still consume 3 places).
-- The cap applies to the spaces alotted by the 'a'. If the cap is 2, 'a+1' will not exceed 3 spaces.
+- The cap applies to the spaces allotted by the 'a'. If the cap is 2, 'a+1' will not exceed 3 spaces.
 
 The bottom layer overrides the 'Tplyr' option. Instead, integers are capped at 1 space, and decimals are capped at 0. 
 
@@ -161,7 +161,7 @@ options(tplyr.custom_summaries = rlang::quos(
 
 ```
 
-Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
+Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `geometric_mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos()`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
 
 Now that geometric mean is set within the 'Tplyr' options, you can use it within your descriptive statistics layers, just like it was one of the built-in summaries.
 
@@ -178,7 +178,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ## Scientific Notation
 
-By default, R will switch to scientific notation for a number less than .001. This is controlled by the `scipen` option. The default value of `scipen` is 0. If you'd like to increase the decimal places required for scientific notation to be triggered, increase the value of `scipen`. The value of `scipen` is the number of orders of ten smaller (i.e. decimal places preceeded by 0's) required to switch to scientific notation. Decreasing the value of scipen will cause R to switch to scientific locaton for larger numbers.
+By default, R will switch to scientific notation for a number less than .001. This is controlled by the `scipen` option. The default value of `scipen` is 0. If you'd like to increase the decimal places required for scientific notation to be triggered, increase the value of `scipen`. The value of `scipen` is the number of orders of ten smaller (i.e. decimal places preceded by 0's) required to switch to scientific notation. Decreasing the value of `scipen` will cause R to switch to scientific location for larger numbers.
 
 This is easier to understand with an example.
 
@@ -195,7 +195,7 @@ options(scipen = -1) # Only require 3 decimal places
 .001
 
 ```
-In 'Tplyr', we have the option `tplyr.scipen`. This is the `scipen` setting that will be used _only_ while the 'Tplyr' table is being built. This allows you to use a different `scipen` setting within 'Tplyr' than your R session. The default value we use in 'Tplyr' is 9999, which is intended to totally prevent numbers from switching to scientific notation. We want this to be a concious decision that you make in order to prevent any unexpected outputs.
+In 'Tplyr', we have the option `tplyr.scipen`. This is the `scipen` setting that will be used _only_ while the 'Tplyr' table is being built. This allows you to use a different `scipen` setting within 'Tplyr' than your R session. The default value we use in 'Tplyr' is 9999, which is intended to totally prevent numbers from switching to scientific notation. We want this to be a conscious decision that you make in order to prevent any unexpected outputs.
 
 ```{r reset_settings1, include=FALSE}
 options(op)
@@ -222,7 +222,7 @@ Note that the risk-difference variables above have mostly shifted to scientific 
 
 ## Quantile Algorithms
 
-There are many algorithms available to compute quantitle R has 9, controlled by the `type` parameter in  `quantile()`. The descriptive statistics offer built-in summaries for Q1, Q3, and Interquartile range, all three of which use the `quantile()` in the underlying implementation. Given that we offer this default, we felt it was important to offer you the flexibility to change the algorithm. You can do this with `tplyr.quantile_type`. 
+There are many algorithms available to compute quantile R has 9, controlled by the `type` parameter in  `quantile()`. The descriptive statistics offer built-in summaries for Q1, Q3, and Interquartile range, all three of which use the `quantile()` in the underlying implementation. Given that we offer this default, we felt it was important to offer you the flexibility to change the algorithm. You can do this with `tplyr.quantile_type`. 
 
 The default we chose to use is the R default of Type 7:
 
@@ -242,7 +242,7 @@ tplyr_table(adsl, TRT01P) %>%
 ```
 
 
-Within the clinical world, you may wish to match the way that SAS calculates quantiles. To match SAS's defintion, use Type 3:
+Within the clinical world, you may wish to match the way that SAS calculates quantiles. To match SAS's definition, use Type 3:
 
 $$
 \textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}

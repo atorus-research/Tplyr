@@ -45,7 +45,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-The settings above are actually the 'Tplyr' default, so if these are the results you desire, then there's no need to use `set_format_strings` at all - and just the `group_desc` call can be used. But let's walk through this call to `set_format_strings` to understand in detail what's going on:
+Let's walk through this call to `set_format_strings` to understand in detail what's going on:
 
 1) The quoted strings on the left of the '=' within `set_format_strings()` become the row label in the output. This allows you to define some custom text in `set_format_strings()` to explain the summary that is presented on the associated row. This text is fully in your control.
 2) On the right side of each equals is a call to `f_str()`. As explained in the `vignette("Tplyr")`, this is an object that captures a lot of metadata to understand how the strings should be presented. 
@@ -298,7 +298,7 @@ tplyr_table(adlb, TRTA) %>%
 
 ```
 
-Now that looks better. The `cap` argument is part of `set_format_strings`. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length alotted for the left side of a decimal, but integers will not truncate. When using 'x' formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integers in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. 
+Now that looks better. The `cap` argument is part of `set_format_strings`. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length allotted for the left side of a decimal, but integers will not truncate. When using 'x' formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integers in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. These caps apply to the length allotted for the "a" on either the integer or the decimal. So for example, if the decimal length is capped at 2 and the selected precision is "a+1", then 3 decimal places will be allotted.
 
 This was a basic situation, but if you're paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don't want that? What about multiple summary variable? How do we determine precision then? We have modifier functions for this:
 
