@@ -45,7 +45,7 @@ When a `tplyr_table()` is created, it will contain the following bindings:
 - `shift_layer_formats` - Default formats to be used on shift layers in the table
 - `desc_layer_formats` - Default formats to be used on descriptive statistics layers in the table
 - `pop_data` - The dataset containing population information. This defaults to the `target` dataset
-- `cols` - A categorical variable in `target` dataset to present summaries grouped by column (in addition to the `treat_var` variable)
+- `cols` - A categorical variable in the `target` dataset to present summaries grouped by column (in addition to the `treat_var` variable)
 - `table_where` - The `where` clause provided, used to subset the `target` dataset
 - `treat_var` - Variable used to distinguish treatment groups in the `target` dataset.
 - `header_n` - Default header N values based on `treat_var` and any `cols` variables
@@ -350,9 +350,20 @@ The underlying process of shift tables is the same as count layers - we're count
 
 There's quite a bit more to learn! And we've prepared a number of other vignettes to help you get what you need out of 'Tplyr'. 
 
+- Learn more about table level settings in `vignettes("table")`
 - Learn more about descriptive statistics layers in `vignettes("desc")`
 - Learn more about count and shift layers in `vignettes("count_shift")`
 - Learn more about calculating risk differences in `vignettes("riskdiff")`
 - Learn more about sorting 'Tplyr' tables in `vignettes("sort")`
 - Learn more about using 'Tplyr' options in `vignettes("options")`
 - And finally, learn more about producing and outputting styled tables using 'Tplyr' in `vignettes("styled-table")`
+
+# References
+
+In building 'Tplyr', we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.
+
+[Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
+
+[Analyses and Displays Associated with Demographics, Disposition, and Medications](https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf)
+
+[Analyses and Displays Associated with Measures of Central Tendency](http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf)
