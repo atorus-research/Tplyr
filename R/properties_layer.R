@@ -1,2 +1,0 @@
-### Layer Properties
-NULL

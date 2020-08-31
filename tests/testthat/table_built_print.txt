@@ -1,0 +1,19 @@
+*** tplyr_table ***
+Target (data.frame):
+	Name:  mtcars
+	Rows:  32
+	Columns:  11 
+pop_data (data.frame)
+	Name:  target 
+	Rows:  32 
+	Columns:  11 
+treat_var variable (quosure)
+	gear
+header_n: 8 header groups
+treat_grps groupings (list)
+	Total
+Table Columns (cols):
+	vs
+where: TRUE
+Number of layer(s): 1
+layer_output: 0

@@ -1,0 +1,8 @@
+option,description
+tplyr.count_layer_default_formats,"The default format strings for a count layer. Defaults to an auto-calculated n width, and (xxx.x%) for distinct counts (if available - non-distinct counts are used otherwise). Risk difference formats default to dif (low CI, high CI), all with 2 integer spaces and 3 decimal places."
+tplyr.shift_layer_default_formats,The default shift layer format. Defaults to an auto-calculated n width.
+tplyr.desc_layer_default_formats,"The default descriptive statistics layer format. Defaults to ""n"", ""Mean (SD)"", ""Median"", ""Q1, Q3"", ""Min, Max"", and ""Missing"". Everything except ""n"" and ""Missing"" use auto-precision. Mean, Q1, Q3, and median defaults to +1 decimal places and Standard Deviation defaults to +2."
+tplyr.precision_cap,"The default precision cap for auto-precision. Both integer and decimal places default to 99, essentially ensuring that precision is not capped by default. "
+tplyr.custom_summaries,"Default custom summaries available to Tplyr. Defaults to NULL, as Tplyr's defaults are seen as built-ins and not custom summaries."
+tplyr.scipen,"The default 'scipen' setting used while Tplyr is executing. Defaults to 1000. See the R documentation on the 'scipen' option to understand more, but this allows you to control how small a number must be before scientific notation is used when a number is string formatted in presentation."
+tplyr.quantile_type,"The default quantile algorithm used by Tpylr when using the built-in summaries for Q1, Q3, and IQR. Defaults to Type 7, which is the R default"

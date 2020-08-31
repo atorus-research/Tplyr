@@ -1,0 +1,245 @@
+---
+title: "Count and Shift Tables"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{count_shift}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE, setup}
+library(Tplyr)
+library(dplyr, warn.conflicts = FALSE)
+library(knitr)
+library(kableExtra)
+load("adsl.Rdata")
+load("adae.Rdata")
+load("adlb.Rdata")
+```
+
+# Frequency Tables
+
+At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it's not that easy. And in clinical reports, there's quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we've added a good bit of flexibility into both `group_count()` and `group_shift()` to help you get what you need when creating these reports, whether you're creating a demographics table, adverse events, of shift in lab results. 
+
+### A Simple Example
+
+Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the "Total" group. 
+
+```{r}
+t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
+  add_total_group() %>%
+  add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
+  add_layer(
+    group_count(DCDECOD) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols(Total)
+  ) %>%
+  build() %>%
+  arrange(desc(ord_layer_1)) %>%
+  select(starts_with("row"), var1_Placebo, `var1_Xanomeline Low Dose`,
+         `var1_Xanomeline High Dose`, var1_Treated, var1_Total)
+
+kable(t)
+```
+
+## Percentages
+
+Counting is one thing - but a count by itself doesn't give much context. Often frequencies in clinical reports are paired with a percentage, which allows you to understand the proportion of events/subjects to some total - but that total can prove to be complicated, which is why we've included a few functions to aid in giving you the necessary denominator. 
+
+  * `set_denoms_by()` function allows users calculate denominators using any variable within the `by`, `cols`, `treatment`, or `target_var`.  This defaults to all variables passed as treatment groups and column variables which causes the column percentages to sum to 100%. This is particularly useful for shift tables, which use a combination of row and column variables.
+  * `set_denom_ignore()` defines values of the target variable to be ignored in the calculation of the denominator. In many tables percentages are based on non-missing counts. You can pass values to this function to have them be excluded from the calculation of the denominator. For example, if your data include NAs, you can use "NA" in `set_denom_ignore()` and those will be excluded from the denominator. 
+  
+Examples with percentages can be seen below.
+
+## Distinct Versus Event Counts
+
+Just as important as denominator flexibility is the determination of whether you should be using distinct or non-distinct counts - or some combination of both. Adverse event tables are a perfect example. Often, you're concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn't necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group. 
+
+'Tplyr' allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified `by` variables.
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(AEDECOD) %>%
+      set_distinct_by(USUBJID) %>%
+      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, distinct_pct, n))
+  ) %>%
+  build() %>%
+  head()
+
+kable(t)
+```
+
+You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct` and `distinct_pct` in addition to the `n` and `pct` created created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
+
+## Adding a 'Total' Row
+
+Some summaries require the addition of a 'Total' row in addition to the categorical counts. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. The default text for this row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used for the 'Total' row.
+
+```{r}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(AGEGR1) %>% 
+      add_total_row() %>% 
+      set_total_row_label("All Age Groups")
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+## Missing Counts
+
+Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator? 
+
+The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. Additionally, using the `string` parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the `row_label` of what will be used for missing values.
+
+In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using `set_denom_ignore()`. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing "NA"). During processing, the NAs are coerced into characters. 
+
+```{r}
+adae2 <- adae
+adae2[sample(nrow(adae2), 50), "AESEV"] <- NA
+t <- tplyr_table(adae2, TRTA) %>%
+  add_layer(
+    group_count(AESEV) %>%
+      set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
+      # AESEV of SEVERE is used to demonstrate missing
+      set_missing_count(f_str("xxx", n), string = c(MISSING = "NA"))  %>%
+      set_denom_ignore("NA")
+    
+  ) %>%
+  build()
+
+t %>% 
+  kable()
+
+```
+
+## Nested Count Summaries
+
+Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of "Other" summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.
+
+One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don't want you to have to do that. Instead, we handle this complexity for you. This is done in `group_count()` by submitting two target variables with `dplyr::vars()`. The first variable should be your grouping variable that you want summarized, which we refer to as the "Outside" variable, and the second should have the narrower scope, which we call the "Inside" variable. 
+
+The example below demonstrates how to do a nested summary. Look at the first row - here `row_label1` and `row_label2` are both "CARDIAC DISORDERS". This line is the summary for `AEBODSYS.` In the rows below that, `row_label1` continues on with the value "CARDIAC DISORDERS", but `row_label2` changes. These are the summaries for `AEDECOD`.
+
+```{r}
+tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD))
+  ) %>%
+  build() %>%
+  head() %>% 
+  kable()
+```
+
+This accomplishes what we needed, but it's not exactly the presentation you might hope for. We have a solution for this as well.
+
+```{r} 
+tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+      set_nest_count(TRUE) %>% 
+      set_indentation("--->")
+  ) %>%
+  build() %>%
+  head() %>% 
+  kable()
+```
+
+By using `set_nest_count()`, this triggers 'Tplyr' to drop row_label1, and indent all of the AEDECOD values within row_label2. The columns are renamed appropriately as well. The default indentation used will be 3 spaces, but as you can see here - you can set the indentation however you like. This let's you use tab strings for different language-specific output types, stick with spaces, indent wider or smaller - whatever you wish. All of the existing order variables remain, so this has no impact on your ability to sort the table. 
+
+## Shift Tables
+
+Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in a subject's status at baseline versus their status at some designated evaluation point. Shift tables allow you to see the distribution of how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
+
+While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs.
+
+One thing to note - the `group_shift()` API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows "Low to High", "Normal to High", etc. For those situations, `group_count()` will do just fine.
+
+Let's look at an example.
+
+```{r}
+tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
+  ) %>%
+  build() %>%
+  head(20) %>%
+  kable()
+```
+
+For the most part, this is getting us where we want to go - but there's still some that's left to be desired. It doesn’t look like there are any 'L' values for BNRIND in the dataset so we are not getting and rows containing 'L'. Let’s see if we can fix that by dummying in the possible values.
+
+```{r}
+adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
+adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))
+tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
+  ) %>%
+  build() %>%
+  head(20) %>%
+  kable()
+```
+
+There we go. This is another situation where using factors in R let's us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. Check out the `vignettes("sort")` for more information on sorting. 
+
+A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the "box" that is formed from the "from" and "to" groups of the shift for each treatment group. To support this, 'Tplyr' let's you specify the grouping used to calculate the denominators. 
+
+Just like the count layers, the `set_denoms_by()` functions any variable name from the treatment variable, `cols` argument, `by` variables, and the target variables.
+
+```{r} 
+tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
+      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
+      # This is the default, the 3x3 box formed by the target variables
+      set_denoms_by(TRTA, PARAM, AVISIT) 
+  ) %>%
+  build() %>%
+  kable()
+```
+
+In the example above, the denominators were based on the by and treatment variables, `TRTA`, `PARAM` and `VISIT`. This creates a 3 X 3 box, where the denominator is the total of all record within the **FROM** and **TO** shift variables, within each parameter, visit, and treatment. This is the default, and this is how 'Tplyr' will create the denominators if `set_denom_by()` isn't specified.
+
+In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%. 
+
+```{r}
+tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
+      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
+      set_denoms_by(BNRIND, PARAM, AVISIT) # Each row made by LBNRIND, TRTA
+  ) %>%
+  build() %>%
+  arrange(ord_layer_1, ord_layer_2) %>% 
+  kable()
+```
+
+While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, `TRTA` and `ANRIND` the layer will use those denominators when determining the percentages. 
+
+```{r}
+suppressWarnings({
+  tplyr_table(adlb, TRTA, where = !is.na(LBNRIND) & VISIT == "WEEK 4") %>%
+  add_layer(
+    group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, AVISIT)) %>%
+      set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
+      set_denoms_by(TRTA, LBNRIND) # Use the column total as the denominator
+  ) %>%
+  build() %>%
+  head() %>%
+  kable()
+})
+```
+
+Our hope is that this gives you the flexibility you need to structure your denominator however required. 
+

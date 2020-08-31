@@ -1,0 +1,122 @@
+---
+title: "Tplyr Table Properties"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(Tplyr)
+library(knitr)
+load("adae.Rdata")
+load("adsl.Rdata")
+```
+
+Most of the work in creating a 'Tplyr' table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in 'Tplyr' is allow you to eliminate redundant code wherever possible. Adding some processing to the `tplyr_table()` level allows us to do that. Furthermore, some settings simply need to be applied table wide.
+
+## Table Parameters
+
+The `tplyr_table()` function has 4 parameters:
+
+- **target**: The dataset upon which summaries will be performed
+- **`treat_var`**: The variable containing treatment group assignments
+- **`where`**: The overarching table subset criteria. Each layer will use this subset by default. The `where` parameter at the table level will be called **in addition to** the layer subset criteria.
+- **`cols`**: Grouping variables used in addition to the `by` variables set at the layer level, but will be transposed into columns in addition to `treat_var`. 
+
+Let's look at an example:
+
+```{r table_params1}
+tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
+  add_layer(
+    group_count(RACE, by = "Race")
+  ) %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (Years)")
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+In the example above, the `where` parameter is passed forward into both the `RACE` and `AGE` layers. Furthermore, note how the `cols` parameter works. By default, the target variables from the layers are transposed by the `treat_var` variables. The `cols` argument adds an additional variable to transpose by, and the values of these variable are added as a suffix to the variable name. You are able to use multiple `cols` variables just like `by`, by using `dplyr::vars()`. But use with caution - as depending on the distinct variable values in the dataset, this could get quite wide.
+
+```{r table_params2}
+tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (Years)")
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+## Additional Treatment Groups
+
+Another important feature that works at the table level is the addition of treatment groups. By adding additional treatment groups, you're able to do a number of things:
+
+- Add a 'treated' group to your data so you can analyze 'treated' vs. 'placebo' when you have multiple treated cohorts
+- Add a 'total' group so summarize the overall study population
+
+We've added the function `add_treat_grps()` to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within `treat_var`. Additionally, to simplify the process we added an abstraction of `add_treat_grps()` named `add_total_group()` to simplify the process of creating a "Total" group.
+
+```{r treat_grps}
+tplyr_table(adsl, TRT01P) %>%
+  add_treat_grps('Treated' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
+  add_total_group() %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (Years)")
+  ) %>% 
+  build() %>% 
+  kable()
+```
+Note how in the above example, there are two new columns added to the data - `var1_Total` and `var1_Treated`. The summaries for the individual cohorts are left unchanged. 
+
+## Population Data
+
+A last and very important aspect of table level properties in 'Tplyr' is the addition of a population dataset. In CDISC standards, datasets like `adae` only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you're subsetting for, they don't appear in the dataset. When you're looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, `adae` itself leaves you no way to calculate that total - as the subjects won't exist in the data.
+
+'Tplyr' allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter and a population treatment variable named `pop_treat_var`, as variable names may differ between the datasets.
+
+```{r pop_data1}
+t <- tplyr_table(adae, TRTA, where = AEREL != "NONE") %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01A) %>% 
+  set_pop_where(TRUE) %>% 
+  add_layer(
+    group_count(AEDECOD) %>% 
+      set_distinct_by(USUBJID)
+  )
+  
+t %>% 
+  build() %>% 
+  kable()
+```
+
+In the above example, `AEREL` doesn’t exist in `adsl`, therefore we used `set_pop_where()` to remove the filter criteria on the population data.  Setting the population dataset where parameter to `TRUE` removes any filter applied by the population data.  If `set_pop_where()` is not set for the population data, it will default to the `where` parameter used in `tplyr_table()`. The same logic applies to the population treatment variable. `TRTA` does not exist in `adsl` either, so we used `set_pop_treat_var()` to change it to the appropriate variable in `adsl`. 
+
+Note the percentage values in the summary above. By setting the population data, 'Tplyr' now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, 'Tplyr' is able to calculate your header N's properly:
+
+```{r pop_data2}
+header_n(t) %>% 
+  kable()
+```
+
+With the table level settings under control, now you're ready to learn more about what 'Tplyr' has to offer in each layer. 
+
+- Learn more about descriptive statistics layers in `vignettes("desc")`
+- Learn more about count and shift layers in `vignettes("count_shift")`
+- Learn more about calculating risk differences in `vignettes("riskdiff")`
+- Learn more about sorting 'Tplyr' tables in `vignettes("sort")`
+- Learn more about using 'Tplyr' options in `vignettes("options")`
+- And finally, learn more about producing and outputting styled tables using 'Tplyr' in `vignettes("styled-table")`
