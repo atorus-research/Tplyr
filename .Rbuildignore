@@ -18,3 +18,4 @@
 ^vignettes/riskdiff\.Rmd$
 ^README\.Rmd$
 ^uat$
+^cran-comments\.md$
