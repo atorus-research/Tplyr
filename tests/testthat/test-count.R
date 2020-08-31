@@ -262,7 +262,8 @@ test_that("missing counts can be displayed as expected", {
   expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
   expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "))
   expect_equal(t4$ord_layer_index, c(1L, 1L, 1L))
-  expect_equal(t4$ord_layer_1, c(1, 2, 3))
+  # Added unname for compatibility between tibble versions
+  expect_equal(unname(t4$ord_layer_1), c(1, 2, 3))
 
 })
 
