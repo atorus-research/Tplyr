@@ -50,7 +50,7 @@ In this table, we have:
 
 - Added a 'Total' treatment group
 - Added a 'Treated' group made up of the two treated cohorts
-- Created a count layer for "End of Study Status", reported by sex
+- Created a count layer for End of Study Status, reported by sex
 - Created a descriptive statistics layer for Height at Baseline, reported by sex
 
 Now let's dig in. 
@@ -78,9 +78,9 @@ t %>%
 
 ```
 
-### Reordering and Droping Columns
+### Reordering and Dropping Columns
 
-Column selection from data frames is something that is already very well done in R. The functions `dplyr::select()`, `dplyr::relocate()`, `magrittr::extract()`, and `[` can all be used to reorder and drop column cleanly and concisely based on a user's preference.
+Column selection from data frames is something that is already very well done in R. The functions `dplyr::select()`, `magrittr::extract()`, and `[` can all be used to reorder and drop column cleanly and concisely based on a user's preference.
 
 To drop the ordering helpers, you can easily subtract them with 'dplyr' and 'tidyselect'.
 
@@ -111,9 +111,9 @@ t %>%
   kable()
 ```
 
-## Sorting the `by` varaibles
+## Sorting the `by` Variables
 
-Each `by` variable gets its own order column as well. These will be named `ord_layer_<n>` where `<n>` typically relates back to the `row_label` variable (this isn't necessarily the case when count layers are nested - see the vignette("Count_and_Shift_Tables")).
+Each `by` variable gets its own order column as well. These will be named `ord_layer_<n>` where `<n>` typically relates back to the `row_label` variable (this isn't necessarily the case when count layers are nested - see `vignettes("count_shift")`).
 
 These order variables will calculate based on the first applicable method below.
 
@@ -241,7 +241,7 @@ Using count-based sorting is where things get more complicated. There are multip
 - What column do you want to sort by? 
 - If there are multiple numbers in the column, like "n (%) [event]" type tables, which number should be used to create the sort variable? 
 
-We've create helper functions to aid in making this step more intuitive from a user perspetive, and to maintain the flexibility that you need. The two functions that you need here are `set_ordering_cols()` and `set_result_order_var()`.
+We've created helper functions to aid in making this step more intuitive from a user perspective, and to maintain the flexibility that you need. The two functions that you need here are `set_ordering_cols()` and `set_result_order_var()`.
 
 ```{r}
 tplyr_table(adae, TRTA) %>%
@@ -312,7 +312,7 @@ tplyr_table(adae, TRTA) %>%
 
 In a layer that uses nesting, we need one more order variable - as we're now concerned with the sorting of both the outside and inside variable. Counts are being summarized for both - so we need to know how both should be sorted. Additionally, we need to make sure that, in this case, the adverse events within a body system stay within the rows of that body system.
 
-These result variables will always be the last two order variables output by 'Tplyr'. In the above example, `ord_layer_1` is for `AEBODSYS` and `ord_layer_2` is for AEDECOD. Note that `ord_layer_2` has `Inf` where `row_label1` and `row_label2` are both equal. This is the row that summarizes the `AEBODSYS` counts. By default, 'Tplyr' is set to assume that you will use **descending** sort on the order variable associated with the inside count variable (i.e. `AEDECOD`). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you'd like to use ascending sorting instead, we offer the function `set_outer_sort_position()`. 
+These result variables will always be the last two order variables output by 'Tplyr'. In the above example, `ord_layer_1` is for `AEBODSYS` and `ord_layer_2` is for `AEDECOD`. Note that `ord_layer_2` has `Inf` where `row_label1` and `row_label2` are both equal. This is the row that summarizes the `AEBODSYS` counts. By default, 'Tplyr' is set to assume that you will use **descending** sort on the order variable associated with the inside count variable (i.e. `AEDECOD`). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you'd like to use ascending sorting instead, we offer the function `set_outer_sort_position()`. 
 
 ```{r}
 tplyr_table(adae, TRTA) %>% 
@@ -378,10 +378,10 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
 
 There are a few problems here:
 
-- H sorts before N alphabetically
+- "H" sorts before "N" alphabetically
 - We're missing the rows for "L" on most visits, even though "L" in in the data for `BNRIND`.
 
-Using a factor variables cleans this right up for us:
+Using factor variables cleans this right up for us:
 
 ```{r}
 adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))

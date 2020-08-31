@@ -35,7 +35,7 @@ suppressMessages(read_csv('tplyr_options.csv')) %>%
   kable(align="cl", col.names = c('Option', 'Description'))
 ```
 
-Each of these options allows you to set these settings in one place, and every 'Tplyr' table you create will inherit your option settings as defaults. This allows your table code to be more concise, and centralize where you need to make an update when your code has to be adjusted. This vignette is dedicated to helping you understand how to leverage each of these options properly.
+Each of these options allows you to set these settings in one place, and every 'Tplyr' table you create will inherit your option settings as defaults. This allows your table code to be more concise, and centralizes where you need to make an update when your code has to be adjusted. This vignette is dedicated to helping you understand how to leverage each of these options properly.
 
 ## Default Layer Formats
 
