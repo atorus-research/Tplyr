@@ -150,6 +150,21 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
 | Age Categories n (%) | \>80        | 30 ( 34.9%)   | 18 ( 21.4%)                | 29 ( 34.5%)               |                 2 |             1 |             2 |
 | Age Categories n (%) | 65-80       | 42 ( 48.8%)   | 55 ( 65.5%)                | 47 ( 56.0%)               |                 2 |             1 |             3 |
 
+## ‘Tplyr’ is Qualified
+
+We understand how important documentation and testing is within the
+pharmaceutical world. This is why outside of unit testing ’Tplyr
+includes an entire user-acceptable testing document, where requirements
+were established, test-cases were written, and tests were independently
+programmed and executed. We do this in the hope that you can leverage
+our work within a qualified programming environment, and that we save
+you a substantial amount of trouble in getting it there.
+
+You can find the qualification document within this repository right
+[here](uat/references/output/uat.pdf). The ‘uat’ folder additionally
+contains all of the raw files, programmatic tests, specifications, and
+test cases necessary to create this report.
+
 ## The TL;DR
 
 Here are some of the high level benefits of using `Tplyr`:
