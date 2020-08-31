@@ -169,6 +169,17 @@ prep_two_way <- function(comp) {
 
     two_way <- numeric_data
 
+    # Nested layers need to plug the NAs left over - needs revision in the future
+    if (is_built_nest) {
+      two_way <- two_way %>%
+        # Need to fill in NAs in the numeric data that
+        # are patched later in formatting
+        mutate(
+          !!by[[1]] := ifelse(is.na(!!by[[1]]), summary_var, !!by[[1]])
+        )
+    }
+
+
     # If distinct is set and distinct values are there, use them
     if (distinct == TRUE && any(str_detect(names(two_way), 'distinct'))) {
       two_way <- two_way %>%

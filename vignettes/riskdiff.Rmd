@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{risk_difference}
+  %\VignetteIndexEntry{riskdiff}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,13 +25,13 @@ load("adae.Rdata")
 load("adsl.Rdata")
 ```
 
-Tplyr does not support, nor do we intended to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
+'Tplyr' does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
 
 ## Tplyr Implementation
 
-Our current implementation of risk difference is solely built on top of the base R function `prop.test`. For any and all questions about this method, please review the `prop.test` documentation within R. 
+Our current implementation of risk difference is solely built on top of the base R function `stats::prop.test()`. For any and all questions about this method, please review the `stats::prop.test()` documentation within R. 
 
-Risk difference is built on top of count layers, as it's a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function `add_risk_diff`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
+Risk difference is built on top of count layers, as it's a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function `add_risk_diff()`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
 
 ```{r riskdiff1}
 t <- tplyr_table(adae, TRTA) %>% 
@@ -51,11 +51,11 @@ suppressWarnings(build(t)) %>%
 
 ```
 
-Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_group` or `add_total_group` as well.
+Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_group()` or `add_total_group()` as well.
 
 The risk difference calculations are displayed in the `rdiff` columns. There will be an `rdiff` column for every comparison that is made, following the convention `rdiff_<comparison>_<reference>`. 
 
-Note the use of `suppressWarnings` - if the counts used in `prop.test` are too low, you'll get a warning that says "Chi-squared approximation may be incorrect" for every time `prop.test` is run with counts that are too low... This could happen a lot, but the warning is perfectly valid. 
+Note the use of `base::suppressWarnings()` - if the counts used in `stats::prop.test()` are too low, you'll get a warning that says "Chi-squared approximation may be incorrect" for every time `stats::prop.test()` is run with counts that are too low... This could happen a lot, but the warning is perfectly valid. 
 
 ## Controlling Presentation
 
@@ -65,7 +65,7 @@ The default values presented within formatted strings in the built table will be
 - 95% confidence interval low
 - 95% confidence interval high
 
-You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using `set_format_strings`.
+You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using `set_format_strings()`.
 
 ```{r riskdiff2}
 t <- tplyr_table(adae, TRTA) %>% 
@@ -91,13 +91,13 @@ suppressWarnings(build(t)) %>%
 
 Take a look at the `rdiff` columns now - you'll see they have 5 values. These are:
 
-- The comparison proportion (i.e. the estimate[1] output from a `prop.test` object)
-- The reference proportion (i.e. the estimate[2] output from a `prop.test` object)
+- The comparison proportion (i.e. the estimate[1] output from a `stats::prop.test()` object)
+- The reference proportion (i.e. the estimate[2] output from a `stats::prop.test()` object)
 - The difference (i.e. estimate[1] - estimate[2])
 - The lower end of the confidence interval
 - The upper end of the confidence interval
 
-You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to `prop.test` using a named list and the `args` argument in `add_risk_diff`. This wasn't done using the ellipsis (i.e. `...`) like typical R functions because it's already used to capture a varying number of comparisons, but it's not much more difficult to use:
+You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to `stats::prop.test()` using a named list and the `args` argument in `add_risk_diff()`. This wasn't done using the ellipsis (i.e. `...`) like typical R functions because it's already used to capture a varying number of comparisons, but it's not much more difficult to use:
 
 ```{r riskdiff3}
 t <- tplyr_table(adae, TRTA) %>% 
@@ -125,17 +125,20 @@ suppressWarnings(build(t)) %>%
 As seen above, using the `args` argument, we:
 
 - Changed the confidence interval level to 90% instead of the default 95%
-- Switched the alternative hypothesis of `prop.test` to "less" instead of the default "two.sided"
+- Switched the alternative hypothesis of `stats::prop.test()` to "less" instead of the default "two.sided"
 - Turned off the Yates' continuity correction
 
-For more information on these parameters, see the documentation for `prop.test`. 
+For more information on these parameters, see the documentation for `stats::prop.test()`. 
 
-## Other notes
+## Other Notes
 
-The default of `add_risk_diff` works on the distinct counts available within the count summary. If for whatever reason you'd like to run risk difference on the non-distinct counts, switch the `distinct` argument to FALSE. `add_risk_diff` also will function on multi-level summaries no different than single level, so no concerns there either.
+The default of `add_risk_diff()` works on the distinct counts available within the count summary. 
 
 ```{r riskdiff4}
 t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01A) %>% 
+  set_pop_where(TRUE) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -149,12 +152,32 @@ suppressWarnings(build(t)) %>%
   head() %>% 
   select(starts_with("rdiff"), everything()) %>%  
   kable()
+```
+
+If for whatever reason you'd like to run risk difference on the non-distinct counts, switch the `distinct` argument to FALSE. `add_risk_diff()` also will function on multi-level summaries no different than single level, so no concerns there either.
+
+```{r riskdiff5}
+t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
+  add_layer(
+    group_count(AEDECOD) %>% 
+      set_distinct_by(USUBJID) %>% 
+      add_risk_diff(
+        c('Xanomeline High Dose', 'Placebo'),
+        c('Xanomeline Low Dose', 'Placebo'),
+        distinct=FALSE
+      ) 
+  )
+
+suppressWarnings(build(t)) %>% 
+  head() %>% 
+  select(starts_with("rdiff"), everything()) %>%  
+  kable()
 
 ```
 
 Risk difference also works with the `cols` argument, but it's important to understand how the comparisons work in these situation. Here, it's still the treatment groups that are compared - but the column argument is used as a "by" variable. For example:
 
-```{r riskdiff5}
+```{r riskdiff6}
 t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -172,19 +195,19 @@ suppressWarnings(build(t)) %>%
 
 ```
 
-## Getting raw numbers
+## Getting Raw Numbers
 
-Just like you can get the numeric data from a 'Tplyr' layer with `get_numeric_data`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data`. The function interface is almost identical to `get_numeric_data`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in Tplyr at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data` the `statistic` parameter to allow you to differentiate in the situation where there are multiple options.
+Just like you can get the numeric data from a 'Tplyr' layer with `get_numeric_data`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data`. The function interface is almost identical to `get_numeric_data`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in 'Tplyr' at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data` the `statistic` parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.
 
 The output of `get_stats_data` depends on what parameters have been used:
 
 - If no specific layer has been entered in the `layer` parameter, then an element will be returned for each layer
-- If no statistic has been entered in the `stastic` parameter, an element will be returned for each statistic for each layer
+- If no statistic has been entered in the `statistic` parameter, an element will be returned for each statistic for each layer
 - If neither statistic nor layer are entered, a list of lists is returned, where the outer list is each layer and the inside list is the numeric statistic data for that layer.
 
 This works best when layers are named, as it makes the output much clearer.
 
-```{r riskdiff6}
+```{r riskdiff7}
 t <- tplyr_table(adae, TRTA) %>% 
   add_layer(name="PreferredTerm",
     group_count(AEDECOD) %>% 
@@ -211,7 +234,7 @@ suppressWarnings(
 
 Instead of playing around with lists, `get_stats_data` is most advantageous if you'd like to extract out some data specifically. Let's say that you'd like to see just the difference values from the Preferred Term layer in the table above. 
 
-```{r risdiff7}
+```{r risdiff8}
 
 suppressWarnings(
   get_stats_data(t, layer='PreferredTerm', statistic='riskdiff', where= measure == "dif")
@@ -221,4 +244,4 @@ suppressWarnings(
 
 ```
 
-Using this data frame, you have access to the un-formatted numeric values before any rounding or formatting. This gives you flexibility to use these calculations in other contexts, make more precise comparisons in a double programming scenario, or take a deeper look into the calculations that were make if any values in the result warrant further investigation. 
+Using this data frame, you have access to the un-formatted numeric values before any rounding or formatting. This gives you flexibility to use these calculations in other contexts, make more precise comparisons in a double programming scenario, or take a deeper look into the calculations that were made if any values in the result warrant further investigation. 

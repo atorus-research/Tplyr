@@ -68,9 +68,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
+    <li class="dropdown-header">Table Vignettes</li>
+    <li>
+      <a href="../articles/table.html">Tplyr Table Properties</a>
+    </li>
+    <li class="divider">
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
-      <a href="../articles/desc-vignette.html">Descriptive Statistic Layers</a>
+      <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
     <li>
       <a href="../articles/count_shift.html">Count and Shift Tables</a>
@@ -84,13 +89,11 @@
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
     <li>
-      <a href="../articles/options-vignette.html">Tplyr Options</a>
+      <a href="../articles/options.html">Tplyr Options</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
     </li>
-    <li class="divider">
-    <li class="dropdown-header">Release Vignettes</li>
   </ul>
 </li>
 <li>
@@ -127,12 +130,12 @@
 
     
     
-<p>Tplyr does not support, nor do we intended to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it’s reasonable for us to include. So let’s take a look at risk difference.</p>
+<p>‘Tplyr’ does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it’s reasonable for us to include. So let’s take a look at risk difference.</p>
 <div id="tplyr-implementation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tplyr-implementation" class="anchor"></a>Tplyr Implementation</h2>
-<p>Our current implementation of risk difference is solely built on top of the base R function <code>prop.test</code>. For any and all questions about this method, please review the <code>prop.test</code> documentation within R.</p>
-<p>Risk difference is built on top of count layers, as it’s a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function <code>add_risk_diff</code>. We made a large effort to make this flow very naturally with the count layer construction, so let’s walk through it step by step.</p>
+<p>Our current implementation of risk difference is solely built on top of the base R function <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code>. For any and all questions about this method, please review the <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> documentation within R.</p>
+<p>Risk difference is built on top of count layers, as it’s a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. We made a large effort to make this flow very naturally with the count layer construction, so let’s walk through it step by step.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
@@ -221,9 +224,9 @@
 </tr>
 </tbody>
 </table>
-<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code>add_treat_group</code> or <code>add_total_group</code> as well.</p>
+<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code>add_treat_group()</code> or <code><a href="../reference/treat_grps.html">add_total_group()</a></code> as well.</p>
 <p>The risk difference calculations are displayed in the <code>rdiff</code> columns. There will be an <code>rdiff</code> column for every comparison that is made, following the convention <code>rdiff_&lt;comparison&gt;_&lt;reference&gt;</code>.</p>
-<p>Note the use of <code>suppressWarnings</code> - if the counts used in <code>prop.test</code> are too low, you’ll get a warning that says “Chi-squared approximation may be incorrect” for every time <code>prop.test</code> is run with counts that are too low… This could happen a lot, but the warning is perfectly valid.</p>
+<p>Note the use of <code><a href="https://rdrr.io/r/base/warning.html">base::suppressWarnings()</a></code> - if the counts used in <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> are too low, you’ll get a warning that says “Chi-squared approximation may be incorrect” for every time <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> is run with counts that are too low… This could happen a lot, but the warning is perfectly valid.</p>
 </div>
 <div id="controlling-presentation" class="section level2">
 <h2 class="hasAnchor">
@@ -234,7 +237,7 @@
 <li>95% confidence interval low</li>
 <li>95% confidence interval high</li>
 </ul>
-<p>You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using <code>set_format_strings</code>.</p>
+<p>You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
@@ -329,13 +332,13 @@
 </table>
 <p>Take a look at the <code>rdiff</code> columns now - you’ll see they have 5 values. These are:</p>
 <ul>
-<li>The comparison proportion (i.e. the estimate[1] output from a <code>prop.test</code> object)</li>
-<li>The reference proportion (i.e. the estimate[2] output from a <code>prop.test</code> object)</li>
+<li>The comparison proportion (i.e. the estimate[1] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> object)</li>
+<li>The reference proportion (i.e. the estimate[2] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> object)</li>
 <li>The difference (i.e. estimate[1] - estimate[2])</li>
 <li>The lower end of the confidence interval</li>
 <li>The upper end of the confidence interval</li>
 </ul>
-<p>You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to <code>prop.test</code> using a named list and the <code>args</code> argument in <code>add_risk_diff</code>. This wasn’t done using the ellipsis (i.e. <code>...</code>) like typical R functions because it’s already used to capture a varying number of comparisons, but it’s not much more difficult to use:</p>
+<p>You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> using a named list and the <code>args</code> argument in <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. This wasn’t done using the ellipsis (i.e. <code>...</code>) like typical R functions because it’s already used to capture a varying number of comparisons, but it’s not much more difficult to use:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
@@ -432,16 +435,19 @@
 <p>As seen above, using the <code>args</code> argument, we:</p>
 <ul>
 <li>Changed the confidence interval level to 90% instead of the default 95%</li>
-<li>Switched the alternative hypothesis of <code>prop.test</code> to “less” instead of the default “two.sided”</li>
+<li>Switched the alternative hypothesis of <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> to “less” instead of the default “two.sided”</li>
 <li>Turned off the Yates’ continuity correction</li>
 </ul>
-<p>For more information on these parameters, see the documentation for <code>prop.test</code>.</p>
+<p>For more information on these parameters, see the documentation for <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code>.</p>
 </div>
 <div id="other-notes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-notes" class="anchor"></a>Other notes</h2>
-<p>The default of <code>add_risk_diff</code> works on the distinct counts available within the count summary. If for whatever reason you’d like to run risk difference on the non-distinct counts, switch the <code>distinct</code> argument to FALSE. <code>add_risk_diff</code> also will function on multi-level summaries no different than single level, so no concerns there either.</p>
+<a href="#other-notes" class="anchor"></a>Other Notes</h2>
+<p>The default of <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> works on the distinct counts available within the count summary.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
@@ -470,35 +476,35 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">0.256 ( 0.104, 0.408)</td>
+<td align="left">0.256 ( 0.104, 0.408)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
-<td align="left">21 (100.0%)</td>
-<td align="left">42 (100.0%)</td>
-<td align="left">42 (100.0%)</td>
+<td align="left">21 ( 24.4%)</td>
+<td align="left">42 ( 50.0%)</td>
+<td align="left">42 ( 50.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
 <tr class="even">
-<td align="left">0.024 (-0.046, 0.094)</td>
+<td align="left">0.012 (-0.023, 0.047)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 2.4%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.048 (-0.174, 0.079)</td>
-<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 4.8%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -506,23 +512,23 @@
 <td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">0.024 (-0.046, 0.094)</td>
-<td align="left">0.119 (-0.015, 0.253)</td>
+<td align="left">0.012 (-0.023, 0.047)</td>
+<td align="left">0.060 (-0.003, 0.122)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 2.4%)</td>
-<td align="left">5 ( 11.9%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">5 ( 6.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.048 (-0.174, 0.079)</td>
-<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 4.8%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -530,11 +536,11 @@
 <td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="left">-0.048 (-0.174, 0.079)</td>
-<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 4.8%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -543,8 +549,98 @@
 </tr>
 </tbody>
 </table>
+<p>If for whatever reason you’d like to run risk difference on the non-distinct counts, switch the <code>distinct</code> argument to FALSE. <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> also will function on multi-level summaries no different than single level, so no concerns there either.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>),
+        <span class="kw">distinct</span><span class="kw">=</span><span class="fl">FALSE</span>
+      )
+  )
+
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">rdiff_Xanomeline High Dose_Placebo</th>
+<th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
+<th align="left">row_label1</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.009 (-0.018, 0.036)</td>
+<td align="left">0.000 ( 0.000, 0.000)</td>
+<td align="left">ACTINIC KERATOSIS</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">-0.021 (-0.078, 0.035)</td>
+<td align="left">-0.021 (-0.077, 0.035)</td>
+<td align="left">ALOPECIA</td>
+<td align="left">1 ( 4.8%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">0.018 (-0.022, 0.058)</td>
+<td align="left">0.068 ( 0.008, 0.128)</td>
+<td align="left">BLISTER</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">5 ( 11.9%)</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">-0.064 (-0.149, 0.021)</td>
+<td align="left">-0.064 (-0.149, 0.021)</td>
+<td align="left">COLD SWEAT</td>
+<td align="left">1 ( 4.8%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">-0.021 (-0.078, 0.035)</td>
+<td align="left">-0.021 (-0.077, 0.035)</td>
+<td align="left">DERMATITIS ATOPIC</td>
+<td align="left">1 ( 4.8%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">0.000 ( 0.000, 0.000)</td>
+<td align="left">0.017 (-0.021, 0.055)</td>
+<td align="left">DERMATITIS CONTACT</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
 <p>Risk difference also works with the <code>cols</code> argument, but it’s important to understand how the comparisons work in these situation. Here, it’s still the treatment groups that are compared - but the column argument is used as a “by” variable. For example:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, <span class="kw">cols</span><span class="kw">=</span><span class="no">SEX</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, <span class="kw">cols</span><span class="kw">=</span><span class="no">SEX</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
@@ -614,16 +710,16 @@
 </div>
 <div id="getting-raw-numbers" class="section level2">
 <h2 class="hasAnchor">
-<a href="#getting-raw-numbers" class="anchor"></a>Getting raw numbers</h2>
-<p>Just like you can get the numeric data from a ‘Tplyr’ layer with <code>get_numeric_data</code>, we’ve also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function <code>get_stats_data</code>. The function interface is almost identical to <code>get_numeric_data</code>, except for the extra parameter of <code>statistic</code>. Although risk difference is the only statistic implemented in Tplyr at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we’ve built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, <code>get_stats_data</code> the <code>statistic</code> parameter to allow you to differentiate in the situation where there are multiple options.</p>
+<a href="#getting-raw-numbers" class="anchor"></a>Getting Raw Numbers</h2>
+<p>Just like you can get the numeric data from a ‘Tplyr’ layer with <code>get_numeric_data</code>, we’ve also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function <code>get_stats_data</code>. The function interface is almost identical to <code>get_numeric_data</code>, except for the extra parameter of <code>statistic</code>. Although risk difference is the only statistic implemented in ‘Tplyr’ at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we’ve built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, <code>get_stats_data</code> the <code>statistic</code> parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.</p>
 <p>The output of <code>get_stats_data</code> depends on what parameters have been used:</p>
 <ul>
 <li>If no specific layer has been entered in the <code>layer</code> parameter, then an element will be returned for each layer</li>
-<li>If no statistic has been entered in the <code>stastic</code> parameter, an element will be returned for each statistic for each layer</li>
+<li>If no statistic has been entered in the <code>statistic</code> parameter, an element will be returned for each statistic for each layer</li>
 <li>If neither statistic nor layer are entered, a list of lists is returned, where the outer list is each layer and the inside list is the numeric statistic data for that layer.</li>
 </ul>
 <p>This works best when layers are named, as it makes the output much clearer.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span><span class="kw">=</span><span class="st">"PreferredTerm"</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
@@ -673,7 +769,7 @@
 <span class="co">#&gt; 4 SKIN AND SUBCUTANEOUS T… low                          0                      0</span>
 <span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS T… high                         0                      0</span></pre></body></html></div>
 <p>Instead of playing around with lists, <code>get_stats_data</code> is most advantageous if you’d like to extract out some data specifically. Let’s say that you’d like to see just the difference values from the Preferred Term layer in the table above.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r">
+<div class="sourceCode" id="cb8"><html><body><pre class="r">
 <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(
   <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span>(<span class="no">t</span>, <span class="kw">layer</span><span class="kw">=</span><span class="st">'PreferredTerm'</span>, <span class="kw">statistic</span><span class="kw">=</span><span class="st">'riskdiff'</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">measure</span> <span class="kw">==</span> <span class="st">"dif"</span>)
   ) <span class="kw">%&gt;%</span>
@@ -725,7 +821,7 @@
 </tr>
 </tbody>
 </table>
-<p>Using this data frame, you have access to the un-formatted numeric values before any rounding or formatting. This gives you flexibility to use these calculations in other contexts, make more precise comparisons in a double programming scenario, or take a deeper look into the calculations that were make if any values in the result warrant further investigation.</p>
+<p>Using this data frame, you have access to the un-formatted numeric values before any rounding or formatting. This gives you flexibility to use these calculations in other contexts, make more precise comparisons in a double programming scenario, or take a deeper look into the calculations that were made if any values in the result warrant further investigation.</p>
 </div>
   </div>
 
