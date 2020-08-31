@@ -62,7 +62,7 @@ server <- function(input, output) {
     observeEvent(input$saveButton, {
         saveRDS(vur$df, "~/Tplyr/uat/references/output/vur_auto.Rds")
         showModal(modalDialog("Validation User Responses written"))
-        rmarkdown::render("~/Tplyr/uat/references/input/uat.Rmd", "pdf_document")
+        rmarkdown::render("~/Tplyr/uat/references/output/uat.Rmd", "pdf_document")
         # file.remove("~/Tplyr/uat/references/output/vur_auto.Rds")
     })
 
