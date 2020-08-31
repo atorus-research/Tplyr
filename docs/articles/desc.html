@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -607,19 +607,55 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="no">mean</span>, <span class="no">sd</span>, <span class="kw">empty</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"NA"</span>)))
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="co">#%&gt;% </span>
-<span class="co">#&gt; # A tibble: 5 x 8</span>
-<span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 BUN        Mean (SD)  "    NA (  … "  4.57 (  1.30… "  5.71 (  2.94…</span>
-<span class="co">#&gt; 2 CA         Mean (SD)  "    NA (  … "  2.19 (  0.13… "  2.15 (  0.08…</span>
-<span class="co">#&gt; 3 CK         Mean (SD)  "    NA (  … " 64.25 ( 93.98… " 58.33 ( 77.91…</span>
-<span class="co">#&gt; 4 GGT        Mean (SD)  "    NA (  … " 16.75 ( 48.69… " 21.33 ( 26.98…</span>
-<span class="co">#&gt; 5 URATE      Mean (SD)  "    NA (  … "271.23 ( 88.16… "230.98 ( 87.00…</span>
-<span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
-<span class="co">#&gt; #   ord_layer_2 &lt;int&gt;</span>
-  <span class="co"># select(-starts_with("ord")) %&gt;% </span>
-  <span class="co"># kable()</span></pre></body></html></div>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">BUN</td>
+<td align="left">Mean (SD)</td>
+<td align="left">NA ( NA)</td>
+<td align="left">4.57 ( 1.301)</td>
+<td align="left">5.71 ( 2.940)</td>
+</tr>
+<tr class="even">
+<td align="left">CA</td>
+<td align="left">Mean (SD)</td>
+<td align="left">NA ( NA)</td>
+<td align="left">2.19 ( 0.137)</td>
+<td align="left">2.15 ( 0.083)</td>
+</tr>
+<tr class="odd">
+<td align="left">CK</td>
+<td align="left">Mean (SD)</td>
+<td align="left">NA ( NA)</td>
+<td align="left">64.25 ( 93.986)</td>
+<td align="left">58.33 ( 77.915)</td>
+</tr>
+<tr class="even">
+<td align="left">GGT</td>
+<td align="left">Mean (SD)</td>
+<td align="left">NA ( NA)</td>
+<td align="left">16.75 ( 48.692)</td>
+<td align="left">21.33 ( 26.989)</td>
+</tr>
+<tr class="odd">
+<td align="left">URATE</td>
+<td align="left">Mean (SD)</td>
+<td align="left">NA ( NA)</td>
+<td align="left">271.23 ( 88.161)</td>
+<td align="left">230.98 ( 87.006)</td>
+</tr>
+</tbody>
+</table>
 <p>In the example above, instead of filling the whole space, the <code>empty</code> text of “NA” replaces the empty value for each element. So for ‘Mean (SD)’, we now have ‘NA ( NA)’. Note that the proper padding was still used for ‘NA’ to make sure the parentheses still align with populated records.</p>
 <div id="auto-precision" class="section level3">
 <h3 class="hasAnchor">

@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -165,20 +165,62 @@
       <small>Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="tplyr-012" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.2">
-<a href="#tplyr-012" class="anchor"></a>Tplyr 0.1.2</h1>
-<p>Inital release onto CRAN</p>
-</div>
     <div id="tplyr-011" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.1">
 <a href="#tplyr-011" class="anchor"></a>Tplyr 0.1.1</h1>
-<p>Beta release for Tplyr. <code>vignette("beta-release")</code></p>
+<p>Inital release onto CRAN.</p>
+<ul>
+<li>Bug Fixes/Enhancements
+<ul>
+<li>Count layers were re-factored to improve the execution efficiency</li>
+<li>Auto-precision now works without a <code>by</code> variable</li>
+<li>Several new assertions have been added to give clearer error messages</li>
+<li>Treatment groups within the population data will produce columns in the resulting build, even if no records exist for that treatment group in the target dataset</li>
+<li>Risk difference variable names will now populate properly when a <code>cols</code> argument is used</li>
+<li>Data frame attributes are cleaned prior to processing to prevent any merge/bind warnings during processing</li>
+<li>Total values within count layers are properly filled when the resulting count is 0 (largely impacts risk-difference calculations)</li>
+</ul>
+</li>
+<li>Feature additions
+<ul>
+<li>Shift layers are here!</li>
+<li>Flexibility when filling missing values has been enhanced for descriptive statistic layers</li>
+<li>Layers can now be named, and those names can be used in <code>get_numeric_data</code> and the new function <code>get_statistics_data</code> to get risk difference raw numbers. Data may also be filtered directly from both functions.</li>
+<li>Default formats can now be set via options or at the table level, which allows you to eliminate a great deal of redundant code</li>
+</ul>
+</li>
+</ul>
 </div>
     <div id="tplyr-010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
 <a href="#tplyr-010" class="anchor"></a>Tplyr 0.1.0</h1>
-<p>Alpha release for Tplyr. <code>vignette("alpha-release")</code></p>
+<p>Beta release for Tplyr with introduction of numerous new features:</p>
+<p>General updates:</p>
+<ul>
+<li>Calculate your header N counts based on the population dataset or the target dataset. The alpha release had an option to set the population data but this wasn’t actually used anywhere in the internals.</li>
+<li>Use these header N counts as token replacements when using the <code>add_column_headers</code> function.</li>
+<li>Order variables are now added to the built dataset to allow you to sort the output dataset as you wish with numeric variables.</li>
+<li>Count layer updates:
+<ul>
+<li>Optionally use the population data N counts as denominators for percent calculation.</li>
+<li>For multi-level count summaries, nest the row label columns together to present both row labels in a single column</li>
+<li>You can now present both distinct and non-distinct counts instead of one or the other</li>
+<li>Sorting options allow you to order results from the target variable values or from derived counts within a specified column</li>
+<li>Risk difference calculations can now be added as additional columns, with flexible options for presentation</li>
+</ul>
+</li>
+<li>Descriptive statistics layer updates:
+<ul>
+<li>The custom summary functionality has been updated to apply to multi-variable summaries, which results in an interface change</li>
+<li>Automatic decimal precision has been added to allow you to base the presentation on the precision of the data as collected</li>
+</ul>
+</li>
+</ul>
+</div>
+    <div id="tplyr-0109999" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0.9999">
+<a href="#tplyr-0109999" class="anchor"></a>Tplyr 0.1.0.9999</h1>
+<p>Initial alpha release of Tplyr</p>
 </div>
   </div>
 

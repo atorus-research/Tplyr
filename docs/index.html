@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -120,11 +120,12 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-
 <div id="tplyr-version-011-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-version-011-" class="anchor"></a>Tplyr Version 0.1.1 <a href="https://github.com/atorus-research/Tplyr"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a href="#tplyr-version-011-" class="anchor"></a>Tplyr Version 0.1.1 <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
+<!-- badges: start -->
+
 <p>Welcome to Tplyr! This is the first full and stable release of our package. With this release comes a number of new enhancements, loads of new documentation, and our complete package qualification document.</p>
 <p>If you’ve been keeping up, here are the things that we’ve added since the Beta release in July:</p>
 <ul>
@@ -150,6 +151,12 @@
 </ul>
 <p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues">here</a>.</p>
 </div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1>
+<p>We’re working on posting to CRAN! We’ll update as soon as it’s accepted. In the mean time, you can install via:</p>
+<div class="sourceCode" id="cb1"><pre class="r">devtools::install_github(devtools::install_github("https://github.com/atorus-research/Tplyr.git")</pre></div>
+</div>
 <div id="what-is-tplyr" class="section level1">
 <h1 class="hasAnchor">
 <a href="#what-is-tplyr" class="anchor"></a>What is Tplyr?</h1>
@@ -172,8 +179,8 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the original pilot project submission package(<a href="https://www.cdisc.org/sdtmadam-pilot-project" class="uri">https://www.cdisc.org/sdtmadam-pilot-project</a>). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="r">
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="r">
 <span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>)
@@ -181,19 +188,122 @@
   <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age Categories n (%)"</span>)
   ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/build.html">build</a></span>()
-<span class="co">#&gt; # A tibble: 9 x 8</span>
-<span class="co">#&gt;   row_label1          row_label2 var1_Placebo  `var1_Xanomeline High Do… `var1_Xanomeline Low Do… ord_layer_index ord_layer_1 ord_layer_2</span>
-<span class="co">#&gt;   &lt;chr&gt;               &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;                     &lt;chr&gt;                              &lt;int&gt;       &lt;int&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Age (years)         n          " 86"         " 84"                     " 84"                                  1           1           1</span>
-<span class="co">#&gt; 2 Age (years)         Mean (SD)  "75.2 ( 8.59… "74.4 ( 7.89)"            "75.7 ( 8.29)"                         1           1           2</span>
-<span class="co">#&gt; 3 Age (years)         Median     "76.0"        "76.0"                    "77.5"                                 1           1           3</span>
-<span class="co">#&gt; 4 Age (years)         Q1, Q3     "69.2, 81.8"  "70.8, 80.0"              "71.0, 82.0"                           1           1           4</span>
-<span class="co">#&gt; 5 Age (years)         Min, Max   "52, 89"      "56, 88"                  "51, 88"                               1           1           5</span>
-<span class="co">#&gt; 6 Age (years)         Missing    "  0"         "  0"                     "  0"                                  1           1           6</span>
-<span class="co">#&gt; 7 Age Categories n (… &lt;65        "14 ( 16.3%)" "11 ( 13.1%)"             " 8 (  9.5%)"                          2           1           1</span>
-<span class="co">#&gt; 8 Age Categories n (… &gt;80        "30 ( 34.9%)" "18 ( 21.4%)"             "29 ( 34.5%)"                          2           1           2</span>
-<span class="co">#&gt; 9 Age Categories n (… 65-80      "42 ( 48.8%)" "55 ( 65.5%)"             "47 ( 56.0%)"                          2           1           3</span></pre></div>
+  <span class="fu"><a href="reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></div>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="7%">
+<col width="9%">
+<col width="18%">
+<col width="18%">
+<col width="12%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">n</td>
+<td align="left">86</td>
+<td align="left">84</td>
+<td align="left">84</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Mean (SD)</td>
+<td align="left">75.2 ( 8.59)</td>
+<td align="left">74.4 ( 7.89)</td>
+<td align="left">75.7 ( 8.29)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">Median</td>
+<td align="left">76.0</td>
+<td align="left">76.0</td>
+<td align="left">77.5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.2, 81.8</td>
+<td align="left">70.8, 80.0</td>
+<td align="left">71.0, 82.0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">Min, Max</td>
+<td align="left">52, 89</td>
+<td align="left">56, 88</td>
+<td align="left">51, 88</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="left">14 ( 16.3%)</td>
+<td align="left">11 ( 13.1%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="left">30 ( 34.9%)</td>
+<td align="left">18 ( 21.4%)</td>
+<td align="left">29 ( 34.5%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">65-80</td>
+<td align="left">42 ( 48.8%)</td>
+<td align="left">55 ( 65.5%)</td>
+<td align="left">47 ( 56.0%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
 <div id="the-tldr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-tldr" class="anchor"></a>The TL;DR</h2>
@@ -202,14 +312,39 @@
 <li>Easy construction of table data using an intuitive syntax</li>
 <li>Smart string formatting for your numbers that’s easily specified by the user</li>
 <li>A great deal of flexibility in what is performed and how it’s presented, without specifying hundreds of parameters</li>
-<li>Extensibility (in the future…) - we’re going to open doors to allow you some level of customization.</li>
 </ul>
 </div>
-<div id="where-next" class="section level2">
-<h2 class="hasAnchor">
-<a href="#where-next" class="anchor"></a>Where Next</h2>
-<p><tbd></tbd></p>
 </div>
+<div id="where-to-go-from-here" class="section level1">
+<h1 class="hasAnchor">
+<a href="#where-to-go-from-here" class="anchor"></a>Where to go from here?</h1>
+<p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of ‘Tplyr’.</p>
+<ul>
+<li>The best place to start is with our Getting Started vignette at <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("Tplyr")</a></code>
+</li>
+<li>Learn more about table level settings in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("table")</a></code>
+</li>
+<li>Learn more about descriptive statistics layers in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("desc")</a></code>
+</li>
+<li>Learn more about count and shift layers in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("count_shift")</a></code>
+</li>
+<li>Learn more about calculating risk differences in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("riskdiff")</a></code>
+</li>
+<li>Learn more about sorting ‘Tplyr’ tables in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("sort")</a></code>
+</li>
+<li>Learn more about using ‘Tplyr’ options in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("options")</a></code>
+</li>
+<li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("styled-table")</a></code>
+</li>
+</ul>
+</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<p>In building ‘Tplyr’, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
+<p><a href="http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf">Analysis and Displays Associated with Adverse Events</a></p>
+<p><a href="https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
+<p><a href="http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf">Analyses and Displays Associated with Measures of Central Tendency</a></p>
 </div>
 
   </div>
