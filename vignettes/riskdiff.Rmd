@@ -27,7 +27,7 @@ load("adsl.Rdata")
 
 'Tplyr' does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
 
-## Tplyr Implementation
+## 'Tplyr' Implementation
 
 Our current implementation of risk difference is solely built on top of the base R function `stats::prop.test()`. For any and all questions about this method, please review the `stats::prop.test()` documentation within R. 
 
@@ -51,7 +51,7 @@ suppressWarnings(build(t)) %>%
 
 ```
 
-Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_group()` or `add_total_group()` as well.
+Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you'll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using `add_treat_grps()` or `add_total_group()` as well.
 
 The risk difference calculations are displayed in the `rdiff` columns. There will be an `rdiff` column for every comparison that is made, following the convention `rdiff_<comparison>_<reference>`. 
 
@@ -197,9 +197,9 @@ suppressWarnings(build(t)) %>%
 
 ## Getting Raw Numbers
 
-Just like you can get the numeric data from a 'Tplyr' layer with `get_numeric_data`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data`. The function interface is almost identical to `get_numeric_data`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in 'Tplyr' at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data` the `statistic` parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.
+Just like you can get the numeric data from a 'Tplyr' layer with `get_numeric_data()`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data()`. The function interface is almost identical to `get_numeric_data()`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in 'Tplyr' at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data()` the `statistic` parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.
 
-The output of `get_stats_data` depends on what parameters have been used:
+The output of `get_stats_data()` depends on what parameters have been used:
 
 - If no specific layer has been entered in the `layer` parameter, then an element will be returned for each layer
 - If no statistic has been entered in the `statistic` parameter, an element will be returned for each statistic for each layer
@@ -232,7 +232,7 @@ suppressWarnings(
 
 ```
 
-Instead of playing around with lists, `get_stats_data` is most advantageous if you'd like to extract out some data specifically. Let's say that you'd like to see just the difference values from the Preferred Term layer in the table above. 
+Instead of playing around with lists, `get_stats_data()` is most advantageous if you'd like to extract out some data specifically. Let's say that you'd like to see just the difference values from the Preferred Term layer in the table above. 
 
 ```{r risdiff8}
 
