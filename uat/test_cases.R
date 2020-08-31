@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/28/2020
+#' 8/31/2020
 
 #setup ----
 #insert any necessary libraries
@@ -783,7 +783,6 @@ test_that('T17',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-
     t <- tplyr_table(adsl, TRT01A) %>%
       add_layer(
         group_count(RACE) %>%
@@ -795,14 +794,8 @@ test_that('T17',{
                         args = list(conf.level = 0.9, correct=FALSE, alternative='less'))
       )
 
-    t2 <- tplyr_table(adsl, TRT01A, cols=SEX) %>%
-      add_layer(
-        group_count(RACE) %>%
-          add_risk_diff(c('Xanomeline High Dose','Placebo'))
-      )
     suppressWarnings(build(t))
-    suppressWarnings(build(t2))
-    test_17 <- c(get_stats_data(t), get_stats_data(t2))
+    test_17 <- get_stats_data(t)
 
 
     # output table to check attributes
@@ -810,7 +803,6 @@ test_that('T17',{
 
     #clean up working directory
     rm(t)
-    rm(t2)
     rm(test_17)
 
     #load output for checks
@@ -827,11 +819,6 @@ test_that('T17',{
   cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
   t17_noarg <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
   t17_args <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p), conf.level = 0.9, correct=FALSE, alternative='less')
-  tot_t2 <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & SEX == "F"), n=n())[[1]]
-  cnt_t2 <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
-  tot_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & SEX == "F"), n=n())[[1]]
-  cnt_p2 <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
-  suppressWarnings(t17_noarg2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t2,tot_p2)))
   testthat::expect_equal(t17_noarg$estimate[[1]] - t17_noarg$estimate[[2]],
                          filter(test_17[[1]]$riskdiff, summary_var == 'WHITE' & measure == 'dif')[[3]],
                          label = "T17.1")
@@ -844,11 +831,6 @@ test_that('T17',{
                            filter(test_17[[2]]$riskdiff, summary_var == 'WHITE' & measure == 'low')[[3]],
                            filter(test_17[[2]]$riskdiff, summary_var == 'WHITE' & measure == 'high')[[3]]),
                          label = "T17.3")
-  testthat::expect_equal(c(t17_noarg2$estimate[[1]] - t17_noarg2$estimate[[2]], t17_noarg2$conf.int[1], t17_noarg2$conf.int[2]),
-                         c(filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'dif')[[4]],
-                           filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'low')[[4]],
-                           filter(test_17[[3]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'high')[[4]]),
-                         label = "T17.4")
   #manual check(s)
 
   #clean up working directory
@@ -858,17 +840,179 @@ test_that('T17',{
   rm(cnt_t)
   rm(t17_noarg)
   rm(t17_args)
-  rm(tot_p2)
-  rm(cnt_p2)
-  rm(tot_t2)
-  rm(cnt_t2)
-  rm(t17_noarg2)
   rm(test_17)
 })
 
 
 #test 18 ----
 test_that('T18',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01A, cols=SEX) %>%
+      add_layer(
+        group_count(RACE) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      )
+    suppressWarnings(build(t))
+    test_18 <- get_stats_data(t)
+
+
+    # output table to check attributes
+    save(test_18, file = "~/Tplyr/uat/output/test_18.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_18)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_18.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & SEX == "F"), n=n())[[1]]
+  cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
+  tot_p <- summarise(filter(adsl, TRT01P == "Placebo" & SEX == "F"), n=n())[[1]]
+  cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE' & SEX == "F"), n=n())[[1]]
+  suppressWarnings(t18 <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p)))
+
+  testthat::expect_equal(c(t18$estimate[[1]] - t18$estimate[[2]], t18$conf.int[1], t18$conf.int[2]),
+                         c(filter(test_18[[1]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'dif')[[4]],
+                           filter(test_18[[1]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'low')[[4]],
+                           filter(test_18[[1]]$riskdiff, summary_var == 'WHITE' & SEX == "F" & measure == 'high')[[4]]),
+                         label = "T18.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(tot_p)
+  rm(cnt_p)
+  rm(tot_t)
+  rm(cnt_t)
+  rm(t18)
+  rm(test_18)
+})
+
+
+#test 19 ----
+test_that('T19',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(AEBODSYS, by = SEX) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD), by = SEX) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      )
+    suppressWarnings(build(t))
+    test_19 <- get_stats_data(t)
+
+    # output table to check attributes
+    save(test_19, file = "~/Tplyr/uat/output/test_19.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_19)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_19.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  tot_p <- summarise(filter(adae, TRTA == "Placebo"), n=n())[[1]]
+  tot_t <- summarise(filter(adae, TRTA == 'Xanomeline High Dose'), n=n())[[1]]
+  cnt_p1 <- summarise(filter(adae, TRTA == "Placebo" &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               AEDECOD == "PRURITUS"),
+                      n=n())[[1]]
+  cnt_t1 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               AEDECOD == "PRURITUS"),
+                      n=n())[[1]]
+  cnt_p2 <- summarise(filter(adae, TRTA == "Placebo" &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               SEX == "F"),
+                      n=n())[[1]]
+  cnt_t2 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               SEX == "F"),
+                      n=n())[[1]]
+  cnt_p3 <- summarise(filter(adae, TRTA == "Placebo" &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               AEDECOD == "PRURITUS" &
+                               SEX == "F"),
+                      n=n())[[1]]
+  cnt_t3 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
+                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                               AEDECOD == "PRURITUS" &
+                               SEX == "F"),
+                      n=n())[[1]]
+
+  suppressWarnings(t19_1 <- prop.test(c(cnt_t1, cnt_p1), c(tot_t, tot_p)))
+  suppressWarnings(t19_2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t, tot_p)))
+  suppressWarnings(t19_3 <- prop.test(c(cnt_t3, cnt_p3), c(tot_t, tot_p)))
+
+  testthat::expect_equal(c(t19_1$estimate[[1]] - t19_1$estimate[[2]], t19_1$conf.int[1], t19_1$conf.int[2]),
+                         c(filter(test_19[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & measure == 'dif')[[4]],
+                           filter(test_19[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & measure == 'low')[[4]],
+                           filter(test_19[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & measure == 'high')[[4]]),
+                         label = "T19.1")
+  testthat::expect_equal(c(t19_2$estimate[[1]] - t19_2$estimate[[2]], t19_2$conf.int[1], t19_2$conf.int[2]),
+                         c(filter(test_19[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    SEX == 'F' & measure == 'dif')[[4]],
+                           filter(test_19[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    SEX == 'F' & measure == 'low')[[4]],
+                           filter(test_19[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    SEX == 'F' & measure == 'high')[[4]]),
+                         label = "T19.2")
+  testthat::expect_equal(c(t19_3$estimate[[1]] - t19_3$estimate[[2]], t19_3$conf.int[1], t19_3$conf.int[2]),
+                         c(filter(test_19[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'dif')[[5]],
+                           filter(test_19[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'low')[[5]],
+                           filter(test_19[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
+                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'high')[[5]]),
+                         label = "T19.3")
+  #manual check(s)
+
+  #clean up working directory
+  rm(tot_p)
+  rm(tot_t)
+  rm(cnt_p1)
+  rm(cnt_t1)
+  rm(cnt_p2)
+  rm(cnt_t2)
+  rm(cnt_p3)
+  rm(cnt_t3)
+  rm(t19_1)
+  rm(t19_2)
+  rm(t19_3)
+  rm(test_19)
+})
+
+
+#test 20 ----
+test_that('T20',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -893,65 +1037,65 @@ test_that('T18',{
       )
 
     build(t)
-    test_18 <- get_numeric_data(t)[[1]]
+    test_20 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
-    save(test_18, file = "~/Tplyr/uat/output/test_18.RData")
+    save(test_20, file = "~/Tplyr/uat/output/test_20.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_18)
+    rm(test_20)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_18.RData")
+    load("~/Tplyr/uat/output/test_20.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], n=n())[[1]],
-                         subset(test_18, stat == 'n' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.1")
+                         subset(test_20, stat == 'n' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.1")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], mean=mean(AGE))[[1]],
-                         subset(test_18, stat == 'mean' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.2")
+                         subset(test_20, stat == 'mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.2")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], median=median(AGE))[[1]],
-                         subset(test_18, stat == 'median' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.3")
+                         subset(test_20, stat == 'median' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.3")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], sd=sd(AGE))[[1]],
-                         subset(test_18, stat == 'sd' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.4")
+                         subset(test_20, stat == 'sd' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.4")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], var=var(AGE))[[1]],
-                         subset(test_18, stat == 'var' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.5")
+                         subset(test_20, stat == 'var' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.5")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], min=min(AGE))[[1]],
-                         subset(test_18, stat == 'min' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.6")
+                         subset(test_20, stat == 'min' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.6")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], max=max(AGE))[[1]],
-                         subset(test_18, stat == 'max' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.7")
+                         subset(test_20, stat == 'max' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.7")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], iqr=IQR(AGE))[[1]],
-                         subset(test_18, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.8")
+                         subset(test_20, stat == 'iqr' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.8")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q1=quantile(AGE)[[2]])[[1]],
-                         subset(test_18, stat == 'q1' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.9")
+                         subset(test_20, stat == 'q1' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.9")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',], q3=quantile(AGE)[[4]])[[1]],
-                         subset(test_18, stat == 'q3' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.10")
+                         subset(test_20, stat == 'q3' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.10")
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo' & is.na(adsl$AGE),], n=n())[[1]],
-                         subset(test_18, stat == 'missing' & TRT01P == 'Placebo')[['value']],
-                         label = "T18.11")
+                         subset(test_20, stat == 'missing' & TRT01P == 'Placebo')[['value']],
+                         label = "T20.11")
   #manual check(s)
 
   #clean up working directory
-  rm(test_18)
+  rm(test_20)
 })
 
 
-#test 19 ----
-test_that('T19',{
+#test 21 ----
+test_that('T21',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -970,18 +1114,18 @@ test_that('T19',{
       )
 
     build(t)
-    test_19 <- get_numeric_data(t)[[1]]
+    test_21 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
-    save(test_19, file = "~/Tplyr/uat/output/test_19.RData")
+    save(test_21, file = "~/Tplyr/uat/output/test_21.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_19)
+    rm(test_21)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_19.RData")
+    load("~/Tplyr/uat/output/test_21.RData")
   }
 
   #perform checks
@@ -989,17 +1133,17 @@ test_that('T19',{
   #programmatic check(s)
   testthat::expect_equal(summarise(adsl[adsl$TRT01P == 'Placebo',],
                                    geometric_mean = exp(sum(log(AGE[AGE > 0]),na.rm=TRUE) / length(AGE)))[[1]],
-                         subset(test_19, stat == 'geometric_mean' & TRT01P == 'Placebo')[['value']],
-                         label = "T19.1")
+                         subset(test_21, stat == 'geometric_mean' & TRT01P == 'Placebo')[['value']],
+                         label = "T21.1")
   #manual check(s)
 
   #clean up working directory
-  rm(test_19)
+  rm(test_21)
 })
 
 
-#test 20 ----
-test_that('T20',{
+#test 22 ----
+test_that('T22',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -1023,121 +1167,7 @@ test_that('T20',{
       )
 
     build(t)
-    test_20 <- filter(get_numeric_data(t)[[1]], TRT01P == 'Placebo')
-
-    # output table to check attributes
-    save(test_20, file = "~/Tplyr/uat/output/test_20.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_20)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_20.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t20_1 <- pivot_longer(data.frame(summarise(group_by(adsl[adsl$TRT01P == 'Placebo',],ETHNIC),
-                                             n=n(),
-                                             mean=mean(AGE),
-                                             median=median(AGE),
-                                             sd=sd(AGE),
-                                             var=var(AGE),
-                                             min=min(AGE),
-                                             max=max(AGE),
-                                             iqr=IQR(AGE),
-                                             q1=quantile(AGE)[[2]],
-                                             q3=quantile(AGE)[[4]]
-                                             )
-                                   ),
-                        cols=c(n,mean,median,sd,var,min,max,iqr,q1,q3),names_to="STAT")
-
-  testthat::expect_equal(t20_1$value,
-                         test_20$value,
-                         label = "T20.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t20_1)
-  rm(test_20)
-})
-
-
-#test 21 ----
-test_that('T21',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_desc(AGE) %>%
-          set_format_strings(
-            'combo' = f_str('xx, xx.x, xx, x.xx, xx.xx, xx, xx, xx.x, xx.x, xx.x',
-                            n,   mean, median, sd,  var,   min, max, iqr, q1,  q3)
-          )
-      )
-
-    test_21 <- build(t)$var1_Placebo
-
-    # output table to check attributes
-    save(test_21, file = "~/Tplyr/uat/output/test_21.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_21)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_21.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t21_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=median(AGE))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=round(sd(AGE),2))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=round(var(AGE),2))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=round(IQR(AGE),1))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=round(quantile(AGE)[[2]],1))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]],
-                 sep=", ")
-
-  testthat::expect_equal(t21_1,
-                         test_21,
-                         label = "T21.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t21_1)
-  rm(test_21)
-})
-
-#test 22 ----
-test_that('T22',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_desc(AGE) %>%
-          set_format_strings(
-            'combo' = f_str('xx, xx.xx, xx.xx, xx.xxx, xx.xxx, xx, xx, xx.xx, xx.xx, xx.xx',
-                             n,  mean, median, sd,     var,    min, max, iqr, q1,  q3)
-          )
-      )
-
-    test_22 <- build(t)$var1_Placebo
+    test_22 <- filter(get_numeric_data(t)[[1]], TRT01P == 'Placebo')
 
     # output table to check attributes
     save(test_22, file = "~/Tplyr/uat/output/test_22.RData")
@@ -1154,20 +1184,23 @@ test_that('T22',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t22_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=sprintf("%5.2f",round(mean(AGE),2)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=sprintf("%5.2f",round(median(AGE),2)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=sprintf("%6.3f",round(sd(AGE),3)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=sprintf("%6.3f",round(var(AGE),3)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=sprintf("%5.2f",round(IQR(AGE),1)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=sprintf("%5.2f",round(quantile(AGE)[[2]],2)))[[1]],
-                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=sprintf("%5.2f",round(quantile(AGE)[[4]],2)))[[1]],
-                 sep=", ")
+  t22_1 <- pivot_longer(data.frame(summarise(group_by(adsl[adsl$TRT01P == 'Placebo',],ETHNIC),
+                                             n=n(),
+                                             mean=mean(AGE),
+                                             median=median(AGE),
+                                             sd=sd(AGE),
+                                             var=var(AGE),
+                                             min=min(AGE),
+                                             max=max(AGE),
+                                             iqr=IQR(AGE),
+                                             q1=quantile(AGE)[[2]],
+                                             q3=quantile(AGE)[[4]]
+                                             )
+                                   ),
+                        cols=c(n,mean,median,sd,var,min,max,iqr,q1,q3),names_to="STAT")
 
-  testthat::expect_equal(t22_1,
-                         test_22,
+  testthat::expect_equal(t22_1$value,
+                         test_22$value,
                          label = "T22.1")
   #manual check(s)
 
@@ -1176,6 +1209,7 @@ test_that('T22',{
   rm(test_22)
 })
 
+
 #test 23 ----
 test_that('T23',{
   if(is.null(vur)) {
@@ -1183,16 +1217,16 @@ test_that('T23',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(advs, TRTA) %>%
+    t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_desc(AVAL, by=PARAMCD) %>%
+        group_desc(AGE) %>%
           set_format_strings(
-            'combo' = f_str('xxxx, a.a+1, xx.a+1, a.a+2, xx.a+2, xxx, a, a.xx, xxx.xx, a.a+1',
-                             n,    mean,  median, sd,    var,    min, max, iqr,   q1,    q3)
+            'combo' = f_str('xx, xx.x, xx, x.xx, xx.xx, xx, xx, xx.x, xx.x, xx.x',
+                            n,   mean, median, sd,  var,   min, max, iqr, q1,  q3)
           )
       )
 
-    test_23 <- build(t)
+    test_23 <- build(t)$var1_Placebo
 
     # output table to check attributes
     save(test_23, file = "~/Tplyr/uat/output/test_23.RData")
@@ -1209,8 +1243,117 @@ test_that('T23',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t23_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=median(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=round(sd(AGE),2))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=round(var(AGE),2))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=round(IQR(AGE),1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=round(quantile(AGE)[[2]],1))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]],
+                 sep=", ")
 
-  t23_dat <- mutate(advs, avalc = as.character(AVAL)) %>%
+  testthat::expect_equal(t23_1,
+                         test_23,
+                         label = "T23.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t23_1)
+  rm(test_23)
+})
+
+#test 24 ----
+test_that('T24',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(AGE) %>%
+          set_format_strings(
+            'combo' = f_str('xx, xx.xx, xx.xx, xx.xxx, xx.xxx, xx, xx, xx.xx, xx.xx, xx.xx',
+                             n,  mean, median, sd,     var,    min, max, iqr, q1,  q3)
+          )
+      )
+
+    test_24 <- build(t)$var1_Placebo
+
+    # output table to check attributes
+    save(test_24, file = "~/Tplyr/uat/output/test_24.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_24)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_24.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t24_1 <- paste(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],mean=sprintf("%5.2f",round(mean(AGE),2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],median=sprintf("%5.2f",round(median(AGE),2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],sd=sprintf("%6.3f",round(sd(AGE),3)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],var=sprintf("%6.3f",round(var(AGE),3)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],min=min(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],max=max(AGE))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],iqr=sprintf("%5.2f",round(IQR(AGE),1)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q1=sprintf("%5.2f",round(quantile(AGE)[[2]],2)))[[1]],
+                 summarise(adsl[adsl$TRT01P == 'Placebo',],q3=sprintf("%5.2f",round(quantile(AGE)[[4]],2)))[[1]],
+                 sep=", ")
+
+  testthat::expect_equal(t24_1,
+                         test_24,
+                         label = "T24.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t24_1)
+  rm(test_24)
+})
+
+#test 25 ----
+test_that('T25',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(advs, TRTA) %>%
+      add_layer(
+        group_desc(AVAL, by=PARAMCD) %>%
+          set_format_strings(
+            'combo' = f_str('xxxx, a.a+1, xx.a+1, a.a+2, xx.a+2, xxx, a, a.xx, xxx.xx, a.a+1',
+                             n,    mean,  median, sd,    var,    min, max, iqr,   q1,    q3)
+          )
+      )
+
+    test_25 <- build(t)
+
+    # output table to check attributes
+    save(test_25, file = "~/Tplyr/uat/output/test_25.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_25)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_25.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t25_dat <- mutate(advs, avalc = as.character(AVAL)) %>%
     rowwise() %>%
     mutate(intlen = nchar(unlist(strsplit(avalc,'\\.'))[[1]])) %>%
     mutate(hasdec = as.numeric(grepl('\\.', avalc))) %>%
@@ -1221,8 +1364,8 @@ test_that('T23',{
     mutate(hasdec = max(hasdec)) %>%
     mutate(declen = max(declen))
 
-  t23_1 <- unique(t23_dat[,c("PARAMCD","intlen","declen","hasdec")]) %>%
-    left_join(summarise(t23_dat[t23_dat$TRTA == 'Placebo',], n=n(), mean=mean(AVAL), median=median(AVAL), sd=sd(AVAL),
+  t25_1 <- unique(t25_dat[,c("PARAMCD","intlen","declen","hasdec")]) %>%
+    left_join(summarise(t25_dat[t25_dat$TRTA == 'Placebo',], n=n(), mean=mean(AVAL), median=median(AVAL), sd=sd(AVAL),
                         var=var(AVAL), min=min(AVAL), max=max(AVAL), iqr=IQR(AVAL),
                         q1=quantile(AVAL)[[2]], q3=quantile(AVAL)[[4]]), by="PARAMCD") %>%
     mutate(combo = paste(sprintf("%4s",n),
@@ -1264,20 +1407,20 @@ test_that('T23',{
                                  )[[1]]),
                          sep = ", "))
 
-  testthat::expect_equal(t23_1$combo,
-                         test_23$var1_Placebo,
-                         label = "T23.1")
+  testthat::expect_equal(t25_1$combo,
+                         test_25$var1_Placebo,
+                         label = "T25.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t23_dat)
-  rm(t23_1)
-  rm(test_23)
+  rm(t25_dat)
+  rm(t25_1)
+  rm(test_25)
 })
 
 
-#test 24 ----
-test_that('T24',{
+#test 26 ----
+test_that('T26',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -1292,25 +1435,24 @@ test_that('T24',{
           )
       )
 
-    test_24 <- build(t)$var1_Placebo
+    test_26 <- build(t)$var1_Placebo
 
     # output table to check attributes
-    save(test_24, file = "~/Tplyr/uat/output/test_24.RData")
+    save(test_26, file = "~/Tplyr/uat/output/test_26.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_24)
+    rm(test_26)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_24.RData")
+    load("~/Tplyr/uat/output/test_26.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-
-  t24_1 <- paste0(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
+  t26_1 <- paste0(summarise(adsl[adsl$TRT01P == 'Placebo',],n=n())[[1]],
                   ", (",
                   summarise(adsl[adsl$TRT01P == 'Placebo',],mean=round(mean(AGE),1))[[1]],
                   "), )",
@@ -1331,18 +1473,18 @@ test_that('T24',{
                   summarise(adsl[adsl$TRT01P == 'Placebo',],q3=round(quantile(AGE)[[4]],1))[[1]]
                   )
 
-  testthat::expect_equal(t24_1,
-                         test_24,
-                         label = "T24.1")
+  testthat::expect_equal(t26_1,
+                         test_26,
+                         label = "T26.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t24_1)
-  rm(test_24)
+  rm(t26_1)
+  rm(test_26)
 })
 
-#test 25 ----
-test_that('T25',{
+#test 27 ----
+test_that('T27',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -1357,93 +1499,7 @@ test_that('T25',{
           )
       )
     build(t)
-    test_25 <- build(t)
-
-    # output table to check attributes
-    save(test_25, file = "~/Tplyr/uat/output/test_25.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_25)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_25.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t25_1 <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
-    summarise(n=n(), mean = round(mean(AGE),1)) %>%
-    ungroup() %>%
-    complete(TRT01P, RACE_FACTOR, fill=list(n="NA",mean="N/A")) %>%
-    filter(TRT01P == "Placebo") %>%
-    pivot_longer(cols=c(n,mean))
-  testthat::expect_equal(t25_1$value, trimws(test_25$var1_Placebo),label = "T25.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t25_1)
-  rm(test_25)
-})
-
-#test 26 ----
-test_that('T26',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
-      add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
-      )
-    build(t)
-    test_26 <- get_numeric_data(t)[[1]]
-
-    # output table to check attributes
-    save(test_26, file = "~/Tplyr/uat/output/test_26.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_26)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_26.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t26_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, ANRIND, BNRIND) %>%
-    summarise(n=n()) %>%
-    ungroup() %>%
-    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t26_1$n,test_26$n,label = "T26.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t26_1)
-  rm(test_26)
-})
-
-
-#test 27 ----
-test_that('T27',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
-      add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=SEX)
-      )
-    build(t)
-    test_27 <- get_numeric_data(t)[[1]]
+    test_27 <- build(t)
 
     # output table to check attributes
     save(test_27, file = "~/Tplyr/uat/output/test_27.RData")
@@ -1460,12 +1516,13 @@ test_that('T27',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t27_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, SEX, ANRIND, BNRIND) %>%
-    summarise(n=n()) %>%
+  t27_1 <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+    summarise(n=n(), mean = round(mean(AGE),1)) %>%
     ungroup() %>%
-    complete(TRTA, SEX, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t27_1$n,test_27$n,label = "T27.1")
+    complete(TRT01P, RACE_FACTOR, fill=list(n="NA",mean="N/A")) %>%
+    filter(TRT01P == "Placebo") %>%
+    pivot_longer(cols=c(n,mean))
+  testthat::expect_equal(t27_1$value, trimws(test_27$var1_Placebo),label = "T27.1")
   #manual check(s)
 
   #clean up working directory
@@ -1482,7 +1539,7 @@ test_that('T28',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(RACE, SEX))
+        group_shift(vars(row=ANRIND, column=BNRIND))
       )
     build(t)
     test_28 <- get_numeric_data(t)[[1]]
@@ -1503,10 +1560,10 @@ test_that('T28',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t28_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, RACE, SEX, ANRIND, BNRIND) %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, RACE, SEX, ANRIND, BNRIND, fill=list(n = 0))
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0))
   testthat::expect_equal(t28_1$n,test_28$n,label = "T28.1")
   #manual check(s)
 
@@ -1514,6 +1571,7 @@ test_that('T28',{
   rm(t28_1)
   rm(test_28)
 })
+
 
 #test 29 ----
 test_that('T29',{
@@ -1524,7 +1582,7 @@ test_that('T29',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
+        group_shift(vars(row=ANRIND, column=BNRIND), by=SEX)
       )
     build(t)
     test_29 <- get_numeric_data(t)[[1]]
@@ -1545,10 +1603,10 @@ test_that('T29',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t29_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, ANRIND_FACTOR, BNRIND_FACTOR) %>%
+    group_by(TRTA, SEX, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0))
+    complete(TRTA, SEX, ANRIND, BNRIND, fill=list(n = 0))
   testthat::expect_equal(t29_1$n,test_29$n,label = "T29.1")
   #manual check(s)
 
@@ -1566,11 +1624,10 @@ test_that('T30',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
-          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(RACE, SEX))
       )
-
-    test_30 <- build(t)
+    build(t)
+    test_30 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
     save(test_30, file = "~/Tplyr/uat/output/test_30.RData")
@@ -1587,29 +1644,18 @@ test_that('T30',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t30_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, BNRIND) %>%
-    summarise(total=n()) %>%
-    ungroup() %>%
-    complete(TRTA, BNRIND, fill=list(total = 0))
   t30_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, ANRIND, BNRIND) %>%
+    group_by(TRTA, RACE, SEX, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    left_join(t30_tots, by=c("TRTA","BNRIND")) %>%
-    mutate(pct = ifelse(total > 0, n / total * 100,0)) %>%
-    mutate(col =paste0(sprintf("%3s",n),' (',sprintf("%5.1f",pct),'%)')) %>%
-    filter(TRTA == "Placebo" & BNRIND == "N")
-  testthat::expect_equal(t30_1$col,test_30$var1_Placebo_N,label = "T30.1")
+    complete(TRTA, RACE, SEX, ANRIND, BNRIND, fill=list(n = 0))
+  testthat::expect_equal(t30_1$n,test_30$n,label = "T30.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t30_tots)
   rm(t30_1)
   rm(test_30)
 })
-
 
 #test 31 ----
 test_that('T31',{
@@ -1618,13 +1664,12 @@ test_that('T31',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA) %>%
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
-          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
+        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
       )
-
-    test_31 <- build(t)
+    build(t)
+    test_31 <- get_numeric_data(t)[[1]]
 
     # output table to check attributes
     save(test_31, file = "~/Tplyr/uat/output/test_31.RData")
@@ -1641,27 +1686,18 @@ test_that('T31',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t31_tots <- filter(adlb) %>%
-    group_by(TRTA) %>%
-    summarise(total=n())
-  t31_1 <- filter(adlb) %>%
-    group_by(TRTA, ANRIND, BNRIND) %>%
+  t31_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND_FACTOR, BNRIND_FACTOR) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    left_join(t31_tots, by="TRTA") %>%
-    mutate(pct = n / total * 100) %>%
-    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
-    filter(TRTA == "Placebo" & BNRIND == "N")
-  testthat::expect_equal(t31_1$col,test_31$var1_Placebo_N,label = "T31.1")
+    complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0))
+  testthat::expect_equal(t31_1$n,test_31$n,label = "T31.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t31_tots)
   rm(t31_1)
   rm(test_31)
 })
-
 
 #test 32 ----
 test_that('T32',{
@@ -1694,16 +1730,18 @@ test_that('T32',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t32_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA) %>%
-    summarise(total=n())
+    group_by(TRTA, BNRIND) %>%
+    summarise(total=n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, fill=list(total = 0))
   t32_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    left_join(t32_tots, by="TRTA") %>%
-    mutate(pct = n / total * 100) %>%
-    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    left_join(t32_tots, by=c("TRTA","BNRIND")) %>%
+    mutate(pct = ifelse(total > 0, n / total * 100,0)) %>%
+    mutate(col =paste0(sprintf("%3s",n),' (',sprintf("%5.1f",pct),'%)')) %>%
     filter(TRTA == "Placebo" & BNRIND == "N")
   testthat::expect_equal(t32_1$col,test_32$var1_Placebo_N,label = "T32.1")
   #manual check(s)
@@ -1723,11 +1761,8 @@ test_that('T33',{
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA) %>%
-      set_pop_data(adsl) %>%
-      set_pop_treat_var(TRT01P) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND),
-                    where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
@@ -1748,18 +1783,15 @@ test_that('T33',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t33_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2") %>%
-    select(TRTA, USUBJID) %>%
-    distinct(TRTA, USUBJID) %>%
-    merge(adsl, by.x=c("USUBJID", "TRTA"), by.y=c("USUBJID", "TRT01P"), all.y = FALSE) %>%
+  t33_tots <- filter(adlb) %>%
     group_by(TRTA) %>%
     summarise(total=n())
-  t33_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+  t33_1 <- filter(adlb) %>%
     group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    merge(t33_tots, by.x="TRTA", by.y="TRTA") %>%
+    left_join(t33_tots, by="TRTA") %>%
     mutate(pct = n / total * 100) %>%
     mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
     filter(TRTA == "Placebo" & BNRIND == "N")
@@ -1780,11 +1812,10 @@ test_that('T34',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA) %>%
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
-          set_format_strings(f_str("xxx (xxx.x%)",n,pct)) %>%
-          set_denoms_by(TRTA, PARAMCD, AVISIT)
+        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
     test_34 <- build(t)
@@ -1804,15 +1835,15 @@ test_that('T34',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t34_tots <- filter(adlb) %>%
-    group_by(TRTA, PARAMCD, AVISIT) %>%
+  t34_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA) %>%
     summarise(total=n())
-  t34_1 <- filter(adlb) %>%
-    group_by(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND) %>%
+  t34_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND, fill=list(n = 0)) %>%
-    left_join(t34_tots, by=c("TRTA", "PARAMCD", "AVISIT")) %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t34_tots, by="TRTA") %>%
     mutate(pct = n / total * 100) %>%
     mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
     filter(TRTA == "Placebo" & BNRIND == "N")
@@ -1833,9 +1864,13 @@ test_that('T35',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
+    t <- tplyr_table(adlb, TRTA) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
       add_layer(
-        group_count(RACE, by = "Race")
+        group_shift(vars(row=ANRIND, column=BNRIND),
+                    where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
     test_35 <- build(t)
@@ -1855,12 +1890,27 @@ test_that('T35',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(replicate(n = length(unique(adsl$RACE)), "Race", simplify = TRUE ),
-                         test_35$row_label1,
-                         label = "T35.1")
+  t35_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2") %>%
+    select(TRTA, USUBJID) %>%
+    distinct(TRTA, USUBJID) %>%
+    merge(adsl, by.x=c("USUBJID", "TRTA"), by.y=c("USUBJID", "TRT01P"), all.y = FALSE) %>%
+    group_by(TRTA) %>%
+    summarise(total=n())
+  t35_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    merge(t35_tots, by.x="TRTA", by.y="TRTA") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t35_1$col,test_35$var1_Placebo_N,label = "T35.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t35_tots)
+  rm(t35_1)
   rm(test_35)
 })
 
@@ -1872,9 +1922,11 @@ test_that('T36',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
+    t <- tplyr_table(adlb, TRTA) %>%
       add_layer(
-        group_count(RACE, by = vars("Ethnicity", ETHNIC, "Race"))
+        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
+          set_format_strings(f_str("xxx (xxx.x%)",n,pct)) %>%
+          set_denoms_by(TRTA, PARAMCD, AVISIT)
       )
 
     test_36 <- build(t)
@@ -1894,16 +1946,23 @@ test_that('T36',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t36_1 <- distinct(adsl, ETHNIC, RACE) %>%
-    complete(ETHNIC, RACE) %>%
-    mutate(ethnic_text = "Ethnicity") %>%
-    mutate(race_text = "Race")
-  testthat::expect_equal(c(t36_1$ethnic_text, t36_1$ETHNIC, t36_1$race_text, t36_1$RACE),
-                         c(test_36$row_label1, test_36$row_label2, test_36$row_label3, test_36$row_label4),
-                         label = "T36.1")
+  t36_tots <- filter(adlb) %>%
+    group_by(TRTA, PARAMCD, AVISIT) %>%
+    summarise(total=n())
+  t36_1 <- filter(adlb) %>%
+    group_by(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, PARAMCD, AVISIT, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t36_tots, by=c("TRTA", "PARAMCD", "AVISIT")) %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%3s",n)," (",sprintf("%5.1f",pct),"%)")) %>%
+    filter(TRTA == "Placebo" & BNRIND == "N")
+  testthat::expect_equal(t36_1$col,test_36$var1_Placebo_N,label = "T36.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t36_tots)
   rm(t36_1)
   rm(test_36)
 })
@@ -1918,16 +1977,7 @@ test_that('T37',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE)
-      ) %>%
-      add_layer(
-        group_desc(AGE)
-      ) %>%
-      add_layer(
-        group_desc(CUMDOSE)
-      ) %>%
-      add_layer(
-        group_count(ETHNIC)
+        group_count(RACE, by = "Race")
       )
 
     test_37 <- build(t)
@@ -1947,33 +1997,125 @@ test_that('T37',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t37_denoms <- filter(adsl, TRT01P == "Placebo") %>%
+  testthat::expect_equal(replicate(n = length(unique(adsl$RACE)), "Race", simplify = TRUE ),
+                         test_37$row_label1,
+                         label = "T37.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_37)
+})
+
+
+#test 38 ----
+test_that('T38',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE, by = vars("Ethnicity", ETHNIC, "Race"))
+      )
+
+    test_38 <- build(t)
+
+    # output table to check attributes
+    save(test_38, file = "~/Tplyr/uat/output/test_38.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_38)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_38.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t38_1 <- distinct(adsl, ETHNIC, RACE) %>%
+    complete(ETHNIC, RACE) %>%
+    mutate(ethnic_text = "Ethnicity") %>%
+    mutate(race_text = "Race")
+  testthat::expect_equal(c(t38_1$ethnic_text, t38_1$ETHNIC, t38_1$race_text, t38_1$RACE),
+                         c(test_38$row_label1, test_38$row_label2, test_38$row_label3, test_38$row_label4),
+                         label = "T38.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t38_1)
+  rm(test_38)
+})
+
+
+#test 39 ----
+test_that('T39',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      add_layer(
+        group_desc(AGE)
+      ) %>%
+      add_layer(
+        group_desc(CUMDOSE)
+      ) %>%
+      add_layer(
+        group_count(ETHNIC)
+      )
+
+    test_39 <- build(t)
+
+    # output table to check attributes
+    save(test_39, file = "~/Tplyr/uat/output/test_39.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_39)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_39.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t39_denoms <- filter(adsl, TRT01P == "Placebo") %>%
     group_by(TRT01P) %>%
     summarise(total = n())
 
-  t37_race <- group_by(adsl, TRT01P, RACE) %>%
+  t39_race <- group_by(adsl, TRT01P, RACE) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, RACE, fill=list(n = 0)) %>%
     filter(TRT01P == "Placebo") %>%
-    left_join(t37_denoms, by="TRT01P") %>%
+    left_join(t39_denoms, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
     mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%)")) %>%
     mutate(label = RACE) %>%
     select(label, col)
 
-  t37_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
+  t39_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, ETHNIC, fill=list(n = 0)) %>%
     filter(TRT01P == "Placebo") %>%
-    left_join(t37_denoms, by="TRT01P") %>%
+    left_join(t39_denoms, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
     mutate(col = paste0(sprintf("%2s", n)," (",sprintf("%5.1f",pct),"%)")) %>%
     mutate(label = ETHNIC) %>%
     select(label, col)
 
-  t37_age <- filter(adsl, TRT01P == "Placebo") %>%
+  t39_age <- filter(adsl, TRT01P == "Placebo") %>%
     summarise(n=n(),
               mean=mean(AGE),
               median=median(AGE),
@@ -1991,7 +2133,7 @@ test_that('T37',{
                  names_to = "label", values_to = "col") %>%
     select(label, col)
 
-  t37_cumdose <- filter(adsl, TRT01P == "Placebo") %>%
+  t39_cumdose <- filter(adsl, TRT01P == "Placebo") %>%
     summarise(n=n(),
               mean=mean(CUMDOSE),
               median=median(CUMDOSE),
@@ -2009,109 +2151,17 @@ test_that('T37',{
                  names_to = "label", values_to = "col") %>%
     select(label, col)
 
-  t37_1 <- rbind(t37_race, t37_age, t37_cumdose, t37_ethnic)
+  t39_1 <- rbind(t39_race, t39_age, t39_cumdose, t39_ethnic)
 
-  testthat::expect_equal(t37_1$col, filter(test_37, row_label1 != 'Missing')$var1_Placebo,label = "T37.1")
+  testthat::expect_equal(t39_1$col, filter(test_39, row_label1 != 'Missing')$var1_Placebo,label = "T39.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t37_denoms)
-  rm(t37_race)
-  rm(t37_ethnic)
-  rm(t37_age)
-  rm(t37_cumdose)
-  rm(t37_1)
-  rm(test_37)
-})
-
-
-#test 38 ----
-test_that('T38',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_count(RACE_FACTOR) %>%
-          set_order_count_method("byfactor")
-      )
-
-    test_38 <- build(t) %>%
-      arrange(ord_layer_index, ord_layer_1)
-
-    # output table to check attributes
-    save(test_38, file = "~/Tplyr/uat/output/test_38.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_38)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_38.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  testthat::expect_equal(c(c("WHITE", "BLACK OR AFRICAN AMERICAN","AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
-                           c(1, 2, 3, 4)),
-                         c(test_38$row_label1, test_38$ord_layer_1),
-                         label = "T38.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(test_38)
-})
-
-
-#test 39 ----
-test_that('T39',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_count(RACE) %>%
-          set_order_count_method("bycount") %>%
-          set_ordering_cols("Xanomeline High Dose")
-      )
-
-    test_39 <- build(t) %>%
-      arrange(ord_layer_index, desc(ord_layer_1))
-
-    # output table to check attributes
-    save(test_39, file = "~/Tplyr/uat/output/test_39.RData")
-
-    #clean up working directory
-    rm(t)
-    rm(test_39)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_39.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t39_1 <- group_by(adsl, TRT01P, RACE) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, RACE, fill = list(n=0)) %>%
-    filter(TRT01P == "Xanomeline High Dose") %>%
-    arrange(desc(n))
-
-  testthat::expect_equal(c(t39_1$RACE, t39_1$n),
-                         c(test_39$row_label1, test_39$ord_layer_1),
-                         label = "T39.1")
-  #manual check(s)
-
-  #clean up working directory
+  rm(t39_denoms)
+  rm(t39_race)
+  rm(t39_ethnic)
+  rm(t39_age)
+  rm(t39_cumdose)
   rm(t39_1)
   rm(test_39)
 })
@@ -2126,11 +2176,12 @@ test_that('T40',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE)
+        group_count(RACE_FACTOR) %>%
+          set_order_count_method("byfactor")
       )
 
     test_40 <- build(t) %>%
-      arrange(ord_layer_index, row_label1)
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_40, file = "~/Tplyr/uat/output/test_40.RData")
@@ -2147,8 +2198,9 @@ test_that('T40',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(sort(unique(adsl$RACE)),
-                         test_40$row_label1,
+  testthat::expect_equal(c(c("WHITE", "BLACK OR AFRICAN AMERICAN","AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
+                           c(1, 2, 3, 4)),
+                         c(test_40$row_label1, test_40$ord_layer_1),
                          label = "T40.1")
   #manual check(s)
 
@@ -2167,11 +2219,12 @@ test_that('T41',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(RACE) %>%
-          set_order_count_method("byvarn")
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
       )
 
     test_41 <- build(t) %>%
-      arrange(ord_layer_index, ord_layer_1)
+      arrange(ord_layer_index, desc(ord_layer_1))
 
     # output table to check attributes
     save(test_41, file = "~/Tplyr/uat/output/test_41.RData")
@@ -2188,10 +2241,14 @@ test_that('T41',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t41_1 <- distinct(adsl, RACE, RACEN) %>%
-    arrange(RACEN)
+  t41_1 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, fill = list(n=0)) %>%
+    filter(TRT01P == "Xanomeline High Dose") %>%
+    arrange(desc(n))
 
-  testthat::expect_equal(c(t41_1$RACE, t41_1$RACEN),
+  testthat::expect_equal(c(t41_1$RACE, t41_1$n),
                          c(test_41$row_label1, test_41$ord_layer_1),
                          label = "T41.1")
   #manual check(s)
@@ -2211,14 +2268,11 @@ test_that('T42',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(ETHNIC, by=RACE)
-      ) %>%
-      add_layer(
-        group_count(ETHNIC, by=SEX)
+        group_count(RACE)
       )
 
     test_42 <- build(t) %>%
-      arrange(ord_layer_index, ord_layer_1)
+      arrange(ord_layer_index, row_label1)
 
     # output table to check attributes
     save(test_42, file = "~/Tplyr/uat/output/test_42.RData")
@@ -2235,48 +2289,12 @@ test_that('T42',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t42_racesort <- distinct(adsl, RACE, RACEN) %>%
-    mutate(sorter = as.numeric(RACEN)) %>%
-    select(RACE,sorter)
-
-  t42_sexsort <- distinct(adsl, SEX) %>%
-    mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
-    select(SEX,sorter)
-
-  t42_byrace <- group_by(adsl, TRT01P, RACE, ETHNIC) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, RACE, ETHNIC ,fill = list(n=0)) %>%
-    filter(TRT01P == "Placebo") %>%
-    mutate(label = RACE) %>%
-    left_join(t42_racesort, by="RACE") %>%
-    select(label, ETHNIC, sorter)  %>%
-    mutate(ord_layer = 1)
-
-  t42_bysex <- group_by(adsl, TRT01P, SEX, ETHNIC) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, SEX, ETHNIC ,fill = list(n=0)) %>%
-    filter(TRT01P == "Placebo") %>%
-    mutate(label = SEX) %>%
-    left_join(t42_sexsort, by="SEX") %>%
-    select(label, ETHNIC, sorter) %>%
-    mutate(ord_layer = 2)
-
-  t42_1 <- rbind(t42_byrace, t42_bysex)%>%
-    arrange(ord_layer, sorter)
-
-  testthat::expect_equal(c(t42_1$label, t42_1$sorter),
-                         c(test_42$row_label1, test_42$ord_layer_1),
+  testthat::expect_equal(sort(unique(adsl$RACE)),
+                         test_42$row_label1,
                          label = "T42.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t42_racesort)
-  rm(t42_sexsort)
-  rm(t42_byrace)
-  rm(t42_bysex)
-  rm(t42_1)
   rm(test_42)
 })
 
@@ -2288,15 +2306,14 @@ test_that('T43',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adae, TRTA) %>%
+    t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
-          set_order_count_method("bycount") %>%
-          set_ordering_cols("Xanomeline High Dose")
+        group_count(RACE) %>%
+          set_order_count_method("byvarn")
       )
 
     test_43 <- build(t) %>%
-      arrange(ord_layer_index, desc(ord_layer_1), row_label1, desc(ord_layer_2), row_label2)
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_43, file = "~/Tplyr/uat/output/test_43.RData")
@@ -2313,30 +2330,15 @@ test_that('T43',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t43_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
-    summarise(n=n()) %>%
-    ungroup() %>%
-    complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
-    mutate(total = n) %>%
-    mutate(AEDECOD = AEBODSYS)
-  t43_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
-    summarise(n=n()) %>%
-    ungroup() %>%
-    complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
-    left_join(select(t43_aebodsys, TRTA, AEBODSYS, total), by=c("TRTA","AEBODSYS")) %>%
-    rbind(mutate(t43_aebodsys, n=Inf)) %>%
-    pivot_wider(values_from=c(n,total), names_from = TRTA) %>%
-    arrange(desc(`total_Xanomeline High Dose`), AEBODSYS, desc(`n_Xanomeline High Dose`), AEDECOD) %>%
-    filter(n_Placebo > 0 | `n_Xanomeline Low Dose` > 0 | `n_Xanomeline High Dose` > 0) %>%
-    mutate(AEDECOD = ifelse(AEBODSYS == AEDECOD, AEDECOD, paste0('   ',AEDECOD)))
+  t43_1 <- distinct(adsl, RACE, RACEN) %>%
+    arrange(RACEN)
 
-  testthat::expect_equal(c(t43_1$AEBODSYS, t43_1$AEDECOD, t43_1$`total_Xanomeline High Dose`, t43_1$`n_Xanomeline High Dose`),
-                         c(test_43$row_label1, test_43$row_label2, test_43$ord_layer_1, test_43$ord_layer_2),
+  testthat::expect_equal(c(t43_1$RACE, t43_1$RACEN),
+                         c(test_43$row_label1, test_43$ord_layer_1),
                          label = "T43.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t43_aebodsys)
   rm(t43_1)
   rm(test_43)
 })
@@ -2351,21 +2353,10 @@ test_that('T44',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE) %>%
-          set_order_count_method("byvarn")
+        group_count(ETHNIC, by=RACE)
       ) %>%
       add_layer(
-        group_count(ETHNIC) %>%
-          set_order_count_method("bycount") %>%
-          set_ordering_cols("Xanomeline High Dose")
-      ) %>%
-      add_layer(
-        group_count(SEX) %>%
-          set_order_count_method("byfactor")
-      ) %>%
-      add_layer(
-        group_count(RACE_FACTOR) %>%
-          set_order_count_method("byfactor")
+        group_count(ETHNIC, by=SEX)
       )
 
     test_44 <- build(t) %>%
@@ -2390,60 +2381,31 @@ test_that('T44',{
     mutate(sorter = as.numeric(RACEN)) %>%
     select(RACE,sorter)
 
-  t44_ethnicsort <- filter(adsl, TRT01P == "Xanomeline High Dose")%>%
-    group_by(ETHNIC) %>%
-    summarise(sorter = n()) %>%
-    select(ETHNIC,sorter)
-
   t44_sexsort <- distinct(adsl, SEX) %>%
     mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
     select(SEX,sorter)
 
-  t44_racefactorsort <- distinct(adsl, RACE_FACTOR) %>%
-    complete(RACE_FACTOR) %>%
-    cbind(sorter = c(1,2,3,4))
-
-  t44_race <- group_by(adsl, TRT01P, RACE) %>%
+  t44_byrace <- group_by(adsl, TRT01P, RACE, ETHNIC) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    complete(TRT01P, RACE ,fill = list(n=0)) %>%
+    complete(TRT01P, RACE, ETHNIC ,fill = list(n=0)) %>%
     filter(TRT01P == "Placebo") %>%
     mutate(label = RACE) %>%
     left_join(t44_racesort, by="RACE") %>%
-    select(label, sorter)  %>%
+    select(label, ETHNIC, sorter)  %>%
     mutate(ord_layer = 1)
 
-  t44_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
+  t44_bysex <- group_by(adsl, TRT01P, SEX, ETHNIC) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    complete(TRT01P, ETHNIC,fill = list(n=0)) %>%
-    filter(TRT01P == "Placebo") %>%
-    mutate(label = ETHNIC) %>%
-    left_join(t44_ethnicsort, by="ETHNIC") %>%
-    select(label, sorter) %>%
-    mutate(ord_layer = 2)
-
-  t44_sex <- group_by(adsl, TRT01P, SEX) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, SEX,fill = list(n=0)) %>%
+    complete(TRT01P, SEX, ETHNIC ,fill = list(n=0)) %>%
     filter(TRT01P == "Placebo") %>%
     mutate(label = SEX) %>%
     left_join(t44_sexsort, by="SEX") %>%
-    select(label, sorter) %>%
-    mutate(ord_layer = 3)
+    select(label, ETHNIC, sorter) %>%
+    mutate(ord_layer = 2)
 
-  t44_racefactor <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, RACE_FACTOR ,fill = list(n=0)) %>%
-    filter(TRT01P == "Placebo") %>%
-    mutate(label = RACE_FACTOR) %>%
-    left_join(t44_racefactorsort, by="RACE_FACTOR") %>%
-    select(label, sorter)  %>%
-    mutate(ord_layer = 4)
-
-  t44_1 <- rbind(t44_race, t44_ethnic, t44_sex, t44_racefactor)%>%
+  t44_1 <- rbind(t44_byrace, t44_bysex)%>%
     arrange(ord_layer, sorter)
 
   testthat::expect_equal(c(t44_1$label, t44_1$sorter),
@@ -2453,16 +2415,13 @@ test_that('T44',{
 
   #clean up working directory
   rm(t44_racesort)
-  rm(t44_ethnicsort)
   rm(t44_sexsort)
-  rm(t44_racefactorsort)
-  rm(t44_race)
-  rm(t44_ethnic)
-  rm(t44_sex)
-  rm(t44_racefactor)
+  rm(t44_byrace)
+  rm(t44_bysex)
   rm(t44_1)
   rm(test_44)
 })
+
 
 #test 45 ----
 test_that('T45',{
@@ -2471,17 +2430,15 @@ test_that('T45',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adsl, TRT01P) %>%
-      set_count_layer_formats(n_counts = f_str('xxxx (xxx.x%)',n,pct)) %>%
+    t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(RACE)
-      ) %>%
-      add_layer(
-        group_count(SEX) %>%
-          set_format_strings(n_counts = f_str('[xxx]',n))
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
       )
 
-    test_45 <- build(t)
+    test_45 <- build(t) %>%
+      arrange(ord_layer_index, desc(ord_layer_1), row_label1, desc(ord_layer_2), row_label2)
 
     # output table to check attributes
     save(test_45, file = "~/Tplyr/uat/output/test_45.RData")
@@ -2498,20 +2455,205 @@ test_that('T45',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t45_tots <- group_by(adsl, TRT01P) %>%
+  t45_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
+    mutate(total = n) %>%
+    mutate(AEDECOD = AEBODSYS)
+  t45_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
+    left_join(select(t45_aebodsys, TRTA, AEBODSYS, total), by=c("TRTA","AEBODSYS")) %>%
+    rbind(mutate(t45_aebodsys, n=Inf)) %>%
+    pivot_wider(values_from=c(n,total), names_from = TRTA) %>%
+    arrange(desc(`total_Xanomeline High Dose`), AEBODSYS, desc(`n_Xanomeline High Dose`), AEDECOD) %>%
+    filter(n_Placebo > 0 | `n_Xanomeline Low Dose` > 0 | `n_Xanomeline High Dose` > 0) %>%
+    mutate(AEDECOD = ifelse(AEBODSYS == AEDECOD, AEDECOD, paste0('   ',AEDECOD)))
+
+  testthat::expect_equal(c(t45_1$AEBODSYS, t45_1$AEDECOD, t45_1$`total_Xanomeline High Dose`, t45_1$`n_Xanomeline High Dose`),
+                         c(test_45$row_label1, test_45$row_label2, test_45$ord_layer_1, test_45$ord_layer_2),
+                         label = "T45.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t45_aebodsys)
+  rm(t45_1)
+  rm(test_45)
+})
+
+
+#test 46 ----
+test_that('T46',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE) %>%
+          set_order_count_method("byvarn")
+      ) %>%
+      add_layer(
+        group_count(ETHNIC) %>%
+          set_order_count_method("bycount") %>%
+          set_ordering_cols("Xanomeline High Dose")
+      ) %>%
+      add_layer(
+        group_count(SEX) %>%
+          set_order_count_method("byfactor")
+      ) %>%
+      add_layer(
+        group_count(RACE_FACTOR) %>%
+          set_order_count_method("byfactor")
+      )
+
+    test_46 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
+
+    # output table to check attributes
+    save(test_46, file = "~/Tplyr/uat/output/test_46.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_46)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_46.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t46_racesort <- distinct(adsl, RACE, RACEN) %>%
+    mutate(sorter = as.numeric(RACEN)) %>%
+    select(RACE,sorter)
+
+  t46_ethnicsort <- filter(adsl, TRT01P == "Xanomeline High Dose")%>%
+    group_by(ETHNIC) %>%
+    summarise(sorter = n()) %>%
+    select(ETHNIC,sorter)
+
+  t46_sexsort <- distinct(adsl, SEX) %>%
+    mutate(sorter = ifelse(SEX == 'F',1,2)) %>%
+    select(SEX,sorter)
+
+  t46_racefactorsort <- distinct(adsl, RACE_FACTOR) %>%
+    complete(RACE_FACTOR) %>%
+    cbind(sorter = c(1,2,3,4))
+
+  t46_race <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = RACE) %>%
+    left_join(t46_racesort, by="RACE") %>%
+    select(label, sorter)  %>%
+    mutate(ord_layer = 1)
+
+  t46_ethnic <- group_by(adsl, TRT01P, ETHNIC) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, ETHNIC,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = ETHNIC) %>%
+    left_join(t46_ethnicsort, by="ETHNIC") %>%
+    select(label, sorter) %>%
+    mutate(ord_layer = 2)
+
+  t46_sex <- group_by(adsl, TRT01P, SEX) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, SEX,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = SEX) %>%
+    left_join(t46_sexsort, by="SEX") %>%
+    select(label, sorter) %>%
+    mutate(ord_layer = 3)
+
+  t46_racefactor <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE_FACTOR ,fill = list(n=0)) %>%
+    filter(TRT01P == "Placebo") %>%
+    mutate(label = RACE_FACTOR) %>%
+    left_join(t46_racefactorsort, by="RACE_FACTOR") %>%
+    select(label, sorter)  %>%
+    mutate(ord_layer = 4)
+
+  t46_1 <- rbind(t46_race, t46_ethnic, t46_sex, t46_racefactor)%>%
+    arrange(ord_layer, sorter)
+
+  testthat::expect_equal(c(t46_1$label, t46_1$sorter),
+                         c(test_46$row_label1, test_46$ord_layer_1),
+                         label = "T46.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t46_racesort)
+  rm(t46_ethnicsort)
+  rm(t46_sexsort)
+  rm(t46_racefactorsort)
+  rm(t46_race)
+  rm(t46_ethnic)
+  rm(t46_sex)
+  rm(t46_racefactor)
+  rm(t46_1)
+  rm(test_46)
+})
+
+#test 47 ----
+test_that('T47',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      set_count_layer_formats(n_counts = f_str('xxxx (xxx.x%)',n,pct)) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      add_layer(
+        group_count(SEX) %>%
+          set_format_strings(n_counts = f_str('[xxx]',n))
+      )
+
+    test_47 <- build(t)
+
+    # output table to check attributes
+    save(test_47, file = "~/Tplyr/uat/output/test_47.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_47)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_47.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t47_tots <- group_by(adsl, TRT01P) %>%
     summarise(total = n())
 
-  t45_1 <- group_by(adsl, TRT01P, RACE) %>%
+  t47_1 <- group_by(adsl, TRT01P, RACE) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, RACE, fill = list(n=0)) %>%
-    left_join(t45_tots, by="TRT01P") %>%
+    left_join(t47_tots, by="TRT01P") %>%
     mutate(pct = n / total * 100) %>%
     mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%5.1f", pct),'%)')) %>%
     select(col, TRT01P, RACE) %>%
     pivot_wider(values_from = col, names_from = TRT01P)
 
-  t45_2 <- group_by(adsl, TRT01P, SEX) %>%
+  t47_2 <- group_by(adsl, TRT01P, SEX) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, SEX, fill = list(n=0)) %>%
@@ -2519,23 +2661,23 @@ test_that('T45',{
     select(col, TRT01P, SEX) %>%
     pivot_wider(values_from = col, names_from = TRT01P)
 
-  testthat::expect_equal(t45_1$Placebo,
-                         filter(test_45, ord_layer_index == 1)$var1_Placebo,
-                         label = "T45.1")
-  testthat::expect_equal(t45_2$Placebo,
-                         filter(test_45, ord_layer_index == 2)$var1_Placebo,
-                         label = "T45.2")
+  testthat::expect_equal(t47_1$Placebo,
+                         filter(test_47, ord_layer_index == 1)$var1_Placebo,
+                         label = "T47.1")
+  testthat::expect_equal(t47_2$Placebo,
+                         filter(test_47, ord_layer_index == 2)$var1_Placebo,
+                         label = "T47.2")
   #manual check(s)
 
   #clean up working directory
-  rm(t45_tots)
-  rm(t45_1)
-  rm(t45_2)
-  rm(test_45)
+  rm(t47_tots)
+  rm(t47_1)
+  rm(t47_2)
+  rm(test_47)
 })
 
-#test 46 ----
-test_that('T46',{
+#test 48 ----
+test_that('T48',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -2557,24 +2699,24 @@ test_that('T46',{
           )
       )
 
-    test_46 <- build(t)
+    test_48 <- build(t)
 
     # output table to check attributes
-    save(test_46, file = "~/Tplyr/uat/output/test_46.RData")
+    save(test_48, file = "~/Tplyr/uat/output/test_48.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_46)
+    rm(test_48)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_46.RData")
+    load("~/Tplyr/uat/output/test_48.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t46_1 <- group_by(adsl, TRT01P) %>%
+  t48_1 <- group_by(adsl, TRT01P) %>%
     summarise(mean = mean(CUMDOSE),
               sd = sd(CUMDOSE),
               iqr = IQR(CUMDOSE),
@@ -2587,7 +2729,7 @@ test_that('T46',{
     select(TRT01P, name, stat) %>%
     pivot_wider(values_from = stat, names_from = TRT01P)
 
-  t46_2 <- group_by(adsl, TRT01P) %>%
+  t48_2 <- group_by(adsl, TRT01P) %>%
     summarise(n = n(),
               mean = mean(AGE),
               sd = sd(AGE),
@@ -2603,22 +2745,22 @@ test_that('T46',{
     select(TRT01P, name, stat) %>%
     pivot_wider(values_from = stat, names_from = TRT01P)
 
-  testthat::expect_equal(t46_1$`Xanomeline High Dose`,
-                         filter(test_46, ord_layer_index == 1)$`var1_Xanomeline High Dose`,
-                         label = "T46.1")
-  testthat::expect_equal(t46_2$Placebo,
-                         filter(test_46, ord_layer_index == 2)$var1_Placebo,
-                         label = "T46.2")
+  testthat::expect_equal(t48_1$`Xanomeline High Dose`,
+                         filter(test_48, ord_layer_index == 1)$`var1_Xanomeline High Dose`,
+                         label = "T48.1")
+  testthat::expect_equal(t48_2$Placebo,
+                         filter(test_48, ord_layer_index == 2)$var1_Placebo,
+                         label = "T48.2")
   #manual check(s)
 
   #clean up working directory
-  rm(t46_1)
-  rm(t46_2)
-  rm(test_46)
+  rm(t48_1)
+  rm(t48_2)
+  rm(test_48)
 })
 
-#test 47 ----
-test_that('T47',{
+#test 49 ----
+test_that('T49',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -2634,41 +2776,41 @@ test_that('T47',{
           set_format_strings(f_str("xxx",n))
       )
 
-    test_47 <- build(t)
+    test_49 <- build(t)
 
     # output table to check attributes
-    save(test_47, file = "~/Tplyr/uat/output/test_47.RData")
+    save(test_49, file = "~/Tplyr/uat/output/test_49.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_47)
+    rm(test_49)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_47.RData")
+    load("~/Tplyr/uat/output/test_49.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t47_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+  t49_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, BNRIND) %>%
     summarise(total = n()) %>%
     ungroup() %>%
     complete(TRTA, BNRIND, fill = list(total = 0))
 
-  t47_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+  t49_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, BNRIND, ANRIND) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRTA, BNRIND, ANRIND, fill = list(n=0)) %>%
-    left_join(t47_tots, by=c("TRTA", "BNRIND")) %>%
+    left_join(t49_tots, by=c("TRTA", "BNRIND")) %>%
     mutate(pct = ifelse(total > 0, n / total * 100, 0)) %>%
     mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%5.1f", pct),'%)')) %>%
     select(col, TRTA, BNRIND, ANRIND) %>%
     pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
 
-  t47_2 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+  t49_2 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, BNRIND, ANRIND) %>%
     summarise(n = n()) %>%
     ungroup() %>%
@@ -2678,26 +2820,26 @@ test_that('T47',{
     pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
 
 
-  testthat::expect_equal(c(t47_1$Placebo_H,t47_1$Placebo_N),
-                         c(filter(test_47, ord_layer_index == 1)$var1_Placebo_H,
-                           filter(test_47, ord_layer_index == 1)$var1_Placebo_N),
-                         label = "T47.1")
-  testthat::expect_equal(c(t47_2$Placebo_H,t47_2$Placebo_N),
-                         c(filter(test_47, ord_layer_index == 2)$var1_Placebo_H,
-                           filter(test_47, ord_layer_index == 2)$var1_Placebo_N),
-                         label = "T47.2")
+  testthat::expect_equal(c(t49_1$Placebo_H,t49_1$Placebo_N),
+                         c(filter(test_49, ord_layer_index == 1)$var1_Placebo_H,
+                           filter(test_49, ord_layer_index == 1)$var1_Placebo_N),
+                         label = "T49.1")
+  testthat::expect_equal(c(t49_2$Placebo_H,t49_2$Placebo_N),
+                         c(filter(test_49, ord_layer_index == 2)$var1_Placebo_H,
+                           filter(test_49, ord_layer_index == 2)$var1_Placebo_N),
+                         label = "T49.2")
   #manual check(s)
 
   #clean up working directory
-  rm(t47_tots)
-  rm(t47_1)
-  rm(t47_2)
-  rm(test_47)
+  rm(t49_tots)
+  rm(t49_1)
+  rm(t49_2)
+  rm(test_49)
 })
 
 
-#test 48 ----
-test_that('T48',{
+#test 50 ----
+test_that('T50',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -2713,125 +2855,6 @@ test_that('T48',{
         group_count(RACE)
       )
 
-    test_48 <- build(t)
-
-    # output table to check attributes
-    save(test_48, file = "~/Tplyr/uat/output/test_48.RData")
-
-    #clean up working directory
-    options(opts)
-    rm(t)
-    rm(test_48)
-
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_48.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t48_tots <- group_by(adsl, TRT01P) %>%
-    summarise(total = n())
-
-  t48_1 <- group_by(adsl, TRT01P, RACE) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
-    complete(TRT01P, RACE, fill = list(n=0)) %>%
-    left_join(t48_tots, by="TRT01P") %>%
-    mutate(pct = n / total * 100) %>%
-    mutate(col = paste0(sprintf("%4s",n),' [',sprintf("%6.2f", pct),'%]')) %>%
-    select(col, TRT01P, RACE) %>%
-    pivot_wider(values_from = col, names_from = TRT01P)
-
-  testthat::expect_equal(t48_1$Placebo,
-                         test_48$var1_Placebo,
-                         label = "T48.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t48_tots)
-  rm(t48_1)
-  rm(test_48)
-})
-
-
-#test 49 ----
-test_that('T49',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    options('tplyr.desc_layer_default_formats' = list(
-      'meansd' = f_str('xxx.x [xxx.xx]', mean, sd),
-      'medquarts' = f_str('xxx.x, xxx.x, xxx.x', q1, median, q3)
-    ))
-
-    t <- tplyr_table(adsl, TRT01P) %>%
-      add_layer(
-        group_desc(AGE)
-      )
-
-    test_49 <- build(t)
-
-    # output table to check attributes
-    save(test_49, file = "~/Tplyr/uat/output/test_49.RData")
-
-    #clean up working directory
-    options(opts)
-    rm(t)
-    rm(test_49)
-
-    #load output for checks
-  } else {
-    load("~/Tplyr/uat/output/test_49.RData")
-  }
-
-  #perform checks
-  skip_if(is.null(vur))
-  #programmatic check(s)
-  t49_1 <- group_by(adsl, TRT01P) %>%
-    summarise(mean = mean(AGE),
-              sd = sd(AGE),
-              med = median(AGE),
-              q1 = quantile(AGE)[[2]],
-              q3 = quantile(AGE)[[4]]
-    ) %>%
-    mutate(meansd = paste0(sprintf("%5.1f", mean), ' [',sprintf("%6.2f", sd), ']'))%>%
-    mutate(quartiles = paste0(sprintf("%5.1f", q1), ', ',sprintf("%5.1f", med),', ',sprintf("%5.1f", q3))) %>%
-    pivot_longer(cols = c(meansd, quartiles), values_to = "stat") %>%
-    select(TRT01P, name, stat) %>%
-    pivot_wider(values_from = stat, names_from = TRT01P)
-
-  testthat::expect_equal(t49_1$Placebo,
-                         test_49$var1_Placebo,
-                         label = "T49.1")
-  #manual check(s)
-
-  #clean up working directory
-  rm(t49_1)
-  rm(test_49)
-})
-
-
-#test 50 ----
-test_that('T50',{
-  if(is.null(vur)) {
-
-    #perform test and create outputs to use for checks
-    #if input files are needed they should be read in from "~/uat/input" folder
-    #outputs should be sent to "~/uat/output" folder
-    options('tplyr.shift_layer_default_formats' = list(
-      f_str('xxxx (xxx.xx%)', n, pct)
-    ))
-
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
-      add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
-      )
-
     test_50 <- build(t)
 
     # output table to check attributes
@@ -2842,6 +2865,7 @@ test_that('T50',{
     rm(t)
     rm(test_50)
 
+
     #load output for checks
   } else {
     load("~/Tplyr/uat/output/test_50.RData")
@@ -2850,25 +2874,21 @@ test_that('T50',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t50_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, BNRIND) %>%
-    summarise(total = n()) %>%
-    ungroup() %>%
-    complete(TRTA, BNRIND, fill = list(total = 0))
+  t50_tots <- group_by(adsl, TRT01P) %>%
+    summarise(total = n())
 
-  t50_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
-    group_by(TRTA, BNRIND, ANRIND) %>%
+  t50_1 <- group_by(adsl, TRT01P, RACE) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    complete(TRTA, BNRIND, ANRIND, fill = list(n=0)) %>%
-    left_join(t50_tots, by=c("TRTA", "BNRIND")) %>%
-    mutate(pct = ifelse(total > 0, n / total * 100, 0)) %>%
-    mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%6.2f", pct),'%)')) %>%
-    select(col, TRTA, BNRIND, ANRIND) %>%
-    pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
+    complete(TRT01P, RACE, fill = list(n=0)) %>%
+    left_join(t50_tots, by="TRT01P") %>%
+    mutate(pct = n / total * 100) %>%
+    mutate(col = paste0(sprintf("%4s",n),' [',sprintf("%6.2f", pct),'%]')) %>%
+    select(col, TRT01P, RACE) %>%
+    pivot_wider(values_from = col, names_from = TRT01P)
 
-  testthat::expect_equal(c(t50_1$Placebo_H,t50_1$Placebo_N),
-                         c(test_50$var1_Placebo_H, test_50$var1_Placebo_N),
+  testthat::expect_equal(t50_1$Placebo,
+                         test_50$var1_Placebo,
                          label = "T50.1")
   #manual check(s)
 
@@ -2886,14 +2906,17 @@ test_that('T51',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    options('tplyr.precision_cap' = c('int'=5, 'dec'=2))
+    options('tplyr.desc_layer_default_formats' = list(
+      'meansd' = f_str('xxx.x [xxx.xx]', mean, sd),
+      'medquarts' = f_str('xxx.x, xxx.x, xxx.x', q1, median, q3)
+    ))
 
-    t <- tplyr_table(adlb, TRTA, where=PARAMCD == "BUN") %>%
+    t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_desc(AVAL)
+        group_desc(AGE)
       )
 
-    test_51 <- filter(build(t), row_label1 != 'Missing')
+    test_51 <- build(t)
 
     # output table to check attributes
     save(test_51, file = "~/Tplyr/uat/output/test_51.RData")
@@ -2911,30 +2934,18 @@ test_that('T51',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t51_int = min(5, max(nchar(sub("\\..*", "", filter(adlb, PARAMCD == "BUN")$AVAL))))
-  t51_dec = min(2, max(nchar(sub("*.\\.", "", filter(adlb, PARAMCD == "BUN")$AVAL))))
-  t51_1 <- filter(adlb, PARAMCD == "BUN") %>%
-    group_by(TRTA) %>%
-    summarise(n = n(),
-              mean = mean(AVAL),
-              sd = sd(AVAL),
-              median = median(AVAL),
-              q1 = quantile(AVAL)[[2]],
-              q3 = quantile(AVAL)[[4]],
-              min = min(AVAL),
-              max = max(AVAL)
+  t51_1 <- group_by(adsl, TRT01P) %>%
+    summarise(mean = mean(AGE),
+              sd = sd(AGE),
+              med = median(AGE),
+              q1 = quantile(AGE)[[2]],
+              q3 = quantile(AGE)[[4]]
     ) %>%
-    mutate(n = sprintf("%*s",t51_int,n)) %>%
-    mutate(meansd = paste0(sprintf("%*s",t51_int + t51_dec + 2, sprintf("%.*f", t51_dec + 1, mean)), ' (',
-                           sprintf("%*s",t51_int + t51_dec + 3, sprintf("%.*f", t51_dec + 2, sd)), ')')) %>%
-    mutate(median = sprintf("%*s",t51_int + t51_dec + 2, sprintf("%.*f", t51_dec + 1, median))) %>%
-    mutate(quartiles = paste0(sprintf("%*s",t51_int + t51_dec + 2, sprintf("%.*f", t51_dec + 1, q1)),', ',
-                              sprintf("%*s",t51_int + t51_dec + 2, sprintf("%.*f", t51_dec + 1, q3)))) %>%
-    mutate(minmax = paste0(sprintf("%*s",t51_int + t51_dec + 1, sprintf("%.*f", t51_dec, min)),', ',
-                           sprintf("%*s",t51_int + t51_dec + 1, sprintf("%.*f", t51_dec, max)))) %>%
-    pivot_longer(cols = c(n, meansd, median, quartiles, minmax), values_to = "stat") %>%
-    select(TRTA, name, stat) %>%
-    pivot_wider(values_from = stat, names_from = TRTA)
+    mutate(meansd = paste0(sprintf("%5.1f", mean), ' [',sprintf("%6.2f", sd), ']'))%>%
+    mutate(quartiles = paste0(sprintf("%5.1f", q1), ', ',sprintf("%5.1f", med),', ',sprintf("%5.1f", q3))) %>%
+    pivot_longer(cols = c(meansd, quartiles), values_to = "stat") %>%
+    select(TRT01P, name, stat) %>%
+    pivot_wider(values_from = stat, names_from = TRT01P)
 
   testthat::expect_equal(t51_1$Placebo,
                          test_51$var1_Placebo,
@@ -2942,8 +2953,6 @@ test_that('T51',{
   #manual check(s)
 
   #clean up working directory
-  rm(t51_int)
-  rm(t51_dec)
   rm(t51_1)
   rm(test_51)
 })
@@ -2956,17 +2965,16 @@ test_that('T52',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    options('tplyr.custom_summaries' = quos(geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))))
+    options('tplyr.shift_layer_default_formats' = list(
+      f_str('xxxx (xxx.xx%)', n, pct)
+    ))
 
-    t <- tplyr_table(adsl, TRT01P) %>%
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_desc(AGE) %>%
-          set_format_strings(
-            'Geometric Mean)' = f_str('xxx.xx', geometric_mean)
-          )
+        group_shift(vars(row=ANRIND, column=BNRIND))
       )
 
-    test_52 <- filter(build(t), row_label1 != 'Missing')
+    test_52 <- build(t)
 
     # output table to check attributes
     save(test_52, file = "~/Tplyr/uat/output/test_52.RData")
@@ -2984,17 +2992,30 @@ test_that('T52',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t52_1 <- group_by(adsl, TRT01P) %>%
-    summarise(geometric_mean = exp(sum(log(AGE[AGE > 0]), na.rm=TRUE) / length(AGE))) %>%
-    mutate(geometric_mean = sprintf("%6.2f",geometric_mean)) %>%
-    pivot_wider(values_from = "geometric_mean",names_from = "TRT01P")
+  t52_tots <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND) %>%
+    summarise(total = n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, fill = list(total = 0))
 
-  testthat::expect_equal(c(t52_1$Placebo, t52_1$`Xanomeline Low Dose`, t52_1$`Xanomeline High Dose`),
-                         c(test_52$var1_Placebo, test_52$`var1_Xanomeline Low Dose`, test_52$`var1_Xanomeline High Dose`),
+  t52_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA, BNRIND, ANRIND) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRTA, BNRIND, ANRIND, fill = list(n=0)) %>%
+    left_join(t52_tots, by=c("TRTA", "BNRIND")) %>%
+    mutate(pct = ifelse(total > 0, n / total * 100, 0)) %>%
+    mutate(col = paste0(sprintf("%4s",n),' (',sprintf("%6.2f", pct),'%)')) %>%
+    select(col, TRTA, BNRIND, ANRIND) %>%
+    pivot_wider(values_from = col, names_from = c(TRTA, BNRIND))
+
+  testthat::expect_equal(c(t52_1$Placebo_H,t52_1$Placebo_N),
+                         c(test_52$var1_Placebo_H, test_52$var1_Placebo_N),
                          label = "T52.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t52_tots)
   rm(t52_1)
   rm(test_52)
 })
@@ -3007,15 +3028,14 @@ test_that('T53',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    options('tplyr.scipen' = -3)
+    options('tplyr.precision_cap' = c('int'=5, 'dec'=2))
 
-    t <- tplyr_table(adsl, TRT01P) %>%
+    t <- tplyr_table(adlb, TRTA, where=PARAMCD == "BUN") %>%
       add_layer(
-        group_count(RACE) %>%
-          add_risk_diff(c("Xanomeline High Dose", "Placebo"))
+        group_desc(AVAL)
       )
 
-    test_53 <- suppressWarnings(build(t))
+    test_53 <- filter(build(t), row_label1 != 'Missing')
 
     # output table to check attributes
     save(test_53, file = "~/Tplyr/uat/output/test_53.RData")
@@ -3033,29 +3053,39 @@ test_that('T53',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  options("scipen" = -3)
-  tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose"), n=n())[[1]]
-  cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
-  tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
-  cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
-  testvals <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
-  t53_1 = paste0(format(round(testvals$estimate[[1]] - testvals$estimate[[2]],3),nsmall = 3), ' (',
-                 format(round(testvals$conf.int[[1]],3),nsmall = 3), ', ',
-                 format(round(testvals$conf.int[[2]],3),nsmall = 3), ')'
-                 )
+  t53_int = min(5, max(nchar(sub("\\..*", "", filter(adlb, PARAMCD == "BUN")$AVAL))))
+  t53_dec = min(2, max(nchar(sub("*.\\.", "", filter(adlb, PARAMCD == "BUN")$AVAL))))
+  t53_1 <- filter(adlb, PARAMCD == "BUN") %>%
+    group_by(TRTA) %>%
+    summarise(n = n(),
+              mean = mean(AVAL),
+              sd = sd(AVAL),
+              median = median(AVAL),
+              q1 = quantile(AVAL)[[2]],
+              q3 = quantile(AVAL)[[4]],
+              min = min(AVAL),
+              max = max(AVAL)
+    ) %>%
+    mutate(n = sprintf("%*s",t53_int,n)) %>%
+    mutate(meansd = paste0(sprintf("%*s",t53_int + t53_dec + 2, sprintf("%.*f", t53_dec + 1, mean)), ' (',
+                           sprintf("%*s",t53_int + t53_dec + 3, sprintf("%.*f", t53_dec + 2, sd)), ')')) %>%
+    mutate(median = sprintf("%*s",t53_int + t53_dec + 2, sprintf("%.*f", t53_dec + 1, median))) %>%
+    mutate(quartiles = paste0(sprintf("%*s",t53_int + t53_dec + 2, sprintf("%.*f", t53_dec + 1, q1)),', ',
+                              sprintf("%*s",t53_int + t53_dec + 2, sprintf("%.*f", t53_dec + 1, q3)))) %>%
+    mutate(minmax = paste0(sprintf("%*s",t53_int + t53_dec + 1, sprintf("%.*f", t53_dec, min)),', ',
+                           sprintf("%*s",t53_int + t53_dec + 1, sprintf("%.*f", t53_dec, max)))) %>%
+    pivot_longer(cols = c(n, meansd, median, quartiles, minmax), values_to = "stat") %>%
+    select(TRTA, name, stat) %>%
+    pivot_wider(values_from = stat, names_from = TRTA)
 
-  testthat::expect_equal(t53_1,
-                         filter(test_53,row_label1 == 'WHITE')$`rdiff_Xanomeline High Dose_Placebo`,
+  testthat::expect_equal(t53_1$Placebo,
+                         test_53$var1_Placebo,
                          label = "T53.1")
   #manual check(s)
 
   #clean up working directory
-  options("scipen" = 0)
-  rm(tot_t)
-  rm(cnt_t)
-  rm(tot_p)
-  rm(cnt_p)
-  rm(testvals)
+  rm(t53_int)
+  rm(t53_dec)
   rm(t53_1)
   rm(test_53)
 })
@@ -3068,13 +3098,13 @@ test_that('T54',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    options('tplyr.quantile_type' = 3)
+    options('tplyr.custom_summaries' = quos(geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))))
 
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_desc(CUMDOSE) %>%
+        group_desc(AGE) %>%
           set_format_strings(
-            'Quartiles' = f_str('xxx.x, xxx.x', q1, q3)
+            'Geometric Mean)' = f_str('xxx.xx', geometric_mean)
           )
       )
 
@@ -3097,11 +3127,9 @@ test_that('T54',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t54_1 <- group_by(adsl, TRT01P) %>%
-    summarise(q1 = quantile(CUMDOSE, type = 3)[[2]],
-              q3 = quantile(CUMDOSE, type = 3)[[4]]) %>%
-    mutate(col = paste0(sprintf("%5.1f", q1), ', ', sprintf("%5.1f", q3))) %>%
-    select(TRT01P, col) %>%
-    pivot_wider(values_from = "col",names_from = "TRT01P")
+    summarise(geometric_mean = exp(sum(log(AGE[AGE > 0]), na.rm=TRUE) / length(AGE))) %>%
+    mutate(geometric_mean = sprintf("%6.2f",geometric_mean)) %>%
+    pivot_wider(values_from = "geometric_mean",names_from = "TRT01P")
 
   testthat::expect_equal(c(t54_1$Placebo, t54_1$`Xanomeline Low Dose`, t54_1$`Xanomeline High Dose`),
                          c(test_54$var1_Placebo, test_54$`var1_Xanomeline Low Dose`, test_54$`var1_Xanomeline High Dose`),
@@ -3121,20 +3149,21 @@ test_that('T55',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
+    options('tplyr.scipen' = -3)
+
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE)
-      ) %>%
-      build() %>%
-      mutate_all(as.character)
+        group_count(RACE) %>%
+          add_risk_diff(c("Xanomeline High Dose", "Placebo"))
+      )
 
-
-    test_55 <- add_column_headers(t, "Race|Placebo|Xanomeline High Dose|Xanomeline Low Dose|LayerIndex|Sorter")
+    test_55 <- suppressWarnings(build(t))
 
     # output table to check attributes
     save(test_55, file = "~/Tplyr/uat/output/test_55.RData")
 
     #clean up working directory
+    options(opts)
     rm(t)
     rm(test_55)
 
@@ -3146,18 +3175,131 @@ test_that('T55',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(c("Race", "Placebo","Xanomeline High Dose","Xanomeline Low Dose", "LayerIndex", "Sorter"),
-                         as.character(test_55[1,]),
+  options("scipen" = -3)
+  tot_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose"), n=n())[[1]]
+  cnt_t <- summarise(filter(adsl, TRT01P == "Xanomeline High Dose" & RACE == 'WHITE'), n=n())[[1]]
+  tot_p <- summarise(filter(adsl, TRT01P == "Placebo"), n=n())[[1]]
+  cnt_p <- summarise(filter(adsl, TRT01P == "Placebo" & RACE == 'WHITE'), n=n())[[1]]
+  testvals <- prop.test(c(cnt_t, cnt_p), c(tot_t,tot_p))
+  t55_1 = paste0(format(round(testvals$estimate[[1]] - testvals$estimate[[2]],3),nsmall = 3), ' (',
+                 format(round(testvals$conf.int[[1]],3),nsmall = 3), ', ',
+                 format(round(testvals$conf.int[[2]],3),nsmall = 3), ')'
+                 )
+
+  testthat::expect_equal(t55_1,
+                         filter(test_55,row_label1 == 'WHITE')$`rdiff_Xanomeline High Dose_Placebo`,
                          label = "T55.1")
   #manual check(s)
 
   #clean up working directory
+  options("scipen" = 0)
+  rm(tot_t)
+  rm(cnt_t)
+  rm(tot_p)
+  rm(cnt_p)
+  rm(testvals)
+  rm(t55_1)
   rm(test_55)
 })
 
 
 #test 56 ----
 test_that('T56',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    options('tplyr.quantile_type' = 3)
+
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_desc(CUMDOSE) %>%
+          set_format_strings(
+            'Quartiles' = f_str('xxx.x, xxx.x', q1, q3)
+          )
+      )
+
+    test_56 <- filter(build(t), row_label1 != 'Missing')
+
+    # output table to check attributes
+    save(test_56, file = "~/Tplyr/uat/output/test_56.RData")
+
+    #clean up working directory
+    options(opts)
+    rm(t)
+    rm(test_56)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_56.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t56_1 <- group_by(adsl, TRT01P) %>%
+    summarise(q1 = quantile(CUMDOSE, type = 3)[[2]],
+              q3 = quantile(CUMDOSE, type = 3)[[4]]) %>%
+    mutate(col = paste0(sprintf("%5.1f", q1), ', ', sprintf("%5.1f", q3))) %>%
+    select(TRT01P, col) %>%
+    pivot_wider(values_from = "col",names_from = "TRT01P")
+
+  testthat::expect_equal(c(t56_1$Placebo, t56_1$`Xanomeline Low Dose`, t56_1$`Xanomeline High Dose`),
+                         c(test_56$var1_Placebo, test_56$`var1_Xanomeline Low Dose`, test_56$`var1_Xanomeline High Dose`),
+                         label = "T56.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t56_1)
+  rm(test_56)
+})
+
+
+#test 57 ----
+test_that('T57',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P) %>%
+      add_layer(
+        group_count(RACE)
+      ) %>%
+      build() %>%
+      mutate_all(as.character)
+
+
+    test_57 <- add_column_headers(t, "Race|Placebo|Xanomeline High Dose|Xanomeline Low Dose|LayerIndex|Sorter")
+
+    # output table to check attributes
+    save(test_57, file = "~/Tplyr/uat/output/test_57.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_57)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_57.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  testthat::expect_equal(c("Race", "Placebo","Xanomeline High Dose","Xanomeline Low Dose", "LayerIndex", "Sorter"),
+                         as.character(test_57[1,]),
+                         label = "T57.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(test_57)
+})
+
+
+#test 58 ----
+test_that('T58',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -3171,37 +3313,37 @@ test_that('T56',{
       build() %>%
       arrange(desc(ord_layer_1), desc(ord_layer_2))
 
-    test_56 <- apply_row_masks(t, row_breaks = TRUE, ord_layer_1)
+    test_58 <- apply_row_masks(t, row_breaks = TRUE, ord_layer_1)
 
     # output table to check attributes
-    save(test_56, file = "~/Tplyr/uat/output/test_56.RData")
+    save(test_58, file = "~/Tplyr/uat/output/test_58.RData")
 
     #clean up working directory
     rm(t)
-    rm(test_56)
+    rm(test_58)
 
     #load output for checks
   } else {
-    load("~/Tplyr/uat/output/test_56.RData")
+    load("~/Tplyr/uat/output/test_58.RData")
   }
 
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t56_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
+  t58_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
     mutate(AEDECOD = AEBODSYS)
-  t56_breaks <- select(t56_aebodsys, TRTA, AEBODSYS) %>%
+  t58_breaks <- select(t58_aebodsys, TRTA, AEBODSYS) %>%
     mutate(n = -1) %>%
     mutate(AEDECOD = "")
-  t56_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
+  t58_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%
-    rbind(t56_aebodsys) %>%
-    rbind(t56_breaks) %>%
+    rbind(t58_aebodsys) %>%
+    rbind(t58_breaks) %>%
     pivot_wider(values_from=c(n), names_from = TRTA) %>%
     filter(Placebo != 0 | `Xanomeline Low Dose` != 0 | `Xanomeline High Dose` != 0) %>%
     mutate(AEDECOD = ifelse(AEDECOD == "", "", ifelse(AEBODSYS == AEDECOD, paste0('z', AEDECOD), paste0('    ',AEDECOD)))) %>%
@@ -3212,22 +3354,22 @@ test_that('T56',{
     mutate(`Xanomeline Low Dose` = ifelse(`Xanomeline Low Dose` == -1, "", sprintf("%3s",`Xanomeline Low Dose`))) %>%
     mutate(`Xanomeline High Dose` = ifelse(`Xanomeline High Dose` == -1, "", sprintf("%3s",`Xanomeline High Dose`)))
 
-  testthat::expect_equal(c(t56_1$AEBODSYS, t56_1$AEDECOD, t56_1$Placebo,
-                           t56_1$`Xanomeline High Dose`, t56_1$`Xanomeline Low Dose`),
-                         c(test_56$row_label1, test_56$row_label2, test_56$var1_Placebo,
-                           test_56$`var1_Xanomeline High Dose`, test_56$`var1_Xanomeline Low Dose`),
-                         label = "T56.1")
+  testthat::expect_equal(c(t58_1$AEBODSYS, t58_1$AEDECOD, t58_1$Placebo,
+                           t58_1$`Xanomeline High Dose`, t58_1$`Xanomeline Low Dose`),
+                         c(test_58$row_label1, test_58$row_label2, test_58$var1_Placebo,
+                           test_58$`var1_Xanomeline High Dose`, test_58$`var1_Xanomeline Low Dose`),
+                         label = "T58.1")
   #manual check(s)
 
   #clean up working directory
-  rm(t56_aebodsys)
-  rm(t56_breaks)
-  rm(t56_1)
-  rm(test_56)
+  rm(t58_aebodsys)
+  rm(t58_breaks)
+  rm(t58_1)
+  rm(test_58)
 })
 
-#test 57 ----
-test_that('T57',{
+#test 59 ----
+test_that('T59',{
   if(is.null(vur)) {
 
     #perform test and create outputs to use for checks
@@ -3262,17 +3404,17 @@ test_that('T57',{
       huxtable::set_width(1.5) %>%
       huxtable::map_align(huxtable::by_cols("left","left","center","center","center","center","center"))
 
-    test_57 <- pharmaRTF::rtf_doc(hux) %>%
+    test_59 <- pharmaRTF::rtf_doc(hux) %>%
       pharmaRTF::add_titles(pharmaRTF::hf_line("Demographics Summary", bold=TRUE))
 
     # output table to check attributes
-    pharmaRTF::write_rtf(test_57, file = "~/Tplyr/uat/output/test_57.rtf")
+    pharmaRTF::write_rtf(test_59, file = "~/Tplyr/uat/output/test_59.rtf")
 
     #clean up working directory
     rm(t)
     rm(built)
     rm(hux)
-    rm(test_57)
+    rm(test_59)
 
     #load output for checks
   } else {
@@ -3283,7 +3425,7 @@ test_that('T57',{
   skip_if(is.null(vur))
   #programmatic check(s)
   #manual check(s)
-  expect_true(vur[vur$ID == "T57.1", "Response"])
+  expect_true(vur[vur$ID == "T59.1", "Response"])
 
   #clean up working directory
 
