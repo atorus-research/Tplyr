@@ -16,3 +16,6 @@
 ^vignettes/sort\.Rmd$
 ^vignettes/styled-table\.Rmd$
 ^vignettes/riskdiff\.Rmd$
+^README\.Rmd$
+^uat$
+^cran-comments\.md$
