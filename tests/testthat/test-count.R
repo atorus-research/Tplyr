@@ -257,12 +257,12 @@ test_that("missing counts can be displayed as expected", {
         set_denom_ignore("Unknown", NA)
     ) %>%
     build()
-  expect_equal(t4, tibble(row_label1 = c("4", "Unknown", "Missing"),
-                          var1_3 = c(" 1 (100.0%)", " 2 (200.0%)", "12 "),
-                          var1_4 = c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "),
-                          var1_5 = c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "),
-                          ord_layer_index = c(1L, 1L, 1L),
-                          ord_layer_1 = c(1, 2, 3)))
+  expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
+  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
+  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
+  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "))
+  expect_equal(t4$ord_layer_index, c(1L, 1L, 1L))
+  expect_equal(t4$ord_layer_1, c(1, 2, 3))
 
 })
 

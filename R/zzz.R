@@ -10,7 +10,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select
@@ -255,3 +255,5 @@ outer_inf <- NULL
 shift_layer_formats <- NULL
 .tmp_name <- NULL
 include_total_row <- NULL
+ord_layer_index <- NULL
+ord_break <- NULL
