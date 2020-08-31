@@ -4,11 +4,12 @@ pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
   count_shift: count_shift.html
-  desc-vignette: desc-vignette.html
-  options-vignette: options-vignette.html
+  desc: desc.html
+  options: options.html
   readme: readme.html
   riskdiff: riskdiff.html
   sort: sort.html
   styled-table: styled-table.html
-last_built: 2020-08-28T16:11Z
+  table: table.html
+last_built: 2020-08-31T12:52Z
 
