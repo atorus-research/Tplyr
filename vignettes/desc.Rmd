@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Descriptive Statistic Layers}
+  %\VignetteIndexEntry{desc_layers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,7 +25,7 @@ load("adlb.Rdata")
 load("adsl.Rdata")
 ```
 
-Descriptive statistics in 'Tplyr' are created using `group_desc` function when creating a layer. While `group_desc` allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from `set_format_strings` where the actual summaries are declared. 
+Descriptive statistics in 'Tplyr' are created using `group_desc()` function when creating a layer. While `group_desc()` allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from `set_format_strings()` where the actual summaries are declared. 
 
 ```{r intro}
 tplyr_table(adsl, TRT01P) %>% 
@@ -45,18 +45,18 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-The settings above are actually the 'Tplyr' default, so if these are the results you desire, then there's no need to use `set_format_strings` at all - and just the `group_desc` call can be used. But let's walk through this call to `set_format_strings` to understand in detail what's going on:
+Let's walk through this call to `set_format_strings` to understand in detail what's going on:
 
-1) The quotes strings on the left of the '=', to name each parameter, become the row label in the output. This allows you to define in `set_format_strings` some custom text to explain the summary that is presented on the associated row. This text is fully in your control.
-2) On the right side of each equals is a call to `f_str`. As explained in the 'Getting Started' vignette, this is an object that captures a lot of metadata to understand how the strings should be presented. 
-3) Within the `f_str` call, you see x's in quotes. This defines how you'd like the numbers formatted from the resulting summaries. The number of x's you use on the left side of a decimal control the space allotted for an integer, and the right side controls the decimal precision. Decimals are rounded prior to string formatting - so no need to worry about that. Note that this forcefully sets the decimal and integer precision - 'Tplyr' can automatically determine this for you as well, but more on that later.
-4) After the x's there are unquoted variable names. This is where you specify the actual summaries that will be performed. Notice that some `f_str` calls have two summaries specified. This allows you to put two summaries in the same string and present them on the same line. 
+1) The quoted strings on the left of the '=' within `set_format_strings()` become the row label in the output. This allows you to define some custom text in `set_format_strings()` to explain the summary that is presented on the associated row. This text is fully in your control.
+2) On the right side of each equals is a call to `f_str()`. As explained in the `vignette("Tplyr")`, this is an object that captures a lot of metadata to understand how the strings should be presented. 
+3) Within the `f_str()` call, you see x's in quotes. This defines how you'd like the numbers formatted from the resulting summaries. The number of x's you use on the left side of a decimal control the space allotted for an integer, and the right side controls the decimal precision. Decimals are rounded prior to string formatting - so no need to worry about that. Note that this forcefully sets the decimal and integer precision - 'Tplyr' can automatically determine this for you as well, but more on that later.
+4) After the x's there are unquoted variable names. This is where you specify the actual summaries that will be performed. Notice that some `f_str()` calls have two summaries specified. This allows you to put two summaries in the same string and present them on the same line. 
 
 But where do these summary names come from? And which ones does 'Tplyr' have? 
 
 ## Built-in Summaries
 
-We've built a number of default summaries into 'Tplyr', which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to 'Tplyr' are listed below. In the second column are the names that you would use within an `f_str` call to use them. In the third column, we have the syntax used to make the function call.
+We've built a number of default summaries into 'Tplyr', which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to 'Tplyr' are listed below. In the second column are the names that you would use within an `f_str()` call to use them. In the third column, we have the syntax used to make the function call.
 
 ```{r varnames, echo=FALSE}
 x <- data.frame(
@@ -83,9 +83,9 @@ Note that the only non-default option being used in any of the function calls ab
 $$
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
 $$
-That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the `tplyr.quantile_type` option. If you're intending to match the SAS definition, you can use Type 3. For more information, see the `quantile` documentation. 
+That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the `tplyr.quantile_type` option. If you're intending to match the SAS definition, you can use Type 3. For more information, see the `stats::quantile()` documentation. 
 
-The example below demonstrates using the default quantile algorithm in R
+The example below demonstrates using the default quantile algorithm in R.
 
 ```{r quantile_types_default}
 tplyr_table(adsl, TRT01P) %>% 
@@ -122,18 +122,18 @@ options(tplyr.quantile_type=7)
 
 It's up to you to determine which algorithm you should use - but we found it necessary to provide you with the flexibility to change this within the default summaries.
 
-But what if Tplyr doesn't offer you the summaries that you need? 
+But what if 'Tplyr' doesn't offer you the summaries that you need? 
 
 ## Custom Summaries
 
-We understand that our defaults may not cover every descriptive statistic that you'd like to see. That's why we've opened to door to creating custom summaries. Custom summaries allow you to provide any function you'd like into a desc layer. You can focus on the derivation and how to calculate the number you want to see. Tplyr can consume this function, and use all the existing tools within Tplyr to produce the string formatted result alongside any of the default summaries we provide as well. 
+We understand that our defaults may not cover every descriptive statistic that you'd like to see. That's why we've opened to door to creating custom summaries. Custom summaries allow you to provide any function you'd like into a desc layer. You can focus on the derivation and how to calculate the number you want to see. 'Tplyr' can consume this function, and use all the existing tools within 'Tplyr' to produce the string formatted result alongside any of the default summaries we provide as well. 
 
 Custom summaries may be provided in two ways: 
 
 - Through the `tplyr.custom_summaries` option set at your session level
-- Through the function `set_custom_summaries` at the layer level
+- Through the function `set_custom_summaries()` at the layer level
 
-As with any other setting in Tplyr, the layer setting will always take precedence over any other setting. 
+As with any other setting in 'Tplyr', the layer setting will always take precedence over any other setting. 
 
 Let's look at an example.
 
@@ -156,13 +156,13 @@ tplyr_table(adsl, TRT01P) %>%
 
 Here, a few important things are demonstrated:
 
-- This is a multi-variable descriptive statistics layer. Both `AGE` and `HEIGHTBL` are being summarized in the same layer. AGE results go to the `var1_` variables and `HEIGHTBL` results go to the `var2_` variables.
-- The parameter names in `set_custom_summaries`, or names on the left side of the equals, flow into `set_format_strings` in the `f_str` calls. Just like the default summaries, `geometric_mean` becomes the name that you refer to in order to use the geometric mean derivation in a summary. 
+- This is a multi-variable descriptive statistics layer. Both `AGE` and `HEIGHTBL` are being summarized in the same layer. `AGE` results go to the `var1_` variables and `HEIGHTBL` results go to the `var2_` variables.
+- The parameter names in `set_custom_summaries()`, or names on the left side of the equals, flow into `set_format_strings()` in the `f_str()` calls. Just like the default summaries, `geometric_mean` becomes the name that you refer to in order to use the geometric mean derivation in a summary. 
 - In geometric mean, the target variable that you're summarizing is referred to as `.var`. This may not seem intuitive. The reason we have to use `.var` is so that, like in this example, the custom function can be applied to each of the separate target variables. 
 
-Another note about custom summaries is that you're able to overwrite the default summaries built into Tplyr as well. Don't like the default summary functions that we provide? Use the `tplyr.custom_summaries` option to overwrite them in your session, and add any new ones that you would like to include.
+Another note about custom summaries is that you're able to overwrite the default summaries built into 'Tplyr' as well. Don't like the default summary functions that we provide? Use the `tplyr.custom_summaries` option to overwrite them in your session, and add any new ones that you would like to include.
 
-For example, here we use the Tplyr default mean.
+For example, here we use the 'Tplyr' default mean.
 
 ```{r custom_options}
 tplyr_table(adsl, TRT01P) %>% 
@@ -192,7 +192,7 @@ tplyr_table(adsl, TRT01P) %>%
   kable()
 ```
 
-Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
+Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos()`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
 
 ## Formatting 
 
@@ -218,7 +218,7 @@ tplyr_table(adlb_2, TRTA) %>%
 
 ```
 
-Note how the entire example above has the `var1_Placebo` records missing. 'Tplyr' gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the f_str object using the `empty` parameter
+Note how the entire example above has all records in `var1_Placebo` missing, as well as some in `var1_Xanomeline High Dose`. 'Tplyr' gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the `f_str()` object using the `empty` parameter
 
 ```{r missing1}
 adlb_2 <- adlb %>% 
@@ -237,7 +237,7 @@ tplyr_table(adlb_2, TRTA) %>%
   kable()
 ```
 
-Notice that the `empty` parameter here is a named character vector. The name used is '.overall'. When you name this vector, 'Tplyr' know to fill the entire space when both elements are empty. But you may not _want_ to fill the entire space. In the example above, both mean and standard deviation. are missing for Placebo, but other results are just missing standard deviation, which can happen if there's only one record in the group. Here, if you don't name the `empty` parameter, 'Tplyr' instead fits your specified 'empty' string into the formatted text, and aligns the data properly (assuming your string fits).
+Look at the `empty` parameter above. Here, we use a named character vector, where the name is `.overall`. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you'd like to see. Perhaps want a string that fills each missing space.
 
 ```{r missing2}
 adlb_2 <- adlb %>% 
@@ -251,16 +251,18 @@ tplyr_table(adlb_2, TRTA) %>%
       set_format_strings('Mean (SD)' = f_str('xxx.xx (xxx.xxx)', mean, sd, empty=c("NA")))
   ) %>% 
   build() %>% 
-  head() %>% 
-  select(-starts_with("ord")) %>% 
+  head() %>%
+  select(-starts_with("ord")) %>%
   kable()
 ```
 
+In the example above, instead of filling the whole space, the `empty` text of "NA" replaces the empty value for each element. So for 'Mean (SD)', we now have 'NA ( NA)'. Note that the proper padding was still used for 'NA' to make sure the parentheses still align with populated records.
+
 ### Auto Precision
 
-You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, for standard deviation +2. 
+You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, and for standard deviation +2. 
 
-'Tplyr' has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
+'Tplyr' has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed on each side of a decimal. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
 
 ```{r autoprecision1}
 
@@ -296,7 +298,7 @@ tplyr_table(adlb, TRTA) %>%
 
 ```
 
-Now that looks better. The `cap` argument is part of `set_format_strings`. You need to specify the integer and decimal caps separately. Note that integer precision might not behave like you expect - it doesn't make sense to truncate an integer if it's value is too high, so if the integer exceeds the allotted space, then the length of the string will increase and the full value will be displayed. But values that are short enough will only pad to the capped number of spaces. We plan to implement a warning in future releases if integers exceed the set display space allocation. 
+Now that looks better. The `cap` argument is part of `set_format_strings`. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length allotted for the left side of a decimal, but integers will not truncate. When using 'x' formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integers in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. These caps apply to the length allotted for the "a" on either the integer or the decimal. So for example, if the decimal length is capped at 2 and the selected precision is "a+1", then 3 decimal places will be allotted.
 
 This was a basic situation, but if you're paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don't want that? What about multiple summary variable? How do we determine precision then? We have modifier functions for this:
 
@@ -317,4 +319,4 @@ tplyr_table(adlb, TRTA) %>%
 
 ```
 
-Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? `set_precision_on` allows you to specify this, where the `precision_on` variable must be one of the variables within `target_var`. Similarly, `set_precision_by` changes the `by` variables used to determine collected precision. If no `precision_on` variable is specified, the first variable in `target_var` is used. If not `precision_by` variables are specified, then the default `by` variables are used.
+Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? `set_precision_on()` allows you to specify this, where the `precision_on()` variable must be one of the variables within `target_var`. Similarly, `set_precision_by()` changes the `by` variables used to determine collected precision. If no `precision_on()` variable is specified, the first variable in `target_var` is used. If not `precision_by()` variables are specified, then the default `by` variables are used.

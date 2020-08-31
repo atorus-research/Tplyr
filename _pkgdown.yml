@@ -62,20 +62,20 @@ reference:
   - get_stats_data
 
 articles:
+- title: Table Vignettes
+  navbar: Table Vignettes
+  contents:
+  - table
 - title: Layer Vignettes
   navbar: Layer Vignettes
   contents:
-  - desc-vignette
+  - desc
   - count_shift
 - title: Helper Vignettes
   navbar: Helpers
   contents:
   - riskdiff
   - sort
-  - options-vignette
+  - options
   - styled-table
-- title: Release Vignettes
-  navbar: Release Vignettes
-  contents:
-  - alpha-release
-  - beta-release
+

@@ -15,3 +15,4 @@
 ^vignettes/readme\.Rmd$
 ^vignettes/sort\.Rmd$
 ^vignettes/styled-table\.Rmd$
+^vignettes/riskdiff\.Rmd$

@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -68,9 +68,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
+    <li class="dropdown-header">Table Vignettes</li>
+    <li>
+      <a href="articles/table.html">Tplyr Table Properties</a>
+    </li>
+    <li class="divider">
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
-      <a href="articles/desc-vignette.html">Descriptive Statistic Layers</a>
+      <a href="articles/desc.html">Descriptive Statistic Layers</a>
     </li>
     <li>
       <a href="articles/count_shift.html">Count and Shift Tables</a>
@@ -84,18 +89,10 @@
       <a href="articles/sort.html">Sorting a Tplyr Table</a>
     </li>
     <li>
-      <a href="articles/options-vignette.html">Tplyr Options</a>
+      <a href="articles/options.html">Tplyr Options</a>
     </li>
     <li>
       <a href="articles/styled-table.html">Producing a Styled Table</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="articles/beta-release.html">Tplyr (Beta Release)</a>
     </li>
   </ul>
 </li>
@@ -124,9 +121,10 @@
   <div class="contents col-md-9">
 
 
-<div id="tplyr-version-011" class="section level1">
+<div id="tplyr-version-011-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-version-011" class="anchor"></a>Tplyr Version 0.1.1</h1></div>
+<a href="#tplyr-version-011-" class="anchor"></a>Tplyr Version 0.1.1 <a href="https://github.com/atorus-research/Tplyr"><img src="reference/figures/logo.png" align="right" height="139"></a>
+</h1></div>
 <p>Welcome to Tplyr! This is the first full and stable release of our package. With this release comes a number of new enhancements, loads of new documentation, and our complete package qualification document.</p>
 <p>If you’ve been keeping up, here are the things that we’ve added since the Beta release in July:</p>
 <ul>
@@ -174,7 +172,7 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the original pilot project submission package(<a href="https://www.cdisc.org/sdtmadam-pilot-project" class="uri">https://www.cdisc.org/sdtmadam-pilot-project</a>). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="r">
 <span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(

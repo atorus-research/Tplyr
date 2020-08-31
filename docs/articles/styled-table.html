@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -68,9 +68,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
+    <li class="dropdown-header">Table Vignettes</li>
+    <li>
+      <a href="../articles/table.html">Tplyr Table Properties</a>
+    </li>
+    <li class="divider">
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
-      <a href="../articles/desc-vignette.html">Descriptive Statistic Layers</a>
+      <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
     <li>
       <a href="../articles/count_shift.html">Count and Shift Tables</a>
@@ -84,18 +89,10 @@
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
     <li>
-      <a href="../articles/options-vignette.html">Tplyr Options</a>
+      <a href="../articles/options.html">Tplyr Options</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="../articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="../articles/beta-release.html">Tplyr (Beta Release)</a>
     </li>
   </ul>
 </li>
@@ -134,8 +131,17 @@
     
     
 <p>In the other vignettes we talk about how to get the most out of ‘Tplyr’ when it comes to preparing your data. The last step we need to cover is how to get from the data output by ‘Tplyr’ to a presentation ready table.</p>
-<p>There are a few things left to do after a table is built. These steps will vary based on what package you’re using for presentation - but within this vignette we will demonstrate how to use <a href="https://hughjonesd.github.io/huxtable/">huxtable</a> to prepare your table and <a href="https://github.com/atorus-research/pharmaRTF">pharmaRTF</a> to write the output.</p>
-<p>After a ‘Tplyr’ table is built, you will likely have to: - Sort the table however you wish using the provided order variables - Drop the order variables once sorted - Reorder the columns however you’d like them for presentation - Apply row masking to blank out repeating values in row labels - Set column headers within the data frame - Create and style your huxtable output - Set up your RTF output with ‘pharmaRTF’</p>
+<p>There are a few things left to do after a table is built. These steps will vary based on what package you’re using for presentation - but within this vignette we will demonstrate how to use <a href="https://hughjonesd.github.io/huxtable/">‘huxtable’</a> to prepare your table and <a href="https://github.com/atorus-research/pharmaRTF">‘pharmaRTF’</a> to write the output.</p>
+<p>After a ‘Tplyr’ table is built, you will likely have to:</p>
+<ul>
+<li>Sort the table however you wish using the provided order variables</li>
+<li>Drop the order variables once sorted</li>
+<li>Reorder the columns however you’d like them for presentation</li>
+<li>Apply row masking to blank out repeating values in row labels</li>
+<li>Set column headers within the data frame</li>
+<li>Create and style your ‘huxtable’ output</li>
+<li>Set up your RTF output with ‘pharmaRTF’</li>
+</ul>
 <p>Let’s build a demographics table to see how this all works.</p>
 <div id="preparing-the-data" class="section level2">
 <h2 class="hasAnchor">
@@ -1455,17 +1461,17 @@ Missing
 </table>
 <p>Now you can see things coming together. In this block, we:</p>
 <ul>
-<li>Sorting the data by the layer, by the row labels (which in this case are just text strings we defined), and by the results. Review the Sorting vignette to understand how each layer handles sorting in more detail.</li>
-<li>The next step is a ‘Tplyr’ function. Essentially, <strong>after</strong> your data are sorted, this function will look at all of your <code>row_label</code> variables and drop any repeating values. For packages like ‘huxtable’, this eases the process of making your table presentation ready, so you don’t need to do any cell merging once the ‘huxtable’ table is created. Additionally, here we set the <code>row_breaks</code> option to <code>TRUE</code>. This will insert a blank row between each of your layers, which helps improve the presentation depending on your output. It’s important to note that the input dataset <strong>must</strong> still have the <code>ord_layer_index</code> variable attached in order for the blank rows to be added. Sorting should be done prior, and column reordering/dropping may be done after.</li>
-<li>The next step is where I re-order the columns and drop off the order columns. For more information about how to get the most out of <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html">here</a>. This is where the <code>starts_with</code> comes.</li>
-<li>Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just enter in a string to define your headers. But there’s more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that Tplyr calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.</li>
+<li>Sorted the data by the layer, by the row labels (which in this case are just text strings we defined), and by the results. Review <code><a href="../articles/sort.html">vignette("sort")</a></code> to understand how each layer handles sorting in more detail.</li>
+<li>Used the <code><a href="../reference/apply_row_masks.html">apply_row_masks()</a></code> function. Essentially, <strong>after</strong> your data are sorted, this function will look at all of your row_label variables and drop any repeating values. For packages like ‘huxtable’, this eases the process of making your table presentation ready, so you don’t need to do any cell merging once the ‘huxtable’ table is created. Additionally, here we set the <code>row_breaks</code> option to <code>TRUE</code>. This will insert a blank row between each of your layers, which helps improve the presentation depending on your output. It’s important to note that the input dataset <strong>must</strong> still have the <code>ord_layer_index</code> variable attached in order for the blank rows to be added. Sorting should be done prior, and column reordering/dropping may be done after.</li>
+<li>Re-ordered the columns and dropped off the order columns. For more information about how to get the most out of <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html">here</a>. This is where the <code><a href="https://tidyselect.r-lib.org/reference/select_helpers.html">tidyselect::starts_with()</a></code> comes from.</li>
+<li>Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. The ‘Tplyr’ function <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just enter in a string to define your headers. But there’s more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that ‘Tplyr’ calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.</li>
 </ul>
 </div>
 <div id="table-styling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#table-styling" class="anchor"></a>Table Styling</h2>
-<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/">gt</a> package is always a good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/">kableExtra</a> throughout these vignettes. At the moment, with the tools we’ve made available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/">huxtable</a> and our package <a href="https://github.com/atorus-research/pharmaRTF">pharmaRTF</a> will get you where you need to go.</p>
-<p><em>(Note: We plan to extend ‘pharmaRTF’ to support GT when it has better RTF support)</em></p>
+<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/">‘gt’</a> package is always a good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/">‘kableExtra’</a> throughout these vignettes. At the moment, with the tools we’ve made available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/">‘huxtable’</a> and our package <a href="https://github.com/atorus-research/pharmaRTF">‘pharmaRTF’</a> will get you where you need to go.</p>
+<p><em>(Note: We plan to extend ‘pharmaRTF’ to support ‘GT’ when it has better RTF support)</em></p>
 <p>Alright - so the table is ready. Let’s prepare the ‘huxtable’ table.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># Make the table</span>
 <span class="no">ht</span> <span class="kw">&lt;-</span> <span class="kw pkg">huxtable</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/huxtable/man/as_huxtable.html">as_hux</a></span>(<span class="no">dat</span>, <span class="kw">add_colnames</span><span class="kw">=</span><span class="fl">FALSE</span>) <span class="kw">%&gt;%</span>
@@ -1735,12 +1741,12 @@ Missing
   <span class="kw pkg">pharmaRTF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/font_size.html">set_font_size</a></span>(<span class="fl">10</span>) <span class="kw">%&gt;%</span>
   <span class="kw pkg">pharmaRTF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/ignore_cell_padding.html">set_ignore_cell_padding</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
   <span class="kw pkg">pharmaRTF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/column_header_buffer.html">set_column_header_buffer</a></span>(<span class="kw">top</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
-<p>This may look a little messy, but pharmaRTF syntax can be abbreviated by standardizing a process. Check out <a href="https://atorus-research.github.io/tf_from_file.html">this vignette</a> for instructions on how to read titles and footnotes into pharmaRTF from a file.</p>
+<p>This may look a little messy, but ‘pharmaRTF’ syntax can be abbreviated by standardizing your process. Check out <a href="https://atorus-research.github.io/tf_from_file.html">this vignette</a> for instructions on how to read titles and footnotes into ‘pharmaRTF’ from a file.</p>
 <p>Our document is now created, all the titles and footnotes are added, and settings are good to go. Last step is to write it out.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="kw pkg">pharmaRTF</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/write_rtf.html">write_rtf</a></span>(<span class="no">doc</span>, <span class="kw">file</span><span class="kw">=</span><span class="st">'styled_example.rtf'</span>)</pre></body></html></div>
 <p>And here we have it - Our table is styled and ready to go!</p>
 <p><img src="styled_example.png" width="800px"></p>
-<p>If you’d like to learn more about how to use huxtable, be sure to check out the <a href="https://hughjonesd.github.io/huxtable/">website</a>. For use specifically with pharmaRTF, we prepared a vignette of tips and tricks <a href="https://atorus-research.github.io/huxtable_tips.html">here</a>.</p>
+<p>If you’d like to learn more about how to use ‘huxtable’, be sure to check out the <a href="https://hughjonesd.github.io/huxtable/">website</a>. For use specifically with ‘pharmaRTF’, we prepared a vignette of tips and tricks <a href="https://atorus-research.github.io/huxtable_tips.html">here</a>.</p>
 </div>
   </div>
 

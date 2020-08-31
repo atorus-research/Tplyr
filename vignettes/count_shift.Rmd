@@ -4,7 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Count_and_Shift_Tables}
+  %\VignetteIndexEntry{count_shift}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,7 +32,7 @@ At the surface, counting sounds pretty simple, right? You just want to know how 
 
 ### A simple example
 
-Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the `Total` group. 
+Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the "Total" group. 
 
 ```{r}
 t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
@@ -65,7 +65,7 @@ Examples with percentages can be seen below.
 
 Just as important as denominator flexibility is the determination of whether you should be using distinct or non-distinct counts - or some combination of both. Adverse event tables are a perfect example. Often, you're concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn't necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group. 
 
-'Tplyr' allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the non-distinct counts too. The `set_distinct_by` function sets the variables used to calculate the distinct occurrences of some value using the specified 'by' variables.
+'Tplyr' allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the non-distinct counts too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified 'by' variables.
 
 ```{r}
 t <- tplyr_table(adae, TRTA) %>%
@@ -80,15 +80,30 @@ t <- tplyr_table(adae, TRTA) %>%
 kable(t)
 ```
 
-You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation distinct_n and distinct_pct and the display of the values is then controlled by the `f_str()` call in `set_format_strings`.  
+You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation distinct_n and distinct_pct and the display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
+
+## Adding a 'Total' row
+
+Some summaries require the addition of a 'Total' row in addition to the categorical counts. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. The default text for this row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used for the 'Total' row.
+
+```{r}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(AGEGR1) %>% 
+      add_total_row() %>% 
+      set_total_row_label("All Age Groups")
+  ) %>% 
+  build() %>% 
+  kable()
+```
 
 ## Missing Counts
 
 Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator? 
 
-The `set_missing_count()` function can take a new `f_str` object to set the display of missing values. Additionally, using the `string` parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the row_label of what will be used for missing values.
+The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. Additionally, using the `string` parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the row_label of what will be used for missing values.
 
-In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using `set_denom_ignorE()`. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing "NA"). During processing, the NAs are coerced into characters. 
+In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using `set_denom_ignore()`. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing "NA"). During processing, the NAs are coerced into characters. 
 
 ```{r}
 adae2 <- adae
@@ -160,7 +175,8 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   head(20) %>%
   kable()
 ```
-For the most part, this is getting us where we want to go - but there's still some that's left to be desired. It doesn't look like there are any L values for ANRIND in the dataset. Let's see if we can fix that.
+
+For the most part, this is getting us where we want to go - but there's still some that's left to be desired. It doesn't look like there are any 'L' values for `ANRIND` in the dataset. Let's see if we can fix that.
 
 ```{r}
 adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
@@ -225,9 +241,3 @@ suppressWarnings({
 
 Our hope is that this gives you the flexibility you need to structure your denominator however required. 
 
-# References
-[Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
-
-[Analyses and Displays Associated with Demographics, Disposition, and Medications](https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf)
-
-[Analyses and Displays Associated with Measures of Central Tendency](http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf)

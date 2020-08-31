@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -68,9 +68,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
+    <li class="dropdown-header">Table Vignettes</li>
+    <li>
+      <a href="../articles/table.html">Tplyr Table Properties</a>
+    </li>
+    <li class="divider">
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
-      <a href="../articles/desc-vignette.html">Descriptive Statistic Layers</a>
+      <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
     <li>
       <a href="../articles/count_shift.html">Count and Shift Tables</a>
@@ -84,18 +89,10 @@
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
     <li>
-      <a href="../articles/options-vignette.html">Tplyr Options</a>
+      <a href="../articles/options.html">Tplyr Options</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Release Vignettes</li>
-    <li>
-      <a href="../articles/alpha-release.html">Tplyr (Alpha Release)</a>
-    </li>
-    <li>
-      <a href="../articles/beta-release.html">Tplyr (Beta Release)</a>
     </li>
   </ul>
 </li>
@@ -140,7 +137,7 @@
 <div id="a-simple-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-simple-example" class="anchor"></a>A simple example</h3>
-<p>Let’s start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we’re sorting by descending total occurrences using the <code>Total</code> group.</p>
+<p>Let’s start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we’re sorting by descending total occurrences using the “Total” group.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="kw">Treated</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span>)) <span class="kw">%&gt;%</span>
@@ -380,7 +377,7 @@ LOST TO FOLLOW-UP
 <h2 class="hasAnchor">
 <a href="#distinct-versus-event-counts" class="anchor"></a>Distinct Versus Event Counts</h2>
 <p>Just as important as denominator flexibility is the determination of whether you should be using distinct or non-distinct counts - or some combination of both. Adverse event tables are a perfect example. Often, you’re concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn’t necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group.</p>
-<p>‘Tplyr’ allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the non-distinct counts too. The <code>set_distinct_by</code> function sets the variables used to calculate the distinct occurrences of some value using the specified ‘by’ variables.</p>
+<p>‘Tplyr’ allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the non-distinct counts too. The <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> function sets the variables used to calculate the distinct occurrences of some value using the specified ‘by’ variables.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
@@ -535,15 +532,132 @@ DERMATITIS CONTACT
 </tr>
 </tbody>
 </table>
-<p>You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> triggered the derivation distinct_n and distinct_pct and the display of the values is then controlled by the <code><a href="../reference/f_str.html">f_str()</a></code> call in <code>set_format_strings</code>.</p>
+<p>You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> triggered the derivation distinct_n and distinct_pct and the display of the values is then controlled by the <code><a href="../reference/f_str.html">f_str()</a></code> call in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
+</div>
+<div id="adding-a-total-row" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adding-a-total-row" class="anchor"></a>Adding a ‘Total’ row</h2>
+<p>Some summaries require the addition of a ‘Total’ row in addition to the categorical counts. ‘Tplyr’ has the helper function <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. The default text for this row is “Total”, but we provide <code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text used for the ‘Total’ row.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>() <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_total_row_label.html">set_total_row_label</a></span>(<span class="st">"All Age Groups"</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+row_label1
+</th>
+<th style="text-align:left;">
+var1_Placebo
+</th>
+<th style="text-align:left;">
+var1_Xanomeline High Dose
+</th>
+<th style="text-align:left;">
+var1_Xanomeline Low Dose
+</th>
+<th style="text-align:right;">
+ord_layer_index
+</th>
+<th style="text-align:right;">
+ord_layer_1
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;65
+</td>
+<td style="text-align:left;">
+14 ( 16.3%)
+</td>
+<td style="text-align:left;">
+11 ( 13.1%)
+</td>
+<td style="text-align:left;">
+8 ( 9.5%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&gt;80
+</td>
+<td style="text-align:left;">
+30 ( 34.9%)
+</td>
+<td style="text-align:left;">
+18 ( 21.4%)
+</td>
+<td style="text-align:left;">
+29 ( 34.5%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+65-80
+</td>
+<td style="text-align:left;">
+42 ( 48.8%)
+</td>
+<td style="text-align:left;">
+55 ( 65.5%)
+</td>
+<td style="text-align:left;">
+47 ( 56.0%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+All Age Groups
+</td>
+<td style="text-align:left;">
+86 (100.0%)
+</td>
+<td style="text-align:left;">
+84 (100.0%)
+</td>
+<td style="text-align:left;">
+84 (100.0%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="missing-counts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-counts" class="anchor"></a>Missing Counts</h2>
 <p>Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator?</p>
-<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code>f_str</code> object to set the display of missing values. Additionally, using the <code>string</code> parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the row_label of what will be used for missing values.</p>
-<p>In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using <code>set_denom_ignorE()</code>. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing “NA”). During processing, the NAs are coerced into characters.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">adae2</span> <span class="kw">&lt;-</span> <span class="no">adae</span>
+<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. Additionally, using the <code>string</code> parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the row_label of what will be used for missing values.</p>
+<p>In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing “NA”). During processing, the NAs are coerced into characters.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">adae2</span> <span class="kw">&lt;-</span> <span class="no">adae</span>
 <span class="no">adae2</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">adae2</span>), <span class="fl">50</span>), <span class="st">"AESEV"</span>] <span class="kw">&lt;-</span> <span class="fl">NA</span>
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae2</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -563,7 +677,7 @@ DERMATITIS CONTACT
 <p>Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of “Other” summaries what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.</p>
 <p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/layer_constructors.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
 <p>The example below demonstrates how to do a nested summary. Look at the first row - here <code>row_label1</code> and <code>row_label2</code> are both “CARDIAC DISORDERS”. This line is the summary for <code>AEBODSYS.</code> In the rows below that, <code>row_label1</code> continues on with the value “CARDIAC DISORDERS”, but <code>row_label2</code> changes. These are the summaries for <code>AEDECOD</code>.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>))
   ) <span class="kw">%&gt;%</span>
@@ -757,7 +871,7 @@ DERMATITIS ATOPIC
 </tbody>
 </table>
 <p>This accomplishes what we needed, but it’s not exactly the presentation you might hope for. We have a solution for this as well.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
@@ -940,7 +1054,7 @@ Inf
 <p>While shift tables are very similar to a normal frequency table, there’s more nuance here, and thus we decided to create <code><a href="../reference/layer_constructors.html">group_shift()</a></code>. This function is largely an abstraction of the a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the <code><a href="../reference/layer_constructors.html">group_count()</a></code> and <code><a href="../reference/layer_constructors.html">group_desc()</a></code> APIs.</p>
 <p>One thing to note - the <code><a href="../reference/layer_constructors.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/layer_constructors.html">group_count()</a></code> will do just fine.</p>
 <p>Let’s look at an example.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">VISIT</span>))
   ) <span class="kw">%&gt;%</span>
@@ -985,6 +1099,9 @@ ord_layer_1
 <th style="text-align:right;">
 ord_layer_2
 </th>
+<th style="text-align:right;">
+ord_layer_3
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -1020,6 +1137,9 @@ H
 </td>
 <td style="text-align:right;">
 35
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 1
@@ -1062,6 +1182,9 @@ N
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1099,6 +1222,9 @@ H
 </td>
 <td style="text-align:right;">
 2
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -1138,6 +1264,9 @@ N
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1175,6 +1304,9 @@ H
 </td>
 <td style="text-align:right;">
 3
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -1214,11 +1346,14 @@ N
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 </tbody>
 </table>
-<p>For the most part, this is getting us where we want to go - but there’s still some that’s left to be desired. It doesn’t look like there are any L values for ANRIND in the dataset. Let’s see if we can fix that.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<p>For the most part, this is getting us where we want to go - but there’s still some that’s left to be desired. It doesn’t look like there are any ‘L’ values for <code>ANRIND</code> in the dataset. Let’s see if we can fix that.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -1274,6 +1409,9 @@ ord_layer_1
 <th style="text-align:right;">
 ord_layer_2
 </th>
+<th style="text-align:right;">
+ord_layer_3
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -1318,6 +1456,9 @@ L
 </td>
 <td style="text-align:right;">
 35
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 1
@@ -1369,6 +1510,9 @@ N
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1416,6 +1560,9 @@ H
 <td style="text-align:right;">
 1
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1462,6 +1609,9 @@ L
 </td>
 <td style="text-align:right;">
 2
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -1510,6 +1660,9 @@ N
 <td style="text-align:right;">
 2
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1556,6 +1709,9 @@ H
 </td>
 <td style="text-align:right;">
 2
+</td>
+<td style="text-align:right;">
+3
 </td>
 </tr>
 <tr>
@@ -1604,6 +1760,9 @@ L
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1650,6 +1809,9 @@ N
 </td>
 <td style="text-align:right;">
 3
+</td>
+<td style="text-align:right;">
+2
 </td>
 </tr>
 <tr>
@@ -1698,13 +1860,16 @@ H
 <td style="text-align:right;">
 3
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 </tbody>
 </table>
 <p>There we go. This is another situation where using factors in R let’s us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order row the row labels too. Check out the vignette(“sort”) for more information on sorting.</p>
 <p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the “box” that is formed from the “from” and “to” groups of the shift for each treatment group. To support this, ‘Tplyr’ let’s you specify the grouping used to calculate the denominators.</p>
 <p>Just like the count layers, the <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the treatment variable, <code>cols</code> argument, <code>by</code> variables, and the target variables.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
@@ -1760,6 +1925,9 @@ ord_layer_1
 <th style="text-align:right;">
 ord_layer_2
 </th>
+<th style="text-align:right;">
+ord_layer_3
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -1808,6 +1976,9 @@ L
 <td style="text-align:right;">
 12
 </td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1854,6 +2025,9 @@ N
 </td>
 <td style="text-align:right;">
 12
+</td>
+<td style="text-align:right;">
+2
 </td>
 </tr>
 <tr>
@@ -1902,6 +2076,9 @@ H
 <td style="text-align:right;">
 12
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1948,6 +2125,9 @@ L
 </td>
 <td style="text-align:right;">
 24
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -1996,6 +2176,9 @@ N
 <td style="text-align:right;">
 24
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2042,6 +2225,9 @@ H
 </td>
 <td style="text-align:right;">
 24
+</td>
+<td style="text-align:right;">
+3
 </td>
 </tr>
 <tr>
@@ -2090,6 +2276,9 @@ L
 <td style="text-align:right;">
 8
 </td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2136,6 +2325,9 @@ N
 </td>
 <td style="text-align:right;">
 8
+</td>
+<td style="text-align:right;">
+2
 </td>
 </tr>
 <tr>
@@ -2184,12 +2376,15 @@ H
 <td style="text-align:right;">
 8
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 </tbody>
 </table>
 <p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is the total of all record within the FROM and TO shift variables, within each parameter, visit, and treatment. This is the default, and this is how ‘Tplyr’ will create the denominators if <code>set_denom_by()</code> isn’t specified.</p>
 <p>In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
@@ -2245,6 +2440,9 @@ ord_layer_1
 <th style="text-align:right;">
 ord_layer_2
 </th>
+<th style="text-align:right;">
+ord_layer_3
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -2293,6 +2491,9 @@ H
 <td style="text-align:right;">
 8
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2339,6 +2540,9 @@ L
 </td>
 <td style="text-align:right;">
 8
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -2387,6 +2591,9 @@ N
 <td style="text-align:right;">
 8
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2434,6 +2641,9 @@ H
 <td style="text-align:right;">
 12
 </td>
+<td style="text-align:right;">
+3
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2480,6 +2690,9 @@ L
 </td>
 <td style="text-align:right;">
 12
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 <tr>
@@ -2528,6 +2741,9 @@ N
 <td style="text-align:right;">
 12
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2574,6 +2790,9 @@ H
 </td>
 <td style="text-align:right;">
 24
+</td>
+<td style="text-align:right;">
+3
 </td>
 </tr>
 <tr>
@@ -2622,6 +2841,9 @@ L
 <td style="text-align:right;">
 24
 </td>
+<td style="text-align:right;">
+1
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -2669,11 +2891,14 @@ N
 <td style="text-align:right;">
 24
 </td>
+<td style="text-align:right;">
+2
+</td>
 </tr>
 </tbody>
 </table>
 <p>While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>ANRIND</code> the layer will use those denominator when determining the percentages.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>({
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>({
   <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">LBNRIND</span>) <span class="kw">&amp;</span> <span class="no">VISIT</span> <span class="kw">==</span> <span class="st">"WEEK 4"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">LBNRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
@@ -2707,6 +2932,9 @@ ord_layer_1
 <th style="text-align:right;">
 ord_layer_2
 </th>
+<th style="text-align:right;">
+ord_layer_3
+</th>
 </tr></thead>
 <tbody><tr>
 <td style="text-align:left;">
@@ -2730,17 +2958,13 @@ NA
 <td style="text-align:right;">
 25
 </td>
+<td style="text-align:right;">
+4
+</td>
 </tr></tbody>
 </table>
 <p>Our hope is that this gives you the flexibility you need to structure your denominator however required.</p>
 </div>
-</div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
-<p><a href="http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf">Analysis and Displays Associated with Adverse Events</a></p>
-<p><a href="https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
-<p><a href="http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf">Analyses and Displays Associated with Measures of Central Tendency</a></p>
 </div>
   </div>
 

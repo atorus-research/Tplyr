@@ -68,9 +68,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
+    <li class="dropdown-header">Table Vignettes</li>
+    <li>
+      <a href="../articles/table.html">Tplyr Table Properties</a>
+    </li>
+    <li class="divider">
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
-      <a href="../articles/desc-vignette.html">Descriptive Statistic Layers</a>
+      <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
     <li>
       <a href="../articles/count_shift.html">Count and Shift Tables</a>
@@ -84,13 +89,11 @@
       <a href="../articles/sort.html">Sorting a Tplyr Table</a>
     </li>
     <li>
-      <a href="../articles/options-vignette.html">Tplyr Options</a>
+      <a href="../articles/options.html">Tplyr Options</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
     </li>
-    <li class="divider">
-    <li class="dropdown-header">Release Vignettes</li>
   </ul>
 </li>
 <li>
@@ -120,14 +123,14 @@
       <h1 data-toc-skip>Descriptive Statistic Layers</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/desc-vignette.Rmd"><code>vignettes/desc-vignette.Rmd</code></a></small>
-      <div class="hidden name"><code>desc-vignette.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/desc.Rmd"><code>vignettes/desc.Rmd</code></a></small>
+      <div class="hidden name"><code>desc.Rmd</code></div>
 
     </div>
 
     
     
-<p>Descriptive statistics in ‘Tplyr’ are created using <code>group_desc</code> function when creating a layer. While <code>group_desc</code> allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from <code>set_format_strings</code> where the actual summaries are declared.</p>
+<p>Descriptive statistics in ‘Tplyr’ are created using <code><a href="../reference/layer_constructors.html">group_desc()</a></code> function when creating a layer. While <code><a href="../reference/layer_constructors.html">group_desc()</a></code> allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> where the actual summaries are declared.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span><span class="kw">==</span><span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
@@ -216,18 +219,18 @@
 </tr>
 </tbody>
 </table>
-<p>The settings above are actually the ‘Tplyr’ default, so if these are the results you desire, then there’s no need to use <code>set_format_strings</code> at all - and just the <code>group_desc</code> call can be used. But let’s walk through this call to <code>set_format_strings</code> to understand in detail what’s going on:</p>
+<p>Let’s walk through this call to <code>set_format_strings</code> to understand in detail what’s going on:</p>
 <ol style="list-style-type: decimal">
-<li>The quotes strings on the left of the ‘=’, to name each parameter, become the row label in the output. This allows you to define in <code>set_format_strings</code> some custom text to explain the summary that is presented on the associated row. This text is fully in your control.</li>
-<li>On the right side of each equals is a call to <code>f_str</code>. As explained in the ‘Getting Started’ vignette, this is an object that captures a lot of metadata to understand how the strings should be presented.</li>
-<li>Within the <code>f_str</code> call, you see x’s in quotes. This defines how you’d like the numbers formatted from the resulting summaries. The number of x’s you use on the left side of a decimal control the space allotted for an integer, and the right side controls the decimal precision. Decimals are rounded prior to string formatting - so no need to worry about that. Note that this forcefully sets the decimal and integer precision - ‘Tplyr’ can automatically determine this for you as well, but more on that later.</li>
-<li>After the x’s there are unquoted variable names. This is where you specify the actual summaries that will be performed. Notice that some <code>f_str</code> calls have two summaries specified. This allows you to put two summaries in the same string and present them on the same line.</li>
+<li>The quoted strings on the left of the ‘=’ within <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> become the row label in the output. This allows you to define some custom text in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> to explain the summary that is presented on the associated row. This text is fully in your control.</li>
+<li>On the right side of each equals is a call to <code><a href="../reference/f_str.html">f_str()</a></code>. As explained in the <code><a href="../articles/Tplyr.html">vignette("Tplyr")</a></code>, this is an object that captures a lot of metadata to understand how the strings should be presented.</li>
+<li>Within the <code><a href="../reference/f_str.html">f_str()</a></code> call, you see x’s in quotes. This defines how you’d like the numbers formatted from the resulting summaries. The number of x’s you use on the left side of a decimal control the space allotted for an integer, and the right side controls the decimal precision. Decimals are rounded prior to string formatting - so no need to worry about that. Note that this forcefully sets the decimal and integer precision - ‘Tplyr’ can automatically determine this for you as well, but more on that later.</li>
+<li>After the x’s there are unquoted variable names. This is where you specify the actual summaries that will be performed. Notice that some <code><a href="../reference/f_str.html">f_str()</a></code> calls have two summaries specified. This allows you to put two summaries in the same string and present them on the same line.</li>
 </ol>
 <p>But where do these summary names come from? And which ones does ‘Tplyr’ have?</p>
 <div id="built-in-summaries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#built-in-summaries" class="anchor"></a>Built-in Summaries</h2>
-<p>We’ve built a number of default summaries into ‘Tplyr’, which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to ‘Tplyr’ are listed below. In the second column are the names that you would use within an <code>f_str</code> call to use them. In the third column, we have the syntax used to make the function call.</p>
+<p>We’ve built a number of default summaries into ‘Tplyr’, which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to ‘Tplyr’ are listed below. In the second column are the names that you would use within an <code><a href="../reference/f_str.html">f_str()</a></code> call to use them. In the third column, we have the syntax used to make the function call.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="center">Statistic</th>
@@ -298,8 +301,8 @@
 <p>Note that the only non-default option being used in any of the function calls above is <code>na.rm=TRUE</code>. For most of the functions, this is likely fine - but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:</p>
 <p><span class="math display">\[
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
-\]</span> That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the <code>tplyr.quantile_type</code> option. If you’re intending to match the SAS definition, you can use Type 3. For more information, see the <code>quantile</code> documentation.</p>
-<p>The example below demonstrates using the default quantile algorithm in R</p>
+\]</span> That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the <code>tplyr.quantile_type</code> option. If you’re intending to match the SAS definition, you can use Type 3. For more information, see the <code><a href="https://rdrr.io/r/stats/quantile.html">stats::quantile()</a></code> documentation.</p>
+<p>The example below demonstrates using the default quantile algorithm in R.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">CUMDOSE</span>) <span class="kw">%&gt;%</span>
@@ -350,19 +353,19 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr></tbody>
 </table>
 <p>It’s up to you to determine which algorithm you should use - but we found it necessary to provide you with the flexibility to change this within the default summaries.</p>
-<p>But what if Tplyr doesn’t offer you the summaries that you need?</p>
+<p>But what if ‘Tplyr’ doesn’t offer you the summaries that you need?</p>
 </div>
 </div>
 <div id="custom-summaries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#custom-summaries" class="anchor"></a>Custom Summaries</h2>
-<p>We understand that our defaults may not cover every descriptive statistic that you’d like to see. That’s why we’ve opened to door to creating custom summaries. Custom summaries allow you to provide any function you’d like into a desc layer. You can focus on the derivation and how to calculate the number you want to see. Tplyr can consume this function, and use all the existing tools within Tplyr to produce the string formatted result alongside any of the default summaries we provide as well.</p>
+<p>We understand that our defaults may not cover every descriptive statistic that you’d like to see. That’s why we’ve opened to door to creating custom summaries. Custom summaries allow you to provide any function you’d like into a desc layer. You can focus on the derivation and how to calculate the number you want to see. ‘Tplyr’ can consume this function, and use all the existing tools within ‘Tplyr’ to produce the string formatted result alongside any of the default summaries we provide as well.</p>
 <p>Custom summaries may be provided in two ways:</p>
 <ul>
 <li>Through the <code>tplyr.custom_summaries</code> option set at your session level</li>
-<li>Through the function <code>set_custom_summaries</code> at the layer level</li>
+<li>Through the function <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code> at the layer level</li>
 </ul>
-<p>As with any other setting in Tplyr, the layer setting will always take precedence over any other setting.</p>
+<p>As with any other setting in ‘Tplyr’, the layer setting will always take precedence over any other setting.</p>
 <p>Let’s look at an example.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -401,12 +404,12 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </table>
 <p>Here, a few important things are demonstrated:</p>
 <ul>
-<li>This is a multi-variable descriptive statistics layer. Both <code>AGE</code> and <code>HEIGHTBL</code> are being summarized in the same layer. AGE results go to the <code>var1_</code> variables and <code>HEIGHTBL</code> results go to the <code>var2_</code> variables.</li>
-<li>The parameter names in <code>set_custom_summaries</code>, or names on the left side of the equals, flow into <code>set_format_strings</code> in the <code>f_str</code> calls. Just like the default summaries, <code>geometric_mean</code> becomes the name that you refer to in order to use the geometric mean derivation in a summary.</li>
+<li>This is a multi-variable descriptive statistics layer. Both <code>AGE</code> and <code>HEIGHTBL</code> are being summarized in the same layer. <code>AGE</code> results go to the <code>var1_</code> variables and <code>HEIGHTBL</code> results go to the <code>var2_</code> variables.</li>
+<li>The parameter names in <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code>, or names on the left side of the equals, flow into <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> in the <code><a href="../reference/f_str.html">f_str()</a></code> calls. Just like the default summaries, <code>geometric_mean</code> becomes the name that you refer to in order to use the geometric mean derivation in a summary.</li>
 <li>In geometric mean, the target variable that you’re summarizing is referred to as <code>.var</code>. This may not seem intuitive. The reason we have to use <code>.var</code> is so that, like in this example, the custom function can be applied to each of the separate target variables.</li>
 </ul>
-<p>Another note about custom summaries is that you’re able to overwrite the default summaries built into Tplyr as well. Don’t like the default summary functions that we provide? Use the <code>tplyr.custom_summaries</code> option to overwrite them in your session, and add any new ones that you would like to include.</p>
-<p>For example, here we use the Tplyr default mean.</p>
+<p>Another note about custom summaries is that you’re able to overwrite the default summaries built into ‘Tplyr’ as well. Don’t like the default summary functions that we provide? Use the <code>tplyr.custom_summaries</code> option to overwrite them in your session, and add any new ones that you would like to include.</p>
+<p>For example, here we use the ‘Tplyr’ default mean.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>) <span class="kw">%&gt;%</span>
@@ -464,7 +467,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="right">1</td>
 </tr></tbody>
 </table>
-<p>Note that the table code used to produce the output is the same. Now ‘Tplyr’ used the custom summary function for <code>mean</code> as specified in the <code>tplyr.custom_summaries</code> option. Also note the use of <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::quos</a></code>. We’ve done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you’d like to learn more about non-standard evaluation and quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html">Section IV</a> in Advanced R.</p>
+<p>Note that the table code used to produce the output is the same. Now ‘Tplyr’ used the custom summary function for <code>mean</code> as specified in the <code>tplyr.custom_summaries</code> option. Also note the use of <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::quos()</a></code>. We’ve done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you’d like to learn more about non-standard evaluation and quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html">Section IV</a> in Advanced R.</p>
 </div>
 <div id="formatting" class="section level2">
 <h2 class="hasAnchor">
@@ -531,7 +534,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr>
 </tbody>
 </table>
-<p>Note how the entire example above has the <code>var1_Placebo</code> records missing. ‘Tplyr’ gives you control over how you fill this space. Let’s say that we wanted instead to make that space say “Missing”. You can control this with the f_str object using the <code>empty</code> parameter</p>
+<p>Note how the entire example above has all records in <code>var1_Placebo</code> missing, as well as some in <code>var1_Xanomeline High Dose</code>. ‘Tplyr’ gives you control over how you fill this space. Let’s say that we wanted instead to make that space say “Missing”. You can control this with the <code><a href="../reference/f_str.html">f_str()</a></code> object using the <code>empty</code> parameter</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adlb_2</span> <span class="kw">&lt;-</span> <span class="no">adlb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">TRTA</span> <span class="kw">!=</span> <span class="st">"Placebo"</span>)
 
@@ -592,7 +595,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr>
 </tbody>
 </table>
-<p>Notice that the <code>empty</code> parameter here is a named character vector. The name used is ‘.overall’. When you name this vector, ‘Tplyr’ know to fill the entire space when both elements are empty. But you may not <em>want</em> to fill the entire space. In the example above, both mean and standard deviation. are missing for Placebo, but other results are just missing standard deviation, which can happen if there’s only one record in the group. Here, if you don’t name the <code>empty</code> parameter, ‘Tplyr’ instead fits your specified ‘empty’ string into the formatted text, and aligns the data properly (assuming your string fits).</p>
+<p>Look at the <code>empty</code> parameter above. Here, we use a named character vector, where the name is <code>.overall</code>. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you’d like to see. Perhaps want a string that fills each missing space.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">adlb_2</span> <span class="kw">&lt;-</span> <span class="no">adlb</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">TRTA</span> <span class="kw">!=</span> <span class="st">"Placebo"</span>)
 
@@ -604,60 +607,25 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="no">mean</span>, <span class="no">sd</span>, <span class="kw">empty</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"NA"</span>)))
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">row_label1</th>
-<th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
-<th align="left">var1_Xanomeline High Dose</th>
-<th align="left">var1_Xanomeline Low Dose</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">BUN</td>
-<td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
-<td align="left">4.57 ( 1.301)</td>
-<td align="left">5.71 ( 2.940)</td>
-</tr>
-<tr class="even">
-<td align="left">CA</td>
-<td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
-<td align="left">2.19 ( 0.137)</td>
-<td align="left">2.15 ( 0.083)</td>
-</tr>
-<tr class="odd">
-<td align="left">CK</td>
-<td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
-<td align="left">64.25 ( 93.986)</td>
-<td align="left">58.33 ( 77.915)</td>
-</tr>
-<tr class="even">
-<td align="left">GGT</td>
-<td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
-<td align="left">16.75 ( 48.692)</td>
-<td align="left">21.33 ( 26.989)</td>
-</tr>
-<tr class="odd">
-<td align="left">URATE</td>
-<td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
-<td align="left">271.23 ( 88.161)</td>
-<td align="left">230.98 ( 87.006)</td>
-</tr>
-</tbody>
-</table>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="co">#%&gt;% </span>
+<span class="co">#&gt; # A tibble: 5 x 8</span>
+<span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
+<span class="co">#&gt; 1 BUN        Mean (SD)  "    NA (  … "  4.57 (  1.30… "  5.71 (  2.94…</span>
+<span class="co">#&gt; 2 CA         Mean (SD)  "    NA (  … "  2.19 (  0.13… "  2.15 (  0.08…</span>
+<span class="co">#&gt; 3 CK         Mean (SD)  "    NA (  … " 64.25 ( 93.98… " 58.33 ( 77.91…</span>
+<span class="co">#&gt; 4 GGT        Mean (SD)  "    NA (  … " 16.75 ( 48.69… " 21.33 ( 26.98…</span>
+<span class="co">#&gt; 5 URATE      Mean (SD)  "    NA (  … "271.23 ( 88.16… "230.98 ( 87.00…</span>
+<span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
+<span class="co">#&gt; #   ord_layer_2 &lt;int&gt;</span>
+  <span class="co"># select(-starts_with("ord")) %&gt;% </span>
+  <span class="co"># kable()</span></pre></body></html></div>
+<p>In the example above, instead of filling the whole space, the <code>empty</code> text of “NA” replaces the empty value for each element. So for ‘Mean (SD)’, we now have ‘NA ( NA)’. Note that the proper padding was still used for ‘NA’ to make sure the parentheses still align with populated records.</p>
 <div id="auto-precision" class="section level3">
 <h3 class="hasAnchor">
 <a href="#auto-precision" class="anchor"></a>Auto Precision</h3>
-<p>You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, for standard deviation +2.</p>
-<p>‘Tplyr’ has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use <code>a</code> instead of <code>x</code> when creating your summaries. Note that only one <code>a</code> is needed. To use increased precision, use <code>a+n</code> where <code>n</code> is the number of additional spaces you wish to add.</p>
+<p>You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, and for standard deviation +2.</p>
+<p>‘Tplyr’ has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use <code>a</code> instead of <code>x</code> when creating your summaries. Note that only one <code>a</code> is needed on each side of a decimal. To use increased precision, use <code>a+n</code> where <code>n</code> is the number of additional spaces you wish to add.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r">
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -810,7 +778,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr>
 </tbody>
 </table>
-<p>Now that looks better. The <code>cap</code> argument is part of <code>set_format_strings</code>. You need to specify the integer and decimal caps separately. Note that integer precision might not behave like you expect - it doesn’t make sense to truncate an integer if it’s value is too high, so if the integer exceeds the allotted space, then the length of the string will increase and the full value will be displayed. But values that are short enough will only pad to the capped number of spaces. We plan to implement a warning in future releases if integers exceed the set display space allocation.</p>
+<p>Now that looks better. The <code>cap</code> argument is part of <code>set_format_strings</code>. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length allotted for the left side of a decimal, but integers will not truncate. When using ‘x’ formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integers in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. These caps apply to the length allotted for the “a” on either the integer or the decimal. So for example, if the decimal length is capped at 2 and the selected precision is “a+1”, then 3 decimal places will be allotted.</p>
 <p>This was a basic situation, but if you’re paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don’t want that? What about multiple summary variable? How do we determine precision then? We have modifier functions for this:</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -925,7 +893,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr>
 </tbody>
 </table>
-<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code>set_precision_on</code> allows you to specify this, where the <code>precision_on</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code>set_precision_by</code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on</code> variable is specified, the first variable in <code>target_var</code> is used. If not <code>precision_by</code> variables are specified, then the default <code>by</code> variables are used.</p>
+<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code><a href="../reference/precision_on.html">set_precision_on()</a></code> allows you to specify this, where the <code>precision_on()</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code><a href="../reference/precision_by.html">set_precision_by()</a></code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on()</code> variable is specified, the first variable in <code>target_var</code> is used. If not <code>precision_by()</code> variables are specified, then the default <code>by</code> variables are used.</p>
 </div>
 </div>
   </div>
