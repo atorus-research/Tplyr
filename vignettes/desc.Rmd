@@ -251,9 +251,9 @@ tplyr_table(adlb_2, TRTA) %>%
       set_format_strings('Mean (SD)' = f_str('xxx.xx (xxx.xxx)', mean, sd, empty=c("NA")))
   ) %>% 
   build() %>% 
-  head() #%>% 
-  # select(-starts_with("ord")) %>% 
-  # kable()
+  head() %>%
+  select(-starts_with("ord")) %>%
+  kable()
 ```
 
 In the example above, instead of filling the whole space, the `empty` text of "NA" replaces the empty value for each element. So for 'Mean (SD)', we now have 'NA ( NA)'. Note that the proper padding was still used for 'NA' to make sure the parentheses still align with populated records.
