@@ -685,7 +685,7 @@ test_that('T15',{
       set_pop_treat_var(TRT01P) %>%
       add_layer(
       group_count(AEDECOD) %>%
-        set_format_strings(f_str("xxx (xx.x%)", n, pct))
+        set_distinct_by(USUBJID)
     )
 
     test_15 <- list(build(t), header_n(t))
@@ -707,13 +707,14 @@ test_that('T15',{
   #programmatic check(s)
   t15_1 <- group_by(adsl, TRT01P) %>%
     summarise(total=n())
-  t15_2 <- group_by(adae, TRTA, AEDECOD) %>%
+  t15_2 <- distinct(adae, TRTA, AEDECOD, USUBJID) %>%
+    group_by(TRTA, AEDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEDECOD, fill = list(n = 0)) %>%
     merge(t15_1, by.y='TRT01P', by.x = "TRTA") %>%
     mutate(pct = round((n / total) * 100, digits = 1)) %>%
-    mutate(col = paste0(sprintf("%3s",n),' (',sprintf("%4.1f",pct),'%)')) %>%
+    mutate(col = paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),'%)')) %>%
     select(TRTA, AEDECOD, col) %>%
     pivot_wider(names_from = "TRTA", values_from = col)
   testthat::expect_equal(t15_2$Placebo,test_15[[1]]$var1_Placebo, label = "T15.1")
