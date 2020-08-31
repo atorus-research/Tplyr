@@ -101,6 +101,12 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
 
 ```
 
+## 'Tplyr' is Qualified
+
+We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing 'Tplyr includes an entire user-acceptable testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.
+
+You can find the qualification document within this repository right [here](./uat/references/output/uat.pdf). The 'uat' folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.
+
 ## The TL;DR
 
 Here are some of the high level benefits of using `Tplyr`:
