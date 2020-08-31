@@ -122,9 +122,9 @@ add_layers <- function(parent, ...) {
 #' @param target_var Symbol. Required, The variable name(s) on which the summary
 #'   is to be performed. Must be a variable within the target dataset. Enter
 #'   unquoted - i.e. target_var = AEBODSYS. You may also provide multiple
-#'   variables with \code{\link[dplyr]{dplyr::vars}}.
+#'   variables with \code{\link[dplyr]{vars}}.
 #' @param by A string, a variable name, or a list of variable names supplied
-#'   using \code{\link[dplyr]{dplyr::vars}}
+#'   using \code{\link[dplyr]{vars}}
 #' @param where Call. Filter logic used to subset the target data when
 #'   performing a summary.
 #' @param ... Additional arguments to pass forward
@@ -140,7 +140,7 @@ add_layers <- function(parent, ...) {
 #'   tables like Adverse Events where you want to see the Preferred Terms within
 #'   Body Systems, all in one layer. Further control over denominators is
 #'   available using the function \code{\link{set_denoms_by}} and distinct
-#'   counts can be set using \code{\link{set_distinct_by}}}. \item{Descriptive
+#'   counts can be set using \code{\link{set_distinct_by}}} \item{Descriptive
 #'   Statistics Layers}{Descriptive statistics layers perform summaries on
 #'   continuous variables. There are a number of summaries built into Tplyr
 #'   already that you can perform, including n, mean, median, standard
@@ -159,7 +159,7 @@ add_layers <- function(parent, ...) {
 #'   counts (n) and percentages (pct) are supported and can be specified with
 #'   the \code{\link{set_format_strings}} function. To allow for flexibility
 #'   when defining percentages, you can define the denominator using the
-#'   \code{\link{set_denom_by}} function. This function takes variable names and
+#'   \code{\link{set_denoms_by}} function. This function takes variable names and
 #'   uses those to determine the denominator for the counts.} }
 #'
 #' @return An \code{tplyr_layer} environment that is a child of the specified

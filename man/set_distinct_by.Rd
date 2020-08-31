@@ -9,7 +9,7 @@ set_distinct_by(e, distinct_by)
 \arguments{
 \item{e}{A count_layer object}
 
-\item{distinct_by}{A variable to get the distinct}
+\item{distinct_by}{Variable(s) to get the distinct data.}
 }
 \value{
 The layer object with

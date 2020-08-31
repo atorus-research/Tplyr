@@ -8,6 +8,9 @@ process_summaries.shift_layer <- function(x, ...) {
                 all(c("row", "column") %in% names(target_var)),
                 msg = "target_vars passed to a shift layer must be named.")
 
+
+    if(is.null(format_strings)) format_strings <- gather_defaults(environment())[[1]]
+
     # Subset the local built_target based on where
     # Catch errors
     # Puting this here to make clear it happens up-front in the layer
@@ -76,7 +79,6 @@ prepare_format_metadata.shift_layer <- function(x) {
 
   evalq({
 
-    if(is.null(format_strings)) format_strings <- f_str("a", n)
 
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
@@ -144,7 +146,7 @@ construct_shift_string <- function(.n, .total, shift_fmt, max_layer_length, max_
   # Put the vector strings together. Only include parts of str_all that aren't null
   string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
 
-  string_ <- pad_formatted_data(string_, max_layer_length, max_n_width)
+  string_ <- pad_formatted_data(string_, 0, max_n_width)
 
   string_
 }

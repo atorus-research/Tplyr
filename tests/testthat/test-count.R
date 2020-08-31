@@ -16,6 +16,9 @@ t9 <- tplyr_table(mtcars, gear)
 t10 <- tplyr_table(mtcars, gear)
 t11 <- tplyr_table(mtcars, gear)
 t12 <- tplyr_table(mtcars, gear)
+t13 <- tplyr_table(mtcars, gear)
+t14 <- tplyr_table(mtcars, gear)
+t15 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -49,9 +52,13 @@ c11 <- group_count(t11, cyl) %>%
 # Change numeric extraction value
 c12 <- group_count(t12, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
-  set_result_order_var(distinct_n)
-
-
+  set_result_order_var(distinct_n) %>%
+  set_distinct_by(am)
+c13 <- group_count(t13, vars(cyl, grp), by = "Test")
+c14 <- group_count(t14, vars(cyl, grp)) %>%
+  set_outer_sort_position("asc")
+c15 <- group_count(t15, cyl) %>%
+  set_distinct_by(vars(am, vs))
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -65,6 +72,9 @@ t9 <- add_layers(t9, c9)
 t10 <- add_layers(t10, c10)
 t11 <- add_layers(t11, c11)
 t12 <- add_layers(t12, c12)
+t13 <- add_layers(t13, c13)
+t14 <- add_layers(t14, c14)
+t15 <- add_layers(t15, c15)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -98,7 +108,7 @@ test_that("Count layers are built as expected", {
                                "ordering_cols"))
   expect_setequal(names(c12), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
-                               "format_strings", "result_order_var"))
+                               "format_strings", "result_order_var", "distinct_by"))
 
   expect_equal(c1$by, quos())
   expect_equal(c2$by, quos(am))
@@ -124,10 +134,11 @@ test_that("Count layers are built as expected", {
 
   expect_equal(c4$format_strings$n_counts, f_str("xxx", n))
   expect_equal(c5$include_total_row, TRUE)
-  expect_equal(c6$distinct_by, quo(cyl))
-  expect_equal(c8$distinct_by, quo(am))
+  expect_equal(c6$distinct_by, quos(cyl))
+  expect_equal(c8$distinct_by, quos(am))
   expect_equal(c9$indentation, "")
   expect_equal(c10$count_row_prefix, "abc")
+  expect_equal(c15$distinct_by, quos(am, vs))
 })
 
 test_that("Count layers are summarized without errors and warnings", {
@@ -144,6 +155,11 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t8))
   expect_silent(build(t9))
   expect_silent(build(t10))
+  expect_silent(build(t11))
+  expect_silent(build(t12))
+  expect_silent(build(t13))
+  expect_silent(build(t14))
+  expect_silent(build(t15))
 })
 
 test_that("Count layers are processed as expected", {
@@ -241,12 +257,13 @@ test_that("missing counts can be displayed as expected", {
         set_denom_ignore("Unknown", NA)
     ) %>%
     build()
-  expect_equal(t4, tibble(row_label1 = c("4", "Unknown", "Missing"),
-                          var1_3 = c(" 1 (100.0%)", " 2 (200.0%)", "12 "),
-                          var1_4 = c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "),
-                          var1_5 = c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "),
-                          ord_layer_index = c(1L, 1L, 1L),
-                          ord_layer_1 = c(1, 2, 3)))
+  expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
+  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
+  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
+  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "))
+  expect_equal(t4$ord_layer_index, c(1L, 1L, 1L))
+  # Added unname for compatibility between tibble versions
+  expect_equal(unname(t4$ord_layer_1), c(1, 2, 3))
 
 })
 
@@ -259,3 +276,14 @@ test_that("Count layer clauses with invalid syntax give informative error", {
   expect_error(build(t), "group_count `where` condition `bad == code` is invalid.")
 })
 
+
+test_that("Nested count layers can be built with text by variables", {
+  expect_equal(dim(c13$numeric_data), c(27, 6))
+  expect_equal(dim(c13$formatted_data), c(9, 9))
+
+  expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
+})
+
+test_that("set_outer_sort_position works as expected", {
+  expect_equal(c14$formatted_data$ord_layer_2, rep(c(-Inf, 1, 2), 3))
+})

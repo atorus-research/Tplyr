@@ -14,7 +14,7 @@
 #'
 #' Comparisons are specified by providing two-element character vectors. You can provide as many of
 #' these groups as you want. You can also use groups that have been constructed using
-#' \code{\link{add_treat_group}} or \code{\link{add_total_group}}. The first element provided will be considered
+#' \code{\link{add_treat_grps}} or \code{\link{add_total_group}}. The first element provided will be considered
 #' the 'reference' group (i.e. the left side of the comparison), and the second group will be considered
 #' the 'comparison'. So if you'd like to see the risk difference of 'T1 - Placebo', you would specify
 #' this as \code{c('T1', 'Placebo')}.
@@ -168,6 +168,17 @@ prep_two_way <- function(comp) {
                              ": ", paste(invalid_groups, collapse=", ")))
 
     two_way <- numeric_data
+
+    # Nested layers need to plug the NAs left over - needs revision in the future
+    if (is_built_nest) {
+      two_way <- two_way %>%
+        # Need to fill in NAs in the numeric data that
+        # are patched later in formatting
+        mutate(
+          !!by[[1]] := ifelse(is.na(!!by[[1]]), summary_var, !!by[[1]])
+        )
+    }
+
 
     # If distinct is set and distinct values are there, use them
     if (distinct == TRUE && any(str_detect(names(two_way), 'distinct'))) {

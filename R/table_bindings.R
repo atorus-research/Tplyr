@@ -319,3 +319,18 @@ set_count_layer_formats <- function(obj, ...) {
   env_bind(obj, count_layer_formats = list(...))
   obj
 }
+
+#' @export
+#' @rdname table_format_defaults
+get_shift_layer_formats <- function(obj) {
+  # Bind the formats into the table
+  env_get(obj, 'shift_layer_formats')
+}
+
+#' @export
+#' @rdname table_format_defaults
+set_shift_layer_formats <- function(obj, ...) {
+  # Bind the formats into the table
+  env_bind(obj, shift_layer_formats = list(...))
+  obj
+}

@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(
     person(given = "Eli",
@@ -42,7 +42,8 @@ Imports:
     tidyr (>= 1.0.2),
     tidyselect (>= 1.0.0),
     tibble (>= 3.0.1),
-    lifecycle
+    lifecycle,
+    forcats (>= 0.4.0)
 Suggests: 
     testthat (>= 2.1.0),
     haven (>= 2.2.0),
@@ -50,7 +51,9 @@ Suggests:
     rmarkdown,
     huxtable,
     tidyverse,
-    readr
+    readr,
+    kableExtra,
+    pharmaRTF
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 RdMacros: lifecycle

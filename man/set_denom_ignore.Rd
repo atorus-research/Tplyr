@@ -21,9 +21,12 @@ percentages do not use "missing" values in the denominator. This function
 notes different values as "missing" and excludes them from the denominators.
 }
 \examples{
-mtcars[mtcars$cyl == 6, "cyl"] <- NA
-mtcars[mtcars$cyl == 8, "cyl"] <- NA
-tplyr_table(mtcars, gear) \%>\%
+library(magrittr)
+mtcars2 <- mtcars
+mtcars2[mtcars$cyl == 6, "cyl"] <- NA
+mtcars2[mtcars$cyl == 8, "cyl"] <- NA
+
+tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) \%>\%

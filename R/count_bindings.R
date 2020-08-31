@@ -72,7 +72,7 @@ set_total_row_label <- function(e, total_row_label) {
 #' \code{pct}, \code{distinct}, and \code{distinct_pct}.
 #'
 #' @param e A count_layer object
-#' @param distinct_by A variable to get the distinct
+#' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
 #' @export
@@ -88,7 +88,10 @@ set_total_row_label <- function(e, total_row_label) {
 #'   ) %>%
 #'   build()
 set_distinct_by <- function(e, distinct_by) {
-  distinct_by <- enquo(distinct_by)
+
+  distinct_by <- unpack_vars(enquos(distinct_by))
+
+  assert_quo_var_present(distinct_by, envir = e)
 
   env_bind(e, distinct_by = distinct_by)
 
@@ -178,7 +181,7 @@ set_nest_count <- function(e, nest_count) {
 #'   provides you with order variables that can be used to sort your table after
 #'   the data are summarized. Tplyr has a default order in which the table will
 #'   be returned, but the order variables will always persist. This allows you
-#'   to use powerful sorting functions like \code{\link[dplyr]{dplyr::arrange}}
+#'   to use powerful sorting functions like \code{\link[dplyr]{arrange}}
 #'   to get your desired order, and in double programming situations, helps your
 #'   validator understand the how you achieved a particular sort order and where
 #'   discrepancies may be coming from.
@@ -386,9 +389,14 @@ set_result_order_var <- function(e, result_order_var) {
 #' @export
 #'
 #' @examples
-#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
-#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
-#' tplyr_table(mtcars, gear) %>%
+#' library(magrittr)
+#' library(dplyr)
+#'   mtcars2 <- mtcars %>%
+#' mutate_all(as.character)
+#' mtcars2[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars2[mtcars$cyl == 8, "cyl"] <- NA
+#'
+#' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
 #'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
@@ -424,9 +432,12 @@ set_missing_count <- function(e, f_str, string = "NA") {
 #' @export
 #'
 #' @examples
-#' mtcars[mtcars$cyl == 6, "cyl"] <- NA
-#' mtcars[mtcars$cyl == 8, "cyl"] <- NA
-#' tplyr_table(mtcars, gear) %>%
+#' library(magrittr)
+#' mtcars2 <- mtcars
+#' mtcars2[mtcars$cyl == 6, "cyl"] <- NA
+#' mtcars2[mtcars$cyl == 8, "cyl"] <- NA
+#'
+#' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
 #'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
@@ -441,4 +452,24 @@ set_denom_ignore <- function(e, ...) {
 
   e
 
+}
+
+#' Set the value of a outer nested count layer to Inf or -Inf
+#'
+#' @param e A count layer
+#' @param outer_sort_position Either 'asc' or 'desc'. If desc the final ordering helper
+#'   will be set to Inf, if 'asc' the ordering helper is set to -Inf.
+#'
+#' @return The modified count layer.
+#' @export
+set_outer_sort_position <- function(e, outer_sort_position) {
+
+  assert_that(outer_sort_position %in% c("asc", "desc"),
+              msg = "outer_sort_position must be 'asc' 'desc'")
+
+  outer_inf <- outer_sort_position == "desc"
+
+  env_bind(e, outer_inf = outer_inf)
+
+  e
 }

@@ -4,19 +4,20 @@
 #' @importFrom rlang quos quo env_names env_bind_active as_label
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
-#' @importFrom stringr str_sub str_extract
+#' @importFrom stringr str_sub str_extract str_pad str_starts
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
-#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between
+#' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
+#' @importFrom forcats fct_expand
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -73,10 +74,10 @@ NULL
 #' # Use just the defaults
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
-#'     group_desc(mpg, by=cyl) %>%
+#'     group_desc(mpg, by=cyl)
 #'   ) %>%
 #'   add_layer(
-#'     group_count(carb, by=cyl) %>%
+#'     group_count(carb, by=cyl)
 #'   ) %>%
 #'   build()
 #'
@@ -118,29 +119,30 @@ NULL
 #'   build()
 #'
 #' @docType package
-#' @name tplyr
+#' @name Tplyr
 "_PACKAGE"
 
 # Default options ----
 tplyr_default_options <- list(
-  # Debug (deprecated)
-  tplyr.debug = FALSE,
 
   # Count layer defaults
   tplyr.count_layer_default_formats =
-    list(n_counts = f_str("a (xxx.x%)", n, pct),
+    list(n_counts = f_str("a (xxx.x%)", distinct, distinct_pct),
          riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
          ),
 
   # Desc layer defaults
   tplyr.desc_layer_default_formats =
-    list("n"        = f_str("xx", n),
-         "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
-         "Median"   = f_str("xx.x", median),
-         "Q1, Q3"   = f_str("xx, xx", q1, q3),
-         "Min, Max" = f_str("xx, xx", min, max),
-         "Missing"  = f_str("xx", missing)
+    list("n"        = f_str("xxx", n),
+         "Mean (SD)"= f_str("a.a+1 (a.a+2)", mean, sd),
+         "Median"   = f_str("a.a+1", median),
+         "Q1, Q3"   = f_str("a.a+1, a.a+1", q1, q3),
+         "Min, Max" = f_str("a.a, a.a", min, max),
+         "Missing"  = f_str("xxx", missing)
          ),
+
+  # Shift layer defaults
+  tplyr.shift_layer_default_formats = list(f_str("a", n)),
 
   # Precision caps for decimal and integer precision
   tplyr.precision_cap = c('int' = 99, 'dec'=99),
@@ -149,7 +151,10 @@ tplyr_default_options <- list(
   tplyr.custom_summaries = NULL,
 
   # Set to avoid printing in scientific notation
-  tplyr.scipen = 1000
+  tplyr.scipen = 1000,
+
+  # Quantile algorithm setting
+  tplyr.quantile_type = 7
 )
 
 # Carry out process on load ----
@@ -246,3 +251,9 @@ missing_string <- NULL
 denom_ignore <- NULL
 denoms_distinct_df <- NULL
 missing_name <- NULL
+outer_inf <- NULL
+shift_layer_formats <- NULL
+.tmp_name <- NULL
+include_total_row <- NULL
+ord_layer_index <- NULL
+ord_break <- NULL

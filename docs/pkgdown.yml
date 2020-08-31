@@ -1,0 +1,15 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  Tplyr: Tplyr.html
+  count_shift: count_shift.html
+  desc: desc.html
+  options: options.html
+  readme: readme.html
+  riskdiff: riskdiff.html
+  sort: sort.html
+  styled-table: styled-table.html
+  table: table.html
+last_built: 2020-08-31T14:38Z
+

@@ -163,13 +163,14 @@ add_order_columns.count_layer <- function(x) {
       formatted_col_index <- length(by) + 1
 
       walk2(by, seq_along(by), function(a_by, by_i) {
-        # If a_by is a character, skip and go to the next, it doesn't have any sorting information.
-        if (!is.name(quo_get_expr(a_by))) return()
-        formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+        # If a_by is a character, add the index itself
+        if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+        # Otherwise determine data order
+        else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
-      # Used to remove the prefix. String is encoded to get contolled characters i.e. \t
-      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 2)
+      # Used to remove the prefix. String is encoded to get controlled characters i.e. \t
+      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 3)
 
       # Only the outer columns
       filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
@@ -194,7 +195,18 @@ add_order_columns.count_layer <- function(x) {
                                  order_count_method = order_count_method,
                                  target = target, all_outer = all_outer,
                                  filter_logic = filter_logic,
-                                 indentation = indentation))
+                                 indentation = indentation,
+                                 outer_inf = outer_inf))
+
+      if (!is.null(nest_count) && nest_count) {
+        # If the table nest should be collapsed into one row.
+        row_label_names <- vars_select(names(formatted_data), starts_with("row"))
+        # Remove first row
+        formatted_data[, 1] <- NULL
+        # Rename row labels
+        names(formatted_data)[length(by)] <- head(row_label_names, -1)
+
+      }
 
       # If it isn't a nested count layer
     } else {
@@ -205,9 +217,10 @@ add_order_columns.count_layer <- function(x) {
 
       # This adds a column for each by variable and the target variable.
       walk2(by, seq_along(by), function(a_by, by_i) {
-        # If a_by is a character, skip and go to the next, it doesn't have any sorting information.
-        if (!is.name(quo_get_expr(a_by))) return()
-        formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+        # If a_by is a character, add the index itself
+        if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+        # Otherwise determine data order
+        else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
@@ -224,15 +237,22 @@ add_order_columns.desc_layer <- function(x) {
 
     # This adds a column for each by variable and the target variable.
     walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
-      if (!is.name(quo_get_expr(a_by))) return()
-      formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+      # Otherwise determine data order
+      else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
     })
 
     # Number of sorting columns needed, number of bys plus one for the target_var
     formatted_col_index <- length(by) + 1
 
-    formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
+    if (formatted_col_index > 1) {
+      formatted_data <- formatted_data %>%
+        group_by(!! sym(paste0("ord_layer_", formatted_col_index - 1))) %>%
+        mutate(!!sym(paste0("ord_layer_", formatted_col_index)) := row_number())
+    } else {
+      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
+    }
 
     rm(formatted_col_index)
 
@@ -244,9 +264,10 @@ add_order_columns.shift_layer <- function(x) {
 
     # This adds a column for each by variable and the target variable.
     walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, skip and go to the next, it doesn't have any sorting information
-      if (!is.name(quo_get_expr(a_by))) return()
-      formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+      # Otherwise determine data order
+      else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
     })
 
     # Number of sorting columns needed, number of bys plus one for the target_var
@@ -271,7 +292,8 @@ add_order_columns.shift_layer <- function(x) {
       )
 
       # The logic is the same now for a byvarn so reuse that function
-      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
+      formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
 
     }
 
@@ -397,6 +419,15 @@ get_data_order <- function(x, formatted_col_index) {
 #' @noRd
 get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var) {
+
+  # Make sure that if distinct_n is selected by set_result_order_var, that
+  # there's a distinct variable in the numeric dataset
+  if (as_name(result_order_var) %in% c("distinct_n", "distinct_pct")) {
+    assert_that("distinct_n" %in% names(numeric_data),
+                msg = paste0("`result_order_var` is set to `", as_name(result_order_var),
+                             "` but no `distinct_by` is set. If you wish to sort by a distinct variable, ",
+                             "you must use `set_distinct_by()` to choose a variable to calculate distinct counts."))
+  }
 
   # Pull out each unique filter requirement. Each name for header_n is stored
   # on the LHS and its unique value in the function is on the RHS.
@@ -546,10 +577,10 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   #Same idea here, remove prefix
   filtered_group_data <- group_data[-1, ] %>%
     mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
-                                                             indentation_length))
+                                                             indentation_length + 1))
 
   # The first row is always the first thing in the order so make it Inf
-  group_data[1, paste0("ord_layer_", final_col + 1)] <- Inf
+  group_data[1, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
 
   if(tail(order_count_method, 1) == "bycount") {
     group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,

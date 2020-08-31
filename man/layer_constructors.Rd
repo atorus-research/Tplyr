@@ -20,10 +20,10 @@ group_shift(parent, target_var, by = vars(), where = TRUE, ...)
 \item{target_var}{Symbol. Required, The variable name(s) on which the summary
 is to be performed. Must be a variable within the target dataset. Enter
 unquoted - i.e. target_var = AEBODSYS. You may also provide multiple
-variables with \code{\link[dplyr]{dplyr::vars}}.}
+variables with \code{\link[dplyr]{vars}}.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied
-using \code{\link[dplyr]{dplyr::vars}}}
+using \code{\link[dplyr]{vars}}}
 
 \item{where}{Call. Filter logic used to subset the target data when
 performing a summary.}
@@ -55,7 +55,7 @@ This family of functions specifies the type of summary that is
   tables like Adverse Events where you want to see the Preferred Terms within
   Body Systems, all in one layer. Further control over denominators is
   available using the function \code{\link{set_denoms_by}} and distinct
-  counts can be set using \code{\link{set_distinct_by}}}. \item{Descriptive
+  counts can be set using \code{\link{set_distinct_by}}} \item{Descriptive
   Statistics Layers}{Descriptive statistics layers perform summaries on
   continuous variables. There are a number of summaries built into Tplyr
   already that you can perform, including n, mean, median, standard
@@ -74,7 +74,7 @@ This family of functions specifies the type of summary that is
   counts (n) and percentages (pct) are supported and can be specified with
   the \code{\link{set_format_strings}} function. To allow for flexibility
   when defining percentages, you can define the denominator using the
-  \code{\link{set_denom_by}} function. This function takes variable names and
+  \code{\link{set_denoms_by}} function. This function takes variable names and
   uses those to determine the denominator for the counts.} }
 }
 \examples{
