@@ -177,7 +177,7 @@ suppressWarnings(build(t)) %>%
 
 Risk difference also works with the `cols` argument, but it's important to understand how the comparisons work in these situation. Here, it's still the treatment groups that are compared - but the column argument is used as a "by" variable. For example:
 
-```{r riskdiff5}
+```{r riskdiff6}
 t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -207,7 +207,7 @@ The output of `get_stats_data` depends on what parameters have been used:
 
 This works best when layers are named, as it makes the output much clearer.
 
-```{r riskdiff6}
+```{r riskdiff7}
 t <- tplyr_table(adae, TRTA) %>% 
   add_layer(name="PreferredTerm",
     group_count(AEDECOD) %>% 
@@ -234,7 +234,7 @@ suppressWarnings(
 
 Instead of playing around with lists, `get_stats_data` is most advantageous if you'd like to extract out some data specifically. Let's say that you'd like to see just the difference values from the Preferred Term layer in the table above. 
 
-```{r risdiff7}
+```{r risdiff8}
 
 suppressWarnings(
   get_stats_data(t, layer='PreferredTerm', statistic='riskdiff', where= measure == "dif")
