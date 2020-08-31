@@ -181,7 +181,7 @@ test_that('T5',{
       set_pop_data(adsl) %>%
       set_pop_treat_var(TRT01P) %>%
       add_layer(
-        group_count(AEDECOD, by="Preferred Term", where = SAFFL == "Y")
+        group_count(AEDECOD)
       )
 
     # output table to check attributes
@@ -688,8 +688,7 @@ test_that('T15',{
         set_format_strings(f_str("xxx (xx.x%)", n, pct))
     )
 
-    build(t)
-    test_15 <- merge(get_numeric_data(t)[[1]], rename(header_n(t), header_n=n),by.x = "TRTA", by.y = "TRT01P")
+    test_15 <- list(build(t), header_n(t))
 
     # output table to check attributes
     save(test_15, file = "~/Tplyr/uat/output/test_15.RData")
@@ -707,16 +706,18 @@ test_that('T15',{
   skip_if(is.null(vur))
   #programmatic check(s)
   t15_1 <- group_by(adsl, TRT01P) %>%
-    summarise(total=n()) %>%
-    mutate(total = as.numeric(total))
+    summarise(total=n())
   t15_2 <- group_by(adae, TRTA, AEDECOD) %>%
     summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, AEDECOD, fill = list(n = 0)) %>%
     merge(t15_1, by.y='TRT01P', by.x = "TRTA") %>%
-    mutate(pct = round((n / total) * 100, digits = 1))
-  testthat::expect_equal(t15_1$total,unique(test_15[c("TRTA", "header_n")])$header_n,label = "T15.1")
-  testthat::expect_equal(t15_2$pct,
-                         mutate(filter(test_15, n != 0),pct = round((n / header_n) * 100, digits = 1))[['pct']],
-                         label = "T15.2")
+    mutate(pct = round((n / total) * 100, digits = 1)) %>%
+    mutate(col = paste0(sprintf("%3s",n),' (',sprintf("%4.1f",pct),'%)')) %>%
+    select(TRTA, AEDECOD, col) %>%
+    pivot_wider(names_from = "TRTA", values_from = col)
+  testthat::expect_equal(t15_2$Placebo,test_15[[1]]$var1_Placebo, label = "T15.1")
+  testthat::expect_equal(t15_1$total,test_15[[2]]$n, label = "T15.2")
   #manual check(s)
 
   #clean up working directory
