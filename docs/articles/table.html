@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -134,12 +134,16 @@
 <div id="table-parameters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#table-parameters" class="anchor"></a>Table Parameters</h2>
-<p>In addition to <code>treat_var</code>, <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> has two additional parameters:</p>
+<p>The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> function has 4 parameters:</p>
 <ul>
 <li>
-<code>where</code>: The overarching table subset criteria. Each layer will use this subset by default. The <code>where</code> parameter at the table level will be called <strong>in addition to</strong> this subset criteria.</li>
+<strong>target</strong>: The dataset upon which summaries will be performed</li>
 <li>
-<code>cols</code>: Grouping variables used in addition to the <code>by</code> variables set at the layer level, but will be transposed into columns in addition to <code>treat_var</code>.</li>
+<strong><code>treat_var</code></strong>: The variable containing treatment group assignments</li>
+<li>
+<strong><code>where</code></strong>: The overarching table subset criteria. Each layer will use this subset by default. The <code>where</code> parameter at the table level will be called <strong>in addition to</strong> the layer subset criteria.</li>
+<li>
+<strong><code>cols</code></strong>: Grouping variables used in addition to the <code>by</code> variables set at the layer level, but will be transposed into columns in addition to <code>treat_var</code>.</li>
 </ul>
 <p>Let’s look at an example:</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span><span class="st">"Y"</span>, <span class="kw">cols</span> <span class="kw">=</span> <span class="no">SEX</span>) <span class="kw">%&gt;%</span>
@@ -480,7 +484,7 @@
 <li>Add a ‘treated’ group to your data so you can analyze ‘treated’ vs. ‘placebo’ when you have multiple treated cohorts</li>
 <li>Add a ‘total’ group so summarize the overall study population</li>
 </ul>
-<p>We’ve added the function <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> to do this work for you. Additionally, to simplify the process we added an abstraction of <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> named <code><a href="../reference/treat_grps.html">add_total_group()</a></code> to simplify the process of creating a “Total” group.</p>
+<p>We’ve added the function <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within <code>treat_var</code>. Additionally, to simplify the process we added an abstraction of <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> named <code><a href="../reference/treat_grps.html">add_total_group()</a></code> to simplify the process of creating a “Total” group.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="st">'Treated'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
@@ -593,8 +597,8 @@
 <div id="population-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#population-data" class="anchor"></a>Population Data</h2>
-<p>A last and very important aspect of table level properties in Tplyr is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
-<p>‘Tplyr’ allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter, as the variable names may differ between the datasets.</p>
+<p>A last and very important aspect of table level properties in ‘Tplyr’ is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
+<p>‘Tplyr’ allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter and a population treatment variable named <code>pop_treat_var</code>, as variable names may differ between the datasets.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">AEREL</span> <span class="kw">!=</span> <span class="st">"NONE"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
@@ -763,7 +767,7 @@
 </tr>
 </tbody>
 </table>
-<p>In the above example, setting the population dataset <code>where</code> clause to <code>TRUE</code> removes any filter. <code>AEREL</code> doesn’t exist in ADSL, therefore we removed the filter criteria on the population data. If <code><a href="../reference/where.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
+<p>In the above example, <code>AEREL</code> doesn’t exist in <code>adsl</code>, therefore we used <code><a href="../reference/where.html">set_pop_where()</a></code> to remove the filter criteria on the population data. Setting the population dataset where parameter to <code>TRUE</code> removes any filter applied by the population data. If <code><a href="../reference/where.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
 <p>Note the percentage values in the summary above. By setting the population data, ‘Tplyr’ now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/header_n.html">header_n</a></span>(<span class="no">t</span>) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
