@@ -29,10 +29,12 @@ Most of the work in creating a 'Tplyr' table is at the layer level, but there ar
 
 ## Table Parameters
 
-In addition to `treat_var`, `tplyr_table()` has two additional parameters:
+The `tplyr_table()` function has 4 parameters:
 
-- `where`: The overarching table subset criteria. Each layer will use this subset by default. The `where` parameter at the table level will be called **in addition to** this subset criteria.
-- `cols`: Grouping variables used in addition to the `by` variables set at the layer level, but will be transposed into columns in addition to `treat_var`. 
+- **target**: The dataset upon which summaries will be performed
+- **`treat_var`**: The variable containing treatment group assignments
+- **`where`**: The overarching table subset criteria. Each layer will use this subset by default. The `where` parameter at the table level will be called **in addition to** the layer subset criteria.
+- **`cols`**: Grouping variables used in addition to the `by` variables set at the layer level, but will be transposed into columns in addition to `treat_var`. 
 
 Let's look at an example:
 
@@ -66,7 +68,7 @@ Another important feature that works at the table level is the addition of treat
 - Add a 'treated' group to your data so you can analyze 'treated' vs. 'placebo' when you have multiple treated cohorts
 - Add a 'total' group so summarize the overall study population
 
-We've added the function `add_treat_grps()` to do this work for you. Additionally, to simplify the process we added an abstraction of `add_treat_grps()` named `add_total_group()` to simplify the process of creating a "Total" group.
+We've added the function `add_treat_grps()` to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within `treat_var`. Additionally, to simplify the process we added an abstraction of `add_treat_grps()` named `add_total_group()` to simplify the process of creating a "Total" group.
 
 ```{r treat_grps}
 tplyr_table(adsl, TRT01P) %>%
@@ -82,9 +84,9 @@ Note how in the above example, there are two new columns added to the data - `va
 
 ## Population Data
 
-A last and very important aspect of table level properties in Tplyr is the addition of a population dataset. In CDISC standards, datasets like `adae` only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you're subsetting for, they don't appear in the dataset. When you're looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, `adae` itself leaves you no way to calculate that total - as the subjects won't exist in the data.
+A last and very important aspect of table level properties in 'Tplyr' is the addition of a population dataset. In CDISC standards, datasets like `adae` only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you're subsetting for, they don't appear in the dataset. When you're looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, `adae` itself leaves you no way to calculate that total - as the subjects won't exist in the data.
 
-'Tplyr' allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter, as the variable names may differ between the datasets.
+'Tplyr' allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter and a population treatment variable named `pop_treat_var`, as variable names may differ between the datasets.
 
 ```{r pop_data1}
 t <- tplyr_table(adae, TRTA, where = AEREL != "NONE") %>% 
@@ -101,7 +103,7 @@ t %>%
   kable()
 ```
 
-In the above example, setting the population dataset `where` clause to `TRUE` removes any filter. `AEREL` doesn't exist in ADSL, therefore we removed the filter criteria on the population data. If `set_pop_where()` is not set for the population data, it will default to the `where` parameter used in `tplyr_table()`. The same logic applies to the population treatment variable. `TRTA` does not exist in `adsl` either, so we used `set_pop_treat_var()` to change it to the appropriate variable in `adsl`. 
+In the above example, `AEREL` doesn’t exist in `adsl`, therefore we used `set_pop_where()` to remove the filter criteria on the population data.  Setting the population dataset where parameter to `TRUE` removes any filter applied by the population data.  If `set_pop_where()` is not set for the population data, it will default to the `where` parameter used in `tplyr_table()`. The same logic applies to the population treatment variable. `TRTA` does not exist in `adsl` either, so we used `set_pop_treat_var()` to change it to the appropriate variable in `adsl`. 
 
 Note the percentage values in the summary above. By setting the population data, 'Tplyr' now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, 'Tplyr' is able to calculate your header N's properly:
 
