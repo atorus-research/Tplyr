@@ -480,7 +480,7 @@
 <div id="reordering-and-droping-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reordering-and-droping-columns" class="anchor"></a>Reordering and Droping Columns</h3>
-<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code>dplyr::relocate()</code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
+<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/relocate.html">dplyr::relocate()</a></code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
 <p>To drop the ordering helpers, you can easily subtract them with ‘dplyr’ and ‘tidyselect’.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)) <span class="kw">%&gt;%</span>
@@ -957,21 +957,21 @@
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
-<th align="right">RACEN</th>
 <th align="left">RACE</th>
+<th align="right">RACEN</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
 <td align="left">WHITE</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="right">2</td>
 <td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="right">6</td>
 <td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="right">6</td>
 </tr>
 </tbody>
 </table>
