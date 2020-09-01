@@ -201,7 +201,7 @@ This is required if you are using the token replacement.</p></td>
     <p>Headers are created by providing a single string. Columns are specified by delimitting each header with a '|' symbol.
 Instead of specifying the destination of each header, <code>add_column_headers</code> assumes that you have organized the columns
 of your data frame before hand. This means that after you use <code><a href='build.html'>Tplyr::build()</a></code>, if you'd like to reorganize the
-default column order (which is simply alphabetical), simply pass the build output to a <code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select</a></code> or <code>dplyr::relocate</code>
+default column order (which is simply alphabetical), simply pass the build output to a <code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select</a></code> or <code><a href='https://dplyr.tidyverse.org/reference/relocate.html'>dplyr::relocate</a></code>
 statement before passing into <code>add_column_headers</code>.</p>
 <p>Spanning headers are also supported. A spanning header is an overarching header that sits across multiple columns.
 Spanning headers are introduced to <code>add_column_header</code> by providing the spanner text (i.e. the text that
