@@ -61,7 +61,7 @@ We’re working on posting to CRAN! We’ll update as soon as it’s accepted.
 In the mean time, you can install via:
 
 ``` r
-devtools::install_github(devtools::install_github("https://github.com/atorus-research/Tplyr.git")
+devtools::install_github("https://github.com/atorus-research/Tplyr.git")
 ```
 
 What is Tplyr?
