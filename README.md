@@ -10,7 +10,7 @@ Tplyr Version 0.1.1 <img src="man/figures/logo.png" align="right" alt="" width="
 [![Build
 Status](https://travis-ci.com/atorus-research/tplyr.svg?branch=master)](https://travis-ci.com/atorus-research/tplyr)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
-[<img src="https://img.shields.io/github/license/atorus-research/tplyr">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
+[<img src="https://img.shields.io/badge/License-MIT-blue.svg">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
@@ -139,19 +139,276 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   ) %>% 
   build() %>% 
   kable()
+#> Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.
+#> Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.
 ```
 
-| row\_label1          | row\_label2 | var1\_Placebo | var1\_Xanomeline High Dose | var1\_Xanomeline Low Dose |  ord\_layer\_index|  ord\_layer\_1|  ord\_layer\_2|
-|:---------------------|:------------|:--------------|:---------------------------|:--------------------------|------------------:|--------------:|--------------:|
-| Age (years)          | n           | 86            | 84                         | 84                        |                  1|              1|              1|
-| Age (years)          | Mean (SD)   | 75.2 ( 8.59)  | 74.4 ( 7.89)               | 75.7 ( 8.29)              |                  1|              1|              2|
-| Age (years)          | Median      | 76.0          | 76.0                       | 77.5                      |                  1|              1|              3|
-| Age (years)          | Q1, Q3      | 69.2, 81.8    | 70.8, 80.0                 | 71.0, 82.0                |                  1|              1|              4|
-| Age (years)          | Min, Max    | 52, 89        | 56, 88                     | 51, 88                    |                  1|              1|              5|
-| Age (years)          | Missing     | 0             | 0                          | 0                         |                  1|              1|              6|
-| Age Categories n (%) | \<65        | 14 ( 16.3%)   | 11 ( 13.1%)                | 8 ( 9.5%)                 |                  2|              1|              1|
-| Age Categories n (%) | \>80        | 30 ( 34.9%)   | 18 ( 21.4%)                | 29 ( 34.5%)               |                  2|              1|              2|
-| Age Categories n (%) | 65-80       | 42 ( 48.8%)   | 55 ( 65.5%)                | 47 ( 56.0%)               |                  2|              1|              3|
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+row\_label1
+</th>
+<th style="text-align:left;">
+row\_label2
+</th>
+<th style="text-align:left;">
+var1\_Placebo
+</th>
+<th style="text-align:left;">
+var1\_Xanomeline High Dose
+</th>
+<th style="text-align:left;">
+var1\_Xanomeline Low Dose
+</th>
+<th style="text-align:right;">
+ord\_layer\_index
+</th>
+<th style="text-align:right;">
+ord\_layer\_1
+</th>
+<th style="text-align:right;">
+ord\_layer\_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+84
+</td>
+<td style="text-align:left;">
+84
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+Mean (SD)
+</td>
+<td style="text-align:left;">
+75.2 ( 8.59)
+</td>
+<td style="text-align:left;">
+74.4 ( 7.89)
+</td>
+<td style="text-align:left;">
+75.7 ( 8.29)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+Median
+</td>
+<td style="text-align:left;">
+76.0
+</td>
+<td style="text-align:left;">
+76.0
+</td>
+<td style="text-align:left;">
+77.5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+Q1, Q3
+</td>
+<td style="text-align:left;">
+69.2, 81.8
+</td>
+<td style="text-align:left;">
+70.8, 80.0
+</td>
+<td style="text-align:left;">
+71.0, 82.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+Min, Max
+</td>
+<td style="text-align:left;">
+52, 89
+</td>
+<td style="text-align:left;">
+56, 88
+</td>
+<td style="text-align:left;">
+51, 88
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age (years)
+</td>
+<td style="text-align:left;">
+Missing
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age Categories n (%)
+</td>
+<td style="text-align:left;">
+\<65
+</td>
+<td style="text-align:left;">
+14 ( 16.3%)
+</td>
+<td style="text-align:left;">
+11 ( 13.1%)
+</td>
+<td style="text-align:left;">
+8 ( 9.5%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age Categories n (%)
+</td>
+<td style="text-align:left;">
+\>80
+</td>
+<td style="text-align:left;">
+30 ( 34.9%)
+</td>
+<td style="text-align:left;">
+18 ( 21.4%)
+</td>
+<td style="text-align:left;">
+29 ( 34.5%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age Categories n (%)
+</td>
+<td style="text-align:left;">
+65-80
+</td>
+<td style="text-align:left;">
+42 ( 48.8%)
+</td>
+<td style="text-align:left;">
+55 ( 65.5%)
+</td>
+<td style="text-align:left;">
+47 ( 56.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+</tbody>
+</table>
 
 ‘Tplyr’ is Qualified
 --------------------
