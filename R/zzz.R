@@ -22,7 +22,7 @@ NULL
 
 #' A grammar of summary data for clinical reports
 #'
-#' \lifecycle{experimental}
+#' `r lifecycle::badge("experimental")`
 #'
 #' 'Tplyr' is a package dedicated to simplifying the data manipulation necessary
 #' to create clinical reports. Clinical data summaries can often be broken down

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  31 AUG 2020 21:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  1 SEP 2020 13:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1201,7 +1201,7 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (18 pages, 229627 bytes).
+Output written on uat.pdf (18 pages, 229314 bytes).
 PDF statistics:
  203 PDF objects out of 1000 (max. 8388607)
  172 compressed objects within 2 object streams

@@ -6,7 +6,7 @@
 \alias{Tplyr-package}
 \title{A grammar of summary data for clinical reports}
 \description{
-\lifecycle{experimental}
+`r lifecycle::badge("experimental")`
 }
 \details{
 'Tplyr' is a package dedicated to simplifying the data manipulation necessary
