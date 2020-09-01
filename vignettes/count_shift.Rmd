@@ -228,17 +228,15 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
 While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, `TRTA` and `ANRIND` the layer will use those denominators when determining the percentages. 
 
 ```{r}
-suppressWarnings({
-  tplyr_table(adlb, TRTA, where = !is.na(LBNRIND) & VISIT == "WEEK 4") %>%
+tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column = LBNRIND), by = vars(PARAM, AVISIT)) %>%
+    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
       set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
-      set_denoms_by(TRTA, LBNRIND) # Use the column total as the denominator
+      set_denoms_by(TRTA, ANRIND) # Use the column total as the denominator
   ) %>%
   build() %>%
   head() %>%
   kable()
-})
 ```
 
 Our hope is that this gives you the flexibility you need to structure your denominator however required. 
