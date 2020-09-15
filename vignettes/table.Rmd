@@ -80,6 +80,7 @@ tplyr_table(adsl, TRT01P) %>%
   build() %>% 
   kable()
 ```
+
 Note how in the above example, there are two new columns added to the data - `var1_Total` and `var1_Treated`. The summaries for the individual cohorts are left unchanged. 
 
 ## Population Data

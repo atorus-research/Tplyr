@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="A Grammar of Clinical Data Summary">
-<meta property="og:description" content="Tplyr is a package dedicated to simplifying the data manipulation necessary to create clinical reports. Clinical data summaries can often be broken down into two factors - counting discrete variables (or counting shifts in state), and descriptive statistics around continuous variable. Many of the reports that go into a clinical report are simply made up of these two scenarios. By abstracting this process away, Tplyr allows you to rapidly build these tables without worrying about the underlying data manipulation. ">
+<meta property="og:description" content="Simplified data manipulation necessary to create clinical reports.">
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
 <meta name="twitter:card" content="summary_large_image">
@@ -179,7 +179,7 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="r">
 <span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(
@@ -193,10 +193,10 @@
 <table class="table">
 <colgroup>
 <col width="14%">
-<col width="7%">
+<col width="8%">
 <col width="9%">
 <col width="18%">
-<col width="18%">
+<col width="17%">
 <col width="12%">
 <col width="9%">
 <col width="9%">
@@ -308,7 +308,7 @@
 <h2 class="hasAnchor">
 <a href="#tplyr-is-qualified" class="anchor"></a>‘Tplyr’ is Qualified</h2>
 <p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing ’Tplyr includes an entire user-acceptable testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
-<p>You can find the qualification document within this repository right <a href="uat/references/output/uat.pdf">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
+<p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
 </div>
 <div id="the-tldr" class="section level2">
 <h2 class="hasAnchor">
@@ -396,7 +396,7 @@
 <li><a href="https://RValidationHub.slack.com"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
 <li><a href="https://travis-ci.com/atorus-research/tplyr"><img src="https://travis-ci.com/atorus-research/tplyr.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://codecov.io/gh/atorus-research/tplyr"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
-<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/atorus-research/tplyr"></a></li>
+<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE"><img src="https://img.shields.io/github/license/atorus-research/tplyr"></a></li>
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
