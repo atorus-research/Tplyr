@@ -175,9 +175,9 @@ variable within the population dataset. <code>set_pop_treat_var</code> allows yo
 to change this.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pop_treat_var</span>(<span class='no'>table</span>)
+    <pre class="usage"><span class='fu'>pop_treat_var</span>(<span class='kw'>table</span>)
 
-<span class='fu'>set_pop_treat_var</span>(<span class='no'>table</span>, <span class='no'>pop_treat_var</span>)</pre>
+<span class='fu'>set_pop_treat_var</span>(<span class='kw'>table</span>, <span class='kw'>pop_treat_var</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,10 +199,11 @@ to change this.</p>
   object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>)
+    <pre class="examples"><div class='input'><span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>)
 
-<span class='fu'><a href='pop_data.html'>pop_data</a></span>(<span class='no'>tab</span>) <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>
-<span class='fu'>set_pop_treat_var</span>(<span class='no'>tab</span>, <span class='no'>mpg</span>)</div><div class='output co'>#&gt; *** tplyr_table ***
+<span class='fu'><a href='pop_data.html'>pop_data</a></span>(<span class='kw'>tab</span>) <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>
+<span class='fu'>set_pop_treat_var</span>(<span class='kw'>tab</span>, <span class='kw'>mpg</span>)
+</div><div class='output co'>#&gt; *** tplyr_table ***
 #&gt; Target (data.frame):
 #&gt; 	Name:  iris
 #&gt; 	Rows:  150
@@ -237,7 +238,7 @@ to change this.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

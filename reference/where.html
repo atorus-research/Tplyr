@@ -172,24 +172,24 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tplyr_layer</span>
-<span class='fu'>get_where</span>(<span class='no'>obj</span>)
+<span class='fu'>get_where</span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for tplyr_layer</span>
-<span class='fu'>set_where</span>(<span class='no'>obj</span>, <span class='no'>where</span>)
+<span class='fu'>set_where</span>(<span class='kw'>obj</span>, <span class='kw'>where</span>)
 
-<span class='fu'>get_where</span>(<span class='no'>obj</span>)
-
-<span class='co'># S3 method for tplyr_table</span>
-<span class='fu'>get_where</span>(<span class='no'>obj</span>)
-
-<span class='fu'>set_where</span>(<span class='no'>obj</span>, <span class='no'>where</span>)
+<span class='fu'>get_where</span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for tplyr_table</span>
-<span class='fu'>set_where</span>(<span class='no'>obj</span>, <span class='no'>where</span>)
+<span class='fu'>get_where</span>(<span class='kw'>obj</span>)
 
-<span class='fu'>set_pop_where</span>(<span class='no'>obj</span>, <span class='no'>where</span>)
+<span class='fu'>set_where</span>(<span class='kw'>obj</span>, <span class='kw'>where</span>)
 
-<span class='fu'>get_pop_where</span>(<span class='no'>obj</span>)</pre>
+<span class='co'># S3 method for tplyr_table</span>
+<span class='fu'>set_where</span>(<span class='kw'>obj</span>, <span class='kw'>where</span>)
+
+<span class='fu'>set_pop_where</span>(<span class='kw'>obj</span>, <span class='kw'>where</span>)
+
+<span class='fu'>get_pop_where</span>(<span class='kw'>obj</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -212,14 +212,16 @@ Supply as programming logic (i.e. x &lt; 5 &amp; y == 10)</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>magrittr</span>)
 
-<span class='no'>iris</span>$<span class='no'>Species2</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>$<span class='no'>Species</span>
-<span class='no'>lay</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_constructors.html'>group_count</a></span>(<span class='no'>Species</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>set_where</span>(<span class='no'>Petal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
+<span class='kw'>iris</span><span class='op'>$</span><span class='kw'>Species2</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span><span class='op'>$</span><span class='kw'>Species</span>
+<span class='kw'>lay</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>Species</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>set_where</span>(<span class='kw'>Petal.Length</span> <span class='op'>&gt;</span> <span class='fl'>3</span>) <span class='op'>%&gt;%</span>
   <span class='co'># Set logic for pop_data as well</span>
-  <span class='fu'>set_pop_where</span>(<span class='no'>Petal.Length</span> <span class='kw'>&gt;</span> <span class='fl'>3</span>)</div></pre>
+  <span class='fu'>set_pop_where</span>(<span class='kw'>Petal.Length</span> <span class='op'>&gt;</span> <span class='fl'>3</span>)
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -235,7 +237,7 @@ Supply as programming logic (i.e. x &lt; 5 &amp; y == 10)</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

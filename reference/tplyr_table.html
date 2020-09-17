@@ -175,7 +175,7 @@ one or more layers. Each layer contains an instruction for a summary to be perfo
 those layers, and the general data, metadata, and logic necessary.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tplyr_table</span>(<span class='no'>target</span>, <span class='no'>treat_var</span>, <span class='kw'>where</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cols</span> <span class='kw'>=</span> <span class='fu'>vars</span>())</pre>
+    <pre class="usage"><span class='fu'>tplyr_table</span>(<span class='kw'>target</span>, <span class='kw'>treat_var</span>, where = <span class='fl'>TRUE</span>, cols = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,12 +218,14 @@ column variables by using <code><a href='https://dplyr.tidyverse.org/reference/v
 
 <p><code>tplyr_table</code> allows you a basic interface to instantiate the object. Modifier functions are available to change
 individual parameters catered to your analysis. For example, to add a total group, you can use the
-<code><a href='treat_grps.html'>add_total_group</a></code>.</p>
+<code><a href='add_treat_grps.html'>add_total_group</a></code>.</p>
 <p>In future releases, we will provide vigenttes to fully demonstrate these capabilities.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'>tplyr_table</span>(<span class='no'>iris</span>, <span class='no'>Species</span>, <span class='kw'>where</span> <span class='kw'>=</span> <span class='no'>Sepal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>5.8</span>)</div></pre>
+<span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'>tplyr_table</span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>, where = <span class='kw'>Sepal.Length</span> <span class='op'>&lt;</span> <span class='fl'>5.8</span>)
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -239,7 +241,7 @@ individual parameters catered to your analysis. For example, to add a total grou
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

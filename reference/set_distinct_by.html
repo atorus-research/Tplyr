@@ -177,7 +177,7 @@ who had a particular adverse event. <code>set_distinct_by</code> allows you to s
 the by variables used to determine a distinct count.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_distinct_by</span>(<span class='no'>e</span>, <span class='no'>distinct_by</span>)</pre>
+    <pre class="usage"><span class='fu'>set_distinct_by</span>(<span class='kw'>e</span>, <span class='kw'>distinct_by</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,14 +204,15 @@ choose which to display in your <code><a href='f_str.html'>f_str</a></code> obje
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>magrittr</span>)
 
-<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>mtcars</span>, <span class='no'>gear</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
-    <span class='fu'><a href='layer_constructors.html'>group_count</a></span>(<span class='no'>cyl</span>) <span class='kw'>%&gt;%</span>
-      <span class='fu'>set_distinct_by</span>(<span class='no'>carb</span>)
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='build.html'>build</a></span>()</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 6</span><span>
+<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
+    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
+      <span class='fu'>set_distinct_by</span>(<span class='kw'>carb</span>)
+  ) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='build.html'>build</a></span>()
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 6</span><span>
 #&gt;   row_label1 var1_3        var1_4       var1_5       ord_layer_index ord_layer_1
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> 4          </span><span style='color: #555555;'>"</span><span> 1 ( 50.0%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 2 (100.0%… </span><span style='color: #555555;'>"</span><span> 1 ( 50.0%…               1           1
@@ -232,7 +233,7 @@ choose which to display in your <code><a href='f_str.html'>f_str</a></code> obje
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -179,9 +179,9 @@ dataset for each by group. The precision_by variables must be a subset of the
 by variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_precision_by</span>(<span class='no'>layer</span>)
+    <pre class="usage"><span class='fu'>get_precision_by</span>(<span class='kw'>layer</span>)
 
-<span class='fu'>set_precision_by</span>(<span class='no'>layer</span>, <span class='no'>precision_by</span>)</pre>
+<span class='fu'>set_precision_by</span>(<span class='kw'>layer</span>, <span class='kw'>precision_by</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,12 +204,13 @@ using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>dplyr::var
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
-<span class='no'>lay</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>mtcars</span>, <span class='no'>gear</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
-    <span class='fu'><a href='layer_constructors.html'>group_desc</a></span>(<span class='no'>mpg</span>, <span class='kw'>by</span><span class='kw'>=</span><span class='fu'>vars</span>(<span class='no'>carb</span>, <span class='no'>am</span>)) <span class='kw'>%&gt;%</span>
-    <span class='fu'>set_precision_by</span>(<span class='no'>carb</span>)
-  )</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>magrittr</span>)
+<span class='kw'>lay</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
+    <span class='fu'><a href='group_count.html'>group_desc</a></span>(<span class='kw'>mpg</span>, by=<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>carb</span>, <span class='kw'>am</span>)) <span class='op'>%&gt;%</span>
+    <span class='fu'>set_precision_by</span>(<span class='kw'>carb</span>)
+  )
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,7 +226,7 @@ using <code><a href='https://dplyr.tidyverse.org/reference/vars.html'>dplyr::var
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
