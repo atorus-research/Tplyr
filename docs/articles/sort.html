@@ -359,7 +359,7 @@
 <ul>
 <li>Added a ‘Total’ treatment group</li>
 <li>Added a ‘Treated’ group made up of the two treated cohorts</li>
-<li>Created a count layer for “End of Study Status”, reported by sex</li>
+<li>Created a count layer for End of Study Status, reported by sex</li>
 <li>Created a descriptive statistics layer for Height at Baseline, reported by sex</li>
 </ul>
 <p>Now let’s dig in.</p>
@@ -477,10 +477,10 @@
 </tbody>
 </table>
 </div>
-<div id="reordering-and-droping-columns" class="section level3">
+<div id="reordering-and-dropping-columns" class="section level3">
 <h3 class="hasAnchor">
-<a href="#reordering-and-droping-columns" class="anchor"></a>Reordering and Droping Columns</h3>
-<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/relocate.html">dplyr::relocate()</a></code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
+<a href="#reordering-and-dropping-columns" class="anchor"></a>Reordering and Dropping Columns</h3>
+<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
 <p>To drop the ordering helpers, you can easily subtract them with ‘dplyr’ and ‘tidyselect’.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)) <span class="kw">%&gt;%</span>
@@ -938,10 +938,10 @@
 </tbody>
 </table>
 </div>
-<div id="sorting-the-by-varaibles" class="section level2">
+<div id="sorting-the-by-variables" class="section level2">
 <h2 class="hasAnchor">
-<a href="#sorting-the-by-varaibles" class="anchor"></a>Sorting the <code>by</code> varaibles</h2>
-<p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see the vignette(“Count_and_Shift_Tables”)).</p>
+<a href="#sorting-the-by-variables" class="anchor"></a>Sorting the <code>by</code> Variables</h2>
+<p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("count_shift")</a></code>).</p>
 <p>These order variables will calculate based on the first applicable method below.</p>
 <ol style="list-style-type: decimal">
 <li>If the variable has a <code>VARN</code> variable in the <code>target</code> dataset, (i.e. <code>AVISIT</code> has <code>AVISITN</code>, or <code>PARAM</code> has <code>PARAMN</code>), that variable will be extracted and used as the ordering variable associated with that row label.</li>
@@ -1214,7 +1214,7 @@
 <li>What column do you want to sort by?</li>
 <li>If there are multiple numbers in the column, like “n (%) [event]” type tables, which number should be used to create the sort variable?</li>
 </ul>
-<p>We’ve create helper functions to aid in making this step more intuitive from a user perspetive, and to maintain the flexibility that you need. The two functions that you need here are <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and <code><a href="../reference/ordering.html">set_result_order_var()</a></code>.</p>
+<p>We’ve created helper functions to aid in making this step more intuitive from a user perspective, and to maintain the flexibility that you need. The two functions that you need here are <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and <code><a href="../reference/ordering.html">set_result_order_var()</a></code>.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
@@ -1423,7 +1423,7 @@
 </tbody>
 </table>
 <p>In a layer that uses nesting, we need one more order variable - as we’re now concerned with the sorting of both the outside and inside variable. Counts are being summarized for both - so we need to know how both should be sorted. Additionally, we need to make sure that, in this case, the adverse events within a body system stay within the rows of that body system.</p>
-<p>These result variables will always be the last two order variables output by ‘Tplyr’. In the above example, <code>ord_layer_1</code> is for <code>AEBODSYS</code> and <code>ord_layer_2</code> is for AEDECOD. Note that <code>ord_layer_2</code> has <code>Inf</code> where <code>row_label1</code> and <code>row_label2</code> are both equal. This is the row that summarizes the <code>AEBODSYS</code> counts. By default, ‘Tplyr’ is set to assume that you will use <strong>descending</strong> sort on the order variable associated with the inside count variable (i.e. <code>AEDECOD</code>). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you’d like to use ascending sorting instead, we offer the function <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code>.</p>
+<p>These result variables will always be the last two order variables output by ‘Tplyr’. In the above example, <code>ord_layer_1</code> is for <code>AEBODSYS</code> and <code>ord_layer_2</code> is for <code>AEDECOD</code>. Note that <code>ord_layer_2</code> has <code>Inf</code> where <code>row_label1</code> and <code>row_label2</code> are both equal. This is the row that summarizes the <code>AEBODSYS</code> counts. By default, ‘Tplyr’ is set to assume that you will use <strong>descending</strong> sort on the order variable associated with the inside count variable (i.e. <code>AEDECOD</code>). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you’d like to use ascending sorting instead, we offer the function <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code>.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
@@ -1780,10 +1780,10 @@
 </table>
 <p>There are a few problems here:</p>
 <ul>
-<li>H sorts before N alphabetically</li>
+<li>“H” sorts before “N” alphabetically</li>
 <li>We’re missing the rows for “L” on most visits, even though “L” in in the data for <code>BNRIND</code>.</li>
 </ul>
-<p>Using a factor variables cleans this right up for us:</p>
+<p>Using factor variables cleans this right up for us:</p>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 
