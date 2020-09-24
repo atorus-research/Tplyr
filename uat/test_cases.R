@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/31/2020
+#' 9/24/2020
 
 #setup ----
 #insert any necessary libraries
@@ -3430,6 +3430,176 @@ test_that('T59',{
 
   #clean up working directory
 
+})
+
+#test 60 ----
+test_that('T60',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA, cols=SEX) %>%
+      add_treat_grps("Treated" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
+      set_distinct_by(USUBJID) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          add_risk_diff(c('Treated','Placebo'))
+      )
+
+    test_60 <- suppressWarnings(build(t))
+
+    # output table to check attributes
+    save(test_60, file = "~/Tplyr/uat/output/test_60.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_60)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_60.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t60_tots <- rbind(adsl, mutate(filter(adsl, TRT01P %in% c("Xanomeline High Dose", "Xanomeline Low Dose")),
+                              TRT01P = 'Treated')) %>%
+    distinct(TRT01P, SEX, USUBJID) %>%
+    group_by(TRT01P, SEX) %>%
+    summarise(total=n()) %>%
+    mutate(total = as.integer(total)) %>%
+    complete(TRT01P, SEX, fill=list(n=0))
+
+  t60_ae <- rbind(adae, mutate(filter(adae, TRTA %in% c("Xanomeline High Dose", "Xanomeline Low Dose")),
+                              TRTA = 'Treated'))
+
+  t60_calc <- rbind(t60_ae, mutate(t60_ae,AEDECOD = ' ')) %>%
+    distinct(TRTA, SEX, AEBODSYS, AEDECOD, USUBJID) %>%
+    group_by(TRTA, SEX, AEBODSYS, AEDECOD) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, AEBODSYS, AEDECOD, fill=list(n=0)) %>%
+    merge(t60_tots, by.x=c("TRTA","SEX"), by.y=c("TRT01P","SEX")) %>%
+    mutate(pct = (n / total) * 100) %>%
+    mutate(col = paste0(sprintf('%3s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    pivot_wider(names_from = c(TRTA, SEX), values_from = c(col,n,total,pct)) %>%
+    filter(n_Placebo_F != 0 | n_Placebo_M != 0 |
+           n_Treated_F != 0 | n_Treated_M != 0 |
+           `n_Xanomeline High Dose_F` != 0 | `n_Xanomeline High Dose_M` != 0 |
+           `n_Xanomeline Low Dose_F` != 0 | `n_Xanomeline Low Dose_M` != 0)
+
+  t60_2 <- rowwise(t60_calc) %>%
+    mutate(est1 = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$estimate[[1]]) %>%
+    mutate(est2 = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$estimate[[2]]) %>%
+    mutate(lci = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$conf.int[[1]]) %>%
+    mutate(uci = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$conf.int[[2]]) %>%
+    mutate(rdiff = est1 - est2) %>%
+    mutate(col = paste0(sprintf("%6.3f",rdiff),' (',sprintf("%6.3f",lci), ', ',sprintf("%6.3f",uci),')'))
+
+  testthat::expect_equal(c(t60_calc$col_Placebo_F, t60_calc$col_Placebo_M, t60_calc$col_Treated_F, t60_calc$col_Treated_M),
+                         c(test_60$var1_Placebo_F, test_60$var1_Placebo_M, test_60$var1_Treated_F, test_60$var1_Treated_M),
+                         label = "T60.1")
+  testthat::expect_equal(t60_2$col,
+                         test_60$rdiff_Treated_Placebo_F,
+                         label = "T60.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t60_tots)
+  rm(t60_ae)
+  rm(t60_calc)
+  rm(t60_2)
+  rm(test_60)
+})
+
+#test 61 ----
+test_that('T61',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA, where=RACE == 'WHITE', cols=SEX) %>%
+      add_treat_grps("Treated" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
+      set_distinct_by(USUBJID) %>%
+      add_layer(
+        group_count(vars(AEBODSYS, AEDECOD)) %>%
+          add_risk_diff(c('Treated','Placebo'))
+      )
+
+    test_61 <- suppressWarnings(build(t))
+
+    # output table to check attributes
+    save(test_61, file = "~/Tplyr/uat/output/test_61.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_61)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_61.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t61_tots <- rbind(adsl, mutate(filter(adsl, TRT01P %in% c("Xanomeline High Dose", "Xanomeline Low Dose")),
+                                 TRT01P = 'Treated')) %>%
+    filter(RACE == 'WHITE') %>%
+    distinct(TRT01P, SEX, USUBJID) %>%
+    group_by(TRT01P, SEX) %>%
+    summarise(total=n()) %>%
+    mutate(total = as.integer(total)) %>%
+    complete(TRT01P, SEX, fill=list(n=0))
+
+  t61_ae <- rbind(adae, mutate(filter(adae, TRTA %in% c("Xanomeline High Dose", "Xanomeline Low Dose")),
+                               TRTA = 'Treated')) %>%
+    filter(RACE == 'WHITE')
+
+  t61_calc <- rbind(t61_ae, mutate(t61_ae,AEDECOD = ' ')) %>%
+    distinct(TRTA, SEX, AEBODSYS, AEDECOD, USUBJID) %>%
+    group_by(TRTA, SEX, AEBODSYS, AEDECOD) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, AEBODSYS, AEDECOD, fill=list(n=0)) %>%
+    merge(t61_tots, by.x=c("TRTA","SEX"), by.y=c("TRT01P","SEX")) %>%
+    mutate(pct = (n / total) * 100) %>%
+    mutate(col = paste0(sprintf('%3s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    pivot_wider(names_from = c(TRTA, SEX), values_from = c(col,n,total,pct)) %>%
+    filter(n_Placebo_F != 0 | n_Placebo_M != 0 |
+             n_Treated_F != 0 | n_Treated_M != 0 |
+             `n_Xanomeline High Dose_F` != 0 | `n_Xanomeline High Dose_M` != 0 |
+             `n_Xanomeline Low Dose_F` != 0 | `n_Xanomeline Low Dose_M` != 0)
+
+  t61_2 <- rowwise(t61_calc) %>%
+    mutate(est1 = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$estimate[[1]]) %>%
+    mutate(est2 = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$estimate[[2]]) %>%
+    mutate(lci = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$conf.int[[1]]) %>%
+    mutate(uci = suppressWarnings(prop.test(c(n_Treated_F, n_Placebo_F), c(total_Treated_F, total_Placebo_F)))$conf.int[[2]]) %>%
+    mutate(rdiff = est1 - est2) %>%
+    mutate(col = paste0(sprintf("%6.3f",rdiff),' (',sprintf("%6.3f",lci), ', ',sprintf("%6.3f",uci),')'))
+
+  testthat::expect_equal(c(t61_calc$col_Placebo_F, t61_calc$col_Placebo_M, t61_calc$col_Treated_F, t61_calc$col_Treated_M),
+                         c(test_61$var1_Placebo_F, test_61$var1_Placebo_M, test_61$var1_Treated_F, test_61$var1_Treated_M),
+                         label = "T61.1")
+  testthat::expect_equal(t61_2$col,
+                         test_61$rdiff_Treated_Placebo_F,
+                         label = "T61.2")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t61_tots)
+  rm(t61_ae)
+  rm(t61_calc)
+  rm(t61_2)
+  rm(test_61)
 })
 #clean up ----
 rm(vur)
