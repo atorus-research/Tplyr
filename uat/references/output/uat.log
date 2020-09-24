@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  24 SEP 2020 18:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  24 SEP 2020 18:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1225,65 +1225,64 @@ Overfull \hbox (15.88121pt too wide) in alignment at lines 636--638
 [11] [12
 
 ] [13] [14]
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1362--1366
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1362--1366
  [] [] [] 
  []
 
 
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1366--1371
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1366--1371
  [] [] [] 
  []
 
 
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1371--1498
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1371--1437
  [] [] [] 
  []
 
 [15]
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1498--1694
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1437--1477
  [] [] [] 
  []
 
 
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1694--1904
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1477--1517
  [] [] [] 
  []
 
 
-Overfull \hbox (4060.42851pt too wide) in alignment at lines 1904--1974
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1517--1561
  [] [] [] 
  []
 
 [16]
-Overfull \hbox (18.19513pt too wide) in paragraph at lines 1988--1993
-\T1/lmr/m/n/10 (-20) [6] LC_MESSAGES=C.UTF-8 LC_PAPER=C.UTF-8 LC_NAME=C LC_ADDR
-ESS=C LC_TELEPHONE=C 
+Overfull \hbox (1198.07706pt too wide) in alignment at lines 1561--1588
+ [] [] [] 
  []
 
 [17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2046.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1655.
 [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2046.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1655.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2046.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 2046.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2046.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1655.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1655.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1655.
  ) 
 Here is how much of TeX's memory you used:
- 14708 strings out of 494923
- 210237 string characters out of 6180743
- 452907 words of memory out of 5000000
+ 14704 strings out of 494923
+ 210195 string characters out of 6180743
+ 452911 words of memory out of 5000000
  17647 multiletter control sequences out of 15000+600000
- 60453 words of font info for 91 fonts, out of 8000000 for 9000
+ 60287 words of font info for 89 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,11n,43p,654b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,12n,43p,654b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/shar
 e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (18 pages, 236714 bytes).
+Output written on uat.pdf (18 pages, 232529 bytes).
 PDF statistics:
  203 PDF objects out of 1000 (max. 8388607)
  172 compressed objects within 2 object streams
