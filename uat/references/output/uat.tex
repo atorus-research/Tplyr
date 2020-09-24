@@ -1,0 +1,2046 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Tplyr Validation Report},
+  pdfauthor={Nathan Kosiba},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{titling}
+\usepackage{pdflscape}
+
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+
+\pretitle{%
+  \begin{center}
+  \LARGE
+  \includegraphics[width=4cm,height=6cm]{atorus_logo.png}\\[\bigskipamount]
+}
+\posttitle{\end{center}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{booktabs}
+\fancyhead[CO, CE]{Atorus Research}
+\fancyfoot[CO, CE]{Tplyr UAT \thepage}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\title{Tplyr Validation Report}
+\author{Nathan Kosiba}
+\date{2020-09-24}
+
+\begin{document}
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+
+\hypertarget{validation-files-information}{%
+\section{Validation Files
+Information}\label{validation-files-information}}
+
+\hypertarget{specifications}{%
+\subsection{Specifications}\label{specifications}}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Specification Name & Last updated by & Last updated date\\
+\midrule
+\cellcolor{gray!6}{specification.Rmd} & \cellcolor{gray!6}{Nathan Kosiba} & \cellcolor{gray!6}{2020-09-24}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{test-case}{%
+\subsection{Test case}\label{test-case}}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Test Case Name & Last updated by & Last updated date\\
+\midrule
+\cellcolor{gray!6}{test\_cases.Rmd} & \cellcolor{gray!6}{Nathan Kosiba} & \cellcolor{gray!6}{2020-09-24}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{test-code}{%
+\subsection{Test code}\label{test-code}}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Test Code Name & Last updated by & Last updated date\\
+\midrule
+\cellcolor{gray!6}{test\_cases.R} & \cellcolor{gray!6}{Nathan Kosiba} & \cellcolor{gray!6}{2020-09-24}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{validation-results}{%
+\section{Validation Results}\label{validation-results}}
+
+\hypertarget{specifications-1}{%
+\subsection{Specifications}\label{specifications-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  A: Population data can be specified by the user
+\item
+  B: Treatment variable can be manually specified for population data
+\item
+  C: Population data subset can be specified on user specified
+  conditions
+\item
+  D: Header N counts will be specified by combining different subgroups
+  available within the population data
+\item
+  E: Manual groups can be specified by combining different subgroups
+\item
+  F: Analysis data can be specified by the user
+\item
+  G: Analysis data subset can be specified on user specified conditions
+\item
+  H: Treatment variable can be manually specified for analysis data
+\item
+  I: n counts of values within a variable can be produced
+\item
+  J: n counts of values within a group of variables can be produced
+\item
+  K: Total n counts can be added
+\item
+  L: Missing n count handling can be specified including presentation
+  and denominator handling
+\item
+  M: Dummy values can be specified for categories that need to be
+  presented but may not exist within the data
+\item
+  N: Counts can be produced as n (\%)
+\item
+  O: When producing n (\%), the denominator can be specified using the
+  analysis data
+\item
+  P: When producing n (\%), the denominator can be specified using a
+  particular manually specified subset
+\item
+  Q: When producing n (\%), the denominator can be specified using the
+  population data
+\item
+  R: When producing n (\%), the denominator can be specified using
+  grouping of variables
+\item
+  S: Risk difference including confidence interval can be produced based
+  on specified treatment groupings
+\item
+  T: Risk difference arguments can be passed forward into prop.test
+  using args parameter
+\item
+  U: Risk difference can be calculated over user specified cols
+  arguments
+\item
+  V: Risk difference can be calculated over nested count layers and by
+  variables
+\item
+  W: The descriptive statistic of n can be produced based on an input
+  variable
+\item
+  X: The descriptive statistic of mean can be produced based on an input
+  variable
+\item
+  Y: The descriptive statistic of median can be produced based on an
+  input variable
+\item
+  Z: The descriptive statistic of IQR/Q1/Q3 can be produced based on an
+  input variable
+\item
+  AA: The descriptive statistic of standard deviation can be produced
+  based on an input variable
+\item
+  AB: The descriptive statistic of variance can be produced based on an
+  input variable
+\item
+  AC: The descriptive statistic of min can be produced based on an input
+  variable
+\item
+  AD: The descriptive statistic of max can be produced based on an input
+  variable
+\item
+  AE: The descriptive statistic of missing can be produced based on an
+  input variable
+\item
+  AF: Custom descriptive statistics can be produced based on an input
+  variable and a specified formula
+\item
+  AG: Descriptive statistics can be performed across discrete values
+  within a grouping variable or a group of grouping variables
+\item
+  AH: Multiple statistics can be presented in one line (i.e.~combining
+  Q1, Q3 or Min, Max)
+\item
+  AI: Decimal precision can be specified by the user
+\item
+  AJ: Integer length can be specified by the user
+\item
+  AK: Decimal precision can be dynamically created from analysis data
+\item
+  AL: Integer length can be dynamically created from analysis data
+\item
+  AM: Presentation format can be specified by the user including desired
+  non-numeric text
+\item
+  AN: Strings are built to align per user specification within a display
+\item
+  AO: Descriptive statistic missing values can be set to a user
+  specified string
+\item
+  AP: Shift n counts of values using two variables, a `from' and a `to'
+  variable, can be produced
+\item
+  AQ: Shift n counts of values within a variable can be produced
+\item
+  AR: Shift n counts of values within a group of variables can be
+  produced
+\item
+  AS: Dummy values for shift counts can be specified for categories that
+  need to be presented but may not exist within the data
+\item
+  AT: Shift counts can be produced as n (\%)
+\item
+  AU: For shift counts when producing n (\%), the denominator can be
+  specified using the analysis data
+\item
+  AV: For shift counts when producing n (\%), the denominator can be
+  specified using a particular manually specified subset
+\item
+  AW: For shift counts when producing n (\%), the denominator can be
+  specified using the population data
+\item
+  AX: For shift counts when producing n (\%), the denominator can be
+  specified using a grouping of variables
+\item
+  AY: Row labels can be manually specified by the user
+\item
+  AZ: Row labels can be nested to put a subgroup within a parent group
+\item
+  BA: Summaries can be stacked on top of one another
+\item
+  BB: Summaries can be sorted based on manual sorting by presentation
+  specified order
+\item
+  BC: Summaries can be sorted based on count based sorting (either
+  ascending or descending) by a specified treatment group
+\item
+  BD: Summaries can be sorted based on alphabetical sorting based on
+  data values
+\item
+  BE: Summaries can be sorted based on a numeric version of the target
+  variable if available
+\item
+  BF: Summary by variables will be sorted by a numeric variable if
+  available and then by factor
+\item
+  BG: Nested layers can be sorted independently using different methods
+\item
+  BH: Independent layers can be sorted using different methods and
+  stacked using common sorting variables
+\item
+  BI: Count layer default formats can be set at the table level
+\item
+  BJ: Descriptive statistics layer default formats can be set at the
+  table level
+\item
+  BK: Shift layer default formats can be set at the table level
+\item
+  BLL: Option for count layer default formats can be specified by the
+  user
+\item
+  BM: Option for descriptive statistics layer default formats can be
+  specified by the user
+\item
+  BN: Option for shift layer default formats can be specified by the
+  user
+\item
+  BO: Option for a cap on auto precision can be specified by the user
+\item
+  BP: Option for custom descriptive statistics can be specified by the
+  user for use in the table
+\item
+  BQ: Option for setting scipen internal option can be specified by the
+  user
+\item
+  BR: Option for setting quantile algorithm choice can be specified by
+  the user
+\item
+  BS: Column headers can be added to the output object
+\item
+  BT: Row breaks can be added between sections based on grouping
+  variables
+\item
+  BU: Row labels can be masked in a hierarchical fashion
+\item
+  BV: A table object is returned in a format that is ready to be
+  cosmetically prepared
+\item
+  BW: Count layers can process a cols argument and separate population
+  data passed from the table level along with normal count layer
+  processing
+\item
+  BX: Count layers can process a cols argument, separate population
+  data, and a defined subset passed from the table level along with
+  normal count layer processing
+\end{itemize}
+
+\newpage
+
+\blandscape
+
+\hypertarget{matrix}{%
+\subsection{Matrix}\label{matrix}}
+
+\begin{longtable}[l]{lllllllllllllllllllllllllll}
+\toprule
+  & A & B & C & D & E & F & G & H & I & J & K & L & M & N & O & P & Q & R & S & T & U & V & W & X & Y & Z\\
+\midrule
+\endfirsthead
+\multicolumn{27}{@{}l}{\textit{(continued)}}\\
+\toprule
+  & A & B & C & D & E & F & G & H & I & J & K & L & M & N & O & P & Q & R & S & T & U & V & W & X & Y & Z\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{T1} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T2 &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T3} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T4 &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T5} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T6 &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T7} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T8 &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T9} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T10 &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T11} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T12 &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T13} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T14 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T15} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T16 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T17} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T18 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & \\
+\cellcolor{gray!6}{T19} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T20 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X\\
+\addlinespace
+\cellcolor{gray!6}{T21} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T22 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T23} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T24 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T25} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T26 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T27} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T28 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T29} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T30 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T31} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T32 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T33} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T34 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T35} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T36 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T37} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T38 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T39} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T40 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T41} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T42 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T43} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T44 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T45} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T46 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T47} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T48 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T49} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T50 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T51} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T52 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T53} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T54 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T55} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T56 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T57} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T58 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T59} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T60 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T61} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\*
+\end{longtable}
+\begin{longtable}[l]{lllllllllllllllllllllllllll}
+\toprule
+  & AA & AB & AC & AD & AE & AF & AG & AH & AI & AJ & AK & AL & AM & AN & AO & AP & AQ & AR & AS & AT & AU & AV & AW & AX & AY & AZ\\
+\midrule
+\endfirsthead
+\multicolumn{27}{@{}l}{\textit{(continued)}}\\
+\toprule
+  & AA & AB & AC & AD & AE & AF & AG & AH & AI & AJ & AK & AL & AM & AN & AO & AP & AQ & AR & AS & AT & AU & AV & AW & AX & AY & AZ\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{T1} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T2 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T3} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T4 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T5} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T6 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T7} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T8 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T9} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T10 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T11} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T12 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T13} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T14 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T15} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T16 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T17} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T18 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T19} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T20 & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T21} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T22 &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T23} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T24 &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T25} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T26 &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T27} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T28 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T29} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T30 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T31} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T32 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & \\
+\cellcolor{gray!6}{T33} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T34 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & \\
+\cellcolor{gray!6}{T35} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T36 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & \\
+\cellcolor{gray!6}{T37} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{}\\
+T38 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X\\
+\cellcolor{gray!6}{T39} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T40 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T41} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T42 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T43} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T44 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T45} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T46 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T47} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T48 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T49} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T50 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T51} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T52 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T53} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T54 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T55} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T56 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T57} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T58 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T59} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T60 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T61} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\*
+\end{longtable}
+\begin{longtable}[l]{lllllllllllllllllllllllll}
+\toprule
+  & BA & BB & BC & BD & BE & BF & BG & BH & BI & BJ & BK & BLL & BM & BN & BO & BP & BQ & BR & BS & BT & BU & BV & BW & BX\\
+\midrule
+\endfirsthead
+\multicolumn{25}{@{}l}{\textit{(continued)}}\\
+\toprule
+  & BA & BB & BC & BD & BE & BF & BG & BH & BI & BJ & BK & BLL & BM & BN & BO & BP & BQ & BR & BS & BT & BU & BV & BW & BX\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{T1} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T2 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T3} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T4 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T5} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T6 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T7} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T8 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T9} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T10 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T11} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T12 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T13} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T14 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T15} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T16 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T17} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T18 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T19} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T20 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T21} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T22 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T23} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T24 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T25} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T26 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T27} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T28 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T29} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T30 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T31} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T32 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T33} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T34 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T35} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T36 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T37} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T38 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T39} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T40 &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T41} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T42 &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T43} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T44 &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T45} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T46 &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T47} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T48 &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T49} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T50 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\addlinespace
+\cellcolor{gray!6}{T51} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T52 &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T53} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T54 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & \\
+\cellcolor{gray!6}{T55} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+\addlinespace
+T56 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & \\
+\cellcolor{gray!6}{T57} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T58 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & \\
+\cellcolor{gray!6}{T59} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{}\\
+T60 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & \\
+\addlinespace
+\cellcolor{gray!6}{T61} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{X}\\*
+\end{longtable}
+
+\elandscape
+
+\newpage
+
+\hypertarget{test-cases}{%
+\subsection{Test Cases}\label{test-cases}}
+
+This section contains details of each test executed. Checks verifying
+each test are included as sub-bullets of their associated test.
+
+\begin{itemize}
+\item
+  Setup: \emph{No prerequisites required}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    T1: Population data can be specified by the user and treatment
+    variable can be specified
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T1.1: Verify target dataset in table is the same as specified
+    \item
+      T1.2: Verify treatment variable in table is the same as specified
+    \end{itemize}
+  \item
+    T2: Population data subset can be specified on user specified
+    conditions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T2.1: Population data created matches data subset as specified
+    \end{itemize}
+  \item
+    T3: Manual groups can be specified by combining different subgroups
+    and header N counts will be specified from these groups within the
+    population data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T3.1: Population groups can be added by combining existing groups
+    \item
+      T3.2: Header N counts of combined groups match the combined total
+      of the groups
+    \end{itemize}
+  \item
+    T4: Analysis data can be specified by the user and treatment
+    variable can be specified for the analysis population
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T4.1: Verify analysis dataset in layer is the same as specified
+      when inherited from table
+    \item
+      T4.2: Verify treatment variable in layer is the same as specified
+      when inherited from table
+    \end{itemize}
+  \item
+    T5: Population data and treatment variable can be specified
+    independent of analysis data and treatment variable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T5.1: Verify population data can be manually specified if not the
+      same as analysis data
+    \item
+      T5.2: Verify analysis data can be manually specified if not the
+      same as population data
+    \item
+      T5.3: Verify population treatment variable can be manually
+      specified if not the same as analysis treatment variable
+    \item
+      T5.4: Verify analysis treatment variable can be manually specified
+      if not the same as population treatment variable
+    \end{itemize}
+  \item
+    T6: Analysis data subset can be specified on user specified
+    conditions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T6.1: Analysis data created matches data subset as specified
+    \end{itemize}
+  \item
+    T7: n counts of values within a variable can be produced
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T7.1: Complete data value n counts can be produced within a
+      variable
+    \item
+      T7.2: Distinct data value n counts can be produced within a
+      variable
+    \end{itemize}
+  \item
+    T8: n counts of values within a group of variables can be produced
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T8.1: Complete data value n counts can be produced within a group
+      of variables
+    \item
+      T8.2: Distinct data value n counts can be produced within a group
+      of variables
+    \end{itemize}
+  \item
+    T9: Total n counts can be added
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T9.1: Total n count can be added within a layer
+    \end{itemize}
+  \item
+    T10: Missing n count handling can be specified including
+    presentation and denominator handling
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T10.1: Missing n count rows can be added within a layer
+    \item
+      T10.2: Missing values can be excluded from the layer denominator
+    \end{itemize}
+  \item
+    T11: Dummy values can be specified for categories that need to be
+    presented but may not exist within the data and missing values can
+    be set to a user specified string
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T11.1: Values specified by user are presented in the output table
+    \item
+      T11.2: Missing values can be set to a user specified string
+    \end{itemize}
+  \item
+    T12: Counts can be produced as n (\%)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T12.1: When specified, both n and \% can be displayed in a n (\%)
+      fashion
+    \item
+      T12.2: Distinct n and \% can be displayed in a n (\%) fashion
+    \item
+      T12.3: Distinct and non-distinct n and \% can be presented
+      together
+    \end{itemize}
+  \item
+    T13: When producing n (\%), the denominator can be specified using
+    the analysis data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T13.1: Check denominators created match counts from analysis data
+    \item
+      T13.2: Check \% produced use denominators matching counts from
+      analysis data
+    \end{itemize}
+  \item
+    T14: When producing n (\%), the denominator can be specified using a
+    particular manually specified subset
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T14.1: Check denominators created match counts using specified
+      conditions
+    \item
+      T14.2: Check \% produced use denominators matching counts using
+      specified conditions
+    \end{itemize}
+  \item
+    T15: When producing n (\%), the denominator can be specified using
+    the population data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T15.1: Check \% produced use denominators matching counts from
+      population data
+    \item
+      T15.2: Check denominators created match counts from population
+      data
+    \end{itemize}
+  \item
+    T16: For shift counts when producing n (\%), the denominator can be
+    specified using a grouping of variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T16.1: Check \% produced use denominators matching counts from
+      grouping variables
+    \end{itemize}
+  \item
+    T17: Risk difference including confidence interval can be produced
+    based on specified treatment groupings and arguments can be passed
+    through to prop.test
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T17.1: Check that risk difference calculated between groupings is
+      correct
+    \item
+      T17.2: Check that confidence interval calculated between groupings
+      is correct
+    \item
+      T17.3: Arguments passed through to prop.test create the correct
+      output
+    \end{itemize}
+  \item
+    T18: Risk difference can be calculated over user specified cols
+    arguments
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T18.1: Risk difference estimate and confidence interval can be
+      computed across values of the treatment variable and cols argument
+    \end{itemize}
+  \item
+    T19: Risk difference can be calculated over nested count layers and
+    by variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T19.1: Risk difference estimate and confidence interval can be
+      computed across values of the treatment variable and nested count
+      layer
+    \item
+      T19.2: Risk difference estimate and confidence interval can be
+      computed across values of the treatment variable and by variable
+    \item
+      T19.3: Risk difference estimate and confidence interval can be
+      computed across values of the treatment variable, nested count
+      layer and by variable
+    \end{itemize}
+  \item
+    T20: The descriptive statistics of n, mean, median, IQR, Q1, Q3,
+    standard deviation, variance, min, max, and missing can be produced
+    based on an input variable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T20.1: Check the computed statistic of n matches the expected
+      value
+    \item
+      T20.2: Check the computed statistic of mean matches the expected
+      value
+    \item
+      T20.3: Check the computed statistic of median matches the expected
+      value
+    \item
+      T20.4: Check the computed statistic of IQR matches the expected
+      value
+    \item
+      T20.5: Check the computed statistic of Q1 matches the expected
+      value
+    \item
+      T20.6: Check the computed statistic of Q3 matches the expected
+      value
+    \item
+      T20.7: Check the computed statistic of standard deviation matches
+      the expected value
+    \item
+      T20.8: Check the computed statistic of variance matches the
+      expected value
+    \item
+      T20.9: Check the computed statistic of min matches the expected
+      value
+    \item
+      T20.10: Check the computed statistic of max matches the expected
+      value
+    \item
+      T20.11: Check the computed statistic of missing matches the
+      expected value
+    \end{itemize}
+  \item
+    T21: Custom descriptive statistics can be produced based on an input
+    variable and a specified formula
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T21.1: Check that the computed statistic value matches the value
+      from the specified formula
+    \end{itemize}
+  \item
+    T22: Descriptive statistics can be performed across discrete values
+    within a grouping variable or a group of grouping variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T22.1: Check the statistic values match the values from the
+      specified grouping variable
+    \end{itemize}
+  \item
+    T23: Multiple statistics can be presented in one line
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T23.1: Check that the output can include multiple statistics on
+      the same line
+    \end{itemize}
+  \item
+    T24: Decimal precision and integer length can be specified by the
+    user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T24.1: The output decimal precision and integer length is the same
+      as the user specified values
+    \end{itemize}
+  \item
+    T25: Decimal precision and integer length can be dynamically created
+    from analysis data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T25.1: The output decimal precision and integer length is the same
+      as the decimal precision and integer length from the target data
+      variable
+    \end{itemize}
+  \item
+    T26: Presentation format can be specified by the user including
+    desired non-numeric text and align per user specification
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T26.1: The output string is formatted the same as user
+      specification including non-numeric text and alignment
+    \end{itemize}
+  \item
+    T27: Descriptive statistic missing values can be set to a user
+    specified string
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T27.1: Missing values can be set to a user specified string
+    \end{itemize}
+  \item
+    T28: Shift n counts of values using two variables, a `from' and a
+    `to' variable, can be produced
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T28.1: n counts can be created in a shift manner using a from and
+      to variable
+    \end{itemize}
+  \item
+    T29: Shift n counts of values within a variable can be produced
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T29.1: n counts can be created in a shift manner using a from and
+      to variable and a by variable
+    \end{itemize}
+  \item
+    T30: Shift n counts of values within a group of variables can be
+    produced
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T30.1: n counts can be created in a shift manner using a from and
+      to variable and multiple by variables
+    \end{itemize}
+  \item
+    T31: Dummy values for shift counts can be specified for categories
+    that need to be presented but may not exist within the data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T31.1: Values specified by user for the shift variables are
+      presented in the output table
+    \end{itemize}
+  \item
+    T32: Shift counts can be produced as n (\%)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T32.1: When specified, both n and \% can be displayed in a n (\%)
+      fashion for shift layer
+    \end{itemize}
+  \item
+    T33: For shift counts when producing n (\%), the denominator can be
+    specified using the analysis data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T33.1: Check \% produced use denominators matching counts from
+      analysis data
+    \end{itemize}
+  \item
+    T34: For shift counts when producing n (\%), the denominator can be
+    specified using a particular manually specified subset
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T34.1: Check \% produced use denominators matching counts using
+      specified conditions
+    \end{itemize}
+  \item
+    T35: For shift counts when producing n (\%), the denominator can be
+    specified using the population data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T35.1: Check \% produced use denominators matching counts from
+      population data
+    \end{itemize}
+  \item
+    T36: For shift counts when producing n (\%), the denominator can be
+    specified using a grouping of variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T36.1: Check \% produced use denominators matching counts from
+      grouping variables
+    \end{itemize}
+  \item
+    T37: Row labels can be manually specified by the user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T37.1: Check row labels in output table match user specified
+      values
+    \end{itemize}
+  \item
+    T38: Row labels can be nested to put a subgroup within a parent
+    group
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T38.1: Check row labels and nesting in output table match user
+      specified values and nesting
+    \end{itemize}
+  \item
+    T39: Summaries can be stacked on top of one another
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T39.1: Check multiple summaries mixed between descriptive
+      statistics and count are created they can be stacked
+    \end{itemize}
+  \item
+    T40: Summaries can be sorted based on manual sorting by presentation
+    specified order
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T40.1: Check that output table has correct count sorting variables
+      matching specified order
+    \end{itemize}
+  \item
+    T41: Summaries can be sorted based on count based sorting (either
+    ascending or descending) by a specified treatment group
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T41.1: Check that output table has correct count sorting variables
+      for count based sorting
+    \end{itemize}
+  \item
+    T42: Summaries can be sorted based on alphabetical sorting based on
+    data values
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T42.1: Check that output table has correct count sorting variables
+      for data values
+    \end{itemize}
+  \item
+    T43: Summaries can be sorted based on a numeric version of the
+    target variable if available
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T43.1: Check that output table has correct count sorting variables
+      for the corresponding numeric variable
+    \end{itemize}
+  \item
+    T44: Summary by variables will be sorted by a numeric variable if
+    available and then by factor
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T44.1: Check that ouput table has correct sorting variables for
+      supplied by variables
+    \end{itemize}
+  \item
+    T45: Nested layers can be sorted independently using different
+    methods
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T45.1: Check that when different methods are supplied for nested
+      layers they are applied correctly
+    \end{itemize}
+  \item
+    T46: Independent layers can be sorted using different methods and
+    stacked using common sorting variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T46.1: Check that when different methods are supplied for
+      independent layers they are applied correctly
+    \end{itemize}
+  \item
+    T47: Count layer default formats can be set at the table level
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T47.1: Check that count layer formats set at the table level are
+      applied to layers created
+    \item
+      T47.2: Check that count layer formats applied at the layer level
+      take prescedence over table level formats
+    \end{itemize}
+  \item
+    T48: Descriptive statistics layer default formats can be set at the
+    table level
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T48.1: Check that descriptive statistics layer formats set at the
+      table level are applied to layers created
+    \item
+      T48.2: Check that descriptive statistics layer formats applied at
+      the layer level take prescedence over table level formats
+    \end{itemize}
+  \item
+    T49: Shift layer default formats can be set at the table level
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T49.1: Check that shift layer formats set at the table level are
+      applied to layers created
+    \item
+      T49.2: Check that shift layer formats applied at the layer level
+      take prescedence over table level formats
+    \end{itemize}
+  \item
+    T50: Option for count layer default formats can be specified by the
+    user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T50.1: Check that the count layer defail formats specified in the
+      option are displayed in the table
+    \end{itemize}
+  \item
+    T51: Option for descriptive statistics layer default formats can be
+    specified by the user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T51.1: Check that the descriptive statistics layer defail formats
+      specified in the option are displayed in the table
+    \end{itemize}
+  \item
+    T52: Option for shift layer default formats can be specified by the
+    user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T52.1: Check that the shift layer defail formats specified in the
+      option are displayed in the table
+    \end{itemize}
+  \item
+    T53: Option for a cap on auto precision can be specified by the user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T53.1: Check that the cap on auto precision specified by the user
+      is displayed correctly in the table for both integers and decimals
+    \end{itemize}
+  \item
+    T54: Option for custom descriptive statistics can be specified by
+    the user for use in the table
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T54.1: Check that custom descriptive statistics set in the options
+      can be used and displayed correctly in the table
+    \end{itemize}
+  \item
+    T55: Option for setting scipen internal option can be specified by
+    the user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T55.1: Check that scientific notation supplied is displayed
+      correctly in the table
+    \end{itemize}
+  \item
+    T56: Option for setting quantile algorithm choice can be specified
+    by the user
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T56.1: Check that the quantile algorithm supplied is used in table
+      q1 and q3 calculation
+    \end{itemize}
+  \item
+    T57: Column headers can be added to the output object
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T57.1: Check that column headers added match those in the output
+      object
+    \end{itemize}
+  \item
+    T58: Row breaks can be added between sections based on grouping
+    variables and row labels can be masked in a hierarchical fashion
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T58.1: Check that a row break is added between each section based
+      on the supplied grouping variables and row labels can be masked in
+      a hierarchical fashion
+    \end{itemize}
+  \item
+    T59: A table object is returned in a format that is ready to be
+    cosmetically prepared
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T59.1: Check that the table object can be easily cosmetically
+      prepared
+    \end{itemize}
+  \item
+    T60: Count layers can process a cols argument and separate
+    population data passed from the table level along with normal count
+    layer processing
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T60.1: Test that n and \% results are accurate when the
+      combination of the cols argument and separate population data
+    \item
+      T60.2: Test that risk difference results are accurate when the
+      combination of the cols argument and separate population data
+    \end{itemize}
+  \item
+    T61: Count layers can process a cols argument, separate population
+    data, and a defined subset passed from the table level along with
+    normal count layer processing
+
+    \begin{itemize}
+    \tightlist
+    \item
+      T61.1: Test that n and \% results are accurate when the
+      combination of the cols argument, separate population data, and a
+      defined subset are applied
+    \item
+      T61.2: Test that risk difference results are accurate when the
+      combination of the cols argument, separate population data, and a
+      defined subset are applied
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{test-cases-results}{%
+\subsection{Test Cases Results}\label{test-cases-results}}
+
+{[}1{]} ``/home/nathan.kosiba/Tplyr/uat/references/output''
+
+\begin{longtable}{l|l|l}
+\hline
+Check & Results & Pass/Fail\\
+\hline
+\endfirsthead
+\multicolumn{3}{@{}l}{\textit{(continued)}}\\
+\hline
+Check & Results & Pass/Fail\\
+\hline
+\endhead
+T1.1 & T1.1 not equal to Tplyr::pop\_data(test\_1).
+Attributes: < Names: 1 string mismatch >
+Attributes: < Length mismatch: comparison on first 2 components >
+Attributes: < Component 2: Modes: numeric, name >
+Attributes: < Component 2: Lengths: 254, 1 >
+Attributes: < Component 2: target is numeric, current is name > & Fail\\
+\hline
+T1.2 & As expected & Pass\\
+\hline
+T2.1 & T2.1 not equal to filter(Tplyr::pop\_data(test\_2), \textasciitilde{}(EFFFL == "Y")).
+Attributes: < Names: 1 string mismatch >
+Attributes: < Length mismatch: comparison on first 2 components >
+Attributes: < Component 2: Modes: numeric, name >
+Attributes: < Component 2: Lengths: 234, 1 >
+Attributes: < Component 2: target is numeric, current is name > & Fail\\
+\hline
+T3.1 & As expected & Pass\\
+\hline
+T3.2 & As expected & Pass\\
+\hline
+T4.1 & T4.1 not equal to Tplyr::pop\_data(test\_4).
+Attributes: < Names: 1 string mismatch >
+Attributes: < Length mismatch: comparison on first 2 components >
+Attributes: < Component 2: Modes: numeric, name >
+Attributes: < Component 2: Lengths: 254, 1 >
+Attributes: < Component 2: target is numeric, current is name > & Fail\\
+\hline
+T4.2 & As expected & Pass\\
+\hline
+T5.1 & T5.1 not equal to Tplyr::pop\_data(test\_5).
+Attributes: < Names: 1 string mismatch >
+Attributes: < Length mismatch: comparison on first 2 components >
+Attributes: < Component 2: Modes: numeric, name >
+Attributes: < Component 2: Lengths: 254, 1 >
+Attributes: < Component 2: target is numeric, current is name > & Fail\\
+\hline
+T5.2 & T5.2 not equal to test\_5\$target.
+Attributes: < Length mismatch: comparison on first 2 components > & Fail\\
+\hline
+T5.3 & As expected & Pass\\
+\hline
+T5.4 & As expected & Pass\\
+\hline
+T6.1 & T6.1 not equal to filter(Tplyr::pop\_data(test\_6), \textasciitilde{}TRUE).
+Attributes: < Names: 1 string mismatch >
+Attributes: < Length mismatch: comparison on first 2 components >
+Attributes: < Component 2: Modes: numeric, name >
+Attributes: < Component 2: Lengths: 1191, 1 >
+Attributes: < Component 2: target is numeric, current is name > & Fail\\
+\hline
+T7.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adae, TRTA == "Placebo")
+  1. dplyr::group\_by(., AEDECOD)
+  9. plyr::summarise(., n = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T8.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adae, TRTA == "Placebo")
+  1. dplyr::group\_by(., SEX, AEDECOD)
+  9. plyr::summarise(., n = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T9.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. testthat::expect\_equal(...) \textasciitilde{}Tplyruattest\_cases.R:387:2
+  4. plyr::summarise(filter(adsl, TRT01P == "Placebo"), n = n())
+  5. [ base::eval(...) ] with 1 more call
+  7. dplyr::n()
+  8. dplyr:::peek\_mask("n()")
+  9. dplyr:::context\_peek("mask", fun)
+ 10. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T10.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adsl, DCSREAS != "")
+  1. dplyr::group\_by(., TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T11.1 & As expected & Pass\\
+\hline
+T12.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adae)
+  1. dplyr::group\_by(., TRTA)
+  9. plyr::summarize(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T13.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T14.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adsl, SEX == "F")
+  1. dplyr::group\_by(., TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T15.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T16.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P, SEX)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T17.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. plyr::summarise(...) \textasciitilde{}Tplyruattest\_cases.R:817:2
+ 2. [ base::eval(...) ] with 1 more call
+ 4. dplyr::n()
+ 5. dplyr:::peek\_mask("n()")
+ 6. dplyr:::context\_peek("mask", fun)
+ 7. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T18.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. plyr::summarise(...) \textasciitilde{}Tplyruattest\_cases.R:879:2
+ 2. [ base::eval(...) ] with 1 more call
+ 4. dplyr::n()
+ 5. dplyr:::peek\_mask("n()")
+ 6. dplyr:::context\_peek("mask", fun)
+ 7. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T19.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. plyr::summarise(filter(adae, TRTA == "Placebo"), n = n()) \textasciitilde{}Tplyruattest\_cases.R:940:2
+ 2. [ base::eval(...) ] with 1 more call
+ 4. dplyr::n()
+ 5. dplyr:::peek\_mask("n()")
+ 6. dplyr:::context\_peek("mask", fun)
+ 7. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T20.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. testthat::expect\_equal(...) \textasciitilde{}Tplyruattest\_cases.R:1058:2
+  4. plyr::summarise(adsl[adsl\$TRT01P == "Placebo", ], n = n())
+  5. [ base::eval(...) ] with 1 more call
+  7. dplyr::n()
+  8. dplyr:::peek\_mask("n()")
+  9. dplyr:::context\_peek("mask", fun)
+ 10. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T21.1 & As expected & Pass\\
+\hline
+T22.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. tidyr::pivot\_longer(...) \textasciitilde{}Tplyruattest\_cases.R:1188:2
+  8. plyr::summarise(...)
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T23.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. base::paste(...) \textasciitilde{}Tplyruattest\_cases.R:1247:2
+ 2. plyr::summarise(adsl[adsl\$TRT01P == "Placebo", ], n = n())
+ 3. [ base::eval(...) ] with 1 more call
+ 5. dplyr::n()
+ 6. dplyr:::peek\_mask("n()")
+ 7. dplyr:::context\_peek("mask", fun)
+ 8. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T24.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. base::paste(...) \textasciitilde{}Tplyruattest\_cases.R:1302:2
+ 2. plyr::summarise(adsl[adsl\$TRT01P == "Placebo", ], n = n())
+ 3. [ base::eval(...) ] with 1 more call
+ 5. dplyr::n()
+ 6. dplyr:::peek\_mask("n()")
+ 7. dplyr:::context\_peek("mask", fun)
+ 8. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T25.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. base::unique(t25\_dat[, c("PARAMCD", "intlen", "declen", "hasdec")])
+  8. dplyr::left\_join(...)
+ 15. [ base::eval(...) ] with 1 more call
+ 17. dplyr::n()
+ 18. dplyr:::peek\_mask("n()")
+ 19. dplyr:::context\_peek("mask", fun)
+ 20. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T26.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. base::paste0(...) \textasciitilde{}Tplyruattest\_cases.R:1456:2
+ 2. plyr::summarise(adsl[adsl\$TRT01P == "Placebo", ], n = n())
+ 3. [ base::eval(...) ] with 1 more call
+ 5. dplyr::n()
+ 6. dplyr:::peek\_mask("n()")
+ 7. dplyr:::context\_peek("mask", fun)
+ 8. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T27.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P, RACE\_FACTOR)
+  8. plyr::summarise(., n = n(), mean = round(mean(AGE), 1))
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T28.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, ANRIND, BNRIND)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T29.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, SEX, ANRIND, BNRIND)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T30.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, RACE, SEX, ANRIND, BNRIND)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T31.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, ANRIND\_FACTOR, BNRIND\_FACTOR)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T32.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, BNRIND)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T33.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adlb)
+  1. dplyr::group\_by(., TRTA)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T34.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T35.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adlb, PARAMCD == "BILI" \& AVISIT == "Week 2")
+  1. dplyr::select(., TRTA, USUBJID)
+  1. dplyr::distinct(., TRTA, USUBJID)
+  1. base::merge(...)
+  1. dplyr::group\_by(., TRTA)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T36.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adlb)
+  1. dplyr::group\_by(., TRTA, PARAMCD, AVISIT)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T37.1 & As expected & Pass\\
+\hline
+T38.1 & As expected & Pass\\
+\hline
+T39.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adsl, TRT01P == "Placebo")
+  1. dplyr::group\_by(., TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T40.1 & T40.1 not equal to c(test\_40\$row\_label1, test\_40\$ord\_layer\_1).
+names for current but not for target & Fail\\
+\hline
+T41.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P, RACE)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T42.1 & As expected & Pass\\
+\hline
+T43.1 & T43.1 not equal to c(test\_43\$row\_label1, test\_43\$ord\_layer\_1).
+names for current but not for target & Fail\\
+\hline
+T44.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P, RACE, ETHNIC)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T45.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adae, TRTA, AEBODSYS)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T46.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adsl, TRT01P == "Xanomeline High Dose")
+  1. dplyr::group\_by(., ETHNIC)
+  8. plyr::summarise(., sorter = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T47.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T48.1 & Can't subset columns that don't exist.
+x Column `TRT01P` doesn't exist.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  1. plyr::summarise(...)
+  1. plyr::mutate(...)
+  1. plyr::mutate(...)
+  1. tidyr::pivot\_longer(., cols = c(meansd, quartiles), values\_to = "stat")
+  8. dplyr::select(., TRT01P, name, stat)
+ 10. tidyselect::eval\_select(expr(c(...)), .data)
+ 11. tidyselect:::eval\_select\_impl(...)
+ 19. tidyselect:::vars\_select\_eval(...)
+ 20. tidyselect:::walk\_data\_tree(expr, data\_mask, context\_mask)
+ 21. tidyselect:::eval\_c(expr, data\_mask, context\_mask)
+ 22. tidyselect:::reduce\_sels(node, data\_mask, context\_mask, init = init)
+ 23. tidyselect:::walk\_data\_tree(new, data\_mask, context\_mask)
+ 24. tidyselect:::as\_indices\_sel\_impl(...)
+ 25. tidyselect:::as\_indices\_impl(x, vars, strict = strict)
+ 26. tidyselect:::chr\_as\_locations(x, vars)
+ 27. vctrs::vec\_as\_location(x, n = length(vars), names = vars)
+ 29. vctrs:::stop\_subscript\_oob(...)
+ 30. vctrs:::stop\_subscript(...) & Fail\\
+\hline
+T49.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, BNRIND)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T50.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  9. plyr::summarise(., total = n())
+ 10. [ base::eval(...) ] with 1 more call
+ 12. dplyr::n()
+ 13. dplyr:::peek\_mask("n()")
+ 14. dplyr:::context\_peek("mask", fun)
+ 15. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T51.1 & Can't subset columns that don't exist.
+x Column `TRT01P` doesn't exist.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  1. plyr::summarise(...)
+  1. plyr::mutate(...)
+  1. plyr::mutate(...)
+  1. tidyr::pivot\_longer(., cols = c(meansd, quartiles), values\_to = "stat")
+  8. dplyr::select(., TRT01P, name, stat)
+ 10. tidyselect::eval\_select(expr(c(...)), .data)
+ 11. tidyselect:::eval\_select\_impl(...)
+ 19. tidyselect:::vars\_select\_eval(...)
+ 20. tidyselect:::walk\_data\_tree(expr, data\_mask, context\_mask)
+ 21. tidyselect:::eval\_c(expr, data\_mask, context\_mask)
+ 22. tidyselect:::reduce\_sels(node, data\_mask, context\_mask, init = init)
+ 23. tidyselect:::walk\_data\_tree(new, data\_mask, context\_mask)
+ 24. tidyselect:::as\_indices\_sel\_impl(...)
+ 25. tidyselect:::as\_indices\_impl(x, vars, strict = strict)
+ 26. tidyselect:::chr\_as\_locations(x, vars)
+ 27. vctrs::vec\_as\_location(x, n = length(vars), names = vars)
+ 29. vctrs:::stop\_subscript\_oob(...)
+ 30. vctrs:::stop\_subscript(...) & Fail\\
+\hline
+T52.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(...)
+  1. dplyr::group\_by(., TRTA, BNRIND)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T53.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::filter(adlb, PARAMCD == "BUN")
+  1. dplyr::group\_by(., TRTA)
+  8. plyr::summarise(...)
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T54.1 & Can't subset columns that don't exist.
+x Column `TRT01P` doesn't exist.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  1. plyr::summarise(...)
+  1. plyr::mutate(., geometric\_mean = sprintf("\%6.2f", geometric\_mean))
+  9. tidyr::pivot\_wider(., values\_from = "geometric\_mean", names\_from = "TRT01P")
+ 10. tidyr::build\_wider\_spec(...)
+ 11. tidyselect::vars\_select(tbl\_vars(data), !!enquo(names\_from))
+ 12. tidyselect:::eval\_select\_impl(...)
+ 20. tidyselect:::vars\_select\_eval(...)
+ 21. tidyselect:::walk\_data\_tree(expr, data\_mask, context\_mask)
+ 22. tidyselect:::eval\_c(expr, data\_mask, context\_mask)
+ 23. tidyselect:::reduce\_sels(node, data\_mask, context\_mask, init = init)
+ 24. tidyselect:::walk\_data\_tree(new, data\_mask, context\_mask)
+ 25. tidyselect:::as\_indices\_sel\_impl(...)
+ 26. tidyselect:::as\_indices\_impl(x, vars, strict = strict)
+ 27. tidyselect:::chr\_as\_locations(x, vars)
+ 28. vctrs::vec\_as\_location(x, n = length(vars), names = vars)
+ 30. vctrs:::stop\_subscript\_oob(...)
+ 31. vctrs:::stop\_subscript(...) & Fail\\
+\hline
+T55.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+ 1. plyr::summarise(...) \textasciitilde{}Tplyruattest\_cases.R:3180:2
+ 2. [ base::eval(...) ] with 1 more call
+ 4. dplyr::n()
+ 5. dplyr:::peek\_mask("n()")
+ 6. dplyr:::context\_peek("mask", fun)
+ 7. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T56.1 & Can't subset columns that don't exist.
+x Column `TRT01P` doesn't exist.
+Backtrace:
+  1. dplyr::group\_by(adsl, TRT01P)
+  1. plyr::summarise(...)
+  1. plyr::mutate(...)
+  8. dplyr::select(., TRT01P, col)
+ 10. tidyselect::eval\_select(expr(c(...)), .data)
+ 11. tidyselect:::eval\_select\_impl(...)
+ 19. tidyselect:::vars\_select\_eval(...)
+ 20. tidyselect:::walk\_data\_tree(expr, data\_mask, context\_mask)
+ 21. tidyselect:::eval\_c(expr, data\_mask, context\_mask)
+ 22. tidyselect:::reduce\_sels(node, data\_mask, context\_mask, init = init)
+ 23. tidyselect:::walk\_data\_tree(new, data\_mask, context\_mask)
+ 24. tidyselect:::as\_indices\_sel\_impl(...)
+ 25. tidyselect:::as\_indices\_impl(x, vars, strict = strict)
+ 26. tidyselect:::chr\_as\_locations(x, vars)
+ 27. vctrs::vec\_as\_location(x, n = length(vars), names = vars)
+ 29. vctrs:::stop\_subscript\_oob(...)
+ 30. vctrs:::stop\_subscript(...) & Fail\\
+\hline
+T57.1 & As expected & Pass\\
+\hline
+T58.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. dplyr::group\_by(adae, TRTA, AEBODSYS)
+  8. plyr::summarise(., n = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T59.1 & As expected & Pass\\
+\hline
+T60.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. base::rbind(...)
+  1. dplyr::distinct(., TRT01P, SEX, USUBJID)
+  1. dplyr::group\_by(., TRT01P, SEX)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+T61.1 & `n()` must only be used inside dplyr verbs.
+Backtrace:
+  1. base::rbind(...)
+  1. dplyr::filter(., RACE == "WHITE")
+  1. dplyr::distinct(., TRT01P, SEX, USUBJID)
+  1. dplyr::group\_by(., TRT01P, SEX)
+  8. plyr::summarise(., total = n())
+  9. [ base::eval(...) ] with 1 more call
+ 11. dplyr::n()
+ 12. dplyr:::peek\_mask("n()")
+ 13. dplyr:::context\_peek("mask", fun)
+ 14. context\_peek\_bare(name) \%||\% abort(glue("`\{fun\}` must only be used inside \{location\}.")) & Fail\\
+\hline
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{system-information}{%
+\section{System Information}\label{system-information}}
+
+R version 3.6.2 (2019-12-12) Platform: x86\_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.4 LTS
+
+Matrix products: default BLAS:
+/usr/lib/x86\_64-linux-gnu/openblas/libblas.so.3 LAPACK:
+/usr/lib/x86\_64-linux-gnu/libopenblasp-r0.2.20.so
+
+locale: {[}1{]} LC\_CTYPE=C.UTF-8 LC\_NUMERIC=C LC\_TIME=C.UTF-8
+LC\_COLLATE=C.UTF-8 LC\_MONETARY=C.UTF-8\\
+{[}6{]} LC\_MESSAGES=C.UTF-8 LC\_PAPER=C.UTF-8 LC\_NAME=C LC\_ADDRESS=C
+LC\_TELEPHONE=C\\
+{[}11{]} LC\_MEASUREMENT=C.UTF-8 LC\_IDENTIFICATION=C
+
+attached base packages: {[}1{]} stats graphics grDevices utils datasets
+methods base
+
+other attached packages: {[}1{]} rlang\_0.4.7 kableExtra\_1.2.1
+knitr\_1.28 plyr\_1.8.5 shinydashboard\_0.7.1 {[}6{]} testthat\_2.3.1
+forcats\_0.4.0 stringr\_1.4.0 dplyr\_1.0.2 purrr\_0.3.4\\
+{[}11{]} readr\_1.3.1 tidyr\_1.0.2 tibble\_3.0.1 ggplot2\_3.2.1
+tidyverse\_1.3.0\\
+{[}16{]} Tplyr\_0.1.1 shiny\_1.5.0
+
+loaded via a namespace (and not attached): {[}1{]} Rcpp\_1.0.3
+lubridate\_1.7.4 lattice\_0.20-38 clisymbols\_1.2.0 assertthat\_0.2.1
+digest\_0.6.25\\
+{[}7{]} packrat\_0.5.0 prompt\_1.0.0 mime\_0.9 R6\_2.4.1
+cellranger\_1.1.0 backports\_1.1.5\\
+{[}13{]} reprex\_0.3.0 evaluate\_0.14 httr\_1.4.1 pillar\_1.4.4
+lazyeval\_0.2.2 readxl\_1.3.1\\
+{[}19{]} rstudioapi\_0.11 rmarkdown\_2.1 webshot\_0.5.2 munsell\_0.5.0
+broom\_0.5.4 xfun\_0.12\\
+{[}25{]} compiler\_3.6.2 httpuv\_1.5.2 modelr\_0.1.5 pkgconfig\_2.0.3
+htmltools\_0.5.0 tidyselect\_1.1.0 {[}31{]} viridisLite\_0.3.0
+fansi\_0.4.1 crayon\_1.3.4 dbplyr\_1.4.2 withr\_2.1.2 later\_1.0.0\\
+{[}37{]} grid\_3.6.2 nlme\_3.1-142 jsonlite\_1.6.1 xtable\_1.8-4
+gtable\_0.3.0 lifecycle\_0.2.0\\
+{[}43{]} DBI\_1.1.0 magrittr\_1.5 scales\_1.1.0 cli\_2.0.2
+stringi\_1.4.5 fs\_1.3.1\\
+{[}49{]} promises\_1.1.0 xml2\_1.3.2 ellipsis\_0.3.1 generics\_0.0.2
+vctrs\_0.3.4 tools\_3.6.2\\
+{[}55{]} glue\_1.4.1 hms\_0.5.3 yaml\_2.2.1 rsconnect\_0.8.16
+fastmap\_1.0.1 colorspace\_1.4-1 {[}61{]} rvest\_0.3.5 haven\_2.2.0
+
+\hypertarget{manual-check-completion-history}{%
+\section{Manual Check Completion
+History}\label{manual-check-completion-history}}
+
+\begin{longtable}{llll}
+\toprule
+Check & Output File Reviewed & Response & Log\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\textit{(continued)}}\\
+\toprule
+Check & Output File Reviewed & Response & Log\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{T59.1} & \cellcolor{gray!6}{test\_59.rtf} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{nathan.kosiba:2020-09-24 18:45:07}\\*
+\end{longtable}
+
+\end{document}

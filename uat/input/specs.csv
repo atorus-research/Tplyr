@@ -1,6 +1,6 @@
 ﻿LineType,RequirementID,Text
 UpdatedBy,,Nathan Kosiba
-UpdatedDate,,8/31/2020
+UpdatedDate,,9/24/2020
 Specs,A,Population data can be specified by the user
 Specs,B,Treatment variable can be manually specified for population data
 Specs,C,Population data subset can be specified on user specified conditions
@@ -75,3 +75,5 @@ Specs,BS,Column headers can be added to the output object
 Specs,BT,Row breaks can be added between sections based on grouping variables
 Specs,BU,Row labels can be masked in a hierarchical fashion 
 Specs,BV,A table object is returned in a format that is ready to be cosmetically prepared
+Specs,BW,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
+Specs,BX,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing"

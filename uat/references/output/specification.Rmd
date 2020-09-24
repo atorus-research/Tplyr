@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 8/31/2020
+#' 9/24/2020
 + A: Population data can be specified by the user
 + B: Treatment variable can be manually specified for population data
 + C: Population data subset can be specified on user specified conditions
@@ -76,3 +76,5 @@
 + BT: Row breaks can be added between sections based on grouping variables
 + BU: Row labels can be masked in a hierarchical fashion 
 + BV: A table object is returned in a format that is ready to be cosmetically prepared
++ BW: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
++ BX: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing

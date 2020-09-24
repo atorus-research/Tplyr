@@ -1,6 +1,6 @@
 ﻿LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,8/31/2020,,
+UpdatedDate,,,,9/24/2020,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -152,3 +152,9 @@ TestCase,BT:BU,T58,,Row breaks can be added between sections based on grouping v
 Check,,T58,1,Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion,programmatic,test_58.RData
 TestCase,BV,T59,,A table object is returned in a format that is ready to be cosmetically prepared,,
 Check,,T59,1,Check that the table object can be easily cosmetically prepared ,visual,test_59.rtf
+TestCase,BW,T60,,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing,,
+Check,,T60,1,Test that n and % results are accurate when the combination of the cols argument and separate population data,programmatic,test_60.RData
+Check,,T60,2,Test that risk difference results are accurate when the combination of the cols argument and separate population data,programmatic,test_60.RData
+TestCase,BX,T61,,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing",,
+Check,,T61,1,"Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_61.RData
+Check,,T61,2,"Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_61.RData
