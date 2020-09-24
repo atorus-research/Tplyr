@@ -9,6 +9,9 @@
 build_header_n <- function(table) {
   evalq({
 
+    # Error out if the cols variables around found in the pop_data
+    assert_quo_var_present(cols, names(built_pop_data))
+
     # If there is a distinct_by, use it to make the header_n
     if(is.null(distinct_by)) {
       df <- built_pop_data %>%

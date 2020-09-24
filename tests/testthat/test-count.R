@@ -19,6 +19,8 @@ t12 <- tplyr_table(mtcars, gear)
 t13 <- tplyr_table(mtcars, gear)
 t14 <- tplyr_table(mtcars, gear)
 t15 <- tplyr_table(mtcars, gear)
+t16 <- tplyr_table(mtcars, gear) %>%
+  add_total_group()
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -59,6 +61,8 @@ c14 <- group_count(t14, vars(cyl, grp)) %>%
   set_outer_sort_position("asc")
 c15 <- group_count(t15, cyl) %>%
   set_distinct_by(vars(am, vs))
+c16 <- group_count(t16, cyl) %>%
+  set_distinct_by(vars(am,vs))
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -75,6 +79,7 @@ t12 <- add_layers(t12, c12)
 t13 <- add_layers(t13, c13)
 t14 <- add_layers(t14, c14)
 t15 <- add_layers(t15, c15)
+t16 <- add_layers(t16, c16)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -160,6 +165,7 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t13))
   expect_silent(build(t14))
   expect_silent(build(t15))
+  expect_silent(build(t16))
 })
 
 test_that("Count layers are processed as expected", {
@@ -207,6 +213,10 @@ test_that("Count layers are processed as expected", {
 
   # Check all start with abc
   expect_true(all(map_chr(unlist(c10$formatted_data[, 1]), str_sub, 1, 3) == "abc"))
+
+  # Check denoms can be properly formed when there are custom groups and
+  # distinct variables
+  expect_true(all(t16$layers[[1]]$numeric_data$distinct_total != 0))
 
 })
 

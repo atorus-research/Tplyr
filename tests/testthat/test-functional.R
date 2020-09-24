@@ -43,7 +43,7 @@ t4 <- tplyr_table(mtcars, gear) %>%
       )
   )
 
-  ##### T4 Complex table, cols, where, groups #####
+  ##### T5 Complex table, cols, where, groups #####
 t5 <- tplyr_table(mtcars, gear, cols = vs) %>%
   set_where(mpg > 15) %>%
   add_total_group() %>%
@@ -65,7 +65,7 @@ t5 <- add_layers(t5,
                    )
 )
 
-##### T5 Simple table complex count layer #####
+##### T6 Simple table complex count layer #####
 t6 <- tplyr_table(mtcars, gear, col = am) %>%
   add_total_group() %>%
   set_where(mpg > 15) %>%
@@ -93,6 +93,17 @@ t6 <- tplyr_table(mtcars, gear, col = am) %>%
       )
   )
 
+##### T7 Table with pop_data, distinct_by, and treatment groups #####
+mtcars2 <- mtcars
+mtcars2$col_i <- rep(c("a", "b", "c", "d"), 8)
+t7 <- tplyr_table(mtcars2, gear, col = col_i) %>%
+  set_pop_data(mtcars) %>%
+  add_total_group() %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_distinct_by(vs)
+  )
+
 ##### Tests #####
 
 test_that("all test tables can be built without errors or warnings", {
@@ -102,6 +113,7 @@ test_that("all test tables can be built without errors or warnings", {
   expect_silent(build(t4))
   expect_silent(build(t5))
   expect_silent(suppressWarnings(build(t6))) # This seems to be a bug https://github.com/tidyverse/dplyr/issues/5149
+  expect_error(build(t7), "variable `col_i` does not exist in target dataset")
 })
 
 test_that("all tables have the expected dimentions", {
