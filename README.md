@@ -56,8 +56,7 @@ through GitHub right
 
 # Installation
 
-We’re working on posting to CRAN\! We’ll update as soon as it’s
-accepted. In the mean time, you can install via:
+You can Tplyr install with:
 
 ``` r
 # Install from CRAN:
