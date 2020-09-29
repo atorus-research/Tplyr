@@ -1,7 +1,7 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Tplyr Version 0.1.1 <img src="man/figures/logo.png" align="right" alt="" width="120" />
-=======================================================================================
+# Tplyr Version 0.1.2 <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -14,38 +14,38 @@ Status](https://travis-ci.com/atorus-research/tplyr.svg?branch=master)](https://
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-Welcome to Tplyr! This is the first full and stable release of our
+Welcome to Tplyr\! This is the first full and stable release of our
 package. With this release comes a number of new enhancements, loads of
 new documentation, and our complete package qualification document.
 
 If you’ve been keeping up, here are the things that we’ve added since
 the Beta release in July:
 
--   Bug Fixes/Enhancements
-    -   Count layers were re-factored to improve the execution
+  - Bug Fixes/Enhancements
+      - Count layers were re-factored to improve the execution
         efficiency
-    -   Auto-precision now works without a `by` variable
-    -   Several new assertions have been added to give clearer error
+      - Auto-precision now works without a `by` variable
+      - Several new assertions have been added to give clearer error
         messages
-    -   Treatment groups within the population data will produce columns
+      - Treatment groups within the population data will produce columns
         in the resulting build, even if no records exist for that
         treatment group in the target dataset
-    -   Risk difference variable names will now populate properly when a
+      - Risk difference variable names will now populate properly when a
         `cols` argument is used
-    -   Data frame attributes are cleaned prior to processing to prevent
+      - Data frame attributes are cleaned prior to processing to prevent
         any merge/bind warnings during processing
-    -   Total values within count layers are properly filled when the
+      - Total values within count layers are properly filled when the
         resulting count is 0 (largely impacts risk-difference
         calculations)
--   Feature additions
-    -   Shift layers are here!
-    -   Flexibility when filling missing values has been enhanced for
+  - Feature additions
+      - Shift layers are here\!
+      - Flexibility when filling missing values has been enhanced for
         descriptive statistic layers
-    -   Layers can now be named, and those names can be used in
+      - Layers can now be named, and those names can be used in
         `get_numeric_data` and the new function `get_statistics_data` to
         get risk difference raw numbers. Data may also be filtered
         directly from both functions.
-    -   Default formats can now be set via options or at the table
+      - Default formats can now be set via options or at the table
         level, which allows you to eliminate a great deal of redundant
         code
 
@@ -54,18 +54,19 @@ see a new feature, or if any documentation is unclear - submit an issue
 through GitHub right
 [here](https://github.com/atorus-research/Tplyr/issues).
 
-Installation
-============
+# Installation
 
-We’re working on posting to CRAN! We’ll update as soon as it’s accepted.
-In the mean time, you can install via:
+You can Tplyr install with:
 
 ``` r
+# Install from CRAN:
+install.packages("Tplyr")
+
+# Or install the development version:
 devtools::install_github("https://github.com/atorus-research/Tplyr.git")
 ```
 
-What is Tplyr?
-==============
+# What is Tplyr?
 
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of
 data manipulation. So what does that allow you to do? It gives you, as a
@@ -80,10 +81,10 @@ industry, a great deal of the data presented in the outputs we create
 are very similar. For the most part, most of these tables can be broken
 down into a few categories:
 
--   Counting for event based variables or categories
--   Shifting, which is just counting a change in state with a ‘from’ and
+  - Counting for event based variables or categories
+  - Shifting, which is just counting a change in state with a ‘from’ and
     a ‘to’
--   Generating descriptive statistics around some continuous variable.
+  - Generating descriptive statistics around some continuous variable.
 
 For many of the tables that go into a clinical submission, at least when
 considering safety outputs, the tables are made up of a combination of
@@ -93,7 +94,11 @@ example from the PHUSE project Standard Analyses & Code Sharing -
 Medications in Phase 2-4 Clinical Trials and Integrated Summary
 Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf).
 
-![Demographics Table](./vignettes/demo_table.png)
+<p align="center">
+
+<img src="vignettes/demo_table.png" width="800px">
+
+</p>
 
 When you look at this table, you can begin breaking this output down
 into smaller, redundant, components. These components can be viewed as
@@ -101,15 +106,15 @@ into smaller, redundant, components. These components can be viewed as
 layers. The boxes in the image above represent how you can begin to
 conceptualize this.
 
--   First we have Sex, which is made up of n (%) counts.
--   Next we have Age as a continuous variable, where we have a number of
+  - First we have Sex, which is made up of n (%) counts.
+  - Next we have Age as a continuous variable, where we have a number of
     descriptive statistics, including n, mean, standard deviation,
     median, quartile 1, quartile 3, min, max, and missing values.
--   After that we have age, but broken into categories - so this is once
+  - After that we have age, but broken into categories - so this is once
     again n (%) values.
--   Race - more counting,
--   Ethnicity - more counting
--   Weight - and we’re back to descriptive statistics.
+  - Race - more counting,
+  - Ethnicity - more counting
+  - Weight - and we’re back to descriptive statistics.
 
 So we have one table, with 6 summaries (7 including the next page, not
 shown) - but only 2 different approaches to summaries being performed.
@@ -139,279 +144,21 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   ) %>% 
   build() %>% 
   kable()
-#> Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.
-#> Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.
 ```
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-row\_label1
-</th>
-<th style="text-align:left;">
-row\_label2
-</th>
-<th style="text-align:left;">
-var1\_Placebo
-</th>
-<th style="text-align:left;">
-var1\_Xanomeline High Dose
-</th>
-<th style="text-align:left;">
-var1\_Xanomeline Low Dose
-</th>
-<th style="text-align:right;">
-ord\_layer\_index
-</th>
-<th style="text-align:right;">
-ord\_layer\_1
-</th>
-<th style="text-align:right;">
-ord\_layer\_2
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-n
-</td>
-<td style="text-align:left;">
-86
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Mean (SD)
-</td>
-<td style="text-align:left;">
-75.2 ( 8.59)
-</td>
-<td style="text-align:left;">
-74.4 ( 7.89)
-</td>
-<td style="text-align:left;">
-75.7 ( 8.29)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Median
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Q1, Q3
-</td>
-<td style="text-align:left;">
-69.2, 81.8
-</td>
-<td style="text-align:left;">
-70.8, 80.0
-</td>
-<td style="text-align:left;">
-71.0, 82.0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Min, Max
-</td>
-<td style="text-align:left;">
-52, 89
-</td>
-<td style="text-align:left;">
-56, 88
-</td>
-<td style="text-align:left;">
-51, 88
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-\<65
-</td>
-<td style="text-align:left;">
-14 ( 16.3%)
-</td>
-<td style="text-align:left;">
-11 ( 13.1%)
-</td>
-<td style="text-align:left;">
-8 ( 9.5%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-\>80
-</td>
-<td style="text-align:left;">
-30 ( 34.9%)
-</td>
-<td style="text-align:left;">
-18 ( 21.4%)
-</td>
-<td style="text-align:left;">
-29 ( 34.5%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-65-80
-</td>
-<td style="text-align:left;">
-42 ( 48.8%)
-</td>
-<td style="text-align:left;">
-55 ( 65.5%)
-</td>
-<td style="text-align:left;">
-47 ( 56.0%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-</tbody>
-</table>
+| row\_label1          | row\_label2 | var1\_Placebo | var1\_Xanomeline High Dose | var1\_Xanomeline Low Dose | ord\_layer\_index | ord\_layer\_1 | ord\_layer\_2 |
+| :------------------- | :---------- | :------------ | :------------------------- | :------------------------ | ----------------: | ------------: | ------------: |
+| Age (years)          | n           | 86            | 84                         | 84                        |                 1 |             1 |             1 |
+| Age (years)          | Mean (SD)   | 75.2 ( 8.59)  | 74.4 ( 7.89)               | 75.7 ( 8.29)              |                 1 |             1 |             2 |
+| Age (years)          | Median      | 76.0          | 76.0                       | 77.5                      |                 1 |             1 |             3 |
+| Age (years)          | Q1, Q3      | 69.2, 81.8    | 70.8, 80.0                 | 71.0, 82.0                |                 1 |             1 |             4 |
+| Age (years)          | Min, Max    | 52, 89        | 56, 88                     | 51, 88                    |                 1 |             1 |             5 |
+| Age (years)          | Missing     | 0             | 0                          | 0                         |                 1 |             1 |             6 |
+| Age Categories n (%) | \<65        | 14 ( 16.3%)   | 11 ( 13.1%)                | 8 ( 9.5%)                 |                 2 |             1 |             1 |
+| Age Categories n (%) | \>80        | 30 ( 34.9%)   | 18 ( 21.4%)                | 29 ( 34.5%)               |                 2 |             1 |             2 |
+| Age Categories n (%) | 65-80       | 42 ( 48.8%)   | 55 ( 65.5%)                | 47 ( 56.0%)               |                 2 |             1 |             3 |
 
-‘Tplyr’ is Qualified
---------------------
+## ‘Tplyr’ is Qualified
 
 We understand how important documentation and testing is within the
 pharmaceutical world. This is why outside of unit testing ’Tplyr
@@ -427,39 +174,36 @@ The ‘uat’ folder additionally contains all of the raw files,
 programmatic tests, specifications, and test cases necessary to create
 this report.
 
-The TL;DR
----------
+## The TL;DR
 
 Here are some of the high level benefits of using `Tplyr`:
 
--   Easy construction of table data using an intuitive syntax
--   Smart string formatting for your numbers that’s easily specified by
+  - Easy construction of table data using an intuitive syntax
+  - Smart string formatting for your numbers that’s easily specified by
     the user
--   A great deal of flexibility in what is performed and how it’s
+  - A great deal of flexibility in what is performed and how it’s
     presented, without specifying hundreds of parameters
 
-Where to go from here?
-======================
+# Where to go from here?
 
-There’s quite a bit more to learn! And we’ve prepared a number of other
+There’s quite a bit more to learn\! And we’ve prepared a number of other
 vignettes to help you get what you need out of ‘Tplyr’.
 
--   The best place to start is with our Getting Started vignette at
+  - The best place to start is with our Getting Started vignette at
     `vignettes("Tplyr")`
--   Learn more about table level settings in `vignettes("table")`
--   Learn more about descriptive statistics layers in
+  - Learn more about table level settings in `vignettes("table")`
+  - Learn more about descriptive statistics layers in
     `vignettes("desc")`
--   Learn more about count and shift layers in
+  - Learn more about count and shift layers in
     `vignettes("count_shift")`
--   Learn more about calculating risk differences in
+  - Learn more about calculating risk differences in
     `vignettes("riskdiff")`
--   Learn more about sorting ‘Tplyr’ tables in `vignettes("sort")`
--   Learn more about using ‘Tplyr’ options in `vignettes("options")`
--   And finally, learn more about producing and outputting styled tables
+  - Learn more about sorting ‘Tplyr’ tables in `vignettes("sort")`
+  - Learn more about using ‘Tplyr’ options in `vignettes("options")`
+  - And finally, learn more about producing and outputting styled tables
     using ‘Tplyr’ in `vignettes("styled-table")`
 
-References
-==========
+# References
 
 In building ‘Tplyr’, we needed some additional resources in addition to
 our personal experience to help guide design. PHUSE has done some great

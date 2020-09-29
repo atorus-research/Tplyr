@@ -21,7 +21,7 @@ load("vignettes/adae.Rdata")
 load("vignettes/adsl.Rdata")
 ```
 
-# Tplyr Version 0.1.1 <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# Tplyr Version 0.1.2 <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 [<img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&logo=slack">](https://ostinclinicalresearch.slack.com)
@@ -53,9 +53,13 @@ As always, we welcome your feedback. If you spot a bug, would like to see a new 
 
 # Installation
 
-We're working on posting to CRAN! We'll update as soon as it's accepted. In the mean time, you can install via:
+You can Tplyr install with:
 
 ```{r install, eval=FALSE}
+# Install from CRAN:
+install.packages("Tplyr")
+
+# Or install the development version:
 devtools::install_github("https://github.com/atorus-research/Tplyr.git")
 ```
 
@@ -71,7 +75,7 @@ devtools::install_github("https://github.com/atorus-research/Tplyr.git")
 
 For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let's use an example from the PHUSE project Standard Analyses & Code Sharing - [Analyses & Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf). 
 
-![Demographics Table](./vignettes/demo_table.png)
+<p align="center"><img src="vignettes/demo_table.png" width="800px"></p>
 
 When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as 'layers', and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this. 
 

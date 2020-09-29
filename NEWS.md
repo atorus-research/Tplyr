@@ -1,7 +1,7 @@
 # Tplyr 0.1.2
 
 - Bug Fixes
-  - Fixes a bug where percentages in count layers would appear as 'Inf' when a distinct_by variable and custom groupings were used.
+  - Fixes a bug where percentages in count layers would appear as 'Inf' when a distinct_by variable and custom groupings were used. GitHub Issue #8
 
 # Tplyr 0.1.1
 
