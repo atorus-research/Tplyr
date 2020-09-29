@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="A Grammar of Clinical Data Summary">
-<meta property="og:description" content="Simplified data manipulation necessary to create clinical reports.">
+<meta property="og:description" content="A tool created to simplify the data manipulation necessary to create clinical reports.">
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
 <meta name="twitter:card" content="summary_large_image">
@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -120,9 +120,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="tplyr-version-011-" class="section level1">
+<div id="tplyr-version-012-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-version-011-" class="anchor"></a>Tplyr Version 0.1.1 <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<a href="#tplyr-version-012-" class="anchor"></a>Tplyr Version 0.1.2 <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
 <!-- badges: start -->
 
@@ -155,7 +155,11 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>We’re working on posting to CRAN! We’ll update as soon as it’s accepted. In the mean time, you can install via:</p>
-<div class="sourceCode" id="cb1"><pre class="r">devtools::install_github(devtools::install_github("https://github.com/atorus-research/Tplyr.git")</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># Install from CRAN:</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"Tplyr"</span>)
+
+<span class="co"># Or install the development version:</span>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"https://github.com/atorus-research/Tplyr.git"</span>)</pre></div>
 </div>
 <div id="what-is-tplyr" class="section level1">
 <h1 class="hasAnchor">
@@ -168,7 +172,7 @@
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
 <p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&amp;%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&amp;%20Medications.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
-<p><img src="./vignettes/demo_table.png" alt="Demographics Table"></p>
+<p><img src="articles/demo_table.png" alt="Demographics Table"></p>
 <p>When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as ‘layers’, and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this.</p>
 <ul>
 <li>First we have Sex, which is made up of n (%) counts.</li>
@@ -193,10 +197,10 @@
 <table class="table">
 <colgroup>
 <col width="14%">
-<col width="8%">
+<col width="7%">
 <col width="9%">
 <col width="18%">
-<col width="17%">
+<col width="18%">
 <col width="12%">
 <col width="9%">
 <col width="9%">
@@ -359,6 +363,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=Tplyr">https://​cloud.r-project.org/​package=Tplyr</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/atorus-research/Tplyr/">https://​github.com/​atorus-research/​Tplyr/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/atorus-research/Tplyr/issues">https://​github.com/​atorus-research/​Tplyr/​issues</a>
@@ -396,7 +402,7 @@
 <li><a href="https://RValidationHub.slack.com"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
 <li><a href="https://travis-ci.com/atorus-research/tplyr"><img src="https://travis-ci.com/atorus-research/tplyr.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://codecov.io/gh/atorus-research/tplyr"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
-<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE"><img src="https://img.shields.io/github/license/atorus-research/tplyr"></a></li>
+<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a></li>
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
