@@ -94,7 +94,11 @@ example from the PHUSE project Standard Analyses & Code Sharing -
 Medications in Phase 2-4 Clinical Trials and Integrated Summary
 Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf).
 
-![Demographics Table](vignettes/demo_table.png)
+<p align="center">
+
+<img src="vignettes/demo_table.png" width="800px">
+
+</p>
 
 When you look at this table, you can begin breaking this output down
 into smaller, redundant, components. These components can be viewed as
