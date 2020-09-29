@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -170,8 +170,8 @@
 </ul>
 <p>The function <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> allows you a basic interface to instantiate the object. Modifier functions are available to change individual parameters catered to your analysis.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where = <span class="kw">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span>)
-<span class="kw">t</span>
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span>
+<span class="va">t</span>
 <span class="co">#&gt; *** tplyr_table ***</span>
 <span class="co">#&gt; Target (data.frame):</span>
 <span class="co">#&gt;  Name:  adsl</span>
@@ -188,8 +188,7 @@
 <span class="co">#&gt; Table Columns (cols):</span>
 <span class="co">#&gt; where: == SAFFL Y</span>
 <span class="co">#&gt; Number of layer(s): 0</span>
-<span class="co">#&gt; layer_output: 0</span>
-</pre></div>
+<span class="co">#&gt; layer_output: 0</span></pre></div>
 </div>
 <div id="the-tplyr_layer-object" class="section level2">
 <h2 class="hasAnchor">
@@ -216,40 +215,39 @@
 </li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">cnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">t</span>, <span class="kw">AGEGR1</span>)
-<span class="kw">cnt</span>
+<span class="va">cnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGEGR1</span><span class="op">)</span>
+<span class="va">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x7f897515d4a0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7f8972e2bf00 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x7fbb4ceefa08 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fbb4e305d28 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
 <span class="co">#&gt; where: TRUE</span>
 <span class="co">#&gt; Layer(s): 0</span>
 
-<span class="kw">dsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">t</span>, <span class="kw">AGE</span>)
-<span class="kw">dsc</span>
+<span class="va">dsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGE</span><span class="op">)</span>
+<span class="va">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x7f897528e8f0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7f8972e2bf00 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x7fbb4f018058 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fbb4e305d28 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
 <span class="co">#&gt; where: TRUE</span>
 <span class="co">#&gt; Layer(s): 0</span>
 
-<span class="kw">shf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="kw">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row=<span class="kw">COMP8FL</span>, column=<span class="kw">COMP24FL</span>))
-<span class="kw">shf</span>
+<span class="va">shf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row<span class="op">=</span><span class="va">COMP8FL</span>, column<span class="op">=</span><span class="va">COMP24FL</span><span class="op">)</span><span class="op">)</span>
+<span class="va">shf</span>
 <span class="co">#&gt; *** shift_layer ***</span>
-<span class="co">#&gt; Self:  shift_layer &lt; 0x7f8973b1a128 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7f8972e2bf00 &gt;</span>
+<span class="co">#&gt; Self:  shift_layer &lt; 0x7fbb4f118090 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fbb4e305d28 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  COMP8FL</span>
 <span class="co">#&gt;  COMP24FL</span>
 <span class="co">#&gt; by: </span>
 <span class="co">#&gt; where: TRUE</span>
-<span class="co">#&gt; Layer(s): 0</span>
-</pre></div>
+<span class="co">#&gt; Layer(s): 0</span></pre></div>
 </div>
 <div id="adding-layers-to-a-table" class="section level2">
 <h2 class="hasAnchor">
@@ -257,29 +255,26 @@
 <p>Everyone has their own style of coding - so we’ve tried to be flexible to an extent. Overall, ‘Tplyr’ is built around tidy syntax, so all of our object construction supports piping with <a href="https://magrittr.tidyverse.org/articles/magrittr.html"><code>magrittr</code></a> (i.e. <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code>).</p>
 <p>There are two ways to add layers to a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>: <code><a href="../reference/add_layer.html">add_layer()</a></code> and <code><a href="../reference/add_layer.html">add_layers()</a></code>. The difference is that <code><a href="../reference/add_layer.html">add_layer()</a></code> allows you to construct the layer within the call to <code><a href="../reference/add_layer.html">add_layer()</a></code>, whereas with <code><a href="../reference/add_layer.html">add_layers()</a></code> you can attach multiple layers that have already been constructed upfront:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories n (%)"</span>)
-  )
-</pre></div>
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories n (%)"</span><span class="op">)</span>
+  <span class="op">)</span></pre></div>
 <p>Within <code><a href="../reference/add_layer.html">add_layer()</a></code>, the syntax to constructing the count layer for Age Categories was written on the fly. <code><a href="../reference/add_layer.html">add_layer()</a></code> is special in that it also allows you to use piping to use modifier functions on the layer being constructed</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories n (%)"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.x%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>)) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>()
-  )
-</pre></div>
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories n (%)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xx.x%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span></pre></div>
 <p><code><a href="../reference/add_layer.html">add_layers()</a></code>, on the other hand, lets you isolate the code to construct a particular layer if you wanted to separate things out more. Some might find this cleaner to work with if you have a large number of layers being constructed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) 
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> 
 
-<span class="kw">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">t</span>, <span class="kw">AGEGR1</span>, by = <span class="st">"Age categories n (%)"</span>)
-<span class="kw">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">t</span>, <span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>)
+<span class="va">l1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories n (%)"</span><span class="op">)</span>
+<span class="va">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
 
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_layer.html">add_layers</a></span>(<span class="kw">t</span>, <span class="kw">l1</span>, <span class="kw">l2</span>)
-</pre></div>
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_layer.html">add_layers</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">l1</span>, <span class="va">l2</span><span class="op">)</span></pre></div>
 <p>Notice that when you construct the layers separately, you need to specify the table to which they belong. <code><a href="../reference/add_layer.html">add_layer()</a></code> does this automatically. <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> and <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> objects are built on environments, and the parent/child relationships are very important. This is why, even though the layer knows who its table parent is, the layers still need to be attached to the table (as the table doesn’t know who its children are). <a href="https://adv-r.hadley.nz/environments.html">Advanced R</a> does a very good job at explaining what environments in R are, their benefits, and how to use them.</p>
 <div id="a-note-before-we-go-deeper" class="section level3">
 <h3 class="hasAnchor">
@@ -287,15 +282,14 @@
 <p>Notice that when you construct a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> or a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> that what displays is a summary of information about the table or layer? That’s because when you create these objects - it constructs the metadata, but does not process the actual data. This allows you to construct and make sure the pieces of your table fit together before you do the data processing - and it gives you a container to hold all of this metadata, and use it later if necessary.</p>
 <p>To generate the data from a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object, you use the function <code><a href="../reference/build.html">build()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories n (%)"</span>)
-  )
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories n (%)"</span><span class="op">)</span>
+  <span class="op">)</span>
 
-<span class="kw">t</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="va">t</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="15%">
@@ -352,10 +346,9 @@
 </table>
 <p>But there’s more you can get from ‘Tplyr’. It’s great to have the formatted numbers, but what about the numeric data behind the scenes? Maybe a number looks suspicious and you need to investigate <em>how</em> you got that number. What if you want to calculate your own statistics based off of the counts? You can get that information as well using <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>. This returns the numeric data from each layer as a list of data frames:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/get_numeric_data.html">get_numeric_data</a></span>(<span class="kw">t</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/get_numeric_data.html">get_numeric_data</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table kable_wrapper"><tbody><tr>
 <td>
 <table class="table">
@@ -448,19 +441,18 @@
 <p>So - why is this object necessary. Consider this example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'n'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="kw">n</span>),
-        <span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx (xx.xxx)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>)
-      )
-  )
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
+        <span class="st">'n'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>,
+        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx (xx.xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>
+      <span class="op">)</span>
+  <span class="op">)</span>
 
-<span class="kw">t</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="va">t</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -539,14 +531,13 @@
 <p>This simple user input controls a significant amount of work in the back end of the data processing, and the <code><a href="../reference/f_str.html">f_str()</a></code> object allows that metadata to be collected.</p>
 <p><code><a href="../reference/f_str.html">f_str()</a></code> objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use <code>n</code>, <code>pct</code>, <code>distinct</code>, and <code>distinct_pct</code> for your parameters and specify how you would like the values displayed. Using <code>distinct</code> and <code>distinct_pct</code> should be combined with specifying a <code>distinct_by()</code> variable using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (xx.x)'</span>,<span class="kw">n</span>,<span class="kw">pct</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx (xx.x)'</span>,<span class="va">n</span>,<span class="va">pct</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -603,14 +594,13 @@
 </table>
 <div class="sourceCode" id="cb10"><pre class="downlit">
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>,<span class="kw">n</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>,<span class="va">n</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -667,14 +657,13 @@
 </table>
 <p>Really - format strings allow you to present your data however you like.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (•◡•) xx.x%'</span>,<span class="kw">n</span>,<span class="kw">pct</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx (•◡•) xx.x%'</span>,<span class="va">n</span>,<span class="va">pct</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -741,13 +730,12 @@
 <a href="#descriptive-statistic-layers" class="anchor"></a>Descriptive Statistic Layers</h2>
 <p>As covered under string formatting, <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> controls a great deal of what happens within a descriptive statistics layer. Note that there are some built in defaults to what’s output:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -834,19 +822,18 @@
 </table>
 <p>To override these defaults, just specify the summaries that you want to be performed using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> as described above. But what if ‘Tplyr’ doesn’t have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code> comes into play. Let’s say you want to derive a geometric mean.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Sepal Length"</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_custom_summaries.html">set_custom_summaries</a></span>(
-        geometric_mean = <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw">.var</span>[<span class="kw">.var</span> <span class="op">&gt;</span> <span class="fl">0</span>]), na.rm=<span class="fl">TRUE</span>) <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw">.var</span>))
-      ) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'Geometric Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx (xx.xxx)'</span>, <span class="kw">geometric_mean</span>, <span class="kw">sd</span>)
-      )
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Sepal Length"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_custom_summaries.html">set_custom_summaries</a></span><span class="op">(</span>
+        geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span>
+      <span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
+        <span class="st">'Geometric Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx (xx.xxx)'</span>, <span class="va">geometric_mean</span>, <span class="va">sd</span><span class="op">)</span>
+      <span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -882,13 +869,12 @@
 <p>In <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code>, first you name the summary being performed. This is important - that name is what you use in the <code><a href="../reference/f_str.html">f_str()</a></code> call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">dplyr::summarize()</a></code> - so use similar syntax. Use the variable name <code>.var</code> in your custom summary function. This is necessary because it allows a generic variable name to be used when multiple target variables are specified - and therefore the function can be applied to both target variables.</p>
 <p>Sometimes there’s a need to present multiple variables summarized side by side. ‘Tplyr’ allows you to do this as well.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AGE</span>, <span class="kw">AVGDD</span>), by = <span class="st">"Age and Avg. Daily Dose"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AGE</span>, <span class="va">AVGDD</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"Age and Avg. Daily Dose"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -1004,14 +990,13 @@
 <a href="#count-layers" class="anchor"></a>Count Layers</h2>
 <p>Count layers generally allow you to create “n” and “n (%)” count type summaries. There are a few extra features here as well. Let’s say that you want a total row within your counts. This can be done with <code><a href="../reference/add_total_row.html">add_total_row()</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age categories"</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>()
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age categories"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -1078,15 +1063,14 @@
 </table>
 <p>Sometimes it’s also necessary to count summaries based on distinct values. ‘Tplyr’ allows you to do this as well with <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="st">'Subjects with at least one adverse event'</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="kw">n</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="st">'Subjects with at least one adverse event'</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="30%">
@@ -1116,14 +1100,13 @@
 <p>There’s another trick going on here - to create a summary with row label text like you see above, text strings can be used as the target variables. Here, we use this in combination with <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> to count distinct subjects.</p>
 <p>Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. ‘Tplyr’ has means of making this simple for the user as well.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AEBODSYS</span>, <span class="kw">AEDECOD</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="21%">
@@ -1216,17 +1199,16 @@
 <p>Lastly, let’s talk about shift layers. A common example of this would be looking at a subject’s lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in ‘Tplyr’ is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let’s look at an example.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit">
 <span class="co"># Tplyr can use factor orders to dummy values and order presentation</span>
-<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
-<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where = <span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row=<span class="kw">BNRIND</span>, column=<span class="kw">ANRIND</span>), by=<span class="kw">PARAM</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>))
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row<span class="op">=</span><span class="va">BNRIND</span>, column<span class="op">=</span><span class="va">ANRIND</span><span class="op">)</span>, by<span class="op">=</span><span class="va">PARAM</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xxx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="7%">

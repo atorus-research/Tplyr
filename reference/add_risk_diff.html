@@ -87,7 +87,7 @@ be sure to familiarize yourself with its functionality." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@ are performed using the Base R function <code><a href='https://rdrr.io/r/stats/p
 be sure to familiarize yourself with its functionality.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_risk_diff</span>(<span class='kw'>layer</span>, <span class='kw'>...</span>, args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), distinct = <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>add_risk_diff</span><span class='op'>(</span><span class='va'>layer</span>, <span class='va'>...</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, distinct <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -244,21 +244,21 @@ coming from a SAS programming world, but this is R is trying to alert you that t
 don't have enough data to truly be statistically accurate.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>magrittr</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>magrittr</span><span class='op'>)</span>
 
 <span class='co'>## Two group comparisons with default options applied</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>)
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span>
 
 <span class='co'># Basic risk diff for two groups, using defaults</span>
-<span class='kw'>l1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>t</span>, <span class='kw'>carb</span>) <span class='op'>%&gt;%</span>
+<span class='va'>l1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>carb</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># Compare 3 vs. 4, 3 vs. 5</span>
-  <span class='fu'>add_risk_diff</span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'4'</span>),
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'5'</span>)
-  )
+  <span class='fu'>add_risk_diff</span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'4'</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'5'</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Build and show output</span>
-<span class='fu'><a href='add_layer.html'>add_layers</a></span>(<span class='kw'>t</span>, <span class='kw'>l1</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span>()
+<span class='fu'><a href='add_layer.html'>add_layers</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>l1</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span><span>
 #&gt;   row_label1 var1_3 var1_4 var1_5 ord_layer_index rdiff_3_4 rdiff_3_5
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    
@@ -270,22 +270,22 @@ don't have enough data to truly be statistically accurate.</p>
 #&gt; </span><span style='color: #555555;'>6</span><span> 8          0 (  … 0 (  … 1 ( 2…               1 </span><span style='color: #555555;'>"</span><span> 0.000 … </span><span style='color: #555555;'>"</span><span>-0.200 …
 #&gt; </span><span style='color: #555555;'># … with 1 more variable: ord_layer_1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 <span class='co'>## Specify custom formats and display variables</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>)
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span>
 
 <span class='co'># Create the layer with custom formatting</span>
-<span class='kw'>l2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>t</span>, <span class='kw'>carb</span>) <span class='op'>%&gt;%</span>
+<span class='va'>l2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>carb</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># Compare 3 vs. 4, 3 vs. 5</span>
-  <span class='fu'>add_risk_diff</span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'4'</span>),
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'5'</span>)
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='set_format_strings.html'>set_format_strings</a></span>(
-    <span class='st'>'n_counts'</span> = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>'xx (xx.x)'</span>, <span class='kw'>n</span>, <span class='kw'>pct</span>),
-    <span class='st'>'riskdiff'</span> = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class='kw'>comp</span>, <span class='kw'>ref</span>, <span class='kw'>dif</span>, <span class='kw'>low</span>, <span class='kw'>high</span>)
-  )
+  <span class='fu'>add_risk_diff</span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'4'</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'5'</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='set_format_strings.html'>set_format_strings</a></span><span class='op'>(</span>
+    <span class='st'>'n_counts'</span> <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>'xx (xx.x)'</span>, <span class='va'>n</span>, <span class='va'>pct</span><span class='op'>)</span>,
+    <span class='st'>'riskdiff'</span> <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class='va'>comp</span>, <span class='va'>ref</span>, <span class='va'>dif</span>, <span class='va'>low</span>, <span class='va'>high</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Build and show output</span>
-<span class='fu'><a href='add_layer.html'>add_layers</a></span>(<span class='kw'>t</span>, <span class='kw'>l2</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span>()
+<span class='fu'><a href='add_layer.html'>add_layers</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>l2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 8</span><span>
 #&gt;   row_label1 var1_3 var1_4 var1_5 ord_layer_index rdiff_3_4 rdiff_3_5
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    
@@ -297,19 +297,19 @@ don't have enough data to truly be statistically accurate.</p>
 #&gt; </span><span style='color: #555555;'>6</span><span> 8          </span><span style='color: #555555;'>"</span><span> 0 (… </span><span style='color: #555555;'>"</span><span> 0 (… </span><span style='color: #555555;'>"</span><span> 1 (…               1 </span><span style='color: #555555;'>"</span><span> 0.000,… </span><span style='color: #555555;'>"</span><span> 0.000,…
 #&gt; </span><span style='color: #555555;'># … with 1 more variable: ord_layer_1 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 <span class='co'>## Passing arguments to prop.test</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>)
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span>
 
 <span class='co'># Create the layer with args option</span>
-<span class='kw'>l3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>t</span>, <span class='kw'>carb</span>) <span class='op'>%&gt;%</span>
+<span class='va'>l3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>carb</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># Compare 3 vs. 4, 4 vs. 5</span>
-  <span class='fu'>add_risk_diff</span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'4'</span>),
-    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'3'</span>, <span class='st'>'5'</span>),
-    args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(conf.level = <span class='fl'>0.9</span>, correct=<span class='fl'>FALSE</span>, alternative=<span class='st'>'less'</span>)
-  )
+  <span class='fu'>add_risk_diff</span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'4'</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'3'</span>, <span class='st'>'5'</span><span class='op'>)</span>,
+    args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>conf.level <span class='op'>=</span> <span class='fl'>0.9</span>, correct<span class='op'>=</span><span class='cn'>FALSE</span>, alternative<span class='op'>=</span><span class='st'>'less'</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Build and show output</span>
-<span class='fu'><a href='add_layer.html'>add_layers</a></span>(<span class='kw'>t</span>, <span class='kw'>l3</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span>()
+<span class='fu'><a href='add_layer.html'>add_layers</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='va'>l3</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 8</span><span>
 #&gt;   row_label1 var1_3 var1_4 var1_5 ord_layer_index rdiff_3_4 rdiff_3_5
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    

@@ -86,7 +86,7 @@ obtain that data from the environment" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -175,7 +175,7 @@ statistics like risk difference. This helper function gives you access to
 obtain that data from the environment</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_stats_data</span>(<span class='kw'>x</span>, layer = <span class='kw'>NULL</span>, statistic = <span class='kw'>NULL</span>, where = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>x</span>, layer <span class='op'>=</span> <span class='cn'>NULL</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span>, where <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -222,26 +222,26 @@ frames, allowing you to grab, for example, just the risk difference
 statistics across all layers.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>magrittr</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>magrittr</span><span class='op'>)</span>
 
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>'drat'</span>,
-            <span class='fu'><a href='group_count.html'>group_desc</a></span>(<span class='kw'>drat</span>)
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>"cyl"</span>,
-            <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>)
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>"am"</span>,
-            <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>am</span>) <span class='op'>%&gt;%</span>
-              <span class='fu'><a href='add_risk_diff.html'>add_risk_diff</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'4'</span>, <span class='st'>'3'</span>))
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>"carb"</span>,
-            <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>carb</span>) <span class='op'>%&gt;%</span>
-              <span class='fu'><a href='add_risk_diff.html'>add_risk_diff</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'4'</span>, <span class='st'>'3'</span>))
-  )
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'drat'</span>,
+            <span class='fu'><a href='group_count.html'>group_desc</a></span><span class='op'>(</span><span class='va'>drat</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>"cyl"</span>,
+            <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>"am"</span>,
+            <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>am</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+              <span class='fu'><a href='add_risk_diff.html'>add_risk_diff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'4'</span>, <span class='st'>'3'</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>"carb"</span>,
+            <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>carb</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+              <span class='fu'><a href='add_risk_diff.html'>add_risk_diff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'4'</span>, <span class='st'>'3'</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
  <span class='co'># Returns a list of lists, containing stats data from each layer</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt; $drat
 #&gt; list()
 #&gt; 
@@ -285,7 +285,7 @@ statistics across all layers.</p>
 #&gt; </div><div class='input'>
  <span class='co'># Returns just the riskdiff statistics from each layer - NULL</span>
  <span class='co'># for layers without riskdiff</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, statistic=<span class='st'>"riskdiff"</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $drat
 #&gt; NULL
 #&gt; 
@@ -324,7 +324,7 @@ statistics across all layers.</p>
 #&gt; </span><span style='color: #555555;'># … with 20 more rows</span><span>
 #&gt; </div><div class='input'>
  <span class='co'># Return the statistic data for just the "am" layer - a list</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='st'>"am"</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $riskdiff
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
 #&gt;    summary_var measure  `4_3`
@@ -339,7 +339,7 @@ statistics across all layers.</p>
 #&gt; </span><span style='color: #555555;'> 8</span><span> 1           dif      0.667
 #&gt; </span><span style='color: #555555;'> 9</span><span> 1           low      0.325
 #&gt; </span><span style='color: #555555;'>10</span><span> 1           high     1    
-#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='fl'>3</span>)
+#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $riskdiff
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
 #&gt;    summary_var measure  `4_3`
@@ -357,7 +357,7 @@ statistics across all layers.</p>
 #&gt; </div><div class='input'>
  <span class='co'># Return the statistic data for just the "am" and "cyl", layer - a</span>
  <span class='co'># list of lists</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"am"</span>, <span class='st'>"cyl"</span>))
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; $am$riskdiff
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
@@ -377,7 +377,7 @@ statistics across all layers.</p>
 #&gt; 
 #&gt; $cyl
 #&gt; list()
-#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>2</span>))
+#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; $am$riskdiff
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
@@ -399,7 +399,7 @@ statistics across all layers.</p>
 #&gt; list()
 #&gt; </div><div class='input'>
  <span class='co'># Return just the statistic data for "am" and "cyl" - a list</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"am"</span>, <span class='st'>"cyl"</span>), statistic=<span class='st'>"riskdiff"</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
 #&gt;    summary_var measure  `4_3`
@@ -417,7 +417,7 @@ statistics across all layers.</p>
 #&gt; 
 #&gt; $cyl
 #&gt; NULL
-#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>2</span>), statistic=<span class='st'>"riskdiff"</span>)
+#&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
 #&gt;    summary_var measure  `4_3`
@@ -438,7 +438,7 @@ statistics across all layers.</p>
 #&gt; </div><div class='input'>
 
  <span class='co'># Return the riskdiff for the "am" layer - a data frame</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='st'>"am"</span>, statistic=<span class='st'>"riskdiff"</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 10 x 3</span><span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
@@ -453,7 +453,7 @@ statistics across all layers.</p>
 #&gt; </span><span style='color: #555555;'> 9</span><span> 1           low      0.325
 #&gt; </span><span style='color: #555555;'>10</span><span> 1           high     1    </div><div class='input'>
  <span class='co'># Return and filter the riskdiff for the am layer - a data frame</span>
- <span class='fu'>get_stats_data</span>(<span class='kw'>t</span>, layer=<span class='st'>"am"</span>, statistic=<span class='st'>"riskdiff"</span>, where = <span class='kw'>summary_var</span><span class='op'>==</span><span class='fl'>1</span>)
+ <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span>, where <span class='op'>=</span> <span class='va'>summary_var</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 5 x 3</span><span>
 #&gt;   summary_var measure `4_3`
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>

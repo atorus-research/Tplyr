@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -120,9 +120,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="tplyr-version-011-" class="section level1">
+<div id="tplyr-version-012-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-version-011-" class="anchor"></a>Tplyr Version 0.1.1 <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<a href="#tplyr-version-012-" class="anchor"></a>Tplyr Version 0.1.2 <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
 <!-- badges: start -->
 
@@ -154,10 +154,13 @@
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
-<p>We’re working on posting to CRAN! We’ll update as soon as it’s accepted. In the mean time, you can install via:</p>
+<p>You can Tplyr install with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">"https://github.com/atorus-research/Tplyr.git"</span>)
-</pre></div>
+<span class="co"># Install from CRAN:</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span>
+
+<span class="co"># Or install the development version:</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></pre></div>
 </div>
 <div id="what-is-tplyr" class="section level1">
 <h1 class="hasAnchor">
@@ -170,7 +173,10 @@
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
 <p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&amp;%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&amp;%20Medications.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
-<p><img src="./vignettes/demo_table.png" alt="Demographics Table"></p>
+<p align="center">
+</p>
+<p><img src="articles/demo_table.png" width="800px"></p>
+
 <p>When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as ‘layers’, and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this.</p>
 <ul>
 <li>First we have Sex, which is made up of n (%) counts.</li>
@@ -184,279 +190,126 @@
 <p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 
-<span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where = <span class="kw">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age Categories n (%)"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.</span>
-<span class="co">#&gt; Warning: `progress_estimated()` is deprecated as of dplyr 1.0.0.</span>
-</pre></div>
+<span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
-<thead><tr>
-<th style="text-align:left;">
-row_label1
-</th>
-<th style="text-align:left;">
-row_label2
-</th>
-<th style="text-align:left;">
-var1_Placebo
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose
-</th>
-<th style="text-align:right;">
-ord_layer_index
-</th>
-<th style="text-align:right;">
-ord_layer_1
-</th>
-<th style="text-align:right;">
-ord_layer_2
-</th>
+<colgroup>
+<col width="14%">
+<col width="7%">
+<col width="9%">
+<col width="18%">
+<col width="18%">
+<col width="12%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-n
-</td>
-<td style="text-align:left;">
-86
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">n</td>
+<td align="left">86</td>
+<td align="left">84</td>
+<td align="left">84</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Mean (SD)
-</td>
-<td style="text-align:left;">
-75.2 ( 8.59)
-</td>
-<td style="text-align:left;">
-74.4 ( 7.89)
-</td>
-<td style="text-align:left;">
-75.7 ( 8.29)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Mean (SD)</td>
+<td align="left">75.2 ( 8.59)</td>
+<td align="left">74.4 ( 7.89)</td>
+<td align="left">75.7 ( 8.29)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Median
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">Median</td>
+<td align="left">76.0</td>
+<td align="left">76.0</td>
+<td align="left">77.5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Q1, Q3
-</td>
-<td style="text-align:left;">
-69.2, 81.8
-</td>
-<td style="text-align:left;">
-70.8, 80.0
-</td>
-<td style="text-align:left;">
-71.0, 82.0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.2, 81.8</td>
+<td align="left">70.8, 80.0</td>
+<td align="left">71.0, 82.0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Min, Max
-</td>
-<td style="text-align:left;">
-52, 89
-</td>
-<td style="text-align:left;">
-56, 88
-</td>
-<td style="text-align:left;">
-51, 88
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-5
-</td>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">Min, Max</td>
+<td align="left">52, 89</td>
+<td align="left">56, 88</td>
+<td align="left">51, 88</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (years)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-&lt;65
-</td>
-<td style="text-align:left;">
-14 ( 16.3%)
-</td>
-<td style="text-align:left;">
-11 ( 13.1%)
-</td>
-<td style="text-align:left;">
-8 ( 9.5%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="left">14 ( 16.3%)</td>
+<td align="left">11 ( 13.1%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-&gt;80
-</td>
-<td style="text-align:left;">
-30 ( 34.9%)
-</td>
-<td style="text-align:left;">
-18 ( 21.4%)
-</td>
-<td style="text-align:left;">
-29 ( 34.5%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="even">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="left">30 ( 34.9%)</td>
+<td align="left">18 ( 21.4%)</td>
+<td align="left">29 ( 34.5%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-65-80
-</td>
-<td style="text-align:left;">
-42 ( 48.8%)
-</td>
-<td style="text-align:left;">
-55 ( 65.5%)
-</td>
-<td style="text-align:left;">
-47 ( 56.0%)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">65-80</td>
+<td align="left">42 ( 48.8%)</td>
+<td align="left">55 ( 65.5%)</td>
+<td align="left">47 ( 56.0%)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
 </tbody>
 </table>

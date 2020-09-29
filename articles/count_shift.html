@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -139,21 +139,20 @@
 <a href="#a-simple-example" class="anchor"></a>A Simple Example</h3>
 <p>Let’s start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we’re sorting by descending total occurrences using the “Total” group.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where = <span class="kw">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_treat_grps</a></span>(Treated = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span>)) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">DCDECOD</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_order_count_method.html">set_order_count_method</a></span>(<span class="st">"bycount"</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_order_count_method.html">set_ordering_cols</a></span>(<span class="kw">Total</span>)
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span>(<span class="kw">ord_layer_1</span>)) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"row"</span>), <span class="kw">var1_Placebo</span>, <span class="kw">`var1_Xanomeline Low Dose`</span>,
-         <span class="kw">`var1_Xanomeline High Dose`</span>, <span class="kw">var1_Treated</span>, <span class="kw">var1_Total</span>)
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_treat_grps.html">add_treat_grps</a></span><span class="op">(</span>Treated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">DCDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_order_count_method.html">set_order_count_method</a></span><span class="op">(</span><span class="st">"bycount"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_order_count_method.html">set_ordering_cols</a></span><span class="op">(</span><span class="va">Total</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">ord_layer_1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span>, <span class="va">var1_Placebo</span>, <span class="va">`var1_Xanomeline Low Dose`</span>,
+         <span class="va">`var1_Xanomeline High Dose`</span>, <span class="va">var1_Treated</span>, <span class="va">var1_Total</span><span class="op">)</span>
 
-<span class="fu">kable</span>(<span class="kw">t</span>)
-</pre></div>
+<span class="fu">kable</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -380,17 +379,16 @@ LOST TO FOLLOW-UP
 <p>Just as important as denominator flexibility is the determination of whether you should be using distinct or non-distinct counts - or some combination of both. Adverse event tables are a perfect example. Often, you’re concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn’t necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group.</p>
 <p>‘Tplyr’ allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> function sets the variables used to calculate the distinct occurrences of some value using the specified <code>by</code> variables.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx (xx.xx%) [xxx]"</span>, <span class="kw">distinct</span>, <span class="kw">distinct_pct</span>, <span class="kw">n</span>))
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx (xx.xx%) [xxx]"</span>, <span class="va">distinct</span>, <span class="va">distinct_pct</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu">kable</span>(<span class="kw">t</span>)
-</pre></div>
+<span class="fu">kable</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -542,15 +540,14 @@ DERMATITIS CONTACT
 <a href="#adding-a-total-row" class="anchor"></a>Adding a ‘Total’ Row</h2>
 <p>Some summaries require the addition of a ‘Total’ row in addition to the categorical counts. ‘Tplyr’ has the helper function <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. The default text for this row is “Total”, but we provide <code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text used for the ‘Total’ row.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>() <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_total_row_label.html">set_total_row_label</a></span>(<span class="st">"All Age Groups"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_total_row_label.html">set_total_row_label</a></span><span class="op">(</span><span class="st">"All Age Groups"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -663,22 +660,21 @@ All Age Groups
 <p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. Additionally, using the <code>string</code> parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the <code>row_label</code> of what will be used for missing values.</p>
 <p>In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing “NA”). During processing, the NAs are coerced into characters.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">adae2</span> <span class="op">&lt;-</span> <span class="kw">adae</span>
-<span class="kw">adae2</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">adae2</span>), <span class="fl">50</span>), <span class="st">"AESEV"</span>] <span class="op">&lt;-</span> <span class="fl">NA</span>
-<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae2</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AESEV</span>) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx (xx.xx%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>)) <span class="op">%&gt;%</span>
+<span class="va">adae2</span> <span class="op">&lt;-</span> <span class="va">adae</span>
+<span class="va">adae2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">adae2</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"AESEV"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AESEV</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx (xx.xx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
       <span class="co"># AESEV of SEVERE is used to demonstrate missing</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx"</span>, <span class="kw">n</span>), string = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(MISSING = <span class="st">"NA"</span>))  <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx"</span>, <span class="va">n</span><span class="op">)</span>, string <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>MISSING <span class="op">=</span> <span class="st">"NA"</span><span class="op">)</span><span class="op">)</span>  <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span>
     
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>()
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw">t</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="va">t</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -709,10 +705,10 @@ MILD
 25 (53.19%)
 </td>
 <td style="text-align:left;">
-70 (63.06%)
+66 (59.46%)
 </td>
 <td style="text-align:left;">
-43 (36.44%)
+37 (31.36%)
 </td>
 <td style="text-align:right;">
 1
@@ -726,13 +722,13 @@ MILD
 MODERATE
 </td>
 <td style="text-align:left;">
-14 (29.79%)
+17 (36.17%)
 </td>
 <td style="text-align:left;">
-21 (18.92%)
+24 (21.62%)
 </td>
 <td style="text-align:left;">
-49 (41.53%)
+52 (44.07%)
 </td>
 <td style="text-align:right;">
 1
@@ -749,10 +745,10 @@ SEVERE
 0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-1 ( 0.90%)
+0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-3 ( 2.54%)
+5 ( 4.24%)
 </td>
 <td style="text-align:right;">
 1
@@ -766,13 +762,13 @@ SEVERE
 MISSING
 </td>
 <td style="text-align:left;">
-8
+5
 </td>
 <td style="text-align:left;">
-19
+21
 </td>
 <td style="text-align:left;">
-23
+24
 </td>
 <td style="text-align:right;">
 1
@@ -791,14 +787,13 @@ MISSING
 <p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/group_count.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
 <p>The example below demonstrates how to do a nested summary. Look at the first row - here <code>row_label1</code> and <code>row_label2</code> are both “CARDIAC DISORDERS”. This line is the summary for <code>AEBODSYS.</code> In the rows below that, <code>row_label1</code> continues on with the value “CARDIAC DISORDERS”, but <code>row_label2</code> changes. These are the summaries for <code>AEDECOD</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AEBODSYS</span>, <span class="kw">AEDECOD</span>))
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -987,16 +982,15 @@ DERMATITIS ATOPIC
 </table>
 <p>This accomplishes what we needed, but it’s not exactly the presentation you might hope for. We have a solution for this as well.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AEBODSYS</span>, <span class="kw">AEDECOD</span>)) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span>(<span class="fl">TRUE</span>) <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_indentation.html">set_indentation</a></span>(<span class="st">"---&gt;"</span>)
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_indentation.html">set_indentation</a></span><span class="op">(</span><span class="st">"---&gt;"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1172,14 +1166,13 @@ Inf
 <p>One thing to note - the <code><a href="../reference/group_count.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/group_count.html">group_count()</a></code> will do just fine.</p>
 <p>Let’s look at an example.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">VISIT</span>))
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span>
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">VISIT</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1473,16 +1466,15 @@ N
 </table>
 <p>For the most part, this is getting us where we want to go - but there’s still some that’s left to be desired. It doesn’t look like there are any ‘L’ values for BNRIND in the dataset so we are not getting and rows containing ‘L’. Let’s see if we can fix that by dummying in the possible values.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span>, levels=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
-<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span>, levels=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">VISIT</span>))
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span>
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">VISIT</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1991,16 +1983,15 @@ H
 <p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the “box” that is formed from the “from” and “to” groups of the shift for each treatment group. To support this, ‘Tplyr’ let’s you specify the grouping used to calculate the denominators.</p>
 <p>Just like the count layers, the <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the treatment variable, <code>cols</code> argument, <code>by</code> variables, and the target variables.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">AVISIT</span>)) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>)) <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xxx.x%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
       <span class="co"># This is the default, the 3x3 box formed by the target variables</span>
-      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="kw">TRTA</span>, <span class="kw">PARAM</span>, <span class="kw">AVISIT</span>) 
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu">kable</span>()
-</pre></div>
+      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span><span class="op">(</span><span class="va">TRTA</span>, <span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span> 
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2508,16 +2499,15 @@ H
 <p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is the total of all record within the <strong>FROM</strong> and <strong>TO</strong> shift variables, within each parameter, visit, and treatment. This is the default, and this is how ‘Tplyr’ will create the denominators if <code>set_denom_by()</code> isn’t specified.</p>
 <p>In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">AVISIT</span>)) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>)) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="kw">BNRIND</span>, <span class="kw">PARAM</span>, <span class="kw">AVISIT</span>) <span class="co"># Each row made by LBNRIND, TRTA</span>
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw">ord_layer_1</span>, <span class="kw">ord_layer_2</span>) <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xxx.x%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span><span class="op">(</span><span class="va">BNRIND</span>, <span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span> <span class="co"># Each row made by LBNRIND, TRTA</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">ord_layer_1</span>, <span class="va">ord_layer_2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3024,16 +3014,15 @@ N
 </table>
 <p>While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>ANRIND</code> the layer will use those denominators when determining the percentages.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where = <span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">AVISIT</span>)) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.xx%)"</span>, <span class="kw">n</span>, <span class="kw">pct</span>)) <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="kw">TRTA</span>, <span class="kw">ANRIND</span>) <span class="co"># Use the column total as the denominator</span>
-  ) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span>
-  <span class="fu">kable</span>()
-</pre></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xx.xx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span><span class="op">(</span><span class="va">TRTA</span>, <span class="va">ANRIND</span><span class="op">)</span> <span class="co"># Use the column total as the denominator</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
