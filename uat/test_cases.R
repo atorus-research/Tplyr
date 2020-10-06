@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 9/24/2020
+#' 10/06/2020
 
 #setup ----
 #insert any necessary libraries
@@ -3449,7 +3449,7 @@ test_that('T60',{
           add_risk_diff(c('Treated','Placebo'))
       )
 
-    test_60 <- suppressWarnings(build(t))
+    test_60 <- list(suppressWarnings(build(t)), header_n(t))
 
     # output table to check attributes
     save(test_60, file = "~/Tplyr/uat/output/test_60.RData")
@@ -3501,11 +3501,14 @@ test_that('T60',{
     mutate(col = paste0(sprintf("%6.3f",rdiff),' (',sprintf("%6.3f",lci), ', ',sprintf("%6.3f",uci),')'))
 
   testthat::expect_equal(c(t60_calc$col_Placebo_F, t60_calc$col_Placebo_M, t60_calc$col_Treated_F, t60_calc$col_Treated_M),
-                         c(test_60$var1_Placebo_F, test_60$var1_Placebo_M, test_60$var1_Treated_F, test_60$var1_Treated_M),
+                         c(test_60[[1]]$var1_Placebo_F, test_60[[1]]$var1_Placebo_M, test_60[[1]]$var1_Treated_F, test_60[[1]]$var1_Treated_M),
                          label = "T60.1")
   testthat::expect_equal(t60_2$col,
-                         test_60$rdiff_Treated_Placebo_F,
+                         test_60[[1]]$rdiff_Treated_Placebo_F,
                          label = "T60.2")
+  testthat::expect_equal(t60_tots$total,
+                         test_60[[2]]$n,
+                         label = "T60.3")
   #manual check(s)
 
   #clean up working directory
@@ -3533,7 +3536,7 @@ test_that('T61',{
           add_risk_diff(c('Treated','Placebo'))
       )
 
-    test_61 <- suppressWarnings(build(t))
+    test_61 <- list(suppressWarnings(build(t)), header_n(t))
 
     # output table to check attributes
     save(test_61, file = "~/Tplyr/uat/output/test_61.RData")
@@ -3587,11 +3590,14 @@ test_that('T61',{
     mutate(col = paste0(sprintf("%6.3f",rdiff),' (',sprintf("%6.3f",lci), ', ',sprintf("%6.3f",uci),')'))
 
   testthat::expect_equal(c(t61_calc$col_Placebo_F, t61_calc$col_Placebo_M, t61_calc$col_Treated_F, t61_calc$col_Treated_M),
-                         c(test_61$var1_Placebo_F, test_61$var1_Placebo_M, test_61$var1_Treated_F, test_61$var1_Treated_M),
+                         c(test_61[[1]]$var1_Placebo_F, test_61[[1]]$var1_Placebo_M, test_61[[1]]$var1_Treated_F, test_61[[1]]$var1_Treated_M),
                          label = "T61.1")
   testthat::expect_equal(t61_2$col,
-                         test_61$rdiff_Treated_Placebo_F,
+                         test_61[[1]]$rdiff_Treated_Placebo_F,
                          label = "T61.2")
+  testthat::expect_equal(t61_tots$total,
+                         test_61[[2]]$n,
+                         label = "T61.3")
   #manual check(s)
 
   #clean up working directory

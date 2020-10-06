@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 9/24/2020
+#' 10/6/2020
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -158,8 +158,10 @@ This section contains details of each test executed. Checks verifying each test 
   + T59: A table object is returned in a format that is ready to be cosmetically prepared
     + T59.1: Check that the table object can be easily cosmetically prepared 
   + T60: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-    + T60.1: Test that n and % results are accurate when the combination of the cols argument and separate population data
-    + T60.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data
+    + T60.1: Test that n and % results are accurate when the combination of the cols argument and separate population data are applied
+    + T60.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied
+    + T60.3: Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied
   + T61: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
     + T61.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
     + T61.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+    + T61.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
