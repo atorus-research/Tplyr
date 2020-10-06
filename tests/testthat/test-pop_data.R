@@ -35,3 +35,15 @@ test_that("add_treat_grps and add_total_grps properly append existing groups", {
   expect_equal(treat_grps(t), list(a = c("3", "4"), b=c("1", "2"), Total=c("4", "3", "5")))
 
 })
+
+test_that("default header_n is built properly", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_total_group() %>%
+    set_distinct_by(cyl) %>%
+    add_layer(
+      group_count(vs)
+    )
+  t_b <- build(t)
+
+  expect_equal(header_n(t), tibble(gear = factor(c(3, 4, 5, "Total")), n = c(3, 2, 3, 3)))
+})
