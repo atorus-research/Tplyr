@@ -2,6 +2,7 @@
 title: "Tplyr Validation Report"
 author: "Nathan Kosiba"
 date: "`r Sys.Date()`"
+always_allow_html: true
 output:
   pdf_document:
     includes:
@@ -165,7 +166,9 @@ scrape_spec_rmd("~/Tplyr/uat/references/output/test_cases.Rmd")
 ## Test Cases Results
 
 ```{r specfunction1}
-eval_test_code("~/Tplyr/uat/test_cases.R")
+test_res <- eval_test_code("~/Tplyr/uat/test_cases.R")
+save(test_res, file = "~/Tplyr/uat/output/test_res.RData")
+print_eval_test_results(test_res)
 ```
 
 ***

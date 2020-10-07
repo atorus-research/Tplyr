@@ -494,7 +494,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
 
-  map_dbl(by_values, function(a_by) {
+  varns <- map_dbl(by_values, function(a_by) {
 
     # Row containing the index and the value
     ind_row <- by_varn_df %>%
@@ -510,6 +510,10 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
       as.double(unlist(ind_row[, 2]))
     }
   })
+
+  # Remove the names so its just an unnamed numeric vecetor
+  unname(varns)
+
 }
 
 #' Add an ordering column for a nested count layer
