@@ -21,7 +21,7 @@ load("vignettes/adae.Rdata")
 load("vignettes/adsl.Rdata")
 ```
 
-# Tplyr Version 0.1.2 <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# Tplyr Version 0.1.3 <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 [<img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&logo=slack">](https://ostinclinicalresearch.slack.com)

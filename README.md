@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Tplyr Version 0.1.2 <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# Tplyr Version 0.1.3 <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
