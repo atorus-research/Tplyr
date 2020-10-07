@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  6 OCT 2020 18:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  7 OCT 2020 17:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1224,54 +1224,19 @@ Overfull \hbox (15.88121pt too wide) in alignment at lines 636--638
 
 [11] [12
 
-] [13] [14]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1372--1376
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1376--1381
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1381--1447
- [] [] [] 
- []
-
-[15]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1447--1487
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1487--1527
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1527--1571
- [] [] [] 
- []
-
-[16]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1571--1602
- [] [] [] 
- []
-
-[17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1669.
+] [13] [14] [15] [16] [17]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1639.
 [18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1669.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1639.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1669.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1669.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1669.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1639.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1639.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1639.
  ) 
 Here is how much of TeX's memory you used:
  14704 strings out of 494923
  210195 string characters out of 6180743
- 452911 words of memory out of 5000000
+ 452908 words of memory out of 5000000
  17647 multiletter control sequences out of 15000+600000
  60287 words of font info for 89 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -1282,7 +1247,7 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (18 pages, 232341 bytes).
+Output written on uat.pdf (18 pages, 230497 bytes).
 PDF statistics:
  203 PDF objects out of 1000 (max. 8388607)
  172 compressed objects within 2 object streams
