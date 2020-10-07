@@ -99,7 +99,9 @@ set_pop_data <- function(table, pop_data) {
                                        "instead a class of: '",
                                        class(pop_data),
                                        "' was passed."))
-  attr(pop_data, "pop_data_name") <- pop_data_name
+
+  if(pop_data_name == "target") pop_data_name <- attr(table, "target")
+  attr(table, "pop_data_name") <- pop_data_name
   env_bind(table, pop_data = pop_data)
 
   table

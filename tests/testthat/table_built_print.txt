@@ -3,10 +3,6 @@ Target (data.frame):
 	Name:  mtcars
 	Rows:  32
 	Columns:  11 
-pop_data (data.frame)
-	Name:  target 
-	Rows:  32 
-	Columns:  11 
 treat_var variable (quosure)
 	gear
 header_n: 8 header groups

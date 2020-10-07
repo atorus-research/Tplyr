@@ -21,7 +21,7 @@ build_header_n <- function(table) {
         complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
     } else {
       df <- built_pop_data %>%
-        distinct(!!!distinct_by, .keep_all = TRUE) %>%
+        distinct(!!!distinct_by, !!pop_treat_var, .keep_all = TRUE) %>%
         group_by(!!pop_treat_var, !!!cols) %>%
         tally() %>%
         ungroup() %>%

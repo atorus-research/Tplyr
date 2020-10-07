@@ -2,6 +2,7 @@
 title: "Tplyr Validation Report"
 author: "Nathan Kosiba"
 date: "`r Sys.Date()`"
+always_allow_html: true
 output:
   pdf_document:
     includes:
@@ -23,7 +24,6 @@ vignette:  >
 \tableofcontents
 \newpage
 ```{r setup, include=FALSE}
-library(plyr)
 library(dplyr)
 library(testthat)
 library(knitr)
@@ -136,7 +136,7 @@ final <- data.frame(matrix(unlist(temp), ncol = nspecs, nrow = ntests, byrow = T
 
 names(final) <- spec_df$RequirementID
 
-max_cols_to_display <- 26
+max_cols_to_display <- 24
 # max_cols_to_display <- ceiling(ncol(final)/2)
 for(i in seq(ceiling(ncol(final)/max_cols_to_display))) {
   start <- 1 + (i-1) *max_cols_to_display
@@ -165,7 +165,9 @@ scrape_spec_rmd("~/Tplyr/uat/references/output/test_cases.Rmd")
 ## Test Cases Results
 
 ```{r specfunction1}
-eval_test_code("~/Tplyr/uat/test_cases.R")
+test_res <- eval_test_code("~/Tplyr/uat/test_cases.R")
+save(test_res, file = "~/Tplyr/uat/output/test_res.RData")
+print_eval_test_results(test_res)
 ```
 
 ***

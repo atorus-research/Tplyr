@@ -83,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -165,9 +165,28 @@
       <small>Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="tplyr-013" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.3">
+<a href="#tplyr-013" class="anchor"></a>Tplyr 0.1.3<small> Unreleased </small>
+</h1>
+<ul>
+<li>Bug Fixes
+<ul>
+<li>Fixes a bug where ‘N’ counts in column headers would display as 0 when a distinct_by and custom groupings were used.</li>
+</ul>
+</li>
+<li>Other Changes
+<ul>
+<li>Ordering layer columns are now unnamed vectors. For varn and factor ordering columns they could previously be named which could be unexpected.</li>
+<li>The names of the data.frames used in target and pop_data are now attributes of the tplyr table object and not the data.frames themselves.</li>
+<li>The UAT application now gives a warning if an error happened during validation, or confirms that all tests pass.</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="tplyr-012" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.2">
-<a href="#tplyr-012" class="anchor"></a>Tplyr 0.1.2<small> Unreleased </small>
+<a href="#tplyr-012" class="anchor"></a>Tplyr 0.1.2<small> 2020-09-29 </small>
 </h1>
 <ul>
 <li>Bug Fixes
@@ -181,7 +200,7 @@
 <h1 class="page-header" data-toc-text="0.1.1">
 <a href="#tplyr-011" class="anchor"></a>Tplyr 0.1.1<small> 2020-09-10 </small>
 </h1>
-<p>Inital release onto CRAN.</p>
+<p>Initial release onto CRAN.</p>
 <ul>
 <li>Bug Fixes/Enhancements
 <ul>

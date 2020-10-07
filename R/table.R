@@ -48,28 +48,32 @@ tplyr_table <- function(target, treat_var, where = TRUE, cols = vars()) {
     return(structure(rlang::env(),
                      class = c("tplyr_table", "environment")))
   }
+
   target_name <- enexpr(target)
-  attr(target, "target_name") <- target_name
-  new_tplyr_table(target, enquo(treat_var), enquo(where), enquos(cols))
+
+  new_tplyr_table(target, enquo(treat_var), enquo(where), enquos(cols), target_name)
 }
 
 #' Construct new tplyr_table
 #'
 #' @inheritParams tplyr_table
 #' @noRd
-new_tplyr_table <- function(target, treat_var, where, cols) {
+new_tplyr_table <- function(target, treat_var, where, cols, target_name) {
   cols <- unpack_vars(cols)
 
   validate_tplyr_table(target, cols)
 
   # Create table object with default bindings and class of `tplyr_table`
-  structure(rlang::env(
+  table_ <- structure(rlang::env(
     target = target,
     treat_grps = list(),
     cols = cols,
     layers = structure(list(),
                        class = c("tplyr_layer_container", "list"))
-  ), class = c("tplyr_table", "environment")) %>%
+  ), class = c("tplyr_table", "environment"))
+  attr(table_, "target_name") <- target_name
+
+  table_ <- table_ %>%
     # Set default bindings with standard setter methods
     set_treat_var(!!treat_var) %>%
     set_pop_data(target) %>%
@@ -79,6 +83,10 @@ new_tplyr_table <- function(target, treat_var, where, cols) {
     set_desc_layer_formats() %>%
     set_count_layer_formats() %>%
     set_shift_layer_formats()
+
+
+
+  table_
 }
 
 #' Validate tplyr_table target dataset

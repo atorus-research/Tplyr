@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  24 SEP 2020 18:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  7 OCT 2020 19:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1134,158 +1134,80 @@ LaTeX Font Info:    Try loading font information for TS1+lmr on input line 163.
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] [4] [5] [6
 
-]
-Overfull \hbox (66.9725pt too wide) in alignment at lines 463--467
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (66.9725pt too wide) in alignment at lines 467--472
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (66.9725pt too wide) in alignment at lines 472--474
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (66.9725pt too wide) in alignment at lines 474--476
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (66.9725pt too wide) in alignment at lines 476--500
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (66.9725pt too wide) in alignment at lines 500--524
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-[7]
-Overfull \hbox (66.9725pt too wide) in alignment at lines 524--548
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-[8]
-Overfull \hbox (66.9725pt too wide) in alignment at lines 548--550
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [
-] 
- []
-
-
-Overfull \hbox (15.88121pt too wide) in alignment at lines 551--555
+] [7] [8]
+Overfull \hbox (14.21576pt too wide) in alignment at lines 551--555
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (15.88121pt too wide) in alignment at lines 555--560
+Overfull \hbox (14.21576pt too wide) in alignment at lines 555--560
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (15.88121pt too wide) in alignment at lines 560--562
+Overfull \hbox (14.21576pt too wide) in alignment at lines 560--562
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (15.88121pt too wide) in alignment at lines 562--564
+Overfull \hbox (14.21576pt too wide) in alignment at lines 562--564
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (15.88121pt too wide) in alignment at lines 564--588
+Overfull \hbox (14.21576pt too wide) in alignment at lines 564--588
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (15.88121pt too wide) in alignment at lines 588--612
+Overfull \hbox (14.21576pt too wide) in alignment at lines 588--612
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 [9]
-Overfull \hbox (15.88121pt too wide) in alignment at lines 612--636
+Overfull \hbox (14.21576pt too wide) in alignment at lines 612--636
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 [10]
-Overfull \hbox (15.88121pt too wide) in alignment at lines 636--638
+Overfull \hbox (14.21576pt too wide) in alignment at lines 636--638
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
-[11] [12
+[11] [12] [13] [14
 
-] [13] [14]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1362--1366
- [] [] [] 
+] [15] [16] [17] [18] [19]
+Overfull \hbox (18.19513pt too wide) in paragraph at lines 1674--1679
+\T1/lmr/m/n/10 (-20) [6] LC_MESSAGES=C.UTF-8 LC_PAPER=C.UTF-8 LC_NAME=C LC_ADDR
+ESS=C LC_TELEPHONE=C 
  []
 
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1366--1371
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1371--1437
- [] [] [] 
- []
-
-[15]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1437--1477
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1477--1517
- [] [] [] 
- []
-
-
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1517--1561
- [] [] [] 
- []
-
-[16]
-Overfull \hbox (1198.07706pt too wide) in alignment at lines 1561--1588
- [] [] [] 
- []
-
-[17]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1655.
-[18]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1655.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1733.
+[20]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1733.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1655.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1655.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1655.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1733.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1733.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1733.
  ) 
 Here is how much of TeX's memory you used:
- 14704 strings out of 494923
- 210195 string characters out of 6180743
- 452911 words of memory out of 5000000
- 17647 multiletter control sequences out of 15000+600000
- 60287 words of font info for 89 fonts, out of 8000000 for 9000
+ 14710 strings out of 494923
+ 210243 string characters out of 6180743
+ 440336 words of memory out of 5000000
+ 17648 multiletter control sequences out of 15000+600000
+ 60370 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,12n,43p,654b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,12n,43p,608b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/shar
 e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (18 pages, 232529 bytes).
+Output written on uat.pdf (20 pages, 232646 bytes).
 PDF statistics:
- 203 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
- 47 named destinations out of 1000 (max. 500000)
+ 214 PDF objects out of 1000 (max. 8388607)
+ 181 compressed objects within 2 object streams
+ 50 named destinations out of 1000 (max. 500000)
  14430 words of extra memory for PDF output out of 17280 (max. 10000000)
 

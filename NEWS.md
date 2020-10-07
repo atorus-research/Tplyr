@@ -1,3 +1,13 @@
+# Tplyr 0.1.3
+
+- Bug Fixes
+  - Fixes a bug where 'N' counts in column headers would display as 0 when a distinct_by and custom groupings were used.
+  
+- Other Changes
+  - Ordering layer columns are now unnamed vectors. For varn and factor ordering columns they could previously be named which could be unexpected.
+  - The names of the data.frames used in target and pop_data are now attributes of the tplyr table object and not the data.frames themselves.
+  - The UAT application now gives a warning if an error happened during validation, or confirms that all tests pass.
+
 # Tplyr 0.1.2
 
 - Bug Fixes
@@ -5,7 +15,7 @@
 
 # Tplyr 0.1.1
 
-Inital release onto CRAN.
+Initial release onto CRAN.
 
 - Bug Fixes/Enhancements
   - Count layers were re-factored to improve the execution efficiency

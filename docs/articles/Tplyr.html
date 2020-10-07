@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -176,10 +176,6 @@
 <span class="co">#&gt;  Name:  adsl</span>
 <span class="co">#&gt;  Rows:  254</span>
 <span class="co">#&gt;  Columns:  49 </span>
-<span class="co">#&gt; pop_data (data.frame)</span>
-<span class="co">#&gt;  Name:  target </span>
-<span class="co">#&gt;  Rows:  254 </span>
-<span class="co">#&gt;  Columns:  49 </span>
 <span class="co">#&gt; treat_var variable (quosure)</span>
 <span class="co">#&gt;  TRT01P</span>
 <span class="co">#&gt; header_n:  header groups</span>
@@ -216,8 +212,8 @@
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">cnt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">t</span>, <span class="no">AGEGR1</span>)
 <span class="no">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x5614d64022d0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5614d69d1c38 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x55cf397a6b28 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55cf39dbd1e8 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
@@ -227,8 +223,8 @@
 <span class="no">dsc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">t</span>, <span class="no">AGE</span>)
 <span class="no">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x5614d621e3b0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5614d69d1c38 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x55cf395bc578 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55cf39dbd1e8 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
@@ -238,8 +234,8 @@
 <span class="no">shf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="no">t</span>, <span class="fu">vars</span>(<span class="kw">row</span><span class="kw">=</span><span class="no">COMP8FL</span>, <span class="kw">column</span><span class="kw">=</span><span class="no">COMP24FL</span>))
 <span class="no">shf</span>
 <span class="co">#&gt; *** shift_layer ***</span>
-<span class="co">#&gt; Self:  shift_layer &lt; 0x5614d60c1678 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x5614d69d1c38 &gt;</span>
+<span class="co">#&gt; Self:  shift_layer &lt; 0x55cf39463300 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55cf39dbd1e8 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  COMP8FL</span>
 <span class="co">#&gt;  COMP24FL</span>

@@ -12,7 +12,6 @@ Target Name:  mtcars
  $ am  : num  1 1 1 0 0 0
  $ gear: num  4 4 4 3 3 3
  $ carb: num  4 4 1 1 2 1
- - attr(*, "target_name")= symbol mtcars
 *** treat_var***
 gear
 *** pop_data data.frame ***
@@ -28,8 +27,6 @@ gear
  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
- - attr(*, "target_name")= symbol mtcars
- - attr(*, "pop_data_name")= symbol target
 *** pop_treat_var ***
 gear
 *** treat_grps ***

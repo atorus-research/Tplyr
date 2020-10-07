@@ -63,6 +63,16 @@ server <- function(input, output) {
         saveRDS(vur$df, "~/Tplyr/uat/references/output/vur_auto.Rds")
         showModal(modalDialog("Validation User Responses written"))
         rmarkdown::render("~/Tplyr/uat/references/output/uat.Rmd", "pdf_document")
+
+        load("~/Tplyr/uat/output/test_res.RData")
+
+        # Show modal if a test has failed.
+        if(!all(test_res$Pass.Fail == "Pass")) {
+            showModal(modalDialog("Warning: A test has failed in the UAT", size = "s", fade = FALSE))
+        } else {
+            showModal(modalDialog("All tests passed in UAT", size = "s", fade = FALSE))
+        }
+        file.remove("~/Tplyr/uat/output/test_res.RData")
         # file.remove("~/Tplyr/uat/references/output/vur_auto.Rds")
     })
 
