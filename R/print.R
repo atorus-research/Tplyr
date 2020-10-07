@@ -13,13 +13,13 @@ print.tplyr_table <- function(x, ...) {
     cat("*** tplyr_table ***\n")
     # Print str of target data.frame
     cat("Target (data.frame):\n")
-    cat("\tName: ", attr(target, "target_name"))
+    cat("\tName: ", attr(current_env(), "target_name"))
     cat(c("\n\tRows: ", nrow(target)))
     cat(c("\n\tColumns: ", ncol(target), "\n"))
     # Print str of pop_data data.frame
     if(!identical(pop_data, target)){
       cat("pop_data (data.frame)\n")
-      cat("\tName: ", attr(pop_data, "pop_data_name"), "\n")
+      cat("\tName: ", attr(current_env(), "pop_data_name"), "\n")
       cat(c("\tRows: ", nrow(pop_data), "\n"))
       cat(c("\tColumns: ", ncol(pop_data), "\n"))
     }
@@ -122,7 +122,7 @@ print.f_str <- function(x, ...) {
 str.tplyr_table <- function(object, ...) {
   evalq({
     cat("*** target data.frame ***\n")
-    cat("Target Name: ", attr(target, "target_name"), "\n")
+    cat("Target Name: ", attr(current_env(), "target_name"), "\n")
     str(head(target))
     cat("*** treat_var***\n")
     cat(quo_get_expr(treat_var))
@@ -159,7 +159,7 @@ str.tplyr_layer <- function(object, ..., print_env = TRUE) {
   }
   # Only Print target name if parent is table
   if (class(env_parent(object))[1] == "tplyr_table"){
-    cat("\n\tTarget Name: ", attr(env_parent(object)$target, "target_name"))
+    cat("\n\tTarget Name: ", attr(env_parent(object), "target_name"))
   }
   evalq({
     cat("\n*** target_var ***")

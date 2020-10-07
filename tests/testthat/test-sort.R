@@ -194,3 +194,23 @@ test_that("Nested count layers are ordered properly", {
 
 })
 
+test_that("Sorting columns don't have names", {
+  mtcars$cylN <- unclass(mtcars$cyl)
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("byvarn")
+    ) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("byfactor")
+    ) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("bycount")
+    ) %>%
+    build()
+
+  expect_true(is.null(names(t$ord_layer_1)))
+})
