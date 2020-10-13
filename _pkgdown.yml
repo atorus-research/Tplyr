@@ -3,6 +3,7 @@ destination: docs
 template:
   params:
     bootswatch: yeti
+    ganalytics: UA-165685385-2
   opengraph:
     image:
       src: man/figures/Atorus_Stickers_vF_Tplyr.png
@@ -10,7 +11,6 @@ template:
     twitter:
       creator: "@AtorusR"
       card: summary_large_image
-    ganalytics: UA-165685385-2
 
 reference:
 - title: Build
