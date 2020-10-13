@@ -10,6 +10,7 @@ template:
     twitter:
       creator: "@AtorusR"
       card: summary_large_image
+    ganalytics: UA-165685385-2
 
 reference:
 - title: Build
@@ -40,6 +41,7 @@ reference:
 - title: Adding Groups and Stats
 - contents:
   - add_total_row
+  - add_total_group
   - add_risk_diff
   - set_total_row_label
 - title: Summary Functions
