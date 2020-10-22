@@ -203,6 +203,19 @@ process_count_n <- function(x) {
 process_count_distinct_n <- function(x) {
 
   evalq({
+
+    # Subset the local built_target based on where
+    # Catch errors
+    tryCatch({
+      built_target <- built_target %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_count `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
+
+
     if(is.null(denoms_by)) denoms_by <- c(treat_var, cols)
 
     distinct_stat <- built_target %>%
@@ -252,10 +265,32 @@ process_count_distinct_n <- function(x) {
 #' @noRd
 process_count_total_row <- function(x) {
   evalq({
+
+    # Check if denoms_by wasn't passed and by was passed.
+    if(is.null(denoms_by) & length(by) > 0) {
+      message("You passed a by variable and added a total row but didn't note any denoms_by.
+              The total row is based off of the target variable and the denom_by
+              variables. This may be unexpected. If you wish to change this behavior
+              use `set_denoms_by()`",
+              immediate. = TRUE)
+    }
+
+    # Make sure the denoms_by is stripped
+    # Stripped of cols and treat_var variables, otherwise it will error out in the group_by
+    # I thought of replacing the group by with !!!unique(c(treat_var, cols, denoms_by))
+    # but that doesn't work due to the denoms_by having an environment set
+
+    # Logical vector that is used to remove the treat_var and cols
+    needed_denoms_by <- map_lgl(denoms_by, function(x, treat_var) {
+      all(as_name(x) != as_name(treat_var),
+          as_name(x) != map_chr(cols, as_name))
+    }, treat_var)
+
+
     # create a data.frame to create total counts
     total_stat <- summary_stat %>%
       # Group by all column variables
-      group_by(!!treat_var, !!!cols) %>%
+      group_by(!!treat_var, !!!cols, !!!denoms_by[needed_denoms_by]) %>%
       summarize(n = sum(n)) %>%
       ungroup() %>%
       mutate(total = n) %>%
@@ -554,9 +589,17 @@ process_count_denoms <- function(x) {
       as_name(x) %in% names(target)
     })
 
-    denom_target <- built_target %>%
-      filter(!(!!target_var[[1]] %in% unlist(denom_ignore)))
-
+    # Subset the local built_target based on where
+    # Catch errors
+    tryCatch({
+      denom_target <- built_target %>%
+        filter(!(!!target_var[[1]] %in% unlist(denom_ignore))) %>%
+        filter(!!where)
+    }, error = function(e) {
+      abort(paste0("group_count `where` condition `",
+                   as_label(where),
+                   "` is invalid. Filter error:\n", e))
+    })
 
 
     if(!is.null(distinct_by)) {

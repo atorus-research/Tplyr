@@ -167,7 +167,6 @@ get_denom_total <- function(.data, denoms_by, denoms_df, denoms_distinct_df, tot
       extract("distinct_n")
   }
 
-
   .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
 
   .data
