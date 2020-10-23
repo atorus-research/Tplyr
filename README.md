@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Tplyr Version 0.1.2 <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# Tplyr Version 0.1.3 <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -16,7 +16,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 Welcome to Tplyr\! This is the first full and stable release of our
 package. With this release comes a number of new enhancements, loads of
-new documentation, and our complete package qualification document.
+new documentation, and our complete package qualification document. Take
+a look at the
+[cheatsheet\!](https://atorus-research.github.io/Tplyr_cheatsheet.pdf)
 
 If you’ve been keeping up, here are the things that we’ve added since
 the Beta release in July:

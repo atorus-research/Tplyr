@@ -3,6 +3,7 @@ destination: docs
 template:
   params:
     bootswatch: yeti
+    ganalytics: UA-165685385-2
   opengraph:
     image:
       src: man/figures/Atorus_Stickers_vF_Tplyr.png
@@ -40,6 +41,7 @@ reference:
 - title: Adding Groups and Stats
 - contents:
   - add_total_row
+  - add_total_group
   - add_risk_diff
   - set_total_row_label
 - title: Summary Functions

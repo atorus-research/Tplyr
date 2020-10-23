@@ -21,6 +21,9 @@ t14 <- tplyr_table(mtcars, gear)
 t15 <- tplyr_table(mtcars, gear)
 t16 <- tplyr_table(mtcars, gear) %>%
   add_total_group()
+t17 <- tplyr_table(mtcars, gear)
+t18 <- tplyr_table(mtcars, gear)
+t19 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -32,7 +35,8 @@ c4 <- group_count(t4, cyl, by = vars(am, vs)) %>%
   set_format_strings(f_str("xxx", n))
 # Multiple bys and total row
 c5 <- group_count(t5, cyl, by = vars(am, vs)) %>%
-  add_total_row()
+  add_total_row() %>%
+  set_denoms_by(gear)
 # Add distinct by
 c6 <- group_count(t6, cyl) %>%
   set_distinct_by(cyl)
@@ -63,6 +67,16 @@ c15 <- group_count(t15, cyl) %>%
   set_distinct_by(vars(am, vs))
 c16 <- group_count(t16, cyl) %>%
   set_distinct_by(vars(am,vs))
+#Check for warning with by, total row and no denom_by
+c17 <- group_count(t17, cyl, by = vars(am, vs)) %>%
+  add_total_row()
+# Warning shouldn't raise here because they are both strings
+c18 <- group_count(t18, cyl, by = vars("am", "vs")) %>%
+  add_total_row()
+c19 <- group_count(t19, cyl, by = am) %>%
+  set_denoms_by(am) %>%
+  add_total_row()
+
 
 t1 <- add_layers(t1, c1)
 t2 <- add_layers(t2, c2)
@@ -80,6 +94,9 @@ t13 <- add_layers(t13, c13)
 t14 <- add_layers(t14, c14)
 t15 <- add_layers(t15, c15)
 t16 <- add_layers(t16, c16)
+t17 <- add_layers(t17, c17)
+t18 <- add_layers(t18, c18)
+t19 <- add_layers(t19, c19)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -93,7 +110,7 @@ test_that("Count layers are built as expected", {
                                "format_strings"))
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
-                               "include_total_row"))
+                               "include_total_row", "denoms_by"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -166,6 +183,9 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t14))
   expect_silent(build(t15))
   expect_silent(build(t16))
+  expect_warning(build(t17), "A total row was added in addition")
+  expect_silent(build(t18))
+  expect_silent(build(t19))
 })
 
 test_that("Count layers are processed as expected", {
@@ -218,6 +238,10 @@ test_that("Count layers are processed as expected", {
   # distinct variables
   expect_true(all(t16$layers[[1]]$numeric_data$distinct_total != 0))
 
+  # Check denoms_by calculates pcts correctly
+  expect_equal(t19$layers[[1]]$numeric_data$total,
+               c(19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L,
+                 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L))
 })
 
 test_that("nested count layers can be rebuilt without changes", {
