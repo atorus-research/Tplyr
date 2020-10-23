@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 10/07/2020
+#' 10/26/2020
 
 #setup ----
 #insert any necessary libraries
@@ -737,7 +737,8 @@ test_that('T16',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(ETHNIC, by=SEX) %>%
-          set_denoms_by(TRT01P, SEX)
+          set_denoms_by(TRT01P, SEX) %>%
+          add_total_row()
       )
 
     test_16 <- build(t)
@@ -759,13 +760,17 @@ test_that('T16',{
   #programmatic check(s)
   t16_tots <- group_by(adsl, TRT01P, SEX) %>%
     summarise(total=n()) %>%
-    mutate(total = as.numeric(total))
+    mutate(total = as.numeric(total)) %>%
+    mutate(n = total)
   t16_1 <- group_by(adsl, TRT01P, SEX, ETHNIC) %>%
     summarise(n=n()) %>%
-    left_join(t16_tots, by = c('TRT01P', "SEX")) %>%
+    rbind(select(t16_tots, -total)) %>%
+    left_join(select(t16_tots, -n), by = c('TRT01P', "SEX")) %>%
     mutate(pct = round((n / total) * 100, digits = 1)) %>%
     mutate(col = paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),'%)')) %>%
-    filter(TRT01P == "Placebo")
+    filter(TRT01P == "Placebo") %>%
+    mutate(ETHNIC = replace_na(ETHNIC, 'Total')) %>%
+    arrange(SEX, ETHNIC)
 
   testthat::expect_equal(t16_1$col, test_16$var1_Placebo,label = "T16.1")
   #manual check(s)

@@ -1,6 +1,6 @@
 LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,10/6/2020,,
+UpdatedDate,,,,10/26/2020,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -47,8 +47,9 @@ Check,,T14,2,Check % produced use denominators matching counts using specified c
 TestCase,Q,T15,,"When producing n (%), the denominator can be specified using the population data",,
 Check,,T15,1,Check % produced use denominators matching counts from population data,programmatic,test_15.RData
 Check,,T15,2,Check denominators created match counts from population data,programmatic,test_15.RData
-TestCase,R,T16,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
+TestCase,R:K,T16,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
 Check,,T16,1,Check % produced use denominators matching counts from grouping variables,programmatic,test_16.RData
+Check,,T16,2,Check added total row matches counts using denom by variables,programmatic,test_16.RData
 TestCase,S:T,T17,,Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test,,
 Check,,T17,1,Check that risk difference calculated between groupings is correct,programmatic,test_17.RData
 Check,,T17,2,Check that confidence interval calculated between groupings is correct,programmatic,test_17.RData
