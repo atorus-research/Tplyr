@@ -23,6 +23,7 @@ t16 <- tplyr_table(mtcars, gear) %>%
   add_total_group()
 t17 <- tplyr_table(mtcars, gear)
 t18 <- tplyr_table(mtcars, gear)
+t19 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -67,9 +68,12 @@ c15 <- group_count(t15, cyl) %>%
 c16 <- group_count(t16, cyl) %>%
   set_distinct_by(vars(am,vs))
 #Check for warning with by, total row and no denom_by
-c17 <- group_count(t17, cyl, by = am) %>%
+c17 <- group_count(t17, cyl, by = vars(am, vs)) %>%
   add_total_row()
-c18 <- group_count(t18, cyl, by = am) %>%
+# Warning shouldn't raise here because they are both strings
+c18 <- group_count(t18, cyl, by = vars("am", "vs")) %>%
+  add_total_row()
+c19 <- group_count(t19, cyl, by = am) %>%
   set_denoms_by(am) %>%
   add_total_row()
 
@@ -92,6 +96,7 @@ t15 <- add_layers(t15, c15)
 t16 <- add_layers(t16, c16)
 t17 <- add_layers(t17, c17)
 t18 <- add_layers(t18, c18)
+t19 <- add_layers(t19, c19)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -178,8 +183,9 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_silent(build(t14))
   expect_silent(build(t15))
   expect_silent(build(t16))
-  expect_message(build(t17), "You passed a by variable and added a total row")
+  expect_warning(build(t17), "A total row was added in addition")
   expect_silent(build(t18))
+  expect_silent(build(t19))
 })
 
 test_that("Count layers are processed as expected", {
@@ -233,7 +239,7 @@ test_that("Count layers are processed as expected", {
   expect_true(all(t16$layers[[1]]$numeric_data$distinct_total != 0))
 
   # Check denoms_by calculates pcts correctly
-  expect_equal(t18$layers[[1]]$numeric_data$total,
+  expect_equal(t19$layers[[1]]$numeric_data$total,
                c(19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L, 19L,
                  13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L, 13L))
 })
