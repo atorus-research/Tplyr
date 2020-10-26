@@ -47,9 +47,13 @@
 
 
 <meta property="og:title" content="Add a Total row into a count summary. — add_total_row" />
-<meta property="og:description" content="Adding a total row creates an additional observation in the count summary that presents the total counts
-(i.e. the n's that are summarized). This is calculated by the by group variables and the columns
-(treat_var along with any additional columns set by the cols argument)." />
+<meta property="og:description" content="Adding a total row creates an additional observation in the count summary
+that presents the total counts (i.e. the n's that are summarized). This is
+calculated by the by group variables and the columns (treat_var
+along with any additional columns set by the cols argument). The
+format of the total row will be formatted in the same way as the other count
+strings. If there is a percentage in the count string the denominator of the
+total row will be determined by using the `denoms_by` variables." />
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png" />
 <meta property="og:image:alt" content="Tplyr Hex Sticker" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -96,7 +100,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -180,9 +184,13 @@
     </div>
 
     <div class="ref-description">
-    <p>Adding a total row creates an additional observation in the count summary that presents the total counts
-(i.e. the n's that are summarized). This is calculated by the <code>by</code> group variables and the columns
-(<code>treat_var</code> along with any additional columns set by the <code>cols</code> argument).</p>
+    <p>Adding a total row creates an additional observation in the count summary
+that presents the total counts (i.e. the n's that are summarized). This is
+calculated by the <code>by</code> group variables and the columns (<code>treat_var</code>
+along with any additional columns set by the <code>cols</code> argument). The
+format of the total row will be formatted in the same way as the other count
+strings. If there is a percentage in the count string the denominator of the
+total row will be determined by using the `denoms_by` variables.</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_total_row</span><span class='op'>(</span><span class='va'>e</span><span class='op'>)</span></pre>
