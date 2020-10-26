@@ -4,11 +4,9 @@
 * Latest Ubuntu CI with latest tidyverse
 
 ## Updates
-* Resolves GitHub issue #8.
+* Fixes bug with denominator calculation in count layer
+* Makes `add_total_row()` calculation more intuitive.
+
 
 ## R CMD CHECK Results
-No Errors or warnings
-Notes:
-
-* "unable to verify current time". This appears to be an issue with the worldclockapi.com being down. https://stat.ethz.ch/pipermail/r-package-devel/2019q1/003577.html
-
+No Errors, warnings, or notes
