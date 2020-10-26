@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 10/6/2020
+#' 10/26/2020
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -54,6 +54,7 @@ This section contains details of each test executed. Checks verifying each test 
     + T15.2: Check denominators created match counts from population data
   + T16: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
     + T16.1: Check % produced use denominators matching counts from grouping variables
+    + T16.2: Check added total row matches counts using denom by variables
   + T17: Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test
     + T17.1: Check that risk difference calculated between groupings is correct
     + T17.2: Check that confidence interval calculated between groupings is correct

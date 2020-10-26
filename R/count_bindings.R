@@ -2,9 +2,13 @@
 
 #' Add a Total row into a count summary.
 #'
-#' Adding a total row creates an additional observation in the count summary that presents the total counts
-#' (i.e. the n's that are summarized). This is calculated by the \code{by} group variables and the columns
-#' (\code{treat_var} along with any additional columns set by the \code{cols} argument).
+#' Adding a total row creates an additional observation in the count summary
+#' that presents the total counts (i.e. the n's that are summarized). This is
+#' calculated by the \code{by} group variables and the columns (\code{treat_var}
+#' along with any additional columns set by the \code{cols} argument). The
+#' format of the total row will be formatted in the same way as the other count
+#' strings. If there is a percentage in the count string the denominator of the
+#' total row will be determined by using the `denoms_by` variables.
 #'
 #' @param e A layer object
 #'
