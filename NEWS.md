@@ -1,3 +1,12 @@
+# Tplyr 0.1.4
+
+- Bug Fixes
+ - Fixes a bug where "Totals" in numeric data may not take into account the where logic at the layer level and thus give inaccurate percentages
+
+- Other Changes
+ - `add_total_row()` function is more intuitive. It now uses the `denoms_by` variables to determine how to calculate the totals.
+
+
 # Tplyr 0.1.3
 
 - Bug Fixes
