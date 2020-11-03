@@ -110,7 +110,8 @@ test_that("Count layers are built as expected", {
                                "format_strings"))
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
-                               "include_total_row", "denoms_by"))
+                               "include_total_row", "denoms_by",
+                               "total_count_format", "total_denom_ignore"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -257,7 +258,7 @@ test_that("missing counts can be displayed as expected", {
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n))
+        set_missing_count(f_str("xx ", n), Missing = NA)
     ) %>%
     build()
   expect_equal(t1[3, 1], tibble(row_label1 = "Missing"))
@@ -267,7 +268,7 @@ test_that("missing counts can be displayed as expected", {
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = "Not here")
+        set_missing_count(f_str("xx ", n), Missing = "Not here")
     ) %>%
     build()
   expect_equal(t2[3, 1], tibble(row_label1 = "Missing"))
@@ -277,7 +278,7 @@ test_that("missing counts can be displayed as expected", {
   t3 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = c(UNK = "Unknown"))
+        set_missing_count(f_str("xx ", n), UNK = "Unknown")
     ) %>%
     build()
   expect_equal(t3[3, 1], tibble(row_label1 = "UNK"))
@@ -287,10 +288,11 @@ test_that("missing counts can be displayed as expected", {
   t4 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
+        set_missing_count(f_str("xx ", n), Missing = NA) %>%
         set_denom_ignore("Unknown", NA)
     ) %>%
-    build()
+    build() %>%
+    arrange(ord_layer_1)
   expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
   expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
   expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))

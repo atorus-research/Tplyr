@@ -111,7 +111,6 @@ t <- tplyr_table(adae2, TRTA) %>%
   add_layer(
     group_count(AESEV) %>%
       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
-      # AESEV of SEVERE is used to demonstrate missing
       set_missing_count(f_str("xxx", n), string = c(MISSING = "NA"))  %>%
       set_denom_ignore("NA")
     

@@ -4,10 +4,19 @@
 \alias{add_total_row}
 \title{Add a Total row into a count summary.}
 \usage{
-add_total_row(e)
+add_total_row(e, total_count_format = NULL, total_denom_ignore = FALSE)
 }
 \arguments{
 \item{e}{A layer object}
+
+\item{total_count_format}{An f_str object used to format the total row. If
+none is provided, display is based on the layer formatting.}
+
+\item{total_denom_ignore}{Whether or not to ignore the denominators passed
+in `set_denom_ignore` when calculating a pct on a total row. This is
+useful if you need to exclude/include the missing counts in your total
+row. Defaults to FALSE meaning total row percentage will not ignore any
+values.}
 }
 \description{
 Adding a total row creates an additional observation in the count summary
@@ -25,7 +34,7 @@ library(magrittr)
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      add_total_row()
+      add_total_row(f_str("xxxx", n))
    ) \%>\%
    build()
 }

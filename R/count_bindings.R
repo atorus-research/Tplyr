@@ -11,6 +11,13 @@
 #' total row will be determined by using the `denoms_by` variables.
 #'
 #' @param e A layer object
+#' @param total_count_format An f_str object used to format the total row. If
+#'   none is provided, display is based on the layer formatting.
+#' @param total_denom_ignore Whether or not to ignore the denominators passed
+#'   in `set_denom_ignore` when calculating a pct on a total row. This is
+#'   useful if you need to exclude/include the missing counts in your total
+#'   row. Defaults to FALSE meaning total row percentage will not ignore any
+#'   values.
 #'
 #' @export
 #' @examples
@@ -20,13 +27,17 @@
 #' tplyr_table(mtcars, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       add_total_row()
+#'       add_total_row(f_str("xxxx", n))
 #'    ) %>%
 #'    build()
-add_total_row <- function(e) {
+add_total_row <- function(e, total_count_format = NULL, total_denom_ignore = FALSE) {
   assert_inherits_class(e, "count_layer")
+  if(!is.null(total_count_format)) assert_inherits_class(total_count_format, "f_str")
+  assert_inherits_class(total_denom_ignore, "logical")
 
   env_bind(e, include_total_row = TRUE)
+  env_bind(e, total_denom_ignore = total_denom_ignore)
+  env_bind(e, total_count_format = total_count_format)
 
   e
 }
@@ -386,8 +397,9 @@ set_result_order_var <- function(e, result_order_var) {
 #'
 #' @param e A count layer
 #' @param f_str An f_str object to change the display of the missing counts
-#' @param string A named string representing the value to rename missing values
-#'   This value can be named to change the row name in the table.
+#' @param ... Parameters used to note which values to describe as missing.
+#'   Generally NA and "Missing" would be used here. Parameters can be named
+#'   character vectors where the names become the row label.
 #'
 #' @return The modified layer
 #' @export
@@ -398,25 +410,26 @@ set_result_order_var <- function(e, result_order_var) {
 #'   mtcars2 <- mtcars %>%
 #' mutate_all(as.character)
 #' mtcars2[mtcars$cyl == 6, "cyl"] <- NA
-#' mtcars2[mtcars$cyl == 8, "cyl"] <- NA
 #'
 #' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
-#'       set_denom_ignore("Unknown", "NA")
+#'       set_missing_count(f_str("xx ", n), Missing = NA) %>%
+#'       set_denom_ignore(NA)
 #'   ) %>%
 #'   build()
-set_missing_count <- function(e, f_str, string = "NA") {
+set_missing_count <- function(e, f_str, ...) {
+
+  missings <- list(...)
 
   assert_inherits_class(f_str, "f_str")
 
-  if(is.null(names(string))) missing_name <- "Missing"
-  else missing_name <- names(string)
-
+  # f_str object for formatting
   env_bind(e, missing_count_string = f_str)
-  env_bind(e, missing_string = string)
-  env_bind(e, missing_name = missing_name)
+  # Named list of strings and their replacements
+  env_bind(e, missing_count_list = missings)
+  # All replacements without names
+  env_bind(e, missing_string = names(missings))
 
   e
 }

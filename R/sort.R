@@ -145,6 +145,20 @@ add_order_columns <- function(x) {
 }
 
 add_order_columns.count_layer <- function(x) {
+  # Counting has the most complex sorting methods. Here is an attempt and
+  # showing the flow.
+    # 1) A few defaults are set if they are not set yet. result_order_var,
+    # ordering_cols, order_count_method
+    # 2) If the count layer is nested:
+      # a. The by labels are added the same way they are for all layers.
+      # b. The grouping and grouped variables are pulled out and passed to the
+      #    add_data_order_nested function, which is very large.
+      # c. The row_labels are collapsed if the flag is set for that.
+    # 3) If the count layer isn't nested:
+      # a. The by variables are calculated.
+      # b. The final ordering column is passed to get_data_order where it is
+      #    dispatched based on the counting flag.
+
   evalq({
 
     # Set all defaults for ordering
@@ -277,25 +291,24 @@ add_order_columns.shift_layer <- function(x) {
     target_data <- target[, as_name(target_var$row)]
 
     #Pull levels from target variable
-    target_levels <- levels(target_data)
+    target_fact <- levels(target_data[[1]])
 
     # If the levels are null, the target was not a factor. So turn it into a factor
-    if (is.null(target_levels)) {
+    if (is.null(target_fact)) {
 
       # Change target variable into a factor
       target_fact <- as.factor(unlist(target_data))
 
+    }
       # Create data.frame with levels and index
       fact_df <- tibble(
-        !!target_var$row := unique(sort(target_fact)),
-        factor_index := unclass(unique(sort(target_fact)))
+        !!target_var$row := unique(target_fact),
+        factor_index := unclass(unique(target_fact))
       )
 
       # The logic is the same now for a byvarn so reuse that function
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
         get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
-
-    }
 
     rm(formatted_col_index)
 
