@@ -299,12 +299,21 @@ add_order_columns.shift_layer <- function(x) {
       # Change target variable into a factor
       target_fact <- as.factor(unlist(target_data))
 
-    }
       # Create data.frame with levels and index
       fact_df <- tibble(
         !!target_var$row := unique(target_fact),
         factor_index := unclass(unique(target_fact))
       )
+
+    } else {
+      # Create data.frame with levels and index
+      fact_df <- tibble(
+        !!target_var$row := target_fact,
+        factor_index := seq_along(target_fact)
+      )
+
+    }
+
 
       # The logic is the same now for a byvarn so reuse that function
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
