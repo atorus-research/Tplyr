@@ -4,12 +4,16 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, missing_fmt, ...)
+set_missing_count(e, missing_fmt, missing_sort_value = NULL, ...)
 }
 \arguments{
 \item{e}{A count layer}
 
 \item{missing_fmt}{An f_str object to change the display of the missing counts}
+
+\item{missing_sort_value}{A numeric value that will be used in the ordering
+column. This should be numeric. If it is not suplied the ordering column
+will be the maximum value of what appears in the table plus one.}
 
 \item{...}{Parameters used to note which values to describe as missing.
 Generally NA and "Missing" would be used here. Parameters can be named

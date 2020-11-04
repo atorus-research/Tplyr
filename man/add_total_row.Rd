@@ -8,7 +8,7 @@ add_total_row(
   e,
   total_count_format = NULL,
   total_denom_ignore = FALSE,
-  total_row_top = FALSE
+  total_row_sort_value = NULL
 )
 }
 \arguments{
@@ -23,8 +23,8 @@ useful if you need to exclude/include the missing counts in your total
 row. Defaults to FALSE meaning total row percentage will not ignore any
 values.}
 
-\item{total_row_top}{Whether or not to position the total row at the top of
-the output. Defaults to FALSE}
+\item{total_row_sort_value}{The value that will appear in the ordering column
+for total rows. This must be a numeric value.}
 }
 \description{
 Adding a total row creates an additional observation in the count summary
