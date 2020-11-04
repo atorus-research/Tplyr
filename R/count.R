@@ -19,6 +19,13 @@ process_summaries.count_layer <- function(x, ...) {
                    "` is invalid. Filter error:\n", e))
     })
 
+    # Rename missing values
+    for(i in seq_along(missing_count_list)) {
+      built_target <- built_target %>%
+        mutate(!!target_var[[1]] := ifelse(!!target_var[[1]] %in% missing_count_list[[i]], names(missing_count_list)[i], !!target_var[[1]]))
+
+    }
+
   }, envir = x)
 
 
@@ -68,14 +75,6 @@ process_single_count_target <- function(x) {
 
     if(is.null(include_total_row)) include_total_row <- FALSE
     if(is.null(total_row_label)) total_row_label <- "Total"
-
-
-    # Rename missing values
-    for(i in seq_along(missing_count_list)) {
-      built_target <- built_target %>%
-        mutate(!!target_var[[1]] := ifelse(!!target_var[[1]] %in% missing_count_list[[i]], names(missing_count_list)[i], !!target_var[[1]]))
-
-    }
 
     # The current environment should be the layer itself
     process_count_n(current_env())
@@ -234,15 +233,17 @@ process_count_distinct_n <- function(x) {
       tally(name = "distinct_n") %>%
       ungroup()
 
-      if(!is.null(missing_count_string) &&
-         !(missing_string %in% unique(built_target[, as_name(target_var[[1]])]) ||
-           any(is.na(built_target[, as_name(target_var[[1]])])))) {
-        # This adds the missing string as a factor to the tallies. This is needed
-        # to make sure the missing row is added even if there are no missing values.
-        distinct_stat <- distinct_stat %>%
-          mutate(!!target_var[[1]] := fct_expand(.data[[as_name(target_var[[1]])]],
-                                                 missing_string))
-      }
+    if(!is.null(missing_count_string) &&
+
+       !((unname(unlist(missing_count_list)) %in% unique(built_target[, as_name(target_var[[1]])])) ||
+         any(is.na(built_target[, as_name(target_var[[1]])])))) {
+      # This adds the missing string as a factor to the tallies. This is needed
+      # to make sure the missing row is added even if there are no missing values.
+      summary_stat <- summary_stat %>%
+        mutate(!!target_var[[1]] := fct_expand(as.character(.data[[as_name(target_var[[1]])]]),
+                                               names(missing_count_list)))
+    }
+
 
     # complete all combinations of factors to include combinations that don't exist.
     # add 0 for combinations that don't exist
@@ -290,7 +291,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
 
     #Create an expression to evaluate
     if(total_denom_ignore){
-      filter_logic <- expr(!(summary_var %in% unlist(denom_ignore)))
+      filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
     } else {
       filter_logic <- expr(TRUE)
     }
@@ -398,17 +399,8 @@ process_formatting.count_layer <- function(x, ...) {
                                indentation_length = indentation_length,
                                total_count_format = total_count_format,
                                total_row_label = total_row_label)
-      })
-
-      # # Rename missing values
-      # for(i in seq_along(missing_count_list)) {
-      #   formatted_data <- formatted_data %>%
-      #     mutate(summary_var = ifelse(summary_var %in% missing_count_list[[i]], names(missing_count_list)[i], summary_var))
-      #
-      # }
-
+      }) %>%
       # Pivot table
-      formatted_data <- formatted_data %>%
         pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
@@ -625,7 +617,7 @@ process_count_denoms <- function(x) {
 
     # Raise errors if a denom is ignored but there isn't a missing count string
     if(!is.null(denom_ignore) && is.null(missing_count_string)) {
-      stop("A value(s) were set with 'denom_ignore' but no missing count was set. Your percentages/totals may not have meaning.")
+      abort("A value(s) were set with 'denom_ignore' but no missing count was set. Your percentages/totals may not have meaning.")
     }
 
     # Subset the local built_target based on where

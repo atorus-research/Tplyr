@@ -18,6 +18,8 @@
 #'   useful if you need to exclude/include the missing counts in your total
 #'   row. Defaults to FALSE meaning total row percentage will not ignore any
 #'   values.
+#' @param total_row_top Whether or not to position the total row at the top of
+#'   the output. Defaults to FALSE
 #'
 #' @export
 #' @examples
@@ -30,7 +32,8 @@
 #'       add_total_row(f_str("xxxx", n))
 #'    ) %>%
 #'    build()
-add_total_row <- function(e, total_count_format = NULL, total_denom_ignore = FALSE) {
+add_total_row <- function(e, total_count_format = NULL, total_denom_ignore = FALSE,
+                          total_row_top = FALSE) {
   assert_inherits_class(e, "count_layer")
   if(!is.null(total_count_format)) assert_inherits_class(total_count_format, "f_str")
   assert_inherits_class(total_denom_ignore, "logical")
@@ -38,6 +41,7 @@ add_total_row <- function(e, total_count_format = NULL, total_denom_ignore = FAL
   env_bind(e, include_total_row = TRUE)
   env_bind(e, total_denom_ignore = total_denom_ignore)
   env_bind(e, total_count_format = total_count_format)
+  env_bind(e, total_row_top = total_row_top)
 
   e
 }
@@ -396,7 +400,7 @@ set_result_order_var <- function(e, result_order_var) {
 #' will display the values in a different way.
 #'
 #' @param e A count layer
-#' @param f_str An f_str object to change the display of the missing counts
+#' @param missing_fmt An f_str object to change the display of the missing counts
 #' @param ... Parameters used to note which values to describe as missing.
 #'   Generally NA and "Missing" would be used here. Parameters can be named
 #'   character vectors where the names become the row label.
@@ -418,14 +422,14 @@ set_result_order_var <- function(e, result_order_var) {
 #'       set_denom_ignore(NA)
 #'   ) %>%
 #'   build()
-set_missing_count <- function(e, f_str, ...) {
+set_missing_count <- function(e, missing_fmt, ...) {
 
   missings <- list(...)
 
-  assert_inherits_class(f_str, "f_str")
+  assert_inherits_class(missing_fmt, "f_str")
 
   # f_str object for formatting
-  env_bind(e, missing_count_string = f_str)
+  env_bind(e, missing_count_string = missing_fmt)
   # Named list of strings and their replacements
   env_bind(e, missing_count_list = missings)
   # All replacements without names

@@ -4,7 +4,12 @@
 \alias{add_total_row}
 \title{Add a Total row into a count summary.}
 \usage{
-add_total_row(e, total_count_format = NULL, total_denom_ignore = FALSE)
+add_total_row(
+  e,
+  total_count_format = NULL,
+  total_denom_ignore = FALSE,
+  total_row_top = FALSE
+)
 }
 \arguments{
 \item{e}{A layer object}
@@ -17,6 +22,9 @@ in `set_denom_ignore` when calculating a pct on a total row. This is
 useful if you need to exclude/include the missing counts in your total
 row. Defaults to FALSE meaning total row percentage will not ignore any
 values.}
+
+\item{total_row_top}{Whether or not to position the total row at the top of
+the output. Defaults to FALSE}
 }
 \description{
 Adding a total row creates an additional observation in the count summary

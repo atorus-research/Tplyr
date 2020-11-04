@@ -263,3 +263,4 @@ string_t <- NULL
 total_count_format <- NULL
 missing_count_list <- NULL
 total_denom_ignore <- NULL
+total_row_top <- TRUE

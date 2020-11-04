@@ -4,12 +4,12 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, f_str, ...)
+set_missing_count(e, missing_fmt, ...)
 }
 \arguments{
 \item{e}{A count layer}
 
-\item{f_str}{An f_str object to change the display of the missing counts}
+\item{missing_fmt}{An f_str object to change the display of the missing counts}
 
 \item{...}{Parameters used to note which values to describe as missing.
 Generally NA and "Missing" would be used here. Parameters can be named

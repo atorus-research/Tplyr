@@ -317,7 +317,8 @@ add_order_columns.shift_layer <- function(x) {
 
       # The logic is the same now for a byvarn so reuse that function
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
+                              formatted_col_index, , total_row_top = total_row_top)
 
     rm(formatted_col_index)
 
@@ -393,8 +394,18 @@ get_data_order <- function(x, formatted_col_index) {
 
       varn_df <- get_varn_values(target, as_name(target_var[[1]]))
 
+      if(!is.null(missing_count_list)) {
+        varN_name <- names(varn_df)[2]
+        varn_df[,1] <- as.character(varn_df[,1])
+        varn_df <- varn_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            !!varN_name := seq_along(missing_count_list) + max(varn_df[,2])
+          ))
+      }
+
       get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                            formatted_col_index)
+                            formatted_col_index, total_row_top = total_row_top)
 
 
       # Here it is 'byfactor'
@@ -420,9 +431,6 @@ get_data_order <- function(x, formatted_col_index) {
           factor_index := unclass(unique(sort(target_fact)))
         )
 
-        # The logic is the same now for a byvarn so reuse that function
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
-
       } else {
 
         fact_df <- tibble(
@@ -430,9 +438,19 @@ get_data_order <- function(x, formatted_col_index) {
           factor_index := unclass(unique(sort(target_data)))
         )
 
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
-
       }
+
+      if(!is.null(missing_count_list)) {
+        fact_df <- fact_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
+          ))
+      }
+
+      # The logic is the same now for a byvarn so reuse that function
+      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
+                            formatted_col_index, total_row_top = total_row_top)
     }
   }, envir = x)
 }
@@ -511,7 +529,7 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
-                                  indentation = "") {
+                                  indentation = "", total_row_top = FALSE) {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
@@ -526,7 +544,12 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 
     # If the row is length zero it is a total row. Just add one so it appears on the bottom
     if (nrow(ind_row) == 0) {
-      max(by_varn_df[,2]) + 1
+      # Flag to determine where total row is positioned
+      if(total_row_top) {
+        0
+      } else {
+        max(by_varn_df[,2]) + 1
+      }
     } else {
       # Index is always in the second row
       as.double(unlist(ind_row[, 2]))
@@ -573,7 +596,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     varn_df <- get_varn_values(target, as_name(by[[1]]))
 
     all_outer$..index <- group_data[1,] %>%
-      get_data_order_byvarn(varn_df, by[[1]], final_col)
+      get_data_order_byvarn(varn_df, by[[1]], final_col, total_row_top = total_row_top)
 
     group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -626,7 +649,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                                  varn_df,
                                                                                  target_var[[1]],
                                                                                  length(by) + 1,
-                                                                                 indentation)
+                                                                                 indentation,
+                                                                                 total_row_top = total_row_top)
 
   } else {
 

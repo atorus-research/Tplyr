@@ -1,6 +1,7 @@
 # Count Layers
 
 # This is used for nesting counts
+mtcars2 <- mtcars
 mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
 mtcars$amn <- unclass(as.factor(mtcars$am))
 mtcars <- mutate_all(mtcars, as.character)
@@ -111,7 +112,8 @@ test_that("Count layers are built as expected", {
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "include_total_row", "denoms_by",
-                               "total_count_format", "total_denom_ignore"))
+                               "total_count_format", "total_denom_ignore",
+                               "total_row_top"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -289,7 +291,7 @@ test_that("missing counts can be displayed as expected", {
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx ", n), Missing = NA) %>%
-        set_denom_ignore("Unknown", NA)
+        set_denom_ignore("Unknown", "Missing")
     ) %>%
     build() %>%
     arrange(ord_layer_1)
@@ -322,4 +324,94 @@ test_that("Nested count layers can be built with text by variables", {
 
 test_that("set_outer_sort_position works as expected", {
   expect_equal(c14$formatted_data$ord_layer_2, rep(c(-Inf, 1, 2), 3))
+})
+
+test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)", {
+  mtcars2$cyl2 <- mtcars2$cyl + 10
+  mtcars2[mtcars2$cyl == "4", "cyl"] <- NA
+  mtcars2$grp <- paste0("grp.", mtcars2$cyl + sample(c(0, 0.5), 32, replace = TRUE))
+  mtcars2$amN <- unclass(as.factor(mtcars2$am))
+  mtcars2[mtcars2$am == 1, "am"] <- NA
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+    ) %>%
+    build()
+  # Missing Count + Total Row
+  t2 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+    ) %>%
+    build()
+  # Missing Counts + Total Row
+  t3 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(am) %>%
+        set_missing_count(f_str("xx", n), Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct)) %>%
+        set_order_count_method("byvarn")
+    ) %>%
+    build()
+  # Missing Counts + Total Row + byvarn
+  t4 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct)) %>%
+        set_order_count_method("bycount")
+    ) %>%
+    build()
+  # Missing Counts + Total Row + bycount
+  t5 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct),  total_row_top = TRUE)
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom)
+  t6 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(am) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        set_order_count_method("byvarn") %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct),  total_row_top = TRUE) %>%
+        set_denom_ignore("Missing")
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom) + byVarn
+  t7 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        set_order_count_method("bycount") %>%
+      add_total_row(f_str("xxxxx [xx.x%]", n, pct),  total_row_top = TRUE) %>%
+      set_denom_ignore("Missing")
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom) + by count
+  t8 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(vars(grp, cyl)) %>%
+        set_missing_count(f_str("xxxxx [xx.x%]", n, pct), Missing = NA) %>%
+        add_total_row() %>%
+        set_denoms_by(gear)
+    ) %>%
+    build()
+  # Missing Counts + nested counts
+
+
+  expect_output_file(t1, "count_t1", update = TRUE)
+  expect_output_file(t2, "count_t2", update = TRUE)
+  expect_output_file(t3, "count_t3", update = TRUE)
+  expect_output_file(t4, "count_t4", update = TRUE)
+  expect_output_file(t5, "count_t5", update = TRUE)
+  expect_output_file(t6, "count_t6", update = TRUE)
+  expect_output_file(t7, "count_t7", update = TRUE)
+  expect_output_file(t8, "count_t8", update = TRUE)
 })
