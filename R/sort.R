@@ -241,7 +241,9 @@ add_order_columns.count_layer <- function(x) {
       if(include_total_row) {
         ord_cols <- vars_select(names(formatted_data), starts_with("ord"))
         na_ordered_row <- unique(map_int(ord_cols, function(x) {
-          which(is.na(formatted_data[, x]) & formatted_data[, formatted_col_index] == total_row_label)
+          isna_ <- which(is.na(formatted_data[, x]) & formatted_data[, formatted_col_index] == total_row_label)
+          if(length(isna_) == 0) return(NA)
+          else return(isna_)
         }))
       }
 
@@ -250,7 +252,8 @@ add_order_columns.count_layer <- function(x) {
 
       # If there is a total row that is missing some ord values, they should fall
       # back from the last one.
-      if(include_total_row && length(na_ordered_row) >0) {
+      if(exists("na_ordered_row") && length(na_ordered_row) == 0) na_ordered_row <- NA
+      if(include_total_row && !is.na(na_ordered_row)) {
         #This is the ord columns that are NA
         na_ord_cols <- which(is.na(formatted_data[na_ordered_row, ord_cols]))
         # Change those columns to the last value in the formatted table.
