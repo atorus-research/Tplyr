@@ -267,3 +267,5 @@ total_row_sort_value <- NULL
 missing_sort_value <- NULL
 missing_index <- NULL
 total_index <- NULL
+process_distinct_total <- FALSE
+total_stat_denom <- NULL

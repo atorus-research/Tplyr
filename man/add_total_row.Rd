@@ -4,26 +4,21 @@
 \alias{add_total_row}
 \title{Add a Total row into a count summary.}
 \usage{
-add_total_row(
-  e,
-  total_count_format = NULL,
-  total_denom_ignore = FALSE,
-  total_row_sort_value = NULL
-)
+add_total_row(e, fmt = NULL, count_missings = FALSE, sort_value = NULL)
 }
 \arguments{
 \item{e}{A layer object}
 
-\item{total_count_format}{An f_str object used to format the total row. If
+\item{fmt}{An f_str object used to format the total row. If
 none is provided, display is based on the layer formatting.}
 
-\item{total_denom_ignore}{Whether or not to ignore the denominators passed
+\item{count_missings}{Whether or not to ignore the denominators passed
 in `set_denom_ignore` when calculating a pct on a total row. This is
 useful if you need to exclude/include the missing counts in your total
 row. Defaults to FALSE meaning total row percentage will not ignore any
 values.}
 
-\item{total_row_sort_value}{The value that will appear in the ordering column
+\item{sort_value}{The value that will appear in the ordering column
 for total rows. This must be a numeric value.}
 }
 \description{

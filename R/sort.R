@@ -237,7 +237,26 @@ add_order_columns.count_layer <- function(x) {
         else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
+      #This is used to permute any missing ordering values for total rows
+      if(include_total_row) {
+        ord_cols <- vars_select(names(formatted_data), starts_with("ord"))
+        na_ordered_row <- unique(map_int(ord_cols, function(x) {
+          which(is.na(formatted_data[, x]) & formatted_data[, formatted_col_index] == total_row_label)
+        }))
+      }
+
+
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
+
+      # If there is a total row that is missing some ord values, they should fall
+      # back from the last one.
+      if(include_total_row && length(na_ordered_row) >0) {
+        #This is the ord columns that are NA
+        na_ord_cols <- which(is.na(formatted_data[na_ordered_row, ord_cols]))
+        # Change those columns to the last value in the formatted table.
+        formatted_data[na_ordered_row, ord_cols[na_ord_cols]] <-
+          formatted_data[na_ordered_row, ncol(formatted_data)][[1]]
+      }
     }
 
     rm(formatted_col_index)
@@ -346,21 +365,21 @@ get_by_order <- function(formatted_data, target, i, var) {
 
     varn_df <- get_varn_values(target, as_name(var))
 
-    get_data_order_byvarn(formatted_data, varn_df, as_name(var), i)
+    as.numeric(get_data_order_byvarn(formatted_data, varn_df, as_name(var), i))
 
   # If the variable isn't a factor, default to alphabetical
   } else if (is.null(levels_i)) {
 
     # Unlist to get out of tibble, turn into factor which will order it alphabeticlly
     # unclass it to get it as a number
-    unclass(as.factor(unlist(formatted_data[, i])))
+    as.numeric(unclass(as.factor(unlist(formatted_data[, i]))))
 
     # If it is a factor, just use levels to sort
   } else {
 
     # Unlist to pull it out of the tibble, order it based on the orders in the target
     # data.frame, unclass it to pull out the index
-    unclass(ordered(unlist(formatted_data[, i]), levels_i))
+    as.numeric(unclass(ordered(unlist(formatted_data[, i]), levels_i)))
   }
 }
 

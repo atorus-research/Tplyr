@@ -11,14 +11,14 @@
 #' total row will be determined by using the `denoms_by` variables.
 #'
 #' @param e A layer object
-#' @param total_count_format An f_str object used to format the total row. If
+#' @param fmt An f_str object used to format the total row. If
 #'   none is provided, display is based on the layer formatting.
-#' @param total_denom_ignore Whether or not to ignore the denominators passed
+#' @param count_missings Whether or not to ignore the denominators passed
 #'   in `set_denom_ignore` when calculating a pct on a total row. This is
 #'   useful if you need to exclude/include the missing counts in your total
 #'   row. Defaults to FALSE meaning total row percentage will not ignore any
 #'   values.
-#' @param total_row_sort_value The value that will appear in the ordering column
+#' @param sort_value The value that will appear in the ordering column
 #'   for total rows. This must be a numeric value.
 #'
 #' @export
@@ -32,16 +32,15 @@
 #'       add_total_row(f_str("xxxx", n))
 #'    ) %>%
 #'    build()
-add_total_row <- function(e, total_count_format = NULL, total_denom_ignore = FALSE,
-                          total_row_sort_value = NULL) {
+add_total_row <- function(e, fmt = NULL, count_missings = FALSE, sort_value = NULL) {
   assert_inherits_class(e, "count_layer")
-  if(!is.null(total_count_format)) assert_inherits_class(total_count_format, "f_str")
-  if(!is.null(total_row_sort_value)) assert_inherits_class(total_row_sort_value, "numeric")
+  if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
+  if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
 
   env_bind(e, include_total_row = TRUE)
-  env_bind(e, total_denom_ignore = total_denom_ignore)
-  env_bind(e, total_count_format = total_count_format)
-  env_bind(e, total_row_sort_value = total_row_sort_value)
+  env_bind(e, total_denom_ignore = count_missings)
+  env_bind(e, total_count_format = fmt)
+  env_bind(e, total_row_sort_value = sort_value)
 
   e
 }
@@ -400,8 +399,8 @@ set_result_order_var <- function(e, result_order_var) {
 #' will display the values in a different way.
 #'
 #' @param e A count layer
-#' @param missing_fmt An f_str object to change the display of the missing counts
-#' @param missing_sort_value A numeric value that will be used in the ordering
+#' @param fmt An f_str object to change the display of the missing counts
+#' @param sort_value A numeric value that will be used in the ordering
 #'   column. This should be numeric. If it is not suplied the ordering column
 #'   will be the maximum value of what appears in the table plus one.
 #' @param ... Parameters used to note which values to describe as missing.
@@ -425,20 +424,20 @@ set_result_order_var <- function(e, result_order_var) {
 #'       set_denom_ignore(NA)
 #'   ) %>%
 #'   build()
-set_missing_count <- function(e, missing_fmt, missing_sort_value = NULL, ...) {
+set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
 
   missings <- list(...)
 
-  assert_inherits_class(missing_fmt, "f_str")
-  if(!is.null(missing_sort_value)) assert_inherits_class(missing_sort_value, "numeric")
+  assert_inherits_class(fmt, "f_str")
+  if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
 
   # f_str object for formatting
-  env_bind(e, missing_count_string = missing_fmt)
+  env_bind(e, missing_count_string = fmt)
   # Named list of strings and their replacements
   env_bind(e, missing_count_list = missings)
   # All replacements without names
   env_bind(e, missing_string = names(missings))
-  env_bind(e, missing_sort_value = missing_sort_value)
+  env_bind(e, missing_sort_value = sort_value)
 
   e
 }
@@ -452,7 +451,9 @@ set_missing_count <- function(e, missing_fmt, missing_sort_value = NULL, ...) {
 #' notes different values as "missing" and excludes them from the denominators.
 #'
 #' @param e A count_layer object
-#' @param ... Values to exclude from the percentage calculation.
+#' @param ... Values to exclude from the percentage calculation. If you use
+#'   `set_missing_counts()` this should be the name of the parameters instead of
+#'   the values, see the example below.
 #'
 #' @return The modified layer object
 #' @export
@@ -461,13 +462,13 @@ set_missing_count <- function(e, missing_fmt, missing_sort_value = NULL, ...) {
 #' library(magrittr)
 #' mtcars2 <- mtcars
 #' mtcars2[mtcars$cyl == 6, "cyl"] <- NA
-#' mtcars2[mtcars$cyl == 8, "cyl"] <- NA
+#' mtcars2[mtcars$cyl == 8, "cyl"] <- "Not Found"
 #'
 #' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
-#'       set_denom_ignore("Unknown", "NA")
+#'       set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found")) %>%
+#'       set_denom_ignore("Missing")
 #'   ) %>%
 #'   build()
 set_denom_ignore <- function(e, ...) {

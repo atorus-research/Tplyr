@@ -81,7 +81,18 @@ process_single_count_target <- function(x) {
 
     if(!is.null(distinct_by)) process_count_distinct_n(current_env())
 
-    if(include_total_row) process_count_total_row(current_env())
+    if(include_total_row){
+      process_count_total_row(current_env())
+      if(!is.null(distinct_by)) {
+        process_count_distinct_total_row(current_env())
+      }
+
+      if(!total_denom_ignore && !is.null(total_count_format) && !is.null(denom_ignore) &&
+         ("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars)) {
+           warning("Your total row is ignoring certain values. The 'pct' in this row may not be 100%",
+                   immediate. = TRUE)
+         }
+    }
 
     if(is.null(count_row_prefix)) count_row_prefix <- ""
 
@@ -97,9 +108,16 @@ process_single_count_target <- function(x) {
       ungroup()
 
 
-    if(!is.null(distinct_stat)) numeric_data <- bind_cols(numeric_data,
-                                                          distinct_stat[, c("distinct_n", "distinct_total")])
-
+    if(!is.null(distinct_stat)) {
+      if(include_total_row) {
+        distinct_stat <- distinct_stat %>%
+          bind_rows(total_stat_denom) %>%
+          group_by(!!!denoms_by) %>%
+          do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "distinct_n"))
+      }
+      numeric_data <- bind_cols(numeric_data,
+                                distinct_stat[, c("distinct_n", "distinct_total")])
+    }
   }, envir = x)
 }
 
@@ -289,7 +307,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
           as_name(x) != map_chr(cols, as_name))
     }, treat_var, cols)
 
-    #Create an expression to evaluate
+    #Create an expression to evaluate filter
     if(total_denom_ignore){
       filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
     } else {
@@ -300,6 +318,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     total_stat <- summary_stat %>%
       #Filter out any ignored denoms
       filter(!!filter_logic) %>%
+      # Use distinct if this is a distinct total row
       # Group by all column variables
       group_by(!!treat_var, !!!cols, !!!denoms_by[needed_denoms_by]) %>%
       summarize(n = sum(n)) %>%
@@ -314,6 +333,55 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
       ungroup() %>%
       # complete based on missing groupings
       complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
+  }, envir = x)
+}
+
+process_count_distinct_total_row <- function(x) {
+  evalq({
+
+    # Check if denoms_by wasn't passed and by was passed.
+    if(is.null(denoms_by) & any(map_lgl(by, quo_is_symbol)) > 0) {
+      warning("A total row was added in addition to non-text by variables, but
+no denoms_by variable was set. This may cause unexpected results. If you wish to
+change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
+    }
+
+    # Make sure the denoms_by is stripped
+    # Stripped of cols and treat_var variables, otherwise it will error out in the group_by
+    # I thought of replacing the group by with !!!unique(c(treat_var, cols, denoms_by))
+    # but that doesn't work due to the denoms_by having an environment set
+
+    # Logical vector that is used to remove the treat_var and cols
+    needed_denoms_by <- map_lgl(denoms_by, function(x, treat_var, cols) {
+      all(as_name(x) != as_name(treat_var),
+          as_name(x) != map_chr(cols, as_name))
+    }, treat_var, cols)
+
+    #Create an expression to evaluate filter
+    if(total_denom_ignore){
+      filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
+    } else {
+      filter_logic <- expr(TRUE)
+    }
+
+    # create a data.frame to create total counts
+    total_stat_denom <- distinct_stat %>%
+      #Filter out any ignored denoms
+      filter(!!filter_logic) %>%
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols, !!!denoms_by[needed_denoms_by]) %>%
+      summarize(distinct_n = sum(distinct_n)) %>%
+      ungroup() %>%
+      mutate(distinct_total = distinct_n) %>%
+      # Create a variable to label the totals when it is merged in.
+      mutate(!!as_name(target_var[[1]]) := total_row_label) %>%
+      # Create variables to carry forward 'by'. Only pull out the ones that
+      # aren't symbols
+      group_by(!!!extract_character_from_quo(by)) %>%
+      # ungroup right away to make sure the complete works
+      ungroup() %>%
+      # complete based on missing groupings
+      complete(!!treat_var, !!!cols, fill = list(distinct_n = 0, distinct_total = 0))
   }, envir = x)
 }
 

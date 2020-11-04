@@ -352,8 +352,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
   t3 <- tplyr_table(mtcars2, gear) %>%
     add_layer(
       group_count(am) %>%
-        set_missing_count(f_str("xx", n), missing_sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), total_row_sort_value = 9999) %>%
+        set_missing_count(f_str("xx", n), sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
+        set_denom_ignore("Missing") %>%
         set_order_count_method("byvarn")
     ) %>%
     build()
@@ -361,8 +362,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
   t4 <- tplyr_table(mtcars2, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx", n), missing_sort_value = 999, Missing = NA, `Not Found` = NaN) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), total_row_sort_value = 9999) %>%
+        set_missing_count(f_str("xx", n), sort_value = 999, Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999) %>%
         set_order_count_method("bycount")
     ) %>%
     build()
@@ -371,7 +372,7 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct),  total_row_sort_value = 7862)
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 7862)
     ) %>%
     build()
   # Missing COunts + Total Row(bottom)
@@ -380,7 +381,7 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(am) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("byvarn") %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), total_row_sort_value = -Inf) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
         set_denom_ignore("Missing")
     ) %>%
     build()
@@ -390,28 +391,26 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("bycount") %>%
-      add_total_row(f_str("xxxxx [xx.x%]", n, pct),  total_row_sort_value = -6795) %>%
+      add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
       set_denom_ignore("Missing")
     ) %>%
     build()
   # Missing COunts + Total Row(bottom) + by count
   t8 <- tplyr_table(mtcars2, gear) %>%
     add_layer(
-      group_count(vars(grp, cyl)) %>%
-        set_missing_count(f_str("xxxxx [xx.x%]", n, pct), Missing = NA) %>%
-        add_total_row() %>%
-        set_denoms_by(gear)
+      group_count(cyl) %>%
+        set_distinct_by(am) %>%
+        add_total_row()
     ) %>%
     build()
-  # Missing Counts + nested counts
 
 
-  expect_output_file(t1, "count_t1", update = TRUE)
-  expect_output_file(t2, "count_t2", update = TRUE)
-  expect_output_file(t3, "count_t3", update = TRUE)
-  expect_output_file(t4, "count_t4", update = TRUE)
-  expect_output_file(t5, "count_t5", update = TRUE)
-  expect_output_file(t6, "count_t6", update = TRUE)
-  expect_output_file(t7, "count_t7", update = TRUE)
-  expect_output_file(t8, "count_t8", update = TRUE)
+  expect_output_file(print(t1), "count_t1")
+  expect_output_file(print(t2), "count_t2")
+  expect_output_file(print(t3), "count_t3")
+  expect_output_file(print(t4), "count_t4")
+  expect_output_file(print(t5), "count_t5")
+  expect_output_file(print(t6), "count_t6")
+  expect_output_file(print(t7), "count_t7")
+  expect_output_file(print(t8), "count_t8")
 })
