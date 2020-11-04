@@ -1,6 +1,7 @@
 # Count Layers
 
 # This is used for nesting counts
+mtcars2 <- mtcars
 mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
 mtcars$amn <- unclass(as.factor(mtcars$am))
 mtcars <- mutate_all(mtcars, as.character)
@@ -110,7 +111,9 @@ test_that("Count layers are built as expected", {
                                "format_strings"))
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
-                               "include_total_row", "denoms_by"))
+                               "include_total_row", "denoms_by",
+                               "total_count_format", "total_denom_ignore",
+                               "total_row_sort_value"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -257,7 +260,7 @@ test_that("missing counts can be displayed as expected", {
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n))
+        set_missing_count(f_str("xx ", n), Missing = NA)
     ) %>%
     build()
   expect_equal(t1[3, 1], tibble(row_label1 = "Missing"))
@@ -267,7 +270,7 @@ test_that("missing counts can be displayed as expected", {
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = "Not here")
+        set_missing_count(f_str("xx ", n), Missing = "Not here")
     ) %>%
     build()
   expect_equal(t2[3, 1], tibble(row_label1 = "Missing"))
@@ -277,7 +280,7 @@ test_that("missing counts can be displayed as expected", {
   t3 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = c(UNK = "Unknown"))
+        set_missing_count(f_str("xx ", n), UNK = "Unknown")
     ) %>%
     build()
   expect_equal(t3[3, 1], tibble(row_label1 = "UNK"))
@@ -287,10 +290,11 @@ test_that("missing counts can be displayed as expected", {
   t4 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) %>%
-        set_denom_ignore("Unknown", NA)
+        set_missing_count(f_str("xx ", n), Missing = NA) %>%
+        set_denom_ignore("Unknown", "Missing")
     ) %>%
-    build()
+    build() %>%
+    arrange(ord_layer_1)
   expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
   expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
   expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
@@ -320,4 +324,93 @@ test_that("Nested count layers can be built with text by variables", {
 
 test_that("set_outer_sort_position works as expected", {
   expect_equal(c14$formatted_data$ord_layer_2, rep(c(-Inf, 1, 2), 3))
+})
+
+test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)", {
+  mtcars2$cyl2 <- mtcars2$cyl + 10
+  mtcars2[mtcars2$cyl == "4", "cyl"] <- NA
+  mtcars2$grp <- paste0("grp.", mtcars2$cyl + sample(c(0, 0.5), 32, replace = TRUE))
+  mtcars2$amN <- unclass(as.factor(mtcars2$am))
+  mtcars2[mtcars2$am == 1, "am"] <- NA
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+    ) %>%
+    build()
+  # Missing Count + Total Row
+  t2 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+    ) %>%
+    build()
+  # Missing Counts + Total Row
+  t3 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(am) %>%
+        set_missing_count(f_str("xx", n), sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
+        set_denom_ignore("Missing") %>%
+        set_order_count_method("byvarn")
+    ) %>%
+    build()
+  # Missing Counts + Total Row + byvarn
+  t4 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), sort_value = 999, Missing = NA, `Not Found` = NaN) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999) %>%
+        set_order_count_method("bycount")
+    ) %>%
+    build()
+  # Missing Counts + Total Row + bycount
+  t5 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 7862)
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom)
+  t6 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(am) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        set_order_count_method("byvarn") %>%
+        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
+        set_denom_ignore("Missing")
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom) + byVarn
+  t7 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        set_order_count_method("bycount") %>%
+      add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
+      set_denom_ignore("Missing")
+    ) %>%
+    build()
+  # Missing COunts + Total Row(bottom) + by count
+  t8 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_distinct_by(am) %>%
+        add_total_row()
+    ) %>%
+    build()
+
+
+  expect_output_file(print(t1), "count_t1")
+  expect_output_file(print(t2), "count_t2")
+  expect_output_file(print(t3), "count_t3")
+  expect_output_file(print(t4), "count_t4")
+  expect_output_file(print(t5), "count_t5")
+  expect_output_file(print(t6), "count_t6")
+  expect_output_file(print(t7), "count_t7")
+  expect_output_file(print(t8), "count_t8")
 })

@@ -4,15 +4,20 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, f_str, string = "NA")
+set_missing_count(e, fmt, sort_value = NULL, ...)
 }
 \arguments{
 \item{e}{A count layer}
 
-\item{f_str}{An f_str object to change the display of the missing counts}
+\item{fmt}{An f_str object to change the display of the missing counts}
 
-\item{string}{A named string representing the value to rename missing values
-This value can be named to change the row name in the table.}
+\item{sort_value}{A numeric value that will be used in the ordering
+column. This should be numeric. If it is not suplied the ordering column
+will be the maximum value of what appears in the table plus one.}
+
+\item{...}{Parameters used to note which values to describe as missing.
+Generally NA and "Missing" would be used here. Parameters can be named
+character vectors where the names become the row label.}
 }
 \value{
 The modified layer
@@ -27,13 +32,12 @@ library(dplyr)
   mtcars2 <- mtcars \%>\%
 mutate_all(as.character)
 mtcars2[mtcars$cyl == 6, "cyl"] <- NA
-mtcars2[mtcars$cyl == 8, "cyl"] <- NA
 
 tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) \%>\%
-      set_denom_ignore("Unknown", "NA")
+      set_missing_count(f_str("xx ", n), Missing = NA) \%>\%
+      set_denom_ignore(NA)
   ) \%>\%
   build()
 }

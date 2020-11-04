@@ -5,6 +5,11 @@ t1 <- tplyr_table(mtcars, gear)
 t2 <- tplyr_table(mtcars, gear)
 t3 <- tplyr_table(mtcars, gear)
 
+mtcars2 <- mtcars
+mtcars2$cyl2 <-  factor(mtcars2$cyl2, c("16", "18", "14"))
+mtcars2$cyl <-  factor(mtcars2$cyl, c("6", "8", "4"))
+t4 <- tplyr_table(mtcars2, gear)
+
 s1 <- group_shift(t1, vars(row = cyl, column = cyl2)) %>%
   set_format_strings(f_str("a", n))
 s2 <- group_shift(t2, vars(row = cyl, column = cyl2)) %>%
@@ -12,15 +17,18 @@ s2 <- group_shift(t2, vars(row = cyl, column = cyl2)) %>%
 s3 <- group_shift(t3, vars(row = cyl, column = cyl2)) %>%
   set_format_strings(f_str("a (xx.xx%)", n, pct)) %>%
   set_denoms_by(cyl)
+s4 <- group_shift(t4, vars(row = cyl, column = cyl2))
 
 t1 <- add_layers(t1, s1)
 t2 <- add_layers(t2, s2)
 t3 <- add_layers(t3, s3)
+t4 <- add_layers(t4, s4)
 
 test_that("group_shift layers can be built without warnings/errors", {
   expect_silent(build(t1))
   expect_silent(build(t2))
   expect_silent(build(t3))
+  expect_silent(build(t4))
 })
 
 test_that("group_shift outputs the expected numeric data", {
@@ -50,6 +58,7 @@ test_that("group_shift outputs the expected formatted data", {
   expect_equal(dim(s3$formatted_data), c(3, 11))
 
 
+  expect_equal(t4$layers[[1]]$formatted_data$row_label1, c("6", "8", "4"))
 })
 
 test_that("Shift layer clauses with invalid syntax give informative error", {

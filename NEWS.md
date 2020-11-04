@@ -1,3 +1,22 @@
+# Tplyr 0.1.5
+
+- Bug Fixes
+ - A bug where the factors used in the shift layers wouldn't be reflected in the ordering columns.
+
+- Enhansements
+ - Build will error if `denom_ignore` is used but no missing count strings are specified.
+ - The `set_missing_count` interface was updated to be more intuitive.
+ - The `add_total_row` function was improved and now accepts an f_str to display a different string then the layer. It also has a parameter to note if denom_ignore should be used in pct calculation.
+
+# Tplyr 0.1.4
+
+- Bug Fixes
+ - Fixes a bug where "Totals" in numeric data may not take into account the where logic at the layer level and thus give inaccurate percentages
+
+- Other Changes
+ - `add_total_row()` function is more intuitive. It now uses the `denoms_by` variables to determine how to calculate the totals.
+
+
 # Tplyr 0.1.3
 
 - Bug Fixes
