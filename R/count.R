@@ -199,7 +199,7 @@ process_count_n <- function(x) {
       # This adds the missing string as a factor to the tallies. This is needed
       # to make sure the missing row is added even if there are no missing values.
       summary_stat <- summary_stat %>%
-        mutate(!!target_var[[1]] := fct_expand(as.character(.data[[as_name(target_var[[1]])]]),
+        mutate(!!target_var[[1]] := fct_expand(.data[[as_name(target_var[[1]])]],
                                                names(missing_count_list)))
     }
 
@@ -735,7 +735,7 @@ rename_missing_values <- function(x) {
     if(!is.null(missing_count_list)){
       # If the target variable isn't a character or a factor. Coerse it as a
       # character. This can happen if the target var is numeric
-      if(!(class(built_target[, as_name(target_var[[1]])]) %in% c("factor", "character"))) {
+      if(!(class(built_target[, as_name(target_var[[1]])][[1]]) %in% c("factor", "character"))) {
         built_target <- built_target %>%
           mutate(!!target_var[[1]] := as.character(!!target_var[[1]]))
       }
@@ -748,6 +748,7 @@ rename_missing_values <- function(x) {
           missing_count_list[[i]] <- ifelse(missing_count_list[[i]] == "NaN", "(Missing_NAN)", as.character(missing_count_list[[i]]))
           # Replace the implicit values in built_target
           built_target <- built_target %>%
+            mutate(!!target_var[[1]] := fct_expand(!!target_var[[1]], "(Missing_NAN)")) %>%
             mutate(!!target_var[[1]] := ifelse(is.nan(!!target_var[[1]]), "(Missing_NAN)", as.character(!!target_var[[1]])))
 
         } else if(any(is.na(missing_count_list[[i]]))){
@@ -755,14 +756,15 @@ rename_missing_values <- function(x) {
           missing_count_list[[i]] <- ifelse(is.na(as.character(missing_count_list[[i]])) , "(Missing)", as.character(missing_count_list[[i]]))
           # Replace the implicit values in built_target
           built_target <- built_target %>%
-            mutate(!!target_var[[1]] := ifelse(is.na(!!target_var[[1]]) & !is.nan(!!target_var[[1]]), "(Missing)", as.character(!!target_var[[1]])))
+            mutate(!!target_var[[1]] := fct_expand(!!target_var[[1]], "(Missing)")) %>%
+            mutate(!!target_var[[1]] := fct_explicit_na(!!target_var[[1]]))
 
         }
         built_target <- built_target %>%
           mutate(
             # Warnings suppressed here. They can happen if something is called missing
             # That isn't in the data, that isn't something to warn about in this context
-            !!target_var[[1]] := suppressWarnings(fct_collapse(!!target_var[[1]], !!names(missing_count_list)[i] := as.character(missing_count_list[[i]])))
+            !!target_var[[1]] := suppressWarnings(fct_collapse(!!target_var[[1]], !!names(missing_count_list)[i] := missing_count_list[[i]]))
           )
       }
     }
