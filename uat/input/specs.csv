@@ -1,6 +1,6 @@
-﻿LineType,RequirementID,Text
+LineType,RequirementID,Text
 UpdatedBy,,Nathan Kosiba
-UpdatedDate,,9/24/2020
+UpdatedDate,,11/05/2020
 Specs,A,Population data can be specified by the user
 Specs,B,Treatment variable can be manually specified for population data
 Specs,C,Population data subset can be specified on user specified conditions
@@ -12,68 +12,70 @@ Specs,H,Treatment variable can be manually specified for analysis data
 Specs,I,n counts of values within a variable can be produced
 Specs,J,n counts of values within a group of variables can be produced
 Specs,K,Total n counts can be added
-Specs,L,Missing n count handling can be specified including presentation and denominator handling
-Specs,M,Dummy values can be specified for categories that need to be presented but may not exist within the data
-Specs,N,Counts can be produced as n (%)
-Specs,O,"When producing n (%), the denominator can be specified using the analysis data"
-Specs,P,"When producing n (%), the denominator can be specified using a particular manually specified subset"
-Specs,Q,"When producing n (%), the denominator can be specified using the population data"
-Specs,R,"When producing n (%), the denominator can be specified using grouping of variables"
-Specs,S,Risk difference including confidence interval can be produced based on specified treatment groupings
-Specs,T,Risk difference arguments can be passed forward into prop.test using args parameter
-Specs,U,Risk difference can be calculated over user specified cols arguments
-Specs,V,Risk difference can be calculated over nested count layers and by variables
-Specs,W,The descriptive statistic of n can be produced based on an input variable
-Specs,X,The descriptive statistic of mean can be produced based on an input variable
-Specs,Y,The descriptive statistic of median can be produced based on an input variable
-Specs,Z,The descriptive statistic of IQR/Q1/Q3 can be produced based on an input variable
-Specs,AA,The descriptive statistic of standard deviation can be produced based on an input variable
-Specs,AB,The descriptive statistic of variance can be produced based on an input variable
-Specs,AC,The descriptive statistic of min can be produced based on an input variable
-Specs,AD,The descriptive statistic of max can be produced based on an input variable
-Specs,AE,The descriptive statistic of missing can be produced based on an input variable
-Specs,AF,Custom descriptive statistics can be produced based on an input variable and a specified formula
-Specs,AG,Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
-Specs,AH,"Multiple statistics can be presented in one line (i.e. combining Q1, Q3 or Min, Max)"
-Specs,AI,Decimal precision can be specified by the user
-Specs,AJ,Integer length can be specified by the user
-Specs,AK,Decimal precision can be dynamically created from analysis data
-Specs,AL,Integer length can be dynamically created from analysis data
-Specs,AM,Presentation format can be specified by the user including desired non-numeric text 
-Specs,AN,Strings are built to align per user specification within a display
-Specs,AO,Descriptive statistic missing values can be set to a user specified string
-Specs,AP,"Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced"
-Specs,AQ,Shift n counts of values within a variable can be produced
-Specs,AR,Shift n counts of values within a group of variables can be produced
-Specs,AS,Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
-Specs,AT,Shift counts can be produced as n (%)
-Specs,AU,"For shift counts when producing n (%), the denominator can be specified using the analysis data"
-Specs,AV,"For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset"
-Specs,AW,"For shift counts when producing n (%), the denominator can be specified using the population data"
-Specs,AX,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables"
-Specs,AY,Row labels can be manually specified by the user
-Specs,AZ,Row labels can be nested to put a subgroup within a parent group
-Specs,BA,Summaries can be stacked on top of one another
-Specs,BB,Summaries can be sorted based on manual sorting by presentation specified order
-Specs,BC,Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
-Specs,BD,Summaries can be sorted based on alphabetical sorting based on data values
-Specs,BE,Summaries can be sorted based on a numeric version of the target variable if available
-Specs,BF,Summary by variables will be sorted by a numeric variable if available and then by factor
-Specs,BG,Nested layers can be sorted independently using different methods
-Specs,BH,Independent layers can be sorted using different methods and stacked using common sorting variables
-Specs,BI,Count layer default formats can be set at the table level
-Specs,BJ,Descriptive statistics layer default formats can be set at the table level
-Specs,BK,Shift layer default formats can be set at the table level
-Specs,BLL,Option for count layer default formats can be specified by the user
-Specs,BM,Option for descriptive statistics layer default formats can be specified by the user
-Specs,BN,Option for shift layer default formats can be specified by the user
-Specs,BO,Option for a cap on auto precision can be specified by the user
-Specs,BP,Option for custom descriptive statistics can be specified by the user for use in the table
-Specs,BQ,Option for setting scipen internal option can be specified by the user
-Specs,BR,Option for setting quantile algorithm choice can be specified by the user
-Specs,BS,Column headers can be added to the output object
-Specs,BT,Row breaks can be added between sections based on grouping variables
-Specs,BU,Row labels can be masked in a hierarchical fashion 
-Specs,BV,A table object is returned in a format that is ready to be cosmetically prepared
-Specs,BW,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-Specs,BX,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing"
+Specs,L,Total row sort value can be specified by the user
+Specs,M,Missing n count handling can be specified including presentation and denominator handling
+Specs,N,Missing row sort value can be specified by the user
+Specs,O,Dummy values can be specified for categories that need to be presented but may not exist within the data
+Specs,P,Counts can be produced as n (%)
+Specs,Q,"When producing n (%), the denominator can be specified using the analysis data"
+Specs,R,"When producing n (%), the denominator can be specified using a particular manually specified subset"
+Specs,S,"When producing n (%), the denominator can be specified using the population data"
+Specs,T,"When producing n (%), the denominator can be specified using grouping of variables"
+Specs,U,Risk difference including confidence interval can be produced based on specified treatment groupings
+Specs,V,Risk difference arguments can be passed forward into prop.test using args parameter
+Specs,W,Risk difference can be calculated over user specified cols arguments
+Specs,X,Risk difference can be calculated over nested count layers and by variables
+Specs,Y,The descriptive statistic of n can be produced based on an input variable
+Specs,Z,The descriptive statistic of mean can be produced based on an input variable
+Specs,AA,The descriptive statistic of median can be produced based on an input variable
+Specs,AB,The descriptive statistic of IQR/Q1/Q3 can be produced based on an input variable
+Specs,AC,The descriptive statistic of standard deviation can be produced based on an input variable
+Specs,AD,The descriptive statistic of variance can be produced based on an input variable
+Specs,AE,The descriptive statistic of min can be produced based on an input variable
+Specs,AF,The descriptive statistic of max can be produced based on an input variable
+Specs,AG,The descriptive statistic of missing can be produced based on an input variable
+Specs,AH,Custom descriptive statistics can be produced based on an input variable and a specified formula
+Specs,AI,Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
+Specs,AJ,"Multiple statistics can be presented in one line (i.e. combining Q1, Q3 or Min, Max)"
+Specs,AK,Decimal precision can be specified by the user
+Specs,AL,Integer length can be specified by the user
+Specs,AM,Decimal precision can be dynamically created from analysis data
+Specs,AN,Integer length can be dynamically created from analysis data
+Specs,AO,Presentation format can be specified by the user including desired non-numeric text
+Specs,AP,Strings are built to align per user specification within a display
+Specs,AQ,Descriptive statistic missing values can be set to a user specified string
+Specs,AR,"Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced"
+Specs,AS,Shift n counts of values within a variable can be produced
+Specs,AT,Shift n counts of values within a group of variables can be produced
+Specs,AU,Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
+Specs,AV,Shift counts can be produced as n (%)
+Specs,AW,"For shift counts when producing n (%), the denominator can be specified using the analysis data"
+Specs,AX,"For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset"
+Specs,AY,"For shift counts when producing n (%), the denominator can be specified using the population data"
+Specs,AZ,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables"
+Specs,BA,Row labels can be manually specified by the user
+Specs,BB,Row labels can be nested to put a subgroup within a parent group
+Specs,BC,Summaries can be stacked on top of one another
+Specs,BD,Summaries can be sorted based on manual sorting by presentation specified order
+Specs,BE,Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
+Specs,BF,Summaries can be sorted based on alphabetical sorting based on data values
+Specs,BG,Summaries can be sorted based on a numeric version of the target variable if available
+Specs,BH,Summary by variables will be sorted by a numeric variable if available and then by factor
+Specs,BI,Nested layers can be sorted independently using different methods
+Specs,BJ,Independent layers can be sorted using different methods and stacked using common sorting variables
+Specs,BK,Count layer default formats can be set at the table level
+Specs,BL,Descriptive statistics layer default formats can be set at the table level
+Specs,BM,Shift layer default formats can be set at the table level
+Specs,BN,Option for count layer default formats can be specified by the user
+Specs,BO,Option for descriptive statistics layer default formats can be specified by the user
+Specs,BP,Option for shift layer default formats can be specified by the user
+Specs,BQ,Option for a cap on auto precision can be specified by the user
+Specs,BR,Option for custom descriptive statistics can be specified by the user for use in the table
+Specs,BS,Option for setting scipen internal option can be specified by the user
+Specs,BT,Option for setting quantile algorithm choice can be specified by the user
+Specs,BU,Column headers can be added to the output object
+Specs,BV,Row breaks can be added between sections based on grouping variables
+Specs,BW,Row labels can be masked in a hierarchical fashion
+Specs,BX,A table object is returned in a format that is ready to be cosmetically prepared
+Specs,BY,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
+Specs,BZ,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing"

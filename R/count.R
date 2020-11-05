@@ -19,15 +19,9 @@ process_summaries.count_layer <- function(x, ...) {
                    "` is invalid. Filter error:\n", e))
     })
 
-    # Rename missing values
-    for(i in seq_along(missing_count_list)) {
-      built_target <- built_target %>%
-        mutate(!!target_var[[1]] := ifelse(!!target_var[[1]] %in% missing_count_list[[i]], names(missing_count_list)[i], !!target_var[[1]]))
-
-    }
-
   }, envir = x)
 
+  rename_missing_values(x)
 
   # Preprocssing in the case of two target_variables
   if(length(env_get(x, "target_var")) > 2) abort("Only up too two target_variables can be used in a count_layer")
@@ -733,4 +727,44 @@ process_count_denoms <- function(x) {
 
   }, envir = x)
 
+}
+
+rename_missing_values <- function(x) {
+  evalq({
+    # Rename missing values
+    if(!is.null(missing_count_list)){
+      # If the target variable isn't a character or a factor. Coerse it as a
+      # character. This can happen if the target var is numeric
+      if(!(class(built_target[, as_name(target_var[[1]])]) %in% c("factor", "character"))) {
+        built_target <- built_target %>%
+          mutate(!!target_var[[1]] := as.character(!!target_var[[1]]))
+      }
+      # Collapse the factors that were missing.
+      for(i in seq_along(missing_count_list)) {
+
+        # Logic if the missing_count_list contains an implicit NA
+        if(any(is.nan(missing_count_list[[i]]))){
+          ## Repalce the NA in the missing_count list with an explicit value
+          missing_count_list[[i]] <- ifelse(missing_count_list[[i]] == "NaN", "(Missing_NAN)", as.character(missing_count_list[[i]]))
+          # Replace the implicit values in built_target
+          built_target <- built_target %>%
+            mutate(!!target_var[[1]] := ifelse(is.nan(!!target_var[[1]]), "(Missing_NAN)", as.character(!!target_var[[1]])))
+
+        } else if(any(is.na(missing_count_list[[i]]))){
+          ## Repalce the NA in the missing_count list with an explicit value
+          missing_count_list[[i]] <- ifelse(is.na(as.character(missing_count_list[[i]])) , "(Missing)", as.character(missing_count_list[[i]]))
+          # Replace the implicit values in built_target
+          built_target <- built_target %>%
+            mutate(!!target_var[[1]] := ifelse(is.na(!!target_var[[1]]) & !is.nan(!!target_var[[1]]), "(Missing)", as.character(!!target_var[[1]])))
+
+        }
+        built_target <- built_target %>%
+          mutate(
+            # Warnings suppressed here. They can happen if something is called missing
+            # That isn't in the data, that isn't something to warn about in this context
+            !!target_var[[1]] := suppressWarnings(fct_collapse(!!target_var[[1]], !!names(missing_count_list)[i] := as.character(missing_count_list[[i]])))
+          )
+      }
+    }
+  }, envir = x)
 }
