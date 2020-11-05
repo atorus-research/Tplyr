@@ -81,46 +81,65 @@ kable(t)
 
 You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct` and `distinct_pct` in addition to the `n` and `pct` created created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
 
-## Adding a 'Total' Row
-
-Some summaries require the addition of a 'Total' row in addition to the categorical counts. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. The default text for this row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used for the 'Total' row.
-
-```{r}
-tplyr_table(adsl, TRT01P) %>% 
-  add_layer(
-    group_count(AGEGR1) %>% 
-      add_total_row() %>% 
-      set_total_row_label("All Age Groups")
-  ) %>% 
-  build() %>% 
-  kable()
-```
-
 ## Missing Counts
 
 Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator? 
 
-The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. Additionally, using the `string` parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the `row_label` of what will be used for missing values.
+The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. If not specified, the associated count layer's format will be used. Using the `...` parameter, you are able to specify the row label desired for missing values and values that you determine to be considered 'missing'. For example, you may have NAs in the target variable, and the values like "Not Collected" that you also wish to consider "missing". `set_missing_count()` allows you to group those together. Actually - you're able to establish as many different "missing" groups as you want - even though that scenario is fairly unlikely.  
 
-In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using `set_denom_ignore()`. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing "NA"). During processing, the NAs are coerced into characters. 
+In the example below 50 random values are removed and NA is specified as the missing string. This also introduces another function - `set_denom_ignore()`. When you have missing counts, you may wish to exclude them from the totals being summarized. You can exclude them from the denominator by using `set_denom_ignore()`. Simply pass the missing group label established from `set_missing_count()` into `set_denom_ignore()`, and all of the missing values you grouped will be excluded from the denominator. `set_denom_ignore()` can also consume any other value you wish to ignore from the target variable as well, if desired.
 
 ```{r}
 adae2 <- adae
 adae2[sample(nrow(adae2), 50), "AESEV"] <- NA
+
 t <- tplyr_table(adae2, TRTA) %>%
   add_layer(
     group_count(AESEV) %>%
       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
-      set_missing_count(f_str("xxx", n), string = c(MISSING = "NA"))  %>%
-      set_denom_ignore("NA")
-    
+      set_missing_count(f_str("xxx", n), Missing = NA, sort_value=Inf)  %>%
+      set_denom_ignore("Missing")
   ) %>%
-  build()
+  build() %>% 
+  arrange(ord_layer_1)
 
 t %>% 
   kable()
-
 ```
+
+We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you'll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.
+
+## Adding a 'Total' Row
+
+In addition to missing counts, some summaries require the addition of a 'Total' row as well. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. Like everything else that goes into 'Tplyr', this too has a significant bit of nuance to it. 
+
+Much of this functionality is similar to `set_missing_count()`. You're able to specify a different format for the total, but if not specified, the associated count layer's format will be used. You're able to set your own sort value to specify where you want the total row to sit. 
+
+More nuance comes in two places:
+
+- By default, `add_total_row()` will ignore missing values, but you can have it count missing values using the `count_missings` parameter. 'Tplyr' will warn you when using `add_total_row()` with `set_denom_ignore()` if you're requesting to count missing values and including a percentage, because the percentage will exceed 100%. 
+- `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly how denominators are calculated. Typically in a count layer, the column variables (i.e. `treat_var` and any `cols`) are used, and this is the default. The totals presented by `add_total_row()` will always align with denominators specified in `set_denom_by()`. 
+
+In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the denominator. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
+
+```{r}
+adsl2 <- adsl
+adsl2[sample(nrow(adsl2), 50), "AGEGR1"] <- NA
+
+tplyr_table(adsl2, TRT01P) %>% 
+  add_layer(
+    group_count(AGEGR1, by=SEX) %>% 
+      set_denoms_by(TRT01P, SEX) %>%  # This gives me a Total row each group
+      add_total_row(f_str("xxx", n), count_missings=TRUE, sort_value=-Inf) %>% 
+      set_total_row_label("All Age Groups") %>% 
+      set_missing_count(f_str("xxx", n), Missing = NA, sort_value=Inf)
+  ) %>% 
+  build() %>% 
+  arrange(ord_layer_1, ord_layer_2) %>% 
+  kable()
+```
+
+The default text for the Total row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used in your display. 
 
 ## Nested Count Summaries
 
@@ -220,7 +239,8 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
       set_denoms_by(BNRIND, PARAM, AVISIT) # Each row made by LBNRIND, TRTA
   ) %>%
   build() %>%
-  arrange(ord_layer_1, ord_layer_2) %>% 
+  arrange(ord_layer_1, ord_layer_2, ord_layer_3) %>% 
+  head() %>% 
   kable()
 ```
 
@@ -234,6 +254,7 @@ tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
       set_denoms_by(TRTA, ANRIND) # Use the column total as the denominator
   ) %>%
   build() %>%
+  arrange(ord_layer_1, ord_layer_2, ord_layer_3) %>% 
   head() %>%
   kable()
 ```
