@@ -427,7 +427,7 @@ set_result_order_var <- function(e, result_order_var) {
 set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
 
   missings <- list(...)
-  assert_that(length(missings) > 0, "No missing values were specified.")
+  assert_that(length(missings) > 0, msg = "No missing values were specified.")
 
   assert_inherits_class(fmt, "f_str")
   if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
