@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 9/24/2020
+#' 11/05/2020
 + A: Population data can be specified by the user
 + B: Treatment variable can be manually specified for population data
 + C: Population data subset can be specified on user specified conditions
@@ -13,68 +13,70 @@
 + I: n counts of values within a variable can be produced
 + J: n counts of values within a group of variables can be produced
 + K: Total n counts can be added
-+ L: Missing n count handling can be specified including presentation and denominator handling
-+ M: Dummy values can be specified for categories that need to be presented but may not exist within the data
-+ N: Counts can be produced as n (%)
-+ O: When producing n (%), the denominator can be specified using the analysis data
-+ P: When producing n (%), the denominator can be specified using a particular manually specified subset
-+ Q: When producing n (%), the denominator can be specified using the population data
-+ R: When producing n (%), the denominator can be specified using grouping of variables
-+ S: Risk difference including confidence interval can be produced based on specified treatment groupings
-+ T: Risk difference arguments can be passed forward into prop.test using args parameter
-+ U: Risk difference can be calculated over user specified cols arguments
-+ V: Risk difference can be calculated over nested count layers and by variables
-+ W: The descriptive statistic of n can be produced based on an input variable
-+ X: The descriptive statistic of mean can be produced based on an input variable
-+ Y: The descriptive statistic of median can be produced based on an input variable
-+ Z: The descriptive statistic of IQR/Q1/Q3 can be produced based on an input variable
-+ AA: The descriptive statistic of standard deviation can be produced based on an input variable
-+ AB: The descriptive statistic of variance can be produced based on an input variable
-+ AC: The descriptive statistic of min can be produced based on an input variable
-+ AD: The descriptive statistic of max can be produced based on an input variable
-+ AE: The descriptive statistic of missing can be produced based on an input variable
-+ AF: Custom descriptive statistics can be produced based on an input variable and a specified formula
-+ AG: Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
-+ AH: Multiple statistics can be presented in one line (i.e. combining Q1, Q3 or Min, Max)
-+ AI: Decimal precision can be specified by the user
-+ AJ: Integer length can be specified by the user
-+ AK: Decimal precision can be dynamically created from analysis data
-+ AL: Integer length can be dynamically created from analysis data
-+ AM: Presentation format can be specified by the user including desired non-numeric text 
-+ AN: Strings are built to align per user specification within a display
-+ AO: Descriptive statistic missing values can be set to a user specified string
-+ AP: Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced
-+ AQ: Shift n counts of values within a variable can be produced
-+ AR: Shift n counts of values within a group of variables can be produced
-+ AS: Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
-+ AT: Shift counts can be produced as n (%)
-+ AU: For shift counts when producing n (%), the denominator can be specified using the analysis data
-+ AV: For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset
-+ AW: For shift counts when producing n (%), the denominator can be specified using the population data
-+ AX: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
-+ AY: Row labels can be manually specified by the user
-+ AZ: Row labels can be nested to put a subgroup within a parent group
-+ BA: Summaries can be stacked on top of one another
-+ BB: Summaries can be sorted based on manual sorting by presentation specified order
-+ BC: Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
-+ BD: Summaries can be sorted based on alphabetical sorting based on data values
-+ BE: Summaries can be sorted based on a numeric version of the target variable if available
-+ BF: Summary by variables will be sorted by a numeric variable if available and then by factor
-+ BG: Nested layers can be sorted independently using different methods
-+ BH: Independent layers can be sorted using different methods and stacked using common sorting variables
-+ BI: Count layer default formats can be set at the table level
-+ BJ: Descriptive statistics layer default formats can be set at the table level
-+ BK: Shift layer default formats can be set at the table level
-+ BLL: Option for count layer default formats can be specified by the user
-+ BM: Option for descriptive statistics layer default formats can be specified by the user
-+ BN: Option for shift layer default formats can be specified by the user
-+ BO: Option for a cap on auto precision can be specified by the user
-+ BP: Option for custom descriptive statistics can be specified by the user for use in the table
-+ BQ: Option for setting scipen internal option can be specified by the user
-+ BR: Option for setting quantile algorithm choice can be specified by the user
-+ BS: Column headers can be added to the output object
-+ BT: Row breaks can be added between sections based on grouping variables
-+ BU: Row labels can be masked in a hierarchical fashion 
-+ BV: A table object is returned in a format that is ready to be cosmetically prepared
-+ BW: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-+ BX: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
++ L: Total row sort value can be specified by the user
++ M: Missing n count handling can be specified including presentation and denominator handling
++ N: Missing row sort value can be specified by the user
++ O: Dummy values can be specified for categories that need to be presented but may not exist within the data
++ P: Counts can be produced as n (%)
++ Q: When producing n (%), the denominator can be specified using the analysis data
++ R: When producing n (%), the denominator can be specified using a particular manually specified subset
++ S: When producing n (%), the denominator can be specified using the population data
++ T: When producing n (%), the denominator can be specified using grouping of variables
++ U: Risk difference including confidence interval can be produced based on specified treatment groupings
++ V: Risk difference arguments can be passed forward into prop.test using args parameter
++ W: Risk difference can be calculated over user specified cols arguments
++ X: Risk difference can be calculated over nested count layers and by variables
++ Y: The descriptive statistic of n can be produced based on an input variable
++ Z: The descriptive statistic of mean can be produced based on an input variable
++ AA: The descriptive statistic of median can be produced based on an input variable
++ AB: The descriptive statistic of IQR/Q1/Q3 can be produced based on an input variable
++ AC: The descriptive statistic of standard deviation can be produced based on an input variable
++ AD: The descriptive statistic of variance can be produced based on an input variable
++ AE: The descriptive statistic of min can be produced based on an input variable
++ AF: The descriptive statistic of max can be produced based on an input variable
++ AG: The descriptive statistic of missing can be produced based on an input variable
++ AH: Custom descriptive statistics can be produced based on an input variable and a specified formula
++ AI: Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
++ AJ: Multiple statistics can be presented in one line (i.e. combining Q1, Q3 or Min, Max)
++ AK: Decimal precision can be specified by the user
++ AL: Integer length can be specified by the user
++ AM: Decimal precision can be dynamically created from analysis data
++ AN: Integer length can be dynamically created from analysis data
++ AO: Presentation format can be specified by the user including desired non-numeric text
++ AP: Strings are built to align per user specification within a display
++ AQ: Descriptive statistic missing values can be set to a user specified string
++ AR: Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced
++ AS: Shift n counts of values within a variable can be produced
++ AT: Shift n counts of values within a group of variables can be produced
++ AU: Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
++ AV: Shift counts can be produced as n (%)
++ AW: For shift counts when producing n (%), the denominator can be specified using the analysis data
++ AX: For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset
++ AY: For shift counts when producing n (%), the denominator can be specified using the population data
++ AZ: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
++ BA: Row labels can be manually specified by the user
++ BB: Row labels can be nested to put a subgroup within a parent group
++ BC: Summaries can be stacked on top of one another
++ BD: Summaries can be sorted based on manual sorting by presentation specified order
++ BE: Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
++ BF: Summaries can be sorted based on alphabetical sorting based on data values
++ BG: Summaries can be sorted based on a numeric version of the target variable if available
++ BH: Summary by variables will be sorted by a numeric variable if available and then by factor
++ BI: Nested layers can be sorted independently using different methods
++ BJ: Independent layers can be sorted using different methods and stacked using common sorting variables
++ BK: Count layer default formats can be set at the table level
++ BL: Descriptive statistics layer default formats can be set at the table level
++ BM: Shift layer default formats can be set at the table level
++ BN: Option for count layer default formats can be specified by the user
++ BO: Option for descriptive statistics layer default formats can be specified by the user
++ BP: Option for shift layer default formats can be specified by the user
++ BQ: Option for a cap on auto precision can be specified by the user
++ BR: Option for custom descriptive statistics can be specified by the user for use in the table
++ BS: Option for setting scipen internal option can be specified by the user
++ BT: Option for setting quantile algorithm choice can be specified by the user
++ BU: Column headers can be added to the output object
++ BV: Row breaks can be added between sections based on grouping variables
++ BW: Row labels can be masked in a hierarchical fashion
++ BX: A table object is returned in a format that is ready to be cosmetically prepared
++ BY: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
++ BZ: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing

@@ -363,11 +363,13 @@ test_that('T9',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(RACE) %>%
-        add_total_row() %>%
+        set_format_strings(f_str("xxx", n)) %>%
+        add_total_row(sort_value = -Inf) %>%
         set_total_row_label("TOTAL")
       )
-    build(t)
-    test_9 <- get_numeric_data(t)
+
+    test_9 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_9, file = "~/Tplyr/uat/output/test_9.RData")
@@ -384,12 +386,26 @@ test_that('T9',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(summarise(filter(adsl, TRT01P == 'Placebo'), n=n())[[1]],
-                         subset(test_9[[1]], TRT01P == 'Placebo' & summary_var == 'TOTAL')[['n']],
-                         label = "T9.1")
+  t9_tots <- group_by(adsl, TRT01P) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, fill = list(n = 0)) %>%
+    mutate(RACE = ' TOTAL')
+  t9_1 <- group_by(adsl, TRT01P, RACE) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE, fill = list(n = 0)) %>%
+    as_tibble() %>%
+    rbind(t9_tots) %>%
+    mutate(fmtd = sprintf("%3s", n)) %>%
+    pivot_wider(names_from = TRT01P, values_from = fmtd, id_cols = RACE) %>%
+    arrange(RACE)
+  testthat::expect_equal(t9_1$Placebo, test_9$var1_Placebo, label = "T9.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t9_tots)
+  rm(t9_1)
   rm(test_9)
 })
 
@@ -404,11 +420,12 @@ test_that('T10',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(DCSREAS) %>%
-          set_missing_count(f_str("xx", n), string = c(Missing = '')) %>%
-          set_denom_ignore('')
+          set_missing_count(fmt = f_str("xx", n), sort_value = Inf, Missing = "") %>%
+          set_denom_ignore("Missing")
       )
 
-    test_10 <- build(t)
+    test_10 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_10, file = "~/Tplyr/uat/output/test_10.RData")
@@ -433,11 +450,14 @@ test_that('T10',{
     left_join(t10_tots, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
     mutate(col = ifelse(DCSREAS == "", sprintf("%2s",n), paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),"%)"))) %>%
-    filter(TRT01P == "Placebo")
+    mutate(DCSREAS = ifelse(DCSREAS == "", 'ZZZ', DCSREAS)) %>%
+    filter(TRT01P == "Placebo") %>%
+    arrange(DCSREAS)
   testthat::expect_equal(t10_1$col,test_10$var1_Placebo,label = "T10.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t10_tots)
   rm(t10_1)
   rm(test_10)
 })
@@ -488,22 +508,25 @@ test_that('T12',{
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA, where=TRTA == 'Placebo') %>%
+      set_distinct_by(USUBJID) %>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_format_strings(f_str("xxx (xxx.x%)", n, pct))
+          set_format_strings(f_str("xxx (xxx.x%)", n, pct)) %>%
+        add_total_row(f_str("xxx", n), sort_value = -Inf)
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx (xxx.x%)", distinct, distinct_pct))
+          set_format_strings(f_str("xxx (xxx.x%)", distinct, distinct_pct)) %>%
+        add_total_row(f_str("xxx", distinct), sort_value = -Inf)
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct, distinct_pct))
+          set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct, distinct_pct)) %>%
+        add_total_row(f_str("xxx [xxx]", n, distinct), sort_value = -Inf)
       )
 
-    test_12 <- build(t)
+    test_12 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_12, file = "~/Tplyr/uat/output/test_12.RData")
@@ -529,24 +552,42 @@ test_that('T12',{
     group_by(TRTA) %>%
     summarize(distinct_total=n())
 
+  t12_total_row <- filter(adae, TRTA == 'Placebo') %>%
+    group_by(TRTA) %>%
+    summarize(cnt=n()) %>%
+    mutate(AEDECOD = ' TOTAL')
+
+  t12_total_row_distinct <- filter(adae, TRTA == 'Placebo') %>%
+    distinct(USUBJID, TRTA, AEDECOD) %>%
+    group_by(TRTA) %>%
+    summarize(cnt=n()) %>%
+    mutate(AEDECOD = ' TOTAL')
+
   t12_1 <- filter(adae, TRTA == 'Placebo') %>%
     group_by(AEDECOD, TRTA) %>%
     summarize(cnt=n()) %>%
+    as_tibble() %>%
+    rbind(t12_total_row) %>%
     left_join(t12_totals,by="TRTA") %>%
     mutate(pct = sprintf("%5.1f", round(cnt/total*100,digits = 1))) %>%
-    mutate(col = paste0(as.character(cnt),' (',pct,'%)'))
+    mutate(col = ifelse(AEDECOD == ' TOTAL', sprintf("%3s", cnt),paste0(as.character(cnt),' (',pct,'%)'))) %>%
+    arrange(AEDECOD)
 
   t12_2 <- filter(adae, TRTA == 'Placebo') %>%
     distinct(USUBJID, TRTA, AEDECOD) %>%
     group_by(AEDECOD, TRTA) %>%
     summarize(cnt=n()) %>%
+    as_tibble() %>%
+    rbind(t12_total_row_distinct) %>%
     left_join(t12_totals_distinct,by="TRTA") %>%
     mutate(pct = sprintf("%5.1f", round(cnt/distinct_total*100,digits = 1))) %>%
-    mutate(distinct_col = paste0(as.character(cnt),' (',pct,'%)'))
+    mutate(distinct_col = ifelse(AEDECOD == ' TOTAL', sprintf("%3s", cnt),paste0(as.character(cnt),' (',pct,'%)'))) %>%
+    arrange(AEDECOD)
 
   t12_3 <- select(t12_1,c("TRTA","AEDECOD","col")) %>%
     left_join(t12_2, by=c("TRTA","AEDECOD")) %>%
-    mutate(col_combo = paste0(col, " [",sprintf("%12s",distinct_col),"]"))
+    mutate(col_combo = ifelse(AEDECOD == ' TOTAL', paste0(col, " [",distinct_col,"]"),paste0(col, " [",sprintf("%12s",distinct_col),"]"))) %>%
+    arrange(AEDECOD)
 
 
   testthat::expect_equal(t12_1$col,
@@ -563,6 +604,8 @@ test_that('T12',{
   #clean up working directory
   rm(t12_totals)
   rm(t12_totals_distinct)
+  rm(t12_total_row)
+  rm(t12_total_row_distinct)
   rm(t12_1)
   rm(t12_2)
   rm(t12_3)
@@ -1674,8 +1717,9 @@ test_that('T31',{
       add_layer(
         group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
       )
-    build(t)
-    test_31 <- get_numeric_data(t)[[1]]
+
+    test_31 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_31, file = "~/Tplyr/uat/output/test_31.RData")
@@ -1696,8 +1740,10 @@ test_that('T31',{
     group_by(TRTA, ANRIND_FACTOR, BNRIND_FACTOR) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0))
-  testthat::expect_equal(t31_1$n,test_31$n,label = "T31.1")
+    complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0)) %>%
+    mutate(fmtd = sprintf('%2s', n)) %>%
+    pivot_wider(names_from = c(TRTA, BNRIND_FACTOR), values_from = fmtd, id_cols = ANRIND_FACTOR)
+  testthat::expect_equal(t31_1$Placebo_N,test_31$var1_Placebo_N,label = "T31.1")
   #manual check(s)
 
   #clean up working directory
