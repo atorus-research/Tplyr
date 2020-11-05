@@ -403,6 +403,14 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
         add_total_row()
     ) %>%
     build()
+  mtcars3 <- mtcars2
+  mtcars3$cyl <- factor(mtcars3$cyl, c(2,3,4,6,8))
+  t9 <- tplyr_table(mtcars3, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xxxx", n), Missing_ = NA)
+    ) %>%
+    build()
 
 
   expect_output_file(print(t1), "count_t1")
@@ -413,4 +421,5 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
   expect_output_file(print(t6), "count_t6")
   expect_output_file(print(t7), "count_t7")
   expect_output_file(print(t8), "count_t8")
+  expect_output_file(print(t9), "count_t9")
 })
