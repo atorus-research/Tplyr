@@ -145,6 +145,20 @@ add_order_columns <- function(x) {
 }
 
 add_order_columns.count_layer <- function(x) {
+  # Counting has the most complex sorting methods. Here is an attempt and
+  # showing the flow.
+    # 1) A few defaults are set if they are not set yet. result_order_var,
+    # ordering_cols, order_count_method
+    # 2) If the count layer is nested:
+      # a. The by labels are added the same way they are for all layers.
+      # b. The grouping and grouped variables are pulled out and passed to the
+      #    add_data_order_nested function, which is very large.
+      # c. The row_labels are collapsed if the flag is set for that.
+    # 3) If the count layer isn't nested:
+      # a. The by variables are calculated.
+      # b. The final ordering column is passed to get_data_order where it is
+      #    dispatched based on the counting flag.
+
   evalq({
 
     # Set all defaults for ordering
@@ -223,7 +237,29 @@ add_order_columns.count_layer <- function(x) {
         else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
       })
 
+      #This is used to permute any missing ordering values for total rows
+      if(include_total_row) {
+        ord_cols <- vars_select(names(formatted_data), starts_with("ord"))
+        na_ordered_row <- unique(map_int(ord_cols, function(x) {
+          isna_ <- which(is.na(formatted_data[, x]) & formatted_data[, formatted_col_index] == total_row_label)
+          if(length(isna_) == 0) return(NA)
+          else return(isna_)
+        }))
+      }
+
+
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
+
+      # If there is a total row that is missing some ord values, they should fall
+      # back from the last one.
+      if(exists("na_ordered_row") && length(na_ordered_row) == 0) na_ordered_row <- NA
+      if(include_total_row && !is.na(na_ordered_row)) {
+        #This is the ord columns that are NA
+        na_ord_cols <- which(is.na(formatted_data[na_ordered_row, ord_cols]))
+        # Change those columns to the last value in the formatted table.
+        formatted_data[na_ordered_row, ord_cols[na_ord_cols]] <-
+          formatted_data[na_ordered_row, ncol(formatted_data)][[1]]
+      }
     }
 
     rm(formatted_col_index)
@@ -277,25 +313,34 @@ add_order_columns.shift_layer <- function(x) {
     target_data <- target[, as_name(target_var$row)]
 
     #Pull levels from target variable
-    target_levels <- levels(target_data)
+    target_fact <- levels(target_data[[1]])
 
     # If the levels are null, the target was not a factor. So turn it into a factor
-    if (is.null(target_levels)) {
+    if (is.null(target_fact)) {
 
       # Change target variable into a factor
       target_fact <- as.factor(unlist(target_data))
 
       # Create data.frame with levels and index
       fact_df <- tibble(
-        !!target_var$row := unique(sort(target_fact)),
-        factor_index := unclass(unique(sort(target_fact)))
+        !!target_var$row := unique(target_fact),
+        factor_index := unclass(unique(target_fact))
       )
+
+    } else {
+      # Create data.frame with levels and index
+      fact_df <- tibble(
+        !!target_var$row := target_fact,
+        factor_index := seq_along(target_fact)
+      )
+
+    }
+
 
       # The logic is the same now for a byvarn so reuse that function
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row), formatted_col_index)
-
-    }
+        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
+                              formatted_col_index, total_row_sort_value = total_row_sort_value)
 
     rm(formatted_col_index)
 
@@ -323,21 +368,21 @@ get_by_order <- function(formatted_data, target, i, var) {
 
     varn_df <- get_varn_values(target, as_name(var))
 
-    get_data_order_byvarn(formatted_data, varn_df, as_name(var), i)
+    as.numeric(get_data_order_byvarn(formatted_data, varn_df, as_name(var), i))
 
   # If the variable isn't a factor, default to alphabetical
   } else if (is.null(levels_i)) {
 
     # Unlist to get out of tibble, turn into factor which will order it alphabeticlly
     # unclass it to get it as a number
-    unclass(as.factor(unlist(formatted_data[, i])))
+    as.numeric(unclass(as.factor(unlist(formatted_data[, i]))))
 
     # If it is a factor, just use levels to sort
   } else {
 
     # Unlist to pull it out of the tibble, order it based on the orders in the target
     # data.frame, unclass it to pull out the index
-    unclass(ordered(unlist(formatted_data[, i]), levels_i))
+    as.numeric(unclass(ordered(unlist(formatted_data[, i]), levels_i)))
   }
 }
 
@@ -361,9 +406,19 @@ get_data_order <- function(x, formatted_col_index) {
     # Switch for the sorting method
     if (order_count_method == "bycount") {
 
+      # Get the index of the row with the missing and total names
+      label_row_ind <- which(names(formatted_data) %in%
+                               tail(vars_select(names(formatted_data),
+                                                starts_with("row_label")), 1))
+
+      if(!is.null(missing_string)) missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
+      if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
+
       # No processing is needed here just pass in the needed info
       get_data_order_bycount(numeric_data, ordering_cols,
-                             treat_var, by, cols, result_order_var, target_var)
+                             treat_var, by, cols, result_order_var, target_var,
+                             missing_index, missing_sort_value,
+                             total_index, total_row_sort_value)
 
     } else if (order_count_method == "byvarn") {
 
@@ -371,8 +426,29 @@ get_data_order <- function(x, formatted_col_index) {
 
       varn_df <- get_varn_values(target, as_name(target_var[[1]]))
 
+      if(!is.null(missing_count_list)) {
+        if(is.null(missing_sort_value)) {
+          varN_name <- names(varn_df)[2]
+          varn_df[,1] <- as.character(varn_df[,1])
+          varn_df <- varn_df %>%
+            bind_rows(tibble(
+              !!target_var[[1]] := names(missing_count_list),
+              !!varN_name := seq_along(missing_count_list) + max(varn_df[,2])
+            ))
+        } else {
+          varN_name <- names(varn_df)[2]
+          varn_df[,1] <- as.character(varn_df[,1])
+          varn_df <- varn_df %>%
+            bind_rows(tibble(
+              !!target_var[[1]] := names(missing_count_list),
+              !!varN_name := seq_along(missing_count_list) + missing_sort_value - 1
+            ))
+        }
+
+      }
+
       get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                            formatted_col_index)
+                            formatted_col_index, total_row_sort_value = total_row_sort_value)
 
 
       # Here it is 'byfactor'
@@ -384,7 +460,7 @@ get_data_order <- function(x, formatted_col_index) {
       target_data <- target[, as_name(target_var[[1]])]
 
       #Pull levels from target variable
-      target_levels <- levels(target_data)
+      target_levels <- levels(target_data[[1]])
 
       # If the levels are null, the target was not a factor. So turn it into a factor
       if (is.null(target_levels)) {
@@ -398,19 +474,34 @@ get_data_order <- function(x, formatted_col_index) {
           factor_index := unclass(unique(sort(target_fact)))
         )
 
-        # The logic is the same now for a byvarn so reuse that function
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
-
       } else {
 
         fact_df <- tibble(
-          !!target_var[[1]] := unique(sort(target_data)),
-          factor_index := unclass(unique(sort(target_data)))
+          !!target_var[[1]] := target_levels,
+          factor_index := seq_along(target_levels)
         )
 
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]), formatted_col_index)
-
       }
+
+      if(!is.null(missing_count_list)) {
+        if(is.null(missing_sort_value)) {
+          fact_df <- fact_df %>%
+            bind_rows(tibble(
+              !!target_var[[1]] := names(missing_count_list),
+              factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
+            ))
+        } else {
+          fact_df <- fact_df %>%
+            bind_rows(tibble(
+              !!target_var[[1]] := names(missing_count_list),
+              factor_index = seq_along(missing_count_list) + missing_sort_value
+            ))
+        }
+      }
+
+      # The logic is the same now for a byvarn so reuse that function
+      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
+                            formatted_col_index, total_row_sort_value = total_row_sort_value)
     }
   }, envir = x)
 }
@@ -418,7 +509,9 @@ get_data_order <- function(x, formatted_col_index) {
 #' Helper method for get_data_order
 #' @noRd
 get_data_order_bycount <- function(numeric_data, ordering_cols,
-                       treat_var, by, cols, result_order_var, target_var) {
+                       treat_var, by, cols, result_order_var, target_var,
+                       missing_index = NULL, missing_sort_value = NULL,
+                       total_index = NULL, total_row_sort_value = NULL) {
 
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset
@@ -476,6 +569,14 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
     ungroup() %>%
     select(as.symbol(result_column))
 
+  if(!is.null(missing_index) && !is.null(missing_sort_value)) {
+    numeric_ordering_data[missing_index,] <- seq_along(missing_index) - 1 + missing_sort_value
+  }
+
+  if(!is.null(total_index) && !is.null(total_row_sort_value)) {
+    numeric_ordering_data[total_index,] <-  total_row_sort_value
+  }
+
   # This is the numeric index that the numeric data is in. radix was chosen because
   # its the only method that gives indicies as far as I can tell
   # x are the values
@@ -489,7 +590,7 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
-                                  indentation = "") {
+                                  indentation = "", total_row_sort_value = NULL) {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
@@ -502,9 +603,14 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
       # works just as well.
       filter(.data[[as_name(by_var)]] == a_by)
 
-    # If the row is length zero it is a total row. Just add one so it appears on the bottom
+    # If the row is length zero it is a total row. Just add one so it appears on the bottom or use the sort_value
     if (nrow(ind_row) == 0) {
-      max(by_varn_df[,2]) + 1
+      # Flag to determine where total row is positioned
+      if(!is.null(total_row_sort_value)) {
+        total_row_sort_value
+      } else {
+        max(by_varn_df[,2]) + 1
+      }
     } else {
       # Index is always in the second row
       as.double(unlist(ind_row[, 2]))
@@ -551,7 +657,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     varn_df <- get_varn_values(target, as_name(by[[1]]))
 
     all_outer$..index <- group_data[1,] %>%
-      get_data_order_byvarn(varn_df, by[[1]], final_col)
+      get_data_order_byvarn(varn_df, by[[1]], final_col, total_row_sort_value = total_row_sort_value)
 
     group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -604,7 +710,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                                  varn_df,
                                                                                  target_var[[1]],
                                                                                  length(by) + 1,
-                                                                                 indentation)
+                                                                                 indentation,
+                                                                                 total_row_sort_value = total_row_sort_value)
 
   } else {
 

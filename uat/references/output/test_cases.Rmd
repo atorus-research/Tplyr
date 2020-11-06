@@ -1,7 +1,8 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 10/26/2020
+#' 11/05/2020
+NA
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -31,18 +32,17 @@ This section contains details of each test executed. Checks verifying each test 
   + T8: n counts of values within a group of variables can be produced
     + T8.1: Complete data value n counts can be produced within a group of variables
     + T8.2: Distinct data value n counts can be produced within a group of variables
-  + T9: Total n counts can be added
-    + T9.1: Total n count can be added within a layer
-  + T10: Missing n count handling can be specified including presentation and denominator handling
-    + T10.1: Missing n count rows can be added within a layer
+  + T9: Total n counts can be added and a sort value can be sepecified by the user
+    + T9.1: Total n count can be added within a layer and sorted using a specified value
+  + T10: Missing n count handling can be specified including presentation and denominator handling 
+    + T10.1: Missing n count rows can be added within a layer and sorted using a specified value
     + T10.2: Missing values can be excluded from the layer denominator
   + T11: Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string
-    + T11.1: Values specified by user are presented in the output table
-    + T11.2: Missing values can be set to a user specified string
+    + T11.1: Values specified by user are presented in the output table and total or missing rows can be added
   + T12: Counts can be produced as n (%)
-    + T12.1: When specified, both n and % can be displayed in a n (%) fashion
-    + T12.2: Distinct n and % can be displayed in a n (%) fashion
-    + T12.3: Distinct and non-distinct n and % can be presented together
+    + T12.1: When specified
+    + T12.2: Distinct n and % can be displayed in a n (%) fashion and total counts can be added
+    + T12.3: Distinct and non-distinct n and % can be presented together and total counts can be added
   + T13: When producing n (%), the denominator can be specified using the analysis data
     + T13.1: Check denominators created match counts from analysis data
     + T13.2: Check % produced use denominators matching counts from analysis data 
@@ -99,6 +99,7 @@ This section contains details of each test executed. Checks verifying each test 
     + T30.1: n counts can be created in a shift manner using a from and to variable and multiple by variables
   + T31: Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
     + T31.1: Values specified by user for the shift variables are presented in the output table
+    + T31.2: Values are sorted using the order in the provided factor
   + T32: Shift counts can be produced as n (%)
     + T32.1: When specified, both n and % can be displayed in a n (%) fashion for shift layer
   + T33: For shift counts when producing n (%), the denominator can be specified using the analysis data

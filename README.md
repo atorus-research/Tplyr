@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Tplyr Version 0.1.4 <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# Tplyr <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -21,37 +21,6 @@ package. With this release comes a number of new enhancements, loads of
 new documentation, and our complete package qualification document. Take
 a look at the
 [cheatsheet\!](https://atorus-research.github.io/Tplyr_cheatsheet.pdf)
-
-If you’ve been keeping up, here are the things that we’ve added since
-the Beta release in July:
-
-  - Bug Fixes/Enhancements
-      - Count layers were re-factored to improve the execution
-        efficiency
-      - Auto-precision now works without a `by` variable
-      - Several new assertions have been added to give clearer error
-        messages
-      - Treatment groups within the population data will produce columns
-        in the resulting build, even if no records exist for that
-        treatment group in the target dataset
-      - Risk difference variable names will now populate properly when a
-        `cols` argument is used
-      - Data frame attributes are cleaned prior to processing to prevent
-        any merge/bind warnings during processing
-      - Total values within count layers are properly filled when the
-        resulting count is 0 (largely impacts risk-difference
-        calculations)
-  - Feature additions
-      - Shift layers are here\!
-      - Flexibility when filling missing values has been enhanced for
-        descriptive statistic layers
-      - Layers can now be named, and those names can be used in
-        `get_numeric_data` and the new function `get_statistics_data` to
-        get risk difference raw numbers. Data may also be filtered
-        directly from both functions.
-      - Default formats can now be set via options or at the table
-        level, which allows you to eliminate a great deal of redundant
-        code
 
 As always, we welcome your feedback. If you spot a bug, would like to
 see a new feature, or if any documentation is unclear - submit an issue

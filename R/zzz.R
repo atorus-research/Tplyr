@@ -17,7 +17,7 @@
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft
 #' @importFrom stats var
-#' @importFrom forcats fct_expand
+#' @importFrom forcats fct_expand fct_collapse fct_explicit_na
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -250,10 +250,22 @@ missing_count_string <- NULL
 missing_string <- NULL
 denom_ignore <- NULL
 denoms_distinct_df <- NULL
-missing_name <- NULL
 outer_inf <- NULL
 shift_layer_formats <- NULL
 .tmp_name <- NULL
 include_total_row <- NULL
 ord_layer_index <- NULL
 ord_break <- NULL
+missing_vars_ord <- NULL
+total_vars_ord <- NULL
+string_m <- NULL
+string_t <- NULL
+total_count_format <- NULL
+missing_count_list <- NULL
+total_denom_ignore <- NULL
+total_row_sort_value <- NULL
+missing_sort_value <- NULL
+missing_index <- NULL
+total_index <- NULL
+process_distinct_total <- FALSE
+total_stat_denom <- NULL

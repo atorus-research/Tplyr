@@ -9,7 +9,9 @@ set_denom_ignore(e, ...)
 \arguments{
 \item{e}{A count_layer object}
 
-\item{...}{Values to exclude from the percentage calculation.}
+\item{...}{Values to exclude from the percentage calculation. If you use
+`set_missing_counts()` this should be the name of the parameters instead of
+the values, see the example below.}
 }
 \value{
 The modified layer object
@@ -24,13 +26,13 @@ notes different values as "missing" and excludes them from the denominators.
 library(magrittr)
 mtcars2 <- mtcars
 mtcars2[mtcars$cyl == 6, "cyl"] <- NA
-mtcars2[mtcars$cyl == 8, "cyl"] <- NA
+mtcars2[mtcars$cyl == 8, "cyl"] <- "Not Found"
 
 tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_missing_count(f_str("xx ", n), string = c(Missing = "NA")) \%>\%
-      set_denom_ignore("Unknown", "NA")
+      set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found")) \%>\%
+      set_denom_ignore("Missing")
   ) \%>\%
   build()
 }
