@@ -111,7 +111,7 @@ We did one more other thing worth explaining in the example above - gave the mis
 
 ## Adding a 'Total' Row
 
-In addition to missing counts, some summaries require the addition of a 'Total' row as well. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. Like everything else that goes into 'Tplyr', this too has a significant bit of nuance to it. 
+In addition to missing counts, some summaries require the addition of a 'Total' row. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. Like everything else that goes into 'Tplyr', this too has a significant bit of nuance to it. 
 
 Much of this functionality is similar to `set_missing_count()`. You're able to specify a different format for the total, but if not specified, the associated count layer's format will be used. You're able to set your own sort value to specify where you want the total row to sit. 
 
