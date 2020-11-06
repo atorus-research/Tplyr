@@ -4,8 +4,8 @@
 * Latest Ubuntu CI with latest tidyverse
 
 ## Updates
-* Fixes bug with denominator calculation in count layer
-* Makes `add_total_row()` calculation more intuitive.
+* Updates for compatibility with dplyr and tibble
+* Interface updates
 
 
 ## R CMD CHECK Results

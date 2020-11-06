@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.1.5
+Version: 0.2.1
 Authors@R: 
     c(
     person(given = "Eli",
@@ -36,11 +36,11 @@ Imports:
     rlang (>= 0.4.6),
     assertthat (>= 0.2.1),
     magrittr (>= 1.5),
-    dplyr (>= 0.8.4),
+    dplyr (>= 1.0.0),
     purrr (>= 0.3.3),
     stringr (>= 1.4.0),
     tidyr (>= 1.0.2),
-    tidyselect (>= 1.0.0),
+    tidyselect (>= 1.1.0),
     tibble (>= 3.0.1),
     lifecycle,
     forcats (>= 0.4.0)

@@ -47,6 +47,8 @@ reference:
 - title: Summary Functions
 - contents:
   - set_custom_summaries
+  - set_precision_by
+  - set_precision_on
 - title: Counting functions
 - contents:
   - set_denom_ignore
@@ -54,6 +56,7 @@ reference:
   - set_distinct_by
   - set_nest_count
   - set_outer_sort_position
+  - set_missing_count
 - title: Column Headers
 - contents:
   - add_column_headers
