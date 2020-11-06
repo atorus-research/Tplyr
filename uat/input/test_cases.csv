@@ -31,8 +31,8 @@ Check,,T9,1,Total n count can be added within a layer and sorted using a specifi
 TestCase,M:N,T10,,Missing n count handling can be specified including presentation and denominator handling ,,
 Check,,T10,1,Missing n count rows can be added within a layer and sorted using a specified value,programmatic,test_10.RData
 Check,,T10,2,Missing values can be excluded from the layer denominator,programmatic,test_10.RData
-TestCase,O,T11,,Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string,,
-Check,,T11,1,Values specified by user are presented in the output table,programmatic,test_11.RData
+TestCase,O:K,T11,,Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string,,
+Check,,T11,1,Values specified by user are presented in the output table and total or missing rows can be added,programmatic,test_11.RData
 TestCase,P:K,T12,,Counts can be produced as n (%),,
 Check,,T12,1,When specified, both n and % can be displayed in a n (%) fashion and total counts can be added,programmatic,test_12.RData
 Check,,T12,2,Distinct n and % can be displayed in a n (%) fashion and total counts can be added,test_12.RData

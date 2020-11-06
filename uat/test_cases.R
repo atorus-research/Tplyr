@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/05/2020
+#' 11/06/2020
 
 #setup ----
 #insert any necessary libraries
@@ -471,10 +471,14 @@ test_that('T11',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE_FACTOR)
+        group_count(RACE_FACTOR) %>%
+        set_format_strings(f_str('xxx',n)) %>%
+        add_total_row(f_str('xxx',n), sort_value = -Inf) %>%
+        set_missing_count(f_str('xxx',n), Missing = NA, sort_value = Inf)
       )
-    build(t)
-    test_11 <- get_numeric_data(t)
+
+    test_11 <- build(t) %>%
+      arrange(ord_layer_index, ord_layer_1)
 
     # output table to check attributes
     save(test_11, file = "~/Tplyr/uat/output/test_11.RData")
@@ -491,9 +495,40 @@ test_that('T11',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  testthat::expect_equal(c("WHITE", "BLACK OR AFRICAN AMERICAN", "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"),
-                         unique(test_11[[1]]$summary_var),
-                         label = "T11.1")
+  t11_totalrow <- group_by(adsl, TRT01P) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, fill = list(n=0)) %>%
+    mutate(RACE_FACTOR = 'TOTAL') %>%
+    as_tibble()
+
+  if (!length(filter(adsl,is.na(RACE_FACTOR)))) {
+    t11_missingrow <- group_by(adsl, TRT01P) %>%
+      filter(is.na(RACE_FACTOR)) %>%
+      summarise(n = n()) %>%
+      ungroup() %>%
+      complete(TRT01P, fill = list(n=0)) %>%
+      mutate(RACE_FACTOR = 'MISSING')
+  } else {
+    t11_missingrow <- unique(adsl$TRT01P) %>%
+      as_tibble() %>%
+      mutate(n = 0) %>%
+      mutate(RACE_FACTOR = 'MISSING') %>%
+      rename(TRT01P = value)
+  }
+
+  t11_categoryrows <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, RACE_FACTOR, fill = list(n=0)) %>%
+    arrange(RACE_FACTOR) %>%
+    as_tibble()
+
+  t11_1 <- rbind(t11_totalrow, t11_categoryrows, t11_missingrow) %>%
+    filter(TRT01P == 'Placebo') %>%
+    mutate(fmtd = sprintf("%3s", n))
+
+  testthat::expect_equal(t11_1$fmtd, test_11$var1_Placebo, label = "T11.1")
   #manual check(s)
 
   #clean up working directory
