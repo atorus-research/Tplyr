@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -185,8 +185,8 @@
 <a href="#default-layer-formats" class="anchor"></a>Default Layer Formats</h2>
 <p>Declaring string formats and summaries that need to be performed is one of the more verbose parts of ‘Tplyr’. Furthermore, this is something that will often be fairly consistent within a study, as you’ll likely want to look across a consistent set of descriptive statistics, or your count/shift tables will likely require the same sort of “n (%)” formatting.</p>
 <p>Using the format options is very similar to setting a string format. The only difference is that you need to enter the string formats as a named list instead of as separate parameters to a function call.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
     <span class="co"># Count layer defaults</span>
   tplyr.count_layer_default_formats <span class="op">=</span>
     <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>n_counts <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx (xx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span>,
@@ -203,10 +203,10 @@
   <span class="co"># Shift layer defaults</span>
   tplyr.shift_layer_default_formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx"</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
- </pre></div>
+ </code></pre></div>
 <p>Here you can see that ‘Tplyr’ picks up these option changes. In the table below, we didn’t use <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> anywhere - instead we let ‘Tplyr’ pick up the default formats from the options.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -214,7 +214,7 @@
     <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Categorical Age Groups"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -336,8 +336,8 @@
 <li>Setting formats at the <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> level will always be prioritized over ‘Tplyr’ options and any <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> formats set. This has the narrowest scope and will always be used when specified.</li>
 </ul>
 <p>To demonstrate, consider the following. The ‘Tplyr’ options remain set from the block above.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/get_desc_layer_formats.html">set_count_layer_formats</a></span><span class="op">(</span>n_counts <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xxx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/get_desc_layer_formats.html">set_desc_layer_formats</a></span><span class="op">(</span><span class="st">"Mean (SD)"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"a.a+1 (a.a+2)"</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
@@ -351,7 +351,7 @@
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxxxx (xx.xxx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="15%">
@@ -451,11 +451,11 @@
 <h2 class="hasAnchor">
 <a href="#precision-cap" class="anchor"></a>Precision Cap</h2>
 <p>‘Tplyr’ defaults to avoiding capping precision. We do this because capping precision should be a conscious decision, where you as the user specifically set the limit of how many decimal places are relevant to a specific result. One way to cap precision is by using the <code>cap</code> parameter within <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. But perhaps you have a specific limit to what you’d like to see on any output. Here, we offer the <code>tplyr.precision_cap</code> option to set whatever cap you wish.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.precision_cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'int'</span><span class="op">=</span><span class="fl">2</span>, <span class="st">'dec'</span><span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.precision_cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'int'</span><span class="op">=</span><span class="fl">2</span>, <span class="st">'dec'</span><span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Similar to the layer defaults, setting a precision cap at the layer level will override the <code>tplyr.precision_cap</code> option.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">HEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Height at Baseline"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
@@ -470,7 +470,7 @@
       <span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="20%">
@@ -526,20 +526,20 @@
 <h2 class="hasAnchor">
 <a href="#custom-summaries" class="anchor"></a>Custom Summaries</h2>
 <p>Custom summaries allow you to extend the capabilities of descriptive statistics layers in ‘Tplyr’. Maybe our defaults don’t work how you’d like them to, or maybe you have some custom functions within your organization that you commonly would like to use. Specifying the custom summaries you wish to use in every table would prove quite tedious - therefore, the <code>tplyr.custom_summaries</code> option is a better choice.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span><span class="op">(</span>
   geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span><span class="op">)</span></pre></div>
+<span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Note that the table code used to produce the output is the same. Now ‘Tplyr’ used the custom summary function for <code>geometric_mean</code> as specified in the <code>tplyr.custom_summaries</code> option. Also note the use of <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::quos()</a></code>. We’ve done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you’d like to learn more about non-standard evaluation and quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html">Section IV</a> in Advanced R.</p>
 <p>Now that geometric mean is set within the ‘Tplyr’ options, you can use it within your descriptive statistics layers, just like it was one of the built-in summaries.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Geometric Mean'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx'</span>, <span class="va">geometric_mean</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -572,8 +572,8 @@
 <a href="#scientific-notation" class="anchor"></a>Scientific Notation</h2>
 <p>By default, R will switch to scientific notation for a number less than .001. This is controlled by the <code>scipen</code> option. The default value of <code>scipen</code> is 0. If you’d like to increase the decimal places required for scientific notation to be triggered, increase the value of <code>scipen</code>. The value of <code>scipen</code> is the number of orders of ten smaller (i.e. decimal places preceded by 0’s) required to switch to scientific notation. Decreasing the value of <code>scipen</code> will cause R to switch to scientific location for larger numbers.</p>
 <p>This is easier to understand with an example.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># This is the default</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># This is the default</span>
 <span class="fl">.0001</span>
 <span class="co">#&gt; [1] 1e-04</span>
 
@@ -586,10 +586,10 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="co"># Only require 3 decimal places</span>
 <span class="fl">.001</span>
-<span class="co">#&gt; [1] 1e-03</span></pre></div>
+<span class="co">#&gt; [1] 1e-03</span></code></pre></div>
 <p>In ‘Tplyr’, we have the option <code>tplyr.scipen</code>. This is the <code>scipen</code> setting that will be used <em>only</em> while the ‘Tplyr’ table is being built. This allows you to use a different <code>scipen</code> setting within ‘Tplyr’ than your R session. The default value we use in ‘Tplyr’ is 9999, which is intended to totally prevent numbers from switching to scientific notation. We want this to be a conscious decision that you make in order to prevent any unexpected outputs.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.scipen <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.scipen <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -598,7 +598,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Chi-squared warnings occur with small samples</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="13%">
@@ -685,14 +685,14 @@
 <p><span class="math display">\[
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
 \]</span> The example below demonstrates using the default quantile algorithm in R</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Q1, Q3"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxxxx, xxxxx'</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
@@ -723,8 +723,8 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p><span class="math display">\[
 \textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
 \]</span></p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.quantile_type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.quantile_type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
@@ -733,7 +733,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>

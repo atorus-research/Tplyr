@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -126,47 +126,25 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="tplyr-version-014-" class="section level1">
+<div id="tplyr-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-version-014-" class="anchor"></a>Tplyr Version 0.1.4 <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<a href="#tplyr-" class="anchor"></a>Tplyr <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
 <!-- badges: start -->
 
 <p>Welcome to Tplyr! This is the first full and stable release of our package. With this release comes a number of new enhancements, loads of new documentation, and our complete package qualification document. Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf">cheatsheet!</a></p>
-<p>If you’ve been keeping up, here are the things that we’ve added since the Beta release in July:</p>
-<ul>
-<li>Bug Fixes/Enhancements
-<ul>
-<li>Count layers were re-factored to improve the execution efficiency</li>
-<li>Auto-precision now works without a <code>by</code> variable</li>
-<li>Several new assertions have been added to give clearer error messages</li>
-<li>Treatment groups within the population data will produce columns in the resulting build, even if no records exist for that treatment group in the target dataset</li>
-<li>Risk difference variable names will now populate properly when a <code>cols</code> argument is used</li>
-<li>Data frame attributes are cleaned prior to processing to prevent any merge/bind warnings during processing</li>
-<li>Total values within count layers are properly filled when the resulting count is 0 (largely impacts risk-difference calculations)</li>
-</ul>
-</li>
-<li>Feature additions
-<ul>
-<li>Shift layers are here!</li>
-<li>Flexibility when filling missing values has been enhanced for descriptive statistic layers</li>
-<li>Layers can now be named, and those names can be used in <code>get_numeric_data</code> and the new function <code>get_statistics_data</code> to get risk difference raw numbers. Data may also be filtered directly from both functions.</li>
-<li>Default formats can now be set via options or at the table level, which allows you to eliminate a great deal of redundant code</li>
-</ul>
-</li>
-</ul>
 <p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues">here</a>.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can Tplyr install with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># Install from CRAN:</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Install from CRAN:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span>
 
 <span class="co"># Or install the development version:</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="what-is-tplyr" class="section level1">
 <h1 class="hasAnchor">
@@ -194,8 +172,8 @@
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
 <p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
@@ -204,7 +182,7 @@
     <span class="fu"><a href="reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></pre></div>
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="14%">
