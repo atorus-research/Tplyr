@@ -460,7 +460,7 @@ get_data_order <- function(x, formatted_col_index) {
       target_data <- target[, as_name(target_var[[1]])]
 
       #Pull levels from target variable
-      target_levels <- levels(target_data)
+      target_levels <- levels(target_data[[1]])
 
       # If the levels are null, the target was not a factor. So turn it into a factor
       if (is.null(target_levels)) {
@@ -477,8 +477,8 @@ get_data_order <- function(x, formatted_col_index) {
       } else {
 
         fact_df <- tibble(
-          !!target_var[[1]] := unique(sort(target_data)),
-          factor_index := unclass(unique(sort(target_data)))
+          !!target_var[[1]] := target_levels,
+          factor_index := seq_along(target_levels)
         )
 
       }
