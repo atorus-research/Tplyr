@@ -25,7 +25,7 @@ reference:
   - add_layers
   - starts_with("group")
 - title: Formatting
-  desc: Customizing the dispaly as a table
+  desc: Customizing the display as a table
 - contents:
   - f_str
   - ends_with("formats")
