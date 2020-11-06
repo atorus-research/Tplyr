@@ -54,27 +54,27 @@ t <- tplyr_table(adsl, TRT01P) %>%
   add_total_group() %>% 
   add_layer(name = 'Sex', 
     group_count(SEX, by = "Sex n (%)") %>% 
-      set_missing_count(f_str('xx', n), NA) %>%
-      set_denom_ignore(NA)
+      set_missing_count(f_str('xx', n), Missing=NA) %>%
+      set_denom_ignore("Missing")
   ) %>% 
   add_layer(name = 'Age',
     group_desc(AGE, by = "Age (Years)")
   ) %>% 
   add_layer(name = 'Age group', 
     group_count(AGEGR1, by = "Age Categories n (%)") %>% 
-      set_missing_count(f_str('xx', n), NA) %>%
-      set_denom_ignore(NA)
+      set_missing_count(f_str('xx', n), Missing=NA) %>%
+      set_denom_ignore("Missing")
   ) %>% 
   add_layer(name = 'Race', 
     group_count(RACE, by = "Race n (%)") %>% 
-      set_missing_count(f_str('xx', n), NA) %>%
-      set_denom_ignore(NA) %>% 
+      set_missing_count(f_str('xx', n), Missing=NA) %>%
+      set_denom_ignore("Missing") %>% 
       set_order_count_method("byfactor")
   ) %>% 
   add_layer(name = 'Ethnic', 
     group_count(ETHNIC, by = "Ethnicity n (%)") %>% 
-      set_missing_count(f_str('xx', n), NA) %>%
-      set_denom_ignore(NA)
+      set_missing_count(f_str('xx', n), Missing=NA) %>%
+      set_denom_ignore("Missing")
   )
 
 dat <- build(t)
