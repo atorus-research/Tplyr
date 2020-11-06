@@ -38,7 +38,7 @@ This section contains details of each test executed. Checks verifying each test 
     + T10.1: Missing n count rows can be added within a layer and sorted using a specified value
     + T10.2: Missing values can be excluded from the layer denominator
   + T11: Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string
-    + T11.1: Values specified by user are presented in the output table
+    + T11.1: Values specified by user are presented in the output table and total or missing rows can be added
   + T12: Counts can be produced as n (%)
     + T12.1: When specified
     + T12.2: Distinct n and % can be displayed in a n (%) fashion and total counts can be added
