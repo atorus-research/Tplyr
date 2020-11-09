@@ -194,7 +194,7 @@ process_count_n <- function(x) {
     # If there is a missing_count_string, but its not in the dataset
     if(!is.null(missing_count_string) &&
 
-       !((unname(unlist(missing_count_list)) %in% unique(built_target[, as_name(target_var[[1]])])) ||
+       !((any(unname(unlist(missing_count_list)) %in% unique(built_target[, as_name(target_var[[1]])]))) ||
         any(is.na(built_target[, as_name(target_var[[1]])])))) {
       # This adds the missing string as a factor to the tallies. This is needed
       # to make sure the missing row is added even if there are no missing values.
