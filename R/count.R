@@ -11,6 +11,8 @@ process_summaries.count_layer <- function(x, ...) {
   # Catch errors
   evalq({
     tryCatch({
+      # Save this for the denominator where
+      built_target_pre_where <- built_target
       built_target <- built_target %>%
         filter(!!where)
     }, error = function(e) {
@@ -81,7 +83,7 @@ process_single_count_target <- function(x) {
         process_count_distinct_total_row(current_env())
       }
 
-      if(!total_denom_ignore && !is.null(total_count_format) && !is.null(denom_ignore) &&
+      if(!total_denom_ignore && !is.null(total_count_format) && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
          ("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars)) {
            warning("Your total row is ignoring certain values. The 'pct' in this row may not be 100%",
                    immediate. = TRUE)
@@ -682,14 +684,28 @@ process_count_denoms <- function(x) {
       abort("A value(s) were set with 'denom_ignore' but no missing count was set. Your percentages/totals may not have meaning.")
     }
 
+    # Logic to determine how to subset target for denominators
+    if(is.null(denom_where)) {
+      denom_where <- where
+    }
+
+    # Because the missing strings haven't replaced the missing strings, it has to happen here.
+    # Expand denoms contains the
+    if(!is.null(missing_count_list)) {
+      expand_denoms <- names(missing_count_list) %in% unlist(denom_ignore)
+      denom_ignore <- c(denom_ignore, unname(missing_count_list[expand_denoms]))
+    }
+
+
     # Subset the local built_target based on where
     # Catch errors
     tryCatch({
-      denom_target <- built_target %>%
+      denom_target <- built_target_pre_where %>%
+        filter(!!denom_where) %>%
         filter(!(!!target_var[[1]] %in% unlist(denom_ignore)))
     }, error = function(e) {
       abort(paste0("group_count `where` condition `",
-                   as_label(where),
+                   as_label(denom_where),
                    "` is invalid. Filter error:\n", e))
     })
 
@@ -699,6 +715,11 @@ process_count_denoms <- function(x) {
       # population dataset. Trigger this by identifying that
       # the population dataset was overridden
       if (!isTRUE(all.equal(pop_data, target))) {
+        if(!is.null(denom_where)){
+          warning(paste0("A `denom_where` has been set with a pop_data. The `denom_where` has been ignored.",
+          "You should use `set_pop_where` instead of `set_denom_where`.", sep = "\n"),
+          immediate. = TRUE)
+        }
         denoms_distinct_df <- built_pop_data %>%
           rename(!!treat_var := !!pop_treat_var)
       } else {
@@ -733,6 +754,7 @@ rename_missing_values <- function(x) {
   evalq({
     # Rename missing values
     if(!is.null(missing_count_list)){
+      missing_count_list_ <- missing_count_list
       # If the target variable isn't a character or a factor. Coerse it as a
       # character. This can happen if the target var is numeric
       if(!(class(built_target[, as_name(target_var[[1]])][[1]]) %in% c("factor", "character"))) {
@@ -745,7 +767,7 @@ rename_missing_values <- function(x) {
         # Logic if the missing_count_list contains an implicit NA
         if(any(is.nan(missing_count_list[[i]]))){
           ## Repalce the NA in the missing_count list with an explicit value
-          missing_count_list[[i]] <- ifelse(missing_count_list[[i]] == "NaN", "(Missing_NAN)", as.character(missing_count_list[[i]]))
+          missing_count_list_[[i]] <- ifelse(missing_count_list[[i]] == "NaN", "(Missing_NAN)", as.character(missing_count_list[[i]]))
           # Replace the implicit values in built_target
           built_target <- built_target %>%
             mutate(!!target_var[[1]] := fct_expand(!!target_var[[1]], "(Missing_NAN)")) %>%
@@ -753,7 +775,7 @@ rename_missing_values <- function(x) {
 
         } else if(any(is.na(missing_count_list[[i]]))){
           ## Repalce the NA in the missing_count list with an explicit value
-          missing_count_list[[i]] <- ifelse(is.na(as.character(missing_count_list[[i]])) , "(Missing)", as.character(missing_count_list[[i]]))
+          missing_count_list_[[i]] <- ifelse(is.na(as.character(missing_count_list[[i]])) , "(Missing)", as.character(missing_count_list[[i]]))
           # Replace the implicit values in built_target
           built_target <- built_target %>%
             mutate(!!target_var[[1]] := fct_expand(!!target_var[[1]], "(Missing)")) %>%
@@ -764,7 +786,7 @@ rename_missing_values <- function(x) {
           mutate(
             # Warnings suppressed here. They can happen if something is called missing
             # That isn't in the data, that isn't something to warn about in this context
-            !!target_var[[1]] := suppressWarnings(fct_collapse(!!target_var[[1]], !!names(missing_count_list)[i] := missing_count_list[[i]]))
+            !!target_var[[1]] := suppressWarnings(fct_collapse(!!target_var[[1]], !!names(missing_count_list)[i] := missing_count_list_[[i]]))
           )
       }
     }

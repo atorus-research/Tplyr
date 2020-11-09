@@ -501,3 +501,63 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 
   e
 }
+
+#' Set Logic for denominator subsetting
+#'
+#' By default, denominators in count layers are subset based on the layer level
+#' where logic. In some cases this might not be correct. This functions allows
+#' the user to override this behavior and pass custom logic that will be used to
+#' subset the target(pop_data)
+#'
+#' @param e A Tplyr layer
+#' @param denom_where Logic for not subsetting the target for percentage
+#'   denominator. If you don't want any subsetting, pass `TRUE` to this function.
+#'
+#' @return The modified Tplyr layer object
+#' @export
+#'
+#' @examples
+#' library(magrittr)
+#' t10 <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl, where = cyl != 6) %>%
+#'     set_denom_where(TRUE)
+#'     # The denominators will be based on all of the values, including 6
+#'   ) %>%
+#'  build()
+#'
+set_denom_where <- function(e, denom_where) {
+  denom_where <- enquo(denom_where)
+
+  assert_that(is_logical_or_call(denom_where),
+              msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
+
+  env_bind(e, denom_where = denom_where)
+
+  e
+}
+
+set_denoms_by.count_layer <- function(x, ...) {
+  dots <- vars(...)
+  dots_chr <- map_chr(dots, as_name)
+
+  # Pull these variables to make sure the denoms used make sense
+  by_ <- map_chr(env_get(x, "by"), as_name)
+  cols_ <- map_chr(env_get(x, "cols", inherit = TRUE), as_name)
+  treat_var_ <- as_name(env_get(x, "treat_var", inherit = TRUE))
+  target_var <- env_get(x, "target_var")
+  target_var_ <- map_chr(target_var, as_name)
+
+  assert_that(all(dots_chr %in% c(by_, cols_, treat_var_, target_var_)),
+              msg = "A denom_by wasn't found as a grouping variable in the layer/table.")
+
+  # If the row variable is here, rename it to summary_var
+  if(as_name(target_var[[1]]) %in% dots_chr) {
+    dots[[which(as_name(target_var[[1]]) %in% dots_chr)]] <- quo(summary_var)
+  }
+
+  env_bind(x, denoms_by = dots)
+
+  x
+}
+

@@ -269,3 +269,5 @@ missing_index <- NULL
 total_index <- NULL
 process_distinct_total <- FALSE
 total_stat_denom <- NULL
+denom_where <- NULL
+built_target_pre_where <- NULL
