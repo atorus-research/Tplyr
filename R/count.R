@@ -715,7 +715,7 @@ process_count_denoms <- function(x) {
       # population dataset. Trigger this by identifying that
       # the population dataset was overridden
       if (!isTRUE(all.equal(pop_data, target))) {
-        if(!is.null(denom_where)){
+        if(deparse(denom_where) != deparse(where)){
           warning(paste0("A `denom_where` has been set with a pop_data. The `denom_where` has been ignored.",
           "You should use `set_pop_where` instead of `set_denom_where`.", sep = "\n"),
           immediate. = TRUE)
