@@ -1,7 +1,7 @@
 # Tplyr 0.2.1
 
 - Bug Fixes
-  - Fixed a bug caused by an update to `tibble` 3.0.4 that caused factors to be displayed incorected in row labels and sorting columns to populate incorrectly.
+  - Fixed a bug caused by an update to `tibble` 3.0.4 that caused factors to be displayed incorrectly in row labels and sorting columns to populate incorrectly.
   - A bug where the factors used in the shift layers wouldn't be reflected in the ordering columns.
 
 - Enhansements
