@@ -422,15 +422,15 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     build()
 
 
-  expect_output_file(print(t1), "count_t1")
-  expect_output_file(print(t2), "count_t2")
-  expect_output_file(print(t3), "count_t3")
-  expect_output_file(print(t4), "count_t4")
-  expect_output_file(print(t5), "count_t5")
-  expect_output_file(print(t6), "count_t6")
-  expect_output_file(print(t7), "count_t7")
-  expect_output_file(print(t8), "count_t8")
-  expect_output_file(print(t9), "count_t9")
+  expect_output_file(dput(t1), "count_t1")
+  expect_output_file(dput(t2), "count_t2")
+  expect_output_file(dput(t3), "count_t3")
+  expect_output_file(dput(t4), "count_t4")
+  expect_output_file(dput(t5), "count_t5")
+  expect_output_file(dput(t6), "count_t6")
+  expect_output_file(dput(t7), "count_t7")
+  expect_output_file(dput(t8), "count_t8")
+  expect_output_file(dput(t9), "count_t9")
 })
 
 test_that("set_denom_where works as expected", {
@@ -440,17 +440,19 @@ test_that("set_denom_where works as expected", {
   t10 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
-        set_denom_where(TRUE)
+        set_denom_where(TRUE) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
-  expect_output_file(print(t10), "count_t10")
+  expect_output_file(dput(t10), "count_t10")
   t11 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
-        set_denom_where(cyl != 4)
+        set_denom_where(cyl != 4) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
-  expect_output_file(print(t11), "count_t11")
+  expect_output_file(dput(t11), "count_t11")
 
   t12 <- tplyr_table(mtcars, gear) %>%
     set_pop_data(pop_mtcars) %>%
@@ -465,9 +467,10 @@ test_that("set_denom_where works as expected", {
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
         set_distinct_by(am) %>%
-        set_format_strings(f_str("xx (xx.x)", distinct, distinct_pct))
+        set_format_strings(f_str("xx (xx.x)", distinct, distinct_pct)) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
 
-  expect_output_file(print(t13), "count_t13")
+  expect_output_file(dput(t13), "count_t13")
 })

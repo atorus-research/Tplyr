@@ -1,7 +1,6 @@
-# A tibble: 4 x 6
-  row_label1 var1_3        var1_4        var1_5      ord_layer_index ord_layer_1
-  <chr>      <chr>         <chr>         <chr>                 <int>       <dbl>
-1 0          "15 (100.0)"  " 4 (100.0)"  " 0 ( 0.0)"               1           1
-2 Missing    " 0"          " 8"          " 5"                      1        5689
-3 Not Found  " 0"          " 0"          " 0"                      1        5690
-4 Total      "   15 [100.… "    4 [100.… "    0 [ 0…               1        9999
+structure(list(row_label1 = c("0", "Missing", "Not Found", "Total"
+), var1_3 = c("15 (100.0)", " 0", " 0", "   15 [100.0]"), var1_4 = c(" 4 (100.0)", 
+" 8", " 0", "    4 [100.0]"), var1_5 = c(" 0 ( 0.0)", " 5", " 0", 
+"    0 [ 0.0]"), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
+5689, 5690, 9999)), row.names = c(NA, -4L), class = c("tbl_df", 
+"tbl", "data.frame"))
