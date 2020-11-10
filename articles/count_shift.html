@@ -591,13 +591,13 @@ ord_layer_1
 MILD
 </td>
 <td style="text-align:left;">
-23 (56.10%)
+22 (57.89%)
 </td>
 <td style="text-align:left;">
-67 (73.63%)
+67 (76.14%)
 </td>
 <td style="text-align:left;">
-41 (43.62%)
+49 (49.00%)
 </td>
 <td style="text-align:right;">
 1
@@ -611,13 +611,13 @@ MILD
 MODERATE
 </td>
 <td style="text-align:left;">
-18 (43.90%)
+16 (42.11%)
 </td>
 <td style="text-align:left;">
-23 (25.27%)
+21 (23.86%)
 </td>
 <td style="text-align:left;">
-49 (52.13%)
+46 (46.00%)
 </td>
 <td style="text-align:right;">
 1
@@ -634,10 +634,10 @@ SEVERE
 0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-1 ( 1.10%)
+0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-4 ( 4.26%)
+5 ( 5.00%)
 </td>
 <td style="text-align:right;">
 1
@@ -651,13 +651,13 @@ SEVERE
 Missing
 </td>
 <td style="text-align:left;">
-6
+9
 </td>
 <td style="text-align:left;">
-20
+23
 </td>
 <td style="text-align:left;">
-24
+18
 </td>
 <td style="text-align:right;">
 1
@@ -669,6 +669,457 @@ Inf
 </tbody>
 </table>
 <p>We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you’ll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.</p>
+</div>
+<div id="controlling-the-denominator-filter" class="section level2">
+<h2 class="hasAnchor">
+<a href="#controlling-the-denominator-filter" class="anchor"></a>Controlling the Denominator Filter</h2>
+<p>While <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> can be useful for ignoring certain values, ‘Tplyr’ also offers you the ability to specifically control the filter used within the denominator. This is provided through the function <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is the layer level <code>where</code> parameter, if one was supplied. <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> allows you to replace this layer level filter with a custom filter of your choosing. This is done on top of any filtering specified in the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> where parameter - which means that the <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> filter is applied <em>in addition to</em> any table level filtering.</p>
+<p>Take the example shown below. The first layer has no layer level filtering applied, so the table level <code>where</code> is the only filter applied. The second layer has a layer level filter applied, so the denominators will be based on that layer level filter. Notice how in this case, the percentages in the second layer add up to 100%. This is because the denominator only includes values used in that layer.</p>
+<p>The third layer has a layer level filter applied, but additionally uses <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> in this example is actually <em>removing</em> the layer level filter for the denominators. This is because in R, when you filter using <code>TRUE</code>, the filter returns all records. So by using <code>TRUE</code> in <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>, the layer level filter is removed. This causes the denominator to include all values and not just those selected for that layer - so for this layer, the percentages will <em>not</em> add up to 100%. In this example, this allows the percentages from Layer 3 to sum to the total percentage of “DISCONTINUED” from Layer 1.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">adsl2</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>DISCONTEXT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">DISCONFL</span> <span class="op">==</span> <span class="st">'Y'</span>, <span class="st">'DISCONTINUED'</span>, <span class="st">'COMPLETED'</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl2</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">'Y'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">DISCONTEXT</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">DCSREAS</span>, where <span class="op">=</span> <span class="va">DISCONFL</span> <span class="op">==</span> <span class="st">'Y'</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">DCSREAS</span>, where <span class="op">=</span> <span class="va">DISCONFL</span> <span class="op">==</span> <span class="st">'Y'</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="../reference/set_denom_where.html">set_denom_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">ord_layer_index</span>, <span class="va">ord_layer_1</span><span class="op">)</span> 
+
+<span class="va">t</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+row_label1
+</th>
+<th style="text-align:left;">
+var1_Placebo
+</th>
+<th style="text-align:left;">
+var1_Xanomeline High Dose
+</th>
+<th style="text-align:left;">
+var1_Xanomeline Low Dose
+</th>
+<th style="text-align:right;">
+ord_layer_index
+</th>
+<th style="text-align:right;">
+ord_layer_1
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+COMPLETED
+</td>
+<td style="text-align:left;">
+58 ( 67.4%)
+</td>
+<td style="text-align:left;">
+27 ( 32.1%)
+</td>
+<td style="text-align:left;">
+25 ( 29.8%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DISCONTINUED
+</td>
+<td style="text-align:left;">
+28 ( 32.6%)
+</td>
+<td style="text-align:left;">
+57 ( 67.9%)
+</td>
+<td style="text-align:left;">
+59 ( 70.2%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adverse Event
+</td>
+<td style="text-align:left;">
+8 ( 28.6%)
+</td>
+<td style="text-align:left;">
+40 ( 70.2%)
+</td>
+<td style="text-align:left;">
+44 ( 74.6%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Death
+</td>
+<td style="text-align:left;">
+2 ( 7.1%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+I/E Not Met
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 3.5%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Efficacy
+</td>
+<td style="text-align:left;">
+3 ( 10.7%)
+</td>
+<td style="text-align:left;">
+1 ( 1.8%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lost to Follow-up
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Physician Decision
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 3.5%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Protocol Violation
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+1 ( 1.8%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sponsor Decision
+</td>
+<td style="text-align:left;">
+2 ( 7.1%)
+</td>
+<td style="text-align:left;">
+3 ( 5.3%)
+</td>
+<td style="text-align:left;">
+2 ( 3.4%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Withdrew Consent
+</td>
+<td style="text-align:left;">
+9 ( 32.1%)
+</td>
+<td style="text-align:left;">
+8 ( 14.0%)
+</td>
+<td style="text-align:left;">
+10 ( 16.9%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adverse Event
+</td>
+<td style="text-align:left;">
+8 ( 9.3%)
+</td>
+<td style="text-align:left;">
+40 ( 47.6%)
+</td>
+<td style="text-align:left;">
+44 ( 52.4%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Death
+</td>
+<td style="text-align:left;">
+2 ( 2.3%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+I/E Not Met
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Efficacy
+</td>
+<td style="text-align:left;">
+3 ( 3.5%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lost to Follow-up
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Physician Decision
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Protocol Violation
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sponsor Decision
+</td>
+<td style="text-align:left;">
+2 ( 2.3%)
+</td>
+<td style="text-align:left;">
+3 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Withdrew Consent
+</td>
+<td style="text-align:left;">
+9 ( 10.5%)
+</td>
+<td style="text-align:left;">
+8 ( 9.5%)
+</td>
+<td style="text-align:left;">
+10 ( 11.9%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="adding-a-total-row" class="section level2">
 <h2 class="hasAnchor">
@@ -682,7 +1133,7 @@ Inf
 <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will throw a warning when a <code>by</code> variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>, which allows the user to control exactly how denominators are calculated. Typically in a count layer, the column variables (i.e. <code>treat_var</code> and any <code>cols</code>) are used, and this is the default. The totals presented by <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will always align with denominators specified in <code>set_denom_by()</code>.</li>
 </ul>
 <p>In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The ‘Missing’ row tells us the number of missing values, but because <code>count_missings</code> is set to <code>TRUE</code>, the missing counts are included in the denominator. This probably isn’t how you would choose to display things, but here we’re trying to show the flexibility built into ‘Tplyr’.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl2</span> <span class="op">&lt;-</span> <span class="va">adsl</span>
 <span class="va">adsl2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">adsl2</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"AGEGR1"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 
@@ -759,13 +1210,13 @@ F
 &lt;65
 </td>
 <td style="text-align:left;">
-8 ( 15.1%)
+7 ( 13.2%)
 </td>
 <td style="text-align:left;">
-4 ( 10.0%)
+5 ( 12.5%)
 </td>
 <td style="text-align:left;">
-5 ( 10.0%)
+4 ( 8.0%)
 </td>
 <td style="text-align:right;">
 1
@@ -785,13 +1236,13 @@ F
 &gt;80
 </td>
 <td style="text-align:left;">
-18 ( 34.0%)
+17 ( 32.1%)
 </td>
 <td style="text-align:left;">
-6 ( 15.0%)
+4 ( 10.0%)
 </td>
 <td style="text-align:left;">
-17 ( 34.0%)
+14 ( 28.0%)
 </td>
 <td style="text-align:right;">
 1
@@ -814,10 +1265,10 @@ F
 18 ( 34.0%)
 </td>
 <td style="text-align:left;">
-21 ( 52.5%)
+24 ( 60.0%)
 </td>
 <td style="text-align:left;">
-20 ( 40.0%)
+17 ( 34.0%)
 </td>
 <td style="text-align:right;">
 1
@@ -837,13 +1288,13 @@ F
 Missing
 </td>
 <td style="text-align:left;">
-9
+11
 </td>
 <td style="text-align:left;">
-9
+7
 </td>
 <td style="text-align:left;">
-8
+15
 </td>
 <td style="text-align:right;">
 1
@@ -889,13 +1340,13 @@ M
 &lt;65
 </td>
 <td style="text-align:left;">
-4 ( 12.1%)
+5 ( 15.2%)
 </td>
 <td style="text-align:left;">
-5 ( 11.4%)
+6 ( 13.6%)
 </td>
 <td style="text-align:left;">
-3 ( 8.8%)
+2 ( 5.9%)
 </td>
 <td style="text-align:right;">
 1
@@ -915,13 +1366,13 @@ M
 &gt;80
 </td>
 <td style="text-align:left;">
-7 ( 21.2%)
+6 ( 18.2%)
 </td>
 <td style="text-align:left;">
 9 ( 20.5%)
 </td>
 <td style="text-align:left;">
-9 ( 26.5%)
+11 ( 32.4%)
 </td>
 <td style="text-align:right;">
 1
@@ -941,13 +1392,13 @@ M
 65-80
 </td>
 <td style="text-align:left;">
-15 ( 45.5%)
+13 ( 39.4%)
 </td>
 <td style="text-align:left;">
-20 ( 45.5%)
+24 ( 54.5%)
 </td>
 <td style="text-align:left;">
-15 ( 44.1%)
+18 ( 52.9%)
 </td>
 <td style="text-align:right;">
 1
@@ -967,13 +1418,13 @@ M
 Missing
 </td>
 <td style="text-align:left;">
-7
+9
 </td>
 <td style="text-align:left;">
-10
+5
 </td>
 <td style="text-align:left;">
-7
+3
 </td>
 <td style="text-align:right;">
 1
@@ -995,7 +1446,7 @@ Inf
 <p>Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of “Other” summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.</p>
 <p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/group_count.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
 <p>The example below demonstrates how to do a nested summary. Look at the first row - here <code>row_label1</code> and <code>row_label2</code> are both “CARDIAC DISORDERS”. This line is the summary for <code>AEBODSYS.</code> In the rows below that, <code>row_label1</code> continues on with the value “CARDIAC DISORDERS”, but <code>row_label2</code> changes. These are the summaries for <code>AEDECOD</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span>
@@ -1190,7 +1641,7 @@ DERMATITIS ATOPIC
 </tbody>
 </table>
 <p>This accomplishes what we needed, but it’s not exactly the presentation you might hope for. We have a solution for this as well.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -1374,7 +1825,7 @@ Inf
 <p>While shift tables are very similar to a normal frequency table, there’s more nuance here, and thus we decided to create <code><a href="../reference/group_count.html">group_shift()</a></code>. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the <code><a href="../reference/group_count.html">group_count()</a></code> and <code><a href="../reference/group_count.html">group_desc()</a></code> APIs.</p>
 <p>One thing to note - the <code><a href="../reference/group_count.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/group_count.html">group_count()</a></code> will do just fine.</p>
 <p>Let’s look at an example.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">VISIT</span><span class="op">)</span><span class="op">)</span>
@@ -1674,7 +2125,7 @@ N
 </tbody>
 </table>
 <p>For the most part, this is getting us where we want to go - but there’s still some that’s left to be desired. It doesn’t look like there are any ‘L’ values for BNRIND in the dataset so we are not getting and rows containing ‘L’. Let’s see if we can fix that by dummying in the possible values.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">ANRIND</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">BNRIND</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -2191,7 +2642,7 @@ H
 <p>There we go. This is another situation where using factors in R let’s us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. Check out the <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("sort")</a></code> for more information on sorting.</p>
 <p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the “box” that is formed from the “from” and “to” groups of the shift for each treatment group. To support this, ‘Tplyr’ let’s you specify the grouping used to calculate the denominators.</p>
 <p>Just like the count layers, the <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the treatment variable, <code>cols</code> argument, <code>by</code> variables, and the target variables.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -2707,7 +3158,7 @@ H
 </table>
 <p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is the total of all record within the <strong>FROM</strong> and <strong>TO</strong> shift variables, within each parameter, visit, and treatment. This is the default, and this is how ‘Tplyr’ will create the denominators if <code>set_denom_by()</code> isn’t specified.</p>
 <p>In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -3073,7 +3524,7 @@ H
 </tbody>
 </table>
 <p>While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>ANRIND</code> the layer will use those denominators when determining the percentages.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">BNRIND</span>, column <span class="op">=</span> <span class="va">ANRIND</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
