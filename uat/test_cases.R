@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/06/2020
+#' 11/10/2020
 
 #setup ----
 #insert any necessary libraries
@@ -104,7 +104,9 @@ test_that('T3',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_total_group() %>%
       add_treat_grps('Total Xanomeline' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
-      add_layer(group_count(AGEGR1))
+      add_layer(
+        group_count(AGEGR1)
+      )
     build(t)
     test_3 <- header_n(t)
 
@@ -419,9 +421,10 @@ test_that('T10',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(DCSREAS) %>%
+        group_count(DCSREAS, where = EFFFL == 'Y') %>%
           set_missing_count(fmt = f_str("xx", n), sort_value = Inf, Missing = "") %>%
-          set_denom_ignore("Missing")
+          set_denom_ignore("Missing") %>%
+          set_denom_where(TRUE)
       )
 
     test_10 <- build(t) %>%
@@ -445,8 +448,11 @@ test_that('T10',{
   t10_tots <- filter(adsl, DCSREAS != "") %>%
     group_by(TRT01P) %>%
     summarise(total = n())
-  t10_1 <- group_by(adsl, TRT01P, DCSREAS) %>%
+  t10_1 <- filter(adsl, EFFFL == 'Y') %>%
+    group_by(TRT01P, DCSREAS) %>%
     summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, DCSREAS, fill = list(n = 0)) %>%
     left_join(t10_tots, by="TRT01P") %>%
     mutate(pct = n / total *100) %>%
     mutate(col = ifelse(DCSREAS == "", sprintf("%2s",n), paste0(sprintf("%2s",n),' (',sprintf("%5.1f",pct),"%)"))) %>%
@@ -471,7 +477,7 @@ test_that('T11',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE_FACTOR) %>%
+        group_count(RACE_FACTOR, where = EFFFL == 'Y') %>%
         set_format_strings(f_str('xxx',n)) %>%
         add_total_row(f_str('xxx',n), sort_value = -Inf) %>%
         set_missing_count(f_str('xxx',n), Missing = NA, sort_value = Inf)
@@ -495,15 +501,16 @@ test_that('T11',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t11_totalrow <- group_by(adsl, TRT01P) %>%
+  t11_totalrow <- filter(adsl, EFFFL == 'Y') %>%
+    group_by(TRT01P) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, fill = list(n=0)) %>%
     mutate(RACE_FACTOR = 'TOTAL') %>%
     as_tibble()
 
-  if (!length(filter(adsl,is.na(RACE_FACTOR)))) {
-    t11_missingrow <- group_by(adsl, TRT01P) %>%
+  if (!length(filter(adsl,is.na(RACE_FACTOR) & EFFFL == 'Y'))) {
+    t11_missingrow <- group_by(TRT01P) %>%
       filter(is.na(RACE_FACTOR)) %>%
       summarise(n = n()) %>%
       ungroup() %>%
@@ -517,7 +524,8 @@ test_that('T11',{
       rename(TRT01P = value)
   }
 
-  t11_categoryrows <- group_by(adsl, TRT01P, RACE_FACTOR) %>%
+  t11_categoryrows <- filter(adsl, EFFFL == 'Y') %>%
+    group_by(TRT01P, RACE_FACTOR) %>%
     summarise(n = n()) %>%
     ungroup() %>%
     complete(TRT01P, RACE_FACTOR, fill = list(n=0)) %>%
@@ -532,6 +540,10 @@ test_that('T11',{
   #manual check(s)
 
   #clean up working directory
+  rm(t11_totalrow)
+  rm(t11_missingrow)
+  rm(t11_categoryrows)
+  rm(t11_1)
   rm(test_11)
 })
 
@@ -547,17 +559,17 @@ test_that('T12',{
       add_layer(
         group_count(AEDECOD) %>%
           set_format_strings(f_str("xxx (xxx.x%)", n, pct)) %>%
-        add_total_row(f_str("xxx", n), sort_value = -Inf)
+          add_total_row(f_str("xxx", n), sort_value = -Inf)
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
           set_format_strings(f_str("xxx (xxx.x%)", distinct, distinct_pct)) %>%
-        add_total_row(f_str("xxx", distinct), sort_value = -Inf)
+          add_total_row(f_str("xxx", distinct), sort_value = -Inf)
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
           set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct, distinct_pct)) %>%
-        add_total_row(f_str("xxx [xxx]", n, distinct), sort_value = -Inf)
+          add_total_row(f_str("xxx [xxx]", n, distinct), sort_value = -Inf)
       )
 
     test_12 <- build(t) %>%
@@ -3191,7 +3203,7 @@ test_that('T54',{
       add_layer(
         group_desc(AGE) %>%
           set_format_strings(
-            'Geometric Mean)' = f_str('xxx.xx', geometric_mean)
+            'Geometric Mean' = f_str('xxx.xx', geometric_mean)
           )
       )
 

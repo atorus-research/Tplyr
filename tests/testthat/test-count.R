@@ -423,3 +423,41 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
   expect_output_file(print(t8), "count_t8")
   expect_output_file(print(t9), "count_t9")
 })
+
+test_that("set_denom_where works as expected", {
+  # Just make a different object for pop_data. Just used to check for warning
+  pop_mtcars <- mtcars
+  pop_mtcars$grp <- seq_along(mtcars$am)
+  t10 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl, where = cyl != 6) %>%
+        set_denom_where(TRUE)
+    ) %>%
+    build()
+  expect_output_file(print(t10), "count_t10")
+  t11 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl, where = cyl != 6) %>%
+        set_denom_where(cyl != 4)
+    ) %>%
+    build()
+  expect_output_file(print(t11), "count_t11")
+
+  t12 <- tplyr_table(mtcars, gear) %>%
+    set_pop_data(pop_mtcars) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_denom_where(cyl != 6) %>%
+        set_distinct_by(am)
+    )
+  expect_warning(build(t12), "A `denom_where` has been set")
+
+  t13 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl, where = cyl != 6) %>%
+        set_distinct_by(am)
+    ) %>%
+    build()
+
+  expect_output_file(print(t13), "count_t13")
+})
