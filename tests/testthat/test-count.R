@@ -337,7 +337,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+        add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing Count + Total Row
@@ -345,7 +346,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA, `Not Found` = NaN) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct))
+        add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing Counts + Total Row
@@ -353,9 +355,10 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(am) %>%
         set_missing_count(f_str("xx", n), sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
+        add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
         set_denom_ignore("Missing") %>%
-        set_order_count_method("byvarn")
+        set_order_count_method("byvarn") %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing Counts + Total Row + byvarn
@@ -363,8 +366,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), sort_value = 999, Missing = NA, `Not Found` = NaN) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 9999) %>%
-        set_order_count_method("bycount")
+        add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = 9999) %>%
+        set_order_count_method("bycount") %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing Counts + Total Row + bycount
@@ -372,7 +376,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = 7862)
+        add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = 7862) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing COunts + Total Row(bottom)
@@ -381,8 +386,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(am) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("byvarn") %>%
-        add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
-        set_denom_ignore("Missing")
+        add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
+        set_denom_ignore("Missing") %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing COunts + Total Row(bottom) + byVarn
@@ -391,8 +397,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("bycount") %>%
-      add_total_row(f_str("xxxxx [xx.x%]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
-      set_denom_ignore("Missing")
+      add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
+      set_denom_ignore("Missing") %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   # Missing COunts + Total Row(bottom) + by count
@@ -400,7 +407,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     add_layer(
       group_count(cyl) %>%
         set_distinct_by(am) %>%
-        add_total_row()
+        add_total_row() %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
   mtcars3 <- mtcars2
@@ -408,7 +416,8 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
   t9 <- tplyr_table(mtcars3, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xxxx", n), Missing_ = NA)
+        set_missing_count(f_str("xxxx", n), Missing_ = NA) %>%
+        set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
 
@@ -455,7 +464,8 @@ test_that("set_denom_where works as expected", {
   t13 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
-        set_distinct_by(am)
+        set_distinct_by(am) %>%
+        set_format_strings(f_str("xx (xx.x)", distinct, distinct_pct))
     ) %>%
     build()
 
