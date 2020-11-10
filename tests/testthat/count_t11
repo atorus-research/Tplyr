@@ -1,0 +1,5 @@
+# A tibble: 2 x 6
+  row_label1 var1_3        var1_4       var1_5       ord_layer_index ord_layer_1
+  <chr>      <chr>         <chr>        <chr>                  <int>       <dbl>
+1 4          " 1 (  7.1%)" " 8 (200.0%… " 2 ( 66.7%…               1           1
+2 8          "12 ( 85.7%)" " 0 (  0.0%… " 2 ( 66.7%…               1           3
