@@ -8,6 +8,7 @@
   - The `add_total_row()` interface has been updated. It now takes an f_str object can be formatted differently than the rest of the table. A parameter was also added note if total rows should include missing counts.
   - The `set_missing_count()` interface was updated. The 'string' parameter was removed and replaced with the ellipsis. Instead of passing a vector, a user would pass any number of character vectors that are named.
   - Build will error if `denom_ignore` is used but no missing count strings are specified.
+  - A new function, `set_denom_where()` was added to allow a user to change how the denominators are filtered when calculating percentages.
  
 - Other changes
   - The version of dplyr that gets imported was updated to 1.0.0. The version of tidyselect imported was updated to 1.1.0. This was updated to remove warnings in the count layer build process.

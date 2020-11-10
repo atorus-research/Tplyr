@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -154,18 +154,6 @@
 
 <span class="fu">kable</span>(<span class="no">t</span>)</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="6%">
-<col width="7%">
-<col width="10%">
-<col width="10%">
-<col width="10%">
-<col width="15%">
-<col width="15%">
-<col width="9%">
-<col width="7%">
-<col width="7%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -504,15 +492,6 @@
   <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="8%">
-<col width="10%">
-<col width="13%">
-<col width="13%">
-<col width="13%">
-<col width="20%">
-<col width="19%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -674,15 +653,6 @@
   <span class="fu">select</span>( <span class="fu">starts_with</span>(<span class="st">"row"</span>), <span class="no">var1_Total</span>, <span class="fu">starts_with</span>(<span class="st">"var1"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="8%">
-<col width="10%">
-<col width="13%">
-<col width="13%">
-<col width="13%">
-<col width="20%">
-<col width="19%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -1385,16 +1355,6 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="21%">
-<col width="21%">
-<col width="7%">
-<col width="14%">
-<col width="13%">
-<col width="8%">
-<col width="6%">
-<col width="6%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -1481,13 +1441,6 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="13%">
-<col width="10%">
-<col width="10%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -1765,15 +1718,6 @@
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="22%">
-<col width="11%">
-<col width="11%">
-<col width="16%">
-<col width="12%">
-<col width="12%">
-<col width="12%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -1856,34 +1800,8 @@
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">'var1'</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span></pre></body></html></div>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
-<colgroup>
-<col width="22%">
-<col width="11%">
-<col width="11%">
-<col width="16%">
-<col width="12%">
-<col width="12%">
-<col width="12%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -1901,7 +1819,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">12</td>
-<td align="right">NA</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1910,7 +1828,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">12</td>
-<td align="right">NA</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1919,7 +1837,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">12</td>
-<td align="right">NA</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1928,7 +1846,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">24</td>
-<td align="right">NA</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1937,7 +1855,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">24</td>
-<td align="right">NA</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1946,7 +1864,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">24</td>
-<td align="right">NA</td>
+<td align="right">3</td>
 </tr>
 <tr class="odd">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1955,7 +1873,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">8</td>
-<td align="right">NA</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1964,7 +1882,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">8</td>
-<td align="right">NA</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">Creatine Kinase (U/L)</td>
@@ -1973,7 +1891,7 @@
 <td align="right">1</td>
 <td align="right">35</td>
 <td align="right">8</td>
-<td align="right">NA</td>
+<td align="right">3</td>
 </tr>
 </tbody>
 </table>

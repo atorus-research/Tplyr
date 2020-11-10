@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -539,140 +539,24 @@ DERMATITIS CONTACT
 </table>
 <p>You may have seen tables before like the one about. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> triggered the derivation of <code>distinct</code> and <code>distinct_pct</code> in addition to the <code>n</code> and <code>pct</code> created created within <code>group_count</code>. The display of the values is then controlled by the <code><a href="../reference/f_str.html">f_str()</a></code> call in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
 </div>
-<div id="adding-a-total-row" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-a-total-row" class="anchor"></a>Adding a ‘Total’ Row</h2>
-<p>Some summaries require the addition of a ‘Total’ row in addition to the categorical counts. ‘Tplyr’ has the helper function <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. The default text for this row is “Total”, but we provide <code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text used for the ‘Total’ row.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>() <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_total_row_label.html">set_total_row_label</a></span>(<span class="st">"All Age Groups"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-row_label1
-</th>
-<th style="text-align:left;">
-var1_Placebo
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose
-</th>
-<th style="text-align:right;">
-ord_layer_index
-</th>
-<th style="text-align:right;">
-ord_layer_1
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-&lt;65
-</td>
-<td style="text-align:left;">
-14 ( 16.3%)
-</td>
-<td style="text-align:left;">
-11 ( 13.1%)
-</td>
-<td style="text-align:left;">
-8 ( 9.5%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&gt;80
-</td>
-<td style="text-align:left;">
-30 ( 34.9%)
-</td>
-<td style="text-align:left;">
-18 ( 21.4%)
-</td>
-<td style="text-align:left;">
-29 ( 34.5%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-65-80
-</td>
-<td style="text-align:left;">
-42 ( 48.8%)
-</td>
-<td style="text-align:left;">
-55 ( 65.5%)
-</td>
-<td style="text-align:left;">
-47 ( 56.0%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-All Age Groups
-</td>
-<td style="text-align:left;">
-86 (100.0%)
-</td>
-<td style="text-align:left;">
-84 (100.0%)
-</td>
-<td style="text-align:left;">
-84 (100.0%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <div id="missing-counts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-counts" class="anchor"></a>Missing Counts</h2>
 <p>Missing counts are another tricky area for frequency tables. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator?</p>
-<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. Additionally, using the <code>string</code> parameter you can set the value chosen to be summarized as missing. By using a named character vector, you can control the <code>row_label</code> of what will be used for missing values.</p>
-<p>In the example below 50 random values are removed and NA is specified as the missing string. The NAs are additionally ignored in denominators by using <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>. Note that NA is submitted to these functions as a string even though the values are NAs in the data (i.e. not strings containing “NA”). During processing, the NAs are coerced into characters.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">adae2</span> <span class="kw">&lt;-</span> <span class="no">adae</span>
+<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. If not specified, the associated count layer’s format will be used. Using the <code>...</code> parameter, you are able to specify the row label desired for missing values and values that you determine to be considered ‘missing’. For example, you may have NAs in the target variable, and the values like “Not Collected” that you also wish to consider “missing”. <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> allows you to group those together. Actually - you’re able to establish as many different “missing” groups as you want - even though that scenario is fairly unlikely.</p>
+<p>In the example below 50 random values are removed and NA is specified as the missing string. This also introduces another function - <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>. When you have missing counts, you may wish to exclude them from the totals being summarized. You can exclude them from the denominator by using <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>. Simply pass the missing group label established from <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> into <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code>, and all of the missing values you grouped will be excluded from the denominator. <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> can also consume any other value you wish to ignore from the target variable as well, if desired.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">adae2</span> <span class="kw">&lt;-</span> <span class="no">adae</span>
 <span class="no">adae2</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">adae2</span>), <span class="fl">50</span>), <span class="st">"AESEV"</span>] <span class="kw">&lt;-</span> <span class="fl">NA</span>
+
 <span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae2</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AESEV</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx (xx.xx%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx"</span>, <span class="no">n</span>), <span class="kw">string</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">MISSING</span> <span class="kw">=</span> <span class="st">"NA"</span>))  <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>)
-
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx"</span>, <span class="no">n</span>), <span class="kw">Missing</span> <span class="kw">=</span> <span class="fl">NA</span>, <span class="kw">sort_value</span><span class="kw">=</span><span class="fl">Inf</span>)  <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
   ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>()
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>)
 
 <span class="no">t</span> <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
@@ -703,13 +587,13 @@ ord_layer_1
 MILD
 </td>
 <td style="text-align:left;">
-26 (55.32%)
+22 (62.86%)
 </td>
 <td style="text-align:left;">
-64 (57.66%)
+72 (77.42%)
 </td>
 <td style="text-align:left;">
-48 (40.68%)
+46 (46.94%)
 </td>
 <td style="text-align:right;">
 1
@@ -723,13 +607,13 @@ MILD
 MODERATE
 </td>
 <td style="text-align:left;">
-15 (31.91%)
+13 (37.14%)
 </td>
 <td style="text-align:left;">
-21 (18.92%)
+20 (21.51%)
 </td>
 <td style="text-align:left;">
-48 (40.68%)
+48 (48.98%)
 </td>
 <td style="text-align:right;">
 1
@@ -746,10 +630,10 @@ SEVERE
 0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-1 ( 0.90%)
+1 ( 1.08%)
 </td>
 <td style="text-align:left;">
-3 ( 2.54%)
+4 ( 4.08%)
 </td>
 <td style="text-align:right;">
 1
@@ -760,26 +644,795 @@ SEVERE
 </tr>
 <tr>
 <td style="text-align:left;">
-NA
+Missing
 </td>
 <td style="text-align:left;">
-6 (12.77%)
+12
 </td>
 <td style="text-align:left;">
-25 (22.52%)
+18
 </td>
 <td style="text-align:left;">
-19 (16.10%)
+20
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-4
+Inf
 </td>
 </tr>
 </tbody>
 </table>
+<p>We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you’ll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.</p>
+</div>
+<div id="controlling-the-denominator-filter" class="section level2">
+<h2 class="hasAnchor">
+<a href="#controlling-the-denominator-filter" class="anchor"></a>Controlling the Denominator Filter</h2>
+<p>While <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> can be useful for ignoring certain values, ‘Tplyr’ also offers you the ability to specifically control the filter used within the denominator. This is provided through the function <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is the layer level <code>where</code> parameter, if one was supplied. <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> allows you to replace this layer level filter with a custom filter of your choosing. This is done on top of any filtering specified in the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> where parameter - which means that the <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> filter is applied <em>in addition to</em> any table level filtering.</p>
+<p>Take the example shown below. The first layer has no layer level filtering applied, so the table level <code>where</code> is the only filter applied. The second layer has a layer level filter applied, so the denominators will be based on that layer level filter. Notice how in this case, the percentages in the second layer add up to 100%. This is because the denominator only includes values used in that layer.</p>
+<p>The third layer has a layer level filter applied, but additionally uses <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> in this example is actually <em>removing</em> the layer level filter for the denominators. This is because in R, when you filter using <code>TRUE</code>, the filter returns all records. So by using <code>TRUE</code> in <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>, the layer level filter is removed. This causes the denominator to include all values and not just those selected for that layer - so for this layer, the percentages will <em>not</em> add up to 100%. In this example, this allows the percentages from Layer 3 to sum to the total percentage of “DISCONTINUED” from Layer 1.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">adsl2</span> <span class="kw">&lt;-</span> <span class="no">adsl</span> <span class="kw">%&gt;%</span>
+  <span class="fu">mutate</span>(<span class="kw">DISCONTEXT</span> <span class="kw">=</span> <span class="fu">if_else</span>(<span class="no">DISCONFL</span> <span class="kw">==</span> <span class="st">'Y'</span>, <span class="st">'DISCONTINUED'</span>, <span class="st">'COMPLETED'</span>))
+
+<span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl2</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">'Y'</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">DISCONTEXT</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">DCSREAS</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">DISCONFL</span> <span class="kw">==</span> <span class="st">'Y'</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">DCSREAS</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">DISCONFL</span> <span class="kw">==</span> <span class="st">'Y'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="../reference/set_denom_where.html">set_denom_where</a></span>(<span class="fl">TRUE</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_index</span>, <span class="no">ord_layer_1</span>)
+
+<span class="no">t</span> <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+row_label1
+</th>
+<th style="text-align:left;">
+var1_Placebo
+</th>
+<th style="text-align:left;">
+var1_Xanomeline High Dose
+</th>
+<th style="text-align:left;">
+var1_Xanomeline Low Dose
+</th>
+<th style="text-align:right;">
+ord_layer_index
+</th>
+<th style="text-align:right;">
+ord_layer_1
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+COMPLETED
+</td>
+<td style="text-align:left;">
+58 ( 67.4%)
+</td>
+<td style="text-align:left;">
+27 ( 32.1%)
+</td>
+<td style="text-align:left;">
+25 ( 29.8%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DISCONTINUED
+</td>
+<td style="text-align:left;">
+28 ( 32.6%)
+</td>
+<td style="text-align:left;">
+57 ( 67.9%)
+</td>
+<td style="text-align:left;">
+59 ( 70.2%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adverse Event
+</td>
+<td style="text-align:left;">
+8 ( 28.6%)
+</td>
+<td style="text-align:left;">
+40 ( 70.2%)
+</td>
+<td style="text-align:left;">
+44 ( 74.6%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Death
+</td>
+<td style="text-align:left;">
+2 ( 7.1%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+I/E Not Met
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 3.5%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Efficacy
+</td>
+<td style="text-align:left;">
+3 ( 10.7%)
+</td>
+<td style="text-align:left;">
+1 ( 1.8%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lost to Follow-up
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Physician Decision
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 3.5%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Protocol Violation
+</td>
+<td style="text-align:left;">
+1 ( 3.6%)
+</td>
+<td style="text-align:left;">
+1 ( 1.8%)
+</td>
+<td style="text-align:left;">
+1 ( 1.7%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sponsor Decision
+</td>
+<td style="text-align:left;">
+2 ( 7.1%)
+</td>
+<td style="text-align:left;">
+3 ( 5.3%)
+</td>
+<td style="text-align:left;">
+2 ( 3.4%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Withdrew Consent
+</td>
+<td style="text-align:left;">
+9 ( 32.1%)
+</td>
+<td style="text-align:left;">
+8 ( 14.0%)
+</td>
+<td style="text-align:left;">
+10 ( 16.9%)
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Adverse Event
+</td>
+<td style="text-align:left;">
+8 ( 9.3%)
+</td>
+<td style="text-align:left;">
+40 ( 47.6%)
+</td>
+<td style="text-align:left;">
+44 ( 52.4%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Death
+</td>
+<td style="text-align:left;">
+2 ( 2.3%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+I/E Not Met
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Efficacy
+</td>
+<td style="text-align:left;">
+3 ( 3.5%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lost to Follow-up
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Physician Decision
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:left;">
+0 ( 0.0%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Protocol Violation
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:left;">
+1 ( 1.2%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sponsor Decision
+</td>
+<td style="text-align:left;">
+2 ( 2.3%)
+</td>
+<td style="text-align:left;">
+3 ( 3.6%)
+</td>
+<td style="text-align:left;">
+2 ( 2.4%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Withdrew Consent
+</td>
+<td style="text-align:left;">
+9 ( 10.5%)
+</td>
+<td style="text-align:left;">
+8 ( 9.5%)
+</td>
+<td style="text-align:left;">
+10 ( 11.9%)
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="adding-a-total-row" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adding-a-total-row" class="anchor"></a>Adding a ‘Total’ Row</h2>
+<p>In addition to missing counts, some summaries require the addition of a ‘Total’ row. ‘Tplyr’ has the helper function <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. Like everything else that goes into ‘Tplyr’, this too has a significant bit of nuance to it.</p>
+<p>Much of this functionality is similar to <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. You’re able to specify a different format for the total, but if not specified, the associated count layer’s format will be used. You’re able to set your own sort value to specify where you want the total row to sit.</p>
+<p>More nuance comes in two places:</p>
+<ul>
+<li>By default, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will ignore missing values, but you can have it count missing values using the <code>count_missings</code> parameter. ‘Tplyr’ will warn you when using <code><a href="../reference/add_total_row.html">add_total_row()</a></code> with <code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> if you’re requesting to count missing values and including a percentage, because the percentage will exceed 100%.</li>
+<li>
+<code><a href="../reference/add_total_row.html">add_total_row()</a></code> will throw a warning when a <code>by</code> variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>, which allows the user to control exactly how denominators are calculated. Typically in a count layer, the column variables (i.e. <code>treat_var</code> and any <code>cols</code>) are used, and this is the default. The totals presented by <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will always align with denominators specified in <code>set_denom_by()</code>.</li>
+</ul>
+<p>In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The ‘Missing’ row tells us the number of missing values, but because <code>count_missings</code> is set to <code>TRUE</code>, the missing counts are included in the denominator. This probably isn’t how you would choose to display things, but here we’re trying to show the flexibility built into ‘Tplyr’.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">adsl2</span> <span class="kw">&lt;-</span> <span class="no">adsl</span>
+<span class="no">adsl2</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">adsl2</span>), <span class="fl">50</span>), <span class="st">"AGEGR1"</span>] <span class="kw">&lt;-</span> <span class="fl">NA</span>
+
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl2</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span><span class="kw">=</span><span class="no">SEX</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="no">TRT01P</span>, <span class="no">SEX</span>) <span class="kw">%&gt;%</span>  <span class="co"># This gives me a Total row each group</span>
+      <span class="fu"><a href="../reference/add_total_row.html">add_total_row</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx"</span>, <span class="no">n</span>), <span class="kw">count_missings</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">sort_value</span><span class="kw">=</span>-<span class="fl">Inf</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_total_row_label.html">set_total_row_label</a></span>(<span class="st">"All Age Groups"</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xxx"</span>, <span class="no">n</span>), <span class="kw">Missing</span> <span class="kw">=</span> <span class="fl">NA</span>, <span class="kw">sort_value</span><span class="kw">=</span><span class="fl">Inf</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+row_label1
+</th>
+<th style="text-align:left;">
+row_label2
+</th>
+<th style="text-align:left;">
+var1_Placebo
+</th>
+<th style="text-align:left;">
+var1_Xanomeline High Dose
+</th>
+<th style="text-align:left;">
+var1_Xanomeline Low Dose
+</th>
+<th style="text-align:right;">
+ord_layer_index
+</th>
+<th style="text-align:right;">
+ord_layer_1
+</th>
+<th style="text-align:right;">
+ord_layer_2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+All Age Groups
+</td>
+<td style="text-align:left;">
+53
+</td>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:left;">
+50
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-Inf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+&lt;65
+</td>
+<td style="text-align:left;">
+7 ( 13.2%)
+</td>
+<td style="text-align:left;">
+5 ( 12.5%)
+</td>
+<td style="text-align:left;">
+4 ( 8.0%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+&gt;80
+</td>
+<td style="text-align:left;">
+18 ( 34.0%)
+</td>
+<td style="text-align:left;">
+6 ( 15.0%)
+</td>
+<td style="text-align:left;">
+15 ( 30.0%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+65-80
+</td>
+<td style="text-align:left;">
+15 ( 28.3%)
+</td>
+<td style="text-align:left;">
+25 ( 62.5%)
+</td>
+<td style="text-align:left;">
+21 ( 42.0%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+Missing
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+All Age Groups
+</td>
+<td style="text-align:left;">
+33
+</td>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:left;">
+34
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-Inf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+&lt;65
+</td>
+<td style="text-align:left;">
+3 ( 9.1%)
+</td>
+<td style="text-align:left;">
+6 ( 13.6%)
+</td>
+<td style="text-align:left;">
+3 ( 8.8%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+&gt;80
+</td>
+<td style="text-align:left;">
+7 ( 21.2%)
+</td>
+<td style="text-align:left;">
+10 ( 22.7%)
+</td>
+<td style="text-align:left;">
+10 ( 29.4%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+65-80
+</td>
+<td style="text-align:left;">
+17 ( 51.5%)
+</td>
+<td style="text-align:left;">
+18 ( 40.9%)
+</td>
+<td style="text-align:left;">
+14 ( 41.2%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:left;">
+Missing
+</td>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+</tr>
+</tbody>
+</table>
+<p>The default text for the Total row is “Total”, but we provide <code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text used in your display.</p>
 </div>
 <div id="nested-count-summaries" class="section level2">
 <h2 class="hasAnchor">
@@ -787,7 +1440,7 @@ NA
 <p>Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of “Other” summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.</p>
 <p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/layer_constructors.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
 <p>The example below demonstrates how to do a nested summary. Look at the first row - here <code>row_label1</code> and <code>row_label2</code> are both “CARDIAC DISORDERS”. This line is the summary for <code>AEBODSYS.</code> In the rows below that, <code>row_label1</code> continues on with the value “CARDIAC DISORDERS”, but <code>row_label2</code> changes. These are the summaries for <code>AEDECOD</code>.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>))
   ) <span class="kw">%&gt;%</span>
@@ -981,7 +1634,7 @@ DERMATITIS ATOPIC
 </tbody>
 </table>
 <p>This accomplishes what we needed, but it’s not exactly the presentation you might hope for. We have a solution for this as well.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
@@ -1164,7 +1817,7 @@ Inf
 <p>While shift tables are very similar to a normal frequency table, there’s more nuance here, and thus we decided to create <code><a href="../reference/layer_constructors.html">group_shift()</a></code>. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the <code><a href="../reference/layer_constructors.html">group_count()</a></code> and <code><a href="../reference/layer_constructors.html">group_desc()</a></code> APIs.</p>
 <p>One thing to note - the <code><a href="../reference/layer_constructors.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/layer_constructors.html">group_count()</a></code> will do just fine.</p>
 <p>Let’s look at an example.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">VISIT</span>))
   ) <span class="kw">%&gt;%</span>
@@ -1463,7 +2116,7 @@ N
 </tbody>
 </table>
 <p>For the most part, this is getting us where we want to go - but there’s still some that’s left to be desired. It doesn’t look like there are any ‘L’ values for BNRIND in the dataset so we are not getting and rows containing ‘L’. Let’s see if we can fix that by dummying in the possible values.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
 <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
@@ -1471,24 +2124,7 @@ N
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span></pre></body></html></div>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1588,7 +2224,7 @@ L
 1
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -1638,7 +2274,7 @@ N
 1
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -1688,7 +2324,7 @@ H
 1
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 <tr>
@@ -1738,7 +2374,7 @@ L
 2
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -1788,7 +2424,7 @@ N
 2
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -1838,7 +2474,7 @@ H
 2
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 <tr>
@@ -1888,7 +2524,7 @@ L
 3
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -1938,7 +2574,7 @@ N
 3
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -1988,7 +2624,7 @@ H
 3
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 </tbody>
@@ -1996,7 +2632,7 @@ NA
 <p>There we go. This is another situation where using factors in R let’s us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. Check out the <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("sort")</a></code> for more information on sorting.</p>
 <p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the “box” that is formed from the “from” and “to” groups of the shift for each treatment group. To support this, ‘Tplyr’ let’s you specify the grouping used to calculate the denominators.</p>
 <p>Just like the count layers, the <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the treatment variable, <code>cols</code> argument, <code>by</code> variables, and the target variables.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
@@ -2004,24 +2640,7 @@ NA
       <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="no">TRTA</span>, <span class="no">PARAM</span>, <span class="no">AVISIT</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span></pre></body></html></div>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2121,7 +2740,7 @@ L
 12
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -2171,7 +2790,7 @@ N
 12
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -2221,7 +2840,7 @@ H
 12
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 <tr>
@@ -2271,7 +2890,7 @@ L
 24
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -2321,7 +2940,7 @@ N
 24
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -2371,7 +2990,7 @@ H
 24
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 <tr>
@@ -2421,7 +3040,7 @@ L
 8
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -2471,7 +3090,7 @@ N
 8
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -2521,39 +3140,23 @@ H
 8
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 </tbody>
 </table>
 <p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is the total of all record within the <strong>FROM</strong> and <strong>TO</strong> shift variables, within each parameter, visit, and treatment. This is the default, and this is how ‘Tplyr’ will create the denominators if <code>set_denom_by()</code> isn’t specified.</p>
 <p>In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xxx.x%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="no">BNRIND</span>, <span class="no">PARAM</span>, <span class="no">AVISIT</span>) <span class="co"># Each row made by LBNRIND, TRTA</span>
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span></pre></body></html></div>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>, <span class="no">ord_layer_3</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2614,56 +3217,6 @@ Creatine Kinase (U/L)
 Week 8
 </td>
 <td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 8
-</td>
-<td style="text-align:left;">
 L
 </td>
 <td style="text-align:left;">
@@ -2703,7 +3256,7 @@ L
 8
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -2753,7 +3306,7 @@ N
 8
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -2761,7 +3314,7 @@ NA
 Creatine Kinase (U/L)
 </td>
 <td style="text-align:left;">
-Week 12
+Week 8
 </td>
 <td style="text-align:left;">
 H
@@ -2782,7 +3335,7 @@ H
 0 ( 0.0%)
 </td>
 <td style="text-align:left;">
-1 (100.0%)
+0 ( 0.0%)
 </td>
 <td style="text-align:left;">
 0 ( 0.0%)
@@ -2800,10 +3353,10 @@ H
 35
 </td>
 <td style="text-align:right;">
-12
+8
 </td>
 <td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 <tr>
@@ -2853,7 +3406,7 @@ L
 12
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -2903,7 +3456,7 @@ N
 12
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -2911,7 +3464,7 @@ NA
 Creatine Kinase (U/L)
 </td>
 <td style="text-align:left;">
-Week 24
+Week 12
 </td>
 <td style="text-align:left;">
 H
@@ -2932,7 +3485,7 @@ H
 0 ( 0.0%)
 </td>
 <td style="text-align:left;">
-0 ( 0.0%)
+1 (100.0%)
 </td>
 <td style="text-align:left;">
 0 ( 0.0%)
@@ -2950,141 +3503,25 @@ H
 35
 </td>
 <td style="text-align:right;">
-24
+12
 </td>
 <td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 24
-</td>
-<td style="text-align:left;">
-L
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 24
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-10 ( 62.5%)
-</td>
-<td style="text-align:left;">
-2 ( 12.5%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-2 ( 12.5%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-2 ( 12.5%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 </tbody>
 </table>
 <p>While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>ANRIND</code> the layer will use those denominators when determining the percentages.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">AVISIT</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx (xx.xx%)"</span>, <span class="no">n</span>, <span class="no">pct</span>)) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/set_denoms_by.html">set_denoms_by</a></span>(<span class="no">TRTA</span>, <span class="no">ANRIND</span>) <span class="co"># Use the column total as the denominator</span>
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">ord_layer_1</span>, <span class="no">ord_layer_2</span>, <span class="no">ord_layer_3</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span>
-
-<span class="co">#&gt; Warning in .f(.x[[i]], ...): NAs introduced by coercion</span></pre></body></html></div>
+  <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3142,6 +3579,156 @@ ord_layer_3
 Creatine Kinase (U/L)
 </td>
 <td style="text-align:left;">
+Week 8
+</td>
+<td style="text-align:left;">
+L
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Creatine Kinase (U/L)
+</td>
+<td style="text-align:left;">
+Week 8
+</td>
+<td style="text-align:left;">
+N
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+6 (22.22%)
+</td>
+<td style="text-align:left;">
+1 (25.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+9 (52.94%)
+</td>
+<td style="text-align:left;">
+1 (33.33%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+6 (42.86%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Creatine Kinase (U/L)
+</td>
+<td style="text-align:left;">
+Week 8
+</td>
+<td style="text-align:left;">
+H
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:left;">
+0 ( 0.00%)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Creatine Kinase (U/L)
+</td>
+<td style="text-align:left;">
 Week 12
 </td>
 <td style="text-align:left;">
@@ -3184,7 +3771,7 @@ L
 12
 </td>
 <td style="text-align:right;">
-NA
+1
 </td>
 </tr>
 <tr>
@@ -3234,7 +3821,7 @@ N
 12
 </td>
 <td style="text-align:right;">
-NA
+2
 </td>
 </tr>
 <tr>
@@ -3284,157 +3871,7 @@ H
 12
 </td>
 <td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 24
-</td>
-<td style="text-align:left;">
-L
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 24
-</td>
-<td style="text-align:left;">
-N
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-10 (37.04%)
-</td>
-<td style="text-align:left;">
-2 (50.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-2 (11.76%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-2 (14.29%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Creatine Kinase (U/L)
-</td>
-<td style="text-align:left;">
-Week 24
-</td>
-<td style="text-align:left;">
-H
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:left;">
-0 ( 0.00%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-24
-</td>
-<td style="text-align:right;">
-NA
+3
 </td>
 </tr>
 </tbody>
