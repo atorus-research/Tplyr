@@ -182,7 +182,7 @@
 <ul>
 <li>Bug Fixes
 <ul>
-<li>Fixed a bug caused by an update to <code>tibble</code> 3.0.4 that caused factors to be displayed incorected in row labels and sorting columns to populate incorrectly.</li>
+<li>Fixed a bug caused by an update to <code>tibble</code> 3.0.4 that caused factors to be displayed incorrectly in row labels and sorting columns to populate incorrectly.</li>
 <li>A bug where the factors used in the shift layers wouldn’t be reflected in the ordering columns.</li>
 </ul>
 </li>
@@ -191,6 +191,7 @@
 <li>The <code><a href="../reference/add_total_row.html">add_total_row()</a></code> interface has been updated. It now takes an f_str object can be formatted differently than the rest of the table. A parameter was also added note if total rows should include missing counts.</li>
 <li>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> interface was updated. The ‘string’ parameter was removed and replaced with the ellipsis. Instead of passing a vector, a user would pass any number of character vectors that are named.</li>
 <li>Build will error if <code>denom_ignore</code> is used but no missing count strings are specified.</li>
+<li>A new function, <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> was added to allow a user to change how the denominators are filtered when calculating percentages.</li>
 </ul>
 </li>
 <li>Other changes
