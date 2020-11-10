@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -163,27 +163,27 @@
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Sex'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">SEX</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Sex n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">string</span> <span class="kw">=</span> <span class="st">"NA"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Age'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (Years)"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Age group'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age Categories n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">string</span> <span class="kw">=</span> <span class="st">"NA"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Race'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">RACE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Race n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">string</span> <span class="kw">=</span> <span class="st">"NA"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"byfactor"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Ethnic'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">ETHNIC</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Ethnicity n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">string</span> <span class="kw">=</span> <span class="st">"NA"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"NA"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
   )
 
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)
@@ -653,7 +653,7 @@ ASIAN
 1
 </td>
 <td style="text-align:right;">
-6
+2
 </td>
 </tr>
 <tr>
@@ -711,7 +711,7 @@ NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
 1
 </td>
 <td style="text-align:right;">
-6
+4
 </td>
 </tr>
 <tr>
@@ -798,7 +798,7 @@ Missing
 1
 </td>
 <td style="text-align:right;">
-6
+7
 </td>
 </tr>
 <tr>
@@ -1267,44 +1267,6 @@ AMERICAN INDIAN OR ALASKA NATIVE
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-BLACK OR AFRICAN AMERICAN
-</td>
-<td style="text-align:left;">
-8 ( 9.3%)
-</td>
-<td style="text-align:left;">
-6 ( 7.1%)
-</td>
-<td style="text-align:left;">
-9 ( 10.7%)
-</td>
-<td style="text-align:left;">
-23 ( 9.1%)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-WHITE
-</td>
-<td style="text-align:left;">
-78 ( 90.7%)
-</td>
-<td style="text-align:left;">
-78 ( 92.9%)
-</td>
-<td style="text-align:left;">
-74 ( 88.1%)
-</td>
-<td style="text-align:left;">
-230 ( 90.6%)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
 ASIAN
 </td>
 <td style="text-align:left;">
@@ -1324,6 +1286,25 @@ ASIAN
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
+BLACK OR AFRICAN AMERICAN
+</td>
+<td style="text-align:left;">
+8 ( 9.3%)
+</td>
+<td style="text-align:left;">
+6 ( 7.1%)
+</td>
+<td style="text-align:left;">
+9 ( 10.7%)
+</td>
+<td style="text-align:left;">
+23 ( 9.1%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
 NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
 </td>
 <td style="text-align:left;">
@@ -1337,6 +1318,25 @@ NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
 </td>
 <td style="text-align:left;">
 0 ( 0.0%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+WHITE
+</td>
+<td style="text-align:left;">
+78 ( 90.7%)
+</td>
+<td style="text-align:left;">
+78 ( 92.9%)
+</td>
+<td style="text-align:left;">
+74 ( 88.1%)
+</td>
+<td style="text-align:left;">
+230 ( 90.6%)
 </td>
 </tr>
 <tr>
@@ -1643,22 +1643,6 @@ Missing
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">BLACK OR AFRICAN AMERICAN</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  8 (  9.3%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  6 (  7.1%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  9 ( 10.7%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 23 (  9.1%)</td>
-</tr>
-<tr>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">WHITE</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 78 ( 90.7%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 78 ( 92.9%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 74 ( 88.1%)</td>
-<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">230 ( 90.6%)</td>
-</tr>
-<tr>
-<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">ASIAN</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
@@ -1667,11 +1651,27 @@ Missing
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">BLACK OR AFRICAN AMERICAN</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  8 (  9.3%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  6 (  7.1%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  9 ( 10.7%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 23 (  9.1%)</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
 <td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">  0 (  0.0%)</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
+<td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">WHITE</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 78 ( 90.7%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 78 ( 92.9%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"> 74 ( 88.1%)</td>
+<td style="vertical-align: top; text-align: center; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;">230 ( 90.6%)</td>
 </tr>
 <tr>
 <td style="vertical-align: top; text-align: left; white-space: nowrap; padding: 4pt 4pt 4pt 4pt;"></td>
