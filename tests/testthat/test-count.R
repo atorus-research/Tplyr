@@ -447,8 +447,17 @@ test_that("set_denom_where works as expected", {
     set_pop_data(pop_mtcars) %>%
     add_layer(
       group_count(cyl) %>%
-        set_denom_where(TRUE) %>%
+        set_denom_where(cyl != 6) %>%
         set_distinct_by(am)
     )
   expect_warning(build(t12), "A `denom_where` has been set")
+
+  t13 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl, where = cyl != 6) %>%
+        set_distinct_by(am)
+    ) %>%
+    build()
+
+  expect_output_file(print(t13), "count_t13")
 })
