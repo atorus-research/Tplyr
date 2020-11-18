@@ -395,16 +395,17 @@ set_result_order_var <- function(e, result_order_var) {
 
 #' Set the display for missing strings
 #'
-#' If there is a special way NA or missing values should be counted, this binding
-#' will display the values in a different way.
+#' If there is a special way NA or missing values should be counted, this
+#' binding will display the values in a different way.
 #'
 #' @param e A count layer
 #' @param fmt An f_str object to change the display of the missing counts
-#' @param sort_value A numeric value that will be used in the ordering
-#'   column. This should be numeric. If it is not suplied the ordering column
-#'   will be the maximum value of what appears in the table plus one.
-#' @param denom_ignore Whether or not to include the "Missing" in the
-#'   percentage denominators. Defaults to FALSE.
+#' @param sort_value A numeric value that will be used in the ordering column.
+#'   This should be numeric. If it is not supplied the ordering column will be
+#'   the maximum value of what appears in the table plus one.
+#' @param denom_ignore A boolean. Specifies Whether or not to include the
+#'   missing counts specified within the ... parameter within denominators. If
+#'   set to TRUE, the values specified within ... will be ignored.
 #' @param ... Parameters used to note which values to describe as missing.
 #'   Generally NA and "Missing" would be used here. Parameters can be named
 #'   character vectors where the names become the row label.
