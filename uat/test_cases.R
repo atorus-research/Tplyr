@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/10/2020
+#' 11/18/2020
 
 #setup ----
 #insert any necessary libraries
@@ -422,8 +422,7 @@ test_that('T10',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(DCSREAS, where = EFFFL == 'Y') %>%
-          set_missing_count(fmt = f_str("xx", n), sort_value = Inf, Missing = "") %>%
-          set_denom_ignore("Missing") %>%
+          set_missing_count(fmt = f_str("xx", n), sort_value = Inf, Missing = "", denom_ignore = TRUE) %>%
           set_denom_where(TRUE)
       )
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  10 NOV 2020 15:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  18 NOV 2020 16:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1182,13 +1182,13 @@ Overfull \hbox (18.19513pt too wide) in paragraph at lines 1687--1692
 ESS=C LC_TELEPHONE=C 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1743.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1744.
 [20]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1743.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1744.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1743.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1743.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1743.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1744.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1744.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1744.
  ) 
 Here is how much of TeX's memory you used:
  14712 strings out of 494923
@@ -1204,7 +1204,7 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (20 pages, 233468 bytes).
+Output written on uat.pdf (20 pages, 233733 bytes).
 PDF statistics:
  214 PDF objects out of 1000 (max. 8388607)
  181 compressed objects within 2 object streams
