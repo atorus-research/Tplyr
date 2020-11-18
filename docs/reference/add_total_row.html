@@ -100,7 +100,7 @@ total row will be determined by using the `denoms_by` variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -193,7 +193,7 @@ strings. If there is a percentage in the count string the denominator of the
 total row will be determined by using the `denoms_by` variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_total_row</span>(<span class='no'>e</span>, <span class='kw'>total_count_format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>total_denom_ignore</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>add_total_row</span>(<span class='no'>e</span>, <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>count_missings</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>sort_value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,17 +203,22 @@ total row will be determined by using the `denoms_by` variables.</p>
       <td><p>A layer object</p></td>
     </tr>
     <tr>
-      <th>total_count_format</th>
+      <th>fmt</th>
       <td><p>An f_str object used to format the total row. If
 none is provided, display is based on the layer formatting.</p></td>
     </tr>
     <tr>
-      <th>total_denom_ignore</th>
+      <th>count_missings</th>
       <td><p>Whether or not to ignore the denominators passed
 in `set_denom_ignore` when calculating a pct on a total row. This is
 useful if you need to exclude/include the missing counts in your total
 row. Defaults to FALSE meaning total row percentage will not ignore any
 values.</p></td>
+    </tr>
+    <tr>
+      <th>sort_value</th>
+      <td><p>The value that will appear in the ordering column
+for total rows. This must be a numeric value.</p></td>
     </tr>
     </table>
 

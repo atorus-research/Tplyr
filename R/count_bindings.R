@@ -13,10 +13,10 @@
 #' @param e A layer object
 #' @param fmt An f_str object used to format the total row. If
 #'   none is provided, display is based on the layer formatting.
-#' @param count_missings Whether or not to ignore the denominators passed
-#'   in `set_denom_ignore` when calculating a pct on a total row. This is
+#' @param count_missings Whether or not to ignore the named arguments passed
+#'   in `set_denom_ignore` when calculating counts total row. This is
 #'   useful if you need to exclude/include the missing counts in your total
-#'   row. Defaults to FALSE meaning total row percentage will not ignore any
+#'   row. Defaults to TRUE meaning total row will not ignore any
 #'   values.
 #' @param sort_value The value that will appear in the ordering column
 #'   for total rows. This must be a numeric value.
@@ -32,7 +32,7 @@
 #'       add_total_row(f_str("xxxx", n))
 #'    ) %>%
 #'    build()
-add_total_row <- function(e, fmt = NULL, count_missings = FALSE, sort_value = NULL) {
+add_total_row <- function(e, fmt = NULL, count_missings = TRUE, sort_value = NULL) {
   assert_inherits_class(e, "count_layer")
   if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
   if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
@@ -403,6 +403,8 @@ set_result_order_var <- function(e, result_order_var) {
 #' @param sort_value A numeric value that will be used in the ordering
 #'   column. This should be numeric. If it is not suplied the ordering column
 #'   will be the maximum value of what appears in the table plus one.
+#' @param denom_ignore Whether or not to include the "Missing" in the
+#'   percentage denominators. Defaults to FALSE.
 #' @param ... Parameters used to note which values to describe as missing.
 #'   Generally NA and "Missing" would be used here. Parameters can be named
 #'   character vectors where the names become the row label.
@@ -420,11 +422,10 @@ set_result_order_var <- function(e, result_order_var) {
 #' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       set_missing_count(f_str("xx ", n), Missing = NA) %>%
-#'       set_denom_ignore(NA)
+#'       set_missing_count(f_str("xx ", n), Missing = NA)
 #'   ) %>%
 #'   build()
-set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
+set_missing_count <- function(e, fmt, sort_value = NULL, denom_ignore = FALSE, ...) {
 
   missings <- list(...)
   assert_that(length(missings) > 0, msg = "No missing values were specified.")
@@ -440,11 +441,18 @@ set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
   env_bind(e, missing_string = names(missings))
   env_bind(e, missing_sort_value = sort_value)
 
+  if(denom_ignore){
+    env_bind(e, denom_ignore = as.list(names(missings)))
+  }
+
   e
 }
 
 
 #' Set values the denominator calculation will ignore
+#'
+#' @description
+#' `r lifecycle::badge("defunct")`
 #'
 #' This is generally used for missing values. Values like "", NA, "NA" are
 #' common ways missing values are presented in a data frame. In certain cases,
@@ -455,6 +463,7 @@ set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
 #' @param ... Values to exclude from the percentage calculation. If you use
 #'   `set_missing_counts()` this should be the name of the parameters instead of
 #'   the values, see the example below.
+#'
 #'
 #' @return The modified layer object
 #' @export
@@ -468,17 +477,15 @@ set_missing_count <- function(e, fmt, sort_value = NULL, ...) {
 #' tplyr_table(mtcars2, gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found")) %>%
-#'       set_denom_ignore("Missing")
+#'       set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found"))
+#'       # This function is currently deprecated. It was replaced with an
+#'       # argument in set_missing_count
+#'       # set_denom_ignore("Missing")
 #'   ) %>%
 #'   build()
 set_denom_ignore <- function(e, ...) {
 
-  dots <- list(...)
-
-  env_bind(e, denom_ignore = dots)
-
-  e
+  lifecycle::deprecate_stop("0.2.2", "set_denom_ignore()", with = "set_missing_count(count_missings = FALSE)")
 
 }
 
@@ -507,11 +514,13 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 #' By default, denominators in count layers are subset based on the layer level
 #' where logic. In some cases this might not be correct. This functions allows
 #' the user to override this behavior and pass custom logic that will be used to
-#' subset the target(pop_data)
+#' subset the target dataset when calculating denominators for the layer.
 #'
 #' @param e A Tplyr layer
-#' @param denom_where Logic for not subsetting the target for percentage
-#'   denominator. If you don't want any subsetting, pass `TRUE` to this function.
+#' @param denom_where An expression (i.e. syntax) to be used to subset the
+#'   target dataset for calculating layer denominators. Supply as programming
+#'   logic (i.e. x < 5 & y == 10). To remove the layer where parameter
+#'   subsetting, pass 'TRUE' to this function.
 #'
 #' @return The modified Tplyr layer object
 #' @export

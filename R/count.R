@@ -83,8 +83,15 @@ process_single_count_target <- function(x) {
         process_count_distinct_total_row(current_env())
       }
 
-      if(!total_denom_ignore && !is.null(total_count_format) && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
-         ("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars)) {
+      # Used to temporarily check formats
+      if(is.null(format_strings)) tmp_fmt <- gather_defaults.count_layer(current_env())
+      if(total_denom_ignore && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
+         (("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars) ||
+         # Logic if no total_count format
+         (is.null(total_count_format) && is.null(format_strings) && ("pct" %in% tmp_fmt$n_counts$vars || "distinct_pct" %in% tmp_fmt$n_counts$vars)) ||
+         (is.null(total_count_format) && ("pct" %in% count_fmt$n_counts$vars || "distinct_pct" %in% count_fmt$n_counts$vars))
+         )
+         ) {
            warning("Your total row is ignoring certain values. The 'pct' in this row may not be 100%",
                    immediate. = TRUE)
          }
@@ -304,7 +311,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     }, treat_var, cols)
 
     #Create an expression to evaluate filter
-    if(total_denom_ignore){
+    if(!total_denom_ignore){
       filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
     } else {
       filter_logic <- expr(TRUE)
@@ -354,7 +361,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     }, treat_var, cols)
 
     #Create an expression to evaluate filter
-    if(total_denom_ignore){
+    if(!total_denom_ignore){
       filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
     } else {
       filter_logic <- expr(TRUE)
@@ -394,6 +401,7 @@ prepare_format_metadata.count_layer <- function(x) {
     } else if (!'n_counts' %in% names(format_strings)) {
       format_strings[['n_counts']] <- gather_defaults(environment())[['n_counts']]
     }
+
 
     # If there is both n & distinct, or pct and distinct_pct there has to be a
     # distinct_by
