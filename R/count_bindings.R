@@ -13,10 +13,10 @@
 #' @param e A layer object
 #' @param fmt An f_str object used to format the total row. If
 #'   none is provided, display is based on the layer formatting.
-#' @param count_missings Whether or not to ignore the denominators passed
-#'   in `set_denom_ignore` when calculating a pct on a total row. This is
+#' @param count_missings Whether or not to ignore the named arguments passed
+#'   in `set_denom_ignore` when calculating counts total row. This is
 #'   useful if you need to exclude/include the missing counts in your total
-#'   row. Defaults to FALSE meaning total row percentage will not ignore any
+#'   row. Defaults to TRUE meaning total row will not ignore any
 #'   values.
 #' @param sort_value The value that will appear in the ordering column
 #'   for total rows. This must be a numeric value.
