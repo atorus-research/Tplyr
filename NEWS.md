@@ -1,3 +1,11 @@
+# Tplyr 0.2.2
+
+- Enhansments
+  - `set_missing_count()` interface was made more intuitive. A new argument `denom_ignore` was added.
+  - `set_denom_ignore()` is now defunct. It was replaced with the `denom_ignore` argument in `set_missing_count()`
+  - `add_total_row()` now uses the `count_missing` argument and will no longer have any side effects on the denominators.
+
+
 # Tplyr 0.2.1
 
 - Bug Fixes

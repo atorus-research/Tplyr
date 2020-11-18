@@ -514,11 +514,13 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 #' By default, denominators in count layers are subset based on the layer level
 #' where logic. In some cases this might not be correct. This functions allows
 #' the user to override this behavior and pass custom logic that will be used to
-#' subset the target(pop_data)
+#' subset the target dataset when calculating denominators for the layer.
 #'
 #' @param e A Tplyr layer
-#' @param denom_where Logic for not subsetting the target for percentage
-#'   denominator. If you don't want any subsetting, pass `TRUE` to this function.
+#' @param denom_where An expression (i.e. syntax) to be used to subset the
+#'   target dataset for calculating layer denominators. Supply as programming
+#'   logic (i.e. x < 5 & y == 10). To remove the layer where parameter
+#'   subsetting, pass 'TRUE' to this function.
 #'
 #' @return The modified Tplyr layer object
 #' @export
