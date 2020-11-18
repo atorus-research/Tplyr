@@ -4,7 +4,7 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, fmt, sort_value = NULL, ...)
+set_missing_count(e, fmt, sort_value = NULL, denom_ignore = FALSE, ...)
 }
 \arguments{
 \item{e}{A count layer}
@@ -14,6 +14,9 @@ set_missing_count(e, fmt, sort_value = NULL, ...)
 \item{sort_value}{A numeric value that will be used in the ordering
 column. This should be numeric. If it is not suplied the ordering column
 will be the maximum value of what appears in the table plus one.}
+
+\item{denom_ignore}{Whether or not to include the "Missing" in the
+percentage denominators. Defaults to FALSE.}
 
 \item{...}{Parameters used to note which values to describe as missing.
 Generally NA and "Missing" would be used here. Parameters can be named
@@ -36,8 +39,7 @@ mtcars2[mtcars$cyl == 6, "cyl"] <- NA
 tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_missing_count(f_str("xx ", n), Missing = NA) \%>\%
-      set_denom_ignore(NA)
+      set_missing_count(f_str("xx ", n), Missing = NA)
   ) \%>\%
   build()
 }

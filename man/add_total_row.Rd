@@ -4,7 +4,7 @@
 \alias{add_total_row}
 \title{Add a Total row into a count summary.}
 \usage{
-add_total_row(e, fmt = NULL, count_missings = FALSE, sort_value = NULL)
+add_total_row(e, fmt = NULL, count_missings = TRUE, sort_value = NULL)
 }
 \arguments{
 \item{e}{A layer object}

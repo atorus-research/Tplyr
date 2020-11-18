@@ -290,15 +290,14 @@ test_that("missing counts can be displayed as expected", {
   t4 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), Missing = NA) %>%
-        set_denom_ignore("Unknown", "Missing")
+        set_missing_count(f_str("xx ", n), denom_ignore = TRUE, Missing = NA, Unknown = "Unknown")
     ) %>%
     build() %>%
     arrange(ord_layer_1)
   expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
-  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
-  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
-  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "))
+  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 ", "12 "))
+  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ", " 0 "))
+  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ", " 2 "))
   expect_equal(t4$ord_layer_index, c(1L, 1L, 1L))
   # Added unname for compatibility between tibble versions
   expect_equal(unname(t4$ord_layer_1), c(1, 2, 3))
@@ -356,7 +355,6 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(am) %>%
         set_missing_count(f_str("xx", n), sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
         add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
-        set_denom_ignore("Missing") %>%
         set_order_count_method("byvarn") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
@@ -387,7 +385,6 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("byvarn") %>%
         add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
-        set_denom_ignore("Missing") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
@@ -398,9 +395,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("bycount") %>%
       add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
-      set_denom_ignore("Missing") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
+    # Suppressing warnring for pct in total
     build()
   # Missing COunts + Total Row(bottom) + by count
   t8 <- tplyr_table(mtcars2, gear) %>%

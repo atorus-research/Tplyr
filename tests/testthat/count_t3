@@ -1,6 +1,6 @@
 structure(list(row_label1 = c("0", "Missing", "Not Found", "Total"
-), var1_3 = c("15 (100.0)", " 0", " 0", "   15 [100.0]"), var1_4 = c(" 4 (100.0)", 
-" 8", " 0", "    4 [100.0]"), var1_5 = c(" 0 ( 0.0)", " 5", " 0", 
-"    0 [ 0.0]"), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
+), var1_3 = c("15 (100.0)", " 0", " 0", "   15 [100.0]"), var1_4 = c(" 4 (33.3)", 
+" 8", " 0", "   12 [100.0]"), var1_5 = c(" 0 ( 0.0)", " 5", " 0", 
+"    5 [100.0]"), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
 5689, 5690, 9999)), row.names = c(NA, -4L), class = c("tbl_df", 
 "tbl", "data.frame"))
