@@ -38,7 +38,7 @@ add_total_row <- function(e, fmt = NULL, count_missings = TRUE, sort_value = NUL
   if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
 
   env_bind(e, include_total_row = TRUE)
-  env_bind(e, total_denom_ignore = count_missings)
+  env_bind(e, count_missings = count_missings)
   env_bind(e, total_count_format = fmt)
   env_bind(e, total_row_sort_value = sort_value)
 

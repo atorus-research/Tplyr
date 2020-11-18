@@ -364,10 +364,11 @@ test_that('T9',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE) %>%
+        group_count(DCSREAS) %>%
         set_format_strings(f_str("xxx", n)) %>%
-        add_total_row(sort_value = -Inf) %>%
-        set_total_row_label("TOTAL")
+        add_total_row(sort_value = -Inf, count_missings = FALSE) %>%
+        set_total_row_label("TOTAL") %>%
+        set_missing_count(fmt = f_str("xxx", n), sort_value = Inf, Missing = "")
       )
 
     test_9 <- build(t) %>%
@@ -391,17 +392,23 @@ test_that('T9',{
   t9_tots <- group_by(adsl, TRT01P) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    complete(TRT01P, fill = list(n = 0)) %>%
-    mutate(RACE = ' TOTAL')
-  t9_1 <- group_by(adsl, TRT01P, RACE) %>%
+    complete(TRT01P, fill = list(n = 0))
+  t9_totalrow <- filter(adsl, DCSREAS != "") %>%
+    group_by(TRT01P) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    complete(TRT01P, RACE, fill = list(n = 0)) %>%
+    complete(TRT01P, fill = list(n = 0)) %>%
+    mutate(DCSREAS = ' TOTAL')
+  t9_1 <- group_by(adsl, TRT01P, DCSREAS) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    complete(TRT01P, DCSREAS, fill = list(n = 0)) %>%
     as_tibble() %>%
-    rbind(t9_tots) %>%
+    rbind(t9_totalrow) %>%
     mutate(fmtd = sprintf("%3s", n)) %>%
-    pivot_wider(names_from = TRT01P, values_from = fmtd, id_cols = RACE) %>%
-    arrange(RACE)
+    pivot_wider(names_from = TRT01P, values_from = fmtd, id_cols = DCSREAS) %>%
+    mutate(DCSREAS = if_else(DCSREAS == "", 'ZZZ', DCSREAS)) %>%
+    arrange(DCSREAS)
   testthat::expect_equal(t9_1$Placebo, test_9$var1_Placebo, label = "T9.1")
   #manual check(s)
 
