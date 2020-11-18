@@ -88,8 +88,8 @@ process_single_count_target <- function(x) {
       if(total_denom_ignore && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
          (("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars) ||
          # Logic if no total_count format
-         (is.null(total_count_format) && is.null(format_strings) && ("pct" %in% tmp_fmt$vars || "distinct_pct" %in% tmp_fmt$vars)) ||
-         (is.null(total_count_format) && ("pct" %in% count_fmt$vars || "distinct_pct" %in% count_fmt$vars))
+         (is.null(total_count_format) && is.null(format_strings) && ("pct" %in% tmp_fmt$n_counts$vars || "distinct_pct" %in% tmp_fmt$n_counts$vars)) ||
+         (is.null(total_count_format) && ("pct" %in% count_fmt$n_counts$vars || "distinct_pct" %in% count_fmt$n_counts$vars))
          )
          ) {
            warning("Your total row is ignoring certain values. The 'pct' in this row may not be 100%",

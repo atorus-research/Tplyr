@@ -25,6 +25,7 @@ t16 <- tplyr_table(mtcars, gear) %>%
 t17 <- tplyr_table(mtcars, gear)
 t18 <- tplyr_table(mtcars, gear)
 t19 <- tplyr_table(mtcars, gear)
+t20 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -77,6 +78,9 @@ c18 <- group_count(t18, cyl, by = vars("am", "vs")) %>%
 c19 <- group_count(t19, cyl, by = am) %>%
   set_denoms_by(am) %>%
   add_total_row()
+c20 <- group_count(t20, cyl) %>%
+  set_missing_count(f_str("xx", n), Missing = "4", denom_ignore = TRUE) %>%
+  add_total_row()
 
 
 t1 <- add_layers(t1, c1)
@@ -98,6 +102,7 @@ t16 <- add_layers(t16, c16)
 t17 <- add_layers(t17, c17)
 t18 <- add_layers(t18, c18)
 t19 <- add_layers(t19, c19)
+t20 <- add_layers(t20, c20)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -189,6 +194,7 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_warning(build(t17), "A total row was added in addition")
   expect_silent(build(t18))
   expect_silent(build(t19))
+  expect_warning(build(t20), "Your total row is ignoring certain values.")
 })
 
 test_that("Count layers are processed as expected", {
