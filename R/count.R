@@ -85,7 +85,7 @@ process_single_count_target <- function(x) {
 
       # Used to temporarily check formats
       if(is.null(format_strings)) tmp_fmt <- gather_defaults.count_layer(current_env())
-      if(total_denom_ignore && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
+      if(count_missings && !(is.null(denom_ignore) || length(denom_ignore) == 0) &&
          (("pct" %in% total_count_format$vars || "distinct_pct" %in% total_count_format$vars) ||
          # Logic if no total_count format
          (is.null(total_count_format) && is.null(format_strings) && ("pct" %in% tmp_fmt$n_counts$vars || "distinct_pct" %in% tmp_fmt$n_counts$vars)) ||
@@ -311,8 +311,8 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     }, treat_var, cols)
 
     #Create an expression to evaluate filter
-    if(!total_denom_ignore){
-      filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
+    if(!count_missings){
+      filter_logic <- expr(!(!!target_var[[1]] %in% names(missing_count_list)))
     } else {
       filter_logic <- expr(TRUE)
     }
@@ -361,8 +361,8 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     }, treat_var, cols)
 
     #Create an expression to evaluate filter
-    if(!total_denom_ignore){
-      filter_logic <- expr(!(!!target_var[[1]] %in% unlist(denom_ignore)))
+    if(!count_missings){
+      filter_logic <- expr(!(!!target_var[[1]] %in% names(missing_count_list)))
     } else {
       filter_logic <- expr(TRUE)
     }

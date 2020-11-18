@@ -272,3 +272,4 @@ total_stat_denom <- NULL
 denom_where <- NULL
 built_target_pre_where <- NULL
 count_fmt <- NULL
+count_missings <- NULL
