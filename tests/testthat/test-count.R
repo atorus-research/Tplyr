@@ -117,8 +117,8 @@ test_that("Count layers are built as expected", {
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "include_total_row", "denoms_by",
-                               "total_count_format", "total_denom_ignore",
-                               "total_row_sort_value"))
+                               "total_count_format",
+                               "total_row_sort_value", "count_missings"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -308,6 +308,15 @@ test_that("missing counts can be displayed as expected", {
   # Added unname for compatibility between tibble versions
   expect_equal(unname(t4$ord_layer_1), c(1, 2, 3))
 
+  t5 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        add_total_row(f_str("xx (xx.x%)", n, pct), count_missings = FALSE) %>%
+        set_missing_count(f_str("xx", n), Missing = c("Unknown", NA))
+    ) %>%
+    build()
+
+  expect_equal(t5$var1_3, c(" 1 (  6.7%)", "14", " 1 ( 6.7%)"))
 })
 
 test_that("Count layer clauses with invalid syntax give informative error", {
