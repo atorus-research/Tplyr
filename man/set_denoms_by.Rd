@@ -4,10 +4,10 @@
 \alias{set_denoms_by}
 \title{Set variables used in pct denominator calculation}
 \usage{
-set_denoms_by(x, ...)
+set_denoms_by(e, ...)
 }
 \arguments{
-\item{x}{A count/shift layer object}
+\item{e}{A count/shift layer object}
 
 \item{...}{Unquoted variable names}
 }

@@ -7,7 +7,7 @@
 add_total_row(e, fmt = NULL, count_missings = TRUE, sort_value = NULL)
 }
 \arguments{
-\item{e}{A layer object}
+\item{e}{A \code{count_layer} object}
 
 \item{fmt}{An f_str object used to format the total row. If
 none is provided, display is based on the layer formatting.}

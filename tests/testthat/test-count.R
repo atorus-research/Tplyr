@@ -486,3 +486,24 @@ test_that("set_denom_where works as expected", {
 
   expect_output_file(dput(t13), "count_t13")
 })
+
+test_that("missing counts can be set without a format and it inherits the layer format", {
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(Missing = "4")
+    ) %>%
+    build()
+  expect_equal(t1$row_label1, c("Missing", "6", "8"))
+  expect_equal(t1$var1_3, c(" 1 (  6.7%)", " 2 ( 13.3%)", "12 ( 80.0%)"))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(Missing = "4") %>%
+        set_format_strings(f_str("xxx  [xx.x%]", n, pct))
+    ) %>%
+    build()
+  expect_equal(t2$row_label1, c("Missing", "6", "8"))
+  expect_equal(t2$var1_3, c("  1  [ 6.7%]", "  2  [13.3%]", " 12  [80.0%]"))
+})

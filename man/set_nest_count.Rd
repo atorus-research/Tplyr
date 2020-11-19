@@ -7,7 +7,7 @@
 set_nest_count(e, nest_count)
 }
 \arguments{
-\item{e}{A tplyr_count layer}
+\item{e}{A \code{count_layer} object}
 
 \item{nest_count}{A logical value to set the nest option}
 }
