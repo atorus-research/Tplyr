@@ -47,7 +47,9 @@ tplyr_table(adae, TRTA) %>%
       set_distinct_by(USUBJID) %>% 
       set_format_strings(f_str('xx (xx.x%)', distinct, distinct_pct))
   ) %>% 
-  build()
+  build() %>% 
+  head() %>% 
+  kable()
 ```
 
 ```{r}
@@ -59,13 +61,16 @@ tplyr_table(adae, TRTA) %>%
       set_distinct_by(USUBJID) %>% 
       set_format_strings(f_str('xx (xx.x%)', distinct, distinct_pct))
   ) %>% 
-  build()
+  build() %>% 
+  head() %>% 
+  kable()
 ```
 
 There are three things done above that trigger the use of the population data:
-  - Population data must be set in the first place
-  - `set_distinct_by()` must be used. Why? Because when you need to use a separate population dataset, the target dataset is likely more than one record per subject. So `set_distinct_by()` in this scenario would be used to get distinct counts per subject. In this example, we're looking at the number of unique subjects who experienced a specific adverse event.
-  - The population denominator is then accessed using `distinct_pct`. Also, it's worth noting that the default count layer formats use distinct values.
+
+- Population data must be set in the first place
+- `set_distinct_by()` must be used. Why? Because when you need to use a separate population dataset, the target dataset is likely more than one record per subject. So `set_distinct_by()` in this scenario would be used to get distinct counts per subject. In this example, we're looking at the number of unique subjects who experienced a specific adverse event.
+- The population denominator is then accessed using `distinct_pct`. Also, it's worth noting that the default count layer formats use distinct values.
   
 Note that if you need more control over the values used in the denominator from the population data, you can set a separate filter on the population data used `set_pop_where()`. 
 
@@ -87,7 +92,8 @@ tplyr_table(adsl, TRT01P) %>%
   add_layer(
     group_count(DCSREAS)
   ) %>% 
-  build()
+  build() %>% 
+  kable()
 ```
 By default, when not using the population data strategy shown above, a count layer assumes that you want columns to sum to 100%. But that's not always the case. Perhaps you'd like to break this summary down by sex presented row-wise.
 
@@ -96,7 +102,8 @@ tplyr_table(adsl, TRT01P) %>%
   add_layer(
     group_count(DCSREAS, by=SEX)
   ) %>% 
-  build()
+  build() %>% 
+  kable()
 ```
 
 Ok - so, now this is a little bit off. By breaking sex down as a row group, the denominators are still the total treatment group. Does that make sense? 34 female Placebo group subjects completed, but that 39.5% includes male subjects in the denominator as well. Let's fix this using `set_denoms_by()`.
@@ -107,10 +114,12 @@ tplyr_table(adsl, TRT01P) %>%
     group_count(DCSREAS, by=SEX) %>% 
       set_denoms_by(SEX, TRT01P)
   ) %>% 
-  build()
+  build() %>% 
+  kable()
 ```
 
 Ok - much better. `set_denoms_by()` now changed the denominator grouping for us, so the denominator used for those 34 female Placebo subjects are now the total number of female Placebo subjects. Makes sense, right? `set_denoms_by()` allows you to specify:
+
 - The treatment variable
 - any `cols` variables specified at the table level
 - any `by` variables specified at the layer level
