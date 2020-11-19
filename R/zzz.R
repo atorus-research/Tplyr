@@ -273,3 +273,4 @@ denom_where <- NULL
 built_target_pre_where <- NULL
 count_fmt <- NULL
 count_missings <- NULL
+has_missing_count <- FALSE
