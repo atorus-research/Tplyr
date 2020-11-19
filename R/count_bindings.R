@@ -33,9 +33,13 @@
 #'    ) %>%
 #'    build()
 add_total_row <- function(e, fmt = NULL, count_missings = TRUE, sort_value = NULL) {
-  assert_inherits_class(e, "count_layer")
   if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
   if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`add_total_row` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
+
 
   env_bind(e, include_total_row = TRUE)
   env_bind(e, count_missings = count_missings)
@@ -71,6 +75,10 @@ set_total_row_label <- function(e, total_row_label) {
 
   assert_has_class(total_row_label, "character")
   assert_that(length(total_row_label) == 1)
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`set_total_row_label` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
 
   env_bind(e, total_row_label = total_row_label)
 
@@ -175,6 +183,7 @@ set_indentation <- function(e, indentation) {
 set_nest_count <- function(e, nest_count) {
 
   assert_inherits_class(nest_count, "logical")
+  assert_inherits_class(e, "count_layer")
 
   assert_that(length(nest_count) == 1)
 
@@ -347,6 +356,8 @@ set_order_count_method <- function(e, order_count_method) {
               length(order_count_method) == 1,
               msg = "The length of the order_count_method must be equal to the length of the target_var, or 1")
 
+  assert_inherits_class(e, "count_layer")
+
   env_bind(e, order_count_method = order_count_method)
 
   e
@@ -395,8 +406,7 @@ set_result_order_var <- function(e, result_order_var) {
 
 #' Set the display for missing strings
 #'
-#' If there is a special way NA or missing values should be counted, this binding
-#' will display the values in a different way.
+#' Controls how missing counts are handled and displayed in the layer
 #'
 #' @param e A count layer
 #' @param fmt An f_str object to change the display of the missing counts
@@ -425,13 +435,17 @@ set_result_order_var <- function(e, result_order_var) {
 #'       set_missing_count(f_str("xx ", n), Missing = NA)
 #'   ) %>%
 #'   build()
-set_missing_count <- function(e, fmt, sort_value = NULL, denom_ignore = FALSE, ...) {
+set_missing_count <- function(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...) {
 
   missings <- list(...)
   assert_that(length(missings) > 0, msg = "No missing values were specified.")
 
-  assert_inherits_class(fmt, "f_str")
+  if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
   if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`set_missing_count` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
 
   # f_str object for formatting
   env_bind(e, missing_count_string = fmt)
@@ -440,6 +454,8 @@ set_missing_count <- function(e, fmt, sort_value = NULL, denom_ignore = FALSE, .
   # All replacements without names
   env_bind(e, missing_string = names(missings))
   env_bind(e, missing_sort_value = sort_value)
+  # Used to trigger missing count formatting if the fmt is null.
+  env_bind(e, has_missing_count = TRUE)
 
   if(denom_ignore){
     env_bind(e, denom_ignore = as.list(names(missings)))
@@ -501,6 +517,7 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 
   assert_that(outer_sort_position %in% c("asc", "desc"),
               msg = "outer_sort_position must be 'asc' 'desc'")
+  assert_inherits_class(e, "count_layer")
 
   outer_inf <- outer_sort_position == "desc"
 

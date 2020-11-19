@@ -4,7 +4,7 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, fmt, sort_value = NULL, denom_ignore = FALSE, ...)
+set_missing_count(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...)
 }
 \arguments{
 \item{e}{A count layer}
@@ -26,8 +26,7 @@ character vectors where the names become the row label.}
 The modified layer
 }
 \description{
-If there is a special way NA or missing values should be counted, this binding
-will display the values in a different way.
+Controls how missing counts are handled and displayed in the layer
 }
 \examples{
 library(magrittr)

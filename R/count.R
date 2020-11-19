@@ -470,7 +470,8 @@ process_formatting.count_layer <- function(x, ...) {
                                summary_var = summary_var,
                                indentation_length = indentation_length,
                                total_count_format = total_count_format,
-                               total_row_label = total_row_label)
+                               total_row_label = total_row_label,
+                               has_missing_count = has_missing_count)
       }) %>%
       # Pivot table
         pivot_wider(id_cols = c(match_exact(by), "summary_var"),
@@ -538,13 +539,18 @@ process_formatting.count_layer <- function(x, ...) {
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
                                    missing_f_str, summary_var, indentation_length, total_count_format,
-                                   total_row_label) {
+                                   total_row_label, has_missing_count) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
   missing_rows <- FALSE
   total_rows <- FALSE
+
+  # Add in the missing format if its null and there are missing counts
+  if(has_missing_count && is.null(missing_f_str)) {
+    missing_f_str <- count_fmt
+  }
 
   if (!is.null(missing_f_str)) {
 
