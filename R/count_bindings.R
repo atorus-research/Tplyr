@@ -1,23 +1,26 @@
 #' Add a Total row into a count summary.
 #'
 #' Adding a total row creates an additional observation in the count summary
-#' that presents the total counts (i.e. the n's that are summarized). This is
-#' calculated by the \code{by} group variables and the columns (\code{treat_var}
-#' along with any additional columns set by the \code{cols} argument). The
-#' format of the total row will be formatted in the same way as the other count
-#' strings. If there is a percentage in the count string the denominator of the
-#' total row will be determined by using the `denoms_by` variables.
+#' that presents the total counts (i.e. the n's that are summarized). The format
+#' of the total row will be formatted in the same way as the other count
+#' strings.
+#'
+#' Totals are calculated using all grouping variables, including treat_var and
+#' cols from the table level and any by variables included at the layer level.
+#' If a percent is included in the presentation, you will be warned if by
+#' variables are included as the denominator becomes ambiguous. To rectify this,
+#' use \code{set_denoms_by()} to explictly state how denominators should be
+#' grouped, and \code{add_total_row()} will use the denominators as specified.
 #'
 #' @param e A \code{count_layer} object
-#' @param fmt An f_str object used to format the total row. If
-#'   none is provided, display is based on the layer formatting.
-#' @param count_missings Whether or not to ignore the named arguments passed
-#'   in `set_denom_ignore` when calculating counts total row. This is
-#'   useful if you need to exclude/include the missing counts in your total
-#'   row. Defaults to TRUE meaning total row will not ignore any
-#'   values.
-#' @param sort_value The value that will appear in the ordering column
-#'   for total rows. This must be a numeric value.
+#' @param fmt An f_str object used to format the total row. If none is provided,
+#'   display is based on the layer formatting.
+#' @param count_missings Whether or not to ignore the named arguments passed in
+#'   `set_count_missing()` when calculating counts total row. This is useful if
+#'   you need to exclude/include the missing counts in your total row. Defaults
+#'   to TRUE meaning total row will not ignore any values.
+#' @param sort_value The value that will appear in the ordering column for total
+#'   rows. This must be a numeric value.
 #'
 #' @export
 #' @examples
