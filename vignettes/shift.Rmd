@@ -26,11 +26,18 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in a subject's status at baseline versus their status at some designated evaluation point. Shift tables allow you to see the distribution of how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
+Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in seeing how a subject's results related to normal ranges. The 'change in state' would refer to how that subject's results were at baseline versus different points of measure Shift tables allow you to see the distribution o f how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
 
-While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs.
+While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs. Given that shift tables are built on count layers, many of functions that work with count layers behave in the same way when using shift layers, with the exception of:
+- Functions related to nested counts, including `set_nest_count()`, `set_outer_sort_position()`
+- Functions related to total rows and missing rows, including `set_missing_count()`, `add_total_row()`, `set_total_row_label()`
+- Risk difference, including `add_risk_diff()`
+- and finally, result based sorting methods, including `set_order_count_method()`, `set_ordering_cols()`, `set_result_order_var()`
 
 One thing to note - the `group_shift()` API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows "Low to High", "Normal to High", etc. For those situations, `group_count()` will do just fine.
+
+
+## A Basic Example
 
 Let's look at an example.
 
@@ -46,6 +53,8 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
 
 For the most part, this is getting us where we want to go - but there's still some that's left to be desired. It doesn’t look like there are any 'L' values for BNRIND in the dataset so we are not getting and rows containing 'L'. Let’s see if we can fix that by dummying in the possible values.
 
+## Filling Missing Groups Using Factors
+
 ```{r}
 adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
 adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))
@@ -59,53 +68,3 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
 ```
 
 There we go. This is another situation where using factors in R let's us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. Check out the `vignettes("sort")` for more information on sorting. 
-
-A major part of the shift API is the control of the denominators used in the calculation of the percentages. In frequency tables, a lot of the time you want the columns within a by group to sum to 100%. In shift tables, most percentages are relative to the "box" that is formed from the "from" and "to" groups of the shift for each treatment group. To support this, 'Tplyr' let's you specify the grouping used to calculate the denominators. 
-
-Just like the count layers, the `set_denoms_by()` functions any variable name from the treatment variable, `cols` argument, `by` variables, and the target variables.
-
-```{r} 
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
-  add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
-      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
-      # This is the default, the 3x3 box formed by the target variables
-      set_denoms_by(TRTA, PARAM, AVISIT) 
-  ) %>%
-  build() %>%
-  kable()
-```
-
-In the example above, the denominators were based on the by and treatment variables, `TRTA`, `PARAM` and `VISIT`. This creates a 3 X 3 box, where the denominator is the total of all record within the **FROM** and **TO** shift variables, within each parameter, visit, and treatment. This is the default, and this is how 'Tplyr' will create the denominators if `set_denom_by()` isn't specified.
-
-In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%. 
-
-```{r}
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
-  add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
-      set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
-      set_denoms_by(BNRIND, PARAM, AVISIT) # Each row made by LBNRIND, TRTA
-  ) %>%
-  build() %>%
-  arrange(ord_layer_1, ord_layer_2, ord_layer_3) %>% 
-  head() %>% 
-  kable()
-```
-
-While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, `TRTA` and `ANRIND` the layer will use those denominators when determining the percentages. 
-
-```{r}
-tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
-  add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
-      set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
-      set_denoms_by(TRTA, ANRIND) # Use the column total as the denominator
-  ) %>%
-  build() %>%
-  arrange(ord_layer_1, ord_layer_2, ord_layer_3) %>% 
-  head() %>%
-  kable()
-```
-
-Our hope is that this gives you the flexibility you need to structure your denominator however required. 
