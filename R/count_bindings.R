@@ -6,11 +6,11 @@
 #' strings.
 #'
 #' Totals are calculated using all grouping variables, including treat_var and
-#' cols from the table level and any by variables included at the layer level.
-#' If a percent is included in the presentation, you will be warned if by
-#' variables are included as the denominator becomes ambiguous. To rectify this,
-#' use \code{set_denoms_by()} to explictly state how denominators should be
-#' grouped, and \code{add_total_row()} will use the denominators as specified.
+#' cols from the table level. If by variables are included, the grouping of the
+#' total and the application of denominators becomes ambiguous. You will be
+#' warned specifically if a percent is included in the format. To rectify this,
+#' use \code{set_denoms_by()}, and the grouping of \code{add_total_row()} will
+#' be updated accordingly.
 #'
 #' @param e A \code{count_layer} object
 #' @param fmt An f_str object used to format the total row. If none is provided,
