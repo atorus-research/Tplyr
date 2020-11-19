@@ -7,7 +7,7 @@
 set_denom_ignore(e, ...)
 }
 \arguments{
-\item{e}{A count_layer object}
+\item{e}{A \code{count_layer} object}
 
 \item{...}{Values to exclude from the percentage calculation. If you use
 `set_missing_counts()` this should be the name of the parameters instead of

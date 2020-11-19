@@ -6,7 +6,7 @@
 #' can be calculated on any variables passed to target_var, treat_var, by, or
 #' cols.
 #'
-#' @param x A count/shift layer object
+#' @param e A count/shift layer object
 #' @param ... Unquoted variable names
 #'
 #' @return The modified layer object
@@ -39,20 +39,20 @@
 #'       set_denoms_by(cyl, gear, am) # % within treatment group sums to 1
 #'   ) %>%
 #'   build()
-set_denoms_by <- function(x, ...) {
+set_denoms_by <- function(e, ...) {
   UseMethod("set_denoms_by")
 }
 
-set_denoms_by.shift_layer <- function(x, ...) {
+set_denoms_by.shift_layer <- function(e, ...) {
 
   dots <- vars(...)
   dots_chr <- map_chr(dots, as_name)
 
   # Pull these variables to make sure the denoms used make sense
-  by_ <- map_chr(env_get(x, "by"), as_name)
-  cols_ <- map_chr(env_get(x, "cols", inherit = TRUE), as_name)
-  treat_var_ <- as_name(env_get(x, "treat_var", inherit = TRUE))
-  target_var <- env_get(x, "target_var")
+  by_ <- map_chr(env_get(e, "by"), as_name)
+  cols_ <- map_chr(env_get(e, "cols", inherit = TRUE), as_name)
+  treat_var_ <- as_name(env_get(e, "treat_var", inherit = TRUE))
+  target_var <- env_get(e, "target_var")
   target_var_ <- map_chr(target_var, as_name)
 
   assert_that(all(dots_chr %in% c(by_, cols_, treat_var_, target_var_)),
@@ -63,8 +63,8 @@ set_denoms_by.shift_layer <- function(x, ...) {
     dots[[which(dots_chr %in% as_name(target_var$row))]] <- quo(summary_var)
   }
 
-  env_bind(x, denoms_by = dots)
+  env_bind(e, denoms_by = dots)
 
-  x
+  e
 }
 

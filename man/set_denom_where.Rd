@@ -7,7 +7,7 @@
 set_denom_where(e, denom_where)
 }
 \arguments{
-\item{e}{A Tplyr layer}
+\item{e}{A \code{count_layer/shift_layer} object}
 
 \item{denom_where}{An expression (i.e. syntax) to be used to subset the
 target dataset for calculating layer denominators. Supply as programming

@@ -10,7 +10,7 @@
 #' strings. If there is a percentage in the count string the denominator of the
 #' total row will be determined by using the `denoms_by` variables.
 #'
-#' @param e A layer object
+#' @param e A \code{count_layer} object
 #' @param fmt An f_str object used to format the total row. If
 #'   none is provided, display is based on the layer formatting.
 #' @param count_missings Whether or not to ignore the named arguments passed
@@ -97,7 +97,7 @@ set_total_row_label <- function(e, total_row_label) {
 #' choose which to display in your \code{\link{f_str}} objects using \code{n},
 #' \code{pct}, \code{distinct}, and \code{distinct_pct}.
 #'
-#' @param e A count_layer object
+#' @param e A \code{count_layer/shift_layer} object
 #' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
@@ -128,7 +128,7 @@ set_distinct_by <- function(e, distinct_by) {
 #'
 #' This is generally used internally with a nested count layer.
 #'
-#' @param e A tplyr_count layer
+#' @param e A \code{count_layer} object
 #' @param count_row_prefix A character to prefix the row labels
 #'
 #' @return The modified count_layer environment
@@ -150,7 +150,7 @@ set_count_row_prefix <- function(e, count_row_prefix) {
 #' the \code{indentation} argument's value will be used as a prefix for the inner layer's
 #' records
 #'
-#' @param e A tplyr_count layer
+#' @param e A \code{count_layer} object
 #' @param indentation A character to prefix the row labels in an inner
 #'   count layer
 #'
@@ -175,7 +175,7 @@ set_indentation <- function(e, indentation) {
 #' one column holds both the labels of the outer categorical variable
 #' and the inside event variable (i.e. AEBODSYS and AEDECOD).
 #'
-#' @param e A tplyr_count layer
+#' @param e A \code{count_layer} object
 #' @param nest_count A logical value to set the nest option
 #'
 #' @return The modified layer
@@ -239,7 +239,7 @@ set_nest_count <- function(e, nest_count) {
 #'   Shift layers sort very similarly to count layers, but to order your row
 #'   shift variable, use an ordered factor.
 #'
-#' @param e A \code{group_count} layer
+#' @param e A \code{count_layer} object
 #' @param order_count_method The logic determining how the rows in the final
 #'   layer output will be indexed. Options are 'bycount', 'byfactor', and
 #'   'byvarn'.
@@ -380,6 +380,8 @@ set_ordering_cols <- function(e, ...) {
   assert_that(length(check_ordering_cols) == length(c(treat_var, cols)),
               msg = "You need to pass a variable for each treat_var and cols variable.")
 
+  assert_inherits_class(e, "count_layer")
+
   env_bind(e, ordering_cols = ordering_cols)
 
   e
@@ -398,6 +400,7 @@ set_result_order_var <- function(e, result_order_var) {
 
   assert_that(as_name(result_order_var) %in% c("n", "distinct_n", "pct", "distinct_pct"),
               msg = "Invalid argument for result_order_var It can be n, distinct_n, pct, or distinct_pct.")
+  assert_inherits_class(e, "count_layer")
 
   env_bind(e, result_order_var = result_order_var)
 
@@ -408,7 +411,7 @@ set_result_order_var <- function(e, result_order_var) {
 #'
 #' Controls how missing counts are handled and displayed in the layer
 #'
-#' @param e A count layer
+#' @param e A \code{count_layer} object
 #' @param fmt An f_str object to change the display of the missing counts
 #' @param sort_value A numeric value that will be used in the ordering
 #'   column. This should be numeric. If it is not suplied the ordering column
@@ -475,7 +478,7 @@ set_missing_count <- function(e, fmt = NULL, sort_value = NULL, denom_ignore = F
 #' percentages do not use "missing" values in the denominator. This function
 #' notes different values as "missing" and excludes them from the denominators.
 #'
-#' @param e A count_layer object
+#' @param e A \code{count_layer} object
 #' @param ... Values to exclude from the percentage calculation. If you use
 #'   `set_missing_counts()` this should be the name of the parameters instead of
 #'   the values, see the example below.
@@ -507,7 +510,7 @@ set_denom_ignore <- function(e, ...) {
 
 #' Set the value of a outer nested count layer to Inf or -Inf
 #'
-#' @param e A count layer
+#' @param e A \code{count_layer} object
 #' @param outer_sort_position Either 'asc' or 'desc'. If desc the final ordering helper
 #'   will be set to Inf, if 'asc' the ordering helper is set to -Inf.
 #'
@@ -533,7 +536,7 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 #' the user to override this behavior and pass custom logic that will be used to
 #' subset the target dataset when calculating denominators for the layer.
 #'
-#' @param e A Tplyr layer
+#' @param e A \code{count_layer/shift_layer} object
 #' @param denom_where An expression (i.e. syntax) to be used to subset the
 #'   target dataset for calculating layer denominators. Supply as programming
 #'   logic (i.e. x < 5 & y == 10). To remove the layer where parameter
@@ -563,15 +566,15 @@ set_denom_where <- function(e, denom_where) {
   e
 }
 
-set_denoms_by.count_layer <- function(x, ...) {
+set_denoms_by.count_layer <- function(e, ...) {
   dots <- vars(...)
   dots_chr <- map_chr(dots, as_name)
 
   # Pull these variables to make sure the denoms used make sense
-  by_ <- map_chr(env_get(x, "by"), as_name)
-  cols_ <- map_chr(env_get(x, "cols", inherit = TRUE), as_name)
-  treat_var_ <- as_name(env_get(x, "treat_var", inherit = TRUE))
-  target_var <- env_get(x, "target_var")
+  by_ <- map_chr(env_get(e, "by"), as_name)
+  cols_ <- map_chr(env_get(e, "cols", inherit = TRUE), as_name)
+  treat_var_ <- as_name(env_get(e, "treat_var", inherit = TRUE))
+  target_var <- env_get(e, "target_var")
   target_var_ <- map_chr(target_var, as_name)
 
   assert_that(all(dots_chr %in% c(by_, cols_, treat_var_, target_var_)),
@@ -582,8 +585,8 @@ set_denoms_by.count_layer <- function(x, ...) {
     dots[[which(as_name(target_var[[1]]) %in% dots_chr)]] <- quo(summary_var)
   }
 
-  env_bind(x, denoms_by = dots)
+  env_bind(e, denoms_by = dots)
 
-  x
+  e
 }
 
