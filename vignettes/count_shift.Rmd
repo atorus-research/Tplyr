@@ -26,10 +26,10 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-# Frequency Tables
+At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it's not that easy. And in clinical reports, there's quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we've added a good bit of flexibility into both `group_count()` and `group_shift()` to help you get what you need when creating these reports, whether you're creating a demographics table, adverse events, of shift in lab results.
 
-At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it's not that easy. And in clinical reports, there's quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we've added a good bit of flexibility into both `group_count()` and `group_shift()` to help you get what you need when creating these reports, whether you're creating a demographics table, adverse events, of shift in lab results. 
-### A Simple Example
+
+## A Simple Example
 
 Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the "Total" group. 
 

@@ -29,6 +29,7 @@ load("adlb.Rdata")
 Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in seeing how a subject's results related to normal ranges. The 'change in state' would refer to how that subject's results were at baseline versus different points of measure Shift tables allow you to see the distribution o f how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
 
 While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs. Given that shift tables are built on count layers, many of functions that work with count layers behave in the same way when using shift layers, with the exception of:
+
 - Functions related to nested counts, including `set_nest_count()`, `set_outer_sort_position()`
 - Functions related to total rows and missing rows, including `set_missing_count()`, `add_total_row()`, `set_total_row_label()`
 - Risk difference, including `add_risk_diff()`
@@ -67,4 +68,8 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-There we go. This is another situation where using factors in R let's us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. Check out the `vignettes("sort")` for more information on sorting. 
+There we go. This is another situation where using factors in R let's us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. 
+
+## Where to go from here
+
+There's much more to learn! Check out the sorting vignette for more information on sorting. Additionally, check out our vignette on denominators to understand controlling more of the nuance in shift tables.
