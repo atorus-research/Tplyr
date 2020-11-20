@@ -258,7 +258,7 @@ tplyr_table(adsl2, TRT01P) %>%
   add_layer(
     group_count(AGEGR1, by=SEX) %>% 
       set_denoms_by(TRT01P, SEX) %>%  # This gives me a Total row each group
-      add_total_row(f_str("xxx", n), count_missings=FALSE, sort_value=-Inf) %>% 
+      add_total_row(f_str("xxx", n), count_missings=TRUE, sort_value=-Inf) %>% 
       set_total_row_label("All Age Groups") %>% 
       set_missing_count(f_str("xx (xx.x%)", n, pct), Missing = NA, sort_value=Inf)
   ) %>% 
@@ -268,7 +268,7 @@ tplyr_table(adsl2, TRT01P) %>%
 ```
 The default text for the Total row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used in your display. 
 
-Let's look at a more practical version of the table above. If you display missings, you probably want to exclude them from the total. Here we do that using `set_count_missing()`.  So more commonly, you'll see this:
+Let's look at a more practical version of the table above. If you display missings, you probably want to exclude them from the total. Here we do that using `set_missing_count()`.  So more commonly, you'll see this:
 
 ```{r}
 tplyr_table(adsl2, TRT01P) %>% 
@@ -284,6 +284,6 @@ tplyr_table(adsl2, TRT01P) %>%
   kable()
 ```
 
-Now the table is more intuitive. We used `set_count_missing()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
+Now the table is more intuitive. We used `set_missing_count()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
 
 And that's it for denominators! Happy counting!
