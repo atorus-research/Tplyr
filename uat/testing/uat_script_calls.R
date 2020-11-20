@@ -1,7 +1,7 @@
 #Validation Script
 
 library(Tplyr)
-library(tidyverse, lib.loc = .libPaths()[2])
+library(tidyverse)
 library(testthat)
 library(shinydashboard)
 source("~/Tplyr/uat/references/input/helper_test_code.R")

@@ -7,7 +7,7 @@
 set_denom_ignore(e, ...)
 }
 \arguments{
-\item{e}{A count_layer object}
+\item{e}{A \code{count_layer} object}
 
 \item{...}{Values to exclude from the percentage calculation. If you use
 `set_missing_counts()` this should be the name of the parameters instead of
@@ -17,6 +17,8 @@ the values, see the example below.}
 The modified layer object
 }
 \description{
+`r lifecycle::badge("defunct")`
+
 This is generally used for missing values. Values like "", NA, "NA" are
 common ways missing values are presented in a data frame. In certain cases,
 percentages do not use "missing" values in the denominator. This function
@@ -31,8 +33,10 @@ mtcars2[mtcars$cyl == 8, "cyl"] <- "Not Found"
 tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found")) \%>\%
-      set_denom_ignore("Missing")
+      set_missing_count(f_str("xx ", n), Missing = c(NA, "Not Found"))
+      # This function is currently deprecated. It was replaced with an
+      # argument in set_missing_count
+      # set_denom_ignore("Missing")
   ) \%>\%
   build()
 }

@@ -7,7 +7,7 @@
 set_indentation(e, indentation)
 }
 \arguments{
-\item{e}{A tplyr_count layer}
+\item{e}{A \code{count_layer} object}
 
 \item{indentation}{A character to prefix the row labels in an inner
 count layer}

@@ -25,6 +25,7 @@ t16 <- tplyr_table(mtcars, gear) %>%
 t17 <- tplyr_table(mtcars, gear)
 t18 <- tplyr_table(mtcars, gear)
 t19 <- tplyr_table(mtcars, gear)
+t20 <- tplyr_table(mtcars, gear)
 
 c1 <- group_count(t1, cyl)
 # Add in by
@@ -77,6 +78,9 @@ c18 <- group_count(t18, cyl, by = vars("am", "vs")) %>%
 c19 <- group_count(t19, cyl, by = am) %>%
   set_denoms_by(am) %>%
   add_total_row()
+c20 <- group_count(t20, cyl) %>%
+  set_missing_count(f_str("xx", n), Missing = "4", denom_ignore = TRUE) %>%
+  add_total_row()
 
 
 t1 <- add_layers(t1, c1)
@@ -98,6 +102,7 @@ t16 <- add_layers(t16, c16)
 t17 <- add_layers(t17, c17)
 t18 <- add_layers(t18, c18)
 t19 <- add_layers(t19, c19)
+t20 <- add_layers(t20, c20)
 
 test_that("Count layers are built as expected", {
   expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
@@ -112,8 +117,8 @@ test_that("Count layers are built as expected", {
   expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "include_total_row", "denoms_by",
-                               "total_count_format", "total_denom_ignore",
-                               "total_row_sort_value"))
+                               "total_count_format",
+                               "total_row_sort_value", "count_missings"))
   expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
                                "target_var", "precision_by", "layers",
                                "distinct_by"))
@@ -189,6 +194,7 @@ test_that("Count layers are summarized without errors and warnings", {
   expect_warning(build(t17), "A total row was added in addition")
   expect_silent(build(t18))
   expect_silent(build(t19))
+  expect_warning(build(t20), "Your total row is ignoring certain values.")
 })
 
 test_that("Count layers are processed as expected", {
@@ -290,19 +296,27 @@ test_that("missing counts can be displayed as expected", {
   t4 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_missing_count(f_str("xx ", n), Missing = NA) %>%
-        set_denom_ignore("Unknown", "Missing")
+        set_missing_count(f_str("xx ", n), denom_ignore = TRUE, Missing = NA, Unknown = "Unknown")
     ) %>%
     build() %>%
     arrange(ord_layer_1)
   expect_equal(t4$row_label1, c("4", "Unknown", "Missing"))
-  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 (200.0%)", "12 "))
-  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ( 50.0%)", " 0 "))
-  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ( 50.0%)", " 2 "))
+  expect_equal(t4$var1_3, c(" 1 (100.0%)", " 2 ", "12 "))
+  expect_equal(t4$var1_4, c(" 8 (100.0%)", " 4 ", " 0 "))
+  expect_equal(t4$var1_5, c(" 2 (100.0%)", " 1 ", " 2 "))
   expect_equal(t4$ord_layer_index, c(1L, 1L, 1L))
   # Added unname for compatibility between tibble versions
   expect_equal(unname(t4$ord_layer_1), c(1, 2, 3))
 
+  t5 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        add_total_row(f_str("xx (xx.x%)", n, pct), count_missings = FALSE) %>%
+        set_missing_count(f_str("xx", n), Missing = c("Unknown", NA))
+    ) %>%
+    build()
+
+  expect_equal(t5$var1_3, c(" 1 (  6.7%)", "14", " 1 ( 6.7%)"))
 })
 
 test_that("Count layer clauses with invalid syntax give informative error", {
@@ -356,7 +370,6 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
       group_count(am) %>%
         set_missing_count(f_str("xx", n), sort_value = 5689, Missing = NA, `Not Found` = NaN) %>%
         add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = 9999, count_missings = TRUE) %>%
-        set_denom_ignore("Missing") %>%
         set_order_count_method("byvarn") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
@@ -387,7 +400,6 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("byvarn") %>%
         add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -Inf, count_missings = TRUE) %>%
-        set_denom_ignore("Missing") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
@@ -398,9 +410,9 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         set_order_count_method("bycount") %>%
       add_total_row(f_str("xxxxx [xx.x]", n, pct), sort_value = -6795, count_missings = TRUE) %>%
-      set_denom_ignore("Missing") %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
+    # Suppressing warnring for pct in total
     build()
   # Missing COunts + Total Row(bottom) + by count
   t8 <- tplyr_table(mtcars2, gear) %>%
@@ -473,4 +485,25 @@ test_that("set_denom_where works as expected", {
     build()
 
   expect_output_file(dput(t13), "count_t13")
+})
+
+test_that("missing counts can be set without a format and it inherits the layer format", {
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(Missing = "4")
+    ) %>%
+    build()
+  expect_equal(t1$row_label1, c("Missing", "6", "8"))
+  expect_equal(t1$var1_3, c(" 1 (  6.7%)", " 2 ( 13.3%)", "12 ( 80.0%)"))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(Missing = "4") %>%
+        set_format_strings(f_str("xxx  [xx.x%]", n, pct))
+    ) %>%
+    build()
+  expect_equal(t2$row_label1, c("Missing", "6", "8"))
+  expect_equal(t2$var1_3, c("  1  [ 6.7%]", "  2  [13.3%]", " 12  [80.0%]"))
 })

@@ -2,10 +2,11 @@
 
 * Local Ubuntu 18.04.4 devtools::check
 * Latest Ubuntu CI with latest tidyverse
+* Github release action with windows, linux, and osx check
 
 ## Updates
-* Updates for compatibility with dplyr and tibble
-* Interface updates
+* set_denom_ignore is now defunct
+* update set_missing_count interface.
 
 
 ## R CMD CHECK Results

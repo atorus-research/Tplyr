@@ -7,7 +7,7 @@
 set_distinct_by(e, distinct_by)
 }
 \arguments{
-\item{e}{A count_layer object}
+\item{e}{A \code{count_layer/shift_layer} object}
 
 \item{distinct_by}{Variable(s) to get the distinct data.}
 }

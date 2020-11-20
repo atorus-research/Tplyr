@@ -91,10 +91,11 @@
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
+\usepackage{xcolor}
 
 \title{Tplyr Validation Report}
 \author{Nathan Kosiba}
-\date{2020-11-10}
+\date{2020-11-19}
 
 \begin{document}
 \maketitle
@@ -144,7 +145,7 @@ Test Case Name & Last updated by & Last updated date\\
 \toprule
 Test Code Name & Last updated by & Last updated date\\
 \midrule
-\cellcolor{gray!6}{test\_cases.R} & \cellcolor{gray!6}{Nathan Kosiba} & \cellcolor{gray!6}{2020-11-10}\\
+\cellcolor{gray!6}{test\_cases.R} & \cellcolor{gray!6}{Nathan Kosiba} & \cellcolor{gray!6}{2020-11-19}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1677,7 +1678,7 @@ T61.3 & As expected & Pass\\
 \hypertarget{system-information}{%
 \section{System Information}\label{system-information}}
 
-R version 3.6.2 (2019-12-12) Platform: x86\_64-pc-linux-gnu (64-bit)
+R version 4.0.2 (2020-06-22) Platform: x86\_64-pc-linux-gnu (64-bit)
 Running under: Ubuntu 18.04.4 LTS
 
 Matrix products: default BLAS:
@@ -1685,39 +1686,38 @@ Matrix products: default BLAS:
 /usr/lib/x86\_64-linux-gnu/libopenblasp-r0.2.20.so
 
 locale: {[}1{]} LC\_CTYPE=C.UTF-8 LC\_NUMERIC=C LC\_TIME=C.UTF-8
-LC\_COLLATE=C.UTF-8 LC\_MONETARY=C.UTF-8\\
-{[}6{]} LC\_MESSAGES=C.UTF-8 LC\_PAPER=C.UTF-8 LC\_NAME=C LC\_ADDRESS=C
-LC\_TELEPHONE=C\\
-{[}11{]} LC\_MEASUREMENT=C.UTF-8 LC\_IDENTIFICATION=C
+LC\_COLLATE=C.UTF-8 LC\_MONETARY=C.UTF-8 LC\_MESSAGES=C.UTF-8
+LC\_PAPER=C.UTF-8\\
+{[}8{]} LC\_NAME=C LC\_ADDRESS=C LC\_TELEPHONE=C LC\_MEASUREMENT=C.UTF-8
+LC\_IDENTIFICATION=C
 
 attached base packages: {[}1{]} stats graphics grDevices utils datasets
 methods base
 
-other attached packages: {[}1{]} rlang\_0.4.7 kableExtra\_1.2.1
-knitr\_1.30 shinydashboard\_0.7.1 testthat\_2.3.1 forcats\_0.4.0\\
-{[}7{]} stringr\_1.4.0 dplyr\_1.0.2 purrr\_0.3.4 readr\_1.3.1
-tidyr\_1.0.2 tibble\_3.0.1\\
-{[}13{]} ggplot2\_3.2.1 tidyverse\_1.3.0 Tplyr\_0.2.1 shiny\_1.5.0
+other attached packages: {[}1{]} rlang\_0.4.8 kableExtra\_1.3.1
+knitr\_1.30 shinydashboard\_0.7.1 testthat\_3.0.0 shiny\_1.5.0
+Tplyr\_0.2.2 forcats\_0.5.0\\
+{[}9{]} stringr\_1.4.0 dplyr\_1.0.2 purrr\_0.3.4 readr\_1.3.1
+tidyr\_1.1.2 tibble\_3.0.4 ggplot2\_3.3.2 tidyverse\_1.3.0\\
+{[}17{]} magrittr\_1.5
 
 loaded via a namespace (and not attached): {[}1{]} Rcpp\_1.0.5
-lubridate\_1.7.4 lattice\_0.20-38 clisymbols\_1.2.0 assertthat\_0.2.1
-digest\_0.6.25 packrat\_0.5.0\\
-{[}8{]} prompt\_1.0.0 mime\_0.9 R6\_2.4.1 cellranger\_1.1.0
-backports\_1.1.5 reprex\_0.3.0 evaluate\_0.14\\
-{[}15{]} httr\_1.4.1 pillar\_1.4.4 lazyeval\_0.2.2 readxl\_1.3.1
-rstudioapi\_0.11 rmarkdown\_2.4 webshot\_0.5.2\\
-{[}22{]} munsell\_0.5.0 broom\_0.5.4 xfun\_0.18 compiler\_3.6.2
-httpuv\_1.5.2 modelr\_0.1.5 pkgconfig\_2.0.3\\
-{[}29{]} htmltools\_0.5.0 tidyselect\_1.1.0 viridisLite\_0.3.0
-fansi\_0.4.1 crayon\_1.3.4 dbplyr\_1.4.2 withr\_2.1.2\\
-{[}36{]} later\_1.0.0 grid\_3.6.2 nlme\_3.1-142 jsonlite\_1.6.1
-xtable\_1.8-4 gtable\_0.3.0 lifecycle\_0.2.0\\
-{[}43{]} DBI\_1.1.0 magrittr\_1.5 scales\_1.1.0 cli\_2.0.2
-stringi\_1.4.5 fs\_1.3.1 promises\_1.1.0\\
-{[}50{]} xml2\_1.3.2 ellipsis\_0.3.1 generics\_0.0.2 vctrs\_0.3.4
-tools\_3.6.2 glue\_1.4.1 hms\_0.5.3\\
-{[}57{]} yaml\_2.2.1 rsconnect\_0.8.16 fastmap\_1.0.1 colorspace\_1.4-1
-rvest\_0.3.5 haven\_2.2.0
+lubridate\_1.7.9 pharmaRTF\_0.1.1 rprojroot\_1.3-2 assertthat\_0.2.1
+digest\_0.6.27 mime\_0.9 R6\_2.5.0\\
+{[}9{]} cellranger\_1.1.0 backports\_1.2.0 reprex\_0.3.0 evaluate\_0.14
+httr\_1.4.2 pillar\_1.4.6 readxl\_1.3.1 rstudioapi\_0.13\\
+{[}17{]} blob\_1.2.1 rmarkdown\_2.5 desc\_1.2.0 webshot\_0.5.2
+munsell\_0.5.0 broom\_0.7.0 compiler\_4.0.2 httpuv\_1.5.4\\
+{[}25{]} modelr\_0.1.8 xfun\_0.19 pkgconfig\_2.0.3 htmltools\_0.5.0.9002
+tidyselect\_1.1.0 viridisLite\_0.3.0 fansi\_0.4.1 crayon\_1.3.4\\
+{[}33{]} dbplyr\_1.4.4 withr\_2.3.0 later\_1.1.0.1 waldo\_0.2.3
+grid\_4.0.2 jsonlite\_1.7.1 xtable\_1.8-4 gtable\_0.3.0\\
+{[}41{]} lifecycle\_0.2.0 DBI\_1.1.0 huxtable\_5.1.1 scales\_1.1.1
+cli\_2.1.0 stringi\_1.5.3 diffobj\_0.3.2 fs\_1.5.0\\
+{[}49{]} promises\_1.1.1 xml2\_1.3.2 ellipsis\_0.3.1 generics\_0.0.2
+vctrs\_0.3.4 rematch2\_2.1.2 tools\_4.0.2 glue\_1.4.2\\
+{[}57{]} hms\_0.5.3 pkgload\_1.1.0 fastmap\_1.0.1 yaml\_2.2.1
+colorspace\_1.4-1 rvest\_0.3.6 haven\_2.3.1
 
 \hypertarget{manual-check-completion-history}{%
 \section{Manual Check Completion
@@ -1737,7 +1737,7 @@ Check & Output File Reviewed & Response & Log\\
 \endfoot
 \bottomrule
 \endlastfoot
-\cellcolor{gray!6}{T59.1} & \cellcolor{gray!6}{test\_59.rtf} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{nathan.kosiba:2020-11-10 15:56:26}\\*
+\cellcolor{gray!6}{T59.1} & \cellcolor{gray!6}{test\_59.rtf} & \cellcolor{gray!6}{TRUE} & \cellcolor{gray!6}{nathan.kosiba:2020-11-19 19:06:52}\\*
 \end{longtable}
 
 \end{document}

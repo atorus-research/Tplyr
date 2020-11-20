@@ -1,0 +1,107 @@
+---
+title: "Count Layers"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{count}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE, setup}
+library(Tplyr)
+library(dplyr, warn.conflicts = FALSE)
+library(knitr)
+library(kableExtra)
+load("adsl.Rdata")
+load("adae.Rdata")
+load("adlb.Rdata")
+```
+
+At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it's not that easy. And in clinical reports, there's quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we’ve added a good bit of flexibility into `group_count()` to help you get what you need when creating these reports, whether you’re creating a demographics table, adverse events, or lab results.
+
+## A Simple Example
+
+Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the "Total" group. 
+
+```{r}
+t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
+  add_total_group() %>%
+  add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
+  add_layer(
+    group_count(DCDECOD) %>%
+      set_order_count_method("bycount") %>%
+      set_ordering_cols(Total)
+  ) %>%
+  build() %>%
+  arrange(desc(ord_layer_1)) %>%
+  select(starts_with("row"), var1_Placebo, `var1_Xanomeline Low Dose`,
+         `var1_Xanomeline High Dose`, var1_Treated, var1_Total)
+
+kable(t)
+```
+
+## Distinct Versus Event Counts
+
+Another exceptionally important consideration within count layers is whether you should be using distinct counts, non-distinct counts, or some combination of both. Adverse event tables are a perfect example. Often, you're concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn't necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group. 
+
+'Tplyr' allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified `distinct_by` variables.
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(AEDECOD) %>%
+      set_distinct_by(USUBJID) %>%
+      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, distinct_pct, n))
+  ) %>%
+  build() %>%
+  head()
+
+kable(t)
+```
+
+You may have seen tables before like the one above. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct` and `distinct_pct` in addition to the `n` and `pct` created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
+
+## Nested Count Summaries
+
+Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of "Other" summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.
+
+One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don't want you to have to do that. Instead, we handle this complexity for you. This is done in `group_count()` by submitting two target variables with `dplyr::vars()`. The first variable should be your grouping variable that you want summarized, which we refer to as the "Outside" variable, and the second should have the narrower scope, which we call the "Inside" variable. 
+
+The example below demonstrates how to do a nested summary. Look at the first row - here `row_label1` and `row_label2` are both "CARDIAC DISORDERS". This line is the summary for `AEBODSYS.` In the rows below that, `row_label1` continues on with the value "CARDIAC DISORDERS", but `row_label2` changes. These are the summaries for `AEDECOD`.
+
+```{r}
+tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD))
+  ) %>%
+  build() %>%
+  head() %>% 
+  kable()
+```
+
+This accomplishes what we needed, but it's not exactly the presentation you might hope for. We have a solution for this as well.
+
+```{r} 
+tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+      set_nest_count(TRUE) %>% 
+      set_indentation("--->")
+  ) %>%
+  build() %>%
+  head() %>% 
+  kable()
+```
+
+By using `set_nest_count()`, this triggers 'Tplyr' to drop row_label1, and indent all of the AEDECOD values within row_label2. The columns are renamed appropriately as well. The default indentation used will be 3 spaces, but as you can see here - you can set the indentation however you like. This let's you use tab strings for different language-specific output types, stick with spaces, indent wider or smaller - whatever you wish. All of the existing order variables remain, so this has no impact on your ability to sort the table. 
+
+There's a lot more to counting! So be sure to check out our vignettes on sorting, shift tables, and denominators.

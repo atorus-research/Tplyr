@@ -489,13 +489,15 @@ get_data_order <- function(x, formatted_col_index) {
             bind_rows(tibble(
               !!target_var[[1]] := names(missing_count_list),
               factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
-            ))
+            )) %>%
+            distinct(!!target_var[[1]], .keep_all = TRUE)
         } else {
           fact_df <- fact_df %>%
             bind_rows(tibble(
               !!target_var[[1]] := names(missing_count_list),
               factor_index = seq_along(missing_count_list) + missing_sort_value
-            ))
+            )) %>%
+            distinct(!!target_var[[1]], .keep_all = TRUE)
         }
       }
 

@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -127,9 +127,6 @@
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count_shift.html">Count and Shift Tables</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Helpers</li>
@@ -206,6 +203,18 @@
           <p><code><a href="tplyr_table.html">tplyr_table()</a></code> </p>
         </td>
         <td><p>Create a Tplyr table object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pop_data.html">pop_data()</a></code> <code><a href="pop_data.html">`pop_data&lt;-`()</a></code> <code><a href="pop_data.html">set_pop_data()</a></code> </p>
+        </td>
+        <td><p>Return or set population data bindings</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pop_treat_var.html">pop_treat_var()</a></code> <code><a href="pop_treat_var.html">set_pop_treat_var()</a></code> </p>
+        </td>
+        <td><p>Return or set pop_treat_var binding</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -378,12 +387,6 @@ based summaries, descriptive statistics summaries, or shift count summaries</p><
       <tr>
         
         <td>
-          <p><code><a href="set_denom_ignore.html">set_denom_ignore()</a></code> </p>
-        </td>
-        <td><p>Set values the denominator calculation will ignore</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="set_denoms_by.html">set_denoms_by()</a></code> </p>
         </td>
         <td><p>Set variables used in pct denominator calculation</p></td>
@@ -393,6 +396,12 @@ based summaries, descriptive statistics summaries, or shift count summaries</p><
           <p><code><a href="set_distinct_by.html">set_distinct_by()</a></code> </p>
         </td>
         <td><p>Set counts to be distinct by some grouping variable.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_denom_where.html">set_denom_where()</a></code> </p>
+        </td>
+        <td><p>Set Logic for denominator subsetting</p></td>
       </tr><tr>
         
         <td>

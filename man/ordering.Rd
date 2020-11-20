@@ -13,7 +13,7 @@ set_ordering_cols(e, ...)
 set_result_order_var(e, result_order_var)
 }
 \arguments{
-\item{e}{A \code{group_count} layer}
+\item{e}{A \code{count_layer} object}
 
 \item{order_count_method}{The logic determining how the rows in the final
 layer output will be indexed. Options are 'bycount', 'byfactor', and

@@ -7,7 +7,7 @@
 set_outer_sort_position(e, outer_sort_position)
 }
 \arguments{
-\item{e}{A count layer}
+\item{e}{A \code{count_layer} object}
 
 \item{outer_sort_position}{Either 'asc' or 'desc'. If desc the final ordering helper
 will be set to Inf, if 'asc' the ordering helper is set to -Inf.}

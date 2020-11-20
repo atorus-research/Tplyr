@@ -15,7 +15,7 @@
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select
 #' @importFrom tibble tibble rownames_to_column add_column
-#' @importFrom lifecycle deprecate_soft
+#' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
 #' @importFrom forcats fct_expand fct_collapse fct_explicit_na
 NULL
@@ -271,3 +271,6 @@ process_distinct_total <- FALSE
 total_stat_denom <- NULL
 denom_where <- NULL
 built_target_pre_where <- NULL
+count_fmt <- NULL
+count_missings <- NULL
+has_missing_count <- FALSE

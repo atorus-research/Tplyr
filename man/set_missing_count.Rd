@@ -4,16 +4,20 @@
 \alias{set_missing_count}
 \title{Set the display for missing strings}
 \usage{
-set_missing_count(e, fmt, sort_value = NULL, ...)
+set_missing_count(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...)
 }
 \arguments{
-\item{e}{A count layer}
+\item{e}{A \code{count_layer} object}
 
 \item{fmt}{An f_str object to change the display of the missing counts}
 
-\item{sort_value}{A numeric value that will be used in the ordering
-column. This should be numeric. If it is not suplied the ordering column
-will be the maximum value of what appears in the table plus one.}
+\item{sort_value}{A numeric value that will be used in the ordering column.
+This should be numeric. If it is not supplied the ordering column will be
+the maximum value of what appears in the table plus one.}
+
+\item{denom_ignore}{A boolean. Specifies Whether or not to include the
+missing counts specified within the ... parameter within denominators. If
+set to TRUE, the values specified within ... will be ignored.}
 
 \item{...}{Parameters used to note which values to describe as missing.
 Generally NA and "Missing" would be used here. Parameters can be named
@@ -23,8 +27,7 @@ character vectors where the names become the row label.}
 The modified layer
 }
 \description{
-If there is a special way NA or missing values should be counted, this binding
-will display the values in a different way.
+Controls how missing counts are handled and displayed in the layer
 }
 \examples{
 library(magrittr)
@@ -36,8 +39,7 @@ mtcars2[mtcars$cyl == 6, "cyl"] <- NA
 tplyr_table(mtcars2, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
-      set_missing_count(f_str("xx ", n), Missing = NA) \%>\%
-      set_denom_ignore(NA)
+      set_missing_count(f_str("xx ", n), Missing = NA)
   ) \%>\%
   build()
 }
