@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -82,9 +82,6 @@
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count_shift.html">Count and Shift Tables</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Helpers</li>
@@ -501,7 +498,7 @@
 <div id="reordering-and-dropping-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reordering-and-dropping-columns" class="anchor"></a>Reordering and Dropping Columns</h3>
-<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
+<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://magrittr.tidyverse.org/reference/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
 <p>To drop the ordering helpers, you can easily subtract them with ‘dplyr’ and ‘tidyselect’.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">t</span> <span class="op">%&gt;%</span> 

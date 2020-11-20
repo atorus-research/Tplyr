@@ -3,13 +3,15 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
-  count_shift: count_shift.html
+  count: count.html
+  denom: denom.html
   desc: desc.html
   options: options.html
   readme: readme.html
   riskdiff: riskdiff.html
+  shift: shift.html
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2020-11-10T19:47Z
+last_built: 2020-11-20T21:15Z
 
