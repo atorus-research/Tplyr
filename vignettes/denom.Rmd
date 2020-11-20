@@ -26,7 +26,7 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-Counting is pretty easy, right? There's not all that much to it. With of a few considerations, we can cover most of the scenarios that users will encounter while using Tplyr. Denominators, on the other hand, get *_a lot_* more complicated. Why? Because there are a lot of ways to do it. What values do we exclude from the denominator? What groups of variables establish thought groups? Does the denominator use a different filter than the values being counted? If you've programmed enough of these tables, you know that it's all very situational. 
+Counting is pretty easy, right? There's not all that much to it. With a few considerations we can cover most of the scenarios that users will encounter while using Tplyr. Denominators, on the other hand, get *_a lot_* more complicated. Why? Because there are a lot of ways to do it. What values do we exclude from the denominator? What variables establish denominator grouping? Does the denominator use a different filter than the values being counted? If you've programmed enough of these tables, you know that it's all very situational. 
 
 Given the complexity, we've spent a lot of time trying to make this easy for you, the user. In doing this it became very clear that denominators needed their own vignette. Additionally, a few other things go hand in hand with denominators. 
 
@@ -128,7 +128,7 @@ Depending on your presentation, what you require may change - but the flexibilit
 
 ### Shift layers
 
-A major part of the shift API is the control of the denominators used in the calculation of the percentages. In shift tables, most percentages are relative to the "box" that is formed from the "from" and "to" groups of the shift for each treatment group. Just like the count layers, the `set_denoms_by()` functions any variable name from the treatment variable, `cols` argument, `by` variables. The different with shift layers is that now you can also include your target variables used for the row or column.
+A major part of the shift API is the control of the denominators used in the calculation of the percentages. In shift tables, most percentages are relative to the "box" that is formed from the "from" and "to" groups of the shift for each treatment group. Just like the count layers, the `set_denoms_by()` functions any variable name from the treatment variable, `cols` argument, `by` variables. The difference with shift layers is that now you can also include your target variables used for the row or column.
 
 ```{r} 
 tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
@@ -245,10 +245,10 @@ Much of this functionality is similar to `set_missing_count()`. You're able to s
 
 More nuance comes in two places:
 
-- By default, `add_total_row()` *will count missing values*, but you can exclude those values using the `count_missings` parameter. 'Tplyr' will warn you when `set_count_missing()` has `denom_ignore` set to `TRUE`, `add_total_row()` has `count_missings` set to `TRUE` and the format contains a percentage. Why? Because if the denominator is ignore missing values but you're still counting them in your total, the percentage shown can exceed 100%. 
-- `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly which groups are used to form the denominator. The totals presented by `add_total_row()` will always align with denominators specified in `set_denom_by()`. 
+- By default, `add_total_row()` *will count missing values*, but you can exclude those values using the `count_missings` parameter. 'Tplyr' will warn you when `set_count_missing()` has `denom_ignore` set to `TRUE`, `add_total_row()` has `count_missings` set to `TRUE` and the format contains a percentage. Why? Because if the denominator is ignoring missing values but you're still counting them in your total, the percentage shown can exceed 100%. 
+- `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly which groups are used to form the denominator. This way the totals presented by `add_total_row()` will align with denominators specified in `set_denom_by()` and generate total rows that match your denominator values. 
 
-In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the denominator. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
+In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
 
 ```{r}
 adsl2 <- adsl
