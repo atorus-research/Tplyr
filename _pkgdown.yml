@@ -18,6 +18,8 @@ reference:
 - contents:
   - build
   - tplyr_table
+  - set_pop_data
+  - set_pop_treat_var
 - title: Layers and layering
   desc: Creating layers and adding them to the table
 - contents:
@@ -51,9 +53,9 @@ reference:
   - set_precision_on
 - title: Counting functions
 - contents:
-  - set_denom_ignore
   - set_denoms_by
   - set_distinct_by
+  - set_denom_where
   - set_nest_count
   - set_outer_sort_position
   - set_missing_count

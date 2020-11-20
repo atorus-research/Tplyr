@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -82,9 +82,6 @@
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count_shift.html">Count and Shift Tables</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Helpers</li>
@@ -163,27 +160,23 @@
   <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Sex'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">SEX</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Sex n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>, <span class="kw">denom_ignore</span><span class="kw">=</span><span class="fl">TRUE</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Age'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (Years)"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Age group'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age Categories n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>, <span class="kw">denom_ignore</span><span class="kw">=</span><span class="fl">TRUE</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Race'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">RACE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Race n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>) <span class="kw">%&gt;%</span>
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>, <span class="kw">denom_ignore</span><span class="kw">=</span><span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
       <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span>(<span class="st">"byfactor"</span>)
   ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span> <span class="kw">=</span> <span class="st">'Ethnic'</span>,
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">ETHNIC</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Ethnicity n (%)"</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_denom_ignore.html">set_denom_ignore</a></span>(<span class="st">"Missing"</span>)
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span>(<span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx'</span>, <span class="no">n</span>), <span class="kw">Missing</span><span class="kw">=</span><span class="fl">NA</span>, <span class="kw">denom_ignore</span><span class="kw">=</span><span class="fl">TRUE</span>)
   )
 
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)

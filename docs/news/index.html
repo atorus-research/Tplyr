@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -127,9 +127,6 @@
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count_shift.html">Count and Shift Tables</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Helpers</li>
@@ -175,9 +172,27 @@
       <small>Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="tplyr-022" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.2">
+<a href="#tplyr-022" class="anchor"></a>Tplyr 0.2.2<small> Unreleased </small>
+</h1>
+<ul>
+<li>Enhansments
+<ul>
+<li>
+<code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> interface was made more intuitive. A new argument <code>denom_ignore</code> was added.</li>
+<li>
+<code><a href="../reference/set_denom_ignore.html">set_denom_ignore()</a></code> is now defunct. It was replaced with the <code>denom_ignore</code> argument in <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>
+</li>
+<li>
+<code><a href="../reference/add_total_row.html">add_total_row()</a></code> now uses the <code>count_missing</code> argument and will no longer have any side effects on the denominators.</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="tplyr-021" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.1">
-<a href="#tplyr-021" class="anchor"></a>Tplyr 0.2.1<small> Unreleased </small>
+<a href="#tplyr-021" class="anchor"></a>Tplyr 0.2.1<small> 2020-11-10 </small>
 </h1>
 <ul>
 <li>Bug Fixes

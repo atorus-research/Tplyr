@@ -47,8 +47,7 @@
 
 
 <meta property="og:title" content="Set the display for missing strings — set_missing_count" />
-<meta property="og:description" content="If there is a special way NA or missing values should be counted, this binding
-will display the values in a different way." />
+<meta property="og:description" content="Controls how missing counts are handled and displayed in the layer" />
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png" />
 <meta property="og:image:alt" content="Tplyr Hex Sticker" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -95,7 +94,7 @@ will display the values in a different way." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -129,9 +128,6 @@ will display the values in a different way." />
     <li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count_shift.html">Count and Shift Tables</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Helpers</li>
@@ -179,18 +175,17 @@ will display the values in a different way." />
     </div>
 
     <div class="ref-description">
-    <p>If there is a special way NA or missing values should be counted, this binding
-will display the values in a different way.</p>
+    <p>Controls how missing counts are handled and displayed in the layer</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_missing_count</span>(<span class='no'>e</span>, <span class='no'>fmt</span>, <span class='kw'>sort_value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>set_missing_count</span>(<span class='no'>e</span>, <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>sort_value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>denom_ignore</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>e</th>
-      <td><p>A count layer</p></td>
+      <td><p>A <code>count_layer</code> object</p></td>
     </tr>
     <tr>
       <th>fmt</th>
@@ -198,9 +193,15 @@ will display the values in a different way.</p>
     </tr>
     <tr>
       <th>sort_value</th>
-      <td><p>A numeric value that will be used in the ordering
-column. This should be numeric. If it is not suplied the ordering column
-will be the maximum value of what appears in the table plus one.</p></td>
+      <td><p>A numeric value that will be used in the ordering column.
+This should be numeric. If it is not supplied the ordering column will be
+the maximum value of what appears in the table plus one.</p></td>
+    </tr>
+    <tr>
+      <th>denom_ignore</th>
+      <td><p>A boolean. Specifies Whether or not to include the
+missing counts specified within the ... parameter within denominators. If
+set to TRUE, the values specified within ... will be ignored.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -224,14 +225,13 @@ character vectors where the names become the row label.</p></td>
 <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>mtcars2</span>, <span class='no'>gear</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
     <span class='fu'><a href='layer_constructors.html'>group_count</a></span>(<span class='no'>cyl</span>) <span class='kw'>%&gt;%</span>
-      <span class='fu'>set_missing_count</span>(<span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx "</span>, <span class='no'>n</span>), <span class='kw'>Missing</span> <span class='kw'>=</span> <span class='fl'>NA</span>) <span class='kw'>%&gt;%</span>
-      <span class='fu'><a href='set_denom_ignore.html'>set_denom_ignore</a></span>(<span class='fl'>NA</span>)
+      <span class='fu'>set_missing_count</span>(<span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx "</span>, <span class='no'>n</span>), <span class='kw'>Missing</span> <span class='kw'>=</span> <span class='fl'>NA</span>)
   ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='build.html'>build</a></span>()</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 6</span><span>
 #&gt;   row_label1 var1_3        var1_4       var1_5       ord_layer_index ord_layer_1
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 4          </span><span style='color: #555555;'>"</span><span> 1 (  7.7%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 8 (100.0%… </span><span style='color: #555555;'>"</span><span> 2 ( 50.0%…               1           1
-#&gt; </span><span style='color: #555555;'>2</span><span> 8          </span><span style='color: #555555;'>"</span><span>12 ( 92.3%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 0 (  0.0%… </span><span style='color: #555555;'>"</span><span> 2 ( 50.0%…               1           2
+#&gt; </span><span style='color: #555555;'>1</span><span> 4          </span><span style='color: #555555;'>"</span><span> 1 (  6.7%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 8 ( 66.7%… </span><span style='color: #555555;'>"</span><span> 2 ( 40.0%…               1           1
+#&gt; </span><span style='color: #555555;'>2</span><span> 8          </span><span style='color: #555555;'>"</span><span>12 ( 80.0%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 0 (  0.0%… </span><span style='color: #555555;'>"</span><span> 2 ( 40.0%…               1           2
 #&gt; </span><span style='color: #555555;'>3</span><span> Missing    </span><span style='color: #555555;'>"</span><span> 2 </span><span style='color: #555555;'>"</span><span>         </span><span style='color: #555555;'>"</span><span> 4 </span><span style='color: #555555;'>"</span><span>        </span><span style='color: #555555;'>"</span><span> 1 </span><span style='color: #555555;'>"</span><span>                      1           3</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
