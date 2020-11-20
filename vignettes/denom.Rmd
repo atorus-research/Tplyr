@@ -246,9 +246,9 @@ Much of this functionality is similar to `set_missing_count()`. You're able to s
 More nuance comes in two places:
 
 - By default, `add_total_row()` *will count missing values*, but you can exclude those values using the `count_missings` parameter. 'Tplyr' will warn you when `set_count_missing()` has `denom_ignore` set to `TRUE`, `add_total_row()` has `count_missings` set to `TRUE` and the format contains a percentage. Why? Because if the denominator is ignoring missing values but you're still counting them in your total, the percentage shown can exceed 100%. 
-- `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly which groups are used to form the denominator. This way the totals presented by `add_total_row()` will align with denominators specified in `set_denom_by()` and generate total rows that match your denominator values. 
+- `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly which groups are used to form the denominator. This way the totals presented by `add_total_row()` will align with denominators specified in `set_denom_by()` and generate total rows that match the grouping of your denominator values. 
 
-In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and the total row shows us what denominator is used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
+In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator denominator that was used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
 
 ```{r}
 adsl2 <- adsl
@@ -258,9 +258,9 @@ tplyr_table(adsl2, TRT01P) %>%
   add_layer(
     group_count(AGEGR1, by=SEX) %>% 
       set_denoms_by(TRT01P, SEX) %>%  # This gives me a Total row each group
-      add_total_row(f_str("xxx", n), count_missings=TRUE, sort_value=-Inf) %>% 
+      add_total_row(f_str("xxx", n), count_missings=FALSE, sort_value=-Inf) %>% 
       set_total_row_label("All Age Groups") %>% 
-      set_missing_count(f_str("xxx", n), Missing = NA, sort_value=Inf)
+      set_missing_count(f_str("xx (xx.x%)", n, pct), Missing = NA, sort_value=Inf)
   ) %>% 
   build() %>% 
   arrange(ord_layer_1, ord_layer_2) %>% 
@@ -268,7 +268,7 @@ tplyr_table(adsl2, TRT01P) %>%
 ```
 The default text for the Total row is "Total", but we provide `set_total_row_label()` to allow you to customize the text used in your display. 
 
-Let's look at a more practical version of the table above. Typically you would want the total count to be your denominator, which excludes the missings. So more commonly, you'll see this:
+Let's look at a more practical version of the table above. If you display missings, you probably want to exclude them from the total. Here we do that using `set_count_missing()`.  So more commonly, you'll see this:
 
 ```{r}
 tplyr_table(adsl2, TRT01P) %>% 
@@ -284,6 +284,6 @@ tplyr_table(adsl2, TRT01P) %>%
   kable()
 ```
 
-Now the denominators reflect the total counts, and we can see how many records are excluded from the presented group.
+Now the table is more intuitive. We used `set_count_missing()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
 
 And that's it for denominators! Happy counting!
