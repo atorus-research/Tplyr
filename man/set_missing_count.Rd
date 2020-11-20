@@ -11,12 +11,13 @@ set_missing_count(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...)
 
 \item{fmt}{An f_str object to change the display of the missing counts}
 
-\item{sort_value}{A numeric value that will be used in the ordering
-column. This should be numeric. If it is not suplied the ordering column
-will be the maximum value of what appears in the table plus one.}
+\item{sort_value}{A numeric value that will be used in the ordering column.
+This should be numeric. If it is not supplied the ordering column will be
+the maximum value of what appears in the table plus one.}
 
-\item{denom_ignore}{Whether or not to include the "Missing" in the
-percentage denominators. Defaults to FALSE.}
+\item{denom_ignore}{A boolean. Specifies Whether or not to include the
+missing counts specified within the ... parameter within denominators. If
+set to TRUE, the values specified within ... will be ignored.}
 
 \item{...}{Parameters used to note which values to describe as missing.
 Generally NA and "Missing" would be used here. Parameters can be named
