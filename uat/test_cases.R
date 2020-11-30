@@ -7,12 +7,11 @@ context("Atorus Validation")
 #' 11/30/2020
 
 #setup ----
-#insert any necessary libraries and set testthat to version 3
+#insert any necessary libraries
 library(Tplyr)
 library(tidyverse)
 library(rlang)
 library(testthat)
-local_edition(3)
 
 #insert code applicable to all tests i.e. functions or data
 adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
