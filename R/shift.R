@@ -160,7 +160,10 @@ process_shift_denoms <- function(x) {
 
   evalq({
 
+    if(is.null(denom_where)) denom_where <- TRUE
+
     denoms_df <- built_target %>%
+      filter(!!denom_where) %>%
       group_by(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
       summarize(n = n()) %>%
       complete(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%

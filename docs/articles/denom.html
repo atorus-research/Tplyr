@@ -83,6 +83,12 @@
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
+    <li>
+      <a href="../articles/count.html">Count Layers</a>
+    </li>
+    <li>
+      <a href="../articles/shift.html">Shift Layers</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Helpers</li>
     <li>
@@ -96,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
+    <li>
+      <a href="../articles/denom.html">Totals, Missings, and Denominators</a>
     </li>
   </ul>
 </li>
@@ -3236,13 +3245,13 @@ ord_layer_1
 MILD
 </td>
 <td style="text-align:left;">
-24 (57.14%)
+23 (62.16%)
 </td>
 <td style="text-align:left;">
-65 (74.71%)
+69 (75.00%)
 </td>
 <td style="text-align:left;">
-48 (49.48%)
+39 (40.21%)
 </td>
 <td style="text-align:right;">
 1
@@ -3256,13 +3265,13 @@ MILD
 MODERATE
 </td>
 <td style="text-align:left;">
-18 (42.86%)
+14 (37.84%)
 </td>
 <td style="text-align:left;">
-21 (24.14%)
+22 (23.91%)
 </td>
 <td style="text-align:left;">
-45 (46.39%)
+54 (55.67%)
 </td>
 <td style="text-align:right;">
 1
@@ -3279,7 +3288,7 @@ SEVERE
 0 ( 0.00%)
 </td>
 <td style="text-align:left;">
-1 ( 1.15%)
+1 ( 1.09%)
 </td>
 <td style="text-align:left;">
 4 ( 4.12%)
@@ -3296,10 +3305,10 @@ SEVERE
 Missing
 </td>
 <td style="text-align:left;">
-5
+10
 </td>
 <td style="text-align:left;">
-24
+19
 </td>
 <td style="text-align:left;">
 21
@@ -3403,10 +3412,10 @@ F
 &lt;65
 </td>
 <td style="text-align:left;">
-6 ( 11.3%)
+9 ( 17.0%)
 </td>
 <td style="text-align:left;">
-4 ( 10.0%)
+3 ( 7.5%)
 </td>
 <td style="text-align:left;">
 5 ( 10.0%)
@@ -3429,13 +3438,13 @@ F
 &gt;80
 </td>
 <td style="text-align:left;">
-15 ( 28.3%)
+20 ( 37.7%)
 </td>
 <td style="text-align:left;">
 5 ( 12.5%)
 </td>
 <td style="text-align:left;">
-14 ( 28.0%)
+16 ( 32.0%)
 </td>
 <td style="text-align:right;">
 1
@@ -3455,10 +3464,10 @@ F
 65-80
 </td>
 <td style="text-align:left;">
-19 ( 35.8%)
+17 ( 32.1%)
 </td>
 <td style="text-align:left;">
-23 ( 57.5%)
+20 ( 50.0%)
 </td>
 <td style="text-align:left;">
 24 ( 48.0%)
@@ -3481,13 +3490,13 @@ F
 Missing
 </td>
 <td style="text-align:left;">
-13 (24.5%)
+7 (13.2%)
 </td>
 <td style="text-align:left;">
-8 (20.0%)
+12 (30.0%)
 </td>
 <td style="text-align:left;">
-7 (14.0%)
+5 (10.0%)
 </td>
 <td style="text-align:right;">
 1
@@ -3533,13 +3542,13 @@ M
 &lt;65
 </td>
 <td style="text-align:left;">
-3 ( 9.1%)
+5 ( 15.2%)
 </td>
 <td style="text-align:left;">
 4 ( 9.1%)
 </td>
 <td style="text-align:left;">
-3 ( 8.8%)
+2 ( 5.9%)
 </td>
 <td style="text-align:right;">
 1
@@ -3559,13 +3568,13 @@ M
 &gt;80
 </td>
 <td style="text-align:left;">
-6 ( 18.2%)
+5 ( 15.2%)
 </td>
 <td style="text-align:left;">
-11 ( 25.0%)
+9 ( 20.5%)
 </td>
 <td style="text-align:left;">
-10 ( 29.4%)
+8 ( 23.5%)
 </td>
 <td style="text-align:right;">
 1
@@ -3585,13 +3594,13 @@ M
 65-80
 </td>
 <td style="text-align:left;">
-17 ( 51.5%)
+16 ( 48.5%)
 </td>
 <td style="text-align:left;">
-20 ( 45.5%)
+22 ( 50.0%)
 </td>
 <td style="text-align:left;">
-15 ( 44.1%)
+14 ( 41.2%)
 </td>
 <td style="text-align:right;">
 1
@@ -3617,7 +3626,7 @@ Missing
 9 (20.5%)
 </td>
 <td style="text-align:left;">
-6 (17.6%)
+10 (29.4%)
 </td>
 <td style="text-align:right;">
 1
@@ -3680,13 +3689,13 @@ F
 All Age Groups
 </td>
 <td style="text-align:left;">
-40
+46
 </td>
 <td style="text-align:left;">
-32
+28
 </td>
 <td style="text-align:left;">
-43
+45
 </td>
 <td style="text-align:right;">
 1
@@ -3706,13 +3715,13 @@ F
 &lt;65
 </td>
 <td style="text-align:left;">
-6 ( 15.0%)
+9 ( 19.6%)
 </td>
 <td style="text-align:left;">
-4 ( 12.5%)
+3 ( 10.7%)
 </td>
 <td style="text-align:left;">
-5 ( 11.6%)
+5 ( 11.1%)
 </td>
 <td style="text-align:right;">
 1
@@ -3732,13 +3741,13 @@ F
 &gt;80
 </td>
 <td style="text-align:left;">
-15 ( 37.5%)
+20 ( 43.5%)
 </td>
 <td style="text-align:left;">
-5 ( 15.6%)
+5 ( 17.9%)
 </td>
 <td style="text-align:left;">
-14 ( 32.6%)
+16 ( 35.6%)
 </td>
 <td style="text-align:right;">
 1
@@ -3758,13 +3767,13 @@ F
 65-80
 </td>
 <td style="text-align:left;">
-19 ( 47.5%)
+17 ( 37.0%)
 </td>
 <td style="text-align:left;">
-23 ( 71.9%)
+20 ( 71.4%)
 </td>
 <td style="text-align:left;">
-24 ( 55.8%)
+24 ( 53.3%)
 </td>
 <td style="text-align:right;">
 1
@@ -3784,13 +3793,13 @@ F
 Missing
 </td>
 <td style="text-align:left;">
-13
-</td>
-<td style="text-align:left;">
-8
-</td>
-<td style="text-align:left;">
 7
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+5
 </td>
 <td style="text-align:right;">
 1
@@ -3816,7 +3825,7 @@ All Age Groups
 35
 </td>
 <td style="text-align:left;">
-28
+24
 </td>
 <td style="text-align:right;">
 1
@@ -3836,13 +3845,13 @@ M
 &lt;65
 </td>
 <td style="text-align:left;">
-3 ( 11.5%)
+5 ( 19.2%)
 </td>
 <td style="text-align:left;">
 4 ( 11.4%)
 </td>
 <td style="text-align:left;">
-3 ( 10.7%)
+2 ( 8.3%)
 </td>
 <td style="text-align:right;">
 1
@@ -3862,13 +3871,13 @@ M
 &gt;80
 </td>
 <td style="text-align:left;">
-6 ( 23.1%)
+5 ( 19.2%)
 </td>
 <td style="text-align:left;">
-11 ( 31.4%)
+9 ( 25.7%)
 </td>
 <td style="text-align:left;">
-10 ( 35.7%)
+8 ( 33.3%)
 </td>
 <td style="text-align:right;">
 1
@@ -3888,13 +3897,13 @@ M
 65-80
 </td>
 <td style="text-align:left;">
-17 ( 65.4%)
+16 ( 61.5%)
 </td>
 <td style="text-align:left;">
-20 ( 57.1%)
+22 ( 62.9%)
 </td>
 <td style="text-align:left;">
-15 ( 53.6%)
+14 ( 58.3%)
 </td>
 <td style="text-align:right;">
 1
@@ -3920,7 +3929,7 @@ Missing
 9
 </td>
 <td style="text-align:left;">
-6
+10
 </td>
 <td style="text-align:right;">
 1

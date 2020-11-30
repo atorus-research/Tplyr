@@ -116,7 +116,8 @@ header_n(t) %>%
 With the table level settings under control, now you're ready to learn more about what 'Tplyr' has to offer in each layer. 
 
 - Learn more about descriptive statistics layers in `vignettes("desc")`
-- Learn more about count and shift layers in `vignettes("count_shift")`
+- Learn more about count and shift layers in `vignette("count")`
+- Learn more about shift layers in `vignette("shift")`
 - Learn more about calculating risk differences in `vignettes("riskdiff")`
 - Learn more about sorting 'Tplyr' tables in `vignettes("sort")`
 - Learn more about using 'Tplyr' options in `vignettes("options")`
