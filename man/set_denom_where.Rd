@@ -12,7 +12,8 @@ set_denom_where(e, denom_where)
 \item{denom_where}{An expression (i.e. syntax) to be used to subset the
 target dataset for calculating layer denominators. Supply as programming
 logic (i.e. x < 5 & y == 10). To remove the layer where parameter
-subsetting, pass 'TRUE' to this function.}
+subsetting for the total row and thus the percentage denominators,
+pass 'TRUE' to this function.}
 }
 \value{
 The modified Tplyr layer object
