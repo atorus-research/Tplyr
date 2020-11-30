@@ -25,8 +25,6 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-# Sorting a 'Tplyr' Table
-
 At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by 'Tplyr'.
 
 Let's start by looking at an example. 
@@ -113,7 +111,7 @@ t %>%
 
 ## Sorting the `by` Variables
 
-Each `by` variable gets its own order column as well. These will be named `ord_layer_<n>` where `<n>` typically relates back to the `row_label` variable (this isn't necessarily the case when count layers are nested - see `vignettes("count_shift")`).
+Each `by` variable gets its own order column as well. These will be named `ord_layer_<n>` where `<n>` typically relates back to the `row_label` variable (this isn't necessarily the case when count layers are nested - see `vignette("count")`).
 
 These order variables will calculate based on the first applicable method below.
 

@@ -67,6 +67,7 @@ reference:
   - apply_row_masks
   - get_numeric_data
   - get_stats_data
+  - everything()
 
 articles:
 - title: Table Vignettes
@@ -77,7 +78,8 @@ articles:
   navbar: Layer Vignettes
   contents:
   - desc
-  - count_shift
+  - count
+  - shift
 - title: Helper Vignettes
   navbar: Helpers
   contents:
@@ -85,4 +87,5 @@ articles:
   - sort
   - options
   - styled-table
+  - everything()
 
