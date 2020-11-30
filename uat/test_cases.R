@@ -1824,8 +1824,8 @@ test_that('T31',{
     pivot_wider(names_from = c(TRTA, BNRIND_FACTOR), id_cols = ANRIND_FACTOR, values_from = fmtd, names_prefix = 'var1_') %>%
     as_tibble()
 
-  testthat::expect_equal(t31_1[1:2,2:7],
-                         test_31[1:2,2:7],
+  testthat::expect_equal(t31_1[1:2,2:10],
+                         test_31[1:2,2:10],
                          label = "T31.1")
   #manual check(s)
 
