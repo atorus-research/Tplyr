@@ -113,7 +113,9 @@ There's quite a bit more to learn! And we've prepared a number of other vignette
 - The best place to start is with our Getting Started vignette at `vignette("Tplyr")`
 - Learn more about table level settings in `vignette("table")`
 - Learn more about descriptive statistics layers in `vignette("desc")`
-- Learn more about count and shift layers in `vignette("count_shift")`
+- Learn more about count layers in `vignette("count")`
+- Learn more about shift layers in `vignette("shift")`
+- Learn more about percentages in `vignette("denom")`
 - Learn more about calculating risk differences in `vignette("riskdiff")`
 - Learn more about sorting 'Tplyr' tables in `vignette("sort")`
 - Learn more about using 'Tplyr' options in `vignette("options")`

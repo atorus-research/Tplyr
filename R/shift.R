@@ -15,6 +15,8 @@ process_summaries.shift_layer <- function(x, ...) {
     # Catch errors
     # Puting this here to make clear it happens up-front in the layer
     tryCatch({
+      #save the built target before thw where so it can be processed in the denominator
+      built_target_pre_where <- built_target
       built_target <- built_target %>%
         filter(!!where)
     }, error = function(e) {
@@ -160,7 +162,10 @@ process_shift_denoms <- function(x) {
 
   evalq({
 
-    denoms_df <- built_target %>%
+    if(is.null(denom_where)) denom_where <- where
+
+    denoms_df <- built_target_pre_where %>%
+      filter(!!denom_where) %>%
       group_by(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
       summarize(n = n()) %>%
       complete(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%

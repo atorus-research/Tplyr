@@ -542,7 +542,8 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 #' @param denom_where An expression (i.e. syntax) to be used to subset the
 #'   target dataset for calculating layer denominators. Supply as programming
 #'   logic (i.e. x < 5 & y == 10). To remove the layer where parameter
-#'   subsetting, pass 'TRUE' to this function.
+#'   subsetting for the total row and thus the percentage denominators,
+#'   pass 'TRUE' to this function.
 #'
 #' @return The modified Tplyr layer object
 #' @export

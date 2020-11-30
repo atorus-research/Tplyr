@@ -350,13 +350,14 @@ The underlying process of shift tables is the same as count layers - we're count
 
 There's quite a bit more to learn! And we've prepared a number of other vignettes to help you get what you need out of 'Tplyr'. 
 
-- Learn more about table level settings in `vignettes("table")`
-- Learn more about descriptive statistics layers in `vignettes("desc")`
-- Learn more about count and shift layers in `vignettes("count_shift")`
-- Learn more about calculating risk differences in `vignettes("riskdiff")`
-- Learn more about sorting 'Tplyr' tables in `vignettes("sort")`
-- Learn more about using 'Tplyr' options in `vignettes("options")`
-- And finally, learn more about producing and outputting styled tables using 'Tplyr' in `vignettes("styled-table")`
+- Learn more about table level settings in `vignette("table")`
+- Learn more about descriptive statistics layers in `vignette("desc")`
+- Learn more about count and shift layers in `vignette("count")`
+- Learn more about shift layers in `vignette("shift")`
+- Learn more about calculating risk differences in `vignette("riskdiff")`
+- Learn more about sorting 'Tplyr' tables in `vignette("sort")`
+- Learn more about using 'Tplyr' options in `vignette("options")`
+- And finally, learn more about producing and outputting styled tables using 'Tplyr' in `vignette("styled-table")`
 
 # References
 

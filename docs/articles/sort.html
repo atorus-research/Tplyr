@@ -83,6 +83,12 @@
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
+    <li>
+      <a href="../articles/count.html">Count Layers</a>
+    </li>
+    <li>
+      <a href="../articles/shift.html">Shift Layers</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Helpers</li>
     <li>
@@ -96,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
+    </li>
+    <li>
+      <a href="../articles/denom.html">Totals, Missings, and Denominators</a>
     </li>
   </ul>
 </li>
@@ -133,9 +142,6 @@
 
     
     
-<div id="sorting-a-tplyr-table" class="section level1">
-<h1 class="hasAnchor">
-<a href="#sorting-a-tplyr-table" class="anchor"></a>Sorting a ‘Tplyr’ Table</h1>
 <p>At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by ‘Tplyr’.</p>
 <p>Let’s start by looking at an example.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
@@ -944,7 +950,7 @@
 <div id="sorting-the-by-variables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sorting-the-by-variables" class="anchor"></a>Sorting the <code>by</code> Variables</h2>
-<p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("count_shift")</a></code>).</p>
+<p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see <code><a href="../articles/count.html">vignette("count")</a></code>).</p>
 <p>These order variables will calculate based on the first applicable method below.</p>
 <ol style="list-style-type: decimal">
 <li>If the variable has a <code>VARN</code> variable in the <code>target</code> dataset, (i.e. <code>AVISIT</code> has <code>AVISITN</code>, or <code>PARAM</code> has <code>PARAMN</code>), that variable will be extracted and used as the ordering variable associated with that row label.</li>
@@ -1894,7 +1900,6 @@
 </table>
 <p>Now we have the nice “L”, “N”, “H” order that we’d like to see. Other sort methods on a shift table are fairly unlikely, as the matrix structure of the counts displayed by shift tables is relevant to the presentation and interpreting results.</p>
 <p>Happy sorting!</p>
-</div>
 </div>
   </div>
 

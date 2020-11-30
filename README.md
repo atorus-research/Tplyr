@@ -168,7 +168,9 @@ vignettes to help you get what you need out of ‘Tplyr’.
     `vignette("Tplyr")`
   - Learn more about table level settings in `vignette("table")`
   - Learn more about descriptive statistics layers in `vignette("desc")`
-  - Learn more about count and shift layers in `vignette("count_shift")`
+  - Learn more about count layers in `vignette("count")`
+  - Learn more about shift layers in `vignette("shift")`
+  - Learn more about percentages in `vignette("denom")`
   - Learn more about calculating risk differences in
     `vignette("riskdiff")`
   - Learn more about sorting ‘Tplyr’ tables in `vignette("sort")`

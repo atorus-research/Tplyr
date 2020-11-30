@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
-library(kableExtra)
 load("adsl.Rdata")
 load("adae.Rdata")
 load("adlb.Rdata")

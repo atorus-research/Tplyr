@@ -4,14 +4,14 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/19/2020
+#' 11/30/2020
 
 #setup ----
 #insert any necessary libraries
 library(Tplyr)
 library(tidyverse)
-library(testthat)
 library(rlang)
+library(testthat)
 
 #insert code applicable to all tests i.e. functions or data
 adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
@@ -1639,12 +1639,13 @@ test_that('T28',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
+        group_shift(vars(row=ANRIND, column=BNRIND), where=(ANRIND != "" & BNRIND != "")) %>%
+          set_format_strings(f_str("xxx (xxx.x%)", n, pct))
       )
-    build(t)
-    test_28 <- get_numeric_data(t)[[1]]
+
+    test_28 <- build(t)
 
     # output table to check attributes
     save(test_28, file = "~/Tplyr/uat/output/test_28.RData")
@@ -1661,15 +1662,30 @@ test_that('T28',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t28_totals <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
+    group_by(TRTA) %>%
+    summarise(total=n()) %>%
+    ungroup() %>%
+    complete(TRTA, fill=list(total = 0))
   t28_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, ANRIND, BNRIND) %>%
     summarise(n=n()) %>%
     ungroup() %>%
-    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0))
-  testthat::expect_equal(t28_1$n,test_28$n,label = "T28.1")
+    complete(TRTA, ANRIND, BNRIND, fill=list(n = 0)) %>%
+    left_join(t28_totals,by="TRTA") %>%
+    mutate(pct = ifelse(total == 0, 0, (n / total) * 100)) %>%
+    mutate(fmtd = paste0(sprintf("%3s",n), ' (', sprintf("%5.1f", pct), '%)')) %>%
+    select(TRTA, ANRIND, BNRIND, fmtd) %>%
+    pivot_wider(names_from = c(TRTA, BNRIND), id_cols = ANRIND, values_from = fmtd, names_prefix = 'var1_') %>%
+    as_tibble()
+
+  testthat::expect_equal(t28_1[1:2,2:7],
+                         test_28[1:2,2:7],
+                         label = "T28.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t28_totals)
   rm(t28_1)
   rm(test_28)
 })
@@ -1766,9 +1782,11 @@ test_that('T31',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
+    t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR))
+        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR), where=(ANRIND != "" & BNRIND != "")) %>%
+          set_format_strings(f_str("xxx (xxx.x%)", n, pct)) %>%
+          set_denom_where(TRUE)
       )
 
     test_31 <- build(t) %>%
@@ -1789,17 +1807,30 @@ test_that('T31',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  t31_totals <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2") %>%
+    group_by(TRTA) %>%
+    summarise(total=n()) %>%
+    ungroup() %>%
+    complete(TRTA, fill=list(total = 0))
   t31_1 <- filter(adlb, PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "") %>%
     group_by(TRTA, ANRIND_FACTOR, BNRIND_FACTOR) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fill=list(n = 0)) %>%
-    mutate(fmtd = sprintf('%2s', n)) %>%
-    pivot_wider(names_from = c(TRTA, BNRIND_FACTOR), values_from = fmtd, id_cols = ANRIND_FACTOR)
-  testthat::expect_equal(t31_1$Placebo_N,test_31$var1_Placebo_N,label = "T31.1")
+    left_join(t31_totals,by="TRTA") %>%
+    mutate(pct = ifelse(total == 0, 0, (n / total) * 100)) %>%
+    mutate(fmtd = paste0(sprintf("%3s",n), ' (', sprintf("%5.1f", pct), '%)')) %>%
+    select(TRTA, ANRIND_FACTOR, BNRIND_FACTOR, fmtd) %>%
+    pivot_wider(names_from = c(TRTA, BNRIND_FACTOR), id_cols = ANRIND_FACTOR, values_from = fmtd, names_prefix = 'var1_') %>%
+    as_tibble()
+
+  testthat::expect_equal(t31_1[1:3,2:10],
+                         test_31[1:3,2:10],
+                         label = "T31.1")
   #manual check(s)
 
   #clean up working directory
+  rm(t31_totals)
   rm(t31_1)
   rm(test_31)
 })
