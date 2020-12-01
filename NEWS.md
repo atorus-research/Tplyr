@@ -1,10 +1,10 @@
 # Tplyr 0.2.2
 
-- Enhansments
+- Enhancements
   - `set_missing_count()` interface was made more intuitive. A new argument `denom_ignore` was added.
   - `set_denom_ignore()` is now defunct. It was replaced with the `denom_ignore` argument in `set_missing_count()`
   - `add_total_row()` now uses the `count_missing` argument and will no longer have any side effects on the denominators.
-
+  - `set_denom_where()` is now usable by shift layers.
 
 # Tplyr 0.2.1
 
@@ -12,7 +12,7 @@
   - Fixed a bug caused by an update to `tibble` 3.0.4 that caused factors to be displayed incorrectly in row labels and sorting columns to populate incorrectly.
   - A bug where the factors used in the shift layers wouldn't be reflected in the ordering columns.
 
-- Enhansements
+- Enhancements
   - The `add_total_row()` interface has been updated. It now takes an f_str object can be formatted differently than the rest of the table. A parameter was also added note if total rows should include missing counts.
   - The `set_missing_count()` interface was updated. The 'string' parameter was removed and replaced with the ellipsis. Instead of passing a vector, a user would pass any number of character vectors that are named.
   - Build will error if `denom_ignore` is used but no missing count strings are specified.
