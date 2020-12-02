@@ -183,10 +183,10 @@
 
     <div id="tplyr-022" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.2">
-<a href="#tplyr-022" class="anchor"></a>Tplyr 0.2.2<small> Unreleased </small>
+<a href="#tplyr-022" class="anchor"></a>Tplyr 0.2.2<small> 2020-11-30 </small>
 </h1>
 <ul>
-<li>Enhansments
+<li>Enhancements
 <ul>
 <li>
 <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> interface was made more intuitive. A new argument <code>denom_ignore</code> was added.</li>
@@ -195,6 +195,8 @@
 </li>
 <li>
 <code><a href="../reference/add_total_row.html">add_total_row()</a></code> now uses the <code>count_missing</code> argument and will no longer have any side effects on the denominators.</li>
+<li>
+<code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is now usable by shift layers.</li>
 </ul>
 </li>
 </ul>
@@ -210,7 +212,7 @@
 <li>A bug where the factors used in the shift layers wouldn’t be reflected in the ordering columns.</li>
 </ul>
 </li>
-<li>Enhansements
+<li>Enhancements
 <ul>
 <li>The <code><a href="../reference/add_total_row.html">add_total_row()</a></code> interface has been updated. It now takes an f_str object can be formatted differently than the rest of the table. A parameter was also added note if total rows should include missing counts.</li>
 <li>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> interface was updated. The ‘string’ parameter was removed and replaced with the ellipsis. Instead of passing a vector, a user would pass any number of character vectors that are named.</li>
