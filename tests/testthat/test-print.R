@@ -5,7 +5,7 @@ t_ <- tplyr_table(mtcars, gear, cols = vs) %>%
   add_layer(
     group_count(cyl, by = am) %>%
       set_distinct_by(cyl) %>%
-      set_format_strings(f_str("a (xx.xx%) [xxx] [xx.xx%]", distinct, distinct_pct, n, pct))
+      set_format_strings(f_str("a (xx.xx%) [xxx] [xx.xx%]", distinct_n, distinct_pct, n, pct))
   )
 
 

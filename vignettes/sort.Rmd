@@ -115,32 +115,9 @@ Each `by` variable gets its own order column as well. These will be named `ord_l
 
 These order variables will calculate based on the first applicable method below.
 
-1. If the variable has a `VARN` variable in the `target` dataset, (i.e. `AVISIT` has `AVISITN`, or `PARAM` has `PARAMN`), that variable will be extracted and used as the ordering variable associated with that row label.
-2. If the `by` variable is a factor, the values of the ordering column will be associated with the factor levels.
+1. If the `by` variable is a factor, the values of the ordering column will be associated with the factor levels.
+2. If the variable has a `VARN` variable in the `target` dataset, (i.e. `AVISIT` has `AVISITN`, or `PARAM` has `PARAMN`), that variable will be extracted and used as the ordering variable associated with that row label.
 3. If neither 1 or 2 are true, the values in the ordering column will be based on an alphabetical sorting. The resulting column will be numeric. 
-
-### VARN
-
-To demonstrate the use of `VARN` sorting, consider the variable `RACE.` In `ADSL`, `RACE` also has `RACEN`:
-
-```{r}
-adsl %>% 
-  distinct(RACEN, RACE) %>% 
-  kable()
-```
-
-'Tplyr' will automatically figure this out for you, and pull the `RACEN` values into the variable `ord_layer_1`.
-
-```{r}
-tplyr_table(adsl, TRT01A) %>%
-  add_layer(
-    group_count(EOSSTT, by = RACE)
-  ) %>%
-  build() %>%
-  select(row_label1, row_label2, ord_layer_1) %>%
-  arrange(ord_layer_1) %>% 
-  kable()
-```
 
 ### Factor
 
@@ -166,6 +143,29 @@ adsl$ETHNIC <- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC 
 ```
 
 This is converting the variable `ETHNIC` to a factor, then setting the factor levels. But it doesn't _change_ any of the values in the dataset - there are no values of "dummy" within `ETHNIC` in ADSL. Yet in the output built above, you see rows for "DUMMY". By using factors, you can insert rows into your 'Tplyr' table that don't exist in the data. This is particularly helpful if you're working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.
+
+### VARN
+
+To demonstrate the use of `VARN` sorting, consider the variable `RACE.` In `ADSL`, `RACE` also has `RACEN`:
+
+```{r}
+adsl %>% 
+  distinct(RACEN, RACE) %>% 
+  kable()
+```
+
+'Tplyr' will automatically figure this out for you, and pull the `RACEN` values into the variable `ord_layer_1`.
+
+```{r}
+tplyr_table(adsl, TRT01A) %>%
+  add_layer(
+    group_count(EOSSTT, by = RACE)
+  ) %>%
+  build() %>%
+  select(row_label1, row_label2, ord_layer_1) %>%
+  arrange(ord_layer_1) %>% 
+  kable()
+```
 
 ### Alphabetical
 

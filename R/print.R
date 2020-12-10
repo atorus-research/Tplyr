@@ -170,8 +170,6 @@ str.tplyr_layer <- function(object, ..., print_env = TRUE) {
     cat(as.character(purrr::map(by, quo_get_expr)))
     cat("\n*** where ***\n")
     cat(as.character(quo_get_expr(where)))
-    cat("\n*** Layer(s) ***\n")
-    cat(as.character(purrr::map_dfc(layers, class)[2,]))
   }, envir = object)
 
   invisible(object)

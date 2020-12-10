@@ -362,27 +362,29 @@ get_by_order <- function(formatted_data, target, i, var) {
 
   # The levels of the factor in the target data.frame. Will be null if its
   # not a factor
-  levels_i <- levels(target[, as_name(var)])
+  levels_i <- levels(target[[as_name(var)]])
 
-  if (has_varn(target, as_name(var))) {
+  # If variable is factor
+  if (!is.null(levels_i)) {
+
+
+    # Unlist to pull it out of the tibble, order it based on the orders in the target
+    # data.frame, unclass it to pull out the index
+    as.numeric(unclass(ordered(unlist(formatted_data[, i]), levels_i)))
+
+    # If variable is varn
+  } else if (has_varn(target, as_name(var))) {
 
     varn_df <- get_varn_values(target, as_name(var))
 
     as.numeric(get_data_order_byvarn(formatted_data, varn_df, as_name(var), i))
 
-  # If the variable isn't a factor, default to alphabetical
-  } else if (is.null(levels_i)) {
+    # If it is a factor, just use levels to sort
+  } else {
 
     # Unlist to get out of tibble, turn into factor which will order it alphabeticlly
     # unclass it to get it as a number
     as.numeric(unclass(as.factor(unlist(formatted_data[, i]))))
-
-    # If it is a factor, just use levels to sort
-  } else {
-
-    # Unlist to pull it out of the tibble, order it based on the orders in the target
-    # data.frame, unclass it to pull out the index
-    as.numeric(unclass(ordered(unlist(formatted_data[, i]), levels_i)))
   }
 }
 

@@ -1,3 +1,11 @@
+# Tplyr 0.2.3
+
+- Enhancements
+  - The process for determining `by` variable indicies was changed from <VAR>N -> factor -> alphabetical to factor -> <VAR>N -> alphabetical to allow users to override variables that have <VAR>N counterparts that might have additional values not present in the target.
+  
+- Bug Fixes
+  - A bug fix where factors in by variables weren't indexed properly was resolved.
+
 # Tplyr 0.2.2
 
 - Enhancements

@@ -252,11 +252,13 @@ set_nest_count <- function(e, nest_count) {
 #'   table. Following are the indices for the by variables and the target
 #'   variable. The by variables are ordered based on:
 #'
-#'   \enumerate{ \item{A <VAR>N variable (i.e. VISIT -> VISITN, TRT -> TRTN) if
-#'   one is present.} \item{If no <VAR>N variable is present, it is ordered
-#'   based on the factor present in the target dataset.} \item{If the variable
-#'   is not a factor in the target dataset, it is coerced to one and ordered
-#'   alphabetically.} }
+#'   \enumerate{
+#'   \item{The `by` variable is a factor in the target dataset}
+#'   \item{If the variable isn't a factor, but has a <VAR>N variable (i.e. VISIT
+#'   -> VISITN, TRT -> TRTN)}
+#'   \item{If the variable is not a factor in the target dataset, it is coerced
+#'   to one and ordered alphabetically.}
+#'   }
 #'
 #'   The target variable is ordered depending on the type of layer. See more
 #'   below.
