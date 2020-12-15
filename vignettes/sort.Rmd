@@ -246,7 +246,7 @@ tplyr_table(adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>% 
       # This will present 3 numbers in a cell
-      set_format_strings(f_str("xx (xx.x%) [x]", distinct, distinct_pct, n)) %>% 
+      set_format_strings(f_str("xx (xx.x%) [x]", distinct_n, distinct_pct, n)) %>% 
       # This makes the distinct numbers available
       set_distinct_by(USUBJID) %>%
       # Choosing "bycount" ordering for the result variable
@@ -274,7 +274,7 @@ tplyr_table(adae, TRTA, cols=SEX) %>%
   add_layer(
     group_count(AEDECOD) %>% 
       # This will present 3 numbers in a cell
-      set_format_strings(f_str("xx (xx.x%) [x]", distinct, distinct_pct, n)) %>% 
+      set_format_strings(f_str("xx (xx.x%) [x]", distinct_n, distinct_pct, n)) %>% 
       # This makes the distinct numbers available
       set_distinct_by(USUBJID) %>%
       # Choosing "bycount" ordering for the result variable
