@@ -259,7 +259,7 @@ test_that('T7',{
       add_layer(
         group_count(AEDECOD) %>%
         set_distinct_by(USUBJID) %>%
-        set_format_strings(f_str("xxx", distinct))
+        set_format_strings(f_str("xxx", distinct_n))
       )
     build(t)
     test_7 <- get_numeric_data(t)
@@ -314,7 +314,7 @@ test_that('T8',{
       add_layer(
         group_count(AEDECOD, by=SEX) %>%
           set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx", distinct))
+          set_format_strings(f_str("xxx", distinct_n))
       )
     build(t)
     test_8 <- get_numeric_data(t)
@@ -569,13 +569,13 @@ test_that('T12',{
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_format_strings(f_str("xxx (xxx.x%)", distinct, distinct_pct)) %>%
-          add_total_row(f_str("xxx", distinct), sort_value = -Inf)
+          set_format_strings(f_str("xxx (xxx.x%)", distinct_n, distinct_pct)) %>%
+          add_total_row(f_str("xxx", distinct_n), sort_value = -Inf)
       )%>%
       add_layer(
         group_count(AEDECOD) %>%
-          set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct, distinct_pct)) %>%
-          add_total_row(f_str("xxx [xxx]", n, distinct), sort_value = -Inf)
+          set_format_strings(f_str("xxx (xxx.x%) [xxx (xxx.x%)]", n, pct, distinct_n, distinct_pct)) %>%
+          add_total_row(f_str("xxx [xxx]", n, distinct_n), sort_value = -Inf)
       )
 
     test_12 <- build(t) %>%
