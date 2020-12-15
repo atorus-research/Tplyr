@@ -489,7 +489,7 @@
 <div id="reordering-and-dropping-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reordering-and-dropping-columns" class="anchor"></a>Reordering and Dropping Columns</h3>
-<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://rdrr.io/pkg/magrittr/man/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
+<p>Column selection from data frames is something that is already very well done in R. The functions <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, <code><a href="https://magrittr.tidyverse.org/reference/aliases.html">magrittr::extract()</a></code>, and <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> can all be used to reorder and drop column cleanly and concisely based on a user’s preference.</p>
 <p>To drop the ordering helpers, you can easily subtract them with ‘dplyr’ and ‘tidyselect’.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord_"</span>)) <span class="kw">%&gt;%</span>
@@ -953,15 +953,71 @@
 <p>Each <code>by</code> variable gets its own order column as well. These will be named <code>ord_layer_&lt;n&gt;</code> where <code>&lt;n&gt;</code> typically relates back to the <code>row_label</code> variable (this isn’t necessarily the case when count layers are nested - see <code><a href="../articles/count.html">vignette("count")</a></code>).</p>
 <p>These order variables will calculate based on the first applicable method below.</p>
 <ol style="list-style-type: decimal">
-<li>If the variable has a <code>VARN</code> variable in the <code>target</code> dataset, (i.e. <code>AVISIT</code> has <code>AVISITN</code>, or <code>PARAM</code> has <code>PARAMN</code>), that variable will be extracted and used as the ordering variable associated with that row label.</li>
 <li>If the <code>by</code> variable is a factor, the values of the ordering column will be associated with the factor levels.</li>
+<li>If the variable has a <code>VARN</code> variable in the <code>target</code> dataset, (i.e. <code>AVISIT</code> has <code>AVISITN</code>, or <code>PARAM</code> has <code>PARAMN</code>), that variable will be extracted and used as the ordering variable associated with that row label.</li>
 <li>If neither 1 or 2 are true, the values in the ordering column will be based on an alphabetical sorting. The resulting column will be numeric.</li>
 </ol>
+<div id="factor" class="section level3">
+<h3 class="hasAnchor">
+<a href="#factor" class="anchor"></a>Factor</h3>
+<p>If there’s no <code>VARN</code> variable in the target dataset, ‘Tplyr’ will then check if the variable you provided is a factor. If you’re new to R, spending some time trying to understand factor variables is quite worthwhile. Let’s look at example using the variable <code>ETHNIC</code> and see some of the advantages in practice.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">ETHNIC</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">ETHNIC</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>, <span class="st">"DUMMMY"</span>))
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">ETHNIC</span>)
+  ) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">row_label2</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">kable</span>()</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="right">ord_layer_1</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">COMPLETED</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">COMPLETED</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">DUMMMY</td>
+<td align="left">COMPLETED</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">DUMMMY</td>
+<td align="left">DISCONTINUED</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>Factor variables have ‘levels’. These levels are essentially what the <code>VARN</code> variables are trying to achieve - they specify the order of the different values within the associated variable. The variable we set above specifies that “HISPANIC OR LATINO” should sort first, then “NOT HISPANIC OR LATINO”, and finally “DUMMY”. Notice how they’re not alphabetical?</p>
+<p>A highly advantageous aspect of using factor variables in ‘Tplyr’ is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:</p>
+<pre><code>adsl$ETHNIC &lt;- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))</code></pre>
+<p>This is converting the variable <code>ETHNIC</code> to a factor, then setting the factor levels. But it doesn’t <em>change</em> any of the values in the dataset - there are no values of “dummy” within <code>ETHNIC</code> in ADSL. Yet in the output built above, you see rows for “DUMMY”. By using factors, you can insert rows into your ‘Tplyr’ table that don’t exist in the data. This is particularly helpful if you’re working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.</p>
+</div>
 <div id="varn" class="section level3">
 <h3 class="hasAnchor">
 <a href="#varn" class="anchor"></a>VARN</h3>
 <p>To demonstrate the use of <code>VARN</code> sorting, consider the variable <code>RACE.</code> In <code>ADSL</code>, <code>RACE</code> also has <code>RACEN</code>:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adsl</span> <span class="kw">%&gt;%</span>
   <span class="fu">distinct</span>(<span class="no">RACEN</span>, <span class="no">RACE</span>) <span class="kw">%&gt;%</span>
   <span class="fu">kable</span>()</pre></body></html></div>
 <table class="table">
@@ -985,7 +1041,7 @@
 </tbody>
 </table>
 <p>‘Tplyr’ will automatically figure this out for you, and pull the <code>RACEN</code> values into the variable <code>ord_layer_1</code>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
     <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">RACE</span>)
   ) <span class="kw">%&gt;%</span>
@@ -1032,62 +1088,6 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div id="factor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#factor" class="anchor"></a>Factor</h3>
-<p>If there’s no <code>VARN</code> variable in the target dataset, ‘Tplyr’ will then check if the variable you provided is a factor. If you’re new to R, spending some time trying to understand factor variables is quite worthwhile. Let’s look at example using the variable <code>ETHNIC</code> and see some of the advantages in practice.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adsl</span>$<span class="no">ETHNIC</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adsl</span>$<span class="no">ETHNIC</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>, <span class="st">"DUMMMY"</span>))
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">EOSSTT</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">ETHNIC</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">row_label2</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">row_label1</th>
-<th align="left">row_label2</th>
-<th align="right">ord_layer_1</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">HISPANIC OR LATINO</td>
-<td align="left">COMPLETED</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">HISPANIC OR LATINO</td>
-<td align="left">DISCONTINUED</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">NOT HISPANIC OR LATINO</td>
-<td align="left">COMPLETED</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">NOT HISPANIC OR LATINO</td>
-<td align="left">DISCONTINUED</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="left">DUMMMY</td>
-<td align="left">COMPLETED</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">DUMMMY</td>
-<td align="left">DISCONTINUED</td>
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
-<p>Factor variables have ‘levels’. These levels are essentially what the <code>VARN</code> variables are trying to achieve - they specify the order of the different values within the associated variable. The variable we set above specifies that “HISPANIC OR LATINO” should sort first, then “NOT HISPANIC OR LATINO”, and finally “DUMMY”. Notice how they’re not alphabetical?</p>
-<p>A highly advantageous aspect of using factor variables in ‘Tplyr’ is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:</p>
-<pre><code>adsl$ETHNIC &lt;- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))</code></pre>
-<p>This is converting the variable <code>ETHNIC</code> to a factor, then setting the factor levels. But it doesn’t <em>change</em> any of the values in the dataset - there are no values of “dummy” within <code>ETHNIC</code> in ADSL. Yet in the output built above, you see rows for “DUMMY”. By using factors, you can insert rows into your ‘Tplyr’ table that don’t exist in the data. This is particularly helpful if you’re working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.</p>
 </div>
 <div id="alphabetical" class="section level3">
 <h3 class="hasAnchor">
@@ -1242,7 +1242,10 @@
   <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_1</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">`var1_Xanomeline High Dose`</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  <span class="fu">kable</span>()
+<span class="co">#&gt; Warning in set_format_strings.count_layer(., f_str("xx (xx.x%) [x]", distinct, :</span>
+<span class="co">#&gt; The use of 'distinct' in count f_strs is discouraged. It was replaced with</span>
+<span class="co">#&gt; 'distinct_n' for consistancy.</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -1303,7 +1306,10 @@
   <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="no">ord_layer_1</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">row_label1</span>, <span class="no">`var1_Xanomeline High Dose_F`</span>, <span class="no">ord_layer_1</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  <span class="fu">kable</span>()
+<span class="co">#&gt; Warning in set_format_strings.count_layer(., f_str("xx (xx.x%) [x]", distinct, :</span>
+<span class="co">#&gt; The use of 'distinct' in count f_strs is discouraged. It was replaced with</span>
+<span class="co">#&gt; 'distinct_n' for consistancy.</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>

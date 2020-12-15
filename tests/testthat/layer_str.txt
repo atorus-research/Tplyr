@@ -6,4 +6,3 @@
 am
 *** where ***
 TRUE
-*** Layer(s) ***

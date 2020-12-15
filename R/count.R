@@ -406,7 +406,7 @@ prepare_format_metadata.count_layer <- function(x) {
     # If there is both n & distinct, or pct and distinct_pct there has to be a
     # distinct_by
     # If both distinct and n
-    if(((("distinct" %in% map(format_strings$n_counts$vars, as_name) &
+    if(((("distinct_n" %in% map(format_strings$n_counts$vars, as_name) &
          "n" %in% map(format_strings$n_counts$vars, as_name)) |
         # or both distinct_pct and pct
         ("distinct_pct" %in% map(format_strings$n_counts$vars, as_name) &
@@ -417,8 +417,8 @@ prepare_format_metadata.count_layer <- function(x) {
     }
 
     # If distinct_by isn't there, change distinct and distinct_pct
-    if(is.null(distinct_by) & "distinct" %in% map(format_strings$n_counts$vars, as_name)) {
-      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct")
+    if(is.null(distinct_by) & "distinct_n" %in% map(format_strings$n_counts$vars, as_name)) {
+      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_n")
       format_strings$n_counts$vars[[distinct_ind]] <- expr(n)
     }
     if(is.null(distinct_by) & "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) {
@@ -625,7 +625,7 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 #' @param count_fmt f_str object used to format
 #' @param .n values used in 'n'
 #' @param .total values used in pct calculations
-#' @param .distinct_n values used in 'distinct'
+#' @param .distinct_n values used in 'distinct_n'
 #' @param vars_ord values used in distinct pct
 #'
 #' @noRd
@@ -640,7 +640,7 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
            # Make a vector of percentages
            map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
          },
-         "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
+         "distinct_n" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct_n"), fmt = count_fmt),
          "distinct_pct" = {
            # Same as pct
            pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)

@@ -214,3 +214,37 @@ test_that("Sorting columns don't have names", {
 
   expect_true(is.null(names(t$ord_layer_1)))
 })
+
+test_that("by variables get sorted with varn/factors in the correct order", {
+  mtcars2 <- mtcars
+
+
+  #none
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl, by = am)
+    ) %>%
+    build()
+  expect_equal(t1[["row_label1"]], c("0", "0", "0", "1", "1", "1"))
+  expect_equal(t1[["ord_layer_1"]], c(1, 1, 1, 2, 2, 2))
+
+  #factor
+  mtcars2$am <- factor(mtcars2$am, c(1,0))
+  t2 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl, by = am)
+    ) %>%
+    build()
+  expect_equal(t2[["row_label1"]], c("1", "1", "1", "0", "0", "0"))
+  expect_equal(t2[["ord_layer_1"]], c(1, 1, 1, 2, 2, 2))
+
+  #factor+varn
+  mtcars2$amN <- unclass(mtcars2$am) + 2
+  t3 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl, by = am)
+    ) %>%
+    build()
+  expect_equal(t3[["row_label1"]], c("1", "1", "1", "0", "0", "0"))
+  expect_equal(t3[["ord_layer_1"]], c(1, 1, 1, 2, 2, 2))
+})

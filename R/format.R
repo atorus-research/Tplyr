@@ -414,8 +414,19 @@ set_format_strings.count_layer <- function(e, ...) {
   for (name in names(params)) {
 
     if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_pct")),
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct")),
                   msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
+
+      # Check to make sure both disintct(old), and distinct_n(new) aren't passed
+      assert_that(!all(c("distinct", "distinct_n") %in% params[["n_counts"]]$vars),
+                  msg = "You can't pass both distinct and distinct_n, just use distinct_n")
+
+      # Replace the disinct with distinct_n
+      if(any(params[["n_counts"]]$vars %in% "distinct")) {
+        warning("The use of 'distinct' in count f_strs is discouraged. It was replaced with 'distinct_n' for consistancy.")
+      }
+      params[["n_counts"]]$vars[params[["n_counts"]]$vars %in% "distinct"] <- "distinct_n"
+
     } else if (name == "riskdiff") {
       assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
                   msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
