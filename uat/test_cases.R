@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/30/2020
+#' 12/15/2020
 
 #setup ----
 #insert any necessary libraries
