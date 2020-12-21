@@ -17,11 +17,11 @@ set_header_n(table, value)
 
 \item{x}{A \code{tplyr_table} object}
 
-\item{value}{A named numeric vector. Names of vector should match treatment
-group names.}
+\item{value}{A data.frame with columns with the treatment variable, column
+variabes, and a variable with counts named 'n'.}
 
-\item{header_n}{A named numeric vector. Names of vector should match treatment
-group names.}
+\item{header_n}{A data.frame with columns with the treatment variable, column
+variabes, and a variable with counts named 'n'.}
 }
 \value{
 For \code{tplyr_header_n} the header_n binding of the
@@ -29,12 +29,17 @@ For \code{tplyr_header_n} the header_n binding of the
   \code{set_tplyr_header_n} the modified object.
 }
 \description{
-When the header or table body relies on population count data, the header_n
-binding is used for display and calculations.
+The `header_n()` functions can be used to automatically pull the header_n
+derivations from the table or change them for future use.
 }
 \examples{
-tab <- tplyr_table(iris, Species)
+tab <- tplyr_table(mtcars, gear)
 
-header_n(tab) <- c(setosa = 50, versicolor = 50, virginica = 50)
+header_n(tab) <- data.frame(
+  gear = c(3, 4, 5),
+  n = c(10, 15, 45)
+)
+
+
 
 }
