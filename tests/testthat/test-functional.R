@@ -132,3 +132,20 @@ test_that("all tables have the expected dimentions", {
   expect_equal(dim(b_t6), c(48, 15))
 })
 
+## Table with extra treat var factor
+test_that("Extra factors on the treat var come through on the table", {
+  mtcars2 <- mtcars
+  mtcars2$gear <- factor(mtcars2$gear, c(3, 4, 5, 10))
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl)
+    ) %>%
+    add_layer(
+      group_desc(mpg)
+    ) %>%
+    build()
+
+  expect_equal(dim(t1), c(9,7))
+})
+
