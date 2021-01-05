@@ -1,6 +1,6 @@
 LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,11/05/2020,,
+UpdatedDate,,,,01/05/2021,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -34,8 +34,8 @@ Check,,T10,2,Missing values can be excluded from the layer denominator,programma
 TestCase,O:K,T11,,Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string,,
 Check,,T11,1,Values specified by user are presented in the output table and total or missing rows can be added,programmatic,test_11.RData
 TestCase,P:K,T12,,Counts can be produced as n (%),,
-Check,,T12,1,When specified, both n and % can be displayed in a n (%) fashion and total counts can be added,programmatic,test_12.RData
-Check,,T12,2,Distinct n and % can be displayed in a n (%) fashion and total counts can be added,test_12.RData
+Check,,T12,1,"When specified, both n and % can be displayed in a n (%) fashion and total counts can be added",programmatic,test_12.RData
+Check,,T12,2,Distinct n and % can be displayed in a n (%) fashion and total counts can be added,programmatic,test_12.RData
 Check,,T12,3,Distinct and non-distinct n and % can be presented together and total counts can be added,programmatic,test_12.RData
 TestCase,Q,T13,,"When producing n (%), the denominator can be specified using the analysis data",,
 Check,,T13,1,Check denominators created match counts from analysis data,programmatic,test_13.RData

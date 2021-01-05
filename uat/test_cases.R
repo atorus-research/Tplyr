@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 12/15/2020
+#' 01/05/2021
 
 #setup ----
 #insert any necessary libraries
@@ -260,6 +260,9 @@ test_that('T7',{
         group_count(AEDECOD) %>%
         set_distinct_by(USUBJID) %>%
         set_format_strings(f_str("xxx", distinct_n))
+      ) %>%
+      add_layer(
+        group_count("Any AE")
       )
     build(t)
     test_7 <- get_numeric_data(t)
@@ -282,21 +285,29 @@ test_that('T7',{
   t7_1 <- filter(adae, TRTA == "Placebo") %>%
     group_by(AEDECOD) %>%
     summarise(n=n())
-  testthat::expect_equal(t7_1[[2]],
-                         subset(test_7[[1]], TRTA == 'Placebo' & n != 0)[['n']],
-                         label = "T7.1")
   t7_2 <- filter(adae, TRTA == "Placebo") %>%
     group_by(AEDECOD) %>%
     distinct(USUBJID, AEDECOD) %>%
     summarise(n=n())
+  t7_3 <- filter(adae, TRTA == "Placebo") %>%
+    group_by("Any AE") %>%
+    summarise(n = n())
+
+  testthat::expect_equal(t7_1[[2]],
+                         subset(test_7[[1]], TRTA == 'Placebo' & n != 0)[['n']],
+                         label = "T7.1")
   testthat::expect_equal(t7_2[[2]],
                          subset(test_7[[2]], TRTA == 'Placebo' & n != 0)[['distinct_n']],
                          label = "T7.2")
+  testthat::expect_equal(t7_3[[2]],
+                         subset(test_7[[3]], TRTA == 'Placebo' & n != 0)[['n']],
+                         label = "T7.3")
   #manual check(s)
 
   #clean up working directory
   rm(t7_1)
   rm(t7_2)
+  rm(t7_3)
   rm(test_7)
 })
 
