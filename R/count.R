@@ -21,6 +21,21 @@ process_summaries.count_layer <- function(x, ...) {
                    "` is invalid. Filter error:\n", e))
     })
 
+    if(!quo_is_symbol(target_var[[1]]) && as_name(target_var[[1]]) %in% names(target)) {
+      warning(paste0("The first target variable has been coerced into a symbol.",
+                     "You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[1]] <- quo(!!sym(as_name(target_var[[1]])))
+    }
+
+    if(length(target_var) == 2 && !quo_is_symbol(target_var[[2]]) &&
+                as_name(target_var[[2]]) %in% names(target)) {
+      warning(paste0("The second target variable has been coerced into a symbol.",
+                     "You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[2]] <- quo(!!sym(as_name(target_var[[2]])))
+    }
+
   }, envir = x)
 
   rename_missing_values(x)
@@ -131,6 +146,11 @@ process_nested_count_target <- function(x) {
 
     if(is.null(indentation)) indentation <- "   "
 
+
+
+    assert_that(quo_is_symbol(target_var[[2]]),
+                msg = "Inner layers must be data driven variables")
+
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
                                                  by = vars(!!!by), where = !!where))
 
@@ -143,7 +163,7 @@ process_nested_count_target <- function(x) {
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%
-      do(filter_nested_inner_layer(., target, as_name(target_var[[1]]), as_name(target_var[[2]]), indentation))
+      do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
 
     # Bind the numeric data together
     numeric_data <- bind_rows(first_layer_final, second_layer_final)
@@ -173,13 +193,25 @@ refresh_nest <- function(x) {
 #' @noRd
 filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation) {
 
-  current_outer_value <- unique(.group[, outer_name])[[1]]
+  # Is outer variable text? If it is don't filter on it
+  text_outer <- !quo_is_symbol(outer_name)
+  outer_name <- as_name(outer_name)
+  inner_name <- as_name(inner_name)
 
-  target_inner_values <- target %>%
-    filter(!!sym(outer_name) == current_outer_value) %>%
-    select(inner_name) %>%
-    unlist() %>%
-    paste0(indentation, .)
+  if(text_outer) {
+    target_inner_values <- target %>%
+      select(inner_name) %>%
+      unlist() %>%
+      paste0(indentation, .)
+  } else {
+    current_outer_value <- unique(.group[, outer_name])[[1]]
+
+    target_inner_values <- target %>%
+      filter(!!sym(outer_name) == current_outer_value) %>%
+      select(inner_name) %>%
+      unlist() %>%
+      paste0(indentation, .)
+  }
 
   .group %>%
     filter(summary_var %in% target_inner_values)

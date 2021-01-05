@@ -24,7 +24,7 @@ Depending on the display package being used, row label values may need to be
 blanked out if they are repeating. This gives the data frame supporting the
 table the appearance of the grouping variables being grouped together in
 blocks. \code{apply_row_masks} does this work by blanking out the value of
-any row_label variable where the current value is not equal to the value
+any row_label variable where the current value is equal to the value
 before it. Note - \code{apply_row_masks} assumes that the data frame has
 already be sorted and therefore should only be applied once the data frame is
 in its final sort sequence.

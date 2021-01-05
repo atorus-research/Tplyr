@@ -191,8 +191,12 @@ add_order_columns.count_layer <- function(x) {
         expr(!!sym(as_name(x)) == !!as_name(y))
       })
 
-      # Get the number of unique outer values, that is the number of rows to pull out
-      outer_number <- length(unlist(unique(target[, as_name(by[[1]])])))
+      # Get the number of unique outer values, that is the number of rows to pull out.
+      # If its text, it is just 1 to pull out
+      outer_number <- ifelse(quo_is_symbol(by[[1]]),
+                             length(unlist(unique(target[, as_name(by[[1]])]))),
+                             1)
+
       all_outer <- numeric_data %>%
         filter(!!!filter_logic) %>%
         extract(1:outer_number, )
@@ -210,7 +214,8 @@ add_order_columns.count_layer <- function(x) {
                                  target = target, all_outer = all_outer,
                                  filter_logic = filter_logic,
                                  indentation = indentation,
-                                 outer_inf = outer_inf))
+                                 outer_inf = outer_inf)) %>%
+        ungroup()
 
       if (!is.null(nest_count) && nest_count) {
         # If the table nest should be collapsed into one row.

@@ -2,8 +2,8 @@
 
 #' Return or set header_n binding
 #'
-#' When the header or table body relies on population count data, the header_n
-#' binding is used for display and calculations.
+#' The `header_n()` functions can be used to automatically pull the header_n
+#' derivations from the table or change them for future use.
 #'
 #' @param table A \code{tplyr_table} object
 #'
@@ -12,9 +12,14 @@
 #'   \code{set_tplyr_header_n} the modified object.
 #'
 #' @examples
-#' tab <- tplyr_table(iris, Species)
+#' tab <- tplyr_table(mtcars, gear)
 #'
-#' header_n(tab) <- c(setosa = 50, versicolor = 50, virginica = 50)
+#' header_n(tab) <- data.frame(
+#'   gear = c(3, 4, 5),
+#'   n = c(10, 15, 45)
+#' )
+#'
+#'
 #'
 #' @export
 #' @rdname header_n
@@ -23,8 +28,8 @@ header_n <- function(table) {
 }
 
 #' @param x A \code{tplyr_table} object
-#' @param value A named numeric vector. Names of vector should match treatment
-#'   group names.
+#' @param value A data.frame with columns with the treatment variable, column
+#'   variabes, and a variable with counts named 'n'.
 #'
 #' @export
 #' @rdname header_n
@@ -32,16 +37,18 @@ header_n <- function(table) {
   set_header_n(x, value)
 }
 
-#' @param header_n A named numeric vector. Names of vector should match treatment
-#'   group names.
+#' @param header_n A data.frame with columns with the treatment variable, column
+#'   variabes, and a variable with counts named 'n'.
 #'
 #' @export
 #' @rdname header_n
 set_header_n <- function(table, value) {
-  assert_that(is.numeric(value),
+  assert_that(is.data.frame(value),
                           msg = "header_n argument must be numeric")
 
-  assert_that(!is.null(names(value)),
+  assert_that("n" %in% names(value))
+
+  assert_that(is.numeric(value$n),
               msg = "header_n argument must be named")
 
   env_bind(table, header_n = value)

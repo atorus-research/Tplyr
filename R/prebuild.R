@@ -26,7 +26,7 @@ treatment_group_build <- function(table) {
 
 
     built_target <- built_target %>%
-      mutate(!!treat_var := as.character(!!treat_var))
+      mutate(!!treat_var := as.factor(!!treat_var))
 
     # Same filter test on population data
     tryCatch({
@@ -40,7 +40,7 @@ treatment_group_build <- function(table) {
     })
 
     built_pop_data <- built_pop_data %>%
-      mutate(!!pop_treat_var := as.character(!!pop_treat_var))
+      mutate(!!pop_treat_var := as.factor(!!pop_treat_var))
 
     for (grp_i in seq_along(treat_grps)) {
       built_target <- built_target %>%
@@ -57,12 +57,17 @@ treatment_group_build <- function(table) {
     }
 
     # Convert the pop data treatment variable to a factor
-    built_pop_data[[as_label(pop_treat_var)]] <- factor(built_pop_data[[as_label(pop_treat_var)]])
+    if(!is.factor(built_pop_data[[as_label(pop_treat_var)]])){
+      built_pop_data[[as_label(pop_treat_var)]] <- factor(built_pop_data[[as_label(pop_treat_var)]])
+    }
 
     # Convert the target data treatment variable to a factor and force the levels from
     # the population data target variable in
-    built_target[[as_label(treat_var)]] <- factor(built_target[[as_label(treat_var)]],
-                                                  levels = levels(built_pop_data[[as_label(pop_treat_var)]]))
+    if(!is.factor(built_target[[as_label(treat_var)]])){
+      built_target[[as_label(treat_var)]] <- factor(built_target[[as_label(treat_var)]],
+                                                    levels = levels(built_pop_data[[as_label(pop_treat_var)]]))
+    }
+
 
     rm(grp_i)
   }, envir=table)
