@@ -21,6 +21,21 @@ process_summaries.count_layer <- function(x, ...) {
                    "` is invalid. Filter error:\n", e))
     })
 
+    if(!quo_is_symbol(target_var[[1]]) && as_name(target_var[[1]]) %in% names(target)) {
+      warning(paste0("The first target variable has been coerced into a symbol.",
+                     "You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[1]] <- quo(!!sym(as_name(target_var[[1]])))
+    }
+
+    if(length(target_var) == 2 && !quo_is_symbol(target_var[[2]]) &&
+                as_name(target_var[[2]]) %in% names(target)) {
+      warning(paste0("The second target variable has been coerced into a symbol.",
+                     "You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[2]] <- quo(!!sym(as_name(target_var[[2]])))
+    }
+
   }, envir = x)
 
   rename_missing_values(x)
@@ -130,6 +145,8 @@ process_nested_count_target <- function(x) {
   evalq({
 
     if(is.null(indentation)) indentation <- "   "
+
+
 
     assert_that(quo_is_symbol(target_var[[2]]),
                 msg = "Inner layers must be data driven variables")

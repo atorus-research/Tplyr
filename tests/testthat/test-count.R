@@ -548,3 +548,17 @@ test_that("nested count layers can accecpt text values in the first variable", {
     )
   expect_error(build(t2), "Inner layers must be data driven variables")
 })
+
+test_that("Variable names will be coersed into symbols", {
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count("cyl")
+    )
+  expect_warning(build(t1), "The first target variable has been coerced")
+
+  t2 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(vars("all cyl", "cyl"))
+    )
+  expect_warning(build(t2), "The second target variable has been coerced")
+})
