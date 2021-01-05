@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  5 JAN 2021 21:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  5 JAN 2021 21:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -792,6 +792,12 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 )
 \Gin@req@height=\dimen125
 \Gin@req@width=\dimen126
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grffile.sty
+Package: grffile 2017/06/30 v1.18 Extended file name support for graphics (HO)
+Package grffile Info: Option `multidot' is set to `true'.
+Package grffile Info: Option `extendedchars' is set to `false'.
+Package grffile Info: Option `space' is set to `true'.
+Package grffile Info: \Gin@ii of package `graphicx' fixed on input line 494.
 ) (/usr/share/texlive/texmf-dist/tex/latex/titling/titling.sty
 Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmarkwidth=\skip48
@@ -1177,20 +1183,20 @@ Overfull \hbox (18.19513pt too wide) in paragraph at lines 1713--1718
 ESS=C LC_TELEPHONE=C 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1775.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1772.
 [20]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1775.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1772.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1775.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1775.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1775.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1772.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1772.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1772.
  ) 
 Here is how much of TeX's memory you used:
- 14655 strings out of 494923
- 209009 string characters out of 6180743
- 439994 words of memory out of 5000000
- 17590 multiletter control sequences out of 15000+600000
- 60536 words of font info for 92 fonts, out of 8000000 for 9000
+ 14712 strings out of 494923
+ 210265 string characters out of 6180743
+ 441383 words of memory out of 5000000
+ 17648 multiletter control sequences out of 15000+600000
+ 60453 words of font info for 91 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,11n,43p,614b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
@@ -1199,12 +1205,10 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (20 pages, 234420 bytes).
+Output written on uat.pdf (20 pages, 234373 bytes).
 PDF statistics:
  214 PDF objects out of 1000 (max. 8388607)
  181 compressed objects within 2 object streams
  50 named destinations out of 1000 (max. 500000)
  14430 words of extra memory for PDF output out of 17280 (max. 10000000)
 
-
-! pdflatex: /usr/local/anaconda3/lib/libtiff.so.5: no version information available (required by /usr/lib/x86_64-linux-gnu/libpoppler.so.73)
