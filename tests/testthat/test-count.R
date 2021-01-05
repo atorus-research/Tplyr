@@ -542,5 +542,9 @@ test_that("nested count layers can accecpt text values in the first variable", {
   expect_equal(t$layers[[1]]$formatted_data$var1_5,
                c(" 5 (100.0%)", " 2 ( 40.0%)", " 1 ( 20.0%)", " 2 ( 40.0%)"))
 
-
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, "Txt"))
+    )
+  expect_error(build(t2), "Inner layers must be data driven variables")
 })

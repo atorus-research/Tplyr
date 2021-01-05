@@ -131,6 +131,9 @@ process_nested_count_target <- function(x) {
 
     if(is.null(indentation)) indentation <- "   "
 
+    assert_that(quo_is_symbol(target_var[[2]]),
+                msg = "Inner layers must be data driven variables")
+
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
                                                  by = vars(!!!by), where = !!where))
 
