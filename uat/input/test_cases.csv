@@ -23,141 +23,145 @@ Check,,T6,1,Analysis data created matches data subset as specified,programmatic,
 TestCase,I,T7,,n counts of values within a variable can be produced,,
 Check,,T7,1,Complete data value n counts can be produced within a variable,programmatic,test_7.RData
 Check,,T7,2,Distinct data value n counts can be produced within a variable,programmatic,test_7.RData
+Check,,T7,3,A text string can be passed in and will be used as the value for counts,programmatic,test_7.RData
 TestCase,J,T8,,n counts of values within a group of variables can be produced,,
 Check,,T8,1,Complete data value n counts can be produced within a group of variables,programmatic,test_8.RData
 Check,,T8,2,Distinct data value n counts can be produced within a group of variables,programmatic,test_8.RData
-TestCase,K:L,T9,,Total n counts can be added and a sort value can be sepecified by the user,,
-Check,,T9,1,Total n count can be added within a layer and sorted using a specified value,programmatic,test_9.RData
-TestCase,M:N,T10,,Missing n count handling can be specified including presentation and denominator handling ,,
-Check,,T10,1,Missing n count rows can be added within a layer and sorted using a specified value,programmatic,test_10.RData
-Check,,T10,2,Missing values can be excluded from the layer denominator,programmatic,test_10.RData
-TestCase,O:K,T11,,Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string,,
-Check,,T11,1,Values specified by user are presented in the output table and total or missing rows can be added,programmatic,test_11.RData
-TestCase,P:K,T12,,Counts can be produced as n (%),,
-Check,,T12,1,"When specified, both n and % can be displayed in a n (%) fashion and total counts can be added",programmatic,test_12.RData
-Check,,T12,2,Distinct n and % can be displayed in a n (%) fashion and total counts can be added,programmatic,test_12.RData
-Check,,T12,3,Distinct and non-distinct n and % can be presented together and total counts can be added,programmatic,test_12.RData
-TestCase,Q,T13,,"When producing n (%), the denominator can be specified using the analysis data",,
-Check,,T13,1,Check denominators created match counts from analysis data,programmatic,test_13.RData
-Check,,T13,2,Check % produced use denominators matching counts from analysis data ,programmatic,test_13.RData
-TestCase,R,T14,,"When producing n (%), the denominator can be specified using a particular manually specified subset",,
-Check,,T14,1,Check denominators created match counts using specified conditions,programmatic,test_14.RData
-Check,,T14,2,Check % produced use denominators matching counts using specified conditions,programmatic,test_14.RData
-TestCase,S,T15,,"When producing n (%), the denominator can be specified using the population data",,
-Check,,T15,1,Check % produced use denominators matching counts from population data,programmatic,test_15.RData
-Check,,T15,2,Check denominators created match counts from population data,programmatic,test_15.RData
-TestCase,T:K,T16,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
-Check,,T16,1,Check % produced use denominators matching counts from grouping variables,programmatic,test_16.RData
-Check,,T16,2,Check added total row matches counts using denom by variables,programmatic,test_16.RData
-TestCase,U:V,T17,,Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test,,
-Check,,T17,1,Check that risk difference calculated between groupings is correct,programmatic,test_17.RData
-Check,,T17,2,Check that confidence interval calculated between groupings is correct,programmatic,test_17.RData
-Check,,T17,3,Arguments passed through to prop.test create the correct output,programmatic,test_17.RData
-TestCase,W,T18,,Risk difference can be calculated over user specified cols arguments,,
-Check,,T18,1,Risk difference estimate and confidence interval can be computed across values of the treatment variable and cols argument,programmatic,test_18.RData
-TestCase,X,T19,,Risk difference can be calculated over nested count layers and by variables,,
-Check,,T19,1,Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer,programmatic,test_19.RData
-Check,,T19,2,Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable,programmatic,test_19.RData
-Check,,T19,3,"Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable",programmatic,test_19.RData
-TestCase,Y:Z:AA:AB:AC:AD:AE:AF:AG,T20,,"The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable",,
-Check,,T20,1,Check the computed statistic of n matches the expected value,programmatic,test_20.RData
-Check,,T20,2,Check the computed statistic of mean matches the expected value,programmatic,test_20.RData
-Check,,T20,3,Check the computed statistic of median matches the expected value,programmatic,test_20.RData
-Check,,T20,4,Check the computed statistic of IQR matches the expected value,programmatic,test_20.RData
-Check,,T20,5,Check the computed statistic of Q1 matches the expected value,programmatic,test_20.RData
-Check,,T20,6,Check the computed statistic of Q3 matches the expected value,programmatic,test_20.RData
-Check,,T20,7,Check the computed statistic of standard deviation matches the expected value,programmatic,test_20.RData
-Check,,T20,8,Check the computed statistic of variance matches the expected value,programmatic,test_20.RData
-Check,,T20,9,Check the computed statistic of min matches the expected value,programmatic,test_20.RData
-Check,,T20,10,Check the computed statistic of max matches the expected value,programmatic,test_20.RData
-Check,,T20,11,Check the computed statistic of missing matches the expected value,programmatic,test_20.RData
-TestCase,AH,T21,,Custom descriptive statistics can be produced based on an input variable and a specified formula,,
-Check,,T21,1,Check that the computed statistic value matches the value from the specified formula,programmatic,test_21.RData
-TestCase,AI,T22,,Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables,,
-Check,,T22,1,Check the statistic values match the values from the specified grouping variable,programmatic,test_22.RData
-TestCase,AJ,T23,,Multiple statistics can be presented in one line,,
-Check,,T23,1,Check that the output can include multiple statistics on the same line,programmatic,test_23.RData
-TestCase,AK:AL,T24,,Decimal precision and integer length can be specified by the user,,
-Check,,T24,1,The output decimal precision and integer length is the same as the user specified values,programmatic,test_24.RData
-TestCase,AM:AN,T25,,Decimal precision and integer length can be dynamically created from analysis data,,
-Check,,T25,1,The output decimal precision and integer length is the same as the decimal precision and integer length from the target data variable,programmatic,test_25.RData
-TestCase,AO:AP,T26,,Presentation format can be specified by the user including desired non-numeric text and align per user specification,,
-Check,,T26,1,The output string is formatted the same as user specification including non-numeric text and alignment,programmatic,test_26.RData
-TestCase,AQ,T27,,Descriptive statistic missing values can be set to a user specified string,,
-Check,,T27,1,Missing values can be set to a user specified string,programmatic,test_27.RData
-TestCase,AR,T28,,"Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced",,
-Check,,T28,1,n counts can be created in a shift manner using a from and to variable,programmatic,test_28.RData
-TestCase,AS,T29,,Shift n counts of values within a variable can be produced,,
-Check,,T29,1,n counts can be created in a shift manner using a from and to variable and a by variable,programmatic,test_29.RData
-TestCase,AT,T30,,Shift n counts of values within a group of variables can be produced,,
-Check,,T30,1,n counts can be created in a shift manner using a from and to variable and multiple by variables,programmatic,test_30.RData
-TestCase,AU,T31,,Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data,,
-Check,,T31,1,Values specified by user for the shift variables are presented in the output table,programmatic,test_31.RData
-Check,,T31,2,Values are sorted using the order in the provided factor,programmatic,test_31.RData
-TestCase,AV,T32,,Shift counts can be produced as n (%),,
-Check,,T32,1,"When specified, both n and % can be displayed in a n (%) fashion for shift layer",programmatic,test_32.RData
-TestCase,AW,T33,,"For shift counts when producing n (%), the denominator can be specified using the analysis data",,
-Check,,T33,1,Check % produced use denominators matching counts from analysis data ,programmatic,test_33.RData
-TestCase,AX,T34,,"For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset",,
-Check,,T34,1,Check % produced use denominators matching counts using specified conditions,programmatic,test_34.RData
-TestCase,AY,T35,,"For shift counts when producing n (%), the denominator can be specified using the population data",,
-Check,,T35,1,Check % produced use denominators matching counts from population data,programmatic,test_35.RData
-TestCase,AZ,T36,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
-Check,,T36,1,Check % produced use denominators matching counts from grouping variables,programmatic,test_36.RData
-TestCase,BA,T37,,Row labels can be manually specified by the user,,
-Check,,T37,1,Check row labels in output table match user specified values,programmatic,test_37.RData
-TestCase,BB,T38,,Row labels can be nested to put a subgroup within a parent group,,
-Check,,T38,1,Check row labels and nesting in output table match user specified values and nesting,programmatic,test_38.RData
-TestCase,BC,T39,,Summaries can be stacked on top of one another,,
-Check,,T39,1,Check multiple summaries mixed between descriptive statistics and count are created they can be stacked ,programmatic,test_39.RData
-TestCase,BD,T40,,Summaries can be sorted based on manual sorting by presentation specified order,,
-Check,,T40,1,Check that output table has correct count sorting variables matching specified order,programmatic,test_40.RData
-TestCase,BE,T41,,Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group,,
-Check,,T41,1,Check that output table has correct count sorting variables for count based sorting,programmatic,test_41.RData
-TestCase,BF,T42,,Summaries can be sorted based on alphabetical sorting based on data values,,
-Check,,T42,1,Check that output table has correct count sorting variables for data values,programmatic,test_42.RData
-TestCase,BG,T43,,Summaries can be sorted based on a numeric version of the target variable if available,,
-Check,,T43,1,Check that output table has correct count sorting variables for the corresponding numeric variable,programmatic,test_43.RData
-TestCase,BH,T44,,Summary by variables will be sorted by a numeric variable if available and then by factor,,
-Check,,T44,1,Check that ouput table has correct sorting variables for supplied by variables,programmatic,test_44.RData
-TestCase,BI,T45,,Nested layers can be sorted independently using different methods,,
-Check,,T45,1,Check that when different methods are supplied for nested layers they are applied correctly,programmatic,test_45.RData
-TestCase,BJ,T46,,Independent layers can be sorted using different methods and stacked using common sorting variables,,
-Check,,T46,1,Check that when different methods are supplied for independent layers they are applied correctly,programmatic,test_46.RData
-TestCase,BK,T47,,Count layer default formats can be set at the table level,,
-Check,,T47,1,Check that count layer formats set at the table level are applied to layers created,programmatic,test_47.RData
-Check,,T47,2,Check that count layer formats applied at the layer level take prescedence over table level formats,programmatic,test_47.RData
-TestCase,BL,T48,,Descriptive statistics layer default formats can be set at the table level,,
-Check,,T48,1,Check that descriptive statistics layer formats set at the table level are applied to layers created,programmatic,test_48.RData
-Check,,T48,2,Check that descriptive statistics layer formats applied at the layer level take prescedence over table level formats,programmatic,test_48.RData
-TestCase,BM,T49,,Shift layer default formats can be set at the table level,,
-Check,,T49,1,Check that shift layer formats set at the table level are applied to layers created,programmatic,test_49.RData
-Check,,T49,2,Check that shift layer formats applied at the layer level take prescedence over table level formats,programmatic,test_49.RData
-TestCase,BN,T50,,Option for count layer default formats can be specified by the user,,
-Check,,T50,1,Check that the count layer defail formats specified in the option are displayed in the table,programmatic,test_50.RData
-TestCase,BO,T51,,Option for descriptive statistics layer default formats can be specified by the user,,
-Check,,T51,1,Check that the descriptive statistics layer defail formats specified in the option are displayed in the table,programmatic,test_51.RData
-TestCase,BP,T52,,Option for shift layer default formats can be specified by the user,,
-Check,,T52,1,Check that the shift layer defail formats specified in the option are displayed in the table,programmatic,test_52.RData
-TestCase,BQ,T53,,Option for a cap on auto precision can be specified by the user,,
-Check,,T53,1,Check that the cap on auto precision specified by the user is displayed correctly in the table for both integers and decimals,programmatic,test_53.RData
-TestCase,BR,T54,,Option for custom descriptive statistics can be specified by the user for use in the table,,
-Check,,T54,1,Check that custom descriptive statistics set in the options can be used and displayed correctly in the table,programmatic,test_54.RData
-TestCase,BS,T55,,Option for setting scipen internal option can be specified by the user,,
-Check,,T55,1,Check that scientific notation supplied is displayed correctly in the table,programmatic,test_55.RData
-TestCase,BT,T56,,Option for setting quantile algorithm choice can be specified by the user,,
-Check,,T56,1,Check that the quantile algorithm supplied is used in table q1 and q3 calculation,programmatic,test_56.RData
-TestCase,BU,T57,,Column headers can be added to the output object,,
-Check,,T57,1,Check that column headers added match those in the output object,programmatic,test_57.RData
-TestCase,BV:BW,T58,,Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion,,
-Check,,T58,1,Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion,programmatic,test_58.RData
-TestCase,BX,T59,,A table object is returned in a format that is ready to be cosmetically prepared,,
-Check,,T59,1,Check that the table object can be easily cosmetically prepared ,visual,test_59.rtf
-TestCase,BY,T60,,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing,,
-Check,,T60,1,Test that n and % results are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_60.RData
-Check,,T60,2,Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_60.RData
-Check,,T60,3,Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_60.RData
-TestCase,BZ,T61,,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing",,
-Check,,T61,1,"Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_61.RData
-Check,,T61,2,"Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_61.RData
-Check,,T61,3,"Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_61.RData
+TestCase,K,T9,,counts can be produced using a pair of nested variables,,
+Check,,T9,1,two variables with a nested relationship can be used to create counts,programmatic,test_9.RData
+Check,,T9,2,A text string and a variable can be used to create counts,programmatic,test_9.RData
+TestCase,L:M,T10,,Total n counts can be added and a sort value can be sepecified by the user,,
+Check,,T10,1,Total n count can be added within a layer and sorted using a specified value,programmatic,test_10.RData
+TestCase,N:O,T11,,Missing n count handling can be specified including presentation and denominator handling ,,
+Check,,T11,1,Missing n count rows can be added within a layer and sorted using a specified value,programmatic,test_11.RData
+Check,,T11,2,Missing values can be excluded from the layer denominator,programmatic,test_11.RData
+TestCase,P:L,T12,,Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string,,
+Check,,T12,1,Values specified by user are presented in the output table and total or missing rows can be added,programmatic,test_12.RData
+TestCase,Q:L,T13,,Counts can be produced as n (%),,
+Check,,T13,1,"When specified, both n and % can be displayed in a n (%) fashion and total counts can be added",programmatic,test_13.RData
+Check,,T13,2,Distinct n and % can be displayed in a n (%) fashion and total counts can be added,programmatic,test_13.RData
+Check,,T13,3,Distinct and non-distinct n and % can be presented together and total counts can be added,programmatic,test_13.RData
+TestCase,R,T14,,"When producing n (%), the denominator can be specified using the analysis data",,
+Check,,T14,1,Check denominators created match counts from analysis data,programmatic,test_14.RData
+Check,,T14,2,Check % produced use denominators matching counts from analysis data ,programmatic,test_14.RData
+TestCase,S,T15,,"When producing n (%), the denominator can be specified using a particular manually specified subset",,
+Check,,T15,1,Check denominators created match counts using specified conditions,programmatic,test_15.RData
+Check,,T15,2,Check % produced use denominators matching counts using specified conditions,programmatic,test_15.RData
+TestCase,T,T16,,"When producing n (%), the denominator can be specified using the population data",,
+Check,,T16,1,Check % produced use denominators matching counts from population data,programmatic,test_16.RData
+Check,,T16,2,Check denominators created match counts from population data,programmatic,test_16.RData
+TestCase,U:L,T17,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
+Check,,T17,1,Check % produced use denominators matching counts from grouping variables,programmatic,test_17.RData
+Check,,T17,2,Check added total row matches counts using denom by variables,programmatic,test_17.RData
+TestCase,V:W,T18,,Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test,,
+Check,,T18,1,Check that risk difference calculated between groupings is correct,programmatic,test_18.RData
+Check,,T18,2,Check that confidence interval calculated between groupings is correct,programmatic,test_18.RData
+Check,,T18,3,Arguments passed through to prop.test create the correct output,programmatic,test_18.RData
+TestCase,X,T19,,Risk difference can be calculated over user specified cols arguments,,
+Check,,T19,1,Risk difference estimate and confidence interval can be computed across values of the treatment variable and cols argument,programmatic,test_19.RData
+TestCase,Y,T20,,Risk difference can be calculated over nested count layers and by variables,,
+Check,,T20,1,Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer,programmatic,test_20.RData
+Check,,T20,2,Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable,programmatic,test_20.RData
+Check,,T20,3,"Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable",programmatic,test_20.RData
+TestCase,Z:AA:AB:AC:AD:AE:AF:AG:AH,T21,,"The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable",,
+Check,,T21,1,Check the computed statistic of n matches the expected value,programmatic,test_21.RData
+Check,,T21,2,Check the computed statistic of mean matches the expected value,programmatic,test_21.RData
+Check,,T21,3,Check the computed statistic of median matches the expected value,programmatic,test_21.RData
+Check,,T21,4,Check the computed statistic of IQR matches the expected value,programmatic,test_21.RData
+Check,,T21,5,Check the computed statistic of Q1 matches the expected value,programmatic,test_21.RData
+Check,,T21,6,Check the computed statistic of Q3 matches the expected value,programmatic,test_21.RData
+Check,,T21,7,Check the computed statistic of standard deviation matches the expected value,programmatic,test_21.RData
+Check,,T21,8,Check the computed statistic of variance matches the expected value,programmatic,test_21.RData
+Check,,T21,9,Check the computed statistic of min matches the expected value,programmatic,test_21.RData
+Check,,T21,10,Check the computed statistic of max matches the expected value,programmatic,test_21.RData
+Check,,T21,11,Check the computed statistic of missing matches the expected value,programmatic,test_21.RData
+TestCase,AI,T22,,Custom descriptive statistics can be produced based on an input variable and a specified formula,,
+Check,,T22,1,Check that the computed statistic value matches the value from the specified formula,programmatic,test_22.RData
+TestCase,AJ,T23,,Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables,,
+Check,,T23,1,Check the statistic values match the values from the specified grouping variable,programmatic,test_23.RData
+TestCase,AJ,T24,,Multiple statistics can be presented in one line,,
+Check,,T24,1,Check that the output can include multiple statistics on the same line,programmatic,test_24.RData
+TestCase,AL:AM,T25,,Decimal precision and integer length can be specified by the user,,
+Check,,T25,1,The output decimal precision and integer length is the same as the user specified values,programmatic,test_25.RData
+TestCase,AN:AO,T26,,Decimal precision and integer length can be dynamically created from analysis data,,
+Check,,T26,1,The output decimal precision and integer length is the same as the decimal precision and integer length from the target data variable,programmatic,test_26.RData
+TestCase,AP:AQ,T27,,Presentation format can be specified by the user including desired non-numeric text and align per user specification,,
+Check,,T27,1,The output string is formatted the same as user specification including non-numeric text and alignment,programmatic,test_27.RData
+TestCase,AR,T28,,Descriptive statistic missing values can be set to a user specified string,,
+Check,,T28,1,Missing values can be set to a user specified string,programmatic,test_28.RData
+TestCase,AS,T29,,"Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced",,
+Check,,T29,1,n counts can be created in a shift manner using a from and to variable,programmatic,test_29.RData
+TestCase,AT,T30,,Shift n counts of values within a variable can be produced,,
+Check,,T30,1,n counts can be created in a shift manner using a from and to variable and a by variable,programmatic,test_30.RData
+TestCase,AU,T31,,Shift n counts of values within a group of variables can be produced,,
+Check,,T31,1,n counts can be created in a shift manner using a from and to variable and multiple by variables,programmatic,test_31.RData
+TestCase,AV,T32,,Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data,,
+Check,,T32,1,Values specified by user for the shift variables are presented in the output table,programmatic,test_32.RData
+Check,,T32,2,Values are sorted using the order in the provided factor,programmatic,test_32.RData
+TestCase,AW,T33,,Shift counts can be produced as n (%),,
+Check,,T33,1,"When specified, both n and % can be displayed in a n (%) fashion for shift layer",programmatic,test_33.RData
+TestCase,AX,T34,,"For shift counts when producing n (%), the denominator can be specified using the analysis data",,
+Check,,T34,1,Check % produced use denominators matching counts from analysis data ,programmatic,test_34.RData
+TestCase,AY,T35,,"For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset",,
+Check,,T35,1,Check % produced use denominators matching counts using specified conditions,programmatic,test_35.RData
+TestCase,AZ,T36,,"For shift counts when producing n (%), the denominator can be specified using the population data",,
+Check,,T36,1,Check % produced use denominators matching counts from population data,programmatic,test_36.RData
+TestCase,BA,T37,,"For shift counts when producing n (%), the denominator can be specified using a grouping of variables",,
+Check,,T37,1,Check % produced use denominators matching counts from grouping variables,programmatic,test_37.RData
+TestCase,BB,T38,,Row labels can be manually specified by the user,,
+Check,,T38,1,Check row labels in output table match user specified values,programmatic,test_38.RData
+TestCase,BC,T39,,Row labels can be nested to put a subgroup within a parent group,,
+Check,,T39,1,Check row labels and nesting in output table match user specified values and nesting,programmatic,test_39.RData
+TestCase,BD,T40,,Summaries can be stacked on top of one another,,
+Check,,T40,1,Check multiple summaries mixed between descriptive statistics and count are created they can be stacked ,programmatic,test_40.RData
+TestCase,BE,T41,,Summaries can be sorted based on manual sorting by presentation specified order,,
+Check,,T41,1,Check that output table has correct count sorting variables matching specified order,programmatic,test_41.RData
+TestCase,BF,T42,,Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group,,
+Check,,T42,1,Check that output table has correct count sorting variables for count based sorting,programmatic,test_42.RData
+TestCase,BG,T43,,Summaries can be sorted based on alphabetical sorting based on data values,,
+Check,,T43,1,Check that output table has correct count sorting variables for data values,programmatic,test_43.RData
+TestCase,BH,T44,,Summaries can be sorted based on a numeric version of the target variable if available,,
+Check,,T44,1,Check that output table has correct count sorting variables for the corresponding numeric variable,programmatic,test_44.RData
+TestCase,BI,T45,,Summary by variables will be sorted by a numeric variable if available and then by factor,,
+Check,,T45,1,Check that ouput table has correct sorting variables for supplied by variables,programmatic,test_45.RData
+TestCase,BJ,T46,,Nested layers can be sorted independently using different methods,,
+Check,,T46,1,Check that when different methods are supplied for nested layers they are applied correctly,programmatic,test_46.RData
+TestCase,BK,T47,,Independent layers can be sorted using different methods and stacked using common sorting variables,,
+Check,,T47,1,Check that when different methods are supplied for independent layers they are applied correctly,programmatic,test_47.RData
+TestCase,BL,T48,,Count layer default formats can be set at the table level,,
+Check,,T48,1,Check that count layer formats set at the table level are applied to layers created,programmatic,test_48.RData
+Check,,T48,2,Check that count layer formats applied at the layer level take prescedence over table level formats,programmatic,test_48.RData
+TestCase,BM,T49,,Descriptive statistics layer default formats can be set at the table level,,
+Check,,T49,1,Check that descriptive statistics layer formats set at the table level are applied to layers created,programmatic,test_49.RData
+Check,,T49,2,Check that descriptive statistics layer formats applied at the layer level take prescedence over table level formats,programmatic,test_49.RData
+TestCase,BN,T50,,Shift layer default formats can be set at the table level,,
+Check,,T50,1,Check that shift layer formats set at the table level are applied to layers created,programmatic,test_50.RData
+Check,,T50,2,Check that shift layer formats applied at the layer level take prescedence over table level formats,programmatic,test_50.RData
+TestCase,BO,T51,,Option for count layer default formats can be specified by the user,,
+Check,,T51,1,Check that the count layer defail formats specified in the option are displayed in the table,programmatic,test_51.RData
+TestCase,BP,T52,,Option for descriptive statistics layer default formats can be specified by the user,,
+Check,,T52,1,Check that the descriptive statistics layer defail formats specified in the option are displayed in the table,programmatic,test_52.RData
+TestCase,BQ,T53,,Option for shift layer default formats can be specified by the user,,
+Check,,T53,1,Check that the shift layer defail formats specified in the option are displayed in the table,programmatic,test_53.RData
+TestCase,BR,T54,,Option for a cap on auto precision can be specified by the user,,
+Check,,T54,1,Check that the cap on auto precision specified by the user is displayed correctly in the table for both integers and decimals,programmatic,test_54.RData
+TestCase,BS,T55,,Option for custom descriptive statistics can be specified by the user for use in the table,,
+Check,,T55,1,Check that custom descriptive statistics set in the options can be used and displayed correctly in the table,programmatic,test_55.RData
+TestCase,BT,T56,,Option for setting scipen internal option can be specified by the user,,
+Check,,T56,1,Check that scientific notation supplied is displayed correctly in the table,programmatic,test_56.RData
+TestCase,BU,T57,,Option for setting quantile algorithm choice can be specified by the user,,
+Check,,T57,1,Check that the quantile algorithm supplied is used in table q1 and q3 calculation,programmatic,test_57.RData
+TestCase,BU,T58,,Column headers can be added to the output object,,
+Check,,T58,1,Check that column headers added match those in the output object,programmatic,test_58.RData
+TestCase,BW:BX,T59,,Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion,,
+Check,,T59,1,Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion,programmatic,test_59.RData
+TestCase,BY,T60,,A table object is returned in a format that is ready to be cosmetically prepared,,
+Check,,T60,1,Check that the table object can be easily cosmetically prepared ,visual,test_60.rtf
+TestCase,BZ,T61,,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing,,
+Check,,T61,1,Test that n and % results are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_61.RData
+Check,,T61,2,Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_61.RData
+Check,,T61,3,Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied,programmatic,test_61.RData
+TestCase,CA,T62,,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing",,
+Check,,T62,1,"Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_62.RData
+Check,,T62,2,"Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_62.RData
+Check,,T62,3,"Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied",programmatic,test_62.RData
