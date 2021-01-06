@@ -24,9 +24,12 @@ treatment_group_build <- function(table) {
                    "` is invalid. Filter error:\n", e))
     })
 
-
+    # Make sure factors are preserved
     built_target <- built_target %>%
-      mutate(!!treat_var := as.factor(!!treat_var))
+      mutate(!!treat_var := fct_expand(as.character(!!treat_var),
+                                       as.character(unique(target[[as_name(treat_var)]])),
+                                       levels(target[, as_name(treat_var)])))
+      # mutate(!!treat_var := fct_expand(.[, as_name(treat_var)], unique(target[,as_name(treat_var)])))
 
     # Same filter test on population data
     tryCatch({
@@ -40,7 +43,21 @@ treatment_group_build <- function(table) {
     })
 
     built_pop_data <- built_pop_data %>%
-      mutate(!!pop_treat_var := as.factor(!!pop_treat_var))
+      mutate(!!pop_treat_var := fct_expand(as.character(!!pop_treat_var),
+                                           as.character(unique(pop_data[[as_name(pop_treat_var)]])),
+                                           levels(pop_data[, as_name(pop_treat_var)])))
+
+    # Make sure all factors are preserved and where logic didn't take out any factors
+    for(i in seq_along(cols)) {
+      built_target <- built_target %>%
+        mutate(!!cols[[i]] := fct_expand(as.character(!!cols[[i]]),
+                                         as.character(unique(target[[as_name(cols[[i]])]])),
+                                         levels(target[, as_name(cols[[i]])])))
+      built_pop_data <- built_pop_data %>%
+        mutate(!!cols[[i]] := fct_expand(as.character(!!cols[[i]]),
+                                         as.character(unique(pop_data[[as_name(cols[[i]])]])),
+                                         levels(pop_data[, as_name(cols[[i]])])))
+    }
 
     for (grp_i in seq_along(treat_grps)) {
       built_target <- built_target %>%
@@ -69,7 +86,7 @@ treatment_group_build <- function(table) {
     }
 
 
-    rm(grp_i)
+    rm(grp_i, i)
   }, envir=table)
 
   invisible(table)
