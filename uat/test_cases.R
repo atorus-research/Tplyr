@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 01/05/2021
+#' 01/06/2021
 
 #setup ----
 #insert any necessary libraries
@@ -3836,5 +3836,139 @@ test_that('T62',{
   rm(t62_2)
   rm(test_62)
 })
+
+#test 63 ----
+test_that('T63',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adsl, TRT01P, cols = SEX, where = !(TRT01P == 'Xanomeline High Dose' | (TRT01P == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+      add_layer(
+        group_count(AGEGR1) %>%
+        set_format_strings(f_str("xxx", n))
+      ) %>%
+      add_layer(
+        group_desc(AGE) %>%
+        set_format_strings(
+          "mean" = f_str("xx.xx", mean)
+          )
+      )
+    test_63 <- build(t)
+
+    # output table to check attributes
+    save(test_63, file = "~/Tplyr/uat/output/test_63.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_63)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_63.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t63_cnt_shell <- unique(adsl[,c("TRT01P", "SEX", "AGEGR1")])
+  t_63_cnts <- filter(adsl, !(TRT01P == 'Xanomeline High Dose' | (TRT01P == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+    group_by(TRT01P, SEX, AGEGR1) %>%
+    summarise(n = n()) %>%
+    right_join(t63_cnt_shell, by = c("TRT01P", "SEX", "AGEGR1")) %>%
+    mutate(fmtd = if_else(is.na(n), '  0', sprintf("%3s", n))) %>%
+    mutate(row_label = AGEGR1) %>%
+    select(TRT01P, SEX, row_label, fmtd)
+  t63_stat_shell <- unique(adsl[,c("TRT01P", "SEX")])
+  t_63_stats <- filter(adsl, !(TRT01P == 'Xanomeline High Dose' | (TRT01P == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+    group_by(TRT01P, SEX) %>%
+    summarise(mean = mean(AGE)) %>%
+    right_join(t63_stat_shell, by = c("TRT01P", "SEX")) %>%
+    mutate(fmtd = if_else(is.na(mean), '', sprintf("%5.2f", mean))) %>%
+    mutate(row_label = "mean") %>%
+    select(TRT01P, SEX, row_label, fmtd)
+  t_63 <- rbind(t_63_cnts, t_63_stats) %>%
+    pivot_wider(names_from = c("TRT01P", "SEX"), values_from = fmtd, id_cols = row_label)
+
+  testthat::expect_equal(c(t_63$Placebo_F, t_63$Placebo_M,
+                           t_63$`Xanomeline Low Dose_F`, t_63$`Xanomeline Low Dose_M`,
+                           t_63$`Xanomeline High Dose_F`, t_63$`Xanomeline High Dose_M`),
+                         c(test_63$var1_Placebo_F, test_63$var1_Placebo_M,
+                           test_63$`var1_Xanomeline Low Dose_F`, test_63$`var1_Xanomeline Low Dose_M`,
+                           test_63$`var1_Xanomeline High Dose_F`, test_63$`var1_Xanomeline High Dose_M`),
+                         label = "T63.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t63_cnt_shell)
+  rm(t_63_cnts)
+  rm(t63_stat_shell)
+  rm(t_63)
+  rm(t_63_stats)
+  rm(test_63)
+})
+
+#test 64 ----
+test_that('T64',{
+  if(is.null(vur)) {
+
+    #perform test and create outputs to use for checks
+    #if input files are needed they should be read in from "~/uat/input" folder
+    #outputs should be sent to "~/uat/output" folder
+    t <- tplyr_table(adae, TRTA, cols = SEX, where = !(TRTA == 'Xanomeline High Dose' | (TRTA == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+      set_pop_data(adsl) %>%
+      set_pop_treat_var(TRT01P) %>%
+      set_pop_where(!(TRT01P == 'Xanomeline High Dose' | (TRT01P == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+      add_layer(
+        group_count(AEBODSYS) %>%
+          set_format_strings(f_str("xxx", n))
+      )
+    test_64 <- build(t)
+
+    # output table to check attributes
+    save(test_64, file = "~/Tplyr/uat/output/test_64.RData")
+
+    #clean up working directory
+    rm(t)
+    rm(test_64)
+
+    #load output for checks
+  } else {
+    load("~/Tplyr/uat/output/test_64.RData")
+  }
+
+  #perform checks
+  skip_if(is.null(vur))
+  #programmatic check(s)
+  t64_shell <- unique(adae[,c("TRTA", "SEX")])
+  t_64 <- filter(adae, !(TRTA == 'Xanomeline High Dose' | (TRTA == 'Xanomeline Low Dose' & SEX == 'F'))) %>%
+    group_by(TRTA, SEX, AEBODSYS) %>%
+    summarise(n = n()) %>%
+    right_join(t64_shell, by = c("TRTA", "SEX")) %>%
+    mutate(fmtd = if_else(is.na(n), '  0', sprintf("%3s", n))) %>%
+    mutate(row_label = AEBODSYS) %>%
+    select(TRTA, SEX, row_label, fmtd) %>%
+    pivot_wider(names_from = c("TRTA", "SEX"), values_from = fmtd, id_cols = row_label) %>%
+    filter(!is.na(row_label)) %>%
+    arrange(row_label)
+  t_64[is.na(t_64)] <- '  0'
+
+
+  testthat::expect_equal(c(t_64$Placebo_F, t_64$Placebo_M,
+                           t_64$`Xanomeline Low Dose_F`, t_64$`Xanomeline Low Dose_M`,
+                           t_64$`Xanomeline High Dose_F`, t_64$`Xanomeline High Dose_M`),
+                         c(test_64$var1_Placebo_F, test_64$var1_Placebo_M,
+                           test_64$`var1_Xanomeline Low Dose_F`, test_64$`var1_Xanomeline Low Dose_M`,
+                           test_64$`var1_Xanomeline High Dose_F`, test_64$`var1_Xanomeline High Dose_M`),
+                         label = "T64.1")
+  #manual check(s)
+
+  #clean up working directory
+  rm(t64_shell)
+  rm(t_64)
+  rm(test_64)
+})
+
 #clean up ----
 rm(vur)

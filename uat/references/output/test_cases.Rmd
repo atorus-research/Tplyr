@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 01/05/2021
+#' 1/6/2021
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -170,3 +170,7 @@ This section contains details of each test executed. Checks verifying each test 
     + T62.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
     + T62.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
     + T62.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+  + T63: Treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T63.1: Test that all treatment groups and cols variable combinations exist in the final table
+  + T64: When using separate population data treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T64.1: Test that when using separate population data all treatment groups and cols variable combinations exist in the final table
