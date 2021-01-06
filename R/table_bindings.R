@@ -5,6 +5,17 @@
 #' The `header_n()` functions can be used to automatically pull the header_n
 #' derivations from the table or change them for future use.
 #'
+#' @details
+#' The `header_n` object is created by Tplyr when a table is built and intended
+#' to be used by the `add_column_headers()` function when displaying table level
+#' population totals. These methods are intended to be used for calling the
+#' population totals calculated by Tplyr, and to overwrite them if a user
+#' chooses to.
+#'
+#' If you have a need to change the header Ns that appear in your table headers,
+#' say you know you are working with a subset of the data that doesn't represent
+#' the totals, you can replace the data used with `set_header_n()`.
+#'
 #' @param table A \code{tplyr_table} object
 #'
 #' @return For \code{tplyr_header_n} the header_n binding of the
