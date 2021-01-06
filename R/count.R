@@ -775,9 +775,8 @@ process_count_denoms <- function(x) {
         distinct(!!!distinct_by, !!treat_var, .keep_all = TRUE) %>%
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
-        complete(!!!cols, !!treat_var) %>%
-        ungroup()
-
+        ungroup() %>%
+        complete(!!!cols, !!treat_var)
     }
 
     denoms_df <- denom_target %>%
