@@ -52,6 +52,8 @@ tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>%
 
 In the example above, the `where` parameter is passed forward into both the `RACE` and `AGE` layers. Furthermore, note how the `cols` parameter works. By default, the target variables from the layers are transposed by the `treat_var` variables. The `cols` argument adds an additional variable to transpose by, and the values of these variable are added as a suffix to the variable name. You are able to use multiple `cols` variables just like `by`, by using `dplyr::vars()`. But use with caution - as depending on the distinct variable values in the dataset, this could get quite wide.
 
+_Note: Treatment groups and additional column variables presented in the final output are always taken from the **pre-filtered** population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled._
+
 ```{r table_params2}
 tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
   add_layer(
