@@ -7,8 +7,6 @@
 
 [<img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&logo=slack">](https://ostinclinicalresearch.slack.com)
 [<img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&logo=slack">](https://RValidationHub.slack.com)
-[![Build
-Status](https://travis-ci.com/atorus-research/tplyr.svg?branch=master)](https://travis-ci.com/atorus-research/tplyr)
 [![R build
 status](https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
@@ -67,7 +65,7 @@ these approaches. Consider a demographics table - and let’s use an
 example from the PHUSE project Standard Analyses & Code Sharing -
 [Analyses & Displays Associated with Demographics, Disposition, and
 Medications in Phase 2-4 Clinical Trials and Integrated Summary
-Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf).
+Documents](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf).
 
 <p align="center">
 
@@ -101,7 +99,7 @@ you see on the page.
 
 Enough talking - let’s see some code. In these examples, we will be
 using data from the [PHUSE Test Data
-Factory](https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09)
+Factory](https://advance.phuse.global/display/WEL/Test+Dataset+Factory)
 based on the [original pilot project submission
 package](https://github.com/atorus-research/CDISC_pilot_replication).
 Note: You can see our replication of the CDISC pilot using the PHUSE
@@ -187,10 +185,10 @@ multiple pharmaceutical companies and the FDA. You can find some of the
 resource that we referenced below.
 
 [Analysis and Displays Associated with Adverse
-Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
+Events](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf)
 
 [Analyses and Displays Associated with Demographics, Disposition, and
-Medications](https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf)
+Medications](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf)
 
 [Analyses and Displays Associated with Measures of Central
-Tendency](http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf)
+Tendency](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf)

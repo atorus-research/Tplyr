@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="riskdiff_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="riskdiff_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="riskdiff_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Risk Difference</h1>
@@ -148,21 +149,33 @@
 <a href="#tplyr-implementation" class="anchor"></a>‘Tplyr’ Implementation</h2>
 <p>Our current implementation of risk difference is solely built on top of the base R function <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code>. For any and all questions about this method, please review the <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> documentation within R.</p>
 <p>Risk difference is built on top of count layers, as it’s a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. We made a large effort to make this flow very naturally with the count layer construction, so let’s walk through it step by step.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
       )
   )
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span>()) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="19%">
+<col width="18%">
+<col width="10%">
+<col width="7%">
+<col width="14%">
+<col width="13%">
+<col width="8%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo</th>
 <th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
@@ -236,7 +249,7 @@
 </tr>
 </tbody>
 </table>
-<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> or <code><a href="../reference/treat_grps.html">add_total_group()</a></code> as well.</p>
+<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> or <code><a href="../reference/add_treat_grps.html">add_total_group()</a></code> as well.</p>
 <p>The risk difference calculations are displayed in the <code>rdiff</code> columns. There will be an <code>rdiff</code> column for every comparison that is made, following the convention <code>rdiff_&lt;comparison&gt;_&lt;reference&gt;</code>.</p>
 <p>Note the use of <code><a href="https://rdrr.io/r/base/warning.html">base::suppressWarnings()</a></code> - if the counts used in <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> are too low, you’ll get a warning that says “Chi-squared approximation may be incorrect” for every time <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> is run with counts that are too low… This could happen a lot, but the warning is perfectly valid.</p>
 </div>
@@ -250,28 +263,37 @@
 <li>95% confidence interval high</li>
 </ul>
 <p>You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
-      ) <span class="kw">%&gt;%</span>
+      ) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'n_counts'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (xx.x) [x]'</span>, <span class="no">distinct</span>, <span class="no">distinct_pct</span>, <span class="no">n</span>),
-        <span class="st">'riskdiff'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="no">comp</span>, <span class="no">ref</span>, <span class="no">dif</span>, <span class="no">low</span>, <span class="no">high</span>)
+        <span class="st">'n_counts'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (xx.x) [x]'</span>, <span class="kw">distinct_n</span>, <span class="kw">distinct_pct</span>, <span class="kw">n</span>),
+        <span class="st">'riskdiff'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="kw">comp</span>, <span class="kw">ref</span>, <span class="kw">dif</span>, <span class="kw">low</span>, <span class="kw">high</span>)
       )
   )
-<span class="co">#&gt; Warning in set_format_strings.count_layer(., n_counts = f_str("xx (xx.x) [x]", :</span>
-<span class="co">#&gt; The use of 'distinct' in count f_strs is discouraged. It was replaced with</span>
-<span class="co">#&gt; 'distinct_n' for consistancy.</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span>()) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="20%">
+<col width="20%">
+<col width="10%">
+<col width="6%">
+<col width="13%">
+<col width="13%">
+<col width="8%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo</th>
 <th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
@@ -354,29 +376,38 @@
 <li>The upper end of the confidence interval</li>
 </ul>
 <p>You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> using a named list and the <code>args</code> argument in <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. This wasn’t done using the ellipsis (i.e. <code>...</code>) like typical R functions because it’s already used to capture a varying number of comparisons, but it’s not much more difficult to use:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>),
-        <span class="kw">args</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">conf.level</span><span class="kw">=</span><span class="fl">0.90</span>, <span class="kw">alternative</span><span class="kw">=</span><span class="st">'less'</span>, <span class="kw">correct</span><span class="kw">=</span><span class="fl">FALSE</span>)
-      ) <span class="kw">%&gt;%</span>
+        args = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(conf.level=<span class="fl">0.90</span>, alternative=<span class="st">'less'</span>, correct=<span class="fl">FALSE</span>)
+      ) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'n_counts'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (xx.x) [x]'</span>, <span class="no">distinct</span>, <span class="no">distinct_pct</span>, <span class="no">n</span>),
-        <span class="st">'riskdiff'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="no">comp</span>, <span class="no">ref</span>, <span class="no">dif</span>, <span class="no">low</span>, <span class="no">high</span>)
+        <span class="st">'n_counts'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx (xx.x) [x]'</span>, <span class="kw">distinct_n</span>, <span class="kw">distinct_pct</span>, <span class="kw">n</span>),
+        <span class="st">'riskdiff'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="kw">comp</span>, <span class="kw">ref</span>, <span class="kw">dif</span>, <span class="kw">low</span>, <span class="kw">high</span>)
       )
   )
-<span class="co">#&gt; Warning in set_format_strings.count_layer(., n_counts = f_str("xx (xx.x) [x]", :</span>
-<span class="co">#&gt; The use of 'distinct' in count f_strs is discouraged. It was replaced with</span>
-<span class="co">#&gt; 'distinct_n' for consistancy.</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span>()) <span class="op">%&gt;%</span>  
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="20%">
+<col width="20%">
+<col width="10%">
+<col width="6%">
+<col width="13%">
+<col width="13%">
+<col width="8%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo</th>
 <th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
@@ -462,24 +493,38 @@
 <h2 class="hasAnchor">
 <a href="#other-notes" class="anchor"></a>Other Notes</h2>
 <p>The default of <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> works on the distinct counts available within the count summary.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="fu">vars</span>(<span class="no">AEBODSYS</span>, <span class="no">AEDECOD</span>)) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>, where= <span class="kw">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="kw">adsl</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="kw">TRT01A</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/get_where.tplyr_layer.html">set_pop_where</a></span>(<span class="fl">TRUE</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AEBODSYS</span>, <span class="kw">AEDECOD</span>)) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
-      )
+      ) 
   )
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span>()) <span class="op">%&gt;%</span>  
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="13%">
+<col width="13%">
+<col width="15%">
+<col width="15%">
+<col width="5%">
+<col width="10%">
+<col width="9%">
+<col width="6%">
+<col width="4%">
+<col width="4%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo</th>
 <th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
@@ -568,22 +613,34 @@
 </tbody>
 </table>
 <p>If for whatever reason you’d like to run risk difference on the non-distinct counts, switch the <code>distinct</code> argument to FALSE. <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> also will function on multi-level summaries no different than single level, so no concerns there either.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>, where= <span class="kw">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>),
-        <span class="kw">distinct</span><span class="kw">=</span><span class="fl">FALSE</span>
-      )
+        distinct=<span class="fl">FALSE</span>
+      ) 
   )
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span>()) <span class="op">%&gt;%</span>  
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="19%">
+<col width="18%">
+<col width="10%">
+<col width="7%">
+<col width="14%">
+<col width="13%">
+<col width="8%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo</th>
 <th align="left">rdiff_Xanomeline Low Dose_Placebo</th>
@@ -658,21 +715,30 @@
 </tbody>
 </table>
 <p>Risk difference also works with the <code>cols</code> argument, but it’s important to understand how the comparisons work in these situation. Here, it’s still the treatment groups that are compared - but the column argument is used as a “by” variable. For example:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">AEBODSYS</span> <span class="kw">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, <span class="kw">cols</span><span class="kw">=</span><span class="no">SEX</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>, where= <span class="kw">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, cols=<span class="kw">SEX</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
-      )
+      ) 
   )
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="no">t</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"rdiff"</span>), <span class="fu">starts_with</span>(<span class="st">"row"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(<span class="fu"><a href="../reference/build.html">build</a></span>(<span class="kw">t</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"rdiff"</span>), <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"row"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="22%">
+<col width="22%">
+<col width="21%">
+<col width="21%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">rdiff_Xanomeline High Dose_Placebo_F</th>
 <th align="left">rdiff_Xanomeline High Dose_Placebo_M</th>
@@ -737,26 +803,27 @@
 <li>If neither statistic nor layer are entered, a list of lists is returned, where the outer list is each layer and the inside list is the numeric statistic data for that layer.</li>
 </ul>
 <p>This works best when layers are named, as it makes the output much clearer.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span><span class="kw">=</span><span class="st">"PreferredTerm"</span>,
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(name=<span class="st">"PreferredTerm"</span>,
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
-      )
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(<span class="kw">name</span><span class="kw">=</span><span class="st">"BodySystem"</span>,
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEBODSYS</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>) <span class="kw">%&gt;%</span>
+      ) 
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(name=<span class="st">"BodySystem"</span>,
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEBODSYS</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span>(
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span>),
         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span>)
-      )
+      ) 
   )
 
 <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(
-  <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span>(<span class="no">t</span>)
+  <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span>(<span class="kw">t</span>)
   )
 <span class="co">#&gt; $PreferredTerm</span>
 <span class="co">#&gt; $PreferredTerm$riskdiff</span>
@@ -785,15 +852,24 @@
 <span class="co">#&gt; 2 SKIN AND SUBCUTANEOUS T… ref                          1                      1</span>
 <span class="co">#&gt; 3 SKIN AND SUBCUTANEOUS T… dif                          0                      0</span>
 <span class="co">#&gt; 4 SKIN AND SUBCUTANEOUS T… low                          0                      0</span>
-<span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS T… high                         0                      0</span></pre></body></html></div>
+<span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS T… high                         0                      0</span>
+</pre></div>
 <p>Instead of playing around with lists, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> is most advantageous if you’d like to extract out some data specifically. Let’s say that you’d like to see just the difference values from the Preferred Term layer in the table above.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r">
+<div class="sourceCode" id="cb8"><pre class="downlit">
+
 <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span>(
-  <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span>(<span class="no">t</span>, <span class="kw">layer</span><span class="kw">=</span><span class="st">'PreferredTerm'</span>, <span class="kw">statistic</span><span class="kw">=</span><span class="st">'riskdiff'</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">measure</span> <span class="kw">==</span> <span class="st">"dif"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span>(<span class="kw">t</span>, layer=<span class="st">'PreferredTerm'</span>, statistic=<span class="st">'riskdiff'</span>, where= <span class="kw">measure</span> <span class="op">==</span> <span class="st">"dif"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="22%">
+<col width="9%">
+<col width="34%">
+<col width="33%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">summary_var</th>
 <th align="left">measure</th>
@@ -858,7 +934,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

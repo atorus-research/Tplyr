@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="Return or set header_n binding — header_n" />
-<meta property="og:description" content="When the header or table body relies on population count data, the header_n
-binding is used for display and calculations." />
+<meta property="og:description" content="The `header_n()` functions can be used to automatically pull the header_n
+derivations from the table or change them for future use." />
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png" />
 <meta property="og:image:alt" content="Tplyr Hex Sticker" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -95,7 +95,7 @@ binding is used for display and calculations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -185,15 +185,15 @@ binding is used for display and calculations." />
     </div>
 
     <div class="ref-description">
-    <p>When the header or table body relies on population count data, the header_n
-binding is used for display and calculations.</p>
+    <p>The `header_n()` functions can be used to automatically pull the header_n
+derivations from the table or change them for future use.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>header_n</span>(<span class='no'>table</span>)
+    <pre class="usage"><span class='fu'>header_n</span>(<span class='kw'>table</span>)
 
-<span class='fu'>header_n</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+<span class='fu'>header_n</span>(<span class='kw'>x</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span>
 
-<span class='fu'>set_header_n</span>(<span class='no'>table</span>, <span class='no'>value</span>)</pre>
+<span class='fu'>set_header_n</span>(<span class='kw'>table</span>, <span class='kw'>value</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,13 +208,13 @@ binding is used for display and calculations.</p>
     </tr>
     <tr>
       <th>value</th>
-      <td><p>A named numeric vector. Names of vector should match treatment
-group names.</p></td>
+      <td><p>A data.frame with columns with the treatment variable, column
+variabes, and a variable with counts named 'n'.</p></td>
     </tr>
     <tr>
       <th>header_n</th>
-      <td><p>A named numeric vector. Names of vector should match treatment
-group names.</p></td>
+      <td><p>A data.frame with columns with the treatment variable, column
+variabes, and a variable with counts named 'n'.</p></td>
     </tr>
     </table>
 
@@ -223,11 +223,28 @@ group names.</p></td>
     <p>For <code>tplyr_header_n</code> the header_n binding of the
   <code>tplyr_table</code> object. For <code>tplyr_header_n&lt;-</code> and
   <code>set_tplyr_header_n</code> the modified object.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The `header_n` object is created by Tplyr when a table is built and intended
+to be used by the `add_column_headers()` function when displaying table level
+population totals. These methods are intended to be used for calling the
+population totals calculated by Tplyr, and to overwrite them if a user
+chooses to.</p>
+<p>If you have a need to change the header Ns that appear in your table headers,
+say you know you are working with a subset of the data that doesn't represent
+the totals, you can replace the data used with `set_header_n()`.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>)
+    <pre class="examples"><div class='input'><span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>)
 
-<span class='fu'>header_n</span>(<span class='no'>tab</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>setosa</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>versicolor</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>virginica</span> <span class='kw'>=</span> <span class='fl'>50</span>)</div></pre>
+<span class='fu'>header_n</span>(<span class='kw'>tab</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  gear = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>),
+  n = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>15</span>, <span class='fl'>45</span>)
+)
+
+
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -243,7 +260,7 @@ group names.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
