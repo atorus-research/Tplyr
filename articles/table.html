@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +115,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,8 +129,7 @@
 
       
 
-      </header><script src="table_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="table_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="table_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="table_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tplyr Table Properties</h1>
@@ -317,6 +316,7 @@
 </tbody>
 </table>
 <p>In the example above, the <code>where</code> parameter is passed forward into both the <code>RACE</code> and <code>AGE</code> layers. Furthermore, note how the <code>cols</code> parameter works. By default, the target variables from the layers are transposed by the <code>treat_var</code> variables. The <code>cols</code> argument adds an additional variable to transpose by, and the values of these variable are added as a suffix to the variable name. You are able to use multiple <code>cols</code> variables just like <code>by</code>, by using <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. But use with caution - as depending on the distinct variable values in the dataset, this could get quite wide.</p>
+<p><em>Note: Treatment groups and additional column variables presented in the final output are always taken from the <strong>pre-filtered</strong> population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled.</em></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">SEX</span>, <span class="va">RACE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>

@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +115,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,8 +129,7 @@
 
       
 
-      </header><script src="desc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="desc_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="desc_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="desc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Descriptive Statistic Layers</h1>
@@ -550,17 +549,9 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
-<colgroup>
-<col width="12%">
-<col width="12%">
-<col width="15%">
-<col width="30%">
-<col width="29%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -568,35 +559,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">5 ( 1)</td>
 <td align="left">6 ( 3)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">2 ( 0)</td>
 <td align="left">2 ( 0)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">64 ( 94)</td>
 <td align="left">58 ( 78)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">17 ( 49)</td>
 <td align="left">21 ( 27)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">271 ( 88)</td>
 <td align="left">231 ( 87)</td>
 </tr>
@@ -619,17 +605,9 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
-<colgroup>
-<col width="12%">
-<col width="12%">
-<col width="15%">
-<col width="30%">
-<col width="29%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -637,35 +615,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
 </tr>
@@ -688,17 +661,9 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
-<colgroup>
-<col width="12%">
-<col width="12%">
-<col width="15%">
-<col width="30%">
-<col width="29%">
-</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -706,35 +671,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
 </tr>

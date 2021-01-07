@@ -131,7 +131,7 @@ Shift layers sort very similarly to count layers, but to order your row
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@ Shift layers sort very similarly to count layers, but to order your row
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -198,7 +198,7 @@ Shift layers sort very similarly to count layers, but to order your row
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -306,13 +306,11 @@ evaluated, if this happens this will only error out in the ordering.</p></td>
   table. Following are the indices for the by variables and the target
   variable. The by variables are ordered based on:</p>
 <p></p><ol>
-<li><p>A &lt;VAR&gt;N variable (i.e. VISIT -&gt; VISITN, TRT -&gt; TRTN) if
-  one is present.</p></li>
-<li><p>If no &lt;VAR&gt;N variable is present, it is ordered
-  based on the factor present in the target dataset.</p></li>
-<li><p>If the variable
-  is not a factor in the target dataset, it is coerced to one and ordered
-  alphabetically.</p></li>
+<li><p>The `by` variable is a factor in the target dataset</p></li>
+<li><p>If the variable isn't a factor, but has a &lt;VAR&gt;N variable (i.e. VISIT
+  -&gt; VISITN, TRT -&gt; TRTN)</p></li>
+<li><p>If the variable is not a factor in the target dataset, it is coerced
+  to one and ordered alphabetically.</p></li>
 </ol>
 
 <p>The target variable is ordered depending on the type of layer. See more
