@@ -324,7 +324,7 @@ count_f_str_check <- function(...) {
 
       # Check to make sure duplicated parameters aren't passed
       assert_that(length(params[["n_counts"]]$vars) == length(unique(params[["n_counts"]]$vars)),
-                  msg = "You've passed duplicate parametres to `set_format_strings`")
+                  msg = "You've passed duplicate parameters to `set_format_strings`")
 
       # Replace the disinct with distinct_n
       if(any(params[["n_counts"]]$vars %in% "distinct")) {
