@@ -1,3 +1,18 @@
+# Tplyr 0.3.1
+
+- Enhancements
+  - The process for determining `by` variable indicies was changed from <VAR>N -> factor -> alphabetical to factor -> <VAR>N -> alphabetical to allow users to override variables that have <VAR>N counterparts that might have additional values not present in the target.
+  - You can now use text strings as the first variable in nested count.
+  
+- Bug Fixes
+  - A bug fix where factors in by variables weren't indexed properly was resolved.
+  - Several documentation updates for clarity and changed functionality.
+  - Improved error messages and error handling in some places.
+
+- Other changes
+  - Event counts are now noted as 'distinct_n' instead of 'distinct' in count format strings. 'distinct' may still be used but results in a warning that it should no longer be used. Using both 'distinct' and 'distinct_n' results in an error.
+  - Updated for changes in how tibble uses attributes. 
+
 # Tplyr 0.2.2
 
 - Enhancements

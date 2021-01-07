@@ -21,6 +21,21 @@ process_summaries.count_layer <- function(x, ...) {
                    "` is invalid. Filter error:\n", e))
     })
 
+    if(!quo_is_symbol(target_var[[1]]) && as_name(target_var[[1]]) %in% names(target)) {
+      warning(paste0("The first target variable has been coerced into a symbol.",
+                     " You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[1]] <- quo(!!sym(as_name(target_var[[1]])))
+    }
+
+    if(length(target_var) == 2 && !quo_is_symbol(target_var[[2]]) &&
+                as_name(target_var[[2]]) %in% names(target)) {
+      warning(paste0("The second target variable has been coerced into a symbol.",
+                     "You should pass variable names unquoted."), immediate. = TRUE)
+
+      target_var[[2]] <- quo(!!sym(as_name(target_var[[2]])))
+    }
+
   }, envir = x)
 
   rename_missing_values(x)
@@ -131,6 +146,11 @@ process_nested_count_target <- function(x) {
 
     if(is.null(indentation)) indentation <- "   "
 
+
+
+    assert_that(quo_is_symbol(target_var[[2]]),
+                msg = "Inner layers must be data driven variables")
+
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
                                                  by = vars(!!!by), where = !!where))
 
@@ -143,7 +163,7 @@ process_nested_count_target <- function(x) {
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%
-      do(filter_nested_inner_layer(., target, as_name(target_var[[1]]), as_name(target_var[[2]]), indentation))
+      do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
 
     # Bind the numeric data together
     numeric_data <- bind_rows(first_layer_final, second_layer_final)
@@ -173,13 +193,25 @@ refresh_nest <- function(x) {
 #' @noRd
 filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation) {
 
-  current_outer_value <- unique(.group[, outer_name])[[1]]
+  # Is outer variable text? If it is don't filter on it
+  text_outer <- !quo_is_symbol(outer_name)
+  outer_name <- as_name(outer_name)
+  inner_name <- as_name(inner_name)
 
-  target_inner_values <- target %>%
-    filter(!!sym(outer_name) == current_outer_value) %>%
-    select(inner_name) %>%
-    unlist() %>%
-    paste0(indentation, .)
+  if(text_outer) {
+    target_inner_values <- target %>%
+      select(inner_name) %>%
+      unlist() %>%
+      paste0(indentation, .)
+  } else {
+    current_outer_value <- unique(.group[, outer_name])[[1]]
+
+    target_inner_values <- target %>%
+      filter(!!sym(outer_name) == current_outer_value) %>%
+      select(inner_name) %>%
+      unlist() %>%
+      paste0(indentation, .)
+  }
 
   .group %>%
     filter(summary_var %in% target_inner_values)
@@ -406,7 +438,7 @@ prepare_format_metadata.count_layer <- function(x) {
     # If there is both n & distinct, or pct and distinct_pct there has to be a
     # distinct_by
     # If both distinct and n
-    if(((("distinct" %in% map(format_strings$n_counts$vars, as_name) &
+    if(((("distinct_n" %in% map(format_strings$n_counts$vars, as_name) &
          "n" %in% map(format_strings$n_counts$vars, as_name)) |
         # or both distinct_pct and pct
         ("distinct_pct" %in% map(format_strings$n_counts$vars, as_name) &
@@ -417,8 +449,8 @@ prepare_format_metadata.count_layer <- function(x) {
     }
 
     # If distinct_by isn't there, change distinct and distinct_pct
-    if(is.null(distinct_by) & "distinct" %in% map(format_strings$n_counts$vars, as_name)) {
-      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct")
+    if(is.null(distinct_by) & "distinct_n" %in% map(format_strings$n_counts$vars, as_name)) {
+      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_n")
       format_strings$n_counts$vars[[distinct_ind]] <- expr(n)
     }
     if(is.null(distinct_by) & "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) {
@@ -625,7 +657,7 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 #' @param count_fmt f_str object used to format
 #' @param .n values used in 'n'
 #' @param .total values used in pct calculations
-#' @param .distinct_n values used in 'distinct'
+#' @param .distinct_n values used in 'distinct_n'
 #' @param vars_ord values used in distinct pct
 #'
 #' @noRd
@@ -640,7 +672,7 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
            # Make a vector of percentages
            map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
          },
-         "distinct" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct"), fmt = count_fmt),
+         "distinct_n" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct_n"), fmt = count_fmt),
          "distinct_pct" = {
            # Same as pct
            pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)
@@ -743,9 +775,8 @@ process_count_denoms <- function(x) {
         distinct(!!!distinct_by, !!treat_var, .keep_all = TRUE) %>%
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
-        complete(!!!cols, !!treat_var) %>%
-        ungroup()
-
+        ungroup() %>%
+        complete(!!!cols, !!treat_var)
     }
 
     denoms_df <- denom_target %>%

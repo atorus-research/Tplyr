@@ -2,7 +2,7 @@ $n_counts
 *** Format String ***
 xx (xx.xx%) [xxx] [xx.xx%]
 *** vars, extracted formats, and settings ***
-distinct formated as: xx
+distinct_n formated as: xx
 	integer length: 2
 	decimal length: 0
 distinct_pct formated as: xx.xx

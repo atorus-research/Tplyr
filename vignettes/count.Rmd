@@ -59,7 +59,7 @@ t <- tplyr_table(adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>%
       set_distinct_by(USUBJID) %>%
-      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct, distinct_pct, n))
+      set_format_strings(f_str("xxx (xx.xx%) [xxx]", distinct_n, distinct_pct, n))
   ) %>%
   build() %>%
   head()
@@ -67,7 +67,7 @@ t <- tplyr_table(adae, TRTA) %>%
 kable(t)
 ```
 
-You may have seen tables before like the one above. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct` and `distinct_pct` in addition to the `n` and `pct` created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
+You may have seen tables before like the one above. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct_n` and `distinct_pct` in addition to the `n` and `pct` created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
 
 ## Nested Count Summaries
 

@@ -5,8 +5,9 @@
 * Github release action with windows, linux, and osx check
 
 ## Updates
-* set_denom_ignore is now defunct
-* update set_missing_count interface.
+* Updates for nested count layers
+* Documentation Updates
+* Bug fixes
 
 
 ## R CMD CHECK Results

@@ -46,7 +46,7 @@ c6 <- group_count(t6, cyl) %>%
 c7 <- group_count(t7, vars(cyl, grp))
 # Distinct count and Event count
 c8 <- group_count(t8, cyl) %>%
-  set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
+  set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct_n)) %>%
   set_distinct_by(am)
 # Change indentation
 c9 <- group_count(t9, vars(cyl, grp)) %>%
@@ -59,7 +59,7 @@ c11 <- group_count(t11, cyl) %>%
   set_ordering_cols(5)
 # Change numeric extraction value
 c12 <- group_count(t12, cyl) %>%
-  set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct)) %>%
+  set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct_n)) %>%
   set_result_order_var(distinct_n) %>%
   set_distinct_by(am)
 c13 <- group_count(t13, vars(cyl, grp), by = "Test")
@@ -479,7 +479,7 @@ test_that("set_denom_where works as expected", {
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
         set_distinct_by(am) %>%
-        set_format_strings(f_str("xx (xx.x)", distinct, distinct_pct)) %>%
+        set_format_strings(f_str("xx (xx.x)", distinct_n, distinct_pct)) %>%
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
@@ -506,4 +506,59 @@ test_that("missing counts can be set without a format and it inherits the layer 
     build()
   expect_equal(t2$row_label1, c("Missing", "6", "8"))
   expect_equal(t2$var1_3, c("  1  [ 6.7%]", "  2  [13.3%]", " 12  [80.0%]"))
+})
+
+test_that("distinct is changed to distinct_n with a warning", {
+
+  expect_warning({
+    t <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(cyl) %>%
+          set_distinct_by(am) %>%
+          set_format_strings(f_str("xx", distinct))
+      )
+  }, "The use of 'distinct' in count f_strs is discouraged. It was replaced with 'distinct_n' for consistancy.")
+
+  expect_equal(t$layers[[1]]$format_strings$n_counts$vars[[1]], "distinct_n")
+
+})
+
+test_that("nested count layers can accecpt text values in the first variable", {
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars("All Cyl", cyl))
+    )
+
+  expect_silent(build(t))
+
+  expect_equal(t$layers[[1]]$formatted_data$row_label1,
+               c("All Cyl", "All Cyl", "All Cyl", "All Cyl"))
+  expect_equal(t$layers[[1]]$formatted_data$row_label2,
+               c("All Cyl", "   4", "   6", "   8"))
+  expect_equal(t$layers[[1]]$formatted_data$var1_3,
+               c("15 (100.0%)", " 1 (  6.7%)", " 2 ( 13.3%)", "12 ( 80.0%)"))
+  expect_equal(t$layers[[1]]$formatted_data$var1_4,
+               c("12 (100.0%)", " 8 ( 66.7%)", " 4 ( 33.3%)", " 0 (  0.0%)"))
+  expect_equal(t$layers[[1]]$formatted_data$var1_5,
+               c(" 5 (100.0%)", " 2 ( 40.0%)", " 1 ( 20.0%)", " 2 ( 40.0%)"))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, "Txt"))
+    )
+  expect_error(build(t2), "Inner layers must be data driven variables")
+})
+
+test_that("Variable names will be coersed into symbols", {
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count("cyl")
+    )
+  expect_warning(build(t1), "The first target variable has been coerced")
+
+  t2 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(vars("all cyl", "cyl"))
+    )
+  expect_warning(build(t2), "The second target variable has been coerced")
 })

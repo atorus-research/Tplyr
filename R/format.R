@@ -371,56 +371,7 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 #' @rdname set_format_strings
 set_format_strings.count_layer <- function(e, ...) {
 
-  # Catch the arguments from the function call so useful errors can be thrown
-  check <- enquos(...)
-
-  # Make sure that all of the attachments were `f_str` objects
-  for (i in seq_along(check)) {
-
-    if (is_named(check)) {
-      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
-                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
-    } else {
-      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
-                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
-    }
-
-    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
-                msg = msg)
-  }
-
-  # Grab the named parameters
-  params <- list(...)
-
-  # Currently supported format names
-  valid_names <- c("n_counts", "riskdiff")
-
-  # Raise error if names were invalid
-  if (is_named(params)) {
-    assert_that(all(names(params) %in% valid_names),
-                msg = paste('Invalid format names supplied. Count layers only accept the following format names:',
-                            paste(valid_names, collapse = ", "))
-                )
-
-  } else {
-    # If unnamed, then only one argument should have been supplied
-    assert_that(length(params) == 1, msg = "If names are not supplied, count layers can only have on format supplied.")
-    # Force the name in of n_counts
-    names(params) <- "n_counts"
-  }
-
-
-  # Check content of each f_str based on their supplied name
-  for (name in names(params)) {
-
-    if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_pct")),
-                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
-    } else if (name == "riskdiff") {
-      assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
-                  msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
-    }
-  }
+  params <- count_f_str_check(...)
 
   env_bind(e, format_strings = params)
 
@@ -553,3 +504,79 @@ pad_formatted_data <- function(x, right_pad, left_pad) {
 
   x
 }
+
+#' Helper for changing values on count f_str
+#'
+#' @param ... The object passed to `set_format_strings` or `set_count_layer_formats`
+#'
+#' @noRd
+count_f_str_check <- function(...) {
+  # Catch the arguments from the function call so useful errors can be thrown
+  check <- enquos(...)
+
+  # Make sure that all of the attachments were `f_str` objects
+  for (i in seq_along(check)) {
+
+    if (is_named(check)) {
+      msg = paste0("In `set_format_string` entry `",names(check)[[i]],"` is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    } else {
+      msg = paste0("In `set_format_string` entry ",i," is not an `f_str` object. All assignmentes made within",
+                   " `set_format_string` must be made using the function `f_str`. See the `f_str` documentation.")
+    }
+
+    assert_that(class(quo_get_expr(check[[i]])) == "f_str" || (is_call(quo_get_expr(check[[i]])) && call_name(check[[i]]) == "f_str"),
+                msg = msg)
+  }
+
+  # Grab the named parameters
+  params <- list(...)
+
+  # Currently supported format names
+  valid_names <- c("n_counts", "riskdiff")
+
+  # Raise error if names were invalid
+  if (is_named(params)) {
+    assert_that(all(names(params) %in% valid_names),
+                msg = paste('Invalid format names supplied. Count layers only accept the following format names:',
+                            paste(valid_names, collapse = ", "))
+    )
+
+  } else {
+    # If unnamed, then only one argument should have been supplied
+    assert_that(length(params) == 1, msg = "If names are not supplied, count layers can only have on format supplied.")
+    # Force the name in of n_counts
+    names(params) <- "n_counts"
+  }
+
+
+  # Check content of each f_str based on their supplied name
+  for (name in names(params)) {
+
+    if (name == "n_counts") {
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct")),
+                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
+
+      # Check to make sure both disintct(old), and distinct_n(new) aren't passed
+      assert_that(!all(c("distinct", "distinct_n") %in% params[["n_counts"]]$vars),
+                  msg = "You can't pass both distinct and distinct_n, just use distinct_n")
+
+      # Check to make sure duplicated parameters aren't passed
+      assert_that(length(params[["n_counts"]]$vars) == length(unique(params[["n_counts"]]$vars)),
+                  msg = "You've passed duplicate parameters to `set_format_strings`")
+
+      # Replace the disinct with distinct_n
+      if(any(params[["n_counts"]]$vars %in% "distinct")) {
+        warning("The use of 'distinct' in count f_strs is discouraged. It was replaced with 'distinct_n' for consistancy.")
+      }
+      params[["n_counts"]]$vars[params[["n_counts"]]$vars %in% "distinct"] <- "distinct_n"
+
+    } else if (name == "riskdiff") {
+      assert_that(all(params[['riskdiff']]$vars %in% c('comp', 'ref', 'dif', 'low', 'high')),
+                  msg = "f_str for riskdiff in a count_layer can only be comp, ref, dif, low, or high")
+    }
+  }
+
+  params
+}
+

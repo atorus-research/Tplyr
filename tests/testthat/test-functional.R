@@ -113,7 +113,7 @@ test_that("all test tables can be built without errors or warnings", {
   expect_silent(build(t4))
   expect_silent(build(t5))
   expect_silent(suppressWarnings(build(t6))) # This seems to be a bug https://github.com/tidyverse/dplyr/issues/5149
-  expect_error(build(t7), "variable `col_i` does not exist in target dataset")
+  expect_error(build(t7), "object 'col_i' not found")
 })
 
 test_that("all tables have the expected dimentions", {
@@ -132,3 +132,32 @@ test_that("all tables have the expected dimentions", {
   expect_equal(dim(b_t6), c(48, 15))
 })
 
+## Table with extra treat var factor
+test_that("Extra factors on the treat var come through on the table", {
+  mtcars2 <- mtcars
+  mtcars2$gear <- factor(mtcars2$gear, c(3, 4, 5, 10))
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl)
+    ) %>%
+    add_layer(
+      group_desc(mpg)
+    ) %>%
+    build()
+
+  expect_equal(dim(t1), c(9,7))
+})
+
+test_that("Treatment groups and columns persist even when taken out by where logic", {
+  mtcars2 <- mtcars
+  mtcars2$gear <- factor(mtcars2$gear, c(3, 4, 5, 10))
+  mtcars2$am <- factor(mtcars2$am, c(0, 1, 2))
+
+  t1 <- tplyr_table(mtcars2, gear, cols = am, where = (gear != 4 & am != 1)) %>%
+    add_layer(group_count(cyl)) %>%
+    build()
+
+  expect_equal(dim(t1), c(3, 15))
+
+})

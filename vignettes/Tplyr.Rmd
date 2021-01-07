@@ -196,7 +196,7 @@ In a perfect world, the `f_str()` calls wouldn't be necessary - but in reality t
 
 This simple user input controls a significant amount of work in the back end of the data processing, and the `f_str()` object allows that metadata to be collected.
 
-`f_str()` objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use `n`, `pct`, `distinct`, and `distinct_pct` for your parameters and specify how you would like the values displayed. Using `distinct` and `distinct_pct` should be combined with specifying a `distinct_by()` variable using `set_distinct_by()`. 
+`f_str()` objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use `n`, `pct`, `distinct_n`, and `distinct_pct` for your parameters and specify how you would like the values displayed. Using `distinct_n` and `distinct_pct` should be combined with specifying a `distinct_by()` variable using `set_distinct_by()`. 
 
 ```{r format_strings_2}
 tplyr_table(adsl, TRT01P) %>% 

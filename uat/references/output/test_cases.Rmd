@@ -1,8 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 11/05/2020
-NA
+#' 1/6/2021
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -29,141 +28,149 @@ This section contains details of each test executed. Checks verifying each test 
   + T7: n counts of values within a variable can be produced
     + T7.1: Complete data value n counts can be produced within a variable
     + T7.2: Distinct data value n counts can be produced within a variable
+    + T7.3: A text string can be passed in and will be used as the value for counts
   + T8: n counts of values within a group of variables can be produced
     + T8.1: Complete data value n counts can be produced within a group of variables
     + T8.2: Distinct data value n counts can be produced within a group of variables
-  + T9: Total n counts can be added and a sort value can be sepecified by the user
-    + T9.1: Total n count can be added within a layer and sorted using a specified value
-  + T10: Missing n count handling can be specified including presentation and denominator handling 
-    + T10.1: Missing n count rows can be added within a layer and sorted using a specified value
-    + T10.2: Missing values can be excluded from the layer denominator
-  + T11: Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string
-    + T11.1: Values specified by user are presented in the output table and total or missing rows can be added
-  + T12: Counts can be produced as n (%)
-    + T12.1: When specified
-    + T12.2: Distinct n and % can be displayed in a n (%) fashion and total counts can be added
-    + T12.3: Distinct and non-distinct n and % can be presented together and total counts can be added
-  + T13: When producing n (%), the denominator can be specified using the analysis data
-    + T13.1: Check denominators created match counts from analysis data
-    + T13.2: Check % produced use denominators matching counts from analysis data 
-  + T14: When producing n (%), the denominator can be specified using a particular manually specified subset
-    + T14.1: Check denominators created match counts using specified conditions
-    + T14.2: Check % produced use denominators matching counts using specified conditions
-  + T15: When producing n (%), the denominator can be specified using the population data
-    + T15.1: Check % produced use denominators matching counts from population data
-    + T15.2: Check denominators created match counts from population data
-  + T16: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
-    + T16.1: Check % produced use denominators matching counts from grouping variables
-    + T16.2: Check added total row matches counts using denom by variables
-  + T17: Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test
-    + T17.1: Check that risk difference calculated between groupings is correct
-    + T17.2: Check that confidence interval calculated between groupings is correct
-    + T17.3: Arguments passed through to prop.test create the correct output
-  + T18: Risk difference can be calculated over user specified cols arguments
-    + T18.1: Risk difference estimate and confidence interval can be computed across values of the treatment variable and cols argument
-  + T19: Risk difference can be calculated over nested count layers and by variables
-    + T19.1: Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer
-    + T19.2: Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable
-    + T19.3: Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable
-  + T20: The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable
-    + T20.1: Check the computed statistic of n matches the expected value
-    + T20.2: Check the computed statistic of mean matches the expected value
-    + T20.3: Check the computed statistic of median matches the expected value
-    + T20.4: Check the computed statistic of IQR matches the expected value
-    + T20.5: Check the computed statistic of Q1 matches the expected value
-    + T20.6: Check the computed statistic of Q3 matches the expected value
-    + T20.7: Check the computed statistic of standard deviation matches the expected value
-    + T20.8: Check the computed statistic of variance matches the expected value
-    + T20.9: Check the computed statistic of min matches the expected value
-    + T20.10: Check the computed statistic of max matches the expected value
-    + T20.11: Check the computed statistic of missing matches the expected value
-  + T21: Custom descriptive statistics can be produced based on an input variable and a specified formula
-    + T21.1: Check that the computed statistic value matches the value from the specified formula
-  + T22: Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
-    + T22.1: Check the statistic values match the values from the specified grouping variable
-  + T23: Multiple statistics can be presented in one line
-    + T23.1: Check that the output can include multiple statistics on the same line
-  + T24: Decimal precision and integer length can be specified by the user
-    + T24.1: The output decimal precision and integer length is the same as the user specified values
-  + T25: Decimal precision and integer length can be dynamically created from analysis data
-    + T25.1: The output decimal precision and integer length is the same as the decimal precision and integer length from the target data variable
-  + T26: Presentation format can be specified by the user including desired non-numeric text and align per user specification
-    + T26.1: The output string is formatted the same as user specification including non-numeric text and alignment
-  + T27: Descriptive statistic missing values can be set to a user specified string
-    + T27.1: Missing values can be set to a user specified string
-  + T28: Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced
-    + T28.1: n counts can be created in a shift manner using a from and to variable
-  + T29: Shift n counts of values within a variable can be produced
-    + T29.1: n counts can be created in a shift manner using a from and to variable and a by variable
-  + T30: Shift n counts of values within a group of variables can be produced
-    + T30.1: n counts can be created in a shift manner using a from and to variable and multiple by variables
-  + T31: Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
-    + T31.1: Values specified by user for the shift variables are presented in the output table
-    + T31.2: Values are sorted using the order in the provided factor
-  + T32: Shift counts can be produced as n (%)
-    + T32.1: When specified, both n and % can be displayed in a n (%) fashion for shift layer
-  + T33: For shift counts when producing n (%), the denominator can be specified using the analysis data
-    + T33.1: Check % produced use denominators matching counts from analysis data 
-  + T34: For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset
-    + T34.1: Check % produced use denominators matching counts using specified conditions
-  + T35: For shift counts when producing n (%), the denominator can be specified using the population data
-    + T35.1: Check % produced use denominators matching counts from population data
-  + T36: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
-    + T36.1: Check % produced use denominators matching counts from grouping variables
-  + T37: Row labels can be manually specified by the user
-    + T37.1: Check row labels in output table match user specified values
-  + T38: Row labels can be nested to put a subgroup within a parent group
-    + T38.1: Check row labels and nesting in output table match user specified values and nesting
-  + T39: Summaries can be stacked on top of one another
-    + T39.1: Check multiple summaries mixed between descriptive statistics and count are created they can be stacked 
-  + T40: Summaries can be sorted based on manual sorting by presentation specified order
-    + T40.1: Check that output table has correct count sorting variables matching specified order
-  + T41: Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
-    + T41.1: Check that output table has correct count sorting variables for count based sorting
-  + T42: Summaries can be sorted based on alphabetical sorting based on data values
-    + T42.1: Check that output table has correct count sorting variables for data values
-  + T43: Summaries can be sorted based on a numeric version of the target variable if available
-    + T43.1: Check that output table has correct count sorting variables for the corresponding numeric variable
-  + T44: Summary by variables will be sorted by a numeric variable if available and then by factor
-    + T44.1: Check that ouput table has correct sorting variables for supplied by variables
-  + T45: Nested layers can be sorted independently using different methods
-    + T45.1: Check that when different methods are supplied for nested layers they are applied correctly
-  + T46: Independent layers can be sorted using different methods and stacked using common sorting variables
-    + T46.1: Check that when different methods are supplied for independent layers they are applied correctly
-  + T47: Count layer default formats can be set at the table level
-    + T47.1: Check that count layer formats set at the table level are applied to layers created
-    + T47.2: Check that count layer formats applied at the layer level take prescedence over table level formats
-  + T48: Descriptive statistics layer default formats can be set at the table level
-    + T48.1: Check that descriptive statistics layer formats set at the table level are applied to layers created
-    + T48.2: Check that descriptive statistics layer formats applied at the layer level take prescedence over table level formats
-  + T49: Shift layer default formats can be set at the table level
-    + T49.1: Check that shift layer formats set at the table level are applied to layers created
-    + T49.2: Check that shift layer formats applied at the layer level take prescedence over table level formats
-  + T50: Option for count layer default formats can be specified by the user
-    + T50.1: Check that the count layer defail formats specified in the option are displayed in the table
-  + T51: Option for descriptive statistics layer default formats can be specified by the user
-    + T51.1: Check that the descriptive statistics layer defail formats specified in the option are displayed in the table
-  + T52: Option for shift layer default formats can be specified by the user
-    + T52.1: Check that the shift layer defail formats specified in the option are displayed in the table
-  + T53: Option for a cap on auto precision can be specified by the user
-    + T53.1: Check that the cap on auto precision specified by the user is displayed correctly in the table for both integers and decimals
-  + T54: Option for custom descriptive statistics can be specified by the user for use in the table
-    + T54.1: Check that custom descriptive statistics set in the options can be used and displayed correctly in the table
-  + T55: Option for setting scipen internal option can be specified by the user
-    + T55.1: Check that scientific notation supplied is displayed correctly in the table
-  + T56: Option for setting quantile algorithm choice can be specified by the user
-    + T56.1: Check that the quantile algorithm supplied is used in table q1 and q3 calculation
-  + T57: Column headers can be added to the output object
-    + T57.1: Check that column headers added match those in the output object
-  + T58: Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion
-    + T58.1: Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion
-  + T59: A table object is returned in a format that is ready to be cosmetically prepared
-    + T59.1: Check that the table object can be easily cosmetically prepared 
-  + T60: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-    + T60.1: Test that n and % results are accurate when the combination of the cols argument and separate population data are applied
-    + T60.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied
-    + T60.3: Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied
-  + T61: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
-    + T61.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
-    + T61.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
-    + T61.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+  + T9: counts can be produced using a pair of nested variables
+    + T9.1: two variables with a nested relationship can be used to create counts
+    + T9.2: A text string and a variable can be used to create counts
+  + T10: Total n counts can be added and a sort value can be sepecified by the user
+    + T10.1: Total n count can be added within a layer and sorted using a specified value
+  + T11: Missing n count handling can be specified including presentation and denominator handling 
+    + T11.1: Missing n count rows can be added within a layer and sorted using a specified value
+    + T11.2: Missing values can be excluded from the layer denominator
+  + T12: Dummy values can be specified for categories that need to be presented but may not exist within the data and missing values can be set to a user specified string
+    + T12.1: Values specified by user are presented in the output table and total or missing rows can be added
+  + T13: Counts can be produced as n (%)
+    + T13.1: When specified, both n and % can be displayed in a n (%) fashion and total counts can be added
+    + T13.2: Distinct n and % can be displayed in a n (%) fashion and total counts can be added
+    + T13.3: Distinct and non-distinct n and % can be presented together and total counts can be added
+  + T14: When producing n (%), the denominator can be specified using the analysis data
+    + T14.1: Check denominators created match counts from analysis data
+    + T14.2: Check % produced use denominators matching counts from analysis data 
+  + T15: When producing n (%), the denominator can be specified using a particular manually specified subset
+    + T15.1: Check denominators created match counts using specified conditions
+    + T15.2: Check % produced use denominators matching counts using specified conditions
+  + T16: When producing n (%), the denominator can be specified using the population data
+    + T16.1: Check % produced use denominators matching counts from population data
+    + T16.2: Check denominators created match counts from population data
+  + T17: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
+    + T17.1: Check % produced use denominators matching counts from grouping variables
+    + T17.2: Check added total row matches counts using denom by variables
+  + T18: Risk difference including confidence interval can be produced based on specified treatment groupings and arguments can be passed through to prop.test
+    + T18.1: Check that risk difference calculated between groupings is correct
+    + T18.2: Check that confidence interval calculated between groupings is correct
+    + T18.3: Arguments passed through to prop.test create the correct output
+  + T19: Risk difference can be calculated over user specified cols arguments
+    + T19.1: Risk difference estimate and confidence interval can be computed across values of the treatment variable and cols argument
+  + T20: Risk difference can be calculated over nested count layers and by variables
+    + T20.1: Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer
+    + T20.2: Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable
+    + T20.3: Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable
+  + T21: The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable
+    + T21.1: Check the computed statistic of n matches the expected value
+    + T21.2: Check the computed statistic of mean matches the expected value
+    + T21.3: Check the computed statistic of median matches the expected value
+    + T21.4: Check the computed statistic of IQR matches the expected value
+    + T21.5: Check the computed statistic of Q1 matches the expected value
+    + T21.6: Check the computed statistic of Q3 matches the expected value
+    + T21.7: Check the computed statistic of standard deviation matches the expected value
+    + T21.8: Check the computed statistic of variance matches the expected value
+    + T21.9: Check the computed statistic of min matches the expected value
+    + T21.10: Check the computed statistic of max matches the expected value
+    + T21.11: Check the computed statistic of missing matches the expected value
+  + T22: Custom descriptive statistics can be produced based on an input variable and a specified formula
+    + T22.1: Check that the computed statistic value matches the value from the specified formula
+  + T23: Descriptive statistics can be performed across discrete values within a grouping variable or a group of grouping variables
+    + T23.1: Check the statistic values match the values from the specified grouping variable
+  + T24: Multiple statistics can be presented in one line
+    + T24.1: Check that the output can include multiple statistics on the same line
+  + T25: Decimal precision and integer length can be specified by the user
+    + T25.1: The output decimal precision and integer length is the same as the user specified values
+  + T26: Decimal precision and integer length can be dynamically created from analysis data
+    + T26.1: The output decimal precision and integer length is the same as the decimal precision and integer length from the target data variable
+  + T27: Presentation format can be specified by the user including desired non-numeric text and align per user specification
+    + T27.1: The output string is formatted the same as user specification including non-numeric text and alignment
+  + T28: Descriptive statistic missing values can be set to a user specified string
+    + T28.1: Missing values can be set to a user specified string
+  + T29: Shift n counts of values using two variables, a 'from' and a 'to' variable, can be produced
+    + T29.1: n counts can be created in a shift manner using a from and to variable
+  + T30: Shift n counts of values within a variable can be produced
+    + T30.1: n counts can be created in a shift manner using a from and to variable and a by variable
+  + T31: Shift n counts of values within a group of variables can be produced
+    + T31.1: n counts can be created in a shift manner using a from and to variable and multiple by variables
+  + T32: Dummy values for shift counts can be specified for categories that need to be presented but may not exist within the data
+    + T32.1: Values specified by user for the shift variables are presented in the output table
+    + T32.2: Values are sorted using the order in the provided factor
+  + T33: Shift counts can be produced as n (%)
+    + T33.1: When specified, both n and % can be displayed in a n (%) fashion for shift layer
+  + T34: For shift counts when producing n (%), the denominator can be specified using the analysis data
+    + T34.1: Check % produced use denominators matching counts from analysis data 
+  + T35: For shift counts when producing n (%), the denominator can be specified using a particular manually specified subset
+    + T35.1: Check % produced use denominators matching counts using specified conditions
+  + T36: For shift counts when producing n (%), the denominator can be specified using the population data
+    + T36.1: Check % produced use denominators matching counts from population data
+  + T37: For shift counts when producing n (%), the denominator can be specified using a grouping of variables
+    + T37.1: Check % produced use denominators matching counts from grouping variables
+  + T38: Row labels can be manually specified by the user
+    + T38.1: Check row labels in output table match user specified values
+  + T39: Row labels can be nested to put a subgroup within a parent group
+    + T39.1: Check row labels and nesting in output table match user specified values and nesting
+  + T40: Summaries can be stacked on top of one another
+    + T40.1: Check multiple summaries mixed between descriptive statistics and count are created they can be stacked 
+  + T41: Summaries can be sorted based on manual sorting by presentation specified order
+    + T41.1: Check that output table has correct count sorting variables matching specified order
+  + T42: Summaries can be sorted based on count based sorting (either ascending or descending) by a specified treatment group
+    + T42.1: Check that output table has correct count sorting variables for count based sorting
+  + T43: Summaries can be sorted based on alphabetical sorting based on data values
+    + T43.1: Check that output table has correct count sorting variables for data values
+  + T44: Summaries can be sorted based on a numeric version of the target variable if available
+    + T44.1: Check that output table has correct count sorting variables for the corresponding numeric variable
+  + T45: Summary by variables will be sorted by a numeric variable if available and then by factor
+    + T45.1: Check that ouput table has correct sorting variables for supplied by variables
+  + T46: Nested layers can be sorted independently using different methods
+    + T46.1: Check that when different methods are supplied for nested layers they are applied correctly
+  + T47: Independent layers can be sorted using different methods and stacked using common sorting variables
+    + T47.1: Check that when different methods are supplied for independent layers they are applied correctly
+  + T48: Count layer default formats can be set at the table level
+    + T48.1: Check that count layer formats set at the table level are applied to layers created
+    + T48.2: Check that count layer formats applied at the layer level take prescedence over table level formats
+  + T49: Descriptive statistics layer default formats can be set at the table level
+    + T49.1: Check that descriptive statistics layer formats set at the table level are applied to layers created
+    + T49.2: Check that descriptive statistics layer formats applied at the layer level take prescedence over table level formats
+  + T50: Shift layer default formats can be set at the table level
+    + T50.1: Check that shift layer formats set at the table level are applied to layers created
+    + T50.2: Check that shift layer formats applied at the layer level take prescedence over table level formats
+  + T51: Option for count layer default formats can be specified by the user
+    + T51.1: Check that the count layer defail formats specified in the option are displayed in the table
+  + T52: Option for descriptive statistics layer default formats can be specified by the user
+    + T52.1: Check that the descriptive statistics layer defail formats specified in the option are displayed in the table
+  + T53: Option for shift layer default formats can be specified by the user
+    + T53.1: Check that the shift layer defail formats specified in the option are displayed in the table
+  + T54: Option for a cap on auto precision can be specified by the user
+    + T54.1: Check that the cap on auto precision specified by the user is displayed correctly in the table for both integers and decimals
+  + T55: Option for custom descriptive statistics can be specified by the user for use in the table
+    + T55.1: Check that custom descriptive statistics set in the options can be used and displayed correctly in the table
+  + T56: Option for setting scipen internal option can be specified by the user
+    + T56.1: Check that scientific notation supplied is displayed correctly in the table
+  + T57: Option for setting quantile algorithm choice can be specified by the user
+    + T57.1: Check that the quantile algorithm supplied is used in table q1 and q3 calculation
+  + T58: Column headers can be added to the output object
+    + T58.1: Check that column headers added match those in the output object
+  + T59: Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion
+    + T59.1: Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion
+  + T60: A table object is returned in a format that is ready to be cosmetically prepared
+    + T60.1: Check that the table object can be easily cosmetically prepared 
+  + T61: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
+    + T61.1: Test that n and % results are accurate when the combination of the cols argument and separate population data are applied
+    + T61.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied
+    + T61.3: Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied
+  + T62: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
+    + T62.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+    + T62.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+    + T62.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+  + T63: Treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T63.1: Test that all treatment groups and cols variable combinations exist in the final table
+  + T64: When using separate population data treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T64.1: Test that when using separate population data all treatment groups and cols variable combinations exist in the final table

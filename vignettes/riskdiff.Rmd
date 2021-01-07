@@ -77,7 +77,7 @@ t <- tplyr_table(adae, TRTA) %>%
         c('Xanomeline Low Dose', 'Placebo')
       ) %>% 
       set_format_strings(
-        'n_counts' = f_str('xx (xx.x) [x]', distinct, distinct_pct, n),
+        'n_counts' = f_str('xx (xx.x) [x]', distinct_n, distinct_pct, n),
         'riskdiff' = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', comp, ref, dif, low, high)
       )
   )
@@ -110,7 +110,7 @@ t <- tplyr_table(adae, TRTA) %>%
         args = list(conf.level=0.90, alternative='less', correct=FALSE)
       ) %>% 
       set_format_strings(
-        'n_counts' = f_str('xx (xx.x) [x]', distinct, distinct_pct, n),
+        'n_counts' = f_str('xx (xx.x) [x]', distinct_n, distinct_pct, n),
         'riskdiff' = f_str('xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx', comp, ref, dif, low, high)
       )
   )

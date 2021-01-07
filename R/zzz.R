@@ -1,7 +1,7 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args is_call current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names env_bind_active as_label
+#' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
 #' @importFrom stringr str_sub str_extract str_pad str_starts
@@ -127,7 +127,7 @@ tplyr_default_options <- list(
 
   # Count layer defaults
   tplyr.count_layer_default_formats =
-    list(n_counts = f_str("a (xxx.x%)", distinct, distinct_pct),
+    list(n_counts = f_str("a (xxx.x%)", distinct_n, distinct_pct),
          riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
          ),
 
