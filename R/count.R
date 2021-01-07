@@ -23,7 +23,7 @@ process_summaries.count_layer <- function(x, ...) {
 
     if(!quo_is_symbol(target_var[[1]]) && as_name(target_var[[1]]) %in% names(target)) {
       warning(paste0("The first target variable has been coerced into a symbol.",
-                     "You should pass variable names unquoted."), immediate. = TRUE)
+                     " You should pass variable names unquoted."), immediate. = TRUE)
 
       target_var[[1]] <- quo(!!sym(as_name(target_var[[1]])))
     }

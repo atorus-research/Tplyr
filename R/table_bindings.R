@@ -336,7 +336,11 @@ get_count_layer_formats <- function(obj) {
 #' @rdname table_format_defaults
 set_count_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
-  env_bind(obj, count_layer_formats = list(...))
+
+  if (length(list(...)) > 0) params <- count_f_str_check(...)
+  else params <- list(...)
+
+  env_bind(obj, count_layer_formats = params)
   obj
 }
 
