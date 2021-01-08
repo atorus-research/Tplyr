@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -146,11 +146,13 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can Tplyr install with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># Install from CRAN:</span>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co"># Install from CRAN:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"Tplyr"</span>)
 
 <span class="co"># Or install the development version:</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"https://github.com/atorus-research/Tplyr.git"</span>)</pre></div>
+<span class="kw">devtools</span>::<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"https://github.com/atorus-research/Tplyr.git"</span>)
+</pre></div>
 </div>
 <div id="what-is-tplyr" class="section level1">
 <h1 class="hasAnchor">
@@ -162,7 +164,7 @@
 <li>Shifting, which is just counting a change in state with a ‘from’ and a ‘to’</li>
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
-<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&amp;%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&amp;%20Medications.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
+<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
 <p align="center">
 </p>
 <p><img src="articles/demo_table.png" width="800px"></p>
@@ -177,17 +179,19 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="r">
-<span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span> <span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="reference/layer_constructors.html">group_count</a></span>(<span class="no">AGEGR1</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age Categories n (%)"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></div>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+
+<span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where = <span class="kw">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age Categories n (%)"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -350,9 +354,9 @@
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
 <p>In building ‘Tplyr’, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
-<p><a href="http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf">Analysis and Displays Associated with Adverse Events</a></p>
-<p><a href="https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
-<p><a href="http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf">Analyses and Displays Associated with Measures of Central Tendency</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf">Analysis and Displays Associated with Adverse Events</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf">Analyses and Displays Associated with Measures of Central Tendency</a></p>
 </div>
 
   </div>
@@ -398,7 +402,6 @@
 <ul class="list-unstyled">
 <li><a href="https://ostinclinicalresearch.slack.com"><img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&amp;logo=slack"></a></li>
 <li><a href="https://RValidationHub.slack.com"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
-<li><a href="https://travis-ci.com/atorus-research/tplyr"><img src="https://travis-ci.com/atorus-research/tplyr.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check"><img src="https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://codecov.io/gh/atorus-research/tplyr"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
 <li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a></li>
@@ -414,7 +417,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

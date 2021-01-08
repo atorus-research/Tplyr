@@ -51,7 +51,7 @@
 blanked out if they are repeating. This gives the data frame supporting the
 table the appearance of the grouping variables being grouped together in
 blocks. apply_row_masks does this work by blanking out the value of
-any row_label variable where the current value is not equal to the value
+any row_label variable where the current value is equal to the value
 before it. Note - apply_row_masks assumes that the data frame has
 already be sorted and therefore should only be applied once the data frame is
 in its final sort sequence." />
@@ -101,7 +101,7 @@ in its final sort sequence." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -195,13 +195,13 @@ in its final sort sequence." />
 blanked out if they are repeating. This gives the data frame supporting the
 table the appearance of the grouping variables being grouped together in
 blocks. <code>apply_row_masks</code> does this work by blanking out the value of
-any row_label variable where the current value is not equal to the value
+any row_label variable where the current value is equal to the value
 before it. Note - <code>apply_row_masks</code> assumes that the data frame has
 already be sorted and therefore should only be applied once the data frame is
 in its final sort sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>apply_row_masks</span>(<span class='no'>dat</span>, <span class='kw'>row_breaks</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>apply_row_masks</span>(<span class='kw'>dat</span>, row_breaks = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -250,7 +250,7 @@ breaks between layers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

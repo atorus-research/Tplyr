@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a <code>f_str</code> object — f_str • Tplyr</title>
+<title>Create a f_str object — f_str • Tplyr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Create a <code>f_str</code> object — f_str" />
+<meta property="og:title" content="Create a f_str object — f_str" />
 <meta property="og:description" content="f_str objects are intended to be used within the function
 set_format_strings. The f_str object carries information that
 powers a significant amount of layer processing. The format_string
@@ -99,7 +99,7 @@ used to populate the string formatted output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -197,7 +197,7 @@ precision. The variables provided in <code>...</code> control which data points 
 used to populate the string formatted output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>f_str</span>(<span class='no'>format_string</span>, <span class='no'>...</span>, <span class='kw'>empty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>.overall</span> <span class='kw'>=</span> <span class='st'>""</span>))</pre>
+    <pre class="usage"><span class='fu'>f_str</span>(<span class='kw'>format_string</span>, <span class='kw'>...</span>, empty = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(.overall = <span class='st'>""</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -276,7 +276,8 @@ instead replace the whole string.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.x (xx.x)"</span>, <span class='no'>mean</span>, <span class='no'>sd</span>)</div><div class='output co'>#&gt; *** Format String ***
+<span class='fu'>f_str</span>(<span class='st'>"xx.x (xx.x)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+</div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.x (xx.x)
 #&gt; *** vars, extracted formats, and settings ***
 #&gt; mean formated as: xx.x
@@ -286,7 +287,8 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 2
 #&gt; 	decimal length: 1
 #&gt; Total Format Size: 11</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"a.a+1 (a.a+2)"</span>, <span class='no'>mean</span>, <span class='no'>sd</span>)</div><div class='output co'>#&gt; *** Format String ***
+<span class='fu'>f_str</span>(<span class='st'>"a.a+1 (a.a+2)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+</div><div class='output co'>#&gt; *** Format String ***
 #&gt; a.a+1 (a.a+2)
 #&gt; *** vars, extracted formats, and settings ***
 #&gt; mean formated as: a.a+1
@@ -296,7 +298,8 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 0
 #&gt; 	decimal length: 2
 #&gt; Total Format Size: 13</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.a (xx.a+1)"</span>, <span class='no'>mean</span>, <span class='no'>sd</span>)</div><div class='output co'>#&gt; *** Format String ***
+<span class='fu'>f_str</span>(<span class='st'>"xx.a (xx.a+1)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+</div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.a (xx.a+1)
 #&gt; *** vars, extracted formats, and settings ***
 #&gt; mean formated as: xx.a
@@ -306,7 +309,8 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 2
 #&gt; 	decimal length: 1
 #&gt; Total Format Size: 13</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.x, xx.x, xx.x"</span>, <span class='no'>q1</span>, <span class='no'>median</span>, <span class='no'>q3</span>)</div><div class='output co'>#&gt; *** Format String ***
+<span class='fu'>f_str</span>(<span class='st'>"xx.x, xx.x, xx.x"</span>, <span class='kw'>q1</span>, <span class='kw'>median</span>, <span class='kw'>q3</span>)
+</div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.x, xx.x, xx.x
 #&gt; *** vars, extracted formats, and settings ***
 #&gt; q1 formated as: xx.x
@@ -335,7 +339,7 @@ instead replace the whole string.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

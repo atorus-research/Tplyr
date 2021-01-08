@@ -98,7 +98,7 @@ subsequent layers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -195,11 +195,11 @@ an interface to add these groups at a table level and be consumed by
 subsequent layers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_treat_grps</span>(<span class='no'>table</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>add_treat_grps</span>(<span class='kw'>table</span>, <span class='kw'>...</span>)
 
-<span class='fu'>add_total_group</span>(<span class='no'>table</span>, <span class='kw'>group_name</span> <span class='kw'>=</span> <span class='st'>"Total"</span>)
+<span class='fu'>add_total_group</span>(<span class='kw'>table</span>, group_name = <span class='st'>"Total"</span>)
 
-<span class='fu'>treat_grps</span>(<span class='no'>table</span>)</pre>
+<span class='fu'>treat_grps</span>(<span class='kw'>table</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -235,10 +235,11 @@ groups within the population dataset.</p>
 in your <code>tplyr_table</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>)
+    <pre class="examples"><div class='input'><span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>)
 
 <span class='co'># A custom group</span>
-<span class='fu'>add_treat_grps</span>(<span class='no'>tab</span>, <span class='st'>"Not Setosa"</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"versicolor"</span>, <span class='st'>"virginica"</span>))</div><div class='output co'>#&gt; *** tplyr_table ***
+<span class='fu'>add_treat_grps</span>(<span class='kw'>tab</span>, <span class='st'>"Not Setosa"</span> = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"versicolor"</span>, <span class='st'>"virginica"</span>))
+</div><div class='output co'>#&gt; *** tplyr_table ***
 #&gt; Target (data.frame):
 #&gt; 	Name:  iris
 #&gt; 	Rows:  150
@@ -253,7 +254,8 @@ in your <code>tplyr_table</code> object</p>
 #&gt; Number of layer(s): 0
 #&gt; layer_output: 0</div><div class='input'>
 <span class='co'># Add a total group</span>
-<span class='fu'>add_total_group</span>(<span class='no'>tab</span>)</div><div class='output co'>#&gt; *** tplyr_table ***
+<span class='fu'>add_total_group</span>(<span class='kw'>tab</span>)
+</div><div class='output co'>#&gt; *** tplyr_table ***
 #&gt; Target (data.frame):
 #&gt; 	Name:  iris
 #&gt; 	Rows:  150
@@ -268,17 +270,18 @@ in your <code>tplyr_table</code> object</p>
 #&gt; where: TRUE
 #&gt; Number of layer(s): 0
 #&gt; layer_output: 0</div><div class='input'>
-<span class='fu'>treat_grps</span>(<span class='no'>tab</span>)</div><div class='output co'>#&gt; $`Not Setosa`
+<span class='fu'>treat_grps</span>(<span class='kw'>tab</span>)
+</div><div class='output co'>#&gt; $`Not Setosa`
 #&gt; [1] "versicolor" "virginica" 
 #&gt; 
 #&gt; $Total
 #&gt; [1] "setosa"     "versicolor" "virginica" 
-#&gt; </div><div class='input'># Returns:
-# $`Not Setosa`
-#[1] "versicolor" "virginica"
-#
-#$Total
-#[1] "setosa"     "versicolor" "virginica"
+#&gt; </div><div class='input'><span class='co'># Returns:</span>
+<span class='co'># $`Not Setosa`</span>
+<span class='co'>#[1] "versicolor" "virginica"</span>
+<span class='co'>#</span>
+<span class='co'>#$Total</span>
+<span class='co'>#[1] "setosa"     "versicolor" "virginica"</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -295,7 +298,7 @@ in your <code>tplyr_table</code> object</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

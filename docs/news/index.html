@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -181,6 +181,33 @@
       <small>Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="tplyr-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#tplyr-031" class="anchor"></a>Tplyr 0.3.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>Enhancements
+<ul>
+<li>The process for determining <code>by</code> variable indicies was changed from <var>N -&gt; factor -&gt; alphabetical to factor -&gt; <var>N -&gt; alphabetical to allow users to override variables that have <var>N counterparts that might have additional values not present in the target.</var></var></var>
+</li>
+<li>You can now use text strings as the first variable in nested count.</li>
+</ul>
+</li>
+<li>Bug Fixes
+<ul>
+<li>A bug fix where factors in by variables weren’t indexed properly was resolved.</li>
+<li>Several documentation updates for clarity and changed functionality.</li>
+<li>Improved error messages and error handling in some places.</li>
+</ul>
+</li>
+<li>Other changes
+<ul>
+<li>Event counts are now noted as ‘distinct_n’ instead of ‘distinct’ in count format strings. ‘distinct’ may still be used but results in a warning that it should no longer be used. Using both ‘distinct’ and ‘distinct_n’ results in an error.</li>
+<li>Updated for changes in how tibble uses attributes.</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="tplyr-022" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.2">
 <a href="#tplyr-022" class="anchor"></a>Tplyr 0.2.2<small> 2020-11-30 </small>
@@ -346,7 +373,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

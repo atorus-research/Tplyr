@@ -26,7 +26,6 @@ load("vignettes/adsl.Rdata")
 <!-- badges: start -->
 [<img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&logo=slack">](https://ostinclinicalresearch.slack.com)
 [<img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&logo=slack">](https://RValidationHub.slack.com)
-[![Build Status](https://travis-ci.com/atorus-research/tplyr.svg?branch=master)](https://travis-ci.com/atorus-research/tplyr)
 [![R build status](https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/badge/License-MIT-blue.svg">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
@@ -60,7 +59,7 @@ devtools::install_github("https://github.com/atorus-research/Tplyr.git")
 - Shifting, which is just counting a change in state with a 'from' and a 'to'
 - Generating descriptive statistics around some continuous variable. 
 
-For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let's use an example from the PHUSE project Standard Analyses & Code Sharing - [Analyses & Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents](https://www.phusewiki.org/docs/WorkingGroups/New%20Template%20Deliverables/Standard%20Analyses%20&%20Code%20Sharing/Analyses%20and%20Displays%20Associated%20with%20Demographics,%20Disposition%20&%20Medications.pdf). 
+For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let's use an example from the PHUSE project Standard Analyses & Code Sharing - [Analyses & Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf). 
 
 <p align="center"><img src="vignettes/demo_table.png" width="800px"></p>
 
@@ -76,7 +75,7 @@ When you look at this table, you can begin breaking this output down into smalle
 So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. 
 In the same way that `dplyr` is a grammar of data manipulation, `Tplyr` aims to be a grammar of data summary. The goal of `Tplyr` is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller 'layers', and combining them together like you see on the page. 
 
-Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://www.phusewiki.org/wiki/index.php?title=WG5_Project_09) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
+Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://advance.phuse.global/display/WEL/Test+Dataset+Factory) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ```{r initial_demo}
 
@@ -125,8 +124,8 @@ There's quite a bit more to learn! And we've prepared a number of other vignette
 
 In building 'Tplyr', we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.
 
-[Analysis and Displays Associated with Adverse Events](http://www.phusewiki.org/wiki/images/b/bf/Cs-whitepaper-adverseevents-v10-4442.pdf)
+[Analysis and Displays Associated with Adverse Events](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf)
 
-[Analyses and Displays Associated with Demographics, Disposition, and Medications](https://www.phuse.eu/documents//working-groups/deliverables/analyses-displays-associated-with-demographics-disposition-medications-in-phase-2-4-clinical-trials-version-20-02-mar-18-11808.pdf)
+[Analyses and Displays Associated with Demographics, Disposition, and Medications](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf)
 
-[Analyses and Displays Associated with Measures of Central Tendency](http://www.phusewiki.org/wiki/images/4/48/CSS_WhitePaper_CentralTendency_v1.0.pdf)
+[Analyses and Displays Associated with Measures of Central Tendency](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf)
