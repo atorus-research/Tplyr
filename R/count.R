@@ -11,10 +11,12 @@ process_summaries.count_layer <- function(x, ...) {
   # Catch errors
   evalq({
     tryCatch({
-      # Save this for the denominator where
-      built_target_pre_where <- built_target
+      # Save this for the denominator where, but only if it hasn't been saved yet.
+      if(is.null(built_target_pre_where)) built_target_pre_where <- built_target
       built_target <- built_target %>%
-        filter(!!where)
+        filter(!!where) %>%
+        filter(!!kept_levels)
+
     }, error = function(e) {
       abort(paste0("group_count `where` condition `",
                    as_label(where),
@@ -487,6 +489,9 @@ process_formatting.count_layer <- function(x, ...) {
 
     formatted_data <- numeric_data
 
+    # if(is_built_nest && !quo_is_symbol(by[[1]])) {
+    #   names(formatted_data) <- str_remove_all(names(formatted_data), "\\\"")
+    # }
 
 
     formatted_data <- formatted_data %>%
@@ -510,7 +515,7 @@ process_formatting.count_layer <- function(x, ...) {
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
     # Replace the by variables and target variable names with `row_label<n>`
-      replace_by_string_names(quos(!!!by, summary_var))
+    replace_by_string_names(quos(!!!by, summary_var))
 
     if(is_built_nest) {
 

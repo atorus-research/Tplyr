@@ -235,6 +235,12 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
 
   out <- append(list(...), out)
 
+  if(str_detect(names(out)[1], "\\\"")) {
+    names(out)[1] <- str_remove_all(names(out)[1], "\\\"")
+  }
+
+  # Rename
+
   # Totals in the 2 way must be positive
   if (all(c(total_comp, total_ref) > 0)) {
 
@@ -250,7 +256,7 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
   }
 
   # Return as a dataframe
-  as.data.frame(out, stringsAsFactors=FALSE)
+  as.data.frame(out, stringsAsFactors=FALSE, optional = TRUE)
 }
 
 construct_riskdiff_string <- function(..., .fmt_str=NULL) {
