@@ -13,7 +13,7 @@ process_summaries.count_layer <- function(x, ...) {
     tryCatch({
       # Check 'kept_levels' and stop if they're not in the target dataset
       if(!is.null(levels_to_keep) && quo_is_symbol(tail(target_var, 1)[[1]])) {
-        kept_levels_found <- levels_to_keep %in% target[, as_name(tail(target_var, 1)[[1]])]
+        kept_levels_found <- unlist(levels_to_keep) %in% target[[as_name(tail(target_var, 1)[[1]])]]
         assert_that(all(kept_levels_found),
                     msg = paste0("level passed to `kept_levels` not found: ",
                                  paste0(levels_to_keep[!kept_levels_found],
