@@ -601,3 +601,20 @@ test_that("keep_levels works as expeceted", {
   expect_equal(t2$var1_3, c(" 12 ( 80%)", " 12 ( 80%)"))
   expect_equal(dim(t2), c(2, 8))
 })
+
+test_that("nested count layers can be built with restrictive where logic", {
+  mtcars <- mtcars2
+  mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, grp), where = grp == "grp.8.5")%>%
+        set_nest_count(TRUE) %>%
+        set_order_count_method('bycount') %>%
+        set_ordering_cols("3")
+    ) %>%
+    build()
+
+  expect_equal(dim(t), c(2, 7))
+
+})

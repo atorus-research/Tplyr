@@ -194,7 +194,8 @@ add_order_columns.count_layer <- function(x) {
       # Get the number of unique outer values, that is the number of rows to pull out.
       # If its text, it is just 1 to pull out
       outer_number <- ifelse(quo_is_symbol(by[[1]]),
-                             length(unlist(unique(target[, as_name(by[[1]])]))),
+                             # Use built_target here to take the 'where' logic into account
+                             length(unlist(unique(built_target[, as_name(by[[1]])]))),
                              1)
 
       all_outer <- numeric_data %>%
