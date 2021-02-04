@@ -276,3 +276,4 @@ count_fmt <- NULL
 count_missings <- NULL
 has_missing_count <- FALSE
 kept_levels <-expr(TRUE)
+levels_to_keep <- NULL

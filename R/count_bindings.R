@@ -631,6 +631,7 @@ keep_levels <- function(e, ...) {
   # Create the logic for the filtering. Pull out the second variable if it is a
   # nested count layer, or the first if it isn't nested
   env_bind(e, kept_levels = expr(!!tail(env_get(e, "target_var"), 1)[[1]] %in% !!unlist(dots)))
+  env_bind(e, levels_to_keep = dots)
 
   e
 }

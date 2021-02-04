@@ -600,6 +600,15 @@ test_that("keep_levels works as expeceted", {
   expect_equal(dim(t1), c(2, 6))
   expect_equal(t2$var1_3, c(" 12 ( 80%)", " 12 ( 80%)"))
   expect_equal(dim(t2), c(2, 8))
+
+  expect_error({
+    t3 <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(cyl) %>%
+          keep_levels("10", "20")
+      ) %>%
+      build()
+  }, "Error: level passed to `kept_levels` not found: 10 20")
 })
 
 test_that("nested count layers can be built with restrictive where logic", {
