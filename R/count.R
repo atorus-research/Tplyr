@@ -23,9 +23,24 @@ process_summaries.count_layer <- function(x, ...) {
 
       # Save this for the denominator where, but only if it hasn't been saved yet.
       if(is.null(built_target_pre_where)) built_target_pre_where <- built_target
+
+
+
       built_target <- built_target %>%
         filter(!!where) %>%
         filter(!!kept_levels)
+
+      ## Drop levels if target var is factor and kept levels used
+      if(!is.null(levels_to_keep) && quo_is_symbol(tail(target_var, 1)[[1]]) &&
+         is.factor(built_target[[as_name(tail(target_var, 1)[[1]])]])) {
+        # Pull out the levels that weren't in keep levels.
+        target_levels <- levels(built_target[[as_name(tail(target_var, 1)[[1]])]])
+        drop_levels_ind <- !(target_levels %in% levels_to_keep)
+        drop_these_levels <- target_levels[drop_levels_ind]
+        # Use forcats to remove the levels that weren't in the "keep levels"
+        built_target <- built_target %>%
+          mutate(!!tail(target_var,1) := fct_drop(!!tail(target_var,1), only = drop_these_levels))
+      }
 
     }, error = function(e) {
       abort(paste0("group_count `where` condition `",
