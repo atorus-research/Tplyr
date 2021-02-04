@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="desc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="desc_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="desc_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Descriptive Statistic Layers</h1>
@@ -142,22 +143,34 @@
 
     
     
-<p>Descriptive statistics in ‘Tplyr’ are created using <code><a href="../reference/layer_constructors.html">group_desc()</a></code> function when creating a layer. While <code><a href="../reference/layer_constructors.html">group_desc()</a></code> allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> where the actual summaries are declared.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span><span class="kw">==</span><span class="st">"Y"</span>) <span class="kw">%&gt;%</span>
+<p>Descriptive statistics in ‘Tplyr’ are created using <code><a href="../reference/group_count.html">group_desc()</a></code> function when creating a layer. While <code><a href="../reference/group_count.html">group_desc()</a></code> allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> where the actual summaries are declared.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>, where= <span class="kw">SAFFL</span><span class="op">==</span><span class="st">"Y"</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">"n"</span>        <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx"</span>, <span class="no">n</span>),
-        <span class="st">"Mean (SD)"</span><span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx.x (xx.xx)"</span>, <span class="no">mean</span>, <span class="no">sd</span>),
-        <span class="st">"Median"</span>   <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx.x"</span>, <span class="no">median</span>),
-        <span class="st">"Q1, Q3"</span>   <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx, xx"</span>, <span class="no">q1</span>, <span class="no">q3</span>),
-        <span class="st">"Min, Max"</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx, xx"</span>, <span class="no">min</span>, <span class="no">max</span>),
-        <span class="st">"Missing"</span>  <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx"</span>, <span class="no">missing</span>)
+        <span class="st">"n"</span>        = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx"</span>, <span class="kw">n</span>),
+        <span class="st">"Mean (SD)"</span>= <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx.x (xx.xx)"</span>, <span class="kw">mean</span>, <span class="kw">sd</span>),
+        <span class="st">"Median"</span>   = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx.x"</span>, <span class="kw">median</span>),
+        <span class="st">"Q1, Q3"</span>   = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx, xx"</span>, <span class="kw">q1</span>, <span class="kw">q3</span>),
+        <span class="st">"Min, Max"</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx, xx"</span>, <span class="kw">min</span>, <span class="kw">max</span>),
+        <span class="st">"Missing"</span>  = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">"xx"</span>, <span class="kw">missing</span>)
       )
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="9%">
+<col width="8%">
+<col width="10%">
+<col width="20%">
+<col width="19%">
+<col width="12%">
+<col width="9%">
+<col width="9%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -244,6 +257,11 @@
 <a href="#built-in-summaries" class="anchor"></a>Built-in Summaries</h2>
 <p>We’ve built a number of default summaries into ‘Tplyr’, which allows you to perform these summaries without having to specify the functions to calculate them yourself. The summaries built in to ‘Tplyr’ are listed below. In the second column are the names that you would use within an <code><a href="../reference/f_str.html">f_str()</a></code> call to use them. In the third column, we have the syntax used to make the function call.</p>
 <table class="table">
+<colgroup>
+<col width="19%">
+<col width="14%">
+<col width="65%">
+</colgroup>
 <thead><tr class="header">
 <th align="center">Statistic</th>
 <th align="center">Variable Names</th>
@@ -315,14 +333,16 @@
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
 \]</span> That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the <code>tplyr.quantile_type</code> option. If you’re intending to match the SAS definition, you can use Type 3. For more information, see the <code><a href="https://rdrr.io/r/stats/quantile.html">stats::quantile()</a></code> documentation.</p>
 <p>The example below demonstrates using the default quantile algorithm in R.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">CUMDOSE</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Q1, Q3"</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxxxx, xxxxx'</span>, <span class="no">q1</span>, <span class="no">q3</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">CUMDOSE</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Q1, Q3"</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxxxx, xxxxx'</span>, <span class="kw">q1</span>, <span class="kw">q3</span>))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -341,15 +361,17 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p><span class="math display">\[
 \textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
 \]</span></p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">tplyr.quantile_type</span> <span class="kw">=</span> <span class="fl">3</span>)
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">CUMDOSE</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Q1, Q3"</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxxxx, xxxxx'</span>, <span class="no">q1</span>, <span class="no">q3</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-    <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(tplyr.quantile_type = <span class="fl">3</span>)
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">CUMDOSE</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Q1, Q3"</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxxxx, xxxxx'</span>, <span class="kw">q1</span>, <span class="kw">q3</span>))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -379,20 +401,32 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </ul>
 <p>As with any other setting in ‘Tplyr’, the layer setting will always take precedence over any other setting.</p>
 <p>Let’s look at an example.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="fu">vars</span>(<span class="no">AGE</span>, <span class="no">HEIGHTBL</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Sepal Length"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AGE</span>, <span class="kw">HEIGHTBL</span>), by = <span class="st">"Sepal Length"</span>) <span class="op">%&gt;%</span>
       <span class="fu"><a href="../reference/set_custom_summaries.html">set_custom_summaries</a></span>(
-        <span class="kw">geometric_mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="no">.var</span>[<span class="no">.var</span> <span class="kw">&gt;</span> <span class="fl">0</span>]), <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>) / <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">.var</span>))
-      ) <span class="kw">%&gt;%</span>
+        geometric_mean = <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw">.var</span>[<span class="kw">.var</span> <span class="op">&gt;</span> <span class="fl">0</span>]), na.rm=<span class="fl">TRUE</span>) <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw">.var</span>))
+      ) <span class="op">%&gt;%</span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'Geometric Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx (xx.xxx)'</span>, <span class="no">geometric_mean</span>, <span class="no">sd</span>)
+        <span class="st">'Geometric Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx (xx.xxx)'</span>, <span class="kw">geometric_mean</span>, <span class="kw">sd</span>)
       )
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="7%">
+<col width="12%">
+<col width="9%">
+<col width="15%">
+<col width="15%">
+<col width="9%">
+<col width="15%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -422,14 +456,24 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </ul>
 <p>Another note about custom summaries is that you’re able to overwrite the default summaries built into ‘Tplyr’ as well. Don’t like the default summary functions that we provide? Use the <code>tplyr.custom_summaries</code> option to overwrite them in your session, and add any new ones that you would like to include.</p>
 <p>For example, here we use the ‘Tplyr’ default mean.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Mean"</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx'</span>, <span class="no">mean</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Mean"</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx'</span>, <span class="kw">mean</span>))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="10%">
+<col width="12%">
+<col width="25%">
+<col width="24%">
+<col width="15%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">var1_Placebo</th>
@@ -448,20 +492,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr></tbody>
 </table>
 <p>But now, let’s overwrite <code>mean</code> using a custom summary. Let’s use a trimmed mean instead, taking 20% of observations off of both ends.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">tplyr.custom_summaries</span> <span class="kw">=</span>
-          <span class="kw pkg">rlang</span><span class="kw ns">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span>(
-            <span class="kw">mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">.var</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">trim</span><span class="kw">=</span><span class="fl">0.4</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(tplyr.custom_summaries = 
+          <span class="kw">rlang</span>::<span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span>(
+            mean = <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="kw">.var</span>, na.rm=<span class="fl">TRUE</span>, trim=<span class="fl">0.4</span>)
           )
         )
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Mean"</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx'</span>, <span class="no">mean</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">"Mean"</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xx.xx'</span>, <span class="kw">mean</span>))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="10%">
+<col width="12%">
+<col width="25%">
+<col width="24%">
+<col width="15%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">var1_Placebo</th>
@@ -486,25 +540,26 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <a href="#formatting" class="anchor"></a>Formatting</h2>
 <p>A lot of the nuance to formatting descriptive statistics layers has already been covered above, but there are a couple more tricks to getting the most out of ‘Tplyr’. One of these tricks is filling empty values.</p>
 <p>By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">adlb_2</span> <span class="kw">&lt;-</span> <span class="no">adlb</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">TRTA</span> <span class="kw">!=</span> <span class="st">"Placebo"</span>)
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">adlb_2</span> <span class="op">&lt;-</span> <span class="kw">adlb</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">TRTA</span> != <span class="st">"Placebo"</span>)
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb_2</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AVAL</span>, <span class="kw">by</span><span class="kw">=</span><span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx (xxx)'</span>, <span class="no">mean</span>, <span class="no">sd</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb_2</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="kw">adsl</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AVAL</span>, by=<span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx (xxx)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -512,60 +567,56 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">5 ( 1)</td>
 <td align="left">6 ( 3)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">2 ( 0)</td>
 <td align="left">2 ( 0)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">64 ( 94)</td>
 <td align="left">58 ( 78)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">17 ( 49)</td>
 <td align="left">21 ( 27)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left"></td>
 <td align="left">271 ( 88)</td>
 <td align="left">231 ( 87)</td>
 </tr>
 </tbody>
 </table>
 <p>Note how the entire example above has all records in <code>var1_Placebo</code> missing. ‘Tplyr’ gives you control over how you fill this space. Let’s say that we wanted instead to make that space say “Missing”. You can control this with the <code><a href="../reference/f_str.html">f_str()</a></code> object using the <code>empty</code> parameter</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">adlb_2</span> <span class="kw">&lt;-</span> <span class="no">adlb</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">TRTA</span> <span class="kw">!=</span> <span class="st">"Placebo"</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="kw">adlb_2</span> <span class="op">&lt;-</span> <span class="kw">adlb</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">TRTA</span> != <span class="st">"Placebo"</span>)
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb_2</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AVAL</span>, <span class="kw">by</span><span class="kw">=</span><span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="no">mean</span>, <span class="no">sd</span>, <span class="kw">empty</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">.overall</span><span class="kw">=</span><span class="st">"MISSING"</span>)))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb_2</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="kw">adsl</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AVAL</span>, by=<span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>, empty=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.overall=<span class="st">"MISSING"</span>)))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -573,60 +624,56 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">MISSING</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
 </tr>
 </tbody>
 </table>
 <p>Look at the <code>empty</code> parameter above. Here, we use a named character vector, where the name is <code>.overall</code>. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you’d like to see. Perhaps we want a string that fills each missing space.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">adlb_2</span> <span class="kw">&lt;-</span> <span class="no">adlb</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">TRTA</span> <span class="kw">!=</span> <span class="st">"Placebo"</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="kw">adlb_2</span> <span class="op">&lt;-</span> <span class="kw">adlb</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">TRTA</span> != <span class="st">"Placebo"</span>)
 
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb_2</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AVAL</span>, <span class="kw">by</span><span class="kw">=</span><span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="no">mean</span>, <span class="no">sd</span>, <span class="kw">empty</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"NA"</span>)))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">select</span>(-<span class="fu">starts_with</span>(<span class="st">"ord"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb_2</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="kw">adsl</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="kw">TRT01P</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AVAL</span>, by=<span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(<span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>, empty=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"NA"</span>)))
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"ord"</span>)) <span class="op">%&gt;%</span>
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
-<th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 </tr></thead>
@@ -634,35 +681,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <tr class="odd">
 <td align="left">BUN</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
-<td align="left">NA ( NA)</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
 </tr>
@@ -674,18 +716,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <a href="#auto-precision" class="anchor"></a>Auto Precision</h3>
 <p>You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, and for standard deviation +2.</p>
 <p>‘Tplyr’ has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use <code>a</code> instead of <code>x</code> when creating your summaries. Note that only one <code>a</code> is needed on each side of a decimal. To use increased precision, use <code>a+n</code> where <code>n</code> is the number of additional spaces you wish to add.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AVAL</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AVAL</span>, by = <span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="no">mean</span>, <span class="no">sd</span>)
+        <span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>)
       )
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="8%">
+<col width="8%">
+<col width="15%">
+<col width="19%">
+<col width="18%">
+<col width="11%">
+<col width="8%">
+<col width="8%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -751,18 +805,30 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </table>
 <p>As you can see, the decimal precision is now varying depending on the test being performed. Notice that both the integer and the decimal side of each number fluctuate as well. <code>Tpylr</code> collects both the integer and decimal precision, and you can specify both separately. For example, you could use <code>x</code>’s to specify a default number of spaces for your integers that are used consistently across by variables, but vary the decimal precision based on collected data. You can also increment the number of spaces for both integer and decimal separately.</p>
 <p>But - this is kind of ugly, isn’t it? Do we really need all 6 decimal places collected for CA? For this reason, you’re able to set a cap on the precision that’s displayed:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AVAL</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AVAL</span>, by = <span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="no">mean</span>, <span class="no">sd</span>),
-        <span class="kw">cap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">int</span><span class="kw">=</span><span class="fl">3</span>, <span class="kw">dec</span><span class="kw">=</span><span class="fl">2</span>)
+        <span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>),
+        cap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(int=<span class="fl">3</span>, dec=<span class="fl">2</span>)
       )
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="8%">
+<col width="8%">
+<col width="14%">
+<col width="19%">
+<col width="18%">
+<col width="12%">
+<col width="9%">
+<col width="9%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -828,20 +894,38 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </table>
 <p>Now that looks better. The <code>cap</code> argument is part of <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length allotted for the left side of a decimal, but integers will not truncate. When using ‘x’ formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integer in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. These caps apply to the length allotted for the “a” on either the integer or the decimal. So for example, if the decimal length is capped at 2 and the selected precision is “a+1”, then 3 decimal places will be allotted.</p>
 <p>This was a basic situation, but if you’re paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don’t want that? What about multiple summary variables? How do we determine precision then? We have modifier functions for this:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="fu">vars</span>(<span class="no">AVAL</span>, <span class="no">CHG</span>, <span class="no">BASE</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="no">PARAMCD</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">AVAL</span>, <span class="kw">CHG</span>, <span class="kw">BASE</span>), by = <span class="kw">PARAMCD</span>) <span class="op">%&gt;%</span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span>(
-        <span class="st">'Mean (SD)'</span> <span class="kw">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="no">mean</span>, <span class="no">sd</span>, <span class="kw">empty</span><span class="kw">=</span><span class="st">"NA"</span>),
-        <span class="kw">cap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">int</span><span class="kw">=</span><span class="fl">3</span>, <span class="kw">dec</span><span class="kw">=</span><span class="fl">2</span>)
-      ) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/precision_on.html">set_precision_on</a></span>(<span class="no">AVAL</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/precision_by.html">set_precision_by</a></span>(<span class="no">PARAMCD</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+        <span class="st">'Mean (SD)'</span> = <span class="fu"><a href="../reference/f_str.html">f_str</a></span>(<span class="st">'a.a+1 (a.a+2)'</span>, <span class="kw">mean</span>, <span class="kw">sd</span>, empty=<span class="st">"NA"</span>),
+        cap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(int=<span class="fl">3</span>, dec=<span class="fl">2</span>)
+      ) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/get_precision_on.html">set_precision_on</a></span>(<span class="kw">AVAL</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/get_precision_by.html">set_precision_by</a></span>(<span class="kw">PARAMCD</span>)
+  ) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="4%">
+<col width="4%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+<col width="6%">
+<col width="9%">
+<col width="9%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -941,7 +1025,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </tr>
 </tbody>
 </table>
-<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code><a href="../reference/precision_on.html">set_precision_on()</a></code> allows you to specify this, where the <code>precision_on()</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code><a href="../reference/precision_by.html">set_precision_by()</a></code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on()</code> variable is specified, the first variable in <code>target_var</code> is used. If no <code>precision_by()</code> variables are specified, then the default <code>by</code> variables are used.</p>
+<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code><a href="../reference/get_precision_on.html">set_precision_on()</a></code> allows you to specify this, where the <code>precision_on()</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code><a href="../reference/get_precision_by.html">set_precision_by()</a></code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on()</code> variable is specified, the first variable in <code>target_var</code> is used. If no <code>precision_by()</code> variables are specified, then the default <code>by</code> variables are used.</p>
 </div>
 </div>
   </div>
@@ -961,7 +1045,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

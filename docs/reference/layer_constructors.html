@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a <code>count</code>, <code>desc</code>, or <code>shift</code> layer for discrete count
+<title>Create a count, desc, or shift layer for discrete count
 based summaries, descriptive statistics summaries, or shift count summaries — group_count • Tplyr</title>
 
 <!-- favicons -->
@@ -47,7 +47,7 @@ based summaries, descriptive statistics summaries, or shift count summaries — 
 
 
 
-<meta property="og:title" content="Create a <code>count</code>, <code>desc</code>, or <code>shift</code> layer for discrete count
+<meta property="og:title" content="Create a count, desc, or shift layer for discrete count
 based summaries, descriptive statistics summaries, or shift count summaries — group_count" />
 <meta property="og:description" content="This family of functions specifies the type of summary that is
   to be performed within a layer. count layers are used to create
@@ -100,7 +100,7 @@ based summaries, descriptive statistics summaries, or shift count summaries — 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -198,11 +198,11 @@ based summaries, descriptive statistics summaries, or shift count summaries</h1>
   changes in states. See the "details" section below for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>group_count</span>(<span class='no'>parent</span>, <span class='no'>target_var</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>vars</span>(), <span class='kw'>where</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>group_count</span>(<span class='kw'>parent</span>, <span class='kw'>target_var</span>, by = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(), where = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>group_desc</span>(<span class='no'>parent</span>, <span class='no'>target_var</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>vars</span>(), <span class='kw'>where</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>group_desc</span>(<span class='kw'>parent</span>, <span class='kw'>target_var</span>, by = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(), where = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>group_shift</span>(<span class='no'>parent</span>, <span class='no'>target_var</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>vars</span>(), <span class='kw'>where</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>group_shift</span>(<span class='kw'>parent</span>, <span class='kw'>target_var</span>, by = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(), where = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -243,7 +243,7 @@ performing a summary.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-<dl'>
+<dl>
 <dt>Count Layers</dt><dd><p>Count layers allow you to create
   summaries based on counting values with a variable. Additionally, this
   layer allows you to create n (%) summaries where you're also summarizing
@@ -280,26 +280,27 @@ performing a summary.</p></td>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>[<a href='layer_attachment.html'>add_layer</a>, <a href='layer_attachment.html'>add_layers</a>, <a href='tplyr_table.html'>tplyr_table</a>, <a href='tplyr_layer.html'>tplyr_layer</a>]</p></div>
+    <div class='dont-index'><p>[<a href='add_layer.html'>add_layer</a>, <a href='add_layer.html'>add_layers</a>, <a href='tplyr_table.html'>tplyr_table</a>, <a href='tplyr_layer.html'>tplyr_layer</a>]</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://magrittr.tidyverse.org'>magrittr</a></span>)
 
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
-    <span class='fu'>group_desc</span>(<span class='kw'>target_var</span><span class='kw'>=</span><span class='no'>Sepal.Width</span>)
+<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
+    <span class='fu'>group_desc</span>(target_var=<span class='kw'>Sepal.Width</span>)
   )
 
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>iris</span>, <span class='no'>Species</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
-    <span class='fu'>group_desc</span>(<span class='kw'>target_var</span><span class='kw'>=</span><span class='no'>Sepal.Width</span>)
+<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
+    <span class='fu'>group_desc</span>(target_var=<span class='kw'>Sepal.Width</span>)
   )
 
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='no'>mtcars</span>, <span class='no'>am</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='layer_attachment.html'>add_layer</a></span>(
-    <span class='fu'>group_shift</span>(<span class='fu'>vars</span>(<span class='kw'>row</span><span class='kw'>=</span><span class='no'>gear</span>, <span class='kw'>column</span><span class='kw'>=</span><span class='no'>carb</span>), <span class='kw'>by</span><span class='kw'>=</span><span class='no'>cyl</span>)
-  )</div></pre>
+<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>am</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
+    <span class='fu'>group_shift</span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(row=<span class='kw'>gear</span>, column=<span class='kw'>carb</span>), by=<span class='kw'>cyl</span>)
+  )
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -315,7 +316,7 @@ performing a summary.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

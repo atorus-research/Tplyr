@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="shift_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="shift_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="shift_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Shift Layers</h1>
@@ -143,7 +144,7 @@
     
     
 <p>Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in seeing how a subject’s results related to normal ranges. The ‘change in state’ would refer to how that subject’s results were at baseline versus different points of measure. Shift tables allow you to see the distribution of how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.</p>
-<p>While shift tables are very similar to a normal frequency table, there’s more nuance here, and thus we decided to create <code><a href="../reference/layer_constructors.html">group_shift()</a></code>. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the <code><a href="../reference/layer_constructors.html">group_count()</a></code> and <code><a href="../reference/layer_constructors.html">group_desc()</a></code> APIs. Given that shift tables are built on count layers, many of functions that work with count layers behave in the same way when using shift layers. However, the following cannot be used in shift layers:</p>
+<p>While shift tables are very similar to a normal frequency table, there’s more nuance here, and thus we decided to create <code><a href="../reference/group_count.html">group_shift()</a></code>. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the <code><a href="../reference/group_count.html">group_count()</a></code> and <code><a href="../reference/group_count.html">group_desc()</a></code> APIs. Given that shift tables are built on count layers, many of functions that work with count layers behave in the same way when using shift layers. However, the following cannot be used in shift layers:</p>
 <ul>
 <li>Functions related to nested counts, including <code><a href="../reference/set_nest_count.html">set_nest_count()</a></code>, <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code>
 </li>
@@ -151,22 +152,39 @@
 </li>
 <li>Risk difference, including <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>
 </li>
-<li>and finally, result based sorting methods, including <code><a href="../reference/ordering.html">set_order_count_method()</a></code>, <code><a href="../reference/ordering.html">set_ordering_cols()</a></code>, <code><a href="../reference/ordering.html">set_result_order_var()</a></code>
+<li>and finally, result based sorting methods, including <code><a href="../reference/set_order_count_method.html">set_order_count_method()</a></code>, <code><a href="../reference/set_order_count_method.html">set_ordering_cols()</a></code>, <code><a href="../reference/set_order_count_method.html">set_result_order_var()</a></code>
 </li>
 </ul>
-<p>One thing to note - the <code><a href="../reference/layer_constructors.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/layer_constructors.html">group_count()</a></code> will do just fine.</p>
+<p>One thing to note - the <code><a href="../reference/group_count.html">group_shift()</a></code> API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows “Low to High”, “Normal to High”, etc. For those situations, <code><a href="../reference/group_count.html">group_count()</a></code> will do just fine.</p>
 <div id="a-basic-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-basic-example" class="anchor"></a>A Basic Example</h2>
 <p>Let’s look at an example.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">VISIT</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">VISIT</span>))
+  ) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span>
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="9%">
+<col width="4%">
+<col width="4%">
+<col width="6%">
+<col width="6%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="6%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -281,16 +299,36 @@
 <div id="filling-missing-groups-using-factors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#filling-missing-groups-using-factors" class="anchor"></a>Filling Missing Groups Using Factors</h2>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">adlb</span>$<span class="no">ANRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">ANRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
-<span class="no">adlb</span>$<span class="no">BNRIND</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">adlb</span>$<span class="no">BNRIND</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adlb</span>, <span class="no">TRTA</span>, <span class="kw">where</span><span class="kw">=</span><span class="no">PARAMCD</span> <span class="kw">==</span> <span class="st">"CK"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span>(<span class="fu">vars</span>(<span class="kw">row</span> <span class="kw">=</span> <span class="no">BNRIND</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="no">ANRIND</span>), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">PARAM</span>, <span class="no">VISIT</span>))
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">ANRIND</span>, levels=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">adlb</span><span class="op">$</span><span class="kw">BNRIND</span>, levels=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"L"</span>, <span class="st">"N"</span>, <span class="st">"H"</span>))
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adlb</span>, <span class="kw">TRTA</span>, where=<span class="kw">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_shift</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(row = <span class="kw">BNRIND</span>, column = <span class="kw">ANRIND</span>), by = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">PARAM</span>, <span class="kw">VISIT</span>))
+  ) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">20</span>) <span class="op">%&gt;%</span>
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="7%">
+<col width="3%">
+<col width="3%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="9%">
+<col width="9%">
+<col width="9%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
+<col width="5%">
+<col width="3%">
+<col width="3%">
+<col width="3%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -498,7 +536,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

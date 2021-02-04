@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="table_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="table_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="table_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tplyr Table Properties</h1>
@@ -158,16 +159,31 @@
 <strong><code>cols</code></strong>: Grouping variables used in addition to the <code>by</code> variables set at the layer level, but will be transposed into columns in addition to <code>treat_var</code>.</li>
 </ul>
 <p>Let’s look at an example:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span><span class="st">"Y"</span>, <span class="kw">cols</span> <span class="kw">=</span> <span class="no">SEX</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">RACE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Race"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (Years)"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where= <span class="kw">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols = <span class="kw">SEX</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">RACE</span>, by = <span class="st">"Race"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (Years)"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="5%">
+<col width="14%">
+<col width="6%">
+<col width="6%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="7%">
+<col width="5%">
+<col width="5%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -302,13 +318,41 @@
 </tbody>
 </table>
 <p>In the example above, the <code>where</code> parameter is passed forward into both the <code>RACE</code> and <code>AGE</code> layers. Furthermore, note how the <code>cols</code> parameter works. By default, the target variables from the layers are transposed by the <code>treat_var</code> variables. The <code>cols</code> argument adds an additional variable to transpose by, and the values of these variable are added as a suffix to the variable name. You are able to use multiple <code>cols</code> variables just like <code>by</code>, by using <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. But use with caution - as depending on the distinct variable values in the dataset, this could get quite wide.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>, <span class="kw">where</span><span class="kw">=</span> <span class="no">SAFFL</span> <span class="kw">==</span><span class="st">"Y"</span>, <span class="kw">cols</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">SEX</span>, <span class="no">RACE</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (Years)"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<p><em>Note: Treatment groups and additional column variables presented in the final output are always taken from the <strong>pre-filtered</strong> population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled.</em></p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where= <span class="kw">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols = <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw">SEX</span>, <span class="kw">RACE</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (Years)"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="1%">
+<col width="1%">
+<col width="5%">
+<col width="4%">
+<col width="2%">
+<col width="5%">
+<col width="4%">
+<col width="2%">
+<col width="6%">
+<col width="6%">
+<col width="3%">
+<col width="6%">
+<col width="6%">
+<col width="3%">
+<col width="6%">
+<col width="6%">
+<col width="3%">
+<col width="6%">
+<col width="6%">
+<col width="3%">
+<col width="1%">
+<col width="1%">
+<col width="1%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -496,16 +540,30 @@
 <li>Add a ‘treated’ group to your data so you can analyze ‘treated’ vs. ‘placebo’ when you have multiple treated cohorts</li>
 <li>Add a ‘total’ group so summarize the overall study population</li>
 </ul>
-<p>We’ve added the function <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within <code>treat_var</code>. Additionally, to simplify the process we added an abstraction of <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> named <code><a href="../reference/treat_grps.html">add_total_group()</a></code> to simplify the process of creating a “Total” group.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adsl</span>, <span class="no">TRT01P</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span>(<span class="st">'Treated'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span>(<span class="no">AGE</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"Age (Years)"</span>)
-  ) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<p>We’ve added the function <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within <code>treat_var</code>. Additionally, to simplify the process we added an abstraction of <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> named <code><a href="../reference/add_treat_grps.html">add_total_group()</a></code> to simplify the process of creating a “Total” group.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_treat_grps.html">add_treat_grps</a></span>(<span class="st">'Treated'</span> = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span>)) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (Years)"</span>)
+  ) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="7%">
+<col width="7%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
+<col width="16%">
+<col width="16%">
+<col width="10%">
+<col width="7%">
+<col width="7%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
@@ -600,19 +658,29 @@
 <a href="#population-data" class="anchor"></a>Population Data</h2>
 <p>A last and very important aspect of table level properties in ‘Tplyr’ is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
 <p>‘Tplyr’ allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter and a population treatment variable named <code>pop_treat_var</code>, as variable names may differ between the datasets.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="no">adae</span>, <span class="no">TRTA</span>, <span class="kw">where</span> <span class="kw">=</span> <span class="no">AEREL</span> <span class="kw">!=</span> <span class="st">"NONE"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="no">adsl</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="no">TRT01A</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span>(<span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span>(<span class="no">AEDECOD</span>) <span class="kw">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="no">USUBJID</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adae</span>, <span class="kw">TRTA</span>, where = <span class="kw">AEREL</span> != <span class="st">"NONE"</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span>(<span class="kw">adsl</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span>(<span class="kw">TRT01A</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/get_where.tplyr_layer.html">set_pop_where</a></span>(<span class="fl">TRUE</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AEDECOD</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span>(<span class="kw">USUBJID</span>)
   )
-
-<span class="no">t</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+  
+<span class="kw">t</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span>() <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
+<colgroup>
+<col width="18%">
+<col width="11%">
+<col width="23%">
+<col width="22%">
+<col width="14%">
+<col width="10%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">var1_Placebo</th>
@@ -768,10 +836,12 @@
 </tr>
 </tbody>
 </table>
-<p>In the above example, <code>AEREL</code> doesn’t exist in <code>adsl</code>, therefore we used <code><a href="../reference/where.html">set_pop_where()</a></code> to remove the filter criteria on the population data. Setting the population dataset where parameter to <code>TRUE</code> removes any filter applied by the population data. If <code><a href="../reference/where.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
+<p>In the above example, <code>AEREL</code> doesn’t exist in <code>adsl</code>, therefore we used <code><a href="../reference/get_where.tplyr_layer.html">set_pop_where()</a></code> to remove the filter criteria on the population data. Setting the population dataset where parameter to <code>TRUE</code> removes any filter applied by the population data. If <code><a href="../reference/get_where.tplyr_layer.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
 <p>Note the percentage values in the summary above. By setting the population data, ‘Tplyr’ now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/header_n.html">header_n</a></span>(<span class="no">t</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="../reference/header_n.html">header_n</a></span>(<span class="kw">t</span>) <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span>()
+</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">TRT01A</th>
@@ -827,7 +897,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

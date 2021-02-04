@@ -562,3 +562,68 @@ test_that("Variable names will be coersed into symbols", {
     )
   expect_warning(build(t2), "The second target variable has been coerced")
 })
+
+test_that("nested count layers can be build with character value in first position and risk difference", {
+  expect_warning({
+    t1 <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(vars("all_cyl", cyl)) %>%
+          add_risk_diff(c("4", "5"))
+      ) %>%
+      build()
+  }, "Chi-squared approximation may be incorrect")
+
+
+  expect_equal(t1$rdiff_4_5, c(" 0.000 ( 0.000,  0.000)",
+                               " 0.267 (-0.380,  0.914)",
+                               " 0.133 (-0.441,  0.707)",
+                               "-0.400 (-0.971,  0.171)"))
+})
+
+test_that("keep_levels works as expeceted", {
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        keep_levels("4", "6") %>%
+        set_format_strings(f_str("xxx (xxx%)", n, pct))
+    ) %>%
+    build()
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars("all cyl", cyl)) %>%
+        keep_levels("8") %>%
+        set_format_strings(f_str("xxx (xxx%)", n, pct))
+    ) %>%
+    build()
+
+  expect_equal(t1$var1_3, c("  1 (  7%)", "  2 ( 13%)"))
+  expect_equal(dim(t1), c(2, 6))
+  expect_equal(t2$var1_3, c(" 12 ( 80%)", " 12 ( 80%)"))
+  expect_equal(dim(t2), c(2, 8))
+
+  expect_error({
+    t3 <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(cyl) %>%
+          keep_levels("10", "20")
+      ) %>%
+      build()
+  }, "Error: level passed to `kept_levels` not found: 10 20")
+})
+
+test_that("nested count layers can be built with restrictive where logic", {
+  mtcars <- mtcars2
+  mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, grp), where = grp == "grp.8.5")%>%
+        set_nest_count(TRUE) %>%
+        set_order_count_method('bycount') %>%
+        set_ordering_cols("3")
+    ) %>%
+    build()
+
+  expect_equal(dim(t), c(2, 7))
+
+})
