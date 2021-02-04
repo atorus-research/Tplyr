@@ -39,7 +39,7 @@ process_summaries.count_layer <- function(x, ...) {
         drop_these_levels <- target_levels[drop_levels_ind]
         # Use forcats to remove the levels that weren't in the "keep levels"
         built_target <- built_target %>%
-          mutate(!!tail(target_var,1) := fct_drop(!!tail(target_var,1), only = drop_these_levels))
+          mutate(!!tail(target_var,1)[[1]] := fct_drop(!!tail(target_var,1)[[1]], only = drop_these_levels))
       }
 
     }, error = function(e) {
