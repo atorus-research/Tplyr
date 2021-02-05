@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 01/06/2021
+#' 02/05/2021
 
 #setup ----
 #insert any necessary libraries
@@ -320,12 +320,14 @@ test_that('T8',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(AEDECOD, by=SEX)
+        group_count(AEDECOD, by=SEX) %>%
+          keep_levels("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")
       ) %>%
       add_layer(
         group_count(AEDECOD, by=SEX) %>%
           set_distinct_by(USUBJID) %>%
-          set_format_strings(f_str("xxx", distinct_n))
+          set_format_strings(f_str("xxx", distinct_n)) %>%
+          keep_levels("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")
       )
     build(t)
     test_8 <- get_numeric_data(t)
@@ -345,10 +347,10 @@ test_that('T8',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t8_1 <- filter(adae, TRTA == "Placebo") %>%
+  t8_1 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")) %>%
     group_by(SEX, AEDECOD) %>%
     summarise(n=n())
-  t8_2 <- filter(adae, TRTA == "Placebo") %>%
+  t8_2 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")) %>%
     group_by(SEX, AEDECOD) %>%
     distinct(USUBJID, SEX, AEDECOD) %>%
     summarise(n=n())
@@ -377,11 +379,13 @@ test_that('T9',{
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
         group_count(vars(EOSSTT, DCDECOD)) %>%
-          set_format_strings(f_str("xxx", n))
+          set_format_strings(f_str("xxx", n)) %>%
+          keep_levels("COMPLETED", "DEATH")
       ) %>%
       add_layer(
         group_count(vars("Discontinuation", DCDECOD)) %>%
-          set_format_strings(f_str("xxx", n))
+          set_format_strings(f_str("xxx", n)) %>%
+          keep_levels("COMPLETED", "DEATH")
       )
     test_9 <- build(t)
 
@@ -400,12 +404,14 @@ test_that('T9',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t9_1_outer <- group_by(adsl, TRT01P, EOSSTT) %>%
+  t9_1_outer <- filter(adsl, DCDECOD %in% c("COMPLETED", "DEATH")) %>%
+    group_by(TRT01P, EOSSTT) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRT01P, EOSSTT, fill = list(n = 0)) %>%
     mutate(DCDECOD = " A")
-  t9_1 <- group_by(adsl, TRT01P, EOSSTT, DCDECOD) %>%
+  t9_1 <-  filter(adsl, DCDECOD %in% c("COMPLETED", "DEATH")) %>%
+    group_by(TRT01P, EOSSTT, DCDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRT01P, nesting(EOSSTT, DCDECOD), fill = list(n = 0)) %>%
@@ -413,12 +419,14 @@ test_that('T9',{
     arrange(TRT01P, EOSSTT, DCDECOD) %>%
     mutate(fmtd = sprintf("%3s", n)) %>%
     pivot_wider(names_from = TRT01P, values_from = fmtd, id_cols = c(EOSSTT, DCDECOD))
-  t9_2_outer <- group_by(adsl, TRT01P, "Discontinued") %>%
+  t9_2_outer <- filter(adsl, DCDECOD %in% c("COMPLETED", "DEATH")) %>%
+    group_by(TRT01P, "Discontinued") %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRT01P, fill = list(n = 0)) %>%
     mutate(DCDECOD = " A")
-  t9_2 <- group_by(adsl, TRT01P, "Discontinued", DCDECOD) %>%
+  t9_2 <- filter(adsl, DCDECOD %in% c("COMPLETED", "DEATH")) %>%
+    group_by(TRT01P, "Discontinued", DCDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRT01P, nesting("Discontinued", DCDECOD), fill = list(n = 0)) %>%
@@ -2662,7 +2670,7 @@ test_that('T46',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
+        group_count(vars(AEBODSYS, AEDECOD), where = (AOCC01FL == 'Y')) %>%
           set_order_count_method("bycount") %>%
           set_ordering_cols("Xanomeline High Dose")
       )
@@ -2685,13 +2693,15 @@ test_that('T46',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t46_aebodsys <- group_by(adae, TRTA, AEBODSYS) %>%
+  t46_aebodsys <- filter(adae, AOCC01FL == 'Y') %>%
+    group_by(TRTA, AEBODSYS) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
     mutate(total = n) %>%
     mutate(AEDECOD = AEBODSYS)
-  t46_1 <- group_by(adae, TRTA, AEBODSYS, AEDECOD) %>%
+  t46_1 <- filter(adae, AOCC01FL == 'Y') %>%
+    group_by(TRTA, AEBODSYS, AEDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEBODSYS, AEDECOD, fill = list(n=0)) %>%

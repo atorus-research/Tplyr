@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 1/6/2021
+#' 2/5/2021
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -32,9 +32,9 @@ This section contains details of each test executed. Checks verifying each test 
   + T8: n counts of values within a group of variables can be produced
     + T8.1: Complete data value n counts can be produced within a group of variables
     + T8.2: Distinct data value n counts can be produced within a group of variables
-  + T9: counts can be produced using a pair of nested variables
-    + T9.1: two variables with a nested relationship can be used to create counts
-    + T9.2: A text string and a variable can be used to create counts
+  + T9: counts can be produced using a pair of nested variables and inner levels can be subset with keep levels
+    + T9.1: two variables with a nested relationship can be used to create counts and inner levels can be subset with keep levels
+    + T9.2: A text string and a variable can be used to create counts and inner levels can be subset with keep levels
   + T10: Total n counts can be added and a sort value can be sepecified by the user
     + T10.1: Total n count can be added within a layer and sorted using a specified value
   + T11: Missing n count handling can be specified including presentation and denominator handling 

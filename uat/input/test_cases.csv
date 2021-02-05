@@ -1,6 +1,6 @@
 LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,1/6/2021,,
+UpdatedDate,,,,2/5/2021,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -27,9 +27,9 @@ Check,,T7,3,A text string can be passed in and will be used as the value for cou
 TestCase,J,T8,,n counts of values within a group of variables can be produced,,
 Check,,T8,1,Complete data value n counts can be produced within a group of variables,programmatic,test_8.RData
 Check,,T8,2,Distinct data value n counts can be produced within a group of variables,programmatic,test_8.RData
-TestCase,K,T9,,counts can be produced using a pair of nested variables,,
-Check,,T9,1,two variables with a nested relationship can be used to create counts,programmatic,test_9.RData
-Check,,T9,2,A text string and a variable can be used to create counts,programmatic,test_9.RData
+TestCase,K,T9,,counts can be produced using a pair of nested variables and inner levels can be subset with keep levels,,
+Check,,T9,1,two variables with a nested relationship can be used to create counts and inner levels can be subset with keep levels,programmatic,test_9.RData
+Check,,T9,2,A text string and a variable can be used to create counts and inner levels can be subset with keep levels,programmatic,test_9.RData
 TestCase,L:M,T10,,Total n counts can be added and a sort value can be sepecified by the user,,
 Check,,T10,1,Total n count can be added within a layer and sorted using a specified value,programmatic,test_10.RData
 TestCase,N:O,T11,,Missing n count handling can be specified including presentation and denominator handling ,,
