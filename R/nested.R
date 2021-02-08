@@ -10,13 +10,13 @@ process_nested_count_target <- function(x) {
     assert_that(quo_is_symbol(target_var[[2]]),
                 msg = "Inner layers must be data driven variables")
 
-    # if(quo_is_symbol(target_var[[1]])){
-    #   first_var_length <- length(levels(target[[as_name(target_var[[1]])]]))
-    #   second_var_length <- length(levels(target[[as_name(target_var[[2]])]]))
-    #
-    #   assert_that(second_var_length >= first_var_length,
-    #               msg = "The number of levels of your second variable must be greater than the number of levels in your first variable")
-    # }
+    if(quo_is_symbol(target_var[[1]])){
+      first_var_length <- length(unique(target[[as_name(target_var[[1]])]]))
+      second_var_length <- length(unique(target[[as_name(target_var[[2]])]]))
+
+      assert_that(second_var_length >= first_var_length,
+                  msg = "The number of values of your second variable must be greater than the number of levels in your first variable")
+    }
 
     if(is.factor(target[[as_name(target_var[[1]])]])) {
       warning(paste0("Factors are not currently supported in nested count layers",

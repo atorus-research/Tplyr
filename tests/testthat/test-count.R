@@ -620,6 +620,14 @@ test_that("keep_levels works as expeceted", {
       ) %>%
       build()
   }, "Error: level passed to `kept_levels` not found: 10 20")
+
+  mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
+  t4 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, grp)) %>%
+        keep_levels("nothere")
+    )
+  expect_error(build(t4), "level passed to `kept_levels` not found: nothere")
 })
 
 test_that("nested count layers can be built with restrictive where logic", {
@@ -709,4 +717,17 @@ test_that("test IBM rounding option", {
   expect_equal(tabl2$var1_Placebo, c("485 ( 49%)", "515 ( 52%)"))
 
   options(tplyr.IBMRounding = FALSE)
+})
+
+test_that("nested count layers will error out if second variable is bigger than the first", {
+  mtcars <- mtcars2
+  mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(grp, cyl))
+    )
+
+  expect_error(build(t),
+               "The number of values of your second variable must be greater")
 })

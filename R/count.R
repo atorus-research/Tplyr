@@ -15,10 +15,10 @@ process_summaries.count_layer <- function(x, ...) {
       #Logic to check for keep_levels
       # If this is not a built nest
       if(!("tplyr_layer" %in% class(env_parent()))) {
-        keep_levels_logic <- expr(!is.null(levels_to_keep) && quo_is_symbol(target_var[[1]]))
+        keep_levels_logic <- expr(!is.null(levels_to_keep))
         # If this is a built nest and we're begining to process
       }else if("tplyr_layer" %in% class(env_parent()) && length(target_var) == 2){
-        keep_levels_logic <- expr(!is.null(levels_to_keep) && quo_is_symbol(target_var[[2]]))
+        keep_levels_logic <- expr(!is.null(levels_to_keep) && quo_is_symbol(target_var[[1]]))
         # If this is a built nest and we are processing the "sub" layers
       } else {
         keep_levels_logic <- expr(FALSE)
