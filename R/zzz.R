@@ -154,7 +154,10 @@ tplyr_default_options <- list(
   tplyr.scipen = 1000,
 
   # Quantile algorithm setting
-  tplyr.quantile_type = 7
+  tplyr.quantile_type = 7,
+
+  # Rounding option default
+  tplyr.IBMRounding = FALSE
 )
 
 # Carry out process on load ----
