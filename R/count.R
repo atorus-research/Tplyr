@@ -24,8 +24,14 @@ process_summaries.count_layer <- function(x, ...) {
         keep_levels_logic <- expr(FALSE)
       }
 
+      # Check that all values in 'keep levels' are present in the data
       if(eval_tidy(keep_levels_logic)) {
-        kept_levels_found <- unlist(levels_to_keep) %in% target[[as_name(tail(target_var, 1)[[1]])]]
+        if(is.factor(target[[as_name(tail(target_var, 1)[[1]])]])){
+          target_levels <- levels(target[[as_name(tail(target_var, 1)[[1]])]])
+        } else {
+          target_levels <- unique(target[[as_name(tail(target_var, 1)[[1]])]])
+        }
+        kept_levels_found <- unlist(levels_to_keep) %in% target_levels
         assert_that(all(kept_levels_found),
                     msg = paste0("level passed to `kept_levels` not found: ",
                                  paste0(levels_to_keep[!kept_levels_found],
@@ -158,10 +164,10 @@ process_single_count_target <- function(x) {
     # rbind tables together
     numeric_data <- summary_stat %>%
       bind_rows(total_stat) %>%
-      mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
-      rename("summary_var" = !!tail(target_var, 1)[[1]]) %>%
+      rename("summary_var" = !!target_var[[1]]) %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "n")) %>%
+      mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
       ungroup()
 
 
@@ -818,15 +824,14 @@ process_count_denoms <- function(x) {
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
         ungroup() %>%
-        complete(!!!cols, !!treat_var)
+        complete(!!!cols, !!treat_var, fill = list(distinct_n = 0))
     }
 
     denoms_df <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(n = n()) %>%
-      complete(!!!layer_params[param_apears]) %>%
-      # The rows will duplicate for some reason so this removes that
-      distinct()
+      ungroup() %>%
+      complete(!!!layer_params[param_apears], fill = list(n = 0))
 
     if(as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%

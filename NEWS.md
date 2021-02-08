@@ -1,3 +1,24 @@
+# Tplyr 0.4.0
+
+- Enhancements
+  - In certain cases when creating a count layer, you may only want to keep
+  certain factors from your target dataset. Tplyr now has this functionality
+  built in! With the `keep_levels()` you can define what factors you want to
+  keep in your count layers without having to recode/drop factors at the table
+  level.
+  - Tplyr would normally use the R native rounding method and that is the method
+  we recommend. However, in certain cases you may be trying to match your Tplyr
+  output with SAS. You can set the 'tplyr.IBMRounding' option to TRUE, and Tplyr
+  will simulate IBM rounding.
+  
+- Bug fixes
+  - `add_risk_difference()` would error out when you used it in a nested count
+  layer that had a character value as the first variable.
+  - `set_denoms_by()` would error out when you passed a variable used in defining
+  a nested count layer. The error message was improved when the second variable
+  was passed.
+  
+
 # Tplyr 0.3.1
 
 - Enhancements

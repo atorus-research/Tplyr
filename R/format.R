@@ -450,22 +450,16 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
     return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
   }
 
-  # Only run if someone is matching with SAS rounding
-  if(getOption("Tplyr.IBMRounding", FALSE)) {
-    return(
-      format(
-        ut_round(val, nsmall),
-        width=(int_len+decimals),
-        nsmall=nsmall
-      )
-    )
-  }
+  # Use two different rounding methods based on if someone is matching with SAS
+  rounded <- ifelse(getOption("tplyr.IBMRounding", FALSE),
+                    ut_round(val, nsmall),
+                    round(val, nsmall))
 
   # Form the string
   return(
     format(
       # Round
-      round(val, nsmall),
+      rounded,
       # Set width of format string
       width=(int_len+decimals),
       # Decimals to display
