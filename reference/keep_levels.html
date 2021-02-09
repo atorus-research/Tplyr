@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a Total row into a count summary. — add_total_row • Tplyr</title>
+<title>Select levels to keep in a count layer — keep_levels • Tplyr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,12 @@
 
 
 
-<meta property="og:title" content="Add a Total row into a count summary. — add_total_row" />
-<meta property="og:description" content="Adding a total row creates an additional observation in the count summary
-that presents the total counts (i.e. the n's that are summarized). The format
-of the total row will be formatted in the same way as the other count
-strings." />
+<meta property="og:title" content="Select levels to keep in a count layer — keep_levels" />
+<meta property="og:description" content="In certain cases you only want a layer to include certain values of a factor.
+The `keep_levels()` function allows you to pass character values to be
+included in the layer. The others are ignored.
+**NOTE: Denominator calculation is unaffected by this function, see the
+examples on how to include this logic in your percentages'**" />
 <meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png" />
 <meta property="og:image:alt" content="Tplyr Hex Sticker" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -181,19 +182,20 @@ strings." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a Total row into a count summary.</h1>
+    <h1>Select levels to keep in a count layer</h1>
     <small class="dont-index">Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/R/count_bindings.R'><code>R/count_bindings.R</code></a></small>
-    <div class="hidden name"><code>add_total_row.Rd</code></div>
+    <div class="hidden name"><code>keep_levels.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adding a total row creates an additional observation in the count summary
-that presents the total counts (i.e. the n's that are summarized). The format
-of the total row will be formatted in the same way as the other count
-strings.</p>
+    <p>In certain cases you only want a layer to include certain values of a factor.
+The `keep_levels()` function allows you to pass character values to be
+included in the layer. The others are ignored.
+**NOTE: Denominator calculation is unaffected by this function, see the
+examples on how to include this logic in your percentages'**</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_total_row</span><span class='op'>(</span><span class='va'>e</span>, fmt <span class='op'>=</span> <span class='cn'>NULL</span>, count_missings <span class='op'>=</span> <span class='cn'>TRUE</span>, sort_value <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>keep_levels</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,50 +205,29 @@ strings.</p>
       <td><p>A <code>count_layer</code> object</p></td>
     </tr>
     <tr>
-      <th>fmt</th>
-      <td><p>An f_str object used to format the total row. If none is provided,
-display is based on the layer formatting.</p></td>
-    </tr>
-    <tr>
-      <th>count_missings</th>
-      <td><p>Whether or not to ignore the named arguments passed in
-`set_count_missing()` when calculating counts total row. This is useful if
-you need to exclude/include the missing counts in your total row. Defaults
-to TRUE meaning total row will not ignore any values.</p></td>
-    </tr>
-    <tr>
-      <th>sort_value</th>
-      <td><p>The value that will appear in the ordering column for total
-rows. This must be a numeric value.</p></td>
+      <th>...</th>
+      <td><p>Character values to count int he layer</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Totals are calculated using all grouping variables, including treat_var and
-cols from the table level. If by variables are included, the grouping of the
-total and the application of denominators becomes ambiguous. You will be
-warned specifically if a percent is included in the format. To rectify this,
-use <code><a href='set_denoms_by.html'>set_denoms_by()</a></code>, and the grouping of <code>add_total_row()</code> will
-be updated accordingly.</p>
+    <p>The modified Tplyr layer object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load in Pipe</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+<span class='va'>mtcars</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_all</a></span><span class='op'>(</span><span class='va'>as.character</span><span class='op'>)</span>
 
-<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
     <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-      <span class='fu'>add_total_row</span><span class='op'>(</span><span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xxxx"</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span>
-   <span class='op'>)</span> <span class='op'>%&gt;%</span>
-   <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 4 x 6</span><span>
-#&gt;   row_label1 var1_3        var1_4       var1_5       ord_layer_index ord_layer_1
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 4          </span><span style='color: #555555;'>"</span><span> 1 (  6.7%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 8 ( 66.7%… </span><span style='color: #555555;'>"</span><span> 2 ( 40.0%…               1           1
-#&gt; </span><span style='color: #555555;'>2</span><span> 6          </span><span style='color: #555555;'>"</span><span> 2 ( 13.3%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 4 ( 33.3%… </span><span style='color: #555555;'>"</span><span> 1 ( 20.0%…               1           2
-#&gt; </span><span style='color: #555555;'>3</span><span> 8          </span><span style='color: #555555;'>"</span><span>12 ( 80.0%)</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span> 0 (  0.0%… </span><span style='color: #555555;'>"</span><span> 2 ( 40.0%…               1           3
-#&gt; </span><span style='color: #555555;'>4</span><span> Total      </span><span style='color: #555555;'>"</span><span>  15</span><span style='color: #555555;'>"</span><span>        </span><span style='color: #555555;'>"</span><span>  12</span><span style='color: #555555;'>"</span><span>       </span><span style='color: #555555;'>"</span><span>   5</span><span style='color: #555555;'>"</span><span>                     1           4</div></span></pre>
+      <span class='fu'>keep_levels</span><span class='op'>(</span><span class='st'>"4"</span>, <span class='st'>"8"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'><a href='set_denom_where.html'>set_denom_where</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"4"</span>, <span class='st'>"8"</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
