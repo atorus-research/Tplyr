@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 02/08/2021
+#' 02/09/2021
 
 #setup ----
 #insert any necessary libraries
@@ -610,7 +610,7 @@ test_that('T12',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t12_totalrow <- filter(adsl, EFFFL == 'Y') %>%
+  t12_totalrow <- filter(adsl, EFFFL == 'Y' & RACE_FACTOR %in% c("WHITE","ASIAN")) %>%
     group_by(TRT01P) %>%
     summarise(n = n()) %>%
     ungroup() %>%
@@ -642,7 +642,7 @@ test_that('T12',{
     as_tibble()
 
   t12_1 <- rbind(t12_totalrow, t12_categoryrows, t12_missingrow) %>%
-    filter(TRT01P == 'Placebo') %>%
+    filter(TRT01P == 'Placebo' & RACE_FACTOR %in% c("TOTAL","MISSING","WHITE","ASIAN")) %>%
     mutate(fmtd = sprintf("%3s", n))
 
   testthat::expect_equal(t12_1$fmtd, test_12$var1_Placebo, label = "T12.1")
@@ -3504,7 +3504,7 @@ test_that('T58',{
     #perform test and create outputs to use for checks
     #if input files are needed they should be read in from "~/uat/input" folder
     #outputs should be sent to "~/uat/output" folder
-    options('tplyr.IBMRounding' = FALSE)
+    options('tplyr.IBMRounding' = TRUE)
 
     row_num <- seq(1:2000)
     trta = ifelse(row_num <= 1000, "Placebo", "ThisDrg")
@@ -3519,7 +3519,7 @@ test_that('T58',{
           set_format_strings(f_str("xxx (xxx%)", n, pct))
       )
 
-    test_58 <- build(t)
+    test_58 <- suppressWarnings(build(t))
 
     # output table to check attributes
     save(test_58, file = "~/Tplyr/uat/output/test_58.RData")
@@ -3529,6 +3529,7 @@ test_that('T58',{
     rm(row_num)
     rm(trta)
     rm(gender)
+    rm(tdat_58)
     rm(t)
     rm(test_58)
 
@@ -3540,6 +3541,12 @@ test_that('T58',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
+  row_num <- seq(1:2000)
+  trta = ifelse(row_num <= 1000, "Placebo", "ThisDrg")
+  gender = ifelse(between(row_num, 1, 485), "F",
+                  ifelse(between(row_num, 1001, 1525), "F", "M"))
+  tdat_58 <- tibble(trta, gender)
+
   t58_tots <- rbind(tdat_58, mutate(tdat_58, trta = "Total")) %>%
     group_by(trta) %>%
     summarise(tot = n())

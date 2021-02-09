@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  5 FEB 2021 18:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  9 FEB 2021 16:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1129,68 +1129,68 @@ File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] [4] [5] [6
 
 ] [7] [8]
-Overfull \hbox (7.96576pt too wide) in alignment at lines 568--572
+Overfull \hbox (7.96576pt too wide) in alignment at lines 572--576
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (7.96576pt too wide) in alignment at lines 572--577
+Overfull \hbox (7.96576pt too wide) in alignment at lines 576--581
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (7.96576pt too wide) in alignment at lines 577--579
+Overfull \hbox (7.96576pt too wide) in alignment at lines 581--583
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (7.96576pt too wide) in alignment at lines 579--581
+Overfull \hbox (7.96576pt too wide) in alignment at lines 583--585
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 
-Overfull \hbox (7.96576pt too wide) in alignment at lines 581--605
-[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
- []
-
-
-Overfull \hbox (7.96576pt too wide) in alignment at lines 605--629
+Overfull \hbox (7.96576pt too wide) in alignment at lines 585--609
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 [9]
-Overfull \hbox (7.96576pt too wide) in alignment at lines 629--653
+Overfull \hbox (7.96576pt too wide) in alignment at lines 609--633
+[] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (7.96576pt too wide) in alignment at lines 633--657
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 [10]
-Overfull \hbox (7.96576pt too wide) in alignment at lines 653--658
+Overfull \hbox (7.96576pt too wide) in alignment at lines 657--663
 [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] [] 
  []
 
 [11] [12] [13] [14
 
 ] [15] [16] [17] [18] [19]
-Overfull \hbox (37.96739pt too wide) in paragraph at lines 1752--1756
+Overfull \hbox (37.96739pt too wide) in paragraph at lines 1769--1773
 \T1/lmr/m/n/10 (-20) [7] LC_PAPER=C.UTF-8 LC_NAME=C LC_ADDRESS=C LC_TELEPHONE=C
  LC_MEASUREMENT=C.UTF-
  []
 
 [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1812.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1829.
 [21]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1812.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1829.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1812.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1812.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1812.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1829.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1829.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1829.
  ) 
 Here is how much of TeX's memory you used:
- 14661 strings out of 494923
- 209135 string characters out of 6180743
- 442401 words of memory out of 5000000
+ 14665 strings out of 494923
+ 209177 string characters out of 6180743
+ 436768 words of memory out of 5000000
  17591 multiletter control sequences out of 15000+600000
- 60702 words of font info for 94 fonts, out of 8000000 for 9000
+ 60868 words of font info for 96 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,11n,43p,614b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
@@ -1199,7 +1199,7 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (21 pages, 235845 bytes).
+Output written on uat.pdf (21 pages, 236313 bytes).
 PDF statistics:
  218 PDF objects out of 1000 (max. 8388607)
  184 compressed objects within 2 object streams
