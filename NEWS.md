@@ -16,6 +16,9 @@
 - Bug fixes
   - `add_risk_difference()` would error out when you used it in a nested count
   layer that had a character value as the first variable.
+  - Nested count layers could not be sorted `bycount` if the layer level where
+  logic caused a value to be droped. This was fixed and tested for future
+  development.
   
 
 # Tplyr 0.3.1
