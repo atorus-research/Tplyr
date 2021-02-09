@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 1/6/2021
+#' 2/8/2021
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -32,9 +32,9 @@ This section contains details of each test executed. Checks verifying each test 
   + T8: n counts of values within a group of variables can be produced
     + T8.1: Complete data value n counts can be produced within a group of variables
     + T8.2: Distinct data value n counts can be produced within a group of variables
-  + T9: counts can be produced using a pair of nested variables
-    + T9.1: two variables with a nested relationship can be used to create counts
-    + T9.2: A text string and a variable can be used to create counts
+  + T9: counts can be produced using a pair of nested variables and inner levels can be subset with keep levels
+    + T9.1: two variables with a nested relationship can be used to create counts and inner levels can be subset with keep levels
+    + T9.2: A text string and a variable can be used to create counts and inner levels can be subset with keep levels
   + T10: Total n counts can be added and a sort value can be sepecified by the user
     + T10.1: Total n count can be added within a layer and sorted using a specified value
   + T11: Missing n count handling can be specified including presentation and denominator handling 
@@ -156,21 +156,23 @@ This section contains details of each test executed. Checks verifying each test 
     + T56.1: Check that scientific notation supplied is displayed correctly in the table
   + T57: Option for setting quantile algorithm choice can be specified by the user
     + T57.1: Check that the quantile algorithm supplied is used in table q1 and q3 calculation
-  + T58: Column headers can be added to the output object
-    + T58.1: Check that column headers added match those in the output object
-  + T59: Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion
-    + T59.1: Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion
-  + T60: A table object is returned in a format that is ready to be cosmetically prepared
-    + T60.1: Check that the table object can be easily cosmetically prepared 
-  + T61: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-    + T61.1: Test that n and % results are accurate when the combination of the cols argument and separate population data are applied
-    + T61.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied
-    + T61.3: Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied
-  + T62: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
-    + T62.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
-    + T62.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
-    + T62.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
-  + T63: Treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
-    + T63.1: Test that all treatment groups and cols variable combinations exist in the final table
-  + T64: When using separate population data treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
-    + T64.1: Test that when using separate population data all treatment groups and cols variable combinations exist in the final table
+  + T58: Option for setting IBMRounding can be specified by the user
+    + T58.1: Check that IBMRounding is not used and SAS rounding is used when option is set to FALSE
+  + T59: Column headers can be added to the output object
+    + T59.1: Check that column headers added match those in the output object
+  + T60: Row breaks can be added between sections based on grouping variables and row labels can be masked in a hierarchical fashion
+    + T60.1: Check that a row break is added between each section based on the supplied grouping variables and row labels can be masked in a hierarchical fashion
+  + T61: A table object is returned in a format that is ready to be cosmetically prepared
+    + T61.1: Check that the table object can be easily cosmetically prepared 
+  + T62: Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
+    + T62.1: Test that n and % results are accurate when the combination of the cols argument and separate population data are applied
+    + T62.2: Test that risk difference results are accurate when the combination of the cols argument and separate population data are applied
+    + T62.3: Test that header N values produced are accurate when the combination of the cols argument and separate population data are applied
+  + T63: Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing
+    + T63.1: Test that n and % results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+    + T63.2: Test that risk difference results are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+    + T63.3: Test that header N values produced are accurate when the combination of the cols argument, separate population data, and a defined subset are applied
+  + T64: Treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T64.1: Test that all treatment groups and cols variable combinations exist in the final table
+  + T65: When using separate population data treatment groups from target data will be included in the final table even if the table level subset is too narrow to include them
+    + T65.1: Test that when using separate population data all treatment groups and cols variable combinations exist in the final table

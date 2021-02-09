@@ -11,10 +11,55 @@ process_summaries.count_layer <- function(x, ...) {
   # Catch errors
   evalq({
     tryCatch({
-      # Save this for the denominator where
-      built_target_pre_where <- built_target
+      # Check 'kept_levels' and stop if they're not in the target dataset
+      #Logic to check for keep_levels
+      # If this is not a built nest
+      if(!("tplyr_layer" %in% class(env_parent()))) {
+        keep_levels_logic <- expr(!is.null(levels_to_keep))
+        # If this is a built nest and we're begining to process
+      }else if("tplyr_layer" %in% class(env_parent()) && length(target_var) == 2){
+        keep_levels_logic <- expr(!is.null(levels_to_keep) && quo_is_symbol(target_var[[1]]))
+        # If this is a built nest and we are processing the "sub" layers
+      } else {
+        keep_levels_logic <- expr(FALSE)
+      }
+
+      # Check that all values in 'keep levels' are present in the data
+      if(eval_tidy(keep_levels_logic)) {
+        if(is.factor(target[[as_name(tail(target_var, 1)[[1]])]])){
+          target_levels <- levels(target[[as_name(tail(target_var, 1)[[1]])]])
+        } else {
+          target_levels <- unique(target[[as_name(tail(target_var, 1)[[1]])]])
+        }
+        kept_levels_found <- unlist(levels_to_keep) %in% target_levels
+        assert_that(all(kept_levels_found),
+                    msg = paste0("level passed to `kept_levels` not found: ",
+                                 paste0(levels_to_keep[!kept_levels_found],
+                                        collapse = "",
+                                        sep = " ")))
+      }
+
+      # Save this for the denominator where, but only if it hasn't been saved yet.
+      if(is.null(built_target_pre_where)) built_target_pre_where <- built_target
+
+
+
       built_target <- built_target %>%
-        filter(!!where)
+        filter(!!where) %>%
+        filter(!!kept_levels)
+
+      ## Drop levels if target var is factor and kept levels used
+      if(eval_tidy(keep_levels_logic) &&
+         is.factor(built_target[[as_name(tail(target_var, 1)[[1]])]])) {
+        # Pull out the levels that weren't in keep levels.
+        target_levels <- levels(built_target[[as_name(tail(target_var, 1)[[1]])]])
+        drop_levels_ind <- !(target_levels %in% levels_to_keep)
+        drop_these_levels <- target_levels[drop_levels_ind]
+        # Use forcats to remove the levels that weren't in the "keep levels"
+        built_target <- built_target %>%
+          mutate(!!tail(target_var,1)[[1]] := fct_drop(!!tail(target_var,1)[[1]], only = drop_these_levels))
+      }
+
     }, error = function(e) {
       abort(paste0("group_count `where` condition `",
                    as_label(where),
@@ -119,10 +164,10 @@ process_single_count_target <- function(x) {
     # rbind tables together
     numeric_data <- summary_stat %>%
       bind_rows(total_stat) %>%
-      mutate(!!target_var[[1]] := prefix_count_row(!!target_var[[1]], count_row_prefix)) %>%
-      rename("summary_var" = !!tail(target_var, 1)[[1]]) %>%
+      rename("summary_var" = !!target_var[[1]]) %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "n")) %>%
+      mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
       ungroup()
 
 
@@ -487,6 +532,9 @@ process_formatting.count_layer <- function(x, ...) {
 
     formatted_data <- numeric_data
 
+    # if(is_built_nest && !quo_is_symbol(by[[1]])) {
+    #   names(formatted_data) <- str_remove_all(names(formatted_data), "\\\"")
+    # }
 
 
     formatted_data <- formatted_data %>%
@@ -510,7 +558,7 @@ process_formatting.count_layer <- function(x, ...) {
                   names_from = c(!!treat_var, match_exact(cols)), values_from = n,
                   names_prefix = "var1_") %>%
     # Replace the by variables and target variable names with `row_label<n>`
-      replace_by_string_names(quos(!!!by, summary_var))
+    replace_by_string_names(quos(!!!by, summary_var))
 
     if(is_built_nest) {
 
@@ -776,15 +824,14 @@ process_count_denoms <- function(x) {
         group_by(!!!cols, !!treat_var) %>%
         summarize(distinct_n = n()) %>%
         ungroup() %>%
-        complete(!!!cols, !!treat_var)
+        complete(!!!cols, !!treat_var, fill = list(distinct_n = 0))
     }
 
     denoms_df <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(n = n()) %>%
-      complete(!!!layer_params[param_apears]) %>%
-      # The rows will duplicate for some reason so this removes that
-      distinct()
+      ungroup() %>%
+      complete(!!!layer_params[param_apears], fill = list(n = 0))
 
     if(as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%

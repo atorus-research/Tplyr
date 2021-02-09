@@ -1,6 +1,6 @@
 LineType,RequirementID,Text
 UpdatedBy,,Nathan Kosiba
-UpdatedDate,,01/05/2021
+UpdatedDate,,2/8/2021
 Specs,A,Population data can be specified by the user
 Specs,B,Treatment variable can be manually specified for population data
 Specs,C,Population data subset can be specified on user specified conditions
@@ -74,9 +74,10 @@ Specs,BR,Option for a cap on auto precision can be specified by the user
 Specs,BS,Option for custom descriptive statistics can be specified by the user for use in the table
 Specs,BT,Option for setting scipen internal option can be specified by the user
 Specs,BU,Option for setting quantile algorithm choice can be specified by the user
-Specs,BV,Column headers can be added to the output object
-Specs,BW,Row breaks can be added between sections based on grouping variables
-Specs,BX,Row labels can be masked in a hierarchical fashion
-Specs,BY,A table object is returned in a format that is ready to be cosmetically prepared
-Specs,BZ,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
-Specs,CA,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing"
+Specs,BV,Option for setting IBM Rounding can be specified by the user
+Specs,BW,Column headers can be added to the output object
+Specs,BX,Row breaks can be added between sections based on grouping variables
+Specs,BY,Row labels can be masked in a hierarchical fashion
+Specs,BZ,A table object is returned in a format that is ready to be cosmetically prepared
+Specs,CA,Count layers can process a cols argument and separate population data passed from the table level along with normal count layer processing
+Specs,CB,"Count layers can process a cols argument, separate population data, and a defined subset passed from the table level along with normal count layer processing"

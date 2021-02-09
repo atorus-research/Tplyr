@@ -450,11 +450,21 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
     return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
   }
 
+  # Use two different rounding methods based on if someone is matching with IBM rounding
+  if(getOption("tplyr.IBMRounding", FALSE)) {
+    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
+                  " If you have feedback please get in touch with the maintainers!")),
+         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+    rounded <- ut_round(val, nsmall)
+  } else {
+    rounded <- round(val, nsmall)
+  }
+
   # Form the string
   return(
     format(
       # Round
-      round(val, nsmall),
+      rounded,
       # Set width of format string
       width=(int_len+decimals),
       # Decimals to display

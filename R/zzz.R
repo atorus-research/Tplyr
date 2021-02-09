@@ -1,10 +1,10 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
 #' @importFrom rlang call_modify call_standardise call_name call_args is_call current_env quo_name trace_back is_function
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy
+#' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
-#' @importFrom stringr str_sub str_extract str_pad str_starts
+#' @importFrom stringr str_sub str_extract str_pad str_starts str_remove_all
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract
 #' @importFrom assertthat assert_that
@@ -17,7 +17,7 @@
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
-#' @importFrom forcats fct_expand fct_collapse fct_explicit_na
+#' @importFrom forcats fct_expand fct_collapse fct_explicit_na fct_drop
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -154,7 +154,10 @@ tplyr_default_options <- list(
   tplyr.scipen = 1000,
 
   # Quantile algorithm setting
-  tplyr.quantile_type = 7
+  tplyr.quantile_type = 7,
+
+  # Rounding option default
+  tplyr.IBMRounding = FALSE
 )
 
 # Carry out process on load ----
@@ -169,6 +172,7 @@ tplyr_default_options <- list(
   invisible()
 }
 
+i <- NULL
 target_var <- NULL
 target <- NULL
 where <- NULL
@@ -274,3 +278,5 @@ built_target_pre_where <- NULL
 count_fmt <- NULL
 count_missings <- NULL
 has_missing_count <- FALSE
+kept_levels <-expr(TRUE)
+levels_to_keep <- NULL

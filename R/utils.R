@@ -100,7 +100,14 @@ replace_by_string_names <- function(dat, by) {
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1
   for (i in seq_along(by)) {
-    dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
+    # If stats are present in a table and there are character values in the by variables
+    # The name may be `value` or `"value"` this check catches those scenerios
+    if(as_label(by[[i]]) %in% names(dat)) {
+      dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
+    } else if(as_name(by[[i]]) %in% names(dat)) {
+      dat <- rename(dat, !!paste0('row_label', i) := as_name(by[[i]]))
+    }
+
   }
 
   # If i iterated above, it will be have a value. Otherwise it's null, so set it to 0
@@ -266,3 +273,22 @@ clean_attr <- function(dat) {
   dat
 }
 
+#' Simulate IBM rounding
+#'
+#' This logic is from the github issue
+#' https://github.com/atorus-research/Tplyr/issues/9
+#'
+#' @param x The numeric values to round
+#' @param n The number of decimal rounding points
+#'
+#' @return The rounded value
+#' @noRd
+ut_round <- function(x, n=0)
+{
+  # x is the value to be rounded
+  # n is the precision of the rounding
+  scale <- 10^n
+  y <- trunc(x * scale + sign(x) * 0.5) / scale
+  # Return the rounded number
+  return(y)
+}

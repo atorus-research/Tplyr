@@ -198,7 +198,7 @@ The order in which results appear on a frequency table can be deceptively comple
 
 1. **"byfactor"** - The default method is to sort by a factor. If the input variable is not a factor, alphabetical sorting will be used. 
 2. **"byvarn"** - Similar to a 'by' variable, a count target can be sorted with a VARN variable existing in the target dataset.
-3. **"bycount"** - This is the most complex method. Many tables require counts to be sorted based on the counts within a particular group, like a treatment variable. 'Tplyr' can populate the ordering column based on numeric values within any results column. This requires some more granular control, for which we've created the functions `set_ordering_cols()` and `set_numeric_result_order_var()` to specify the column and numeric value on which the ordering column should be based.
+3. **"bycount"** - This is the most complex method. Many tables require counts to be sorted based on the counts within a particular group, like a treatment variable. 'Tplyr' can populate the ordering column based on numeric values within any results column. This requires some more granular control, for which we've created the functions `set_ordering_cols()` and `set_result_order_var()` to specify the column and numeric value on which the ordering column should be based.
 
 
 ### "byfactor" and "byvarn" 
