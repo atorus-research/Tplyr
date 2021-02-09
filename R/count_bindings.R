@@ -592,7 +592,7 @@ set_denoms_by.count_layer <- function(e, ...) {
 
   # If the row variable is here, rename it to summary_var
   if(as_name(target_var[[1]]) %in% dots_chr) {
-    dots[[which(as_name(target_var[[1]]) %in% dots_chr)]] <- quo(summary_var)
+    dots[dots_chr %in% as_name(target_var[[1]])] <- quos(summary_var)
   }
 
   env_bind(e, denoms_by = dots)

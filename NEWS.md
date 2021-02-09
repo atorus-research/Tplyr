@@ -10,13 +10,12 @@
   we recommend. However, in certain cases you may be trying to match your Tplyr
   output with SAS. You can set the 'tplyr.IBMRounding' option to TRUE, and Tplyr
   will simulate IBM rounding.
+  - `set_denoms_by()` has been enhanced for nested count layers. You can now your
+  nested count target variables as denominators.
   
 - Bug fixes
   - `add_risk_difference()` would error out when you used it in a nested count
   layer that had a character value as the first variable.
-  - `set_denoms_by()` would error out when you passed a variable used in defining
-  a nested count layer. The error message was improved when the second variable
-  was passed.
   
 
 # Tplyr 0.3.1
