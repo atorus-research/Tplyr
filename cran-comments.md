@@ -5,8 +5,7 @@
 * Github release action with windows, linux, and osx check
 
 ## Updates
-* Updates for nested count layers
-* Documentation Updates
+* Functionality improvements
 * Bug fixes
 
 

@@ -273,6 +273,16 @@ clean_attr <- function(dat) {
   dat
 }
 
+#' Simulate IBM rounding
+#'
+#' This logic is from the github issue
+#' https://github.com/atorus-research/Tplyr/issues/9
+#'
+#' @param x The numeric values to round
+#' @param n The number of decimal rounding points
+#'
+#' @return The rounded value
+#' @noRd
 ut_round <- function(x, n=0)
 {
   # x is the value to be rounded

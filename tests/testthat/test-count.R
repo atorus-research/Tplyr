@@ -547,6 +547,17 @@ test_that("nested count layers can accecpt text values in the first variable", {
       group_count(vars(cyl, "Txt"))
     )
   expect_error(build(t2), "Inner layers must be data driven variables")
+
+  mtcars$cyl <- factor(as.character(mtcars$cyl), c("4", "6", "8", "25"))
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars("all cyl", cyl))
+    ) %>%
+    build()
+
+  expect_equal(t2$var1_3,
+               c("15 (100.0%)", " 1 (  6.7%)", " 2 ( 13.3%)", "12 ( 80.0%)",
+                 " 0 (  0.0%)"))
 })
 
 test_that("Variable names will be coersed into symbols", {
@@ -609,6 +620,14 @@ test_that("keep_levels works as expeceted", {
       ) %>%
       build()
   }, "Error: level passed to `kept_levels` not found: 10 20")
+
+  mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
+  t4 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl, grp)) %>%
+        keep_levels("nothere")
+    )
+  expect_error(build(t4), "level passed to `kept_levels` not found: nothere")
 })
 
 test_that("nested count layers can be built with restrictive where logic", {
@@ -626,4 +645,89 @@ test_that("nested count layers can be built with restrictive where logic", {
 
   expect_equal(dim(t), c(2, 7))
 
+})
+
+test_that("nested count layers handle `set_denoms_by` as expected", {
+  mtcars <- mtcars2
+  mtcars$grp <- paste0("grp.", mtcars$cyl + rep(c(0, 0.5), 16))
+
+  expect_error({
+    t1 <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(vars(cyl,grp)) %>%
+          set_denoms_by(grp)
+      )
+  }, "You can not pass the second variable in")
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl,grp)) %>%
+        set_denoms_by(cyl)
+    ) %>%
+    build()
+
+  expect_equal(t2$var1_3,
+               c(" 1 (  9.1%)", " 1 (  9.1%)", " 0 (  0.0%)", " 2 ( 28.6%)",
+                 " 0 (  0.0%)", " 2 ( 28.6%)", "12 ( 85.7%)", " 7 ( 50.0%)",
+                 " 5 ( 35.7%)"))
+
+  t3 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(cyl,grp)) %>%
+        set_denoms_by(cyl, gear)
+    ) %>%
+    build()
+
+  expect_equal(t3$var1_3,
+               c(" 1 (100.0%)", " 1 (100.0%)", " 0 (  0.0%)", " 2 (100.0%)",
+                 " 0 (  0.0%)", " 2 (100.0%)", "12 (100.0%)", " 7 ( 58.3%)",
+                 " 5 ( 41.7%)"))
+
+
+
+})
+
+test_that("test IBM rounding option", {
+  row_num <- seq(1:2000)
+  trta = ifelse(row_num <= 1000, "Placebo", "ThisDrg")
+  gender = ifelse(between(row_num, 1, 485), "F",
+                  ifelse(between(row_num, 1001, 1525), "F", "M"))
+  adsl <- tibble(trta, gender)
+
+  tabl <- tplyr_table(adsl, trta) %>%
+    add_total_group(group_name = "Total") %>%
+    add_layer(
+      group_count(gender, by = "Gender")   %>%
+        set_format_strings(f_str("xxx (xxx%)", n, pct))
+    ) %>%
+    build()
+
+  expect_equal(tabl$var1_Placebo, c("485 ( 48%)", "515 ( 52%)"))
+
+  options(tplyr.IBMRounding = TRUE)
+
+  tabl2 <- tplyr_table(adsl, trta) %>%
+    add_total_group(group_name = "Total") %>%
+    add_layer(
+      group_count(gender, by = "Gender")  %>%
+        set_format_strings(f_str("xxx (xxx%)", n, pct))
+    )
+  expect_warning(tabl2 <- build(tabl2), "You have enabled IBM Rounding.")
+
+  expect_equal(tabl2$var1_Placebo, c("485 ( 49%)", "515 ( 52%)"))
+
+  options(tplyr.IBMRounding = FALSE)
+})
+
+test_that("nested count layers will error out if second variable is bigger than the first", {
+  mtcars <- mtcars2
+  mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(vars(grp, cyl))
+    )
+
+  expect_error(build(t),
+               "The number of values of your second variable must be greater")
 })
