@@ -1,5 +1,6 @@
 # Count Layers
-
+# set seed to get consistant sample
+set.seed(1)
 # This is used for nesting counts
 mtcars2 <- mtcars
 mtcars$grp <- paste0("grp.", mtcars$cyl + sample(c(0, 0.5), 32, replace = TRUE))
@@ -343,7 +344,7 @@ test_that("set_outer_sort_position works as expected", {
 test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)", {
   mtcars2$cyl2 <- mtcars2$cyl + 10
   mtcars2[mtcars2$cyl == "4", "cyl"] <- NA
-  mtcars2$grp <- paste0("grp.", mtcars2$cyl + sample(c(0, 0.5), 32, replace = TRUE))
+  mtcars2$grp <- paste0("grp.", mtcars2$cyl + rep(c(0, 0.5), 16))
   mtcars2$amN <- unclass(as.factor(mtcars2$am))
   mtcars2[mtcars2$am == 1, "am"] <- NA
 
