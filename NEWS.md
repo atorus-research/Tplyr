@@ -1,3 +1,9 @@
+# Tplyr 0.4.1
+
+- Bug Fixes
+  - Nested count layers with character values in the first position could error
+  if multiple risk differences were added.
+
 # Tplyr 0.4.0
 
 - Enhancements
