@@ -234,11 +234,6 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
   )
 
   out <- append(list(...), out)
-
-  if(str_detect(names(out)[1], "\\\"")) {
-    names(out)[1] <- str_remove_all(names(out)[1], "\\\"")
-  }
-
   # Rename
 
   # Totals in the 2 way must be positive

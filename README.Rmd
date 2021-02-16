@@ -29,7 +29,7 @@ load("vignettes/adsl.Rdata")
 [![R build status](https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/badge/License-MIT-blue.svg">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 
 Welcome to Tplyr! Tplyr is a grammar of data format and summary. It's designed to simplify the creation of clinical safety summaries and help you focus on how you present your data rather than redundant summaries being performed. 
 

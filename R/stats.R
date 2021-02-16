@@ -96,20 +96,13 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
     for (name in names(comp_numeric_data)) {
 
-      nested_count_flag <- any(!map_lgl(by, quo_is_symbol) & str_detect(map_chr(by, as_label), "\\\""))
-
-      if(nested_count_flag) {
-        names(formatted_statistic_data[[name]])[1] <- as_name(by[[1]])
-        by[[1]] <- quo(!!as_name(by[[1]]))
-      }
-
       # Construct the display string from the numeric variables
       display_string <- comp_numeric_data[[name]] %>%
         pmap_chr(construct_riskdiff_string, .fmt_str = fmt)
 
       # Pick off all the labels
       formatted_statistic_data[[name]] <- formatted_statistic_data[[name]] %>%
-        select(summary_var, !!!head(target_var, -1), !!!by, !!!cols)
+        select(summary_var, !!!head(target_var, -1), map_chr(by, as_label) , !!!cols)
 
       # Put the display string in
       formatted_statistic_data[[name]][paste0('rdiff_', name)] <- display_string
