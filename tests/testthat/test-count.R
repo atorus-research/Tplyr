@@ -580,7 +580,10 @@ test_that("nested count layers can be build with character value in first positi
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
         group_count(vars("all_cyl", cyl)) %>%
-          add_risk_diff(c("4", "5"))
+          add_risk_diff(
+            c("4", "5"),
+            c("3", "5")
+            )
       ) %>%
       build()
   }, "Chi-squared approximation may be incorrect")

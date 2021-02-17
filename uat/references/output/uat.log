@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  9 FEB 2021 16:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.7)  17 FEB 2021 17:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1171,19 +1171,19 @@ Overfull \hbox (7.96576pt too wide) in alignment at lines 657--663
 [11] [12] [13] [14
 
 ] [15] [16] [17] [18] [19]
-Overfull \hbox (37.96739pt too wide) in paragraph at lines 1769--1773
-\T1/lmr/m/n/10 (-20) [7] LC_PAPER=C.UTF-8 LC_NAME=C LC_ADDRESS=C LC_TELEPHONE=C
- LC_MEASUREMENT=C.UTF-
+Overfull \hbox (18.19513pt too wide) in paragraph at lines 1783--1788
+\T1/lmr/m/n/10 (-20) [6] LC_MESSAGES=C.UTF-8 LC_PAPER=C.UTF-8 LC_NAME=C LC_ADDR
+ESS=C LC_TELEPHONE=C 
  []
 
 [20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1829.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1844.
 [21]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1829.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1844.
 (./uat.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1829.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1829.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1829.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1844.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1844.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1844.
  ) 
 Here is how much of TeX's memory you used:
  14665 strings out of 494923
@@ -1199,7 +1199,7 @@ e/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/l
 m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmro10.pfb>
-Output written on uat.pdf (21 pages, 236313 bytes).
+Output written on uat.pdf (21 pages, 236337 bytes).
 PDF statistics:
  218 PDF objects out of 1000 (max. 8388607)
  184 compressed objects within 2 object streams

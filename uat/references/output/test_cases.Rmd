@@ -1,7 +1,7 @@
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 2/8/2021
+#' 2/17/2021
 
 This section contains details of each test executed. Checks verifying each test are included as sub-bullets of their associated test.
 
@@ -68,6 +68,8 @@ This section contains details of each test executed. Checks verifying each test 
     + T20.1: Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer
     + T20.2: Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable
     + T20.3: Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable
+    + T20.4: Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer with static text
+    + T20.5: Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer with static text and by variable
   + T21: The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable
     + T21.1: Check the computed statistic of n matches the expected value
     + T21.2: Check the computed statistic of mean matches the expected value

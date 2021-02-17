@@ -1,6 +1,6 @@
 LineType,ReqsTested,TestID,CheckID,Text,CheckType,OutputFile
 UpdatedBy,,,,Nathan Kosiba,,
-UpdatedDate,,,,2/8/2021,,
+UpdatedDate,,,,2/17/2021,,
 Setup,,,,_No prerequisites required_,,
 TestCase,A:B,T1,,Population data can be specified by the user and treatment variable can be specified,,
 Check,,T1,1,Verify target dataset in table is the same as specified,programmatic,test_1.RData
@@ -63,6 +63,8 @@ TestCase,Y,T20,,Risk difference can be calculated over nested count layers and b
 Check,,T20,1,Risk difference estimate and confidence interval can be computed across values of the treatment variable and nested count layer,programmatic,test_20.RData
 Check,,T20,2,Risk difference estimate and confidence interval can be computed across values of the treatment variable and by variable,programmatic,test_20.RData
 Check,,T20,3,"Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer and by variable",programmatic,test_20.RData
+Check,,T20,4,"Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer with static text",programmatic,test_20.RData
+Check,,T20,5,"Risk difference estimate and confidence interval can be computed across values of the treatment variable, nested count layer with static text and by variable",programmatic,test_20.RData
 TestCase,Z:AA:AB:AC:AD:AE:AF:AG:AH,T21,,"The descriptive statistics of n, mean, median, IQR, Q1, Q3, standard deviation, variance, min, max, and missing can be produced based on an input variable",,
 Check,,T21,1,Check the computed statistic of n matches the expected value,programmatic,test_21.RData
 Check,,T21,2,Check the computed statistic of mean matches the expected value,programmatic,test_21.RData
