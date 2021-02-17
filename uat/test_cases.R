@@ -4,7 +4,7 @@ context("Atorus Validation")
 #' @section Last Updated By:
 #' Nathan Kosiba
 #' @section Last Update Date:
-#' 02/09/2021
+#' 02/17/2021
 
 #setup ----
 #insert any necessary libraries
@@ -18,7 +18,8 @@ adsl <- haven::read_xpt("~/Tplyr/uat/input/adsl.xpt")
 adsl$RACE_FACTOR <- factor(adsl$RACE, c("WHITE", "BLACK OR AFRICAN AMERICAN",
                                         "AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN"))
 
-adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt")
+adae <- haven::read_xpt("~/Tplyr/uat/input/adae.xpt") %>%
+  filter(AEBODSYS %in% c("NERVOUS SYSTEM DISORDERS", "CARDIAC DISORDERS"))
 
 advs <- haven::read_xpt("~/Tplyr/uat/input/advs.xpt")
 
@@ -321,13 +322,13 @@ test_that('T8',{
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
         group_count(AEDECOD, by=SEX) %>%
-          keep_levels("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")
+          keep_levels("DIZZINESS","SINUS BRADYCARDIA","HEADACHE","MYOCARDIAL INFARCTION","SYNCOPE")
       ) %>%
       add_layer(
         group_count(AEDECOD, by=SEX) %>%
           set_distinct_by(USUBJID) %>%
           set_format_strings(f_str("xxx", distinct_n)) %>%
-          keep_levels("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")
+          keep_levels("DIZZINESS","SINUS BRADYCARDIA","HEADACHE","MYOCARDIAL INFARCTION","SYNCOPE")
       )
     build(t)
     test_8 <- get_numeric_data(t)
@@ -347,10 +348,10 @@ test_that('T8',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t8_1 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")) %>%
+  t8_1 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("DIZZINESS","SINUS BRADYCARDIA","HEADACHE","MYOCARDIAL INFARCTION","SYNCOPE")) %>%
     group_by(SEX, AEDECOD) %>%
     summarise(n=n())
-  t8_2 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("APPLICATION SITE ERYTHEMA","APPLICATION SITE PRURITUS","DIARRHOEA","PRURITUS","LOCALISED INFECTION")) %>%
+  t8_2 <- filter(adae, TRTA == "Placebo" & AEDECOD %in% c("DIZZINESS","SINUS BRADYCARDIA","HEADACHE","MYOCARDIAL INFARCTION","SYNCOPE")) %>%
     group_by(SEX, AEDECOD) %>%
     distinct(USUBJID, SEX, AEDECOD) %>%
     summarise(n=n())
@@ -726,7 +727,9 @@ test_that('T13',{
     rbind(t13_total_row) %>%
     left_join(t13_totals,by="TRTA") %>%
     mutate(pct = sprintf("%5.1f", round(cnt/total*100,digits = 1))) %>%
-    mutate(col = ifelse(AEDECOD == ' TOTAL', sprintf("%3s", cnt),paste0(as.character(cnt),' (',pct,'%)'))) %>%
+    mutate(col = ifelse(AEDECOD == ' TOTAL',
+                        sprintf("%3s", cnt),
+                        paste0(sprintf("%3s", cnt),' (',pct,'%)'))) %>%
     arrange(AEDECOD)
 
   t13_2 <- filter(adae, TRTA == 'Placebo') %>%
@@ -737,23 +740,27 @@ test_that('T13',{
     rbind(t13_total_row_distinct) %>%
     left_join(t13_totals_distinct,by="TRTA") %>%
     mutate(pct = sprintf("%5.1f", round(cnt/distinct_total*100,digits = 1))) %>%
-    mutate(distinct_col = ifelse(AEDECOD == ' TOTAL', sprintf("%3s", cnt),paste0(as.character(cnt),' (',pct,'%)'))) %>%
+    mutate(distinct_col = ifelse(AEDECOD == ' TOTAL',
+                                 sprintf("%3s", cnt),
+                                 paste0(sprintf("%3s", cnt),' (',pct,'%)'))) %>%
     arrange(AEDECOD)
 
   t13_3 <- select(t13_1,c("TRTA","AEDECOD","col")) %>%
     left_join(t13_2, by=c("TRTA","AEDECOD")) %>%
-    mutate(col_combo = ifelse(AEDECOD == ' TOTAL', paste0(col, " [",distinct_col,"]"),paste0(col, " [",sprintf("%12s",distinct_col),"]"))) %>%
+    mutate(col_combo = ifelse(AEDECOD == ' TOTAL',
+                              paste0(col, " [",distinct_col,"]"),
+                              paste0(col, " [",sprintf("%12s",distinct_col),"]"))) %>%
     arrange(AEDECOD)
 
 
   testthat::expect_equal(t13_1$col,
-                         trimws(filter(test_13, ord_layer_index == 1)[["var1_Placebo"]]),
+                         filter(test_13, ord_layer_index == 1)[["var1_Placebo"]],
                          label = "T13.1")
   testthat::expect_equal(t13_2$distinct_col,
-                         trimws(filter(test_13, ord_layer_index == 2)[["var1_Placebo"]]),
+                         filter(test_13, ord_layer_index == 2)[["var1_Placebo"]],
                          label = "T13.2")
   testthat::expect_equal(t13_3$col_combo,
-                         trimws(filter(test_13, ord_layer_index == 3)[["var1_Placebo"]]),
+                         filter(test_13, ord_layer_index == 3)[["var1_Placebo"]],
                          label = "T13.3")
   #manual check(s)
 
@@ -1122,9 +1129,20 @@ test_that('T20',{
       add_layer(
         group_count(vars(AEBODSYS, AEDECOD), by = SEX) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(vars("CODED TERM", AEDECOD)) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(vars("CODED TERM", AEDECOD), by = SEX) %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
       )
-    suppressWarnings(build(t))
-    test_20 <- get_stats_data(t)
+
+    test_20 <- suppressWarnings(build(t)) %>%
+      mutate(ord_layer_2 = if_else(is.infinite(ord_layer_2), -1, ord_layer_2)) %>%
+      mutate(ord_layer_3 = if_else(is.infinite(ord_layer_3), -1, ord_layer_3))  %>%
+      arrange(ord_layer_index, ord_layer_1, ord_layer_2, ord_layer_3)
 
     # output table to check attributes
     save(test_20, file = "~/Tplyr/uat/output/test_20.RData")
@@ -1141,77 +1159,125 @@ test_that('T20',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  tot_p <- summarise(filter(adae, TRTA == "Placebo"), n=n())[[1]]
-  tot_t <- summarise(filter(adae, TRTA == 'Xanomeline High Dose'), n=n())[[1]]
-  cnt_p1 <- summarise(filter(adae, TRTA == "Placebo" &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               AEDECOD == "PRURITUS"),
-                      n=n())[[1]]
-  cnt_t1 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               AEDECOD == "PRURITUS"),
-                      n=n())[[1]]
-  cnt_p2 <- summarise(filter(adae, TRTA == "Placebo" &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               SEX == "F"),
-                      n=n())[[1]]
-  cnt_t2 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               SEX == "F"),
-                      n=n())[[1]]
-  cnt_p3 <- summarise(filter(adae, TRTA == "Placebo" &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               AEDECOD == "PRURITUS" &
-                               SEX == "F"),
-                      n=n())[[1]]
-  cnt_t3 <- summarise(filter(adae, TRTA == 'Xanomeline High Dose' &
-                               AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                               AEDECOD == "PRURITUS" &
-                               SEX == "F"),
-                      n=n())[[1]]
+  tots <- group_by(adae, TRTA) %>%
+    summarise(tot=n())
 
-  suppressWarnings(t20_1 <- prop.test(c(cnt_t1, cnt_p1), c(tot_t, tot_p)))
-  suppressWarnings(t20_2 <- prop.test(c(cnt_t2, cnt_p2), c(tot_t, tot_p)))
-  suppressWarnings(t20_3 <- prop.test(c(cnt_t3, cnt_p3), c(tot_t, tot_p)))
+  t20_1 <- rbind(adae, mutate(adae, AEDECOD = paste0(" ", AEBODSYS))) %>%
+    group_by(TRTA, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, nesting(AEBODSYS, AEDECOD), fill = list(n = 0)) %>%
+    left_join(tots, by = "TRTA") %>%
+    pivot_wider(id_cols = c(AEBODSYS, AEDECOD), names_from = TRTA, values_from = c(tot, n)) %>%
+    rowwise() %>%
+    mutate(rdiff = list(suppressWarnings(prop.test(c(`n_Xanomeline High Dose`, `n_Placebo`),
+                                                   c(`tot_Xanomeline High Dose`, `tot_Placebo`))))) %>%
+    mutate(diff = rdiff$estimate[[1]] - rdiff$estimate[[2]]) %>%
+    mutate(lci = rdiff$conf.int[1]) %>%
+    mutate(hci = rdiff$conf.int[2]) %>%
+    mutate(fmtd = paste0(sprintf("%6.3f", diff), ' (',
+                         sprintf("%6.3f", lci), ", ",
+                         sprintf("%6.3f", hci), ")")) %>%
+    arrange(AEBODSYS, AEDECOD)
 
-  testthat::expect_equal(c(t20_1$estimate[[1]] - t20_1$estimate[[2]], t20_1$conf.int[1], t20_1$conf.int[2]),
-                         c(filter(test_20[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & measure == 'dif')[[4]],
-                           filter(test_20[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & measure == 'low')[[4]],
-                           filter(test_20[[1]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & measure == 'high')[[4]]),
+  t20_2 <- group_by(adae, TRTA, SEX, AEBODSYS) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, AEBODSYS, fill = list(n = 0)) %>%
+    left_join(tots, by = "TRTA") %>%
+    pivot_wider(id_cols = c(SEX, AEBODSYS), names_from = TRTA, values_from = c(tot, n)) %>%
+    arrange(SEX, AEBODSYS) %>%
+    rowwise() %>%
+    mutate(rdiff = list(prop.test(c(`n_Xanomeline High Dose`, `n_Placebo`),
+                                  c(`tot_Xanomeline High Dose`, `tot_Placebo`)))) %>%
+    mutate(diff = rdiff$estimate[[1]] - rdiff$estimate[[2]]) %>%
+    mutate(lci = rdiff$conf.int[1]) %>%
+    mutate(hci = rdiff$conf.int[2]) %>%
+    mutate(fmtd = paste0(sprintf("%6.3f", diff), ' (',
+                         sprintf("%6.3f", lci), ", ",
+                         sprintf("%6.3f", hci), ")")) %>%
+    arrange(SEX, AEBODSYS)
+
+  t20_3 <- rbind(adae, mutate(adae, AEDECOD = paste0(" ", AEBODSYS))) %>%
+    group_by(TRTA, SEX, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, nesting(AEBODSYS, AEDECOD), fill = list(n = 0)) %>%
+    left_join(tots, by = "TRTA") %>%
+    pivot_wider(id_cols = c(SEX, AEBODSYS, AEDECOD), names_from = TRTA, values_from = c(tot, n)) %>%
+    rowwise() %>%
+    mutate(rdiff = list(suppressWarnings(prop.test(c(`n_Xanomeline High Dose`, `n_Placebo`),
+                                                   c(`tot_Xanomeline High Dose`, `tot_Placebo`))))) %>%
+    mutate(diff = rdiff$estimate[[1]] - rdiff$estimate[[2]]) %>%
+    mutate(lci = rdiff$conf.int[1]) %>%
+    mutate(hci = rdiff$conf.int[2]) %>%
+    mutate(fmtd = paste0(sprintf("%6.3f", diff), ' (',
+                         sprintf("%6.3f", lci), ", ",
+                         sprintf("%6.3f", hci), ")")) %>%
+    arrange(AEBODSYS, SEX, AEDECOD)
+
+  t20_4 <- rbind(mutate(adae, AEBODSYS = "CODED TERM"),
+                 mutate(adae, AEDECOD = " CODED TERM", AEBODSYS = "CODED TERM")) %>%
+    group_by(TRTA, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, nesting(AEBODSYS, AEDECOD), fill = list(n = 0)) %>%
+    left_join(tots, by = "TRTA") %>%
+    pivot_wider(id_cols = c(AEBODSYS, AEDECOD), names_from = TRTA, values_from = c(tot, n)) %>%
+    rowwise() %>%
+    mutate(rdiff = list(suppressWarnings(prop.test(c(`n_Xanomeline High Dose`, `n_Placebo`),
+                                                   c(`tot_Xanomeline High Dose`, `tot_Placebo`))))) %>%
+    mutate(diff = rdiff$estimate[[1]] - rdiff$estimate[[2]]) %>%
+    mutate(lci = rdiff$conf.int[1]) %>%
+    mutate(hci = rdiff$conf.int[2]) %>%
+    mutate(fmtd = paste0(sprintf("%6.3f", diff), ' (',
+                         sprintf("%6.3f", lci), ", ",
+                         sprintf("%6.3f", hci), ")")) %>%
+    arrange(AEBODSYS, AEDECOD)
+
+  t20_5 <- rbind(mutate(adae, AEBODSYS = "CODED TERM"),
+                 mutate(adae, AEDECOD = " CODED TERM", AEBODSYS = "CODED TERM")) %>%
+    group_by(TRTA, SEX, AEBODSYS, AEDECOD) %>%
+    summarise(n=n()) %>%
+    ungroup() %>%
+    complete(TRTA, SEX, nesting(AEBODSYS, AEDECOD), fill = list(n = 0)) %>%
+    left_join(tots, by = "TRTA") %>%
+    pivot_wider(id_cols = c(SEX, AEBODSYS, AEDECOD), names_from = TRTA, values_from = c(tot, n)) %>%
+    rowwise() %>%
+    mutate(rdiff = list(suppressWarnings(prop.test(c(`n_Xanomeline High Dose`, `n_Placebo`),
+                                                   c(`tot_Xanomeline High Dose`, `tot_Placebo`))))) %>%
+    mutate(diff = rdiff$estimate[[1]] - rdiff$estimate[[2]]) %>%
+    mutate(lci = rdiff$conf.int[1]) %>%
+    mutate(hci = rdiff$conf.int[2]) %>%
+    mutate(fmtd = paste0(sprintf("%6.3f", diff), ' (',
+                         sprintf("%6.3f", lci), ", ",
+                         sprintf("%6.3f", hci), ")")) %>%
+    arrange(AEBODSYS, SEX, AEDECOD)
+
+  testthat::expect_equal(t20_1$fmtd,
+                         filter(test_20, ord_layer_index == 1)$`rdiff_Xanomeline High Dose_Placebo`,
                          label = "T20.1")
-  testthat::expect_equal(c(t20_2$estimate[[1]] - t20_2$estimate[[2]], t20_2$conf.int[1], t20_2$conf.int[2]),
-                         c(filter(test_20[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    SEX == 'F' & measure == 'dif')[[4]],
-                           filter(test_20[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    SEX == 'F' & measure == 'low')[[4]],
-                           filter(test_20[[2]]$riskdiff, summary_var == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    SEX == 'F' & measure == 'high')[[4]]),
+  testthat::expect_equal(t20_2$fmtd,
+                         filter(test_20, ord_layer_index == 2)$`rdiff_Xanomeline High Dose_Placebo`,
                          label = "T20.2")
-  testthat::expect_equal(c(t20_3$estimate[[1]] - t20_3$estimate[[2]], t20_3$conf.int[1], t20_3$conf.int[2]),
-                         c(filter(test_20[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'dif')[[5]],
-                           filter(test_20[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'low')[[5]],
-                           filter(test_20[[3]]$riskdiff, AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS" &
-                                    summary_var == '   PRURITUS' & SEX == 'F' & measure == 'high')[[5]]),
+  testthat::expect_equal(t20_3$fmtd,
+                         filter(test_20, ord_layer_index == 3)$`rdiff_Xanomeline High Dose_Placebo`,
                          label = "T20.3")
+  testthat::expect_equal(t20_4$fmtd,
+                         filter(test_20, ord_layer_index == 4)$`rdiff_Xanomeline High Dose_Placebo`,
+                         label = "T20.4")
+  testthat::expect_equal(t20_5$fmtd,
+                         filter(test_20, ord_layer_index == 5)$`rdiff_Xanomeline High Dose_Placebo`,
+                         label = "T20.5")
   #manual check(s)
 
   #clean up working directory
-  rm(tot_p)
-  rm(tot_t)
-  rm(cnt_p1)
-  rm(cnt_t1)
-  rm(cnt_p2)
-  rm(cnt_t2)
-  rm(cnt_p3)
-  rm(cnt_t3)
+  rm(tots)
   rm(t20_1)
   rm(t20_2)
   rm(t20_3)
+  rm(t20_4)
+  rm(t20_5)
   rm(test_20)
 })
 
@@ -2671,7 +2737,7 @@ test_that('T46',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD), where = (AOCC01FL == 'Y')) %>%
+        group_count(vars(AEBODSYS, AEDECOD), where = (AOCC02FL == 'Y')) %>%
           set_order_count_method("bycount") %>%
           set_ordering_cols("Xanomeline High Dose")
       )
@@ -2694,14 +2760,14 @@ test_that('T46',{
   #perform checks
   skip_if(is.null(vur))
   #programmatic check(s)
-  t46_aebodsys <- filter(adae, AOCC01FL == 'Y') %>%
+  t46_aebodsys <- filter(adae, AOCC02FL == 'Y') %>%
     group_by(TRTA, AEBODSYS) %>%
     summarise(n=n()) %>%
     ungroup() %>%
     complete(TRTA, AEBODSYS, fill = list(n=0)) %>%
     mutate(total = n) %>%
     mutate(AEDECOD = AEBODSYS)
-  t46_1 <- filter(adae, AOCC01FL == 'Y') %>%
+  t46_1 <- filter(adae, AOCC02FL == 'Y') %>%
     group_by(TRTA, AEBODSYS, AEDECOD) %>%
     summarise(n=n()) %>%
     ungroup() %>%
@@ -2710,7 +2776,7 @@ test_that('T46',{
     rbind(mutate(t46_aebodsys, n=Inf)) %>%
     pivot_wider(values_from=c(n,total), names_from = TRTA) %>%
     arrange(desc(`total_Xanomeline High Dose`), AEBODSYS, desc(`n_Xanomeline High Dose`), AEDECOD) %>%
-    filter(n_Placebo > 0 | `n_Xanomeline Low Dose` > 0 | `n_Xanomeline High Dose` > 0) %>%
+    filter(`n_Xanomeline High Dose` > 0) %>%
     mutate(AEDECOD = ifelse(AEBODSYS == AEDECOD, AEDECOD, paste0('   ',AEDECOD)))
 
   testthat::expect_equal(c(t46_1$AEBODSYS, t46_1$AEDECOD, t46_1$`total_Xanomeline High Dose`, t46_1$`n_Xanomeline High Dose`),
@@ -3798,7 +3864,7 @@ test_that('T62',{
     complete(TRTA, SEX, AEBODSYS, AEDECOD, fill=list(n=0)) %>%
     merge(t62_tots, by.x=c("TRTA","SEX"), by.y=c("TRT01P","SEX")) %>%
     mutate(pct = (n / total) * 100) %>%
-    mutate(col = paste0(sprintf('%3s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    mutate(col = paste0(sprintf('%2s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
     pivot_wider(names_from = c(TRTA, SEX), values_from = c(col,n,total,pct)) %>%
     filter(n_Placebo_F != 0 | n_Placebo_M != 0 |
            n_Treated_F != 0 | n_Treated_M != 0 |
@@ -3887,7 +3953,7 @@ test_that('T63',{
     complete(TRTA, SEX, AEBODSYS, AEDECOD, fill=list(n=0)) %>%
     merge(t63_tots, by.x=c("TRTA","SEX"), by.y=c("TRT01P","SEX")) %>%
     mutate(pct = (n / total) * 100) %>%
-    mutate(col = paste0(sprintf('%3s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
+    mutate(col = paste0(sprintf('%2s',n),' (',sprintf("%5.1f", pct),'%)')) %>%
     pivot_wider(names_from = c(TRTA, SEX), values_from = c(col,n,total,pct)) %>%
     filter(n_Placebo_F != 0 | n_Placebo_M != 0 |
              n_Treated_F != 0 | n_Treated_M != 0 |
