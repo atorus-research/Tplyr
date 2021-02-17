@@ -1137,6 +1137,10 @@ test_that('T20',{
       add_layer(
         group_count(vars("CODED TERM", AEDECOD), by = SEX) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
+      ) %>%
+      add_layer(
+        group_count(vars("CODED TERM", AEDECOD), by = "TERMED") %>%
+          add_risk_diff(c('Xanomeline High Dose','Placebo'))
       )
 
     test_20 <- suppressWarnings(build(t)) %>%
@@ -1269,6 +1273,9 @@ test_that('T20',{
   testthat::expect_equal(t20_5$fmtd,
                          filter(test_20, ord_layer_index == 5)$`rdiff_Xanomeline High Dose_Placebo`,
                          label = "T20.5")
+  testthat::expect_equal(t20_4$fmtd,
+                         filter(test_20, ord_layer_index == 6)$`rdiff_Xanomeline High Dose_Placebo`,
+                         label = "T20.6")
   #manual check(s)
 
   #clean up working directory
