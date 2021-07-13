@@ -1,6 +1,6 @@
-## Submission 0.4.0 Try 3
-A transient error was found with certain tests due to a call to 'sample'. A seed
-has been set and it is confirmed the issue doesn't exist with this seed.
+## Submission 0.4.1 Try 2
+* Removed LazyData: true from DESCRIPTION
+
 
 ## Test Environments
 
@@ -9,7 +9,6 @@ has been set and it is confirmed the issue doesn't exist with this seed.
 * Github release action with windows, linux, and osx check
 
 ## Updates
-* Functionality improvements
 * Bug fixes
 
 
