@@ -3,6 +3,7 @@
 - Bug Fixes
   - Nested count layers with character values in the first position could error
   if multiple risk differences were added.
+  - Improved handling of factors in the treatment variable.
 
 # Tplyr 0.4.0
 

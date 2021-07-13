@@ -19,3 +19,6 @@
 ^README\.Rmd$
 ^uat$
 ^cran-comments\.md$
+^Makefile$
+^Jenkinsfile$
+^rsconnect$

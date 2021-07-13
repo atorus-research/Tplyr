@@ -25,10 +25,10 @@ treatment_group_build <- function(table) {
     })
 
     # Make sure factors are preserved
-    built_target <- built_target %>%
-      mutate(!!treat_var := fct_expand(as.character(!!treat_var),
-                                       as.character(unique(target[[as_name(treat_var)]])),
-                                       levels(target[, as_name(treat_var)])))
+      built_target <- built_target %>%
+        mutate(!!treat_var := fct_expand(as.character(!!treat_var),
+                                         as.character(unique(target[[as_name(treat_var)]])),
+                                         levels(target[[as_name(treat_var)]])))
       # mutate(!!treat_var := fct_expand(.[, as_name(treat_var)], unique(target[,as_name(treat_var)])))
 
     # Same filter test on population data
@@ -42,10 +42,10 @@ treatment_group_build <- function(table) {
                    "If the population data and target data subsets should be different, use `set_pop_where`."))
     })
 
-    built_pop_data <- built_pop_data %>%
-      mutate(!!pop_treat_var := fct_expand(as.character(!!pop_treat_var),
-                                           as.character(unique(pop_data[[as_name(pop_treat_var)]])),
-                                           levels(pop_data[, as_name(pop_treat_var)])))
+      built_pop_data <- built_pop_data %>%
+        mutate(!!pop_treat_var := fct_expand(as.character(!!pop_treat_var),
+                                             as.character(unique(pop_data[[as_name(pop_treat_var)]])),
+                                             levels(pop_data[[as_name(pop_treat_var)]])))
 
     # Make sure all factors are preserved and where logic didn't take out any factors
     for(i in seq_along(cols)) {
