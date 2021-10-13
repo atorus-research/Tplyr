@@ -14,7 +14,7 @@ test_that("add_treat_grps errors function properly", {
 
 test_that("add_total_group errors function properly", {
   t <- tplyr_table(mtcars, gear)
-  expect_error(add_total_group(t, 1), "Argument `group_name` in function `add_total_group` must be character.")
+  expect_error(add_total_group(t, 1), msg = "Argument `group_name` in function `add_total_group` must be character")
 })
 
 test_that("add_total_group adds treat_grps bindings properly", {

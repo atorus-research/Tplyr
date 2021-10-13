@@ -1,5 +1,6 @@
-## Submission 0.4.1 Try 2
-* Removed LazyData: true from DESCRIPTION
+## Submission 0.4.2
+* Update test to pass with new version of rlang.
+* Increment versions.
 
 
 ## Test Environments

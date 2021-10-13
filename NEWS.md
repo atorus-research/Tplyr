@@ -1,3 +1,7 @@
+# Tplyr 0.4.2
+
+- No functionality updates. Tests updated to pass rlang 1.0.0.
+
 # Tplyr 0.4.1
 
 - Bug Fixes
