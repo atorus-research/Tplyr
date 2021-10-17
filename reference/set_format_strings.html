@@ -96,7 +96,7 @@ layer. This behaves slightly differently between layers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -273,7 +273,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.</p><
       <span class='fu'>set_format_strings</span><span class='op'>(</span><span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>'xx (xx%)'</span>, <span class='va'>n</span>, <span class='va'>pct</span><span class='op'>)</span><span class='op'>)</span>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 6</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 × 6</span>
 #&gt;   row_label1 var1_3     var1_4     var1_5     ord_layer_index ord_layer_1
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> 4          <span style='color: #949494;'>"</span> 1 ( 7%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 8 (67%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 2 (40%)<span style='color: #949494;'>"</span>               1           1
@@ -294,7 +294,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.</p><
       <span class='op'>)</span>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 x 6</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 × 6</span>
 #&gt;   row_label1 var1_3   var1_4   var1_5   ord_layer_index ord_layer_1
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> n          <span style='color: #949494;'>"</span>15<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span>12<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span> 5<span style='color: #949494;'>"</span>                   1           1
@@ -311,7 +311,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.</p><
     <span class='fu'>set_format_strings</span><span class='op'>(</span><span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xxx (xx.xx%)"</span>, <span class='va'>n</span>, <span class='va'>pct</span><span class='op'>)</span><span class='op'>)</span>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 9 x 17</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 9 × 17</span>
 #&gt;   row_label1 row_label2 var1_0_1  var1_0_2  var1_0_3  var1_0_4 var1_0_6 var1_0_8
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   
 #&gt; <span style='color: #BCBCBC;'>1</span> 4          3          <span style='color: #949494;'>"</span>  1 (33… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …

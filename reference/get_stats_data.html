@@ -96,7 +96,7 @@ obtain that data from the environment" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -266,7 +266,7 @@ statistics across all layers.</p>
 #&gt; 
 #&gt; $am
 #&gt; $am$riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -283,7 +283,7 @@ statistics across all layers.</p>
 #&gt; 
 #&gt; $carb
 #&gt; $carb$riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 30 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 30 × 3</span>
 #&gt;    summary_var measure   `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 1           comp     0.333 
@@ -309,7 +309,7 @@ statistics across all layers.</p>
 #&gt; NULL
 #&gt; 
 #&gt; $am
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -324,7 +324,7 @@ statistics across all layers.</p>
 #&gt; <span style='color: #BCBCBC;'>10</span> 1           high     1    
 #&gt; 
 #&gt; $carb
-#&gt; <span style='color: #949494;'># A tibble: 30 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 30 × 3</span>
 #&gt;    summary_var measure   `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 1           comp     0.333 
@@ -342,7 +342,7 @@ statistics across all layers.</p>
  <span class='co'># Return the statistic data for just the "am" layer - a list</span>
  <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -357,7 +357,7 @@ statistics across all layers.</p>
 #&gt; <span style='color: #BCBCBC;'>10</span> 1           high     1    
 #&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -376,7 +376,7 @@ statistics across all layers.</p>
  <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; $am$riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -396,7 +396,7 @@ statistics across all layers.</p>
 #&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
 #&gt; $am$riskdiff
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -417,7 +417,7 @@ statistics across all layers.</p>
  <span class='co'># Return just the statistic data for "am" and "cyl" - a list</span>
  <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -435,7 +435,7 @@ statistics across all layers.</p>
 #&gt; NULL
 #&gt; </div><div class='input'> <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $am
-#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -455,7 +455,7 @@ statistics across all layers.</p>
 
  <span class='co'># Return the riskdiff for the "am" layer - a data frame</span>
  <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 × 3</span>
 #&gt;    summary_var measure  `4_3`
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> 0           comp     0.333
@@ -470,7 +470,7 @@ statistics across all layers.</p>
 #&gt; <span style='color: #BCBCBC;'>10</span> 1           high     1    </div><div class='input'>
  <span class='co'># Return and filter the riskdiff for the am layer - a data frame</span>
  <span class='fu'>get_stats_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>"am"</span>, statistic<span class='op'>=</span><span class='st'>"riskdiff"</span>, where <span class='op'>=</span> <span class='va'>summary_var</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5 x 3</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5 × 3</span>
 #&gt;   summary_var measure `4_3`
 #&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'>1</span> 1           comp    0.667

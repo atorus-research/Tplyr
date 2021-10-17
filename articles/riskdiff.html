@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -820,32 +820,32 @@
   <span class="op">)</span>
 <span class="co">#&gt; $PreferredTerm</span>
 <span class="co">#&gt; $PreferredTerm$riskdiff</span>
-<span class="co">#&gt; # A tibble: 105 x 4</span>
-<span class="co">#&gt;    summary_var      measure `Xanomeline High Dose_Pla… `Xanomeline Low Dose_Pla…</span>
-<span class="co">#&gt;    &lt;chr&gt;            &lt;chr&gt;                        &lt;dbl&gt;                     &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 ACTINIC KERATOS… comp                        0.0238                    0     </span>
-<span class="co">#&gt;  2 ACTINIC KERATOS… ref                         0                         0     </span>
-<span class="co">#&gt;  3 ACTINIC KERATOS… dif                         0.0238                    0     </span>
-<span class="co">#&gt;  4 ACTINIC KERATOS… low                        -0.0461                    0     </span>
-<span class="co">#&gt;  5 ACTINIC KERATOS… high                        0.0937                    0     </span>
-<span class="co">#&gt;  6 ALOPECIA         comp                        0                         0     </span>
-<span class="co">#&gt;  7 ALOPECIA         ref                         0.0476                    0.0476</span>
-<span class="co">#&gt;  8 ALOPECIA         dif                        -0.0476                   -0.0476</span>
-<span class="co">#&gt;  9 ALOPECIA         low                        -0.174                    -0.174 </span>
-<span class="co">#&gt; 10 ALOPECIA         high                        0.0792                    0.0792</span>
+<span class="co">#&gt; # A tibble: 105 × 4</span>
+<span class="co">#&gt;    summary_var       measure `Xanomeline High Dose_Placebo` `Xanomeline Low Dos…</span>
+<span class="co">#&gt;    &lt;chr&gt;             &lt;chr&gt;                            &lt;dbl&gt;                &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 ACTINIC KERATOSIS comp                            0.0238               0     </span>
+<span class="co">#&gt;  2 ACTINIC KERATOSIS ref                             0                    0     </span>
+<span class="co">#&gt;  3 ACTINIC KERATOSIS dif                             0.0238               0     </span>
+<span class="co">#&gt;  4 ACTINIC KERATOSIS low                            -0.0461               0     </span>
+<span class="co">#&gt;  5 ACTINIC KERATOSIS high                            0.0937               0     </span>
+<span class="co">#&gt;  6 ALOPECIA          comp                            0                    0     </span>
+<span class="co">#&gt;  7 ALOPECIA          ref                             0.0476               0.0476</span>
+<span class="co">#&gt;  8 ALOPECIA          dif                            -0.0476              -0.0476</span>
+<span class="co">#&gt;  9 ALOPECIA          low                            -0.174               -0.174 </span>
+<span class="co">#&gt; 10 ALOPECIA          high                            0.0792               0.0792</span>
 <span class="co">#&gt; # … with 95 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $BodySystem</span>
 <span class="co">#&gt; $BodySystem$riskdiff</span>
-<span class="co">#&gt; # A tibble: 5 x 4</span>
-<span class="co">#&gt;   summary_var              measure `Xanomeline High Dose… `Xanomeline Low Dose_…</span>
-<span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;                    &lt;dbl&gt;                  &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 SKIN AND SUBCUTANEOUS T… comp                         1                      1</span>
-<span class="co">#&gt; 2 SKIN AND SUBCUTANEOUS T… ref                          1                      1</span>
-<span class="co">#&gt; 3 SKIN AND SUBCUTANEOUS T… dif                          0                      0</span>
-<span class="co">#&gt; 4 SKIN AND SUBCUTANEOUS T… low                          0                      0</span>
-<span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS T… high                         0                      0</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 5 × 4</span>
+<span class="co">#&gt;   summary_var                            measure `Xanomeline Hig… `Xanomeline Low…</span>
+<span class="co">#&gt;   &lt;chr&gt;                                  &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 SKIN AND SUBCUTANEOUS TISSUE DISORDERS comp                   1                1</span>
+<span class="co">#&gt; 2 SKIN AND SUBCUTANEOUS TISSUE DISORDERS ref                    1                1</span>
+<span class="co">#&gt; 3 SKIN AND SUBCUTANEOUS TISSUE DISORDERS dif                    0                0</span>
+<span class="co">#&gt; 4 SKIN AND SUBCUTANEOUS TISSUE DISORDERS low                    0                0</span>
+<span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS TISSUE DISORDERS high                   0                0</span></code></pre></div>
 <p>Instead of playing around with lists, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> is most advantageous if you’d like to extract out some data specifically. Let’s say that you’d like to see just the difference values from the Preferred Term layer in the table above.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
