@@ -808,7 +808,7 @@ process_count_denoms <- function(x) {
       # For distinct counts, we want to defer back to the
       # population dataset. Trigger this by identifying that
       # the population dataset was overridden
-      if (!isTRUE(all.equal(pop_data, target))) {
+      if (!isTRUE(try(identical(pop_data, target)))) {
         if(deparse(denom_where) != deparse(where)){
           warning(paste0("A `denom_where` has been set with a pop_data. The `denom_where` has been ignored.",
           "You should use `set_pop_where` instead of `set_denom_where`.", sep = "\n"),

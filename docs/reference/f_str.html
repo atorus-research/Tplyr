@@ -99,7 +99,7 @@ used to populate the string formatted output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@ used to populate the string formatted output." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -166,7 +166,7 @@ used to populate the string formatted output." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -197,7 +197,7 @@ precision. The variables provided in <code>...</code> control which data points 
 used to populate the string formatted output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>f_str</span>(<span class='kw'>format_string</span>, <span class='kw'>...</span>, empty = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(.overall = <span class='st'>""</span>))</pre>
+    <pre class="usage"><span class='fu'>f_str</span><span class='op'>(</span><span class='va'>format_string</span>, <span class='va'>...</span>, empty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>.overall <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -276,7 +276,7 @@ instead replace the whole string.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.x (xx.x)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+<span class='fu'>f_str</span><span class='op'>(</span><span class='st'>"xx.x (xx.x)"</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.x (xx.x)
 #&gt; *** vars, extracted formats, and settings ***
@@ -287,7 +287,7 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 2
 #&gt; 	decimal length: 1
 #&gt; Total Format Size: 11</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"a.a+1 (a.a+2)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+<span class='fu'>f_str</span><span class='op'>(</span><span class='st'>"a.a+1 (a.a+2)"</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; *** Format String ***
 #&gt; a.a+1 (a.a+2)
 #&gt; *** vars, extracted formats, and settings ***
@@ -298,7 +298,7 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 0
 #&gt; 	decimal length: 2
 #&gt; Total Format Size: 13</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.a (xx.a+1)"</span>, <span class='kw'>mean</span>, <span class='kw'>sd</span>)
+<span class='fu'>f_str</span><span class='op'>(</span><span class='st'>"xx.a (xx.a+1)"</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.a (xx.a+1)
 #&gt; *** vars, extracted formats, and settings ***
@@ -309,7 +309,7 @@ instead replace the whole string.</p></td>
 #&gt; 	integer length: 2
 #&gt; 	decimal length: 1
 #&gt; Total Format Size: 13</div><div class='input'>
-<span class='fu'>f_str</span>(<span class='st'>"xx.x, xx.x, xx.x"</span>, <span class='kw'>q1</span>, <span class='kw'>median</span>, <span class='kw'>q3</span>)
+<span class='fu'>f_str</span><span class='op'>(</span><span class='st'>"xx.x, xx.x, xx.x"</span>, <span class='va'>q1</span>, <span class='va'>median</span>, <span class='va'>q3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; *** Format String ***
 #&gt; xx.x, xx.x, xx.x
 #&gt; *** vars, extracted formats, and settings ***

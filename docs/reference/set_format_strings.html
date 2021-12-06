@@ -96,7 +96,7 @@ layer. This behaves slightly differently between layers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@ layer. This behaves slightly differently between layers." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -163,7 +163,7 @@ layer. This behaves slightly differently between layers." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -191,13 +191,13 @@ layer. This behaves slightly differently between layers." />
 layer. This behaves slightly differently between layers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_format_strings</span>(<span class='kw'>e</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>set_format_strings</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for desc_layer</span>
-<span class='fu'>set_format_strings</span>(<span class='kw'>e</span>, <span class='kw'>...</span>, cap = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"tplyr.precision_cap"</span>))
+<span class='fu'>set_format_strings</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span>, cap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"tplyr.precision_cap"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for count_layer</span>
-<span class='fu'>set_format_strings</span>(<span class='kw'>e</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>set_format_strings</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -264,69 +264,69 @@ on integer precision, and a 'dec' element for the cap on decimal precision.</p><
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://magrittr.tidyverse.org'>magrittr</a></span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
 
 <span class='co'># In a count layer</span>
-<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_format_strings</span>(<span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>'xx (xx%)'</span>, <span class='kw'>n</span>, <span class='kw'>pct</span>))
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='build.html'>build</a></span>()
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 6</span><span>
+<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_format_strings</span><span class='op'>(</span><span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>'xx (xx%)'</span>, <span class='va'>n</span>, <span class='va'>pct</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 × 6</span>
 #&gt;   row_label1 var1_3     var1_4     var1_5     ord_layer_index ord_layer_1
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 4          </span><span style='color: #949494;'>"</span><span> 1 ( 7%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 8 (67%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 2 (40%)</span><span style='color: #949494;'>"</span><span>               1           1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 6          </span><span style='color: #949494;'>"</span><span> 2 (13%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 4 (33%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 1 (20%)</span><span style='color: #949494;'>"</span><span>               1           2
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 8          </span><span style='color: #949494;'>"</span><span>12 (80%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 0 ( 0%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 2 (40%)</span><span style='color: #949494;'>"</span><span>               1           3</div><div class='input'>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 4          <span style='color: #949494;'>"</span> 1 ( 7%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 8 (67%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 2 (40%)<span style='color: #949494;'>"</span>               1           1
+#&gt; <span style='color: #BCBCBC;'>2</span> 6          <span style='color: #949494;'>"</span> 2 (13%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 4 (33%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 1 (20%)<span style='color: #949494;'>"</span>               1           2
+#&gt; <span style='color: #BCBCBC;'>3</span> 8          <span style='color: #949494;'>"</span>12 (80%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 0 ( 0%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 2 (40%)<span style='color: #949494;'>"</span>               1           3</div><div class='input'>
 <span class='co'># In a descriptive statistics layer</span>
-<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_desc</a></span>(<span class='kw'>mpg</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_format_strings</span>(
-        <span class='st'>"n"</span>         = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx"</span>, <span class='kw'>n</span>),
-        <span class='st'>"Mean (SD)"</span> = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx.x"</span>, <span class='kw'>mean</span>, empty=<span class='st'>'NA'</span>),
-        <span class='st'>"SD"</span>        = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx.xx"</span>, <span class='kw'>sd</span>),
-        <span class='st'>"Median"</span>    = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx.x"</span>, <span class='kw'>median</span>),
-        <span class='st'>"Q1, Q3"</span>    = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx, xx"</span>, <span class='kw'>q1</span>, <span class='kw'>q3</span>, empty=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(.overall=<span class='st'>'NA'</span>)),
-        <span class='st'>"Min, Max"</span>  = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx, xx"</span>, <span class='kw'>min</span>, <span class='kw'>max</span>),
-        <span class='st'>"Missing"</span>   = <span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xx"</span>, <span class='kw'>missing</span>)
-      )
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='build.html'>build</a></span>()
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 7 x 6</span><span>
+<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_desc</a></span><span class='op'>(</span><span class='va'>mpg</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_format_strings</span><span class='op'>(</span>
+        <span class='st'>"n"</span>         <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx"</span>, <span class='va'>n</span><span class='op'>)</span>,
+        <span class='st'>"Mean (SD)"</span> <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx.x"</span>, <span class='va'>mean</span>, empty<span class='op'>=</span><span class='st'>'NA'</span><span class='op'>)</span>,
+        <span class='st'>"SD"</span>        <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx.xx"</span>, <span class='va'>sd</span><span class='op'>)</span>,
+        <span class='st'>"Median"</span>    <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx.x"</span>, <span class='va'>median</span><span class='op'>)</span>,
+        <span class='st'>"Q1, Q3"</span>    <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx, xx"</span>, <span class='va'>q1</span>, <span class='va'>q3</span>, empty<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>.overall<span class='op'>=</span><span class='st'>'NA'</span><span class='op'>)</span><span class='op'>)</span>,
+        <span class='st'>"Min, Max"</span>  <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx, xx"</span>, <span class='va'>min</span>, <span class='va'>max</span><span class='op'>)</span>,
+        <span class='st'>"Missing"</span>   <span class='op'>=</span> <span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xx"</span>, <span class='va'>missing</span><span class='op'>)</span>
+      <span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 7 × 6</span>
 #&gt;   row_label1 var1_3   var1_4   var1_5   ord_layer_index ord_layer_1
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> n          </span><span style='color: #949494;'>"</span><span>15</span><span style='color: #949494;'>"</span><span>     </span><span style='color: #949494;'>"</span><span>12</span><span style='color: #949494;'>"</span><span>     </span><span style='color: #949494;'>"</span><span> 5</span><span style='color: #949494;'>"</span><span>                   1           1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Mean (SD)  </span><span style='color: #949494;'>"</span><span>16.1</span><span style='color: #949494;'>"</span><span>   </span><span style='color: #949494;'>"</span><span>24.5</span><span style='color: #949494;'>"</span><span>   </span><span style='color: #949494;'>"</span><span>21.4</span><span style='color: #949494;'>"</span><span>                 1           2
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> SD         </span><span style='color: #949494;'>"</span><span> 3.37</span><span style='color: #949494;'>"</span><span>  </span><span style='color: #949494;'>"</span><span> 5.28</span><span style='color: #949494;'>"</span><span>  </span><span style='color: #949494;'>"</span><span> 6.66</span><span style='color: #949494;'>"</span><span>                1           3
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> Median     </span><span style='color: #949494;'>"</span><span>15.5</span><span style='color: #949494;'>"</span><span>   </span><span style='color: #949494;'>"</span><span>22.8</span><span style='color: #949494;'>"</span><span>   </span><span style='color: #949494;'>"</span><span>19.7</span><span style='color: #949494;'>"</span><span>                 1           4
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> Q1, Q3     </span><span style='color: #949494;'>"</span><span>14, 18</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span>21, 28</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span>16, 26</span><span style='color: #949494;'>"</span><span>               1           5
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> Min, Max   </span><span style='color: #949494;'>"</span><span>10, 22</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span>18, 34</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span>15, 30</span><span style='color: #949494;'>"</span><span>               1           6
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> Missing    </span><span style='color: #949494;'>"</span><span> 0</span><span style='color: #949494;'>"</span><span>     </span><span style='color: #949494;'>"</span><span> 0</span><span style='color: #949494;'>"</span><span>     </span><span style='color: #949494;'>"</span><span> 0</span><span style='color: #949494;'>"</span><span>                   1           7</div><div class='input'>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> n          <span style='color: #949494;'>"</span>15<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span>12<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span> 5<span style='color: #949494;'>"</span>                   1           1
+#&gt; <span style='color: #BCBCBC;'>2</span> Mean (SD)  <span style='color: #949494;'>"</span>16.1<span style='color: #949494;'>"</span>   <span style='color: #949494;'>"</span>24.5<span style='color: #949494;'>"</span>   <span style='color: #949494;'>"</span>21.4<span style='color: #949494;'>"</span>                 1           2
+#&gt; <span style='color: #BCBCBC;'>3</span> SD         <span style='color: #949494;'>"</span> 3.37<span style='color: #949494;'>"</span>  <span style='color: #949494;'>"</span> 5.28<span style='color: #949494;'>"</span>  <span style='color: #949494;'>"</span> 6.66<span style='color: #949494;'>"</span>                1           3
+#&gt; <span style='color: #BCBCBC;'>4</span> Median     <span style='color: #949494;'>"</span>15.5<span style='color: #949494;'>"</span>   <span style='color: #949494;'>"</span>22.8<span style='color: #949494;'>"</span>   <span style='color: #949494;'>"</span>19.7<span style='color: #949494;'>"</span>                 1           4
+#&gt; <span style='color: #BCBCBC;'>5</span> Q1, Q3     <span style='color: #949494;'>"</span>14, 18<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span>21, 28<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span>16, 26<span style='color: #949494;'>"</span>               1           5
+#&gt; <span style='color: #BCBCBC;'>6</span> Min, Max   <span style='color: #949494;'>"</span>10, 22<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span>18, 34<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span>15, 30<span style='color: #949494;'>"</span>               1           6
+#&gt; <span style='color: #BCBCBC;'>7</span> Missing    <span style='color: #949494;'>"</span> 0<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span> 0<span style='color: #949494;'>"</span>     <span style='color: #949494;'>"</span> 0<span style='color: #949494;'>"</span>                   1           7</div><div class='input'>
 <span class='co'># In a shift layer</span>
-<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>am</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_shift</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(row=<span class='kw'>gear</span>, column=<span class='kw'>carb</span>), by=<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
-    <span class='fu'>set_format_strings</span>(<span class='fu'><a href='f_str.html'>f_str</a></span>(<span class='st'>"xxx (xx.xx%)"</span>, <span class='kw'>n</span>, <span class='kw'>pct</span>))
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='build.html'>build</a></span>()
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 9 x 17</span><span>
-#&gt;   row_label1 row_label2 var1_0_1 var1_0_2 var1_0_3 var1_0_4 var1_0_6 var1_0_8
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 4          3          </span><span style='color: #949494;'>"</span><span>  1 (3… </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 4          4          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  2 (6… </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 4          5          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 6          3          </span><span style='color: #949494;'>"</span><span>  2 (5… </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 6          4          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  2 (5… </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 6          5          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> 8          3          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  4 (3… </span><span style='color: #949494;'>"</span><span>  3 (2… </span><span style='color: #949494;'>"</span><span>  5 (4… </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>8</span><span> 8          4          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #BCBCBC;'>9</span><span> 8          5          </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( … </span><span style='color: #949494;'>"</span><span>  0 ( …
-#&gt; </span><span style='color: #949494;'># … with 9 more variables: var1_1_1 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, var1_1_2 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, var1_1_3 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>,</span><span>
-#&gt; </span><span style='color: #949494;'>#   var1_1_4 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, var1_1_6 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, var1_1_8 </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span style='color: #949494;'>, ord_layer_index </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span style='color: #949494;'>,</span><span>
-#&gt; </span><span style='color: #949494;'>#   ord_layer_1 </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #949494;'>, ord_layer_2 </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
-</div></span></pre>
+<span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>am</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_shift</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span>row<span class='op'>=</span><span class='va'>gear</span>, column<span class='op'>=</span><span class='va'>carb</span><span class='op'>)</span>, by<span class='op'>=</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>set_format_strings</span><span class='op'>(</span><span class='fu'><a href='f_str.html'>f_str</a></span><span class='op'>(</span><span class='st'>"xxx (xx.xx%)"</span>, <span class='va'>n</span>, <span class='va'>pct</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 9 × 17</span>
+#&gt;   row_label1 row_label2 var1_0_1  var1_0_2  var1_0_3  var1_0_4 var1_0_6 var1_0_8
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   
+#&gt; <span style='color: #BCBCBC;'>1</span> 4          3          <span style='color: #949494;'>"</span>  1 (33… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>2</span> 4          4          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  2 (66… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>3</span> 4          5          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>4</span> 6          3          <span style='color: #949494;'>"</span>  2 (50… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>5</span> 6          4          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  2 (5… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>6</span> 6          5          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>7</span> 8          3          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  4 (33… <span style='color: #949494;'>"</span>  3 (25… <span style='color: #949494;'>"</span>  5 (4… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>8</span> 8          4          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #BCBCBC;'>9</span> 8          5          <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( 0… <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( … <span style='color: #949494;'>"</span>  0 ( …
+#&gt; <span style='color: #949494;'># … with 9 more variables: var1_1_1 &lt;chr&gt;, var1_1_2 &lt;chr&gt;, var1_1_3 &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   var1_1_4 &lt;chr&gt;, var1_1_6 &lt;chr&gt;, var1_1_8 &lt;chr&gt;, ord_layer_index &lt;int&gt;,</span>
+#&gt; <span style='color: #949494;'>#   ord_layer_1 &lt;dbl&gt;, ord_layer_2 &lt;dbl&gt;</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

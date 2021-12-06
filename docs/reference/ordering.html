@@ -131,7 +131,7 @@ Shift layers sort very similarly to count layers, but to order your row
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@ Shift layers sort very similarly to count layers, but to order your row
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -198,7 +198,7 @@ Shift layers sort very similarly to count layers, but to order your row
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -261,11 +261,11 @@ Shift layers sort very similarly to count layers, but to order your row
   shift variable, use an ordered factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_order_count_method</span>(<span class='kw'>e</span>, <span class='kw'>order_count_method</span>)
+    <pre class="usage"><span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>order_count_method</span><span class='op'>)</span>
 
-<span class='fu'>set_ordering_cols</span>(<span class='kw'>e</span>, <span class='kw'>...</span>)
+<span class='fu'>set_ordering_cols</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>set_result_order_var</span>(<span class='kw'>e</span>, <span class='kw'>result_order_var</span>)</pre>
+<span class='fu'>set_result_order_var</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>result_order_var</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -348,63 +348,63 @@ evaluated, if this happens this will only error out in the ordering.</p></td>
   based on the format strings that were used when the layer was created.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
 
 <span class='co'># Default sorting by factor</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>)
-  )
-<span class='fu'><a href='build.html'>build</a></span>(<span class='kw'>t</span>)
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 6</span><span>
-#&gt;   row_label1 var1_3        var1_4       var1_5       ord_layer_index ord_layer_1
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                  </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 4          </span><span style='color: #949494;'>"</span><span> 1 (  6.7%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 8 ( 66.7%… </span><span style='color: #949494;'>"</span><span> 2 ( 40.0%…               1           1
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 6          </span><span style='color: #949494;'>"</span><span> 2 ( 13.3%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 4 ( 33.3%… </span><span style='color: #949494;'>"</span><span> 1 ( 20.0%…               1           2
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 8          </span><span style='color: #949494;'>"</span><span>12 ( 80.0%)</span><span style='color: #949494;'>"</span><span> </span><span style='color: #949494;'>"</span><span> 0 (  0.0%… </span><span style='color: #949494;'>"</span><span> 2 ( 40.0%…               1           3</div><div class='input'>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='fu'><a href='build.html'>build</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 × 6</span>
+#&gt;   row_label1 var1_3        var1_4        var1_5      ord_layer_index ord_layer_1
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                 <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 4          <span style='color: #949494;'>"</span> 1 (  6.7%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 8 ( 66.7%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 2 ( 40.0…               1           1
+#&gt; <span style='color: #BCBCBC;'>2</span> 6          <span style='color: #949494;'>"</span> 2 ( 13.3%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 4 ( 33.3%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 1 ( 20.0…               1           2
+#&gt; <span style='color: #BCBCBC;'>3</span> 8          <span style='color: #949494;'>"</span>12 ( 80.0%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 0 (  0.0%)<span style='color: #949494;'>"</span> <span style='color: #949494;'>"</span> 2 ( 40.0…               1           3</div><div class='input'>
 <span class='co'># Sorting by &lt;VAR&gt;N</span>
-<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>cylN</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>cyl</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_order_count_method</span>(<span class='st'>"byvarn"</span>)
-  )
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cylN</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='st'>"byvarn"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Sorting by row count</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_order_count_method</span>(<span class='st'>"bycount"</span>) <span class='op'>%&gt;%</span>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='st'>"bycount"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
       <span class='co'># Orders based on the 6 gear group</span>
-      <span class='fu'>set_ordering_cols</span>(<span class='fl'>6</span>)
-  )
+      <span class='fu'>set_ordering_cols</span><span class='op'>(</span><span class='fl'>6</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Sorting by row count by percentages</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_order_count_method</span>(<span class='st'>"bycount"</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>set_result_order_var</span>(<span class='kw'>pct</span>)
-  )
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='st'>"bycount"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>set_result_order_var</span><span class='op'>(</span><span class='va'>pct</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Sorting when you have column arguments in the table</span>
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>, cols = <span class='kw'>vs</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span>, cols <span class='op'>=</span> <span class='va'>vs</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
       <span class='co'># Uses the fourth gear group and the 0 vs group in ordering</span>
-      <span class='fu'>set_ordering_cols</span>(<span class='fl'>4</span>, <span class='fl'>0</span>)
-  )
+      <span class='fu'>set_ordering_cols</span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>0</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Using a custom factor to order</span>
-<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>cyl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>4</span>, <span class='fl'>8</span>))
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_layer.html'>add_layer</a></span>(
-    <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>) <span class='op'>%&gt;%</span>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>4</span>, <span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
       <span class='co'># This is the default but can be used to change the setting if it is</span>
       <span class='co'>#set at the table level.</span>
-      <span class='fu'>set_order_count_method</span>(<span class='st'>"byfactor"</span>)
-  )
-</div></span></pre>
+      <span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='st'>"byfactor"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

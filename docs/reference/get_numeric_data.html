@@ -96,7 +96,7 @@ extract distinct layers and filter as desired." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@ extract distinct layers and filter as desired." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -163,7 +163,7 @@ extract distinct layers and filter as desired." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -191,7 +191,7 @@ each of the layers within a <code>tplyr_table</code>, with options to allow you 
 extract distinct layers and filter as desired.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_numeric_data</span>(<span class='kw'>x</span>, layer = <span class='kw'>NULL</span>, where = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>x</span>, layer <span class='op'>=</span> <span class='cn'>NULL</span>, where <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -231,155 +231,155 @@ instead of using a layer index, but a numeric index works as well.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load in pipe</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://magrittr.tidyverse.org'>magrittr</a></span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
 
-<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>mtcars</span>, <span class='kw'>gear</span>) <span class='op'>%&gt;%</span>
- <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>'drat'</span>,
-           <span class='fu'><a href='group_count.html'>group_desc</a></span>(<span class='kw'>drat</span>)
- ) <span class='op'>%&gt;%</span>
- <span class='fu'><a href='add_layer.html'>add_layer</a></span>(name=<span class='st'>'cyl'</span>,
-           <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>cyl</span>)
- )
+<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>gear</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'drat'</span>,
+           <span class='fu'><a href='group_count.html'>group_desc</a></span><span class='op'>(</span><span class='va'>drat</span><span class='op'>)</span>
+ <span class='op'>)</span> <span class='op'>%&gt;%</span>
+ <span class='fu'><a href='add_layer.html'>add_layer</a></span><span class='op'>(</span>name<span class='op'>=</span><span class='st'>'cyl'</span>,
+           <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>
+ <span class='op'>)</span>
 
  <span class='co'># Return a list of the numeric data frames</span>
- <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>)
+ <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $drat
-#&gt; <span style='color: #949494;'># A tibble: 27 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
 #&gt;    summary_var gear  stat     value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> drat        3     missing  0    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> drat        4     n       12    
-#&gt; </span><span style='color: #949494;'># … with 17 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'> 2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'> 3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'> 4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'> 5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'> 6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'> 7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'> 8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'> 9</span> drat        3     missing  0    
+#&gt; <span style='color: #BCBCBC;'>10</span> drat        4     n       12    
+#&gt; <span style='color: #949494;'># … with 17 more rows</span>
 #&gt; 
 #&gt; $cyl
-#&gt; </span><span style='color: #949494;'># A tibble: 9 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
 #&gt;   gear  summary_var     n total
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 3     4               1    15
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 3     6               2    15
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 3     8              12    15
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 4     4               8    12
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 4     6               4    12
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 4     8               0    12
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> 5     4               2     5
-#&gt; </span><span style='color: #BCBCBC;'>8</span><span> 5     6               1     5
-#&gt; </span><span style='color: #BCBCBC;'>9</span><span> 5     8               2     5
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
 #&gt; </div><div class='input'>
  <span class='co'># Get the data from a specific layer</span>
- <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>, layer=<span class='st'>'drat'</span>)
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 27 x 4</span><span>
+ <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>'drat'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
 #&gt;    summary_var gear  stat     value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> drat        3     missing  0    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> drat        4     n       12    
-#&gt; </span><span style='color: #949494;'># … with 17 more rows</span><span></div><div class='input'> <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>, layer=<span class='fl'>1</span>)
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 27 x 4</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'> 2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'> 3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'> 4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'> 5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'> 6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'> 7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'> 8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'> 9</span> drat        3     missing  0    
+#&gt; <span style='color: #BCBCBC;'>10</span> drat        4     n       12    
+#&gt; <span style='color: #949494;'># … with 17 more rows</span></div><div class='input'> <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
 #&gt;    summary_var gear  stat     value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> drat        3     missing  0    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> drat        4     n       12    
-#&gt; </span><span style='color: #949494;'># … with 17 more rows</span><span></div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'> 2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'> 3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'> 4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'> 5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'> 6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'> 7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'> 8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'> 9</span> drat        3     missing  0    
+#&gt; <span style='color: #BCBCBC;'>10</span> drat        4     n       12    
+#&gt; <span style='color: #949494;'># … with 17 more rows</span></div><div class='input'>
  <span class='co'># Choose multiple layers by name or index</span>
- <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'cyl'</span>, <span class='st'>'drat'</span>))
+ <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'cyl'</span>, <span class='st'>'drat'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $cyl
-#&gt; </span><span style='color: #949494;'># A tibble: 9 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
 #&gt;   gear  summary_var     n total
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 3     4               1    15
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 3     6               2    15
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 3     8              12    15
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 4     4               8    12
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 4     6               4    12
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 4     8               0    12
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> 5     4               2     5
-#&gt; </span><span style='color: #BCBCBC;'>8</span><span> 5     6               1     5
-#&gt; </span><span style='color: #BCBCBC;'>9</span><span> 5     8               2     5
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
 #&gt; 
 #&gt; $drat
-#&gt; </span><span style='color: #949494;'># A tibble: 27 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
 #&gt;    summary_var gear  stat     value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> drat        3     missing  0    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> drat        4     n       12    
-#&gt; </span><span style='color: #949494;'># … with 17 more rows</span><span>
-#&gt; </div><div class='input'> <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>, layer=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>1</span>))
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'> 2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'> 3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'> 4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'> 5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'> 6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'> 7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'> 8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'> 9</span> drat        3     missing  0    
+#&gt; <span style='color: #BCBCBC;'>10</span> drat        4     n       12    
+#&gt; <span style='color: #949494;'># … with 17 more rows</span>
+#&gt; </div><div class='input'> <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $cyl
-#&gt; </span><span style='color: #949494;'># A tibble: 9 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
 #&gt;   gear  summary_var     n total
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 3     4               1    15
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 3     6               2    15
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 3     8              12    15
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 4     4               8    12
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> 4     6               4    12
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> 4     8               0    12
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> 5     4               2     5
-#&gt; </span><span style='color: #BCBCBC;'>8</span><span> 5     6               1     5
-#&gt; </span><span style='color: #BCBCBC;'>9</span><span> 5     8               2     5
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
 #&gt; 
 #&gt; $drat
-#&gt; </span><span style='color: #949494;'># A tibble: 27 x 4</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
 #&gt;    summary_var gear  stat     value
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> drat        3     missing  0    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> drat        4     n       12    
-#&gt; </span><span style='color: #949494;'># … with 17 more rows</span><span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'> 2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'> 3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'> 4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'> 5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'> 6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'> 7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'> 8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'> 9</span> drat        3     missing  0    
+#&gt; <span style='color: #BCBCBC;'>10</span> drat        4     n       12    
+#&gt; <span style='color: #949494;'># … with 17 more rows</span>
 #&gt; </div><div class='input'>
  <span class='co'># Get the data and filter it</span>
- <span class='fu'>get_numeric_data</span>(<span class='kw'>t</span>, layer=<span class='st'>'drat'</span>, where = <span class='kw'>gear</span><span class='op'>==</span><span class='fl'>3</span>)
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 9 x 4</span><span>
+ <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>'drat'</span>, where <span class='op'>=</span> <span class='va'>gear</span><span class='op'>==</span><span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
 #&gt;   summary_var gear  stat     value
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> drat        3     n       15    
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> drat        3     mean     3.13 
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> drat        3     sd       0.274
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> drat        3     median   3.08 
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> drat        3     q1       3.04 
-#&gt; </span><span style='color: #BCBCBC;'>6</span><span> drat        3     q3       3.18 
-#&gt; </span><span style='color: #BCBCBC;'>7</span><span> drat        3     min      2.76 
-#&gt; </span><span style='color: #BCBCBC;'>8</span><span> drat        3     max      3.73 
-#&gt; </span><span style='color: #BCBCBC;'>9</span><span> drat        3     missing  0    </div><div class='input'>
-</div></span></pre>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> drat        3     n       15    
+#&gt; <span style='color: #BCBCBC;'>2</span> drat        3     mean     3.13 
+#&gt; <span style='color: #BCBCBC;'>3</span> drat        3     sd       0.274
+#&gt; <span style='color: #BCBCBC;'>4</span> drat        3     median   3.08 
+#&gt; <span style='color: #BCBCBC;'>5</span> drat        3     q1       3.04 
+#&gt; <span style='color: #BCBCBC;'>6</span> drat        3     q3       3.18 
+#&gt; <span style='color: #BCBCBC;'>7</span> drat        3     min      2.76 
+#&gt; <span style='color: #BCBCBC;'>8</span> drat        3     max      3.73 
+#&gt; <span style='color: #BCBCBC;'>9</span> drat        3     missing  0    </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

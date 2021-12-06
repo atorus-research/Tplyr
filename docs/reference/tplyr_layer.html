@@ -105,7 +105,7 @@ group_desc, and group_shift." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ group_desc, and group_shift." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -172,7 +172,7 @@ group_desc, and group_shift." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -209,7 +209,7 @@ using the layer constructor functions <code><a href='group_count.html'>group_cou
 <code><a href='group_count.html'>group_desc</a></code>, and <code><a href='group_count.html'>group_shift</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tplyr_layer</span>(<span class='kw'>parent</span>, <span class='kw'>target_var</span>, <span class='kw'>by</span>, <span class='kw'>where</span>, <span class='kw'>type</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tplyr_layer</span><span class='op'>(</span><span class='va'>parent</span>, <span class='va'>target_var</span>, <span class='va'>by</span>, <span class='va'>where</span>, <span class='va'>type</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -279,11 +279,11 @@ or "shift" for shift table counts</p></td>
     <div class='dont-index'><p><a href='tplyr_table.html'>tplyr_table</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span>(<span class='kw'>iris</span>, <span class='kw'>Sepal.Width</span>)
+    <pre class="examples"><div class='input'><span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tplyr_table.html'>tplyr_table</a></span><span class='op'>(</span><span class='va'>iris</span>, <span class='va'>Sepal.Width</span><span class='op'>)</span>
 
-<span class='kw'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span>(<span class='kw'>tab</span>, by=<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='st'>'Label Text'</span>, <span class='kw'>Species</span>),
-                 target_var=<span class='kw'>Species</span>, where= <span class='kw'>Sepal.Width</span> <span class='op'>&lt;</span> <span class='fl'>5.5</span>,
-                 cols = <span class='kw'>Species</span>)
+<span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='group_count.html'>group_count</a></span><span class='op'>(</span><span class='va'>tab</span>, by<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='st'>'Label Text'</span>, <span class='va'>Species</span><span class='op'>)</span>,
+                 target_var<span class='op'>=</span><span class='va'>Species</span>, where<span class='op'>=</span> <span class='va'>Sepal.Width</span> <span class='op'>&lt;</span> <span class='fl'>5.5</span>,
+                 cols <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span>
 
 
 </div></pre>

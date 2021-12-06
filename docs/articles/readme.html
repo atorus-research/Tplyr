@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +115,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,8 +129,7 @@
 
       
 
-      </header><script src="readme_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="readme_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="readme_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="readme_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>README</h1>
@@ -196,31 +195,30 @@
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
 <p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span>(<span class="kw">adsl</span>, <span class="kw">TRT01P</span>, where = <span class="kw">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span>(<span class="kw">AGE</span>, by = <span class="st">"Age (years)"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span>(
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span>(<span class="kw">AGEGR1</span>, by = <span class="st">"Age Categories n (%)"</span>)
-  ) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span>()
-<span class="co">#&gt; # A tibble: 9 x 8</span>
-<span class="co">#&gt;   row_label1 row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Age (year… n          " 86"        " 84"            " 84"           </span>
-<span class="co">#&gt; 2 Age (year… Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
-<span class="co">#&gt; 3 Age (year… Median     "76.0"       "76.0"           "77.5"          </span>
-<span class="co">#&gt; 4 Age (year… Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
-<span class="co">#&gt; 5 Age (year… Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 6 Age (year… Missing    "  0"        "  0"            "  0"           </span>
-<span class="co">#&gt; 7 Age Categ… &lt;65        "14 ( 16.3%… "11 ( 13.1%)"    " 8 (  9.5%)"   </span>
-<span class="co">#&gt; 8 Age Categ… &gt;80        "30 ( 34.9%… "18 ( 21.4%)"    "29 ( 34.5%)"   </span>
-<span class="co">#&gt; 9 Age Categ… 65-80      "42 ( 48.8%… "55 ( 65.5%)"    "47 ( 56.0%)"   </span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 9 × 8</span>
+<span class="co">#&gt;   row_label1           row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
+<span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           </span>
+<span class="co">#&gt; 1 Age (years)          n          " 86"        " 84"            " 84"           </span>
+<span class="co">#&gt; 2 Age (years)          Mean (SD)  "75.2 ( 8.5… "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
+<span class="co">#&gt; 3 Age (years)          Median     "76.0"       "76.0"           "77.5"          </span>
+<span class="co">#&gt; 4 Age (years)          Q1, Q3     "69.2, 81.8" "70.8, 80.0"     "71.0, 82.0"    </span>
+<span class="co">#&gt; 5 Age (years)          Min, Max   "52, 89"     "56, 88"         "51, 88"        </span>
+<span class="co">#&gt; 6 Age (years)          Missing    "  0"        "  0"            "  0"           </span>
+<span class="co">#&gt; 7 Age Categories n (%) &lt;65        "14 ( 16.3%… "11 ( 13.1%)"    " 8 (  9.5%)"   </span>
+<span class="co">#&gt; 8 Age Categories n (%) &gt;80        "30 ( 34.9%… "18 ( 21.4%)"    "29 ( 34.5%)"   </span>
+<span class="co">#&gt; 9 Age Categories n (%) 65-80      "42 ( 48.8%… "55 ( 65.5%)"    "47 ( 56.0%)"   </span>
 <span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
-<span class="co">#&gt; #   ord_layer_2 &lt;dbl&gt;</span>
-</pre></div>
+<span class="co">#&gt; #   ord_layer_2 &lt;dbl&gt;</span></code></pre></div>
 <div id="the-tldr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-tldr" class="anchor"></a>The TL;DR</h2>
