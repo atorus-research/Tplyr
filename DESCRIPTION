@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.4.2
+Version: 0.4.3
 Authors@R: 
     c(
     person(given = "Eli",
@@ -52,7 +52,8 @@ Suggests:
     tidyverse,
     readr,
     kableExtra,
-    pharmaRTF
+    pharmaRTF,
+    withr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 RdMacros: lifecycle

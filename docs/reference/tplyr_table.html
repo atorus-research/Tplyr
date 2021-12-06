@@ -96,7 +96,7 @@ those layers, and the general data, metadata, and logic necessary." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@ those layers, and the general data, metadata, and logic necessary." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -163,7 +163,7 @@ those layers, and the general data, metadata, and logic necessary." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -191,7 +191,7 @@ one or more layers. Each layer contains an instruction for a summary to be perfo
 those layers, and the general data, metadata, and logic necessary.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tplyr_table</span>(<span class='kw'>target</span>, <span class='kw'>treat_var</span>, where = <span class='fl'>TRUE</span>, cols = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>())</pre>
+    <pre class="usage"><span class='fu'>tplyr_table</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>treat_var</span>, where <span class='op'>=</span> <span class='cn'>TRUE</span>, cols <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -239,7 +239,7 @@ individual parameters catered to your analysis. For example, to add a total grou
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='fu'>tplyr_table</span>(<span class='kw'>iris</span>, <span class='kw'>Species</span>, where = <span class='kw'>Sepal.Length</span> <span class='op'>&lt;</span> <span class='fl'>5.8</span>)
+<span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'>tplyr_table</span><span class='op'>(</span><span class='va'>iris</span>, <span class='va'>Species</span>, where <span class='op'>=</span> <span class='va'>Sepal.Length</span> <span class='op'>&lt;</span> <span class='fl'>5.8</span><span class='op'>)</span>
 
 </div></pre>
   </div>

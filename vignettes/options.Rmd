@@ -260,3 +260,32 @@ tplyr_table(adsl, TRT01P) %>%
     select(-starts_with("ord")) %>% 
   kable()
 ```
+
+## IBM Rounding 
+
+In certain cases users may want to match tables produced by other languages that IBM rounding. Tplyr offers the option 'tplyr.IBMRounding' to change the default rounding behavior of Tplyr tables. Review var1_4 in the tables below.
+
+Using the default R behavior
+```{r rounding_1}
+tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_desc(qsec) %>%
+      set_format_strings(mean = f_str("xx.xx", mean))
+  ) %>%
+  build()
+```
+
+Using IBM rounding
+```{r rounding_2}
+withr::with_options(
+  list(tplyr.IBMRounding = TRUE),
+  {
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(qsec) %>%
+          set_format_strings(mean = f_str("xx.xx", mean))
+      ) %>%
+      build()
+  }
+)
+```

@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -160,7 +160,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/atorus-research/Tplyr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -181,9 +181,61 @@
       <small>Source: <a href='https://github.com/atorus-research/Tplyr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="tplyr-043" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.3">
+<a href="#tplyr-043" class="anchor"></a>Tplyr 0.4.3<small> Unreleased </small>
+</h1>
+<ul>
+<li>Fixes bug <a href='https://github.com/atorus-research/Tplyr/issues/12'>#12</a> where posix class columns would cause the <code>all.equal</code> check between target and pop_data to error.</li>
+<li>Incorporates pull request <a href='https://github.com/atorus-research/Tplyr/issues/13'>#13</a> for change to tidyr.</li>
+</ul>
+</div>
+    <div id="tplyr-042" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.2">
+<a href="#tplyr-042" class="anchor"></a>Tplyr 0.4.2<small> 2021-10-15 </small>
+</h1>
+<ul>
+<li>No functionality updates. Tests updated to pass rlang 1.0.0.</li>
+</ul>
+</div>
+    <div id="tplyr-041" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.1">
+<a href="#tplyr-041" class="anchor"></a>Tplyr 0.4.1<small> 2021-07-13 </small>
+</h1>
+<ul>
+<li>Bug Fixes
+<ul>
+<li>Nested count layers with character values in the first position could error if multiple risk differences were added.</li>
+<li>Improved handling of factors in the treatment variable.</li>
+</ul>
+</li>
+</ul>
+</div>
+    <div id="tplyr-040" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.0">
+<a href="#tplyr-040" class="anchor"></a>Tplyr 0.4.0<small> 2021-02-11 </small>
+</h1>
+<ul>
+<li>Enhancements
+<ul>
+<li>In certain cases when creating a count layer, you may only want to keep certain factors from your target dataset. Tplyr now has this functionality built in! With the <code><a href="../reference/keep_levels.html">keep_levels()</a></code> you can define what factors you want to keep in your count layers without having to recode/drop factors at the table level.</li>
+<li>Tplyr would normally use the R native rounding method and that is the method we recommend. However, in certain cases you may be trying to match your Tplyr output with SAS. You can set the ‘tplyr.IBMRounding’ option to TRUE, and Tplyr will simulate IBM rounding.</li>
+<li>
+<code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> has been enhanced for nested count layers. You can now your nested count target variables as denominators.</li>
+</ul>
+</li>
+<li>Bug fixes
+<ul>
+<li>
+<code>add_risk_difference()</code> would error out when you used it in a nested count layer that had a character value as the first variable.</li>
+<li>Nested count layers could not be sorted <code>bycount</code> if the layer level where logic caused a value to be droped. This was fixed and tested for future development.</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="tplyr-031" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.1">
-<a href="#tplyr-031" class="anchor"></a>Tplyr 0.3.1<small> Unreleased </small>
+<a href="#tplyr-031" class="anchor"></a>Tplyr 0.3.1<small> 2021-01-08 </small>
 </h1>
 <ul>
 <li>Enhancements

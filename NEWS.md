@@ -1,3 +1,9 @@
+# Tplyr 0.4.3
+
+- Fixes bug #12 where posix class columns would cause the `all.equal` check between
+target and pop_data to error.
+- Incorporates pull request #13 for change to tidyr.
+
 # Tplyr 0.4.2
 
 - No functionality updates. Tests updated to pass rlang 1.0.0.

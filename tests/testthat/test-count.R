@@ -735,3 +735,22 @@ test_that("nested count layers will error out if second variable is bigger than 
   expect_error(build(t),
                "The number of values of your second variable must be greater")
 })
+
+test_that("Posix columns don't cause the build to error out.", {
+#
+
+  load(test_path("adae.Rdata"))
+  adsl <- haven::read_xpt(test_path("adsl.xpt")) %>%
+      mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
+    rename(TRTA = TRT01A)
+
+  tp_obj <- tplyr_table(adae, TRTA) %>%
+    set_pop_data(adsl) %>%
+    add_layer(
+      group_count('Number of subjects with any event') %>%
+        set_distinct_by(USUBJID) %>%
+        set_denoms_by(TRTA)
+    )
+
+  expect_silent(build(tp_obj))
+})
