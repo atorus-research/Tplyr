@@ -275,6 +275,7 @@ process_count_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "n") %>%
+      mutate(n = as.double(n)) %>%
       ungroup()
 
     # If there is a missing_count_string, but its not in the dataset
