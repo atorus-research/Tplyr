@@ -17,3 +17,4 @@ The formatted_table object that is binded to the layer
 \description{
 This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
 }
+\keyword{internal}

@@ -87,6 +87,7 @@ build.tplyr_table <- function(x) {
 #'
 #' @return The tplyr_layer object with a 'built_table' binding
 #' @export
+#' @keywords internal
 process_summaries <- function(x, ...) {
   UseMethod("process_summaries")
 }
@@ -99,6 +100,7 @@ process_summaries <- function(x, ...) {
 #'
 #' @return The formatted_table object that is binded to the layer
 #' @export
+#' @keywords internal
 process_formatting <- function(x, ...) {
   UseMethod("process_formatting")
 }

@@ -18,3 +18,4 @@ Formatted tplyr_statistic data
 This is an internal function that is not meant for use externally, but must be exported.
 Use with caution.
 }
+\keyword{internal}

@@ -18,3 +18,4 @@ Numeric statistc data from a tplyr statistc
 This is an internal function that is not meant for use externally, but must be exported.
 Use with caution.
 }
+\keyword{internal}

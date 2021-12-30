@@ -17,3 +17,4 @@ The tplyr_layer object with a 'built_table' binding
 \description{
 This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
 }
+\keyword{internal}

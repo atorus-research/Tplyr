@@ -1,16 +1,11 @@
-## Submission 0.4.2
-* Update test to pass with new version of rlang.
-* Increment versions.
-
+## Submission 0.4.4
+* Functionality update for sorting nested count layers
 
 ## Test Environments
 
 * Local Ubuntu 18.04.4 devtools::check
 * Latest Ubuntu CI with latest tidyverse
 * Github release action with windows, linux, and osx check
-
-## Updates
-* Bug fixes
 
 
 ## R CMD CHECK Results

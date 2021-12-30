@@ -101,6 +101,7 @@ prepare_format_metadata.shift_layer <- function(x) {
 }
 
 #' @export
+#' @keywords internal
 process_formatting.shift_layer <- function(x, ...) {
 
   evalq({

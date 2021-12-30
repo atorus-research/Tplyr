@@ -6,7 +6,7 @@
 \alias{set_result_order_var}
 \title{Set the ordering logic for the count layer}
 \usage{
-set_order_count_method(e, order_count_method)
+set_order_count_method(e, order_count_method, break_ties = NULL)
 
 set_ordering_cols(e, ...)
 
@@ -18,6 +18,12 @@ set_result_order_var(e, result_order_var)
 \item{order_count_method}{The logic determining how the rows in the final
 layer output will be indexed. Options are 'bycount', 'byfactor', and
 'byvarn'.}
+
+\item{break_ties}{In certain cases, a 'bycount' sort will result in conflicts
+if the counts aren't unique. break_ties will add a decimal to the sorting
+column so resolve conflicts. A character value of 'asc' will add a decimal
+based on the alphabetical sorting. 'desc' will do the same
+but sort descending in case that is the intention.}
 
 \item{...}{Unquoted variables used to select the columns whose values will be
 extracted for ordering.}
