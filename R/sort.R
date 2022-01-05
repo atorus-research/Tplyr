@@ -603,15 +603,15 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   # Order the vector based on the sort and return
   res <- numeric_ordering_index$x[order(numeric_ordering_index$ix)]
 
-  if(isTRUE(break_ties == "asc")) {
+  if(isTRUE(break_ties == "asc") && length(target_var) == 2) {
     # dec_level is used to find the highest power of 10 for use in creating the
     # sorted deciaml. If there are 3 values dec_level will be 10, if there are
     # 25 it will be 100 and so forth.
     dec_level <- 10 ^ ceiling(log(nrow(numeric_ordering_data) + 1, base = 10))
-    res + (1:nrow(numeric_ordering_data))/dec_level
-  } else if(isTRUE(break_ties == "desc")) {
-    dec_level <- 10 ^ ceiling(log(numeric_ordering_data + 1, base = 10))
-    res + (nrow(numeric_ordering_data):1)/dec_level
+    unlist(res + (1:nrow(numeric_ordering_data))/dec_level)
+  } else if(isTRUE(break_ties == "desc") && length(target_var) == 2) {
+    dec_level <- 10 ^ ceiling(log(nrow(numeric_ordering_data) + 1, base = 10))
+    unlist(res + (nrow(numeric_ordering_data):1)/dec_level)
   } else {
     res
   }

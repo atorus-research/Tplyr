@@ -113,8 +113,16 @@ test_that("A nested group_count layer can be ordered properly", {
     )
   b_t2 <- build(t2)
 
+  t3 <- tplyr_table(iris, treat) %>%
+    add_layer(
+      group_count(vars(Species, grp)) %>%
+        set_order_count_method("bycount", break_ties = "desc")
+    )
+  b_t3 <- build(t3)
+
   expect_equivalent(b_t[, 6], tibble(ord_layer_1 = as.integer(rep(c( 1, 2, 3), each = 3))))
   expect_equivalent(b_t2[, 6], tibble(ord_layer_1 = rep(c(25.1, 25.2, 25.3), each = 3)))
+  expect_equivalent(b_t3[, 6], tibble(ord_layer_1 = rep(c(25.3, 25.2, 25.1), each = 3)))
 })
 
 test_that("A group_desc layer can be ordered properly", {
