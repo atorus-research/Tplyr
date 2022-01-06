@@ -366,6 +366,11 @@ set_order_count_method <- function(e, order_count_method, break_ties = NULL) {
 
   assert_inherits_class(e, "count_layer")
 
+  assert_that(is.null(break_ties) || length(env_get(e, "target_var")) == 2,
+              msg = "break_ties argument can only be used with nested count layers")
+  assert_that(is.null(break_ties) || break_ties %in% c("asc", "desc"),
+              msg = "break_ties must be 'asc', 'desc', or NULL")
+
   env_bind(e, order_count_method = order_count_method)
   env_bind(e, break_ties = break_ties)
 
