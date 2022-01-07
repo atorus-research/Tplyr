@@ -25,6 +25,7 @@ reference:
 - contents:
   - add_layer
   - add_layers
+  - tplyr_layer
   - starts_with("group")
 - title: Formatting
   desc: Customizing the display as a table
@@ -59,15 +60,22 @@ reference:
   - set_nest_count
   - set_outer_sort_position
   - set_missing_count
+  - keep_levels
+  - set_denom_ignore
+  - set_indentation
 - title: Column Headers
 - contents:
   - add_column_headers
+  - header_n
 - title: Helper functions
 - contents:
   - apply_row_masks
   - get_numeric_data
   - get_stats_data
-  - everything()
+  - by
+  - get_target_var
+  - treat_var
+  - get_where.tplyr_layer
 
 articles:
 - title: Table Vignettes

@@ -8,6 +8,7 @@
 #'
 #' @return Numeric statistc data from a tplyr statistc
 #' @export
+#' @keywords internal
 process_statistic_data <- function(x, ...) {
   UseMethod('process_statistic_data')
 }
@@ -67,6 +68,7 @@ process_statistic_data.tplyr_riskdiff <- function(x, ...) {
 #'
 #' @return Formatted tplyr_statistic data
 #' @export
+#' @keywords internal
 process_statistic_formatting <- function(x, ...) {
   UseMethod('process_statistic_formatting')
 }

@@ -244,6 +244,11 @@ set_nest_count <- function(e, nest_count) {
 #' @param order_count_method The logic determining how the rows in the final
 #'   layer output will be indexed. Options are 'bycount', 'byfactor', and
 #'   'byvarn'.
+#' @param break_ties In certain cases, a 'bycount' sort will result in conflicts
+#'   if the counts aren't unique. break_ties will add a decimal to the sorting
+#'   column so resolve conflicts. A character value of 'asc' will add a decimal
+#'   based on the alphabetical sorting. 'desc' will do the same
+#'   but sort descending in case that is the intention.
 #'
 #'
 #' @section Sorting a Table: When a table is built, the output has several
@@ -347,7 +352,7 @@ set_nest_count <- function(e, nest_count) {
 #'       #set at the table level.
 #'       set_order_count_method("byfactor")
 #'   )
-set_order_count_method <- function(e, order_count_method) {
+set_order_count_method <- function(e, order_count_method, break_ties = NULL) {
 
   assert_inherits_class(order_count_method, "character")
 
@@ -361,7 +366,13 @@ set_order_count_method <- function(e, order_count_method) {
 
   assert_inherits_class(e, "count_layer")
 
+  assert_that(is.null(break_ties) || length(env_get(e, "target_var")) == 2,
+              msg = "break_ties argument can only be used with nested count layers")
+  assert_that(is.null(break_ties) || break_ties %in% c("asc", "desc"),
+              msg = "break_ties must be 'asc', 'desc', or NULL")
+
   env_bind(e, order_count_method = order_count_method)
+  env_bind(e, break_ties = break_ties)
 
   e
 }

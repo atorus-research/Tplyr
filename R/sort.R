@@ -161,6 +161,8 @@ add_order_columns.count_layer <- function(x) {
 
   evalq({
 
+    if(!exists("break_ties")) break_ties <- NULL
+
     # Set all defaults for ordering
     if (is.null(result_order_var)) result_order_var <- quo(n)
     # A lot of weird stripping of the object is done here to make sure its the
@@ -215,7 +217,8 @@ add_order_columns.count_layer <- function(x) {
                                  target = target, all_outer = all_outer,
                                  filter_logic = filter_logic,
                                  indentation = indentation,
-                                 outer_inf = outer_inf)) %>%
+                                 outer_inf = outer_inf,
+                                 break_ties = break_ties)) %>%
         ungroup()
 
       if (!is.null(nest_count) && nest_count) {
@@ -426,7 +429,8 @@ get_data_order <- function(x, formatted_col_index) {
       get_data_order_bycount(numeric_data, ordering_cols,
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
-                             total_index, total_row_sort_value)
+                             total_index, total_row_sort_value,
+                             break_ties = break_ties)
 
     } else if (order_count_method == "byvarn") {
 
@@ -521,7 +525,8 @@ get_data_order <- function(x, formatted_col_index) {
 get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
                        missing_index = NULL, missing_sort_value = NULL,
-                       total_index = NULL, total_row_sort_value = NULL) {
+                       total_index = NULL, total_row_sort_value = NULL,
+                       break_ties) {
 
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset
@@ -596,7 +601,20 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 
 
   # Order the vector based on the sort and return
-  numeric_ordering_index$x[order(numeric_ordering_index$ix)]
+  res <- numeric_ordering_index$x[order(numeric_ordering_index$ix)]
+
+  if(isTRUE(break_ties == "asc") && length(target_var) == 2) {
+    # dec_level is used to find the highest power of 10 for use in creating the
+    # sorted deciaml. If there are 3 values dec_level will be 10, if there are
+    # 25 it will be 100 and so forth.
+    dec_level <- 10 ^ ceiling(log(nrow(numeric_ordering_data) + 1, base = 10))
+    unlist(res + (1:nrow(numeric_ordering_data))/dec_level)
+  } else if(isTRUE(break_ties == "desc") && length(target_var) == 2) {
+    dec_level <- 10 ^ ceiling(log(nrow(numeric_ordering_data) + 1, base = 10))
+    unlist(res + (nrow(numeric_ordering_data):1)/dec_level)
+  } else {
+    res
+  }
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
@@ -678,7 +696,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
     all_outer$..index <- all_outer %>%
       get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
-                             result_order_var, vars(!!by[[1]], !!target_var))
+                             result_order_var, vars(!!by[[1]], !!target_var),
+                             break_ties = break_ties)
 
     group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -709,7 +728,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                                    head(by, -1),
                                                                                    cols,
                                                                                    result_order_var,
-                                                                                   target_var)
+                                                                                   target_var,
+                                                                                   break_ties = break_ties)
   } else if(tail(order_count_method, 1) == "byvarn") {
 
     varn_df <- get_varn_values(target, target_var[[1]])

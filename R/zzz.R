@@ -11,9 +11,10 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
+#' @importFrom dplyr across
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
-#' @importFrom tidyselect all_of vars_select
+#' @importFrom tidyselect all_of vars_select any_of
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
@@ -280,3 +281,4 @@ count_missings <- NULL
 has_missing_count <- FALSE
 kept_levels <-expr(TRUE)
 levels_to_keep <- NULL
+break_ties <- NULL
