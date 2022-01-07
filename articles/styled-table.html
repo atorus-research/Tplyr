@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Tplyr.html">Get started</a>
 </li>
@@ -74,12 +70,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="../articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="../articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="../articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -114,7 +113,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,7 +134,7 @@
       <h1 data-toc-skip>Producing a Styled Table</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/styled-table.Rmd"><code>vignettes/styled-table.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/styled-table.Rmd" class="external-link"><code>vignettes/styled-table.Rmd</code></a></small>
       <div class="hidden name"><code>styled-table.Rmd</code></div>
 
     </div>
@@ -143,7 +142,7 @@
     
     
 <p>In the other vignettes we talk about how to get the most out of ‘Tplyr’ when it comes to preparing your data. The last step we need to cover is how to get from the data output by ‘Tplyr’ to a presentation ready table.</p>
-<p>There are a few things left to do after a table is built. These steps will vary based on what package you’re using for presentation - but within this vignette we will demonstrate how to use <a href="https://hughjonesd.github.io/huxtable/">‘huxtable’</a> to prepare your table and <a href="https://github.com/atorus-research/pharmaRTF">‘pharmaRTF’</a> to write the output.</p>
+<p>There are a few things left to do after a table is built. These steps will vary based on what package you’re using for presentation - but within this vignette we will demonstrate how to use <a href="https://hughjonesd.github.io/huxtable/" class="external-link">‘huxtable’</a> to prepare your table and <a href="https://github.com/atorus-research/pharmaRTF" class="external-link">‘pharmaRTF’</a> to write the output.</p>
 <p>After a ‘Tplyr’ table is built, you will likely have to:</p>
 <ul>
 <li>Sort the table however you wish using the provided order variables</li>
@@ -155,43 +154,43 @@
 <li>Set up your RTF output with ‘pharmaRTF’</li>
 </ul>
 <p>Let’s build a demographics table to see how this all works.</p>
-<div id="preparing-the-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#preparing-the-data" class="anchor"></a>Preparing the data</h2>
+<div class="section level2">
+<h2 id="preparing-the-data">Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-    SEX <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span><span class="va">SEX</span>, M <span class="op">=</span> <span class="st">"Male"</span>, F <span class="op">=</span> <span class="st">"Female"</span><span class="op">)</span>, 
-    RACE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">RACE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"AMERICAN INDIAN OR ALASKA NATIVE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"BLACK OR AFRICAN AMERICAN"</span>, 
+<code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+    SEX <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html" class="external-link">recode</a></span><span class="op">(</span><span class="va">SEX</span>, M <span class="op">=</span> <span class="st">"Male"</span>, F <span class="op">=</span> <span class="st">"Female"</span><span class="op">)</span>, 
+    RACE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RACE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AMERICAN INDIAN OR ALASKA NATIVE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"BLACK OR AFRICAN AMERICAN"</span>, 
                           <span class="st">"NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER"</span>, <span class="st">"WHITE"</span>, <span class="st">"MULTIPLE"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span>
 
-<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Sex'</span>, 
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">SEX</span>, by <span class="op">=</span> <span class="st">"Sex n (%)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Sex'</span>, 
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">SEX</span>, by <span class="op">=</span> <span class="st">"Sex n (%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>, Missing<span class="op">=</span><span class="cn">NA</span>, denom_ignore<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Age'</span>,
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Age group'</span>, 
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Age'</span>,
+    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Age group'</span>, 
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>, Missing<span class="op">=</span><span class="cn">NA</span>, denom_ignore<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Race'</span>, 
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>, Missing<span class="op">=</span><span class="cn">NA</span>, denom_ignore<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_order_count_method.html">set_order_count_method</a></span><span class="op">(</span><span class="st">"byfactor"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Ethnic'</span>, 
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">ETHNIC</span>, by <span class="op">=</span> <span class="st">"Ethnicity n (%)"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Race'</span>, 
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>, Missing<span class="op">=</span><span class="cn">NA</span>, denom_ignore<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span><span class="op">(</span><span class="st">"byfactor"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Ethnic'</span>, 
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">ETHNIC</span>, by <span class="op">=</span> <span class="st">"Ethnicity n (%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_missing_count.html">set_missing_count</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx'</span>, <span class="va">n</span><span class="op">)</span>, Missing<span class="op">=</span><span class="cn">NA</span>, denom_ignore<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">)</span>
 
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>
 
-<span class="va">dat</span> <span class="op">%&gt;%</span> 
+<span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
@@ -899,21 +898,21 @@ Missing
 <li>The second pre-processing step does something interesting. If you recall from <code><a href="../articles/sort.html">vignette("sort")</a></code>, factor variables input to ‘Tplyr’ will use the factor order for the resulting order variable. Another particularly useful advantage of this is dummying values. The adsl dataset only contains the races “WHITE”, “BLACK OR AFRICAN AMERICAN”, and “AMERICAN INDIAN OR ALASK NATIVE”. If you set factor levels prior to entering the data into ‘Tplyr’, the values will be dummied for you. This is particularly advantageous when a study is early on and data may be sparse. Your output can display complete values and the presentation will be consistent as data come in.</li>
 </ul>
 </div>
-<div id="sorting-column-ordering-column-headers-and-clean-up" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sorting-column-ordering-column-headers-and-clean-up" class="anchor"></a>Sorting, Column Ordering, Column Headers, and Clean-up</h2>
+<div class="section level2">
+<h2 id="sorting-column-ordering-column-headers-and-clean-up">Sorting, Column Ordering, Column Headers, and Clean-up<a class="anchor" aria-label="anchor" href="#sorting-column-ordering-column-headers-and-clean-up"></a>
+</h2>
 <p>Now that we have our data, let’s make sure it’s in the right order. Additionally, let’s clean the data up so it’s ready to present.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">ord_layer_index</span>, <span class="va">ord_layer_1</span>, <span class="va">ord_layer_2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/apply_row_masks.html">apply_row_masks</a></span><span class="op">(</span>row_breaks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"row_label"</span><span class="op">)</span>, <span class="va">var1_Placebo</span>, <span class="va">`var1_Xanomeline Low Dose`</span>, <span class="va">`var1_Xanomeline High Dose`</span>, <span class="va">var1_Total</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">ord_layer_index</span>, <span class="va">ord_layer_1</span>, <span class="va">ord_layer_2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/apply_row_masks.html">apply_row_masks</a></span><span class="op">(</span>row_breaks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"row_label"</span><span class="op">)</span>, <span class="va">var1_Placebo</span>, <span class="va">`var1_Xanomeline Low Dose`</span>, <span class="va">`var1_Xanomeline High Dose`</span>, <span class="va">var1_Total</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/add_column_headers.html">add_column_headers</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">" | | Placebo\\line(N=**Placebo**)| Xanomeline Low Dose\\line(N=**Xanomeline Low Dose**) "</span>, 
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">" | | Placebo\\line(N=**Placebo**)| Xanomeline Low Dose\\line(N=**Xanomeline Low Dose**) "</span>, 
            <span class="st">"| Xanomeline High Dose\\line(N=**Xanomeline High Dose**) | Total\\line(N=**Total**)"</span><span class="op">)</span>, 
            header_n <span class="op">=</span> <span class="fu"><a href="../reference/header_n.html">header_n</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">dat</span> <span class="op">%&gt;%</span> 
+<span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr>
@@ -1473,29 +1472,29 @@ Missing
 <ul>
 <li>Sorted the data by the layer, by the row labels (which in this case are just text strings we defined), and by the results. Review <code><a href="../articles/sort.html">vignette("sort")</a></code> to understand how each layer handles sorting in more detail.</li>
 <li>Used the <code><a href="../reference/apply_row_masks.html">apply_row_masks()</a></code> function. Essentially, <strong>after</strong> your data are sorted, this function will look at all of your row_label variables and drop any repeating values. For packages like ‘huxtable’, this eases the process of making your table presentation ready, so you don’t need to do any cell merging once the ‘huxtable’ table is created. Additionally, here we set the <code>row_breaks</code> option to <code>TRUE</code>. This will insert a blank row between each of your layers, which helps improve the presentation depending on your output. It’s important to note that the input dataset <strong>must</strong> still have the <code>ord_layer_index</code> variable attached in order for the blank rows to be added. Sorting should be done prior, and column reordering/dropping may be done after.</li>
-<li>Re-ordered the columns and dropped off the order columns. For more information about how to get the most out of <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html">here</a>. This is where the <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html">tidyselect::starts_with()</a></code> comes from.</li>
+<li>Re-ordered the columns and dropped off the order columns. For more information about how to get the most out of <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html" class="external-link">here</a>. This is where the <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">tidyselect::starts_with()</a></code> comes from.</li>
 <li>Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. The ‘Tplyr’ function <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just enter in a string to define your headers. But there’s more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that ‘Tplyr’ calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.</li>
 </ul>
 </div>
-<div id="table-styling" class="section level2">
-<h2 class="hasAnchor">
-<a href="#table-styling" class="anchor"></a>Table Styling</h2>
-<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/">‘gt’</a> package is always a good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/">‘kableExtra’</a> throughout these vignettes. At the moment, with the tools we’ve made available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/">‘huxtable’</a> and our package <a href="https://github.com/atorus-research/pharmaRTF">‘pharmaRTF’</a> will get you where you need to go.</p>
+<div class="section level2">
+<h2 id="table-styling">Table Styling<a class="anchor" aria-label="anchor" href="#table-styling"></a>
+</h2>
+<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/" class="external-link">‘gt’</a> package is always a good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/" class="external-link">‘kableExtra’</a> throughout these vignettes. At the moment, with the tools we’ve made available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/" class="external-link">‘huxtable’</a> and our package <a href="https://github.com/atorus-research/pharmaRTF" class="external-link">‘pharmaRTF’</a> will get you where you need to go.</p>
 <p><em>(Note: We plan to extend ‘pharmaRTF’ to support ‘GT’ when it has better RTF support)</em></p>
 <p>Alright - so the table is ready. Let’s prepare the ‘huxtable’ table.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Make the table</span>
-<span class="va">ht</span> <span class="op">&lt;-</span> <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/as_huxtable.html">as_hux</a></span><span class="op">(</span><span class="va">dat</span>, add_colnames<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/bold.html">set_bold</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># bold the first row</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/align.html">set_align</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'center'</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Center align the first row </span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/align.html">set_align</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'center'</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Center align the results</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/valign.html">set_valign</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'bottom'</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Bottom align the first row</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/borders.html">set_bottom_border</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Put a border under the first row</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/width.html">set_width</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Set the table width</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/escape_contents.html">set_escape_contents</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co"># Don't escape RTF syntax</span>
-  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/col_width.html">set_col_width</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">.15</span>, <span class="fl">.15</span>, <span class="fl">.15</span>, <span class="fl">.15</span><span class="op">)</span><span class="op">)</span> <span class="co"># Set the column widths</span>
+<span class="va">ht</span> <span class="op">&lt;-</span> <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/as_huxtable.html" class="external-link">as_hux</a></span><span class="op">(</span><span class="va">dat</span>, add_colnames<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/bold.html" class="external-link">set_bold</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># bold the first row</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/align.html" class="external-link">set_align</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'center'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Center align the first row </span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/align.html" class="external-link">set_align</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'center'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Center align the results</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/valign.html" class="external-link">set_valign</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="st">'bottom'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Bottom align the first row</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/borders.html" class="external-link">set_bottom_border</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Put a border under the first row</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/width.html" class="external-link">set_width</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Set the table width</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/escape_contents.html" class="external-link">set_escape_contents</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Don't escape RTF syntax</span>
+  <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/col_width.html" class="external-link">set_col_width</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">.15</span>, <span class="fl">.15</span>, <span class="fl">.15</span>, <span class="fl">.15</span><span class="op">)</span><span class="op">)</span> <span class="co"># Set the column widths</span>
 <span class="va">ht</span></code></pre></div>
-<table class="table huxtable">
+<table class="table huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; width: 150%; margin-left: auto; margin-right: auto;  " id="tab:huxtable">
 <col style="width: 20%">
 <col style="width: 20%">
 <col style="width: 15%">
@@ -1736,30 +1735,30 @@ Missing
 </tr>
 </table>
 </div>
-<div id="output-to-file" class="section level1">
-<h1 class="hasAnchor">
-<a href="#output-to-file" class="anchor"></a>Output to File</h1>
+<div class="section level1">
+<h1 id="output-to-file">Output to File<a class="anchor" aria-label="anchor" href="#output-to-file"></a>
+</h1>
 <p>So now this is starting to look a lot more like what we’re going for! The table styling is coming together. The last step is to get it into a final output document. So here we’ll jump into ‘pharmaRTF’</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/rtf_doc.html">rtf_doc</a></span><span class="op">(</span><span class="va">ht</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/add_titles_footnotes.html">add_titles</a></span><span class="op">(</span>
-    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html">hf_line</a></span><span class="op">(</span><span class="st">"Protocol: CDISCPILOT01"</span>, <span class="st">"PAGE_FORMAT: Page %s of %s"</span>, align<span class="op">=</span><span class="st">'split'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
-    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html">hf_line</a></span><span class="op">(</span><span class="st">"Table 14-2.01"</span>, align<span class="op">=</span><span class="st">'center'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
-    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html">hf_line</a></span><span class="op">(</span><span class="st">"Summary of Demographic and Baseline Characteristics"</span>, align<span class="op">=</span><span class="st">'center'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/add_titles_footnotes.html">add_footnotes</a></span><span class="op">(</span>
-    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html">hf_line</a></span><span class="op">(</span><span class="st">"FILE_PATH: Source: %s"</span>, <span class="st">"DATE_FORMAT: %H:%M %A, %B %d, %Y"</span>, align<span class="op">=</span><span class="st">'split'</span>, bold<span class="op">=</span><span class="cn">FALSE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/font_size.html">set_font_size</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/ignore_cell_padding.html">set_ignore_cell_padding</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/column_header_buffer.html">set_column_header_buffer</a></span><span class="op">(</span>top<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>This may look a little messy, but ‘pharmaRTF’ syntax can be abbreviated by standardizing your process. Check out <a href="https://atorus-research.github.io/tf_from_file.html">this vignette</a> for instructions on how to read titles and footnotes into ‘pharmaRTF’ from a file.</p>
+<code class="sourceCode R"><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/rtf_doc.html" class="external-link">rtf_doc</a></span><span class="op">(</span><span class="va">ht</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/add_titles_footnotes.html" class="external-link">add_titles</a></span><span class="op">(</span>
+    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html" class="external-link">hf_line</a></span><span class="op">(</span><span class="st">"Protocol: CDISCPILOT01"</span>, <span class="st">"PAGE_FORMAT: Page %s of %s"</span>, align<span class="op">=</span><span class="st">'split'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
+    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html" class="external-link">hf_line</a></span><span class="op">(</span><span class="st">"Table 14-2.01"</span>, align<span class="op">=</span><span class="st">'center'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
+    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html" class="external-link">hf_line</a></span><span class="op">(</span><span class="st">"Summary of Demographic and Baseline Characteristics"</span>, align<span class="op">=</span><span class="st">'center'</span>, bold<span class="op">=</span><span class="cn">TRUE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/add_titles_footnotes.html" class="external-link">add_footnotes</a></span><span class="op">(</span>
+    <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/hf_line.html" class="external-link">hf_line</a></span><span class="op">(</span><span class="st">"FILE_PATH: Source: %s"</span>, <span class="st">"DATE_FORMAT: %H:%M %A, %B %d, %Y"</span>, align<span class="op">=</span><span class="st">'split'</span>, bold<span class="op">=</span><span class="cn">FALSE</span>, italic<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/font_size.html" class="external-link">set_font_size</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/ignore_cell_padding.html" class="external-link">set_ignore_cell_padding</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/column_header_buffer.html" class="external-link">set_column_header_buffer</a></span><span class="op">(</span>top<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p>This may look a little messy, but ‘pharmaRTF’ syntax can be abbreviated by standardizing your process. Check out <a href="https://atorus-research.github.io/tf_from_file.html" class="external-link">this vignette</a> for instructions on how to read titles and footnotes into ‘pharmaRTF’ from a file.</p>
 <p>Our document is now created, all the titles and footnotes are added, and settings are good to go. Last step is to write it out.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/write_rtf.html">write_rtf</a></span><span class="op">(</span><span class="va">doc</span>, file<span class="op">=</span><span class="st">'styled_example.rtf'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/write_rtf.html" class="external-link">write_rtf</a></span><span class="op">(</span><span class="va">doc</span>, file<span class="op">=</span><span class="st">'styled_example.rtf'</span><span class="op">)</span></code></pre></div>
 <p>And here we have it - Our table is styled and ready to go!</p>
 <p><img src="styled_example.png" width="800px"></p>
-<p>If you’d like to learn more about how to use ‘huxtable’, be sure to check out the <a href="https://hughjonesd.github.io/huxtable/">website</a>. For use specifically with ‘pharmaRTF’, we prepared a vignette of tips and tricks <a href="https://atorus-research.github.io/huxtable_tips.html">here</a>.</p>
+<p>If you’d like to learn more about how to use ‘huxtable’, be sure to check out the <a href="https://hughjonesd.github.io/huxtable/" class="external-link">website</a>. For use specifically with ‘pharmaRTF’, we prepared a vignette of tips and tricks <a href="https://atorus-research.github.io/huxtable_tips.html" class="external-link">here</a>.</p>
 </div>
   </div>
 
@@ -1774,11 +1773,13 @@ Missing
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -1786,6 +1787,8 @@ Missing
 
   
 
+
+  
 
   </body>
 </html>

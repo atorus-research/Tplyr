@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Tplyr.html">Get started</a>
 </li>
@@ -74,12 +70,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="../articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="../articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="../articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -114,7 +113,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,30 +134,30 @@
       <h1 data-toc-skip>Count Layers</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/count.Rmd"><code>vignettes/count.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/count.Rmd" class="external-link"><code>vignettes/count.Rmd</code></a></small>
       <div class="hidden name"><code>count.Rmd</code></div>
 
     </div>
 
     
     
-<p>At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it’s not that easy. And in clinical reports, there’s quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we’ve added a good bit of flexibility into <code><a href="../reference/group_count.html">group_count()</a></code> to help you get what you need when creating these reports, whether you’re creating a demographics table, adverse events, or lab results.</p>
-<div id="a-simple-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-simple-example" class="anchor"></a>A Simple Example</h2>
+<p>At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it’s not that easy. And in clinical reports, there’s quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we’ve added a good bit of flexibility into <code><a href="../reference/layer_constructors.html">group_count()</a></code> to help you get what you need when creating these reports, whether you’re creating a demographics table, adverse events, or lab results.</p>
+<div class="section level2">
+<h2 id="a-simple-example">A Simple Example<a class="anchor" aria-label="anchor" href="#a-simple-example"></a>
+</h2>
 <p>Let’s start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we’re sorting by descending total occurrences using the “Total” group.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_treat_grps</a></span><span class="op">(</span>Treated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">DCDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_order_count_method.html">set_order_count_method</a></span><span class="op">(</span><span class="st">"bycount"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_order_count_method.html">set_ordering_cols</a></span><span class="op">(</span><span class="va">Total</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">ord_layer_1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span>, <span class="va">var1_Placebo</span>, <span class="va">`var1_Xanomeline Low Dose`</span>,
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span><span class="op">(</span>Treated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Xanomeline Low Dose"</span>, <span class="st">"Xanomeline High Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">DCDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+      <span class="fu"><a href="../reference/ordering.html">set_order_count_method</a></span><span class="op">(</span><span class="st">"bycount"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+      <span class="fu"><a href="../reference/ordering.html">set_ordering_cols</a></span><span class="op">(</span><span class="va">Total</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">ord_layer_1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span>, <span class="va">var1_Placebo</span>, <span class="va">`var1_Xanomeline Low Dose`</span>,
          <span class="va">`var1_Xanomeline High Dose`</span>, <span class="va">var1_Treated</span>, <span class="va">var1_Total</span><span class="op">)</span>
 
 <span class="fu">kable</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></code></pre></div>
@@ -255,23 +254,23 @@
 </tbody>
 </table>
 </div>
-<div id="distinct-versus-event-counts" class="section level2">
-<h2 class="hasAnchor">
-<a href="#distinct-versus-event-counts" class="anchor"></a>Distinct Versus Event Counts</h2>
+<div class="section level2">
+<h2 id="distinct-versus-event-counts">Distinct Versus Event Counts<a class="anchor" aria-label="anchor" href="#distinct-versus-event-counts"></a>
+</h2>
 <p>Another exceptionally important consideration within count layers is whether you should be using distinct counts, non-distinct counts, or some combination of both. Adverse event tables are a perfect example. Often, you’re concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn’t necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group.</p>
 <p>‘Tplyr’ allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> function sets the variables used to calculate the distinct occurrences of some value using the specified <code>distinct_by</code> variables.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx (xx.xx%) [xxx]"</span>, <span class="va">distinct_n</span>, <span class="va">distinct_pct</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu">kable</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="16%">
 <col width="14%">
@@ -341,21 +340,21 @@
 </table>
 <p>You may have seen tables before like the one above. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> triggered the derivation of <code>distinct_n</code> and <code>distinct_pct</code> in addition to the <code>n</code> and <code>pct</code> created within <code>group_count</code>. The display of the values is then controlled by the <code><a href="../reference/f_str.html">f_str()</a></code> call in <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
 </div>
-<div id="nested-count-summaries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nested-count-summaries" class="anchor"></a>Nested Count Summaries</h2>
+<div class="section level2">
+<h2 id="nested-count-summaries">Nested Count Summaries<a class="anchor" aria-label="anchor" href="#nested-count-summaries"></a>
+</h2>
 <p>Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of “Other” summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.</p>
-<p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/group_count.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
+<p>One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don’t want you to have to do that. Instead, we handle this complexity for you. This is done in <code><a href="../reference/layer_constructors.html">group_count()</a></code> by submitting two target variables with <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code>. The first variable should be your grouping variable that you want summarized, which we refer to as the “Outside” variable, and the second should have the narrower scope, which we call the “Inside” variable.</p>
 <p>The example below demonstrates how to do a nested summary. Look at the first row - here <code>row_label1</code> and <code>row_label2</code> are both “CARDIAC DISORDERS”. This line is the summary for <code>AEBODSYS.</code> In the rows below that, <code>row_label1</code> continues on with the value “CARDIAC DISORDERS”, but <code>row_label2</code> changes. These are the summaries for <code>AEDECOD</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="21%">
 <col width="21%">
@@ -441,14 +440,14 @@
 </table>
 <p>This accomplishes what we needed, but it’s not exactly the presentation you might hope for. We have a solution for this as well.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_nest_count.html">set_nest_count</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_indentation.html">set_indentation</a></span><span class="op">(</span><span class="st">"---&gt;"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -542,11 +541,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -554,6 +555,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Tplyr.html">Get started</a>
 </li>
@@ -74,12 +70,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="../articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="../articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="../articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -114,7 +113,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,7 +134,7 @@
       <h1 data-toc-skip>Risk Difference</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/riskdiff.Rmd"><code>vignettes/riskdiff.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/riskdiff.Rmd" class="external-link"><code>vignettes/riskdiff.Rmd</code></a></small>
       <div class="hidden name"><code>riskdiff.Rmd</code></div>
 
     </div>
@@ -143,27 +142,27 @@
     
     
 <p>‘Tplyr’ does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it’s reasonable for us to include. So let’s take a look at risk difference.</p>
-<div id="tplyr-implementation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tplyr-implementation" class="anchor"></a>‘Tplyr’ Implementation</h2>
-<p>Our current implementation of risk difference is solely built on top of the base R function <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code>. For any and all questions about this method, please review the <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> documentation within R.</p>
+<div class="section level2">
+<h2 id="tplyr-implementation">‘Tplyr’ Implementation<a class="anchor" aria-label="anchor" href="#tplyr-implementation"></a>
+</h2>
+<p>Our current implementation of risk difference is solely built on top of the base R function <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code>. For any and all questions about this method, please review the <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> documentation within R.</p>
 <p>Risk difference is built on top of count layers, as it’s a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. We made a large effort to make this flow very naturally with the count layer construction, so let’s walk through it step by step.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
       <span class="op">)</span>
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="19%">
 <col width="18%">
@@ -247,13 +246,13 @@
 </tr>
 </tbody>
 </table>
-<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> or <code><a href="../reference/add_treat_grps.html">add_total_group()</a></code> as well.</p>
+<p>Comparisons are specified with two-element character vectors. These are simply your comparison group - the first element, and your reference group - the second. This coincides with how you might see risk difference specified in the header of your mock, where you’ll see something like T1-Placebo. You can provide as many comparisons as you want - the values specified in the comparison just need to be valid treatment groups within your data. This works with any treatment group built using <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> or <code><a href="../reference/treat_grps.html">add_total_group()</a></code> as well.</p>
 <p>The risk difference calculations are displayed in the <code>rdiff</code> columns. There will be an <code>rdiff</code> column for every comparison that is made, following the convention <code>rdiff_&lt;comparison&gt;_&lt;reference&gt;</code>.</p>
-<p>Note the use of <code><a href="https://rdrr.io/r/base/warning.html">base::suppressWarnings()</a></code> - if the counts used in <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> are too low, you’ll get a warning that says “Chi-squared approximation may be incorrect” for every time <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> is run with counts that are too low… This could happen a lot, but the warning is perfectly valid.</p>
+<p>Note the use of <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">base::suppressWarnings()</a></code> - if the counts used in <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> are too low, you’ll get a warning that says “Chi-squared approximation may be incorrect” for every time <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> is run with counts that are too low… This could happen a lot, but the warning is perfectly valid.</p>
 </div>
-<div id="controlling-presentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#controlling-presentation" class="anchor"></a>Controlling Presentation</h2>
+<div class="section level2">
+<h2 id="controlling-presentation">Controlling Presentation<a class="anchor" aria-label="anchor" href="#controlling-presentation"></a>
+</h2>
 <p>The default values presented within formatted strings in the built table will be:</p>
 <ul>
 <li>The difference</li>
@@ -262,23 +261,23 @@
 </ul>
 <p>You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op">%&gt;%</span> 
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
         <span class="st">'n_counts'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx (xx.x) [x]'</span>, <span class="va">distinct_n</span>, <span class="va">distinct_pct</span>, <span class="va">n</span><span class="op">)</span>,
         <span class="st">'riskdiff'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="va">comp</span>, <span class="va">ref</span>, <span class="va">dif</span>, <span class="va">low</span>, <span class="va">high</span><span class="op">)</span>
       <span class="op">)</span>
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -366,32 +365,32 @@
 </table>
 <p>Take a look at the <code>rdiff</code> columns now - you’ll see they have 5 values. These are:</p>
 <ul>
-<li>The comparison proportion (i.e. the estimate[1] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> object)</li>
-<li>The reference proportion (i.e. the estimate[2] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> object)</li>
+<li>The comparison proportion (i.e. the estimate[1] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> object)</li>
+<li>The reference proportion (i.e. the estimate[2] output from a <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> object)</li>
 <li>The difference (i.e. estimate[1] - estimate[2])</li>
 <li>The lower end of the confidence interval</li>
 <li>The upper end of the confidence interval</li>
 </ul>
-<p>You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> using a named list and the <code>args</code> argument in <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. This wasn’t done using the ellipsis (i.e. <code>...</code>) like typical R functions because it’s already used to capture a varying number of comparisons, but it’s not much more difficult to use:</p>
+<p>You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> using a named list and the <code>args</code> argument in <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code>. This wasn’t done using the ellipsis (i.e. <code>...</code>) like typical R functions because it’s already used to capture a varying number of comparisons, but it’s not much more difficult to use:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>conf.level<span class="op">=</span><span class="fl">0.90</span>, alternative<span class="op">=</span><span class="st">'less'</span>, correct<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op">%&gt;%</span> 
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>conf.level<span class="op">=</span><span class="fl">0.90</span>, alternative<span class="op">=</span><span class="st">'less'</span>, correct<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
+      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
         <span class="st">'n_counts'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx (xx.x) [x]'</span>, <span class="va">distinct_n</span>, <span class="va">distinct_pct</span>, <span class="va">n</span><span class="op">)</span>,
         <span class="st">'riskdiff'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xxx, xx.xxx, xx.xxx, xx.xxx, xx.xxx'</span>, <span class="va">comp</span>, <span class="va">ref</span>, <span class="va">dif</span>, <span class="va">low</span>, <span class="va">high</span><span class="op">)</span>
       <span class="op">)</span>
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>  
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -480,34 +479,34 @@
 <p>As seen above, using the <code>args</code> argument, we:</p>
 <ul>
 <li>Changed the confidence interval level to 90% instead of the default 95%</li>
-<li>Switched the alternative hypothesis of <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code> to “less” instead of the default “two.sided”</li>
+<li>Switched the alternative hypothesis of <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code> to “less” instead of the default “two.sided”</li>
 <li>Turned off the Yates’ continuity correction</li>
 </ul>
-<p>For more information on these parameters, see the documentation for <code><a href="https://rdrr.io/r/stats/prop.test.html">stats::prop.test()</a></code>.</p>
+<p>For more information on these parameters, see the documentation for <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code>.</p>
 </div>
-<div id="other-notes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-notes" class="anchor"></a>Other Notes</h2>
+<div class="section level2">
+<h2 id="other-notes">Other Notes<a class="anchor" aria-label="anchor" href="#other-notes"></a>
+</h2>
 <p>The default of <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> works on the distinct counts available within the count summary.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/get_where.tplyr_layer.html">set_pop_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
       <span class="op">)</span> 
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>  
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="13%">
 <col width="13%">
@@ -609,22 +608,22 @@
 </table>
 <p>If for whatever reason you’d like to run risk difference on the non-distinct counts, switch the <code>distinct</code> argument to FALSE. <code><a href="../reference/add_risk_diff.html">add_risk_diff()</a></code> also will function on multi-level summaries no different than single level, so no concerns there either.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
         distinct<span class="op">=</span><span class="cn">FALSE</span>
       <span class="op">)</span> 
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>  
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="19%">
 <col width="18%">
@@ -710,21 +709,21 @@
 </table>
 <p>Risk difference also works with the <code>cols</code> argument, but it’s important to understand how the comparisons work in these situation. Here, it’s still the treatment groups that are compared - but the column argument is used as a “by” variable. For example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, cols<span class="op">=</span><span class="va">SEX</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where<span class="op">=</span> <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span>, cols<span class="op">=</span><span class="va">SEX</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
       <span class="op">)</span> 
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"rdiff"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="22%">
 <col width="22%">
@@ -785,9 +784,9 @@
 </tbody>
 </table>
 </div>
-<div id="getting-raw-numbers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-raw-numbers" class="anchor"></a>Getting Raw Numbers</h2>
+<div class="section level2">
+<h2 id="getting-raw-numbers">Getting Raw Numbers<a class="anchor" aria-label="anchor" href="#getting-raw-numbers"></a>
+</h2>
 <p>Just like you can get the numeric data from a ‘Tplyr’ layer with <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>, we’ve also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code>. The function interface is almost identical to <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>, except for the extra parameter of <code>statistic</code>. Although risk difference is the only statistic implemented in ‘Tplyr’ at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we’ve built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> the <code>statistic</code> parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.</p>
 <p>The output of <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> depends on what parameters have been used:</p>
 <ul>
@@ -797,62 +796,62 @@
 </ul>
 <p>This works best when layers are named, as it makes the output much clearer.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"PreferredTerm"</span>,
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"PreferredTerm"</span>,
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
       <span class="op">)</span> 
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"BodySystem"</span>,
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEBODSYS</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"BodySystem"</span>,
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEBODSYS</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
       <span class="fu"><a href="../reference/add_risk_diff.html">add_risk_diff</a></span><span class="op">(</span>
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
-        <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline High Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>,
+        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Xanomeline Low Dose'</span>, <span class="st">'Placebo'</span><span class="op">)</span>
       <span class="op">)</span> 
   <span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; $PreferredTerm</span>
 <span class="co">#&gt; $PreferredTerm$riskdiff</span>
-<span class="co">#&gt; # A tibble: 105 × 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 105 × 4</span></span>
 <span class="co">#&gt;    summary_var       measure `Xanomeline High Dose_Placebo` `Xanomeline Low Dos…</span>
-<span class="co">#&gt;    &lt;chr&gt;             &lt;chr&gt;                            &lt;dbl&gt;                &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 ACTINIC KERATOSIS comp                            0.0238               0     </span>
-<span class="co">#&gt;  2 ACTINIC KERATOSIS ref                             0                    0     </span>
-<span class="co">#&gt;  3 ACTINIC KERATOSIS dif                             0.0238               0     </span>
-<span class="co">#&gt;  4 ACTINIC KERATOSIS low                            -0.0461               0     </span>
-<span class="co">#&gt;  5 ACTINIC KERATOSIS high                            0.0937               0     </span>
-<span class="co">#&gt;  6 ALOPECIA          comp                            0                    0     </span>
-<span class="co">#&gt;  7 ALOPECIA          ref                             0.0476               0.0476</span>
-<span class="co">#&gt;  8 ALOPECIA          dif                            -0.0476              -0.0476</span>
-<span class="co">#&gt;  9 ALOPECIA          low                            -0.174               -0.174 </span>
-<span class="co">#&gt; 10 ALOPECIA          high                            0.0792               0.0792</span>
-<span class="co">#&gt; # … with 95 more rows</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ACTINIC KERATOSIS comp                            0.023<span style="text-decoration: underline;">8</span>               0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ACTINIC KERATOSIS ref                             0                    0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ACTINIC KERATOSIS dif                             0.023<span style="text-decoration: underline;">8</span>               0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ACTINIC KERATOSIS low                            -<span style="color: #BB0000;">0.046</span><span style="color: #BB0000; text-decoration: underline;">1</span>               0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ACTINIC KERATOSIS high                            0.093<span style="text-decoration: underline;">7</span>               0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALOPECIA          comp                            0                    0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALOPECIA          ref                             0.047<span style="text-decoration: underline;">6</span>               0.047<span style="text-decoration: underline;">6</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALOPECIA          dif                            -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">6</span>              -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">6</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ALOPECIA          low                            -<span style="color: #BB0000;">0.174</span>               -<span style="color: #BB0000;">0.174</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ALOPECIA          high                            0.079<span style="text-decoration: underline;">2</span>               0.079<span style="text-decoration: underline;">2</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 95 more rows</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $BodySystem</span>
 <span class="co">#&gt; $BodySystem$riskdiff</span>
-<span class="co">#&gt; # A tibble: 5 × 4</span>
-<span class="co">#&gt;   summary_var                            measure `Xanomeline Hig… `Xanomeline Low…</span>
-<span class="co">#&gt;   &lt;chr&gt;                                  &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 SKIN AND SUBCUTANEOUS TISSUE DISORDERS comp                   1                1</span>
-<span class="co">#&gt; 2 SKIN AND SUBCUTANEOUS TISSUE DISORDERS ref                    1                1</span>
-<span class="co">#&gt; 3 SKIN AND SUBCUTANEOUS TISSUE DISORDERS dif                    0                0</span>
-<span class="co">#&gt; 4 SKIN AND SUBCUTANEOUS TISSUE DISORDERS low                    0                0</span>
-<span class="co">#&gt; 5 SKIN AND SUBCUTANEOUS TISSUE DISORDERS high                   0                0</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span>
+<span class="co">#&gt;   summary_var              measure `Xanomeline High Dose… `Xanomeline Low Dose_…</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> SKIN AND SUBCUTANEOUS T… comp                         1                      1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> SKIN AND SUBCUTANEOUS T… ref                          1                      1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> SKIN AND SUBCUTANEOUS T… dif                          0                      0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> SKIN AND SUBCUTANEOUS T… low                          0                      0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> SKIN AND SUBCUTANEOUS T… high                         0                      0</span></code></pre></div>
 <p>Instead of playing around with lists, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> is most advantageous if you’d like to extract out some data specifically. Let’s say that you’d like to see just the difference values from the Preferred Term layer in the table above.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span>
+<span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span>
   <span class="fu"><a href="../reference/get_stats_data.html">get_stats_data</a></span><span class="op">(</span><span class="va">t</span>, layer<span class="op">=</span><span class="st">'PreferredTerm'</span>, statistic<span class="op">=</span><span class="st">'riskdiff'</span>, where<span class="op">=</span> <span class="va">measure</span> <span class="op">==</span> <span class="st">"dif"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -921,11 +920,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -933,6 +934,8 @@
 
   
 
+
+  
 
   </body>
 </html>

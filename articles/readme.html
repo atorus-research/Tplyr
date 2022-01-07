@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Tplyr.html">Get started</a>
 </li>
@@ -74,12 +70,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="../articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="../articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="../articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -114,7 +113,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -135,16 +134,16 @@
       <h1 data-toc-skip>README</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/readme.Rmd"><code>vignettes/readme.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/readme.Rmd" class="external-link"><code>vignettes/readme.Rmd</code></a></small>
       <div class="hidden name"><code>readme.Rmd</code></div>
 
     </div>
 
     
     
-<div id="tplyr-version-0-1-1" class="section level1">
-<h1 class="hasAnchor">
-<a href="#tplyr-version-0-1-1" class="anchor"></a>Tplyr Version 0.1.1</h1>
+<div class="section level1">
+<h1 id="tplyr-version-0-1-1">Tplyr Version 0.1.1<a class="anchor" aria-label="anchor" href="#tplyr-version-0-1-1"></a>
+</h1>
 <p>Welcome to Tplyr! This is the first full and stable release of our package. With this release comes a number of new enhancements, loads of new documentation, and our complete package qualification document.</p>
 <p>If you’ve been keeping up, here are the things that we’ve added since the Beta release in July:</p>
 <ul>
@@ -168,19 +167,19 @@
 </ul>
 </li>
 </ul>
-<p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues">here</a>.</p>
+<p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues" class="external-link">here</a>.</p>
 </div>
-<div id="what-is-tplyr" class="section level1">
-<h1 class="hasAnchor">
-<a href="#what-is-tplyr" class="anchor"></a>What is Tplyr?</h1>
-<p><a href="https://dplyr.tidyverse.org/">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
+<div class="section level1">
+<h1 id="what-is-tplyr">What is Tplyr?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
+</h1>
+<p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
 <p><code>Tplyr</code> is designed around a similar concept, but its focus is on building summary tables within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
 <ul>
 <li>Counting for event based variables or categories</li>
 <li>Shifting, which is just counting a change in state with a ‘from’ and a ‘to’</li>
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
-<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
+<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
 <div class="figure">
 <img src="demo_table.png" alt=""><p class="caption">Demographics Table</p>
 </div>
@@ -194,34 +193,34 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://www.cdisc.org/sdtmadam-pilot-project" class="external-link">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 9 × 8</span>
-<span class="co">#&gt;   row_label1           row_label2 var1_Placebo   `var1_Xanomelin… `var1_Xanomelin…</span>
-<span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 Age (years)          n          " 86"          " 84"            " 84"           </span>
-<span class="co">#&gt; 2 Age (years)          Mean (SD)  "75.2 ( 8.59)" "74.4 ( 7.89)"   "75.7 ( 8.29)"  </span>
-<span class="co">#&gt; 3 Age (years)          Median     "76.0"         "76.0"           "77.5"          </span>
-<span class="co">#&gt; 4 Age (years)          Q1, Q3     "69.2, 81.8"   "70.8, 80.0"     "71.0, 82.0"    </span>
-<span class="co">#&gt; 5 Age (years)          Min, Max   "52, 89"       "56, 88"         "51, 88"        </span>
-<span class="co">#&gt; 6 Age (years)          Missing    "  0"          "  0"            "  0"           </span>
-<span class="co">#&gt; 7 Age Categories n (%) &lt;65        "14 ( 16.3%)"  "11 ( 13.1%)"    " 8 (  9.5%)"   </span>
-<span class="co">#&gt; 8 Age Categories n (%) &gt;80        "30 ( 34.9%)"  "18 ( 21.4%)"    "29 ( 34.5%)"   </span>
-<span class="co">#&gt; 9 Age Categories n (%) 65-80      "42 ( 48.8%)"  "55 ( 65.5%)"    "47 ( 56.0%)"   </span>
-<span class="co">#&gt; # … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span>
-<span class="co">#&gt; #   ord_layer_2 &lt;dbl&gt;</span></code></pre></div>
-<div id="the-tldr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-tldr" class="anchor"></a>The TL;DR</h2>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 8</span></span>
+<span class="co">#&gt;   row_label1           row_label2 var1_Placebo `var1_Xanomelin… `var1_Xanomelin…</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Age (years)          n          <span style="color: #949494;">"</span> 86<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span> 84<span style="color: #949494;">"</span>            <span style="color: #949494;">"</span> 84<span style="color: #949494;">"</span>           </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Age (years)          Mean (SD)  <span style="color: #949494;">"</span>75.2 ( 8.5… <span style="color: #949494;">"</span>74.4 ( 7.89)<span style="color: #949494;">"</span>   <span style="color: #949494;">"</span>75.7 ( 8.29)<span style="color: #949494;">"</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Age (years)          Median     <span style="color: #949494;">"</span>76.0<span style="color: #949494;">"</span>       <span style="color: #949494;">"</span>76.0<span style="color: #949494;">"</span>           <span style="color: #949494;">"</span>77.5<span style="color: #949494;">"</span>          </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Age (years)          Q1, Q3     <span style="color: #949494;">"</span>69.2, 81.8<span style="color: #949494;">"</span> <span style="color: #949494;">"</span>70.8, 80.0<span style="color: #949494;">"</span>     <span style="color: #949494;">"</span>71.0, 82.0<span style="color: #949494;">"</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Age (years)          Min, Max   <span style="color: #949494;">"</span>52, 89<span style="color: #949494;">"</span>     <span style="color: #949494;">"</span>56, 88<span style="color: #949494;">"</span>         <span style="color: #949494;">"</span>51, 88<span style="color: #949494;">"</span>        </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Age (years)          Missing    <span style="color: #949494;">"</span>  0<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>  0<span style="color: #949494;">"</span>            <span style="color: #949494;">"</span>  0<span style="color: #949494;">"</span>           </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span> Age Categories n (%) &lt;65        <span style="color: #949494;">"</span>14 ( 16.3%… <span style="color: #949494;">"</span>11 ( 13.1%)<span style="color: #949494;">"</span>    <span style="color: #949494;">"</span> 8 (  9.5%)<span style="color: #949494;">"</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">8</span> Age Categories n (%) &gt;80        <span style="color: #949494;">"</span>30 ( 34.9%… <span style="color: #949494;">"</span>18 ( 21.4%)<span style="color: #949494;">"</span>    <span style="color: #949494;">"</span>29 ( 34.5%)<span style="color: #949494;">"</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">9</span> Age Categories n (%) 65-80      <span style="color: #949494;">"</span>42 ( 48.8%… <span style="color: #949494;">"</span>55 ( 65.5%)<span style="color: #949494;">"</span>    <span style="color: #949494;">"</span>47 ( 56.0%)<span style="color: #949494;">"</span>   </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   ord_layer_2 &lt;dbl&gt;</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="the-tldr">The TL;DR<a class="anchor" aria-label="anchor" href="#the-tldr"></a>
+</h2>
 <p>Here are some of the high level benefits of using <code>Tplyr</code>:</p>
 <ul>
 <li>Easy construction of table data using an intuitive syntax</li>
@@ -230,9 +229,9 @@
 <li>Extensibility (in the future…) - we’re going to open doors to allow you some level of customization.</li>
 </ul>
 </div>
-<div id="where-next" class="section level2">
-<h2 class="hasAnchor">
-<a href="#where-next" class="anchor"></a>Where Next</h2>
+<div class="section level2">
+<h2 id="where-next">Where Next<a class="anchor" aria-label="anchor" href="#where-next"></a>
+</h2>
 <p><tbd></tbd></p>
 </div>
 </div>
@@ -249,11 +248,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -261,6 +262,8 @@
 
   
 
+
+  
 
   </body>
 </html>
