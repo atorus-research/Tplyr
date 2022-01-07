@@ -73,6 +73,7 @@ reference:
   - get_numeric_data
   - get_stats_data
   - by
+  - get_by
   - get_target_var
   - treat_var
   - get_where.tplyr_layer

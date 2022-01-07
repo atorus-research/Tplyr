@@ -131,7 +131,7 @@ Shift layers sort very similarly to count layers, but to order your row
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4</span>
       </span>
     </div>
 
@@ -261,7 +261,7 @@ Shift layers sort very similarly to count layers, but to order your row
   shift variable, use an ordered factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>order_count_method</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>set_order_count_method</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>order_count_method</span>, break_ties <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>set_ordering_cols</span><span class='op'>(</span><span class='va'>e</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -279,6 +279,14 @@ Shift layers sort very similarly to count layers, but to order your row
       <td><p>The logic determining how the rows in the final
 layer output will be indexed. Options are 'bycount', 'byfactor', and
 'byvarn'.</p></td>
+    </tr>
+    <tr>
+      <th>break_ties</th>
+      <td><p>In certain cases, a 'bycount' sort will result in conflicts
+if the counts aren't unique. break_ties will add a decimal to the sorting
+column so resolve conflicts. A character value of 'asc' will add a decimal
+based on the alphabetical sorting. 'desc' will do the same
+but sort descending in case that is the intention.</p></td>
     </tr>
     <tr>
       <th>...</th>
