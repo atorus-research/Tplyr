@@ -336,8 +336,7 @@ process_count_distinct_n <- function(x) {
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!target_var, !!!cols) %>%
       tally(name = "distinct_n") %>%
-      ungroup() #%>%
-      #complete(!!!denoms_by, !!!target_var, fill = list(distinct_n = 0))
+      ungroup()
 
     if(!is.null(missing_count_string) &&
 
@@ -358,7 +357,6 @@ process_count_distinct_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      #mutate(!!as_label(target_var[[1]]) := as_name(target_var[[1]])) %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df, denoms_distinct_df, "distinct_n")) %>%
       ungroup() %>%
