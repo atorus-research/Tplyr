@@ -154,9 +154,9 @@
 <li>Set up your RTF output with ‘pharmaRTF’</li>
 </ul>
 <p>Let’s build a demographics table to see how this all works.</p>
-<div class="section level2">
-<h2 id="preparing-the-data">Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="preparing-the-data">Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
@@ -898,9 +898,9 @@ Missing
 <li>The second pre-processing step does something interesting. If you recall from <code><a href="../articles/sort.html">vignette("sort")</a></code>, factor variables input to ‘Tplyr’ will use the factor order for the resulting order variable. Another particularly useful advantage of this is dummying values. The adsl dataset only contains the races “WHITE”, “BLACK OR AFRICAN AMERICAN”, and “AMERICAN INDIAN OR ALASK NATIVE”. If you set factor levels prior to entering the data into ‘Tplyr’, the values will be dummied for you. This is particularly advantageous when a study is early on and data may be sparse. Your output can display complete values and the presentation will be consistent as data come in.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="sorting-column-ordering-column-headers-and-clean-up">Sorting, Column Ordering, Column Headers, and Clean-up<a class="anchor" aria-label="anchor" href="#sorting-column-ordering-column-headers-and-clean-up"></a>
-</h2>
+<div class="section level3">
+<h3 id="sorting-column-ordering-column-headers-and-clean-up">Sorting, Column Ordering, Column Headers, and Clean-up<a class="anchor" aria-label="anchor" href="#sorting-column-ordering-column-headers-and-clean-up"></a>
+</h3>
 <p>Now that we have our data, let’s make sure it’s in the right order. Additionally, let’s clean the data up so it’s ready to present.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -1476,9 +1476,9 @@ Missing
 <li>Added the column headers. In a huxtable, your column headers are basically just the top rows of your data frame. The ‘Tplyr’ function <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just enter in a string to define your headers. But there’s more to it - you can also create nested headers by nesting text within curly brackets ({}), and notice that we have the treatment groups within the two stars? This actually allows you to take the header N values that ‘Tplyr’ calculates for you, and use it within the column headers. As you can see in the first row of the output, the text shows the (N=XX) values populated with the proper header_n counts.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="table-styling">Table Styling<a class="anchor" aria-label="anchor" href="#table-styling"></a>
-</h2>
+<div class="section level3">
+<h3 id="table-styling">Table Styling<a class="anchor" aria-label="anchor" href="#table-styling"></a>
+</h3>
 <p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/" class="external-link">‘gt’</a> package is always a good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/" class="external-link">‘kableExtra’</a> throughout these vignettes. At the moment, with the tools we’ve made available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/" class="external-link">‘huxtable’</a> and our package <a href="https://github.com/atorus-research/pharmaRTF" class="external-link">‘pharmaRTF’</a> will get you where you need to go.</p>
 <p><em>(Note: We plan to extend ‘pharmaRTF’ to support ‘GT’ when it has better RTF support)</em></p>
 <p>Alright - so the table is ready. Let’s prepare the ‘huxtable’ table.</p>
@@ -1735,9 +1735,9 @@ Missing
 </tr>
 </table>
 </div>
-<div class="section level1">
-<h1 id="output-to-file">Output to File<a class="anchor" aria-label="anchor" href="#output-to-file"></a>
-</h1>
+<div class="section level2">
+<h2 id="output-to-file">Output to File<a class="anchor" aria-label="anchor" href="#output-to-file"></a>
+</h2>
 <p>So now this is starting to look a lot more like what we’re going for! The table styling is coming together. The last step is to get it into a final output document. So here we’ll jump into ‘pharmaRTF’</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/rtf_doc.html" class="external-link">rtf_doc</a></span><span class="op">(</span><span class="va">ht</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -1779,7 +1779,7 @@ Missing
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

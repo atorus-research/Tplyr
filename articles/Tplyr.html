@@ -141,15 +141,15 @@
 
     
     
-<div class="section level1">
-<h1 id="how-tplyr-works">How ‘Tplyr’ Works<a class="anchor" aria-label="anchor" href="#how-tplyr-works"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-tplyr-works">How ‘Tplyr’ Works<a class="anchor" aria-label="anchor" href="#how-tplyr-works"></a>
+</h2>
 <p>When you look at a summary table within a clinical report, you can often break it down into some basic pieces. Consider this output.</p>
 <p><img src="demo_table.png"></p>
 <p>Different variables are being summarized in chunks of the table, which we refer to as “layers”. Additionally, this table really only contains a few different types of summaries, which makes many of the calculations rather redundant. This drives the motivation behind ‘Tplyr’. The containing table is encapsulated within the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object, and each section, or “layer”, within the summary table can be broken down into a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> object.</p>
-<div class="section level2">
-<h2 id="the-tplyr_table-object">The <code>tplyr_table()</code> Object<a class="anchor" aria-label="anchor" href="#the-tplyr_table-object"></a>
-</h2>
+<div class="section level3">
+<h3 id="the-tplyr_table-object">The <code>tplyr_table()</code> Object<a class="anchor" aria-label="anchor" href="#the-tplyr_table-object"></a>
+</h3>
 <p>The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object is the conceptual “table” that contains all of the logic necessary to construct and display the data. ‘Tplyr’ tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.</p>
 <p>When a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> is created, it will contain the following bindings:</p>
 <ul>
@@ -197,9 +197,9 @@
 <span class="co">#&gt; Number of layer(s): 0</span>
 <span class="co">#&gt; layer_output: 0</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="the-tplyr_layer-object">The <code>tplyr_layer</code> Object<a class="anchor" aria-label="anchor" href="#the-tplyr_layer-object"></a>
-</h2>
+<div class="section level3">
+<h3 id="the-tplyr_layer-object">The <code>tplyr_layer</code> Object<a class="anchor" aria-label="anchor" href="#the-tplyr_layer-object"></a>
+</h3>
 <p>Users of ‘Tplyr’ interface with <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> objects using the <code>group_&lt;type&gt;</code> family of functions. This family specifies the type of summary that is to be performed within a layer. <code>count</code> layers are used to create summary counts of some discrete variable. <code>shift</code> layers summarize the counts for different changes in states. Lastly, <code>desc</code> layers create descriptive statistics.</p>
 <ul>
 <li>
@@ -225,8 +225,8 @@
 <code class="sourceCode R"><span class="va">cnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGEGR1</span><span class="op">)</span>
 <span class="va">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x7fdf6cc842a0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fdf6ca51638 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x7fa44be4b700 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fa44bb47498 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
@@ -236,8 +236,8 @@
 <span class="va">dsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGE</span><span class="op">)</span>
 <span class="va">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x7fdf6cda4e68 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fdf6ca51638 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x7fa44bf721d8 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fa44bb47498 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
@@ -247,8 +247,8 @@
 <span class="va">shf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/layer_constructors.html">group_shift</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span>row<span class="op">=</span><span class="va">COMP8FL</span>, column<span class="op">=</span><span class="va">COMP24FL</span><span class="op">)</span><span class="op">)</span>
 <span class="va">shf</span>
 <span class="co">#&gt; *** shift_layer ***</span>
-<span class="co">#&gt; Self:  shift_layer &lt; 0x7fdf6ce93f00 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fdf6ca51638 &gt;</span>
+<span class="co">#&gt; Self:  shift_layer &lt; 0x7fa44c06a070 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x7fa44bb47498 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  COMP8FL</span>
 <span class="co">#&gt;  COMP24FL</span>
@@ -256,9 +256,9 @@
 <span class="co">#&gt; where: TRUE</span>
 <span class="co">#&gt; Layer(s): 0</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="adding-layers-to-a-table">Adding Layers to a Table<a class="anchor" aria-label="anchor" href="#adding-layers-to-a-table"></a>
-</h2>
+<div class="section level3">
+<h3 id="adding-layers-to-a-table">Adding Layers to a Table<a class="anchor" aria-label="anchor" href="#adding-layers-to-a-table"></a>
+</h3>
 <p>Everyone has their own style of coding - so we’ve tried to be flexible to an extent. Overall, ‘Tplyr’ is built around tidy syntax, so all of our object construction supports piping with <a href="https://magrittr.tidyverse.org/articles/magrittr.html" class="external-link"><code>magrittr</code></a> (i.e. <code>%&gt;%</code>).</p>
 <p>There are two ways to add layers to a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>: <code><a href="../reference/layer_attachment.html">add_layer()</a></code> and <code><a href="../reference/layer_attachment.html">add_layers()</a></code>. The difference is that <code><a href="../reference/layer_attachment.html">add_layer()</a></code> allows you to construct the layer within the call to <code><a href="../reference/layer_attachment.html">add_layer()</a></code>, whereas with <code><a href="../reference/layer_attachment.html">add_layers()</a></code> you can attach multiple layers that have already been constructed upfront:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -283,9 +283,9 @@
 
 <span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/layer_attachment.html">add_layers</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">l1</span>, <span class="va">l2</span><span class="op">)</span></code></pre></div>
 <p>Notice that when you construct the layers separately, you need to specify the table to which they belong. <code><a href="../reference/layer_attachment.html">add_layer()</a></code> does this automatically. <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> and <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> objects are built on environments, and the parent/child relationships are very important. This is why, even though the layer knows who its table parent is, the layers still need to be attached to the table (as the table doesn’t know who its children are). <a href="https://adv-r.hadley.nz/environments.html" class="external-link">Advanced R</a> does a very good job at explaining what environments in R are, their benefits, and how to use them.</p>
-<div class="section level3">
-<h3 id="a-note-before-we-go-deeper">A Note Before We Go Deeper<a class="anchor" aria-label="anchor" href="#a-note-before-we-go-deeper"></a>
-</h3>
+<div class="section level4">
+<h4 id="a-note-before-we-go-deeper">A Note Before We Go Deeper<a class="anchor" aria-label="anchor" href="#a-note-before-we-go-deeper"></a>
+</h4>
 <p>Notice that when you construct a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> or a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> that what displays is a summary of information about the table or layer? That’s because when you create these objects - it constructs the metadata, but does not process the actual data. This allows you to construct and make sure the pieces of your table fit together before you do the data processing - and it gives you a container to hold all of this metadata, and use it later if necessary.</p>
 <p>To generate the data from a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object, you use the function <code><a href="../reference/build.html">build()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -437,13 +437,13 @@
 <p>By storing pertinent information, you can get more out of a ‘Tplyr’ object than processed data for display. And by specifying when you want to get data out of ‘Tplyr’, we can save you from repeatedly processing data while your constructing your outputs - which is particularly useful when that computation starts taking time.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="constructing-layers">Constructing Layers<a class="anchor" aria-label="anchor" href="#constructing-layers"></a>
-</h2>
-<p>The bulk of ‘Tplyr’ coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it’s important to discuss how ‘Tplyr’ handles string formatting.</p>
 <div class="section level3">
-<h3 id="string-formatting-in-tplyr">String Formatting in ‘Tplyr’<a class="anchor" aria-label="anchor" href="#string-formatting-in-tplyr"></a>
+<h3 id="constructing-layers">Constructing Layers<a class="anchor" aria-label="anchor" href="#constructing-layers"></a>
 </h3>
+<p>The bulk of ‘Tplyr’ coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it’s important to discuss how ‘Tplyr’ handles string formatting.</p>
+<div class="section level4">
+<h4 id="string-formatting-in-tplyr">String Formatting in ‘Tplyr’<a class="anchor" aria-label="anchor" href="#string-formatting-in-tplyr"></a>
+</h4>
 <p>String formatting in ‘Tplyr’ is controlled by an object called an <code><a href="../reference/f_str.html">f_str()</a></code>, which is also the name of function you use to create these formats. To set these format strings into a <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code>, you use the function <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>, and this usage varies slightly between layer types (which is covered in other vignettes).</p>
 <p>So - why is this object necessary. Consider this example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -729,12 +729,12 @@
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="layer-types">Layer Types<a class="anchor" aria-label="anchor" href="#layer-types"></a>
-</h1>
 <div class="section level2">
-<h2 id="descriptive-statistic-layers">Descriptive Statistic Layers<a class="anchor" aria-label="anchor" href="#descriptive-statistic-layers"></a>
+<h2 id="layer-types">Layer Types<a class="anchor" aria-label="anchor" href="#layer-types"></a>
 </h2>
+<div class="section level3">
+<h3 id="descriptive-statistic-layers">Descriptive Statistic Layers<a class="anchor" aria-label="anchor" href="#descriptive-statistic-layers"></a>
+</h3>
 <p>As covered under string formatting, <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> controls a great deal of what happens within a descriptive statistics layer. Note that there are some built in defaults to what’s output:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -992,9 +992,9 @@
 </table>
 <p>‘Tplyr’ summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code> - in any situation where you’d like to use multiple variable names in a parameter, use <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code> to specify the variables. You can use text strings in the calls to <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code> as well.</p>
 </div>
-<div class="section level2">
-<h2 id="count-layers">Count Layers<a class="anchor" aria-label="anchor" href="#count-layers"></a>
-</h2>
+<div class="section level3">
+<h3 id="count-layers">Count Layers<a class="anchor" aria-label="anchor" href="#count-layers"></a>
+</h3>
 <p>Count layers generally allow you to create “n” and “n (%)” count type summaries. There are a few extra features here as well. Let’s say that you want a total row within your counts. This can be done with <code><a href="../reference/add_total_row.html">add_total_row()</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -1200,9 +1200,9 @@
 </table>
 <p>Here we again use <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code> to specify multiple target variables. When used in a count layer, ‘Tplyr’ knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.</p>
 </div>
-<div class="section level2">
-<h2 id="shift-layers">Shift Layers<a class="anchor" aria-label="anchor" href="#shift-layers"></a>
-</h2>
+<div class="section level3">
+<h3 id="shift-layers">Shift Layers<a class="anchor" aria-label="anchor" href="#shift-layers"></a>
+</h3>
 <p>Lastly, let’s talk about shift layers. A common example of this would be looking at a subject’s lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in ‘Tplyr’ is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let’s look at an example.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Tplyr can use factor orders to dummy values and order presentation</span>
@@ -1303,9 +1303,9 @@
 <p>The underlying process of shift tables is the same as count layers - we’re counting the number of occurrences of something by a set of grouping variables. This differs in that ‘Tplyr’ uses the <code><a href="../reference/layer_constructors.html">group_shift()</a></code> API to use the same basic interface as other tables, but translate your target variables into the row variable and the column variable. Furthermore, there is some enhanced control over how denominators should behave that is necessary for a shift layer.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="where-to-go-from-here">Where to go from here?<a class="anchor" aria-label="anchor" href="#where-to-go-from-here"></a>
-</h1>
+<div class="section level2">
+<h2 id="where-to-go-from-here">Where to go from here?<a class="anchor" aria-label="anchor" href="#where-to-go-from-here"></a>
+</h2>
 <p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of ‘Tplyr’.</p>
 <ul>
 <li>Learn more about table level settings in <code><a href="../articles/table.html">vignette("table")</a></code>
@@ -1326,9 +1326,9 @@
 </li>
 </ul>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>In building ‘Tplyr’, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf" class="external-link">Analysis and Displays Associated with Adverse Events</a></p>
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
@@ -1353,7 +1353,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

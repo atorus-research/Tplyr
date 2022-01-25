@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
@@ -13,5 +13,5 @@ articles:
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2022-01-07T18:32Z
+last_built: 2022-01-25T18:30Z
 
