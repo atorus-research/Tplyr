@@ -169,6 +169,7 @@ process_shift_denoms <- function(x) {
       filter(!!denom_where) %>%
       group_by(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
       summarize(n = n()) %>%
+      ungroup() %>%
       complete(!!!unname(target_var), !!treat_var, !!!by, !!!cols) %>%
       # The rows will duplicate for some reason so this removes that
       distinct() %>%
