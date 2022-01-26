@@ -57,3 +57,4 @@ Suggests:
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2
 RdMacros: lifecycle
+Config/testthat/edition: 3

@@ -1,14 +1,13 @@
-context('format.R')
 
 test_that("Format string must be character", {
-  expect_error(f_str(123)) # Need to come back to issues with assert_has_class to address the fact that
+  expect_snapshot_error(f_str(123)) # Need to come back to issues with assert_has_class to address the fact that
   # error messages don't work in testthat
 })
 
 # Errors are generated when too few or too many variables
 test_that("Error is thrown when format doesn't match variables", {
-  expect_error(f_str("xx.x xx.x", a), "In `f_str` 2 formats were entered")
-  expect_error(f_str("xx.x", a, b), "In `f_str` 1 formats were entered")
+  expect_snapshot_error(f_str("xx.x xx.x", a))
+  expect_snapshot_error(f_str("xx.x", a, b))
 })
 
 # Variables are picked up appropriately

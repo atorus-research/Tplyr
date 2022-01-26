@@ -113,7 +113,7 @@ test_that("all test tables can be built without errors or warnings", {
   expect_silent(build(t4))
   expect_silent(build(t5))
   expect_silent(suppressWarnings(build(t6))) # This seems to be a bug https://github.com/tidyverse/dplyr/issues/5149
-  expect_error(build(t7), "object 'col_i' not found")
+  expect_snapshot_error(build(t7))
 })
 
 test_that("all tables have the expected dimentions", {

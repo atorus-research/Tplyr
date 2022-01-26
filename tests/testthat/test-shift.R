@@ -81,5 +81,5 @@ test_that("Shift layer clauses with invalid syntax give informative error", {
       group_shift(vars(row=vs, column=am), where=bad == code)
     )
 
-  expect_error(build(t), "group_shift `where` condition `bad == code` is invalid.")
+  expect_snapshot_error(build(t))
 })

@@ -7,22 +7,22 @@ test_that("pop_data binding attaches pop_data properly", {
   tab <- tplyr_table(df, a)
 
   # Changed to equivalent due to attribute change in constructor.
-  expect_equivalent(pop_data(tab), df)
+  expect_equal(pop_data(tab), df, ignore_attr = TRUE)
 
   pop_data(tab) <- iris
-  expect_equivalent(pop_data(tab), iris)
+  expect_equal(pop_data(tab), iris, ignore_attr = TRUE)
 
   tab <- set_pop_data(tab , mtcars)
-  expect_equivalent(pop_data(tab), mtcars)
+  expect_equal(pop_data(tab), mtcars, ignore_attr = TRUE)
 })
 
 test_that("pop_data binding throws expected errors", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
-  expect_error(pop_data(tab) <- "a", "'pop_data' argument passed")
-  expect_error(pop_data(tab) <- iris3, "'pop_data' argument passed")
-  expect_error(pop_data(tab) <- NA, "'pop_data' argument passed")
-  expect_error(pop_data(tab) <- NULL, "'pop_data' argument passed")
+  expect_snapshot_error(pop_data(tab) <- "a")
+  expect_snapshot_error(pop_data(tab) <- iris3)
+  expect_snapshot_error(pop_data(tab) <- NA)
+  expect_snapshot_error(pop_data(tab) <- NULL)
   expect_silent(pop_data(tab) <- iris)
 })
 
@@ -39,9 +39,9 @@ test_that("treat_var binding attaches treat_var properly", {
 test_that("treat_var throws errors as expected", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
 
-  expect_error(set_treat_var(tab, c),"treat_var column not found in target dataset")
-  expect_error(set_treat_var(tab, A), "treat_var column not found in target dataset")
-  expect_error(set_treat_var(tab), "A treat_var argument must be supplied")
+  expect_snapshot_error(set_treat_var(tab, c))
+  expect_snapshot_error(set_treat_var(tab, A))
+  expect_snapshot_error(set_treat_var(tab))
   expect_silent(set_treat_var(tab, b))
 })
 
@@ -60,9 +60,9 @@ test_that("pop_treat_var throws errors as expected", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a) %>%
     set_pop_data(data.frame(d = 21:30))
 
-  expect_error(set_pop_treat_var(tab, a), "pop_treat_var passed to tplyr_table is not a column of pop_data")
-  expect_error(set_pop_treat_var(tab, A), "pop_treat_var passed to tplyr_table is not a column of pop_data")
-  expect_error(set_pop_treat_var(tab), "pop_treat_var passed to tplyr_table is not a column of pop_data")
+  expect_snapshot_error(set_pop_treat_var(tab, a))
+  expect_snapshot_error(set_pop_treat_var(tab, A))
+  expect_snapshot_error(set_pop_treat_var(tab))
   expect_silent(set_pop_treat_var(tab, d))
 })
 

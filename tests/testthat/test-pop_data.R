@@ -5,16 +5,16 @@ test_that("add_treat_grps errors function properly", {
   t <- tplyr_table(mtcars, gear)
 
   # Must be named
-  expect_error(add_treat_grps(t, c("blah", "bloh")), "Treatment group arguments must have names")
+  expect_snapshot_error(add_treat_grps(t, c("blah", "bloh")))
 
   # Must attach to tplyr_table
   l <- group_count(t, am)
-  expect_error(add_treat_grps(l, "one" = c(1,2,3)), msg = "Treatment groups can only be added to `tplyr_table` objects")
+  expect_snapshot_error(add_treat_grps(l, "one" = c(1,2,3)))
 })
 
 test_that("add_total_group errors function properly", {
   t <- tplyr_table(mtcars, gear)
-  expect_error(add_total_group(t, 1), msg = "Argument `group_name` in function `add_total_group` must be character")
+  expect_snapshot_error(add_total_group(t, 1))
 })
 
 test_that("add_total_group adds treat_grps bindings properly", {

@@ -1,4 +1,3 @@
-context('zzz.R')
 
 # Store the default options
 

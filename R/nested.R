@@ -82,7 +82,7 @@ filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, in
   if(text_outer) {
     lvs <- levels(target[[inner_name]])
     target_inner_values <- target %>%
-      select(inner_name) %>%
+      select(any_of(inner_name)) %>%
       unlist() %>%
       c(lvs) %>%
       unique() %>%
@@ -93,7 +93,7 @@ filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, in
 
     target_inner_values <- target %>%
       filter(!!sym(outer_name) == current_outer_value) %>%
-      select(inner_name) %>%
+      select(any_of(inner_name)) %>%
       unlist() %>%
       paste0(indentation, .)
   }

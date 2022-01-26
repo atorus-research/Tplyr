@@ -1,4 +1,3 @@
-context('precision.R')
 
 mtcars_long <- mtcars %>%
   rownames_to_column(var = "model") %>%

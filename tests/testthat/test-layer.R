@@ -1,8 +1,7 @@
-context("layer.R")
 
 ## Check empty return ----
 test_that("`tplyr_layer` errors when no arguments provided", {
-  expect_error(tplyr_layer(),  "The `parent` argument must be provided.")
+  expect_snapshot_error(tplyr_layer())
 
 })
 
@@ -52,18 +51,14 @@ test_that("type field can only contain one of 'count', 'desc', or 'shift'", {
   expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='count'))
   expect_silent(tplyr_layer(t, target_var=quos(Sepal.Length), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='desc'))
   expect_silent(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type='shift'))
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('shift', 'desc')),
-                '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc')),
-               '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc', 'shift')),
-               '`type` must be one of "count", "desc", or "shift"')
-  expect_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type="bad"),
-               '`type` must be one of "count", "desc", or "shift"')
+  expect_snapshot_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('shift', 'desc')))
+  expect_snapshot_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc')))
+  expect_snapshot_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type=c('count', 'desc', 'shift')))
+  expect_snapshot_error(tplyr_layer(t, target_var=quos(Species), by=quos(NULL), cols=quos(NULL), where=quo(TRUE), type="bad"))
 })
 
 test_that("Parent must be a `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer`", {
-  expect_error(group_count(env()), "Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.")
+  expect_snapshot_error(group_count(env()))
 })
 
 test_that("`by` must me a string, a variable name, or multiple variables submitted using `dplyr::vars`", {
@@ -73,12 +68,12 @@ test_that("`by` must me a string, a variable name, or multiple variables submitt
   expect_silent(group_count(t, target_var=Species, by=Petal.Width))
   expect_silent(group_count(t, target_var=Species, by=vars('character', Petal.Width)))
   # Error checks
-  err = "Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."
-  expect_error(group_count(t, target_var=Species, by=1), err)
-  expect_error(group_count(t, target_var=Species, by=list('a', 'b')), err)
-  expect_error(group_count(t, target_var=Species, by=c('a', 'b')), err)
-  expect_error(group_count(t, target_var=Species, by=vars('character', Petal.Width, 1)), err)
-  expect_error(group_count(t, target_var=Species, by=vars('character', Petal.Width, x+y)), err)
+
+  expect_snapshot_error(group_count(t, target_var=Species, by=1))
+  expect_snapshot_error(group_count(t, target_var=Species, by=list('a', 'b')))
+  expect_snapshot_error(group_count(t, target_var=Species, by=c('a', 'b')))
+  expect_snapshot_error(group_count(t, target_var=Species, by=vars('character', Petal.Width, 1)))
+  expect_snapshot_error(group_count(t, target_var=Species, by=vars('character', Petal.Width, x+y)))
 })
 
 test_that("`target_var` must me a string, a variable name, or multiple variables submitted using `dplyr::vars`", {
@@ -87,12 +82,11 @@ test_that("`target_var` must me a string, a variable name, or multiple variables
   expect_silent(group_count(t, target_var=Species))
   expect_silent(group_count(t, target_var=vars(Petal.Width, Petal.Length)))
   # Error checks
-  err = "Submit either a string, a variable name, or multiple variable names using `dplyr::vars`."
-  expect_error(group_count(t, target_var=1), err)
-  expect_error(group_count(t, target_var=list('a', 'b')), err)
-  expect_error(group_count(t, target_var=c('a', 'b')), err)
-  expect_error(group_count(t, target_var=vars('character', Petal.Width, 1)), err)
-  expect_error(group_count(t, target_var=vars('character', Petal.Width, x+y)), err)
+  expect_snapshot_error(group_count(t, target_var=1))
+  expect_snapshot_error(group_count(t, target_var=list('a', 'b')))
+  expect_snapshot_error(group_count(t, target_var=c('a', 'b')))
+  expect_snapshot_error(group_count(t, target_var=vars('character', Petal.Width, 1)))
+  expect_snapshot_error(group_count(t, target_var=vars('character', Petal.Width, x+y)))
 })
 
 
@@ -101,23 +95,20 @@ test_that("`target_var` must exist in target dataset", {
   # Variable exists
   expect_silent(group_count(t, target_var=Species))
   # Variable does not
-  expect_error(group_count(t, target_var=BadVar), "`target_var` variable `BadVar` does not exist in target dataset")
-  expect_error(group_count(t, target_var=vars(Species, BadVar)), "`target_var` variable `BadVar` does not exist in target dataset")
+  expect_snapshot_error(group_count(t, target_var=BadVar))
+  expect_snapshot_error(group_count(t, target_var=vars(Species, BadVar)))
 })
 
 test_that("`by` varaibles must exist in the target dataset", {
   t <- tplyr_table(iris, Sepal.Width)
-  expect_error(group_count(t, target_var=Species, by=BadVars),
-               "`by` variable `BadVars` does not exist in target dataset")
-  expect_error(group_count(t, target_var=Species, by=vars(Species, BadVars)),
-               "`by` variable `BadVars` does not exist in target dataset")
+  expect_snapshot_error(group_count(t, target_var=Species, by=BadVars))
+  expect_snapshot_error(group_count(t, target_var=Species, by=vars(Species, BadVars)))
 })
 
 test_that("`where` must be programming logic (quosure of class 'call')", {
   t <- tplyr_table(iris, Sepal.Width)
   expect_silent(group_count(t, target_var=Species, where=a == b))
-  expect_error(group_count(t, target_var=Species, where=VARAIBLE),
-               "The `where` parameter")
+  expect_snapshot_error(group_count(t, target_var=Species, where=VARAIBLE))
 })
 
 ## Coded defaults ----
@@ -150,23 +141,23 @@ test_that("Parent of layer is appropraitely parent environment", {
 
 test_that("Desc layers only accept numeric variables", {
 
-  expect_error({tplyr_table(ToothGrowth, dose) %>%
+  expect_snapshot_error({tplyr_table(ToothGrowth, dose) %>%
     add_layer(
       group_desc(supp)
     )
-  }, regexp = "Target variables must be numeric for desc layers\\.")
+  })
 
-  expect_error({tplyr_table(ToothGrowth, dose) %>%
+  expect_snapshot_error({tplyr_table(ToothGrowth, dose) %>%
       add_layer(
         group_desc(vars(len, supp))
       )
-  }, regexp = "Target variables must be numeric for desc layers\\.")
+  })
 
-  expect_error({tplyr_table(ToothGrowth, dose) %>%
+  expect_snapshot_error({tplyr_table(ToothGrowth, dose) %>%
       add_layer(
         group_desc(vars(supp, len))
       )
-  }, regexp = "Target variables must be numeric for desc layers\\.")
+  })
 
 })
 

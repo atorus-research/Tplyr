@@ -141,35 +141,35 @@ test_that("Count layers are built as expected", {
                                "target_var", "precision_by", "layers",
                                "format_strings", "result_order_var", "distinct_by"))
 
-  expect_equal(c1$by, quos())
-  expect_equal(c2$by, quos(am))
-  expect_equal(c3$by, quos(am, vs))
-  expect_equal(c4$by, quos(am, vs))
-  expect_equal(c5$by, quos(am, vs))
-  expect_equal(c6$by, quos())
-  expect_equal(c7$by, quos())
-  expect_equal(c8$by, quos())
-  expect_equal(c9$by, quos())
-  expect_equal(c10$by, quos())
+  expect_equal(unname(map_chr(c1$by, as_name)), character())
+  expect_equal(unname(map_chr(c2$by, as_name)), "am")
+  expect_equal(unname(map_chr(c3$by, as_name)), c("am", "vs"))
+  expect_equal(unname(map_chr(c4$by, as_name)), c("am", "vs"))
+  expect_equal(unname(map_chr(c5$by, as_name)), c("am", "vs"))
+  expect_equal(unname(map_chr(c6$by, as_name)), character())
+  expect_equal(unname(map_chr(c7$by, as_name)), character())
+  expect_equal(unname(map_chr(c8$by, as_name)), character())
+  expect_equal(unname(map_chr(c9$by, as_name)), character())
+  expect_equal(unname(map_chr(c10$by, as_name)), character())
 
-  expect_equal(c1$target_var, quos(cyl))
-  expect_equal(c2$target_var, quos(cyl))
-  expect_equal(c3$target_var, quos(cyl))
-  expect_equal(c4$target_var, quos(cyl))
-  expect_equal(c5$target_var, quos(cyl))
-  expect_equal(c6$target_var, quos(cyl))
-  expect_equal(c7$target_var, quos(cyl, grp))
-  expect_equal(c8$target_var, quos(cyl))
-  expect_equal(c9$target_var, quos(cyl, grp))
-  expect_equal(c10$target_var, quos(cyl))
+  expect_equal(unname(map_chr(c1$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c2$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c3$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c4$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c5$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c6$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c7$target_var, as_name)), c("cyl", "grp"))
+  expect_equal(unname(map_chr(c8$target_var, as_name)), "cyl")
+  expect_equal(unname(map_chr(c9$target_var, as_name)), c("cyl", "grp"))
+  expect_equal(unname(map_chr(c10$target_var, as_name)), "cyl")
 
   expect_equal(c4$format_strings$n_counts, f_str("xxx", n))
   expect_equal(c5$include_total_row, TRUE)
-  expect_equal(c6$distinct_by, quos(cyl))
-  expect_equal(c8$distinct_by, quos(am))
+  expect_equal(unname(map_chr(c6$distinct_by, as_name)), "cyl")
+  expect_equal(unname(map_chr(c8$distinct_by, as_name)), "am")
   expect_equal(c9$indentation, "")
   expect_equal(c10$count_row_prefix, "abc")
-  expect_equal(c15$distinct_by, quos(am, vs))
+  expect_equal(unname(map_chr(c15$distinct_by, as_name)), c("am", "vs"))
 })
 
 test_that("Count layers are summarized without errors and warnings", {
@@ -326,7 +326,7 @@ test_that("Count layer clauses with invalid syntax give informative error", {
       group_count(am, where=bad == code)
     )
 
-  expect_error(build(t), "group_count `where` condition `bad == code` is invalid.")
+  expect_snapshot_error(build(t))
 })
 
 
@@ -435,15 +435,15 @@ test_that("Total rows and missing counts are displayed correctly(0.1.5 Updates)"
     build()
 
 
-  expect_output_file(dput(t1), "count_t1")
-  expect_output_file(dput(t2), "count_t2")
-  expect_output_file(dput(t3), "count_t3")
-  expect_output_file(dput(t4), "count_t4")
-  expect_output_file(dput(t5), "count_t5")
-  expect_output_file(dput(t6), "count_t6")
-  expect_output_file(dput(t7), "count_t7")
-  expect_output_file(dput(t8), "count_t8")
-  expect_output_file(dput(t9), "count_t9")
+  expect_snapshot_output(dput(t1))
+  expect_snapshot_output(dput(t2))
+  expect_snapshot_output(dput(t3))
+  expect_snapshot_output(dput(t4))
+  expect_snapshot_output(dput(t5))
+  expect_snapshot_output(dput(t6))
+  expect_snapshot_output(dput(t7))
+  expect_snapshot_output(dput(t8))
+  expect_snapshot_output(dput(t9))
 })
 
 test_that("set_denom_where works as expected", {
@@ -457,7 +457,7 @@ test_that("set_denom_where works as expected", {
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
-  expect_output_file(dput(t10), "count_t10")
+  expect_snapshot_output(dput(t10))
   t11 <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(cyl, where = cyl != 6) %>%
@@ -465,7 +465,7 @@ test_that("set_denom_where works as expected", {
         set_format_strings(f_str("xx (xx.x)", n, pct))
     ) %>%
     build()
-  expect_output_file(dput(t11), "count_t11")
+  expect_snapshot_output(dput(t11))
 
   t12 <- tplyr_table(mtcars, gear) %>%
     set_pop_data(pop_mtcars) %>%
@@ -474,7 +474,7 @@ test_that("set_denom_where works as expected", {
         set_denom_where(cyl != 6) %>%
         set_distinct_by(am)
     )
-  expect_warning(build(t12), "A `denom_where` has been set")
+  expect_snapshot_warning(build(t12))
 
   t13 <- tplyr_table(mtcars, gear) %>%
     add_layer(
@@ -485,7 +485,7 @@ test_that("set_denom_where works as expected", {
     ) %>%
     build()
 
-  expect_output_file(dput(t13), "count_t13")
+  expect_snapshot_output(dput(t13))
 })
 
 test_that("missing counts can be set without a format and it inherits the layer format", {
@@ -547,7 +547,7 @@ test_that("nested count layers can accecpt text values in the first variable", {
     add_layer(
       group_count(vars(cyl, "Txt"))
     )
-  expect_error(build(t2), "Inner layers must be data driven variables")
+  expect_snapshot_error(build(t2))
 
   mtcars$cyl <- factor(as.character(mtcars$cyl), c("4", "6", "8", "25"))
   t2 <- tplyr_table(mtcars, gear) %>%
@@ -566,17 +566,17 @@ test_that("Variable names will be coersed into symbols", {
     add_layer(
       group_count("cyl")
     )
-  expect_warning(build(t1), "The first target variable has been coerced")
+  expect_snapshot_warning(build(t1))
 
   t2 <- tplyr_table(mtcars2, gear) %>%
     add_layer(
       group_count(vars("all cyl", "cyl"))
     )
-  expect_warning(build(t2), "The second target variable has been coerced")
+  expect_snapshot_warning(build(t2))
 })
 
 test_that("nested count layers can be build with character value in first position and risk difference", {
-  expect_warning({
+  suppressWarnings({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
         group_count(vars("all_cyl", cyl)) %>%
@@ -586,7 +586,7 @@ test_that("nested count layers can be build with character value in first positi
             )
       ) %>%
       build()
-  }, "Chi-squared approximation may be incorrect")
+  })
 
 
   expect_equal(t1$rdiff_4_5, c(" 0.000 ( 0.000,  0.000)",
@@ -616,14 +616,14 @@ test_that("keep_levels works as expeceted", {
   expect_equal(t2$var1_3, c(" 12 ( 80%)", " 12 ( 80%)"))
   expect_equal(dim(t2), c(2, 8))
 
-  expect_error({
+  expect_snapshot_error({
     t3 <- tplyr_table(mtcars, gear) %>%
       add_layer(
         group_count(cyl) %>%
           keep_levels("10", "20")
       ) %>%
       build()
-  }, "Error: level passed to `kept_levels` not found: 10 20")
+  })
 
   mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
   t4 <- tplyr_table(mtcars, gear) %>%
@@ -631,7 +631,7 @@ test_that("keep_levels works as expeceted", {
       group_count(vars(cyl, grp)) %>%
         keep_levels("nothere")
     )
-  expect_error(build(t4), "level passed to `kept_levels` not found: nothere")
+  expect_snapshot_error(build(t4))
 })
 
 test_that("nested count layers can be built with restrictive where logic", {
@@ -655,13 +655,13 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
   mtcars <- mtcars2
   mtcars$grp <- paste0("grp.", mtcars$cyl + rep(c(0, 0.5), 16))
 
-  expect_error({
+  expect_snapshot_error({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
         group_count(vars(cyl,grp)) %>%
           set_denoms_by(grp)
       )
-  }, "You can not pass the second variable in")
+  })
 
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
@@ -732,8 +732,7 @@ test_that("nested count layers will error out if second variable is bigger than 
       group_count(vars(grp, cyl))
     )
 
-  expect_error(build(t),
-               "The number of values of your second variable must be greater")
+  expect_snapshot_error(build(t))
 })
 
 test_that("Posix columns don't cause the build to error out.", {

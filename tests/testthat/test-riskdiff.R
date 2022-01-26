@@ -1,4 +1,3 @@
-context("riskdiff.R")
 
 ## Initial set-up and framework exists
 test_that("A container named `stats` exists in a new layer", {
@@ -29,13 +28,13 @@ test_that("`add_risk_diff` adds an element of the correct type to the `stats` co
 test_that("`add_risk_diff` can't be applied to a non-count layer", {
 
 
-  expect_error({
+  expect_snapshot_error({
     t <- tplyr_table(mtcars, gear) %>%
       add_layer(
         group_desc(mpg) %>%
           add_risk_diff(c('5', '3'))
       )
-  }, "Risk difference can only be applied to a count layer.")
+  })
 
 })
 
@@ -45,19 +44,19 @@ test_that("Improper parameter entry is handled correctly", {
   l1 <- group_count(t, carb)
 
   # Not character
-  expect_error({
+  expect_snapshot_error({
     l1 %>% add_risk_diff(c(1,2))
-  }, "Comparisons provided must")
+  })
 
   # Not two elements
-  expect_error({
+  expect_snapshot_error({
     l1 %>% add_risk_diff(c('1', '2', '3'))
-  }, "Comparisons provided must")
+  })
 
   # Invalid arguments to prop.test
-  expect_error({
+  expect_snapshot_error({
     l1 %>% add_risk_diff(c('5', '4'), args=list(badname = 2))
-  }, "All arguments provided")
+  })
 
 })
 
@@ -146,14 +145,14 @@ test_that("Invalid name to format string call errors properly", {
   t <- tplyr_table(mtcars, gear)
 
   # Basic risk diff for two groups, using defaults
-  expect_error({
+  expect_snapshot_error({
     l1 <- group_count(t, carb) %>%
       # Compare 4 vs. 3, 5 vs. 3
       add_risk_diff(
         c('4', '3')
       ) %>%
       set_format_strings(badname = f_str('xx.xxx', dif))
-  }, "Invalid format names supplied")
+  })
 
 })
 
@@ -227,10 +226,10 @@ test_that("Make sure display values accurately reflect prop.test results", {
     c(carb_4$estimate[1], carb_4$estimate[2], carb_4$estimate[1] - carb_4$estimate[2], carb_4$conf.int[1], carb_4$conf.int[2])
   )
 
-  expect_equal(results[[1]], carb_1_res, tolerance = .000001)
-  expect_equal(results[[2]], carb_2_res, tolerance = .000001)
-  expect_equal(results[[3]], carb_3_res, tolerance = .000001)
-  expect_equal(results[[4]], carb_4_res, tolerance = .000001)
+  expect_equal(results[[2]], carb_2_res, tolerance = .00001)
+  expect_equal(results[[3]], carb_3_res, tolerance = .00001)
+  expect_equal(results[[4]], carb_4_res, tolerance = .00001)
+  expect_equal(results[[1]], carb_1_res, tolerance = .00001)
 })
 
 test_that("Distinct or non-distinct values are chosen properly", {

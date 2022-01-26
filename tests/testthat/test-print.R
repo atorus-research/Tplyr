@@ -11,26 +11,26 @@ t_ <- tplyr_table(mtcars, gear, cols = vs) %>%
 
 test_that("tplyr_table is printed as expected", {
 
-  expect_known_output(print(t_), test_path("table_print.txt"))
+  expect_snapshot_output(print(t_))
 
-  expect_known_output(str(t_), test_path("table_str.txt"))
+  expect_snapshot_output(str(t_))
 
   build(t_)
 
-  expect_known_output(print(t_), test_path("table_built_print.txt"))
+  expect_snapshot_output(print(t_))
 
-  expect_known_output(str(t_), test_path("table_built_str.txt"))
+  expect_snapshot_output(str(t_))
 
 })
 
 test_that("tplyr layers are printed as expected", {
-  expect_output_file(print(t_$layers[[1]], print_env = FALSE), test_path("layer_print.txt"))
+  expect_snapshot_output(print(t_$layers[[1]], print_env = FALSE))
 
-  expect_known_output(str(t_$layers[[1]], print_env = FALSE), test_path("layer_str.txt"))
+  expect_snapshot_output(str(t_$layers[[1]], print_env = FALSE))
 })
 
 test_that("f_str objects are printed as expected", {
-  expect_known_output(print(t_$layers[[1]]$format_strings), test_path("fstr_print.txt"))
+  expect_snapshot_output(print(t_$layers[[1]]$format_strings))
 
-  expect_known_output(str(t_$layers[[1]]$format_strings), test_path("fstr_str.txt"))
+  expect_snapshot_output(str(t_$layers[[1]]$format_strings))
 })
