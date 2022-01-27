@@ -1,6 +1,6 @@
 # Call must be quoted
 
-    `call` must be a quoted call
+    `call` must be a defused call, not a number.
 
 # By default, only `Tplyr` exported functions are allowed
 

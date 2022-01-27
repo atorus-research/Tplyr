@@ -8,5 +8,5 @@
 
 # add_total_group errors function properly
 
-    Argument `group_name` in function `add_total_group` must be character. Instead a class of "numeric" was passed.
+    Argument `group_name` must be character. Instead a class of "numeric" was passed.
 
