@@ -1,6 +1,6 @@
 # Format string must be character
 
-    Argument `format_string` must be character. Instead a class of "numeric" was passed.
+    Argument `format_string` in function `f_str` must be character. Instead a class of "numeric" was passed.
 
 # Error is thrown when format doesn't match variables
 
