@@ -1,4 +1,3 @@
-context('get_numeric.R')
 
 ## Numeric Data ----
 test_that("Error handling - numeric", {
@@ -11,12 +10,12 @@ test_that("Error handling - numeric", {
               group_count(cyl)
     )
 
-  expect_error(get_numeric_data(t, where=x==1), "If `where`")
-  expect_error(get_numeric_data(t, layer=c('drat', 'cyl'), where=x==1), "If `where`")
-  expect_error(get_numeric_data(t, layer='blah'), regexp="do\\(es\\) not exist$")
-  expect_error(get_numeric_data(t, layer=c('drat','blah')), regexp="do\\(es\\) not exist$")
-  expect_error(get_numeric_data(t, layer=10), "Provided layer index is out of range")
-  expect_error(get_numeric_data(t, layer=c(1, 10)), "Provided layer index is out of range")
+  expect_snapshot_error(get_numeric_data(t, where=x==1))
+  expect_snapshot_error(get_numeric_data(t, layer=c('drat', 'cyl'), where=x==1))
+  expect_snapshot_error(get_numeric_data(t, layer='blah'))
+  expect_snapshot_error(get_numeric_data(t, layer=c('drat','blah')))
+  expect_snapshot_error(get_numeric_data(t, layer=10))
+  expect_snapshot_error(get_numeric_data(t, layer=c(1, 10)))
 
 })
 
@@ -86,12 +85,12 @@ test_that("Error handling - statistic", {
                 add_risk_diff(c('4', '3'))
     )
 
-  expect_error(get_stats_data(t, where=x==1), "If `where`")
-  expect_error(get_stats_data(t, layer=c(1, 2), where=x==1), "If `where`")
-  expect_error(get_stats_data(t, layer='blah'), regexp="do\\(es\\) not exist$")
-  expect_error(get_stats_data(t, layer=c('am', 'blah')), regexp="do\\(es\\) not exist$")
-  expect_error(get_stats_data(t, layer=10), "Provided layer index is out of range")
-  expect_error(get_stats_data(t, layer=c(1, 10)), "Provided layer index is out of range")
+  expect_snapshot_error(get_stats_data(t, where=x==1))
+  expect_snapshot_error(get_stats_data(t, layer=c(1, 2), where=x==1))
+  expect_snapshot_error(get_stats_data(t, layer='blah'))
+  expect_snapshot_error(get_stats_data(t, layer=c('am', 'blah')))
+  expect_snapshot_error(get_stats_data(t, layer=10))
+  expect_snapshot_error(get_stats_data(t, layer=c(1, 10)))
 
 })
 
@@ -127,7 +126,7 @@ test_that("No parameters gives a list of statistics data in a list of layers", {
   # Elements of list contain a list
   walk(dat_list, expect_type, type='list')
   # No stats on first two - empty
-  expect_equivalent(map_int(dat_list, length), c(0, 0, 1, 1))
+  expect_equal(map_int(dat_list, length), c(0, 0, 1, 1), ignore_attr = TRUE)
   # Last 2 have dataframes
   expect_s3_class(dat_list[[3]][[1]], 'tbl_df')
   expect_s3_class(dat_list[[4]][[1]], 'tbl_df')
@@ -144,7 +143,7 @@ test_that("Multiple layers gives a list of statistics data in a list for those l
   # Elements of list contain a list
   walk(dat_list, expect_type, type='list')
   # No stats on first two - empty
-  expect_equivalent(map_int(dat_list, length), c(0, 0, 1, 1))
+  expect_equal(map_int(dat_list, length), c(0, 0, 1, 1), ignore_attr = TRUE)
   # Last 2 have dataframes
   expect_s3_class(dat_list[[3]][[1]], 'tbl_df')
   expect_s3_class(dat_list[[4]][[1]], 'tbl_df')
@@ -156,7 +155,7 @@ test_that("Multiple layers gives a list of statistics data in a list for those l
   # Elements of list contain a list
   walk(dat_list, expect_type, type='list')
   # No stats on first two - empty
-  expect_equivalent(map_int(dat_list, length), c(1, 1))
+  expect_equal(map_int(dat_list, length), c(1, 1), ignore_attr = TRUE)
   # Last 2 have dataframes
   expect_s3_class(dat_list[[1]][[1]], 'tbl_df')
   expect_s3_class(dat_list[[2]][[1]], 'tbl_df')

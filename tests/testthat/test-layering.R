@@ -1,4 +1,3 @@
-context("layering.R")
 
 ## group_<type> family of functions ----
 
@@ -30,14 +29,13 @@ test_that("`group_<type>` function pass parameters through appropriately", {
 ## `add_layer` error testing
 test_that("All parameters must be provided", {
   t <- tplyr_table(iris, Sepal.Width)
-  expect_error(add_layer(), "`parent` parameter must be provided")
-  expect_error(add_layer(t), "`layer` parameter must be provided")
+  expect_snapshot_error(add_layer())
+  expect_snapshot_error(add_layer(t))
   expect_silent(add_layer(t, group_desc(target_var=Sepal.Length)))
 })
 
 test_that("Parent argument is a valid class (pass through to `tplyr_layer`)", {
-  expect_error(add_layer(iris, group_desc(target_var=Sepal.Length)),
-               "Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.")
+  expect_snapshot_error(add_layer(iris, group_desc(target_var=Sepal.Length)))
 })
 
 test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
@@ -48,13 +46,13 @@ test_that("Only `Tplyr` methods are allowed in the `layer` parameter", {
       )
   })
 
-  expect_error({
+  expect_snapshot_error({
     t <- tplyr_table(iris, Sepal.Width) %>%
       add_layer(
         group_desc(target_var=Sepal.Length) %>%
         print()
       )
-  }, "Functions called within `add_layer` must be part of `Tplyr`")
+  })
 })
 
 ## `add_layer` functionality testing
@@ -66,7 +64,7 @@ test_that("`add_layer` attaches layer object into parent", {
 
   expect_true(length(t$layers) == 1)
   expect_s3_class(t$layers[[1]], 'tplyr_layer')
-  expect_equal(t$layers[[1]]$target_var, vars(Sepal.Length))
+  expect_equal(unname(map_chr(t$layers[[1]]$target_var, as_name)), "Sepal.Length")
 })
 
 test_that("Using `add_layer` within `add_layer` adds child layers into a layer object", {

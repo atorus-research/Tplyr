@@ -202,10 +202,10 @@ test_that("Auto precision builds correctly", {
   t_uncap_comp <- readr::read_csv('t_uncap.csv')
   t_cap_comp <- readr::read_csv('t_cap.csv')
 
-  expect_equivalent(mutate_all(t_uncap, as.character),
-               mutate_all(t_uncap_comp, as.character))
-  expect_equivalent(mutate_all(t_cap, as.character),
-               mutate_all(t_cap_comp, as.character))
+  expect_equal(mutate_all(t_uncap, as.character),
+               mutate_all(t_uncap_comp, as.character), ignore_attr = TRUE)
+  expect_equal(mutate_all(t_cap, as.character),
+               mutate_all(t_cap_comp, as.character), ignore_attr = TRUE)
 
 })
 
@@ -215,5 +215,5 @@ test_that("Desc layer clauses with invalid syntax give informative error", {
       group_desc(drat, where=bad == code)
     )
 
-  expect_error(build(t), "group_desc `where` condition `bad == code` is invalid.")
+  expect_snapshot_error(build(t))
 })

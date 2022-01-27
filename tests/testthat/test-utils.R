@@ -1,8 +1,7 @@
-context('utils.R')
 
 ## modify_nested_call ----
 test_that("Call must be quoted", {
-  expect_error(Tplyr:::modify_nested_call(mean(c(1,2,3))), "`call` must be a quoted call")
+  expect_snapshot_error(Tplyr:::modify_nested_call(mean(c(1,2,3))))
   c <- quo(tplyr_table(treat_var = Species))
   expect_silent(Tplyr:::modify_nested_call(c))
 })
@@ -16,7 +15,7 @@ test_that("With no additional parameters, a call returns unchanged", {
 test_that("By default, only `Tplyr` exported functions are allowed", {
   # Non-tplyr function
   c <- quo(mean(c(1,2,3)))
-  expect_error(Tplyr:::modify_nested_call(c), "Functions called within `add_layer` must be part of `Tplyr`")
+  expect_snapshot_error(Tplyr:::modify_nested_call(c))
 
   # Non-exported Tplyr function
   # c <- quo(Tplyr:::modify_nested_call(quo(x %>% y)))
@@ -74,14 +73,14 @@ test_that("Apply row masks errors trigger properly", {
     build()
 
   # Non-variable names
-  expect_error(apply_row_masks(t, row_breaks=TRUE, x+y), "All parameters submitted through")
-  expect_error(apply_row_masks(t, row_breaks=TRUE, "hello"), "All parameters submitted through")
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, x+y))
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, "hello"))
   # Variable not included
-  expect_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name), "If \\`row_breaks\\` is specified, variables submitted")
-  expect_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name, ord_other_bad_name), "If \\`row_breaks\\` is specified, variables submitted")
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name))
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, ord_bad_name, ord_other_bad_name))
   # Variables submitted must be ord variables in the build dataset
-  expect_error(apply_row_masks(t, row_breaks=TRUE, row_label1), "Break-by variables submitted via")
-  expect_error(apply_row_masks(t, row_breaks=TRUE, row_label1, var1_3), "Break-by variables submitted via")
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, row_label1))
+  expect_snapshot_error(apply_row_masks(t, row_breaks=TRUE, row_label1, var1_3))
 
 })
 

@@ -21,7 +21,7 @@ test_that("tplyr_table comes with empty list binded on 'layers'", {
 
 ### Errors ###
 test_that("tplyr_table throws error when passed a bad table argument", {
-  expect_error(tplyr_table(matrix(a = 1:10, b = 11:20), a))
+  expect_snapshot_error(tplyr_table(matrix(a = 1:10, b = 11:20), a))
   expect_silent(tplyr_table(data.frame(a = 1:10, b = 11:20), a))
 })
 
@@ -31,7 +31,7 @@ test_that("Table level where clauses with invalid syntax give informative error"
       group_desc(drat)
     )
 
-  expect_error(build(t), "tplyr_table `where` condition `bad == code` is invalid.")
+  expect_snapshot_error(build(t))
 })
 
 test_that("Population data where clauses with invalid syntax give informative error", {
@@ -42,5 +42,5 @@ test_that("Population data where clauses with invalid syntax give informative er
       group_desc(drat)
     )
 
-  expect_error(build(t), "Population data `pop_where` condition `bad == code` is invalid.")
+  expect_snapshot_error(build(t))
 })

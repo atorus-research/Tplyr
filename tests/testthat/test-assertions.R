@@ -27,8 +27,8 @@
 #   l <- group_count(tab, Species)
 #
 #   expect_silent(assert_is_layer(l))
-#   expect_error(assert_is_layer(tab), "asdf")
-#   expect_error(assert_is_layer(list()), "asdf")
+#   expect_snapshot_error(assert_is_layer(tab), "asdf")
+#   expect_snapshot_error(assert_is_layer(list()), "asdf")
 # })
 #
 # test_that("assert_is_table raises errors properly", {
@@ -36,7 +36,7 @@
 #   l <- group_count(tab, Species)
 #
 #   expect_silent(assert_is_table(tab))
-#   expect_error(assert_is_table(l), "asdf")
-#   expect_error(assert_is_table(list()), "asdf")
+#   expect_snapshot_error(assert_is_table(l), "asdf")
+#   expect_snapshot_error(assert_is_table(list()), "asdf")
 # })
 

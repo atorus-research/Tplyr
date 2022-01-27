@@ -1,5 +1,6 @@
 ## Submission 0.4.4
 * Functionality update for sorting nested count layers
+* Updates for changes to rlang
 
 ## Test Environments
 

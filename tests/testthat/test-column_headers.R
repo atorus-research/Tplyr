@@ -1,16 +1,15 @@
-context("column_headers.R")
 
 # Need a simple data frame to test with
 iris2 <- iris %>%
   mutate_all(as.character)
 
 test_that("All columns must be character", {
-  expect_error(add_column_headers(iris, "header_text"), "When binding headers")
+  expect_snapshot_error(add_column_headers(iris, "header_text"))
 })
 
 test_that("Nested headers are not allowed", {
   header_string = "TEXT | TEXT {TEXT {TEXT} TEXT } | TEXT"
-  expect_error(add_column_headers(iris2, header_string), "Nested spanning headers")
+  expect_snapshot_error(add_column_headers(iris2, header_string))
 })
 
 test_that("Header strings must have the same number of columns as the data frame", {
@@ -27,19 +26,19 @@ test_that("Header strings must have the same number of columns as the data frame
   # Test the results
   expect_silent(add_column_headers(iris2, good_no_spanner))
   expect_silent(add_column_headers(iris2, good_spanner))
-  err <- "Number of columns provided"
-  expect_error(add_column_headers(iris2, less_no_spanner), err)
-  expect_error(add_column_headers(iris2, more_no_spanner), err)
-  expect_error(add_column_headers(iris2, less_spanner), err)
-  expect_error(add_column_headers(iris2, more_spanner), err)
-  expect_error(add_column_headers(iris2, nested_less), err)
-  expect_error(add_column_headers(iris2, nested_more), err)
+
+  expect_snapshot_error(add_column_headers(iris2, less_no_spanner))
+  expect_snapshot_error(add_column_headers(iris2, more_no_spanner))
+  expect_snapshot_error(add_column_headers(iris2, less_spanner))
+  expect_snapshot_error(add_column_headers(iris2, more_spanner))
+  expect_snapshot_error(add_column_headers(iris2, nested_less))
+  expect_snapshot_error(add_column_headers(iris2, nested_more))
 
 })
 
 test_that("Unmatched spanner brackers", {
   header_string = "TEXT | TEXT {TEXT {TEXT} TEXT  | TEXT"
-  expect_error(add_column_headers(iris2, header_string), "Unmatched brackets for spanning headers")
+  expect_snapshot_error(add_column_headers(iris2, header_string))
 })
 
 test_that("Spanning headers produce correctly", {
@@ -73,7 +72,7 @@ test_that("Spanning headers produce correctly", {
 })
 
 test_that("add_column_headers throws an error when you use a token and don't pass header_n", {
-  expect_error({
+  expect_snapshot_error({
     mtcars2 <- mtcars %>%
       mutate_all(as.character)
 
@@ -87,7 +86,7 @@ test_that("add_column_headers throws an error when you use a token and don't pas
     count_string <- "Rows | am0 **0** | am1 **1**"
 
     add_column_headers(b_t, count_string)
-  }, "You must pass a header_n if you are using replacement tokens")
+  })
 })
 
 test_that("add_column_headers returns the expected result when tokens are passed", {

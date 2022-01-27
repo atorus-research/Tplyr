@@ -1,4 +1,4 @@
-# Tplyr 0.4.3.9000 (Development)
+# Tplyr 0.4.4
 
 - Added new functionality per issue #10. Adds 'Both' an option for sorting outer layers of nested count.
 
