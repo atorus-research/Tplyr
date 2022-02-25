@@ -596,13 +596,13 @@ set_denoms_by.count_layer <- function(e, ...) {
   assert_that(all(dots_chr %in% c(by_, cols_, treat_var_, target_var_)),
               msg = "A denom_by wasn't found as a grouping variable in the layer/table.")
 
-  if(length(target_var) == 2) {
+  if (length(target_var) == 2) {
     assert_that(!(as_name(target_var[[2]]) %in% dots_chr),
                 msg = "You can not pass the second variable in `vars` as a denominator.")
   }
 
   # If the row variable is here, rename it to summary_var
-  if(as_name(target_var[[1]]) %in% dots_chr) {
+  if (as_name(target_var[[1]]) %in% dots_chr) {
     dots[dots_chr %in% as_name(target_var[[1]])] <- quos(summary_var)
   }
 

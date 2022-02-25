@@ -11,7 +11,7 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across
+#' @importFrom dplyr across n_distinct
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -134,19 +134,19 @@ tplyr_default_options <- list(
 
   # Desc layer defaults
   tplyr.desc_layer_default_formats =
-    list("n"        = f_str("xxx", n),
-         "Mean (SD)"= f_str("a.a+1 (a.a+2)", mean, sd),
-         "Median"   = f_str("a.a+1", median),
-         "Q1, Q3"   = f_str("a.a+1, a.a+1", q1, q3),
-         "Min, Max" = f_str("a.a, a.a", min, max),
-         "Missing"  = f_str("xxx", missing)
+    list("n"         = f_str("xxx", n),
+         "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd),
+         "Median"    = f_str("a.a+1", median),
+         "Q1, Q3"    = f_str("a.a+1, a.a+1", q1, q3),
+         "Min, Max"  = f_str("a.a, a.a", min, max),
+         "Missing"   = f_str("xxx", missing)
          ),
 
   # Shift layer defaults
   tplyr.shift_layer_default_formats = list(f_str("a", n)),
 
   # Precision caps for decimal and integer precision
-  tplyr.precision_cap = c('int' = 99, 'dec'=99),
+  tplyr.precision_cap = c('int' = 99, 'dec' = 99),
 
   # Custom summaries
   tplyr.custom_summaries = NULL,
@@ -168,7 +168,7 @@ tplyr_default_options <- list(
 
   # Set any options that haven't been set
   toset <- !(names(tplyr_default_options) %in% names(op))
-  if(any(toset)) options(tplyr_default_options[toset])
+  if (any(toset)) options(tplyr_default_options[toset])
 
   invisible()
 }
@@ -279,6 +279,7 @@ built_target_pre_where <- NULL
 count_fmt <- NULL
 count_missings <- NULL
 has_missing_count <- FALSE
-kept_levels <-expr(TRUE)
+kept_levels <- expr(TRUE)
 levels_to_keep <- NULL
 break_ties <- NULL
+comp_distinct <- NULL
