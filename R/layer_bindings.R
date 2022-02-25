@@ -177,3 +177,27 @@ set_precision_on <- function(layer, precision_on) {
 
   layer
 }
+
+#' Title
+#'
+#' @param layer
+#' @param prec
+#' @param default
+#'
+#' @return
+#' @export
+#'
+#' @examples
+set_precision_data <- function(layer, prec, default = c("error", "auto")) {
+
+  # Grab the metadata
+  precision_by <- names(prec)[which(!names(prec) %in% c('max_int', 'max_dec'))]
+  precision_by_syms <- map(precision_by, sym)
+
+  # Insert the by variables in the layer and let set_precision_by validate
+  set_precision_by(layer, vars(!!!precision_by_syms))
+
+  # Bind it to the layer
+  env_bind(layer, prec = prec)
+  env_bind(layer, prec_error = default)
+}
