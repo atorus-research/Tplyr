@@ -39,31 +39,6 @@ t6 <- add_layers(t6, d6)
 t7 <- add_layers(t7, d7)
 t8 <- add_layers(t8, d8)
 
-test_that("group_desc are built as expected", {
-  expect_setequal(names(d1), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d2), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d3), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d4), c("max_length", "format_strings", "by", "cap",
-                                "row_labels", "stats", "keep_vars",
-                                "precision_on", "custom_summaries", "where",
-                                "target_var", "need_prec_table", "precision_by",
-                                "trans_vars", "summary_vars", "layers" ))
-  expect_setequal(names(d5), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d6), c("max_length", "format_strings", "by", "cap",
-                                "row_labels", "stats", "keep_vars",
-                                "precision_on", "custom_summaries", "where",
-                                "target_var", "need_prec_table", "precision_by",
-                                "trans_vars", "summary_vars", "layers"))
-  expect_setequal(names(d7), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d8), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-})
-
 test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t1))
   expect_silent(build(t2))
