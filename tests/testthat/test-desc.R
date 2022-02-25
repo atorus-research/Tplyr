@@ -180,8 +180,7 @@ test_that("Auto precision builds correctly", {
           'Missing' = f_str('xxx', missing)
         )
     ) %>%
-    build() %>%
-    mutate_at(vars(starts_with('var')), ~ str_trim(.x)) # Reading in the CSV removes leading spaces
+    build()
 
   t_cap <- tplyr_table(mtcars_long, gear) %>%
     add_layer(
@@ -196,11 +195,10 @@ test_that("Auto precision builds correctly", {
           cap = c('int'=3, 'dec'=2)
         )
     ) %>%
-    build() %>%
-    mutate_at(vars(starts_with('var')), ~ str_trim(.x)) # Reading in the CSV removes leading spaces
+    build()
 
-  t_uncap_comp <- readr::read_csv('t_uncap.csv')
-  t_cap_comp <- readr::read_csv('t_cap.csv')
+  load(test_path("t_uncap_comp.Rdata"))
+  load(test_path("t_cap_comp.Rdata"))
 
   expect_equal(mutate_all(t_uncap, as.character),
                mutate_all(t_uncap_comp, as.character), ignore_attr = TRUE)
