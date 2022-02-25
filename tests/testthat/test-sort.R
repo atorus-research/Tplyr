@@ -145,7 +145,6 @@ test_that("A group_desc layer can be ordered properly", {
 })
 
 ##### Nested
-# adsl <- haven::read_xpt("adsl.xpt")
 load(test_path('adsl.Rdata'))
 adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
 adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
