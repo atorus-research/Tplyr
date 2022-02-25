@@ -128,11 +128,6 @@ process_formatting.desc_layer <- function(x, ...) {
                                                                                 .fmt_str = format_strings),
                                             format_strings=format_strings)
 
-      # String pad each of the display strings to match the longest value across layers
-      # TODO: Introduce auto-padding after alhpa release
-      # trans_sums[[i]] <- trans_sums[[i]] %>%
-      #   mutate(display_string = str_pad(display_string, max_layer_length, side='right'))
-
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
       # then also transpose by cols.
