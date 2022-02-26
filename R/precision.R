@@ -64,6 +64,7 @@ make_prec_data <- function(.data, precision_by, precision_on, cap) {
 #' the precision based on the built_target data.
 #'
 #' @param built_target Data precision is calculated from
+#' @param prec External precision dataset
 #' @param precision_by Precision by variables - pulled from the provided precision data
 #' @param precision_on Precision on variable - defaulted to first target_var variable
 #' @param cap Capped precision passed in from set_format_strings
