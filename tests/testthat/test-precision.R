@@ -117,3 +117,25 @@ test_that('Caps work correctly', {
 
 })
 
+test_that("Partially provided decimal precision caps populate correctly", {
+  t <- tplyr_table(adlb, TRTA, where = PARAMCD == 'URATE') %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(dec = 1))
+    ) %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(int = 1))
+    ) %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(int = 1, dec = 1))
+    )
+
+  # In bug #20 this caused an error so expect build to complete correctly
+  expect_silent(d <- build(t))
+
+  # Manually verified these results look appropriate
+  expect_snapshot_output(print(d %>% select(starts_with('var1'))))
+})
+
