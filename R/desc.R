@@ -136,22 +136,41 @@ process_formatting.desc_layer <- function(x, ...) {
       # Now do one more transpose to split the columns out
       # Default is to use the treatment variable, but if `cols` was provided
       # then also transpose by cols.
-      form_sums[[i]] <- trans_sums[[i]] %>%
-        pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
-                    names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
-                    names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
-                    values_from = display_string # Use the created display_string variable for values
+      if (stats_as_columns) {
+        form_sums[[i]] <- trans_sums[[i]] %>%
+          pivot_wider(id_cols=c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
+                      names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
+                      names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
+                      values_from = display_string # Use the created display_string variable for values
+          )
+      } else {
+        form_sums[[i]] <- trans_sums[[i]] %>%
+          pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
+                      names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
+                      names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
+                      values_from = display_string # Use the created display_string variable for values
         )
+      }
     }
 
     # Join the final outputs
-    formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by))) %>%
-      rowwise() %>%
-      # Replace NA values with the proper empty strings
-      mutate_at(vars(starts_with('var')), ~ replace_na(.x, format_strings[[row_label]]$empty))
+    if (stats_as_columns) {
+      formatted_data <- reduce(form_sums, full_join, by=c(as_label(treat_var), match_exact(by)))
+      # Replace row label names
+      formatted_data <- replace_by_string_names(formatted_data, by, treat_var)
+    } else {
+      formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
+      # Replace row label names
+      formatted_data <- replace_by_string_names(formatted_data, by)
+    }
 
-    # Replace row label names
-    formatted_data <- replace_by_string_names(formatted_data, by)
+
+    # Don't want to delete this until I'm absolutely sure it's not necessary
+    # formatted_data <- formatted_data %>%
+    #   rowwise() %>%
+    #   # Replace NA values with the proper empty strings
+    #   mutate_at(vars(starts_with('var')), ~ replace_na(.x, format_strings[[row_label]]$empty))
+
 
     # Clean up
     rm(trans_sums, form_sums, i)

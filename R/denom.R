@@ -148,34 +148,26 @@ get_header_n_value.data.frame <- function(x, ...) {
 #'
 #' @return A data.frame with the
 #' @noRd
-get_denom_total <- function(.data, denoms_by, denoms_df, denoms_distinct_df, total_extract = "n") {
+get_denom_total <- function(.data, denoms_by, denoms_df,
+                            total_extract = "n") {
 
-  if(total_extract == "n") {
-    # Filter denoms dataset
-    vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_df))]
-    filter_logic <- map(vars_in_denoms, function(x) {
-      expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
-    })
+  # Filter denoms dataset
+  vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_df))]
+  filter_logic <- map(vars_in_denoms, function(x) {
+    expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+  })
 
-    sums <-  denoms_df %>%
-      filter(!!!filter_logic) %>%
-      group_by(!!!vars_in_denoms) %>%
-      extract("n")
+  sums <-  denoms_df %>%
+    filter(!!!filter_logic) %>%
+    group_by(!!!vars_in_denoms) %>%
+    extract(total_extract)
 
+  if (total_extract == "n") {
+    .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
   } else {
-    # Filter denoms dataset
-    vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_distinct_df))]
-    filter_logic <- map(vars_in_denoms, function(x) {
-      expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
-    })
-
-    sums <- denoms_distinct_df %>%
-      filter(!!!filter_logic) %>%
-      group_by(!!!vars_in_denoms) %>%
-      extract("distinct_n")
+    .data$distinct_total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
   }
 
-  .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
-
   .data
+
 }

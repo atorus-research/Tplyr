@@ -47,13 +47,14 @@
 #'   The other parameters of the \code{f_str} call specify what values should
 #'   fill the x's. \code{f_str} objects are used slightly differently between
 #'   different layers. When declaring a format string within a count layer,
-#'   \code{f_str} expects to see the values \code{n} and (if desired)
-#'   \code{pct}, which specifies the formatting for your n's and percent values.
-#'   But in descriptive statistic layers, \code{f_str} parameters refer to the
-#'   names of the summaries being performed, either by built in defaults, or
-#'   custom summaries declared using \code{\link{set_custom_summaries}}. See
-#'   \code{\link{set_format_strings}} for some more notes about layers specific
-#'   implementation.
+#'   \code{f_str} expects to see the values \code{n} or \code{distinct_n} for
+#'   event or distinct counts, \code{pct} or \code{distinct_pct} for event or
+#'   distinct percentages, or \code{denom} or \code{distinct_denom} for
+#'   denominator calculations. But in descriptive statistic layers, \code{f_str}
+#'   parameters refer to the names of the summaries being performed, either by
+#'   built in defaults, or custom summaries declared using
+#'   \code{\link{set_custom_summaries}}. See \code{\link{set_format_strings}}
+#'   for some more notes about layers specific implementation.
 #'
 #'   Count and shift layers frequencies and percentages can be specified with
 #'   'n' and 'pct' respectively. Distinct values can also be presented in count
@@ -210,7 +211,7 @@ parse_fmt <- function(x) {
 #'   can, while still allowing flexibility to the user.
 #'
 #'   In a count layer, you can simply provide a single \code{\link{f_str}}
-#'   object to specify how you want your n's (and possibly percents) formatted.
+#'   object to specify how you want your n's, percentages, and denominators formatted.
 #'   If you are additionally supplying a statistic, like risk difference using
 #'   \code{\link{add_risk_diff}}, you specify the count formats using the name
 #'   'n_counts'. The risk difference formats would then be specified using the
@@ -347,6 +348,10 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 
   # Identify if auto precision is needed
   need_prec_table <- any(map_lgl(format_strings, ~ .x$auto_precision))
+
+  # Fill in defaults if cap hasn't fully been provided
+  if (!('int' %in% names(cap))) cap['int'] <- getOption('tplyr.precision_cap')['int']
+  if (!('dec' %in% names(cap))) cap['dec'] <- getOption('tplyr.precision_cap')['dec']
 
   env_bind(e,
            format_strings = format_strings,
@@ -564,7 +569,7 @@ count_f_str_check <- function(...) {
   for (name in names(params)) {
 
     if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct")),
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct", "denom", "distinct_denom")),
                   msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
 
       # Check to make sure both disintct(old), and distinct_n(new) aren't passed
@@ -576,7 +581,7 @@ count_f_str_check <- function(...) {
                   msg = "You've passed duplicate parameters to `set_format_strings`")
 
       # Replace the disinct with distinct_n
-      if(any(params[["n_counts"]]$vars %in% "distinct")) {
+      if (any(params[["n_counts"]]$vars %in% "distinct")) {
         warning("The use of 'distinct' in count f_strs is discouraged. It was replaced with 'distinct_n' for consistancy.")
       }
       params[["n_counts"]]$vars[params[["n_counts"]]$vars %in% "distinct"] <- "distinct_n"

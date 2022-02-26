@@ -1,8 +1,12 @@
-# Call must be quoted
+# add_layer only accepts Tplyr functions
 
-    `call` must be a defused call, not a number.
+    Functions called within `add_layer` must be part of `Tplyr`
 
-# By default, only `Tplyr` exported functions are allowed
+---
+
+    Functions called within `add_layer` must be part of `Tplyr`
+
+---
 
     Functions called within `add_layer` must be part of `Tplyr`
 

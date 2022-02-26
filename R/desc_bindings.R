@@ -99,3 +99,48 @@ set_custom_summaries <- function(e, ...){
   env_bind(e, custom_summaries = params)
   e
 }
+
+#' Set descriptive statistics as columns
+#'
+#' In many cases, treatment groups are represented as columns within a table.
+#' But some tables call for a transposed presentation, where the treatment
+#' groups displayed by row, and the descriptive statistics are represented as
+#' columns. \code{set_stats_as_columns()} allows Tplyr to output a built table
+#' using this transposed format and deviate away from the standard
+#' representation of treatment groups as columns.
+#'
+#' This function leaves all specified by variables intact. The only switch that
+#' happens during the build process is that the provided descriptive statistics
+#' are transposed as columns and the treatment variable is left as rows. Column
+#' variables will remain represented as columns, and multiple target variables
+#' will also be respected properly.
+#'
+#' @param e \code{desc_layer} on descriptive statistics summaries should be represented as columns
+#' @param stats_as_columns Boolean to set stats as columns
+#'
+#' @return The input tplyr_layer
+#' @export
+#'
+#' @examples
+#'
+#' dat <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(wt, by = vs) %>%
+#'       set_format_strings(
+#'         "n"        = f_str("xx", n),
+#'         "sd"       = f_str("xx.x", sd, empty = c(.overall = "BLAH")),
+#'         "Median"   = f_str("xx.x", median),
+#'         "Q1, Q3"   = f_str("xx, xx", q1, q3),
+#'         "Min, Max" = f_str("xx, xx", min, max),
+#'         "Missing"  = f_str("xx", missing)
+#'       ) %>%
+#'       set_stats_as_columns()
+#'   ) %>%
+#'   build()
+#'
+set_stats_as_columns <- function(e, stats_as_columns=TRUE) {
+  assert_inherits_class(e, 'desc_layer')
+  assert_has_class(stats_as_columns, 'logical')
+  env_bind(e, stats_as_columns = stats_as_columns)
+  e
+}
