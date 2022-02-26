@@ -7,9 +7,9 @@
 set_stats_as_columns(e, stats_as_columns = TRUE)
 }
 \arguments{
-\item{stats_as_columns}{Boolean to set stats as columns}
+\item{e}{\code{desc_layer} on descriptive statistics summaries should be represented as columns}
 
-\item{\code{desc}}{layer on which the summaries should be bound}
+\item{stats_as_columns}{Boolean to set stats as columns}
 }
 \value{
 The input tplyr_layer
