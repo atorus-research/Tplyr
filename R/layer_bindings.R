@@ -203,7 +203,7 @@ set_precision_on <- function(layer, precision_on) {
 #'
 #' @examples
 #'
-#' prec <- tribble(
+#' prec <- tibble::tribble(
 #'   ~vs, ~max_int, ~max_dec,
 #'   0,        1,        1,
 #'   1,        2,        2
