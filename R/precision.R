@@ -75,8 +75,6 @@ make_prec_data <- function(.data, precision_by, precision_on, cap) {
 #'
 #' @return A tibble look-up table with the precision_by variables, a variable for the
 #' maximum integer length (max_int), and the maximum decimal length (max_dec).
-#' @export
-#'
 #' @noRd
 get_prec_data <- function(built_target, prec, precision_by, precision_on, cap, prec_error) {
 
