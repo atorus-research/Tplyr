@@ -652,3 +652,28 @@ keep_levels <- function(e, ...) {
   e
 }
 
+#' Title
+#'
+#' @param e A \code{count_layer} object
+#' @param numeric_cutoff A numeric value where only values greater than or equal
+#'   to will be displayed.
+#' @param stat The statistic to use when filtering out rows. Either 'n',
+#'   'distinct_n', or 'pct' are allowable
+#' @param column If only a particular column should be used to cutoff values, it
+#'   can be supplied here as a character value.
+#'
+#' @return The modified Tplyr layer object
+#' @export
+set_numeric_where <- function(e, numeric_cutoff, stat, column = NULL) {
+
+  assert_that(is.numeric(numeric_cutoff),
+              msg = "The `numeric_cutoff` parameter must be numeric")
+  assert_that(stat %in% c("n", "distinct_n", "pct"),
+              msg = "Allowed values for 'stat' are 'n', 'distinct_n', or 'pct'")
+
+  env_bind(e, numeric_cutoff = numeric_cutoff)
+  env_bind(e, numeric_cutoff_stat = stat)
+  env_bind(e, numeric_cutoff_column = column)
+
+  e
+}

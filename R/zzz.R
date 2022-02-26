@@ -6,7 +6,7 @@
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
 #' @importFrom stringr str_sub str_extract str_pad str_starts str_remove_all
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>% extract
+#' @importFrom magrittr %>% extract extract2
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
@@ -283,3 +283,6 @@ kept_levels <- expr(TRUE)
 levels_to_keep <- NULL
 break_ties <- NULL
 comp_distinct <- NULL
+numeric_cutoff <- NULL
+numeric_cutoff_stat <- NULL
+numeric_cutoff_column <- NULL

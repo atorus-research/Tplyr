@@ -443,14 +443,12 @@ process_formatting.count_layer <- function(x, ...) {
     #used to split the string.
     indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
 
-    formatted_data <- numeric_data
+    #formatted_data <- numeric_data
 
-    # if(is_built_nest && !quo_is_symbol(by[[1]])) {
-    #   names(formatted_data) <- str_remove_all(names(formatted_data), "\\\"")
-    # }
-
-
-    formatted_data <- formatted_data %>%
+    formatted_data <- numeric_data %>%
+      filter_numeric(numeric_cutoff,
+                     numeric_cutoff_stat,
+                     numeric_cutoff_column) %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = {
         construct_count_string(.n = n, .total = total,
@@ -798,4 +796,26 @@ rename_missing_values <- function(x) {
       }
     }
   }, envir = x)
+}
+
+filter_numeric <- function(.data,
+                           numeric_cutoff,
+                           numeric_cutoff_stat,
+                           numeric_cutoff_column) {
+
+  if (is.null(numeric_cutoff)) {
+    return(.data)
+  }
+
+  vals <- .data %>%
+    {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
+    mutate(
+      pct = n/total,
+      distinct_pct = distinct_n/distinct_total
+    ) %>%
+    filter(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff) %>%
+    extract2("summary_var")
+
+  .data %>%
+    filter(summary_var %in% vals)
 }
