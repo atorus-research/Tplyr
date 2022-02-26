@@ -56,36 +56,6 @@ modify_nested_call <- function(c, ...) {
   }
 
 }
-#
-# modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
-#
-#   # print(call_name(c))
-#   # If the call is not from magrittr, then modify the contents and return the call
-#   if (call_name(c) != "%>%") {
-#     # Only allow the user to use `tplyr` functions
-#     if (!is.null(allowable_calls)) {
-#       assert_that(call_name(c) %in% allowable_calls, msg = "Functions called within `add_layer` must be part of `Tplyr`")
-#     }
-#
-#     browser()
-#     c <- call_modify(.call=c, ...)
-#
-#   } else {
-#     if (!is.null(allowable_calls)) {
-#       # Only allow the user to use `tplyr` functions
-#       assert_that(all(map_chr(call_args(c), call_name) %in% c(allowable_calls, '%>%')),
-#                   msg="Functions called within `add_layer` must be part of `Tplyr`")
-#     }
-#
-#     browser()
-#     # Recursively extract the left side of the magrittr call to work your way up
-#     e <- call_standardise(c)
-#     c <- modify_nested_call(call_args(e)$lhs, allowable_calls = allowable_calls, ...)
-#     # Modfify the magittr call by inserting the call retrieved from recursive command back in
-#     c <- call_modify(e, lhs=c)
-#     c
-#   }
-# }
 
 #' Find depth of a layer object
 #'
@@ -104,7 +74,6 @@ depth_from_table <- function(layer, i){
     return(depth_from_table(env_parent(layer), i+1))
   }
 }
-
 
 #' Convert a list of quosures to character strings
 #'
