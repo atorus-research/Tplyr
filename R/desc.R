@@ -109,8 +109,13 @@ process_formatting.desc_layer <- function(x, ...) {
     form_sums <- vector("list", length(target_var))
 
     if (need_prec_table) {
-      # If the precision table is required, create it
-      prec <- make_prec_data(built_target, precision_by, precision_on, cap)
+      if ('prec' %in% ls()) {
+        # If precision data was manually specified, grab it
+        prec <- get_prec_data(built_target, prec, precision_by, precision_on, cap, prec_error)
+      } else {
+        # Otherwise create it
+        prec <- make_prec_data(built_target, precision_by, precision_on, cap)
+      }
     }
 
     for (i in seq_along(trans_sums)) {
