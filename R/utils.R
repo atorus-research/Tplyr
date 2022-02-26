@@ -109,12 +109,15 @@ match_exact <- function(var_list) {
 #'
 #' @param dat A data.frame/tibble to have row labels renamed
 #' @param by The \code{by} object within a layer
+#' @param treat_var treatment variable quosure for use when stats_as_columns is true
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
 #' @noRd
-replace_by_string_names <- function(dat, by) {
+replace_by_string_names <- function(dat, by, treat_var = NULL) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
+
+  by <- append(by, treat_var)
 
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1

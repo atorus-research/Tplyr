@@ -99,3 +99,47 @@ test_that("Desc layer clauses with invalid syntax give informative error", {
 
   expect_snapshot_error(build(t))
 })
+
+test_that("Stats as columns properly transposes the built data", {
+
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(vars(wt, drat)) %>%
+        set_format_strings(
+          "n"        = f_str("xx", n),
+          "sd"       = f_str("xx.x", sd, empty = c(.overall = "BLAH"))
+        ) %>%
+        set_stats_as_columns()
+    )
+
+  expect_silent(build(t1))
+
+  d1 <- build(t1)
+
+  # Make sure the names are as expected
+  t1_exp_names <- c("row_label1", "var1_n", "var1_sd", "var2_n", "var2_sd", "ord_layer_index", "ord_layer_1")
+  expect_equal(names(d1), t1_exp_names)
+  expect_snapshot_output(d1)
+
+  # Check that cols evaluate properly as well
+  t2 <- tplyr_table(mtcars, gear, cols=am) %>%
+    add_layer(
+      group_desc(vars(wt, drat)) %>%
+        set_format_strings(
+          "n"        = f_str("xx", n),
+          "sd"       = f_str("xx.x", sd, empty = c(.overall = "BLAH"))
+        ) %>%
+        set_stats_as_columns()
+    )
+
+  expect_silent(build(t2))
+
+  d2 <- build(t2)
+
+  t2_exp_names <- c('row_label1', 'var1_n_0', 'var1_sd_0', 'var1_n_1', 'var1_sd_1', 'var2_n_0',
+                    'var2_sd_0', 'var2_n_1', 'var2_sd_1', 'ord_layer_index', 'ord_layer_1')
+
+  expect_equal(names(d2), t2_exp_names)
+  expect_snapshot_output(d2)
+
+})
