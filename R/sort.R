@@ -218,7 +218,10 @@ add_order_columns.count_layer <- function(x) {
                                  filter_logic = filter_logic,
                                  indentation = indentation,
                                  outer_inf = outer_inf,
-                                 break_ties = break_ties)) %>%
+                                 break_ties = break_ties,
+                                 numeric_cutoff = numeric_cutoff,
+                                 numeric_cutoff_stat = numeric_cutoff_stat,
+                                 numeric_cutoff_column = numeric_cutoff_column)) %>%
         ungroup()
 
       if (!is.null(nest_count) && nest_count) {
@@ -430,7 +433,10 @@ get_data_order <- function(x, formatted_col_index) {
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
                              total_index, total_row_sort_value,
-                             break_ties = break_ties)
+                             break_ties = break_ties,
+                             numeric_cutoff = numeric_cutoff,
+                             numeric_cutoff_stat = numeric_cutoff_stat,
+                             numeric_cutoff_column = numeric_cutoff_column)
 
     } else if (order_count_method == "byvarn") {
 
@@ -526,7 +532,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
                        missing_index = NULL, missing_sort_value = NULL,
                        total_index = NULL, total_row_sort_value = NULL,
-                       break_ties) {
+                       break_ties, numeric_cutoff, numeric_cutoff_stat,
+                       numeric_cutoff_column) {
 
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset
@@ -568,7 +575,11 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 
   ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
   numeric_ordering_data <- numeric_data %>%
+    filter_numeric(numeric_cutoff,
+                   numeric_cutoff_stat,
+                   numeric_cutoff_column) %>%
     filter(!!!filter_logic) %>%
+
 
     # Sometimes row numbers are needed for nested counts if a value in the first
     # target variable is the same as a variable in the second
@@ -697,7 +708,10 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     all_outer$..index <- all_outer %>%
       get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
                              result_order_var, vars(!!by[[1]], !!target_var),
-                             break_ties = break_ties)
+                             break_ties = break_ties,
+                             numeric_cutoff = numeric_cutoff,
+                             numeric_cutoff_stat = numeric_cutoff_stat,
+                             numeric_cutoff_column = numeric_cutoff_column)
 
     group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -729,7 +743,10 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                                    cols,
                                                                                    result_order_var,
                                                                                    target_var,
-                                                                                   break_ties = break_ties)
+                                                                                   break_ties = break_ties,
+                                                                                   numeric_cutoff = numeric_cutoff,
+                                                                                   numeric_cutoff_stat = numeric_cutoff_stat,
+                                                                                   numeric_cutoff_column = numeric_cutoff_column)
   } else if(tail(order_count_method, 1) == "byvarn") {
 
     varn_df <- get_varn_values(target, target_var[[1]])
