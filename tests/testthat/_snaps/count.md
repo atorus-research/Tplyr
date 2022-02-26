@@ -1,10 +1,10 @@
 # Count layer clauses with invalid syntax give informative error
 
     group_count `where` condition `bad == code` is invalid. Filter error:
-    Error in `h()`:
-    ! Problem with `filter()` input `..1`.
-    i Input `..1` is `bad == code`.
-    x object 'bad' not found
+    Error in `filter()`:
+    ! Problem while computing `..1 = bad == code`.
+    Caused by error:
+    ! object 'bad' not found
     
 
 # Total rows and missing counts are displayed correctly(0.1.5 Updates)
@@ -122,7 +122,7 @@
     3)), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
     ))
 
-# nested count layers can accecpt text values in the first variable
+# Nested count layers can accept text values in the first variable
 
     Inner layers must be data driven variables
 

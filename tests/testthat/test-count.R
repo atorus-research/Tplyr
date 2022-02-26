@@ -106,40 +106,6 @@ t19 <- add_layers(t19, c19)
 t20 <- add_layers(t20, c20)
 
 test_that("Count layers are built as expected", {
-  expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c2), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c3), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c4), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "format_strings"))
-  expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "include_total_row", "denoms_by",
-                               "total_count_format",
-                               "total_row_sort_value", "count_missings"))
-  expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "distinct_by"))
-  expect_setequal(names(c7), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c8), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "distinct_by", "format_strings"))
-  expect_setequal(names(c9), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "indentation"))
-  expect_setequal(names(c10), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "count_row_prefix"))
-  expect_setequal(names(c11), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "ordering_cols"))
-  expect_setequal(names(c12), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "format_strings", "result_order_var", "distinct_by"))
 
   expect_equal(unname(map_chr(c1$by, as_name)), character())
   expect_equal(unname(map_chr(c2$by, as_name)), "am")
@@ -200,16 +166,16 @@ test_that("Count layers are summarized without errors and warnings", {
 
 test_that("Count layers are processed as expected", {
 
-  expect_equal(dim(c1$numeric_data), c(9, 4))
-  expect_equal(dim(c2$numeric_data), c(18, 5))
-  expect_equal(dim(c3$numeric_data), c(36, 6))
-  expect_equal(dim(c4$numeric_data), c(36, 6))
-  expect_equal(dim(c5$numeric_data), c(39, 6))
+  expect_equal(dim(c1$numeric_data), c(9, 6))
+  expect_equal(dim(c2$numeric_data), c(18, 7))
+  expect_equal(dim(c3$numeric_data), c(36, 8))
+  expect_equal(dim(c4$numeric_data), c(36, 8))
+  expect_equal(dim(c5$numeric_data), c(39, 8))
   expect_equal(dim(c6$numeric_data), c(9, 6))
-  expect_equal(dim(c7$numeric_data), c(27, 5))
+  expect_equal(dim(c7$numeric_data), c(27, 7))
   expect_equal(dim(c8$numeric_data), c(9, 6))
-  expect_equal(dim(c9$numeric_data), c(27, 5))
-  expect_equal(dim(c10$numeric_data), c(9, 4))
+  expect_equal(dim(c9$numeric_data), c(27, 7))
+  expect_equal(dim(c10$numeric_data), c(9, 6))
 
   expect_type(c1$numeric_data$n, "double")
   expect_type(c2$numeric_data$n, "double")
@@ -323,7 +289,7 @@ test_that("missing counts can be displayed as expected", {
 test_that("Count layer clauses with invalid syntax give informative error", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(am, where=bad == code)
+      group_count(am, where = bad == code)
     )
 
   expect_snapshot_error(build(t))
@@ -331,7 +297,7 @@ test_that("Count layer clauses with invalid syntax give informative error", {
 
 
 test_that("Nested count layers can be built with text by variables", {
-  expect_equal(dim(c13$numeric_data), c(27, 6))
+  expect_equal(dim(c13$numeric_data), c(27, 8))
   expect_equal(dim(c13$formatted_data), c(9, 9))
 
   expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
@@ -524,7 +490,7 @@ test_that("distinct is changed to distinct_n with a warning", {
 
 })
 
-test_that("nested count layers can accecpt text values in the first variable", {
+test_that("Nested count layers can accept text values in the first variable", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(vars("All Cyl", cyl))
@@ -640,7 +606,7 @@ test_that("nested count layers can be built with restrictive where logic", {
 
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl, grp), where = grp == "grp.8.5")%>%
+      group_count(vars(cyl, grp), where = grp == "grp.8.5") %>%
         set_nest_count(TRUE) %>%
         set_order_count_method('bycount') %>%
         set_ordering_cols("3")
@@ -739,8 +705,10 @@ test_that("Posix columns don't cause the build to error out.", {
 #
 
   load(test_path("adae.Rdata"))
-  adsl <- haven::read_xpt(test_path("adsl.xpt")) %>%
-      mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
+  load(test_path("adsl.Rdata"))
+
+  adsl <- adsl %>%
+    mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
     rename(TRTA = TRT01A)
 
   tp_obj <- tplyr_table(adae, TRTA) %>%

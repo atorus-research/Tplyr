@@ -9,32 +9,52 @@
 #' @return The original call object with
 #'
 #' @noRd
-#' @examples
-#'
-#' modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
-modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
-  # If the call is not from magrittr, then modify the contents and return the call
-  if (call_name(c) != "%>%") {
-    # Only allow the user to use `tplyr` functions
-    if (!is.null(allowable_calls)) {
-      assert_that(call_name(c) %in% allowable_calls, msg = "Functions called within `add_layer` must be part of `Tplyr`")
-    }
-    c <- call_modify(.call=c, ...)
+modify_nested_call <- function(c, ...) {
 
-  } else {
-    if (!is.null(allowable_calls)) {
-      # Only allow the user to use `tplyr` functions
-      assert_that(all(map_chr(call_args(c), call_name) %in% c(allowable_calls, '%>%')),
-                  msg="Functions called within `add_layer` must be part of `Tplyr`")
-    }
+  # Get exports from Tplyr
+  allowable_calls = objects("package:Tplyr")
+
+  # Only allow the user to use `Tplyr` functions
+  assert_that(
+    call_name(c) %in% allowable_calls,
+    msg = "Functions called within `add_layer` must be part of `Tplyr`"
+    )
+
+  # Process the magrittr pipe
+  if (call_name(c) == "%>%") {
+    # Only allow the user to use `Tplyr` functions on both sides of the pipe
+    assert_that(all(map_chr(call_args(c), call_name) %in% allowable_calls),
+                msg="Functions called within `add_layer` must be part of `Tplyr`")
 
     # Recursively extract the left side of the magrittr call to work your way up
     e <- call_standardise(c)
-    c <- modify_nested_call(call_args(e)$lhs, allowable_calls = allowable_calls, ...)
-    # Modfify the magittr call by inserting the call retrieved from recursive command back in
+    c <- modify_nested_call(call_args(e)$lhs, ...)
+    # Modify the magittr call by inserting the call retrieved from recursive command back in
     c <- call_modify(e, lhs=c)
     c
   }
+  # Process the 'native' pipe (arguments logically insert as first parameter)
+  else if (!str_starts(call_name(c), "group_[cds]")) {
+
+    # Standardize the call to get argument names and pull out the literal first argument
+    # Save the call to a new variable in the process
+    e <- call_standardise(c)
+    args <- call_args(e)[1]
+
+    # Send the first parameter back down recursively through modify_nested_call and
+    # save it back to the arguments list
+    c <- modify_nested_call(call_args(c)[[1]], ...)
+    args[[1]] <- c
+
+    # Modify the standardized call with the modified first parameter and send it up
+    c <- call_modify(e, !!!args)
+    c
+  }
+  # If the call is not from magrittr or the pipe, then modify the contents and return the call
+  else  {
+    c <- call_modify(.call=c, ...)
+  }
+
 }
 
 #' Find depth of a layer object
@@ -54,7 +74,6 @@ depth_from_table <- function(layer, i){
     return(depth_from_table(env_parent(layer), i+1))
   }
 }
-
 
 #' Convert a list of quosures to character strings
 #'
