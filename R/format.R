@@ -349,6 +349,10 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
   # Identify if auto precision is needed
   need_prec_table <- any(map_lgl(format_strings, ~ .x$auto_precision))
 
+  # Fill in defaults if cap hasn't fully been provided
+  if (!('int' %in% names(cap))) cap['int'] <- getOption('tplyr.precision_cap')['int']
+  if (!('dec' %in% names(cap))) cap['dec'] <- getOption('tplyr.precision_cap')['dec']
+
   env_bind(e,
            format_strings = format_strings,
            summary_vars = vars(!!!summary_vars),
