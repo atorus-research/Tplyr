@@ -133,7 +133,7 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
         layer,
         comparisons = comps,
         args = args,
-        distinct = distinct
+        comp_distinct = distinct
       ),
       class=c("tplyr_statistic", "tplyr_riskdiff")
     )
@@ -181,7 +181,7 @@ prep_two_way <- function(comp) {
 
 
     # If distinct is set and distinct values are there, use them
-    if (distinct == TRUE && any(str_detect(names(two_way), 'distinct'))) {
+    if (comp_distinct && !is.null(distinct_by)) {
       two_way <- two_way %>%
         select(-n, -total) %>%
         rename(n = distinct_n, total = distinct_total)
