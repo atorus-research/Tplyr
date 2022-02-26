@@ -31,7 +31,7 @@ that exist in the target dataset. This can be overriden using the \code{default}
 }
 \examples{
 
-prec <- tribble(
+prec <- tibble::tribble(
   ~vs, ~max_int, ~max_dec,
   0,        1,        1,
   1,        2,        2
