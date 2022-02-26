@@ -115,7 +115,7 @@ set_custom_summaries <- function(e, ...){
 #' variables will remain represented as columns, and multiple target variables
 #' will also be respected properly.
 #'
-#' @param \code{desc} layer on which the summaries should be bound
+#' @param e \code{desc_layer} on descriptive statistics summaries should be represented as columns
 #' @param stats_as_columns Boolean to set stats as columns
 #'
 #' @return The input tplyr_layer
