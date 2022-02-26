@@ -488,7 +488,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p>But now, let’s overwrite <code>mean</code> using a custom summary. Let’s use a trimmed mean instead, taking 20% of observations off of both ends.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> 
-          <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/nse-defuse.html">quos</a></span><span class="op">(</span>
+          <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html">quos</a></span><span class="op">(</span>
             mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.var</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span>, trim<span class="op">=</span><span class="fl">0.4</span><span class="op">)</span>
           <span class="op">)</span>
         <span class="op">)</span>
@@ -526,7 +526,7 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="right">1</td>
 </tr></tbody>
 </table>
-<p>Note that the table code used to produce the output is the same. Now ‘Tplyr’ used the custom summary function for <code>mean</code> as specified in the <code>tplyr.custom_summaries</code> option. Also note the use of <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::quos()</a></code>. We’ve done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you’d like to learn more about non-standard evaluation and quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html">Section IV</a> in Advanced R.</p>
+<p>Note that the table code used to produce the output is the same. Now ‘Tplyr’ used the custom summary function for <code>mean</code> as specified in the <code>tplyr.custom_summaries</code> option. Also note the use of <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html">rlang::quos()</a></code>. We’ve done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you’d like to learn more about non-standard evaluation and quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html">Section IV</a> in Advanced R.</p>
 </div>
 <div id="formatting" class="section level2">
 <h2 class="hasAnchor">

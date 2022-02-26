@@ -71,13 +71,14 @@ Format strings are one of the most powerful components of 'Tplyr'.
   The other parameters of the \code{f_str} call specify what values should
   fill the x's. \code{f_str} objects are used slightly differently between
   different layers. When declaring a format string within a count layer,
-  \code{f_str} expects to see the values \code{n} and (if desired)
-  \code{pct}, which specifies the formatting for your n's and percent values.
-  But in descriptive statistic layers, \code{f_str} parameters refer to the
-  names of the summaries being performed, either by built in defaults, or
-  custom summaries declared using \code{\link{set_custom_summaries}}. See
-  \code{\link{set_format_strings}} for some more notes about layers specific
-  implementation.
+  \code{f_str} expects to see the values \code{n} or \code{distinct_n} for
+  event or distinct counts, \code{pct} or \code{distinct_pct} for event or
+  distinct percentages, or \code{denom} or \code{distinct_denom} for
+  denominator calculations. But in descriptive statistic layers, \code{f_str}
+  parameters refer to the names of the summaries being performed, either by
+  built in defaults, or custom summaries declared using
+  \code{\link{set_custom_summaries}}. See \code{\link{set_format_strings}}
+  for some more notes about layers specific implementation.
 
   Count and shift layers frequencies and percentages can be specified with
   'n' and 'pct' respectively. Distinct values can also be presented in count
