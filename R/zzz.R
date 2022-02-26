@@ -282,3 +282,4 @@ has_missing_count <- FALSE
 kept_levels <-expr(TRUE)
 levels_to_keep <- NULL
 break_ties <- NULL
+stats_as_columns <- NULL
