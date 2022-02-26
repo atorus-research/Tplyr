@@ -93,9 +93,11 @@ match_exact <- function(var_list) {
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
 #' @noRd
-replace_by_string_names <- function(dat, by) {
+replace_by_string_names <- function(dat, by, treat_var = NULL) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
+
+  by <- append(by, treat_var)
 
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1
