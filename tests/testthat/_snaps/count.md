@@ -122,7 +122,7 @@
     3)), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
     ))
 
-# nested count layers can accecpt text values in the first variable
+# Nested count layers can accept text values in the first variable
 
     Inner layers must be data driven variables
 

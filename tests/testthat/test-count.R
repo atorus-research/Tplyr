@@ -490,7 +490,7 @@ test_that("distinct is changed to distinct_n with a warning", {
 
 })
 
-test_that("nested count layers can accecpt text values in the first variable", {
+test_that("Nested count layers can accept text values in the first variable", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(vars("All Cyl", cyl))
@@ -705,8 +705,10 @@ test_that("Posix columns don't cause the build to error out.", {
 #
 
   load(test_path("adae.Rdata"))
-  adsl <- haven::read_xpt(test_path("adsl.xpt")) %>%
-      mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
+  load(test_path("adsl.Rdata"))
+
+  adsl <- adsl %>%
+    mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
     rename(TRTA = TRT01A)
 
   tp_obj <- tplyr_table(adae, TRTA) %>%

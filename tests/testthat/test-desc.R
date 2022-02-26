@@ -39,31 +39,6 @@ t6 <- add_layers(t6, d6)
 t7 <- add_layers(t7, d7)
 t8 <- add_layers(t8, d8)
 
-test_that("group_desc are built as expected", {
-  expect_setequal(names(d1), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d2), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d3), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d4), c("max_length", "format_strings", "by", "cap",
-                                "row_labels", "stats", "keep_vars",
-                                "precision_on", "custom_summaries", "where",
-                                "target_var", "need_prec_table", "precision_by",
-                                "trans_vars", "summary_vars", "layers" ))
-  expect_setequal(names(d5), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d6), c("max_length", "format_strings", "by", "cap",
-                                "row_labels", "stats", "keep_vars",
-                                "precision_on", "custom_summaries", "where",
-                                "target_var", "need_prec_table", "precision_by",
-                                "trans_vars", "summary_vars", "layers"))
-  expect_setequal(names(d7), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(d8), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-})
-
 test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t1))
   expect_silent(build(t2))
@@ -73,97 +48,6 @@ test_that("Group_desc can be created without warnings and errors", {
   expect_silent(build(t6))
   expect_silent(build(t7))
   expect_silent(build(t8))
-})
-
-test_that("group_desc are processed as expected", {
-
-  expect_setequal(names(d1), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-  expect_setequal(names(d2), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-  expect_setequal(names(d3), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-  expect_setequal(names(d4), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "custom_summaries"))
-  expect_setequal(names(d5), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-  expect_setequal(names(d6), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "custom_summaries"))
-  expect_setequal(names(d7), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-  expect_setequal(names(d7), c("where", "need_prec_table", "built_target",
-                               "summary_vars", "formatted_data", "trans_vars",
-                               "target_var", "keep_vars", "cap", "precision_on",
-                               "max_length", "layers", "row_labels", "by",
-                               "precision_by", "stats", "numeric_data",
-                               "format_strings", "prec"))
-
-  expect_equal(dim(d1$numeric_data), c(27, 4))
-  expect_equal(dim(d2$numeric_data), c(54, 5))
-  expect_equal(dim(d3$numeric_data), c(108, 6))
-  expect_equal(dim(d4$numeric_data), c(3, 4))
-  expect_equal(dim(d5$numeric_data), c(54, 4))
-  expect_equal(dim(d6$numeric_data), c(6, 4))
-  expect_equal(dim(d7$numeric_data), c(54, 5))
-  expect_equal(dim(d8$numeric_data), c(324, 6))
-
-
-  expect_type(d1$numeric_data$value, "double")
-  expect_type(d2$numeric_data$value, "double")
-  expect_type(d3$numeric_data$value, "double")
-  expect_type(d4$numeric_data$value, "double")
-  expect_type(d5$numeric_data$value, "double")
-  expect_type(d6$numeric_data$value, "double")
-  expect_type(d7$numeric_data$value, "double")
-  expect_type(d8$numeric_data$value, "double")
-
-  expect_equal(dim(d1$formatted_data), c(6, 5))
-  expect_equal(dim(d2$formatted_data), c(12, 7))
-  expect_equal(dim(d3$formatted_data), c(24, 9))
-  expect_equal(dim(d4$formatted_data), c(1, 5))
-  expect_equal(dim(d5$formatted_data), c(6, 8))
-  expect_equal(dim(d6$formatted_data), c(1, 8))
-  expect_equal(dim(d7$formatted_data), c(6, 8))
-  expect_equal(dim(d8$formatted_data), c(36, 10))
-
-
-  expect_true(!any(is.na(unlist(d1$formatted_data[, 2:4]))))
-  expect_true(!any(is.na(unlist(d2$formatted_data[, 2:4]))))
-  expect_true(!any(is.na(unlist(d3$formatted_data[, 4:6]))))
-  expect_true(!any(is.na(unlist(d4$formatted_data[, 2:4]))))
-  expect_true(!any(is.na(unlist(d5$formatted_data[, 2:7]))))
-  expect_true(!any(is.na(unlist(d6$formatted_data[, 2:7]))))
-  expect_true(!any(is.na(unlist(d7$formatted_data[, 2:7]))))
-  expect_true(!any(is.na(unlist(d8$formatted_data[, 3:8]))))
-
 })
 
 test_that("Auto precision builds correctly", {
@@ -180,8 +64,7 @@ test_that("Auto precision builds correctly", {
           'Missing' = f_str('xxx', missing)
         )
     ) %>%
-    build() %>%
-    mutate_at(vars(starts_with('var')), ~ str_trim(.x)) # Reading in the CSV removes leading spaces
+    build()
 
   t_cap <- tplyr_table(mtcars_long, gear) %>%
     add_layer(
@@ -196,11 +79,10 @@ test_that("Auto precision builds correctly", {
           cap = c('int'=3, 'dec'=2)
         )
     ) %>%
-    build() %>%
-    mutate_at(vars(starts_with('var')), ~ str_trim(.x)) # Reading in the CSV removes leading spaces
+    build()
 
-  t_uncap_comp <- readr::read_csv('t_uncap.csv')
-  t_cap_comp <- readr::read_csv('t_cap.csv')
+  load(test_path("t_uncap_comp.Rdata"))
+  load(test_path("t_cap_comp.Rdata"))
 
   expect_equal(mutate_all(t_uncap, as.character),
                mutate_all(t_uncap_comp, as.character), ignore_attr = TRUE)
