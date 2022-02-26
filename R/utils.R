@@ -90,6 +90,7 @@ match_exact <- function(var_list) {
 #'
 #' @param dat A data.frame/tibble to have row labels renamed
 #' @param by The \code{by} object within a layer
+#' @param treat_var treatment variable quosure for use when stats_as_columns is true
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
 #' @noRd
