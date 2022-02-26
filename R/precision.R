@@ -67,6 +67,7 @@ make_prec_data <- function(.data, precision_by, precision_on, cap) {
 #' @param precision_by Precision by variables - pulled from the provided precision data
 #' @param precision_on Precision on variable - defaulted to first target_var variable
 #' @param cap Capped precision passed in from set_format_strings
+#' @param prec_error How should unspecified cases be handled?
 #'
 #' @return A tibble look-up table with the precision_by variables, a variable for the
 #' maximum integer length (max_int), and the maximum decimal length (max_dec).
@@ -75,8 +76,17 @@ make_prec_data <- function(.data, precision_by, precision_on, cap) {
 #' maximum integer length (max_int), and the maximum decimal length (max_dec).
 #' @export
 #'
-#' @examples
-get_prec_data <- function(built_target, precision_by, precision_on, cap) {
+#' @noRd
+get_prec_data <- function(built_target, prec, precision_by, precision_on, cap, prec_error) {
+
+  # Do the types match between the prec data and the built target?
+  prec_types <- map_chr(precision_by, ~ class(prec[[as_label(.)]]))
+  data_types <- map_chr(precision_by, ~ class(built_target[[as_label(.)]]))
+
+  assert_that(
+    all(prec_types == data_types),
+    msg = "By variable types mismatch between precision dataset and target data"
+  )
 
   # What's in the data?
   precision_by_cases <- built_target %>%
@@ -94,9 +104,12 @@ get_prec_data <- function(built_target, precision_by, precision_on, cap) {
     subset_target <- left_join(mismatches, built_target, by = map_chr(precision_by, as_label))
     auto_prec <- make_prec_data(subset_target, precision_by, precision_on, cap)
     prec <- bind_rows(prec, auto_prec)
-    # Some cleaning for the layer environment
-    rm(precision_by_cases, mismatches, auto_prec)
   }
 
-  prec
+  prec_on <- as_label(precision_on)
+
+  prec %>%
+    mutate(
+      precision_on = as_name(prec_on)
+    )
 }
