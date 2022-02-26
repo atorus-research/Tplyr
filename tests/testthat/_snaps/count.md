@@ -154,3 +154,29 @@
 
     The number of values of your second variable must be greater than the number of levels in your first variable
 
+# denom and distinct_denom values work as expected
+
+    Code
+      build(t1)
+    Output
+      # A tibble: 5 x 6
+        row_label1 var1_3          var1_4          var1_5  ord_layer_index ord_layer_1
+        <chr>      <chr>           <chr>           <chr>             <int>       <dbl>
+      1 4          " 1/ 15 ( 6.7)" " 8/ 12 (66.7)" " 2/  ~               1           8
+      2 6          " 2/ 15 (13.3)" " 4/ 12 (33.3)" " 1/  ~               1           4
+      3 8          "12/ 15 (80.0)" " 0/ 12 ( 0.0)" " 2/  ~               1           0
+      4 Missing    " 0"            " 0"            " 0"                  1           0
+      5 Total      "   15 [100.0]" "   12 [100.0]" "    5~               1          12
+
+---
+
+    Code
+      build(t2)
+    Output
+      # A tibble: 3 x 6
+        row_label1 var1_3            var1_4         var1_5 ord_layer_index ord_layer_1
+        <chr>      <chr>             <chr>          <chr>            <int>       <dbl>
+      1 4          "  1   3   1  15" "  2   4   8 ~ "  1 ~               1           1
+      2 6          "  1   3   2  15" "  2   4   4 ~ "  1 ~               1           2
+      3 8          "  1   3  12  15" "  0   4   0 ~ "  1 ~               1           3
+

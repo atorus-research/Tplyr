@@ -260,18 +260,18 @@ instead of using a layer index, but a numeric index works as well.</p>
 #&gt; <span style='color: #949494;'># … with 17 more rows</span>
 #&gt; 
 #&gt; $cyl
-#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
-#&gt;   gear  summary_var     n total
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
-#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
-#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
-#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
-#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
-#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
-#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
-#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
-#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
+#&gt; <span style='color: #949494;'># A tibble: 9 × 6</span>
+#&gt;   gear  summary_var     n distinct_n distinct_total total
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1          1              3    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2          1              3    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12          1              3    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8          1              2    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4          1              2    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0          0              2    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2          1              3     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1          1              3     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2          1              3     5
 #&gt; </div><div class='input'>
  <span class='co'># Get the data from a specific layer</span>
  <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='st'>'drat'</span><span class='op'>)</span>
@@ -306,18 +306,18 @@ instead of using a layer index, but a numeric index works as well.</p>
  <span class='co'># Choose multiple layers by name or index</span>
  <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'cyl'</span>, <span class='st'>'drat'</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $cyl
-#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
-#&gt;   gear  summary_var     n total
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
-#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
-#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
-#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
-#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
-#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
-#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
-#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
-#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
+#&gt; <span style='color: #949494;'># A tibble: 9 × 6</span>
+#&gt;   gear  summary_var     n distinct_n distinct_total total
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1          1              3    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2          1              3    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12          1              3    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8          1              2    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4          1              2    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0          0              2    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2          1              3     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1          1              3     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2          1              3     5
 #&gt; 
 #&gt; $drat
 #&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>
@@ -336,18 +336,18 @@ instead of using a layer index, but a numeric index works as well.</p>
 #&gt; <span style='color: #949494;'># … with 17 more rows</span>
 #&gt; </div><div class='input'> <span class='fu'>get_numeric_data</span><span class='op'>(</span><span class='va'>t</span>, layer<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $cyl
-#&gt; <span style='color: #949494;'># A tibble: 9 × 4</span>
-#&gt;   gear  summary_var     n total
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1    15
-#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2    15
-#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12    15
-#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8    12
-#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4    12
-#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0    12
-#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2     5
-#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1     5
-#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2     5
+#&gt; <span style='color: #949494;'># A tibble: 9 × 6</span>
+#&gt;   gear  summary_var     n distinct_n distinct_total total
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 3     4               1          1              3    15
+#&gt; <span style='color: #BCBCBC;'>2</span> 3     6               2          1              3    15
+#&gt; <span style='color: #BCBCBC;'>3</span> 3     8              12          1              3    15
+#&gt; <span style='color: #BCBCBC;'>4</span> 4     4               8          1              2    12
+#&gt; <span style='color: #BCBCBC;'>5</span> 4     6               4          1              2    12
+#&gt; <span style='color: #BCBCBC;'>6</span> 4     8               0          0              2    12
+#&gt; <span style='color: #BCBCBC;'>7</span> 5     4               2          1              3     5
+#&gt; <span style='color: #BCBCBC;'>8</span> 5     6               1          1              3     5
+#&gt; <span style='color: #BCBCBC;'>9</span> 5     8               2          1              3     5
 #&gt; 
 #&gt; $drat
 #&gt; <span style='color: #949494;'># A tibble: 27 × 4</span>

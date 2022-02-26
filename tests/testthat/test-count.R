@@ -721,3 +721,27 @@ test_that("Posix columns don't cause the build to error out.", {
 
   expect_silent(build(tp_obj))
 })
+
+test_that("denom and distinct_denom values work as expected", {
+
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
+        set_format_strings(f_str("xx/xxx (xx.x)", n, denom, pct)) %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t1))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_distinct_by(am) %>%
+        set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_denom, n, denom))
+    )
+
+  expect_snapshot(build(t2))
+})
