@@ -19,6 +19,7 @@
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
 #' @importFrom forcats fct_expand fct_collapse fct_explicit_na fct_drop
+#' @importFrom utils capture.output
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -282,3 +283,4 @@ has_missing_count <- FALSE
 kept_levels <-expr(TRUE)
 levels_to_keep <- NULL
 break_ties <- NULL
+prec_error <- NULL
