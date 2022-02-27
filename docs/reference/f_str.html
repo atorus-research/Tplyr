@@ -263,13 +263,14 @@ instead replace the whole string.</p></td>
 <p>The other parameters of the <code>f_str</code> call specify what values should
   fill the x's. <code>f_str</code> objects are used slightly differently between
   different layers. When declaring a format string within a count layer,
-  <code>f_str</code> expects to see the values <code>n</code> and (if desired)
-  <code>pct</code>, which specifies the formatting for your n's and percent values.
-  But in descriptive statistic layers, <code>f_str</code> parameters refer to the
-  names of the summaries being performed, either by built in defaults, or
-  custom summaries declared using <code><a href='set_custom_summaries.html'>set_custom_summaries</a></code>. See
-  <code><a href='set_format_strings.html'>set_format_strings</a></code> for some more notes about layers specific
-  implementation.</p>
+  <code>f_str</code> expects to see the values <code>n</code> or <code>distinct_n</code> for
+  event or distinct counts, <code>pct</code> or <code>distinct_pct</code> for event or
+  distinct percentages, or <code>denom</code> or <code>distinct_denom</code> for
+  denominator calculations. But in descriptive statistic layers, <code>f_str</code>
+  parameters refer to the names of the summaries being performed, either by
+  built in defaults, or custom summaries declared using
+  <code><a href='set_custom_summaries.html'>set_custom_summaries</a></code>. See <code><a href='set_format_strings.html'>set_format_strings</a></code>
+  for some more notes about layers specific implementation.</p>
 <p>Count and shift layers frequencies and percentages can be specified with
   'n' and 'pct' respectively. Distinct values can also be presented in count
   layers with the arguments 'distinct' and 'distinct_total'.</p>

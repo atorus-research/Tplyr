@@ -63,6 +63,7 @@ reference:
   - keep_levels
   - set_denom_ignore
   - set_indentation
+  - set_numeric_where
 - title: Column Headers
 - contents:
   - add_column_headers

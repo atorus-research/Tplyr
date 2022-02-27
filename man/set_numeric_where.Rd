@@ -2,7 +2,7 @@
 % Please edit documentation in R/count_bindings.R
 \name{set_numeric_where}
 \alias{set_numeric_where}
-\title{Title}
+\title{Set a numeric cutoff}
 \usage{
 set_numeric_where(e, numeric_cutoff, stat, column = NULL)
 }
@@ -22,5 +22,19 @@ can be supplied here as a character value.}
 The modified Tplyr layer object
 }
 \description{
-Title
+In certain tables, it may be necessary to only include rows that meet numeric
+conditions. Rows that are less than a certain cutoff can be suppressed from
+the output. This function allows you to pass a cutoff, a cutoff stat(n,
+distinct_n, pct, or distinct_pct) to supress values that are lesser than the
+cutoff.
+}
+\examples{
+mtcars \%>\%
+tplyr_table(gear) \%>\%
+  add_layer(
+    group_count(cyl) \%>\%
+      set_numeric_where(10, "n") \%>\%
+      add_total_row() \%>\%
+      set_order_count_method("bycount")
+  )
 }

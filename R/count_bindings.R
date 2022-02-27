@@ -652,7 +652,13 @@ keep_levels <- function(e, ...) {
   e
 }
 
-#' Title
+#' Set a numeric cutoff
+#'
+#' In certain tables, it may be necessary to only include rows that meet numeric
+#' conditions. Rows that are less than a certain cutoff can be suppressed from
+#' the output. This function allows you to pass a cutoff, a cutoff stat(n,
+#' distinct_n, pct, or distinct_pct) to supress values that are lesser than the
+#' cutoff.
 #'
 #' @param e A \code{count_layer} object
 #' @param numeric_cutoff A numeric value where only values greater than or equal
@@ -664,6 +670,16 @@ keep_levels <- function(e, ...) {
 #'
 #' @return The modified Tplyr layer object
 #' @export
+#'
+#' @examples
+#' mtcars %>%
+#' tplyr_table(gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_numeric_where(10, "n") %>%
+#'       add_total_row() %>%
+#'       set_order_count_method("bycount")
+#'   )
 set_numeric_where <- function(e, numeric_cutoff, stat, column = NULL) {
 
   assert_that(is.numeric(numeric_cutoff),
