@@ -1,0 +1,199 @@
+#' Tplyr Metadata Object
+#'
+#'
+#' @return
+#' @export
+#'
+#' @examples
+tplyr_meta <- function(names, filters) {
+  meta <- new_tplyr_meta()
+  meta <- add_variables(meta, names)
+  meta <- add_filters(meta, filters)
+  meta
+}
+
+#' Create a tplyr_meta object
+#'
+#' @return tplyr_meta object
+new_tplyr_meta <- function() {
+  structure(
+    list(
+      names = list(),
+      filters = exprs()
+    ),
+    class = 'tplyr_meta'
+  )
+}
+
+#' Add variables to a tplyr_meta object
+#'
+#'
+#' @param meta tplyr_meta object
+#' @param names Variables to be added
+#'
+#' @return tplyr_meta object
+#' @export
+#'
+#' @examples
+add_variables <- function(meta, names) {
+  meta$names <- append(meta$names, names)
+  meta
+}
+
+#' Add variables to a tplyr_meta object
+#'
+#'
+#' @param meta tplyr_meta object
+#' @param ... Variables to be added
+#'
+#' @return tplyr_meta object
+#' @export
+#'
+#' @examples
+add_filters <- function(meta, filters) {
+  meta$filters <- append(meta$filters, filters)
+  meta
+}
+
+#' Return proper quoting for a given value
+#'
+#' This function returns whatever value should be necessary to
+#' create the string for a value that will be parsed. For example,
+#' in `x == 'hi'`, the value 'hi' must be quoted like a string. But
+#' if the input variable is numeric, such as `x == 1`, the 1 should
+#' not be provided in quotes.
+#'
+#' @param val Value which needs parsing
+#'
+#' @return A character string
+#' @noRd
+#'
+#' @examples
+#'
+#' get_parse_string_value('hello')
+#' get_parse_string_value(1)
+get_parse_string_value <- function(val) {
+  if (class(val) %in% c('character', 'factor')) {
+    paste0('"', val, '"')
+  } else{
+    val
+  }
+}
+
+#' Convert supplied values into a string that will parse as a vector
+#'
+#' By passing in some vector, the text necessary to create that vector is returned.
+#'
+#' @param values
+#'
+#' @return
+#' @noRd
+#'
+#'
+#' @examples
+#'
+#' x <- make_vect_str(c(1,2,3))
+#' y <- parse(text = x)
+#' eval(y)
+#'
+#' x <- make_vect_str(c('a', 'b', 'c'))
+#' y <- parse(text = x)
+#' eval(y)
+make_vect_str <- function(values) {
+  inner <- paste0(map_chr(values, get_parse_string_value), collapse = ", ")
+
+  paste(c('c(', inner, ')'), collapse = "")
+}
+
+#' Create a parsed string necessary to create filter logic
+#'
+#' Given a symbol and values, this function will return an expression required
+#' to subset the given variable to that set of values
+#'
+#' @param variable A symbol
+#' @param values Values to be filter
+#'
+#' @return
+#' @noRd
+make_parsed_strings <- function(variables, values) {
+
+  out <- vector('list', length(variables))
+
+  for (i in seq_along(variables)) {
+    opr <- ifelse(length(values[[i]]) == 1, '==', '%in%')
+
+    s <- paste(as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
+
+    out[[i]] <- str2lang(s)
+  }
+  out
+}
+
+#' Return the vector of treatment groups based on treatment column
+#'
+#' Given that sets of treatment groups can be combined, this function
+#' allows you to get the original treatment groups back out of the specified
+#' combination name
+#'
+#' @param value Specified treatment group
+#' @param layer Tplyr layer
+#'
+#' @return A character vector of treatment groups
+#' @noRd
+translate_treat_grps <- function(value, treat_grps) {
+  out <- as.character(value)
+  if (out %in% names(treat_grps)) {
+    out <- treat_grps[[out]]
+  }
+  out
+}
+
+#' Translate a filter expression to the symbols in the filter
+#'
+#' This function will return a list of symbols that are present
+#' in a give filter expression
+#'
+#' @param f Filter expression
+#'
+#' @return List of symbols
+#' @noRd
+get_vars_from_filter <- function(f) {
+  syms(all.vars(quo_get_expr(f)))
+}
+
+#' Use available metadata to build the tplyr_meta object
+#'
+#' @param target Target variable currently being summarized
+#' @param table_where Table level where filter
+#' @param layer_where Layer level where filter
+#' @param treat_grps Treatment groups from the tplyr_table parent environment
+#' @param ... All grouping variables
+#'
+#' @return tplyr_meta object
+#' @noRd
+build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
+  variables <- call_args(match.call())
+
+  # Don't want any of the named parameters here
+  variables <- variables[which(names(variables)=='')]
+  values <- list(...)
+
+  # Make an assumption that the treatment variable was the first variable provided
+  values[[1]] <- translate_treat_grps(values[[1]], treat_grps)
+
+  filters <- make_parsed_strings(variables, values)
+
+  meta <- tplyr_meta(
+    names = variables,
+    filters = filters
+  )
+
+  meta <- meta %>%
+    add_filters(layer_where) %>%
+    add_variables(get_vars_from_filter(layer_where)) %>%
+    add_filters(table_where) %>%
+    add_variables(get_vars_from_filter(table_where)) %>%
+    add_variables(target)
+
+  list(meta)
+}
