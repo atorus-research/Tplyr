@@ -3,8 +3,8 @@ mtcars_long <- mtcars %>%
   rownames_to_column(var = "model") %>%
   pivot_longer(cols = c('mpg', 'cyl', 'disp', 'hp', 'drat', 'wt', 'qsec'))
 
-Tplyr:::make_prec_data(mtcars_long, quos(name), quo(value), cap=c('int'=99, 'dec'=99)) %>%
-  arrange(name)
+# Tplyr:::make_prec_data(mtcars_long, quos(name), quo(value), cap=c('int'=99, 'dec'=99)) %>%
+#   arrange(name)
 
 test_that('Precision data calculates correctly', {
   # No by
@@ -117,3 +117,137 @@ test_that('Caps work correctly', {
 
 })
 
+test_that("Precision data can be provided externally", {
+  # Mock up a precision data set
+  prec <- tibble::tribble(
+    ~vs, ~max_int, ~max_dec,
+    0,        1,        1,
+    1,        2,        2
+  )
+
+  t <- tplyr_table(mtcars, gear)
+  l <- group_desc(t, wt, by = vs) %>%
+         set_precision_data(prec)
+
+  t <-add_layers(t, l)
+
+  # Proper data builds without error
+  expect_silent(build(t))
+})
+
+test_that("Missing by variables are handled as specified in precision data",{
+
+  # Mock up a precision data set
+  prec2 <- tibble::tribble(
+    ~vs, ~max_int, ~max_dec,
+    0,        1,        1
+  )
+
+  expect_snapshot_error({
+    t <- tplyr_table(mtcars, gear)
+    l <- group_desc(t, wt, by = vs) %>%
+          set_precision_data(prec2)
+    t <- add_layers(t, l)
+    build(t)
+  })
+
+  expect_snapshot_error({
+    t <- tplyr_table(mtcars, gear)
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(prec2, default="error")
+    t <- add_layers(t, l)
+    build(t)
+  })
+
+  expect_snapshot_error({
+    t <- tplyr_table(mtcars, gear)
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(prec2, default="blah")
+    t <- add_layers(t, l)
+    build(t)
+  })
+
+  expect_snapshot_output({
+    t <- tplyr_table(mtcars, gear)
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(prec2, default="auto")
+    t <- add_layers(t, l)
+    build(t)
+  })
+
+})
+
+test_that("Data validation for external precision data works effectively", {
+  # Mock up a precision data set
+  prec <- tibble::tribble(
+    ~vs, ~max_int, ~max_dec,
+    0,        1,        1,
+    1,        2,        2
+  )
+
+  # max_int and max_dec must exist
+  p1 <- select(prec, -max_dec)
+  p2 <- select(prec, -max_int)
+
+  t <- tplyr_table(mtcars, gear)
+
+  expect_snapshot_error({
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(p1)
+  })
+
+  expect_snapshot_error({
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(p2)
+  })
+
+  # max_int and max_dec must be valid integers
+  p3 <- prec %>% mutate(max_int = max_int + .1)
+  p4 <- prec %>% mutate(max_dec = max_dec + .1)
+
+  expect_snapshot_error({
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(p3)
+  })
+
+  expect_snapshot_error({
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(p4)
+  })
+
+  # by variable types match
+  p5 <- prec %>% mutate(vs = as.character(vs))
+
+  expect_snapshot_error({
+    l <- group_desc(t, wt, by = vs) %>%
+      set_precision_data(p5)
+    t <- add_layers(t, l)
+    build(t)
+  })
+})
+
+
+test_that("Partially provided decimal precision caps populate correctly", {
+
+  load(test_path('adlb.Rdata'))
+
+  t <- tplyr_table(adlb, TRTA, where = PARAMCD == 'URATE') %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(dec = 1))
+    ) %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(int = 1))
+    ) %>%
+    add_layer(
+      group_desc(AVAL) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a (a.a)", mean, sd), cap = c(int = 1, dec = 1))
+    )
+
+  # In bug #20 this caused an error so expect build to complete correctly
+  expect_silent(d <- build(t))
+
+  # Manually verified these results look appropriate
+  expect_snapshot_output(print(d %>% select(starts_with('var1'))))
+})

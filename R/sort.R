@@ -203,7 +203,7 @@ add_order_columns.count_layer <- function(x) {
 
       all_outer <- numeric_data %>%
         filter(!!!filter_logic) %>%
-        extract(1:outer_number, )
+        extract(1:min(nrow(.), outer_number), )
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
@@ -576,10 +576,6 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 
   ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
   numeric_ordering_data <- numeric_data %>%
-    filter_numeric(numeric_cutoff,
-                   numeric_cutoff_stat,
-                   numeric_cutoff_column,
-                   treat_var) %>%
     filter(!!!filter_logic) %>%
 
 
@@ -721,10 +717,11 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
       select(..index)
   }
 
+  present_vars <- unlist(group_data[-1, row_label_vec[length(row_label_vec)]])
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]]), !is.na(!!by[[1]])) %>%
+    filter(numeric_data$summary_var %in% present_vars, !is.na(!!by[[1]])) %>%
     # Remove nesting prefix to prepare numeric data.
     mutate(summary_var := str_sub(summary_var, indentation_length))
 
@@ -738,17 +735,19 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   group_data[1, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
 
   if(tail(order_count_method, 1) == "bycount") {
-    group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
-                                                                                   ordering_cols,
-                                                                                   treat_var,
-                                                                                   head(by, -1),
-                                                                                   cols,
-                                                                                   result_order_var,
-                                                                                   target_var,
-                                                                                   break_ties = break_ties,
-                                                                                   numeric_cutoff = numeric_cutoff,
-                                                                                   numeric_cutoff_stat = numeric_cutoff_stat,
-                                                                                   numeric_cutoff_column = numeric_cutoff_column)
+    if (nrow(group_data) > 1) {
+      group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
+                                                                                     ordering_cols,
+                                                                                     treat_var,
+                                                                                     head(by, -1),
+                                                                                     cols,
+                                                                                     result_order_var,
+                                                                                     target_var,
+                                                                                     break_ties = break_ties,
+                                                                                     numeric_cutoff = numeric_cutoff,
+                                                                                     numeric_cutoff_stat = numeric_cutoff_stat,
+                                                                                     numeric_cutoff_column = numeric_cutoff_column)
+    }
   } else if(tail(order_count_method, 1) == "byvarn") {
 
     varn_df <- get_varn_values(target, target_var[[1]])

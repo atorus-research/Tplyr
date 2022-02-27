@@ -197,7 +197,6 @@ process_nested_count_target <- function(x) {
                                         set_count_row_prefix(indentation))
 
     first_layer_final <- first_layer$numeric_data
-    # add_column(!!target_var[[1]] := .[["summary_var"]])
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%
@@ -654,6 +653,12 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
            pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)
 
            map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
+         },
+         "denom" = {
+           map_chr(.total, num_fmt, which(vars_ord == "denom"), fmt = count_fmt)
+         },
+         "distinct_denom" = {
+           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_denom"), fmt = count_fmt)
          }
   )
 

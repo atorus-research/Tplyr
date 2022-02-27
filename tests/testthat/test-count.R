@@ -490,7 +490,7 @@ test_that("distinct is changed to distinct_n with a warning", {
 
 })
 
-test_that("nested count layers can accecpt text values in the first variable", {
+test_that("Nested count layers can accept text values in the first variable", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(vars("All Cyl", cyl))
@@ -705,8 +705,10 @@ test_that("Posix columns don't cause the build to error out.", {
 #
 
   load(test_path("adae.Rdata"))
-  adsl <- haven::read_xpt(test_path("adsl.xpt")) %>%
-      mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
+  load(test_path("adsl.Rdata"))
+
+  adsl <- adsl %>%
+    mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
     rename(TRTA = TRT01A)
 
   tp_obj <- tplyr_table(adae, TRTA) %>%
@@ -731,7 +733,7 @@ test_that("set_numeric_where works as expected", {
         set_order_count_method("bycount")
     )
 
-  build(t1)
+  expect_snapshot(build(t1))
 
   t2 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -742,7 +744,7 @@ test_that("set_numeric_where works as expected", {
         set_order_count_method("bycount")
     )
 
-  build(t2)
+  expect_snapshot(build(t2))
 
   t3 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -753,7 +755,7 @@ test_that("set_numeric_where works as expected", {
         set_order_count_method("bycount")
     )
 
-  build(t3)
+  expect_snapshot(build(t3))
 
   t4 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -764,7 +766,7 @@ test_that("set_numeric_where works as expected", {
        set_order_count_method("bycount")
     )
 
-  build(t4)
+  expect_snapshot(build(t4))
 
   t5 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -775,7 +777,7 @@ test_that("set_numeric_where works as expected", {
         set_order_count_method("bycount")
     )
 
-  build(t5)
+  expect_snapshot(build(t5))
 
   t6 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -786,26 +788,52 @@ test_that("set_numeric_where works as expected", {
         set_order_count_method("bycount")
     )
 
-  build(t6)
+  expect_snapshot(build(t6))
 
-  t7 <- mtcars %>%
-    tplyr_table(gear) %>%
+  load(test_path("adae.Rdata"))
+
+  t7 <- adae %>%
+    tplyr_table(TRTA) %>%
     add_layer(
-      group_count(vars(vs, cyl)) %>%
-        set_numeric_where(2, "n") %>%
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_where(3, "n", "Placebo") %>%
         add_total_row()
     )
 
-  build(t7)
+  expect_snapshot(build(t7))
 
-  t8 <- mtcars %>%
-    tplyr_table(gear) %>%
+  t8 <- adae %>%
+    tplyr_table(TRTA) %>%
     add_layer(
-      group_count(vars(vs, cyl)) %>%
-        set_numeric_where(2, "n") %>%
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_where(3, "n", "Placebo") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
 
-  build(t8)
+  expect_snapshot(build(t8))
+})
+
+test_that("denom and distinct_denom values work as expected", {
+
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
+        set_format_strings(f_str("xx/xxx (xx.x)", n, denom, pct)) %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t1))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_distinct_by(am) %>%
+        set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_denom, n, denom))
+    )
+
+  expect_snapshot(build(t2))
 })

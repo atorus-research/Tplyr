@@ -226,8 +226,8 @@
 <code class="sourceCode R"><span class="va">cnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGEGR1</span><span class="op">)</span>
 <span class="va">cnt</span>
 <span class="co">#&gt; *** count_layer ***</span>
-<span class="co">#&gt; Self:  count_layer &lt; 0x55c7f3e8ff18 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55c7ee14e048 &gt;</span>
+<span class="co">#&gt; Self:  count_layer &lt; 0x55d916df4ea0 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d911aa5ee0 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGEGR1</span>
 <span class="co">#&gt; by: </span>
@@ -237,8 +237,8 @@
 <span class="va">dsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">AGE</span><span class="op">)</span>
 <span class="va">dsc</span>
 <span class="co">#&gt; *** desc_layer ***</span>
-<span class="co">#&gt; Self:  desc_layer &lt; 0x55c7f3fd63b0 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55c7ee14e048 &gt;</span>
+<span class="co">#&gt; Self:  desc_layer &lt; 0x55d916f44218 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d911aa5ee0 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  AGE</span>
 <span class="co">#&gt; by: </span>
@@ -248,8 +248,8 @@
 <span class="va">shf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_count.html">group_shift</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span>row<span class="op">=</span><span class="va">COMP8FL</span>, column<span class="op">=</span><span class="va">COMP24FL</span><span class="op">)</span><span class="op">)</span>
 <span class="va">shf</span>
 <span class="co">#&gt; *** shift_layer ***</span>
-<span class="co">#&gt; Self:  shift_layer &lt; 0x55c7f40e8eb8 &gt;</span>
-<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55c7ee14e048 &gt;</span>
+<span class="co">#&gt; Self:  shift_layer &lt; 0x55d917062f50 &gt;</span>
+<span class="co">#&gt; Parent:  tplyr_table &lt; 0x55d911aa5ee0 &gt;</span>
 <span class="co">#&gt; target_var: </span>
 <span class="co">#&gt;  COMP8FL</span>
 <span class="co">#&gt;  COMP24FL</span>
@@ -365,6 +365,8 @@
 <th align="left">“Age categories n (%)”</th>
 <th align="left">summary_var</th>
 <th align="right">n</th>
+<th align="right">distinct_n</th>
+<th align="right">distinct_total</th>
 <th align="right">total</th>
 </tr></thead>
 <tbody>
@@ -373,6 +375,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&lt;65</td>
 <td align="right">14</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">86</td>
 </tr>
 <tr class="even">
@@ -380,6 +384,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&gt;80</td>
 <td align="right">30</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">86</td>
 </tr>
 <tr class="odd">
@@ -387,6 +393,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">65-80</td>
 <td align="right">42</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">86</td>
 </tr>
 <tr class="even">
@@ -394,6 +402,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&lt;65</td>
 <td align="right">11</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 <tr class="odd">
@@ -401,6 +411,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&gt;80</td>
 <td align="right">18</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 <tr class="even">
@@ -408,6 +420,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">65-80</td>
 <td align="right">55</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 <tr class="odd">
@@ -415,6 +429,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&lt;65</td>
 <td align="right">8</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 <tr class="even">
@@ -422,6 +438,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">&gt;80</td>
 <td align="right">29</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 <tr class="odd">
@@ -429,6 +447,8 @@
 <td align="left">Age categories n (%)</td>
 <td align="left">65-80</td>
 <td align="right">47</td>
+<td align="right">1</td>
+<td align="right">3</td>
 <td align="right">84</td>
 </tr>
 </tbody>
