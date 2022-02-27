@@ -21,6 +21,8 @@ process_summaries.desc_layer <- function(x, ...) {
     trans_sums <- vector("list", length(target_var))
     # num_sums is the data that will be bound together and returned to provide the numeric internal values
     num_sums <- vector("list", length(target_var))
+    # meta_sums store the metadata table built alongside trans_sums
+    meta_sums <- vector("list", length(target_var))
 
     # Get the row labels out from the format strings list
     row_labels <- name_translator(format_strings)
@@ -68,6 +70,20 @@ process_summaries.desc_layer <- function(x, ...) {
            row_label = row_labels[[stat]]
         )
 
+      # Prepare metadata table
+      meta_sum <- num_sums[[i]] %>%
+        group_by(!!treat_var, !!!by, !!!cols) %>%
+        group_keys() %>%
+        rowwise() %>%
+        mutate(
+          meta = build_desc_meta(cur_var, table_where, where, treat_grps, !!treat_var, !!!by, !!!cols)
+        )
+
+      # Join meta table with the transposed summaries ready for formatting
+      meta_sums[[i]] <- trans_sums[[i]] %>%
+        select(!!treat_var, !!!by, !!!cols, row_label) %>%
+        left_join(meta_sum, by=c(as_label(treat_var), match_exact(by), match_exact(cols)))
+
       # If precision is required, then create the variable identifier
       if (need_prec_table) {
         trans_sums[[i]] <- trans_sums[[i]] %>%
@@ -107,6 +123,7 @@ process_formatting.desc_layer <- function(x, ...) {
   evalq({
     # Initialize list for formatted, transposed outputs
     form_sums <- vector("list", length(target_var))
+    form_meta <- vector("list", length(target_var))
 
     if (need_prec_table) {
       if ('prec' %in% ls()) {
@@ -143,6 +160,15 @@ process_formatting.desc_layer <- function(x, ...) {
                       names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                       values_from = display_string # Use the created display_string variable for values
           )
+
+        # Transpose the metadata identical to the summary
+        form_meta[[i]] <- meta_sums[[i]] %>%
+          pivot_wider(id_cols=c(!!treat_var, match_exact(by)),
+                      names_from = match_exact(vars(row_label, !!!cols)),
+                      names_prefix = paste0('var', i, "_"),
+                      values_from = meta
+          )
+
       } else {
         form_sums[[i]] <- trans_sums[[i]] %>%
           pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
@@ -150,18 +176,31 @@ process_formatting.desc_layer <- function(x, ...) {
                       names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                       values_from = display_string # Use the created display_string variable for values
         )
+
+        form_meta[[i]] <- meta_sums[[i]] %>%
+          pivot_wider(id_cols=c('row_label', match_exact(by)),
+                      names_from = match_exact(vars(!!treat_var, !!!cols)),
+                      names_prefix = paste0('var', i, "_"),
+                      values_from = meta
+          )
       }
     }
 
     # Join the final outputs
     if (stats_as_columns) {
       formatted_data <- reduce(form_sums, full_join, by=c(as_label(treat_var), match_exact(by)))
+      formatted_meta <- reduce(form_meta, full_join, by=c(as_label(treat_var), match_exact(by)))
+
       # Replace row label names
       formatted_data <- replace_by_string_names(formatted_data, by, treat_var)
+      formatted_meta <- replace_by_string_names(formatted_meta, by, treat_var)
     } else {
       formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
+      formatted_meta <- reduce(form_meta, full_join, by=c('row_label', match_exact(by)))
+
       # Replace row label names
       formatted_data <- replace_by_string_names(formatted_data, by)
+      formatted_meta <- replace_by_string_names(formatted_meta, by)
     }
 
 
@@ -173,7 +212,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
 
     # Clean up
-    rm(trans_sums, form_sums, i)
+    rm(trans_sums, form_sums, meta_sums, i)
 
     formatted_data
   }, envir=x)
@@ -238,7 +277,6 @@ construct_desc_string <- function(..., .fmt_str=NULL) {
   } else {
     autos <- c('int'=0, 'dec'=0)
   }
-
   # Format the transposed value
   fmt_args <- list(fmt = fmt$repl_str, num_fmt(value, 1, fmt, autos))
 
