@@ -204,7 +204,12 @@ process_nested_count_target <- function(x) {
       do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
 
     # Bind the numeric data together
-    numeric_data <- bind_rows(first_layer_final, second_layer_final)
+    numeric_data <- bind_rows(first_layer_final, second_layer_final) %>%
+      filter_numeric(numeric_cutoff,
+                     numeric_cutoff_stat,
+                     numeric_cutoff_column,
+                     treat_var[[2]],
+                     by = treat_var[[1]])
 
     # Save the original by and target_vars incase the layer is rebuilt
     by_saved <- by
@@ -448,7 +453,8 @@ process_formatting.count_layer <- function(x, ...) {
     formatted_data <- numeric_data %>%
       filter_numeric(numeric_cutoff,
                      numeric_cutoff_stat,
-                     numeric_cutoff_column) %>%
+                     numeric_cutoff_column,
+                     treat_var) %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = {
         construct_count_string(.n = n, .total = total,
@@ -801,21 +807,25 @@ rename_missing_values <- function(x) {
 filter_numeric <- function(.data,
                            numeric_cutoff,
                            numeric_cutoff_stat,
-                           numeric_cutoff_column) {
+                           numeric_cutoff_column,
+                           treat_var,
+                           by = NULL) {
 
   if (is.null(numeric_cutoff)) {
     return(.data)
   }
 
-  vals <- .data %>%
-    {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
-    mutate(
-      pct = n/total,
-      distinct_pct = distinct_n/distinct_total
-    ) %>%
-    filter(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff) %>%
-    extract2("summary_var")
+    vals <- .data %>%
+      {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
+      mutate(
+        pct = n/total,
+        distinct_pct = distinct_n/distinct_total
+      ) %>%
+      filter(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff) %>%
+      extract2("summary_var")
 
-  .data %>%
-    filter(summary_var %in% vals)
+    .data %>%
+      filter(summary_var %in% vals)
+
+
 }

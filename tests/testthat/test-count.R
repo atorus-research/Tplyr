@@ -719,3 +719,93 @@ test_that("Posix columns don't cause the build to error out.", {
 
   expect_silent(build(tp_obj))
 })
+
+test_that("set_numeric_where works as expected", {
+
+  t1 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(10, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t1)
+
+  t2 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(5.1, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t2)
+
+  t3 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(13, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t3)
+
+  t4 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(16, "n") %>%
+        add_total_row() %>%
+       set_order_count_method("bycount")
+    )
+
+  build(t4)
+
+  t5 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(0.5, "pct") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t5)
+
+  t6 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_where(4, "n", "3") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t6)
+
+  t7 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(vars(vs, cyl)) %>%
+        set_numeric_where(2, "n") %>%
+        add_total_row()
+    )
+
+  build(t7)
+
+  t8 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(vars(vs, cyl)) %>%
+        set_numeric_where(2, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  build(t8)
+})

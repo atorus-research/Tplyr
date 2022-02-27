@@ -161,6 +161,7 @@ add_order_columns.count_layer <- function(x) {
 
   evalq({
 
+    if(nrow(formatted_data) == 0)
     if(!exists("break_ties")) break_ties <- NULL
 
     # Set all defaults for ordering
@@ -577,7 +578,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   numeric_ordering_data <- numeric_data %>%
     filter_numeric(numeric_cutoff,
                    numeric_cutoff_stat,
-                   numeric_cutoff_column) %>%
+                   numeric_cutoff_column,
+                   treat_var) %>%
     filter(!!!filter_logic) %>%
 
 
@@ -762,7 +764,9 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   } else {
 
-    group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:nrow(group_data[-1,])
+    group_row_count <- nrow(group_data[-1,])
+    # Logic for group_row_count is when numeric_where values cause unexpected results
+    group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:ifelse(group_row_count == 0, 1, group_row_count)
 
   }
 

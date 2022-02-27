@@ -54,7 +54,8 @@ process_nested_count_target <- function(x) {
       do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
 
     # Bind the numeric data together
-    numeric_data <- bind_rows(first_layer_final, second_layer_final)
+    numeric_data <- bind_rows(first_layer_final, second_layer_final) %>%
+      filter_numeric(numeric_cutoff, numeric_cutoff_stat, numeric_cutoff_column, treat_var)
 
     # Save the original by and target_vars incase the layer is rebuilt
     by_saved <- by
