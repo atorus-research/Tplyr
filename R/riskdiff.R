@@ -175,7 +175,7 @@ prep_two_way <- function(comp) {
         # Need to fill in NAs in the numeric data that
         # are patched later in formatting
         mutate(
-          !!by[[1]] := ifelse(is.na(!!by[[1]]), summary_var, !!by[[1]])
+          !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
         )
     }
 
