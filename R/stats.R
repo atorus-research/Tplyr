@@ -27,6 +27,7 @@ process_statistic_data.tplyr_riskdiff <- function(x, ...) {
 
     comp_numeric_data <- vector('list', length(comparisons))
     trans_numeric_data <- vector('list', length(comparisons))
+    comp_meta <- vector('list', length(comparisons))
 
     # Execute over each set of comparisons
     for (i in seq_along(comparisons)) {
@@ -95,6 +96,7 @@ process_statistic_formatting.tplyr_riskdiff <- function(x, ...) {
 
     # Prepare the formatted datasets
     formatted_statistic_data <- comp_numeric_data
+    browser()
 
     for (name in names(comp_numeric_data)) {
 
