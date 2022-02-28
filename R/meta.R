@@ -163,7 +163,9 @@ get_vars_from_filter <- function(f) {
 
 #' Use available metadata to build the tplyr_meta object
 #'
-#' @param target Target variable currently being summarized
+#' This is the main driver function, and layer specific variants
+#' adapt on top of this function
+#'
 #' @param table_where Table level where filter
 #' @param layer_where Layer level where filter
 #' @param treat_grps Treatment groups from the tplyr_table parent environment
@@ -171,12 +173,7 @@ get_vars_from_filter <- function(f) {
 #'
 #' @return tplyr_meta object
 #' @noRd
-build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
-  variables <- call_args(match.call())
-
-  # Don't want any of the named parameters here
-  variables <- variables[which(names(variables)=='')]
-  values <- list(...)
+build_meta <- function(table_where, layer_where, treat_grps, variables, values) {
 
   # Make an assumption that the treatment variable was the first variable provided
   values[[1]] <- translate_treat_grps(values[[1]], treat_grps)
@@ -192,8 +189,91 @@ build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
     add_filters(layer_where) %>%
     add_variables(get_vars_from_filter(layer_where)) %>%
     add_filters(table_where) %>%
-    add_variables(get_vars_from_filter(table_where)) %>%
+    add_variables(get_vars_from_filter(table_where))
+
+  meta
+}
+
+#' Build metadata for desc_layers
+#'
+#' @param target Target variable currently being summarized
+#' @param table_where Table level where filter
+#' @param layer_where Layer level where filter
+#' @param treat_grps Treatment groups from the tplyr_table parent environment
+#' @param ... All grouping variables
+#'
+#' @return tplyr_meta object
+#' @noRd
+build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
+
+  variables <- call_args(match.call())
+
+  # Don't want any of the named parameters here
+  variables <- variables[which(names(variables)=='')]
+  values <- list(...)
+
+  meta <- build_meta(table_where, layer_where, treat_grps, variables, values) %>%
     add_variables(target)
+
+  list(meta)
+}
+
+#' Build metadata for count_layers
+#'
+#' @param target Target variable currently being summarized
+#' @param table_where Table level where filter
+#' @param layer_where Layer level where filter
+#' @param treat_grps Treatment groups from the tplyr_table parent environment
+#' @param ... All grouping variables
+#'
+#' @return tplyr_meta object
+#' @noRd
+build_count_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
+
+  variables <- call_args(match.call())
+
+  # Don't want any of the named parameters here
+  variables <- variables[which(names(variables)=='')]
+
+  values <- list(...)
+
+  # The total row label may not pass through, so set it
+  total_row_label <- ifelse(is.null(layer$total_row_label), 'Total', layer$total_row_label)
+  row_filter <- list()
+  add_vars <- layer$target_var
+
+  # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
+  if (any(is.na(values))) {
+    # Total row or outer layer
+    na_var <- variables[which(is.na(values))]
+
+    # work around outer letter being NA
+    filter_variables <- variables[which(!is.na(values))]
+    filter_values <- values[which(!is.na(values))]
+
+    if (summary_var != total_row_label) {
+      # Subset to outer layer value
+      row_filter <- make_parsed_strings(na_var, summary_var)
+    }
+
+    add_vars <- append(add_vars, na_var)
+
+  } else {
+    # Inside the nested layer
+    filter_variables <- variables
+    filter_values <- values
+    # Toss out the indentation
+    if (str_starts(summary_var, layer$indentation)) {
+      summary_var <- str_sub(summary_var, layer$indentation_length+1)
+    }
+    row_filter <- make_parsed_strings(layer$target_var, summary_var)
+
+  }
+
+  # Make the meta object
+  meta <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
+    add_filters(row_filter) %>%
+    add_variables(add_vars)
 
   list(meta)
 }
