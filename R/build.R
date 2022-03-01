@@ -12,12 +12,14 @@
 #' takes place first. Next, each of the layers begins executing. Once the layers complete executing, the output of each layer is stacked
 #' into the resulting data frame.
 #'
+#' TODO: Update the text here to mention the metadata
 #' Once this process is complete, any post-processing necessary within the table environment takes place, and the final output can be
 #' delivered. Metadata and traceability information are kept within each of the layer environments, which allows an investigation into the
 #' source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
 #' a layer using \code{\link{get_numeric_data}}.
 #'
 #' @param x A \code{tplyr_table} object
+#' @param metadata  Trigger to build metadata. Defaults to FALSE
 #'
 #' @return An executed \code{tplyr_table}
 #' @export
@@ -36,7 +38,7 @@
 #'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
-build <- function(x, build_metadata=FALSE) {
+build <- function(x, metadata=FALSE) {
     UseMethod("build")
 }
 
