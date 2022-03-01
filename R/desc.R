@@ -20,9 +20,8 @@ process_summaries.desc_layer <- function(x, ...) {
     # trans_sums is the data that will pass forward to be formatted
     trans_sums <- vector("list", length(target_var))
     # num_sums is the data that will be bound together and returned to provide the numeric internal values
+    num_sums_raw <- vector("list", length(target_var))
     num_sums <- vector("list", length(target_var))
-    # meta_sums store the metadata table built alongside trans_sums
-    meta_sums <- vector("list", length(target_var))
 
     # Get the row labels out from the format strings list
     row_labels <- name_translator(format_strings)
@@ -48,7 +47,7 @@ process_summaries.desc_layer <- function(x, ...) {
       summaries <- get_summaries()[match_exact(summary_vars)]
 
       # Create the numeric summary data
-      num_sums[[i]] <- built_target %>%
+      num_sums_raw[[i]] <- built_target %>%
         # Rename the current variable to make each iteration use a generic name
         rename(.var = !!cur_var) %>%
         # Group by treatment, provided by variable, and provided column variables
@@ -60,7 +59,7 @@ process_summaries.desc_layer <- function(x, ...) {
         complete(!!treat_var, !!!by, !!!cols)
 
       # Create the transposed summary data to prepare for formatting
-      trans_sums[[i]] <- num_sums[[i]] %>%
+      trans_sums[[i]] <- num_sums_raw[[i]] %>%
         # Transpose the summaries that make up the first number in a display string
         # into the the `value` column with labels by `stat`
         pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
@@ -69,20 +68,6 @@ process_summaries.desc_layer <- function(x, ...) {
         mutate(
            row_label = row_labels[[stat]]
         )
-
-      # Prepare metadata table
-      meta_sum <- num_sums[[i]] %>%
-        group_by(!!treat_var, !!!by, !!!cols) %>%
-        group_keys() %>%
-        rowwise() %>%
-        mutate(
-          meta = build_desc_meta(cur_var, table_where, where, treat_grps, !!treat_var, !!!by, !!!cols)
-        )
-
-      # Join meta table with the transposed summaries ready for formatting
-      meta_sums[[i]] <- trans_sums[[i]] %>%
-        select(!!treat_var, !!!by, !!!cols, row_label) %>%
-        left_join(meta_sum, by=c(as_label(treat_var), match_exact(by), match_exact(cols)))
 
       # If precision is required, then create the variable identifier
       if (need_prec_table) {
@@ -93,7 +78,7 @@ process_summaries.desc_layer <- function(x, ...) {
       }
 
       # Numeric data needs the variable names replaced and add summary variable name
-      num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
+      num_sums[[i]] <- replace_by_string_names(num_sums_raw[[i]], by) %>%
         mutate(summary_var = as_name(cur_var)) %>%
         select(summary_var, everything())
 
@@ -103,9 +88,6 @@ process_summaries.desc_layer <- function(x, ...) {
 
     # Bind the numeric data together within the layer
     numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
-
-    # Delete the listed numeric data
-    rm(num_sums)
 
   }, envir=x)
 }
@@ -123,7 +105,6 @@ process_formatting.desc_layer <- function(x, ...) {
   evalq({
     # Initialize list for formatted, transposed outputs
     form_sums <- vector("list", length(target_var))
-    form_meta <- vector("list", length(target_var))
 
     if (need_prec_table) {
       if ('prec' %in% ls()) {
@@ -161,14 +142,6 @@ process_formatting.desc_layer <- function(x, ...) {
                       values_from = display_string # Use the created display_string variable for values
           )
 
-        # Transpose the metadata identical to the summary
-        form_meta[[i]] <- meta_sums[[i]] %>%
-          pivot_wider(id_cols=c(!!treat_var, match_exact(by)),
-                      names_from = match_exact(vars(row_label, !!!cols)),
-                      names_prefix = paste0('var', i, "_"),
-                      values_from = meta
-          )
-
       } else {
         form_sums[[i]] <- trans_sums[[i]] %>%
           pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
@@ -177,30 +150,20 @@ process_formatting.desc_layer <- function(x, ...) {
                       values_from = display_string # Use the created display_string variable for values
         )
 
-        form_meta[[i]] <- meta_sums[[i]] %>%
-          pivot_wider(id_cols=c('row_label', match_exact(by)),
-                      names_from = match_exact(vars(!!treat_var, !!!cols)),
-                      names_prefix = paste0('var', i, "_"),
-                      values_from = meta
-          )
       }
     }
 
     # Join the final outputs
     if (stats_as_columns) {
       formatted_data <- reduce(form_sums, full_join, by=c(as_label(treat_var), match_exact(by)))
-      formatted_meta <- reduce(form_meta, full_join, by=c(as_label(treat_var), match_exact(by)))
 
       # Replace row label names
       formatted_data <- replace_by_string_names(formatted_data, by, treat_var)
-      formatted_meta <- replace_by_string_names(formatted_meta, by, treat_var)
     } else {
       formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
-      formatted_meta <- reduce(form_meta, full_join, by=c('row_label', match_exact(by)))
 
       # Replace row label names
       formatted_data <- replace_by_string_names(formatted_data, by)
-      formatted_meta <- replace_by_string_names(formatted_meta, by)
     }
 
 
@@ -212,7 +175,7 @@ process_formatting.desc_layer <- function(x, ...) {
 
 
     # Clean up
-    rm(trans_sums, form_sums, meta_sums, i)
+    rm(form_sums, i)
 
     formatted_data
   }, envir=x)
