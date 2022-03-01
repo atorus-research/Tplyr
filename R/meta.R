@@ -263,7 +263,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
     filter_variables <- variables
     filter_values <- values
     # Toss out the indentation
-    if (str_starts(summary_var, layer$indentation)) {
+    if (!is.null(layer$indentation) && str_starts(summary_var, layer$indentation)) {
       summary_var <- str_sub(summary_var, layer$indentation_length+1)
     }
     row_filter <- make_parsed_strings(layer$target_var, summary_var)
@@ -276,4 +276,22 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
     add_variables(add_vars)
 
   list(meta)
+}
+
+#' Build metadata for risk difference comparisons
+#'
+#' @param meta A tplyr_metadata object
+#' @param treat_var the treatment variable
+#' @param comp The current rdiff comparison
+#'
+#' @return tplyr_meta object
+#' @noRd
+build_rdiff_meta <- function(meta, treat_var, comp){
+  # Make a new filter that contains the current comparison being made
+  filt <- make_parsed_strings(list(treat_var), list(comp))[[1]]
+  # Add the filter in the spot where the treatment groups are held,
+  # which is always the first element (in a count layer)
+  meta$filters[[1]] <- filt
+
+  meta
 }
