@@ -154,6 +154,24 @@ process_metadata.tplyr_riskdiff <- function(x, ...) {
                                    by=c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var')) %>%
       distinct()
 
+    if (length(cols) > 0) {
+
+      # If only one comparison was made, the columns won't prefix with the transposed variable name
+      # So trick it by introducing a column I can drop later. Not great, but functional
+      formatted_stats_meta['rdiffx'] <- ''
+
+      # Pivot by column
+      formatted_stats_meta <- formatted_stats_meta %>%
+        pivot_wider(id_cols=c(match_exact(c(by, head(target_var, -1))),  'summary_var'),
+                    names_from = match_exact(cols),
+                    names_sep = "_",
+                    values_from=starts_with('rdiff'))
+
+      # Drop the dummied columns
+      formatted_stats_meta <- formatted_stats_meta %>% select(-starts_with('rdiffx'))
+
+    }
+
   }, envir=x)
 
   env_get(x, "formatted_stats_meta")
