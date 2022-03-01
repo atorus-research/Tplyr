@@ -4,7 +4,7 @@
 \alias{build}
 \title{Trigger the execution of the \code{tplyr_table}}
 \usage{
-build(x)
+build(x, build_metadata = FALSE)
 }
 \arguments{
 \item{x}{A \code{tplyr_table} object}
