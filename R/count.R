@@ -444,16 +444,6 @@ process_formatting.count_layer <- function(x, ...) {
     #used to split the string.
     indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
 
-    layer <- current_env()
-
-    meta_sum <- numeric_data %>%
-      group_by(!!treat_var, !!!by, !!!cols, summary_var) %>%
-      group_keys() %>%
-      rowwise() %>%
-      mutate(
-        meta = build_count_meta(layer, table_where, where, treat_grps, summary_var, !!treat_var, !!!cols, !!!by)
-      )
-
     # Can I take the metadata from here and send it back to the comps during formatting?
 
     formatted_data <- numeric_data
@@ -482,24 +472,14 @@ process_formatting.count_layer <- function(x, ...) {
     # Replace the by variables and target variable names with `row_label<n>`
     replace_by_string_names(quos(!!!by, summary_var))
 
-    # Pivot the meta table
-    formatted_meta <- meta_sum %>%
-      pivot_wider(id_cols = c(match_exact(by), "summary_var"),
-                  names_from = c(!!treat_var, match_exact(cols)), values_from = meta,
-                  names_prefix = "var1_") %>%
-      replace_by_string_names(quos(!!!by, summary_var))
-
     if (is_built_nest) {
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
       # Last row label is always the inner target variable
       row_labels <- vars_select(names(formatted_data), starts_with("row_label"))
-      row_labels_meta <- vars_select(names(formatted_meta), starts_with("row_label"))
       # Replace the missing 'outer' with the original target
       # The indexing looks weird but the idea is to get rid of the matrix with the '[, 1]'
       formatted_data[is.na(formatted_data[[1]]), 1] <- formatted_data[is.na(formatted_data[[1]]),
-                                                                      tail(row_labels, 1)]
-      formatted_meta[is.na(formatted_meta[[1]]), 1] <- formatted_meta[is.na(formatted_meta[[1]]),
                                                                       tail(row_labels, 1)]
     }
 
