@@ -36,15 +36,14 @@
 #'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
-build <- function(x) {
-
+build <- function(x, build_metadata=FALSE) {
     UseMethod("build")
 }
 
 #' tplyr_table S3 method
 #' @noRd
 #' @export
-build.tplyr_table <- function(x) {
+build.tplyr_table <- function(x, metadata=FALSE) {
 
   op <- options()
 
@@ -65,6 +64,10 @@ build.tplyr_table <- function(x) {
 
     # Format layers/table and pivot. process_formatting should return the built table!
     output_list <- purrr::map(x$layers, process_formatting)
+
+    if (metadata) {
+      metadata_list <- purrr::map(x$layers, process_metadata)
+    }
 
     output <- output_list %>%
       map2_dfr(seq_along(output_list), add_layer_index) %>%
@@ -98,7 +101,7 @@ process_summaries <- function(x, ...) {
 #' @param x A tplyr_layer object
 #' @param ... arguments passed to dispatch
 #'
-#' @return The formatted_table object that is binded to the layer
+#' @return The formatted_table object that is bound to the layer
 #' @export
 #' @keywords internal
 process_formatting <- function(x, ...) {
@@ -108,6 +111,19 @@ process_formatting <- function(x, ...) {
 #' @noRd
 prepare_format_metadata <- function(x) {
   UseMethod("prepare_format_metadata")
+}
+
+#' Process layers to get metadata tables
+#'
+#' This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
+#' @param x A tplyr_layer object
+#' @param ... arguments passed to dispatch
+#'
+#' @return The formatted_meta object that is bound to the layer
+#' @export
+#' @keywords internal
+process_metadata <- function(x, ...) {
+  UseMethod("process_metadata")
 }
 
 #' Fetch table formatting info from layers
