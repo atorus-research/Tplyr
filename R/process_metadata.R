@@ -19,7 +19,6 @@ process_metadata.desc_layer <- function(x, ...) {
       meta_sum <- num_sums_raw[[i]] %>%
         group_by(!!treat_var, !!!by, !!!cols) %>%
         group_keys() %>%
-        # TODO: Vectorize build_meta functions to avoid the rowwise functions because they're slow
         rowwise() %>%
         mutate(
           meta = build_desc_meta(cur_var, table_where, where, treat_grps, !!treat_var, !!!by, !!!cols)
@@ -79,7 +78,6 @@ process_metadata.count_layer <- function(x, ...) {
     meta_sum <- numeric_data %>%
       group_by(!!treat_var, !!!by, !!!cols, summary_var) %>%
       group_keys() %>%
-      rowwise() %>%
       mutate(
         meta = build_count_meta(
           layer,

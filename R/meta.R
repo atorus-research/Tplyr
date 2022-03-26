@@ -212,11 +212,33 @@ build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
   variables <- variables[which(names(variables)=='')]
   values <- list(...)
 
-  meta <- build_meta(table_where, layer_where, treat_grps, variables, values) %>%
-    add_variables(target)
+  # Output vector
+  meta <- vector('list', length(values[[1]]))
 
-  list(meta)
+  # Vectorize across the input data
+  for (i in seq_along(values[[1]])) {
+    # Pull out the current row's values
+    cur_values <- map(values, ~ .x[i])
+    # Build the tplyr_meta object
+    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, variables, cur_values) %>%
+      add_variables(target)
+  }
+
+  meta
 }
+# build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
+#
+#   variables <- call_args(match.call())
+#
+#   # Don't want any of the named parameters here
+#   variables <- variables[which(names(variables)=='')]
+#   values <- list(...)
+#
+#   meta <- build_meta(table_where, layer_where, treat_grps, variables, values) %>%
+#     add_variables(target)
+#
+#   list(meta)
+# }
 
 #' Build metadata for count_layers
 #'
