@@ -19,7 +19,7 @@ process_metadata.desc_layer <- function(x, ...) {
       meta_sum <- num_sums_raw[[i]] %>%
         group_by(!!treat_var, !!!by, !!!cols) %>%
         group_keys() %>%
-        rowwise() %>%
+        # rowwise() %>%
         mutate(
           meta = build_desc_meta(cur_var, table_where, where, treat_grps, !!treat_var, !!!by, !!!cols)
         )

@@ -73,7 +73,7 @@ add_filters <- function(meta, filters) {
 #' get_parse_string_value('hello')
 #' get_parse_string_value(1)
 get_parse_string_value <- function(val) {
-  if (class(val) %in% c('character', 'factor')) {
+  if (class(val) %in% c('character', 'factor') && !is.na(val)) {
     paste0('"', val, '"')
   } else{
     val
@@ -110,19 +110,28 @@ make_vect_str <- function(values) {
 #' Given a symbol and values, this function will return an expression required
 #' to subset the given variable to that set of values
 #'
-#' @param variable A symbol
-#' @param values Values to be filter
+#' @param variables Variables to filter
+#' @param values Values to be filtered
+#' @param negate  Negate the filter
 #'
 #' @return
 #' @noRd
-make_parsed_strings <- function(variables, values) {
+make_parsed_strings <- function(variables, values, negate=FALSE) {
 
   out <- vector('list', length(variables))
 
   for (i in seq_along(variables)) {
-    opr <- ifelse(length(values[[i]]) == 1, '==', '%in%')
+    if (negate) {
+      opr <- ifelse(length(values[[i]]) == 1, '!=', '%in%')
+    } else {
+      opr <- ifelse(length(values[[i]]) == 1, '==', '%in%')
+    }
 
-    s <- paste(as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
+    if (negate && opr == '%in%') {
+      s <- paste('!', as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
+    } else{
+      s <- paste(as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
+    }
 
     out[[i]] <- str2lang(s)
   }
@@ -226,19 +235,6 @@ build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
 
   meta
 }
-# build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
-#
-#   variables <- call_args(match.call())
-#
-#   # Don't want any of the named parameters here
-#   variables <- variables[which(names(variables)=='')]
-#   values <- list(...)
-#
-#   meta <- build_meta(table_where, layer_where, treat_grps, variables, values) %>%
-#     add_variables(target)
-#
-#   list(meta)
-# }
 
 #' Build metadata for count_layers
 #'
@@ -261,43 +257,63 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # The total row label may not pass through, so set it
   total_row_label <- ifelse(is.null(layer$total_row_label), 'Total', layer$total_row_label)
-  row_filter <- list()
+  count_missings <- ifelse(is.null(layer$count_missings), FALSE, layer$count_missings)
+  mlist <- layer$missing_count_list
+
   add_vars <- layer$target_var
 
-  # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
-  if (any(is.na(values))) {
-    # Total row or outer layer
-    na_var <- variables[which(is.na(values))]
+  meta <- vector('list', length(values[[1]]))
 
-    # work around outer letter being NA
-    filter_variables <- variables[which(!is.na(values))]
-    filter_values <- values[which(!is.na(values))]
+  # Vectorize across the input data
+  for (i in seq_along(values[[1]])) {
 
-    if (summary_var != total_row_label) {
-      # Subset to outer layer value
-      row_filter <- make_parsed_strings(na_var, summary_var)
+    row_filter <- list()
+
+    # Pull out the current row's values
+    cur_values <- map(values, ~ .x[i])
+
+    # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
+    if (any(is.na(cur_values))) {
+
+      # Total row or outer layer
+      na_var <- variables[which(is.na(cur_values))]
+
+      # work around outer letter being NA
+      filter_variables <- variables[which(!is.na(cur_values))]
+      filter_values <- cur_values[which(!is.na(cur_values))]
+
+      if (summary_var[i] != total_row_label) {
+        # Subset to outer layer value
+        row_filter <- make_parsed_strings(na_var, summary_var[i])
+      } else if (summary_var[i] == total_row_label && !count_missings) {
+        # Filter out the missing counts if the total row should exclude missings
+        row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
+      }
+
+      add_vars <- append(add_vars, na_var)
+
+    } else {
+      # Inside the nested layer
+      filter_variables <- variables
+      filter_values <- cur_values
+      # Toss out the indentation
+      if (!is.null(layer$indentation) && str_starts(summary_var[i], layer$indentation)) {
+        summary_var <- str_sub(summary_var[i], layer$indentation_length+1)
+      } else if (summary_var[i] %in% names(mlist)) {
+        # Get the values for the missing row
+        miss_val <- mlist[which(names(mlist) == summary_var[i])]
+        row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
+      }
+      row_filter <- make_parsed_strings(layer$target_var, summary_var[i])
     }
 
-    add_vars <- append(add_vars, na_var)
-
-  } else {
-    # Inside the nested layer
-    filter_variables <- variables
-    filter_values <- values
-    # Toss out the indentation
-    if (!is.null(layer$indentation) && str_starts(summary_var, layer$indentation)) {
-      summary_var <- str_sub(summary_var, layer$indentation_length+1)
-    }
-    row_filter <- make_parsed_strings(layer$target_var, summary_var)
-
+    # Make the meta object
+    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
+      add_filters(row_filter) %>%
+      add_variables(add_vars)
   }
 
-  # Make the meta object
-  meta <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
-    add_filters(row_filter) %>%
-    add_variables(add_vars)
-
-  list(meta)
+  meta
 }
 
 #' Build metadata for risk difference comparisons
