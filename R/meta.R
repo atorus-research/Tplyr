@@ -260,17 +260,18 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
   count_missings <- ifelse(is.null(layer$count_missings), FALSE, layer$count_missings)
   mlist <- layer$missing_count_list
 
-  add_vars <- layer$target_var
 
   meta <- vector('list', length(values[[1]]))
 
   # Vectorize across the input data
   for (i in seq_along(values[[1]])) {
 
+    add_vars <- layer$target_var
     row_filter <- list()
 
     # Pull out the current row's values
     cur_values <- map(values, ~ .x[i])
+
 
     # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
     if (any(is.na(cur_values))) {
@@ -282,29 +283,47 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
       filter_variables <- variables[which(!is.na(cur_values))]
       filter_values <- cur_values[which(!is.na(cur_values))]
 
-      if (summary_var[i] != total_row_label) {
-        # Subset to outer layer value
-        row_filter <- make_parsed_strings(na_var, summary_var[i])
-      } else if (summary_var[i] == total_row_label && !count_missings) {
+      if (summary_var[i] == total_row_label && !count_missings) {
         # Filter out the missing counts if the total row should exclude missings
         row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
       }
-
-      add_vars <- append(add_vars, na_var)
-
-    } else {
-      # Inside the nested layer
-      filter_variables <- variables
-      filter_values <- cur_values
-      # Toss out the indentation
-      if (!is.null(layer$indentation) && str_starts(summary_var[i], layer$indentation)) {
-        summary_var <- str_sub(summary_var[i], layer$indentation_length+1)
-      } else if (summary_var[i] %in% names(mlist)) {
+      else if (summary_var[i] %in% names(mlist)) {
         # Get the values for the missing row
         miss_val <- mlist[which(names(mlist) == summary_var[i])]
         row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
       }
-      row_filter <- make_parsed_strings(layer$target_var, summary_var[i])
+      else if (summary_var[i] != total_row_label) {
+        # Subset to outer layer value
+        row_filter <- make_parsed_strings(na_var, summary_var[i])
+      }
+
+      add_vars <- append(add_vars, na_var)
+
+    }
+    else {
+      # Inside the nested layer
+      filter_variables <- variables
+      filter_values <- cur_values
+
+      # Toss out the indentation
+      if (!is.null(layer$indentation) && str_starts(summary_var[i], layer$indentation)) {
+        summary_var[i] <- str_sub(summary_var[i], layer$indentation_length+1)
+      }
+
+      #TODO: Is this redundant and will this always be the same as the inner layer?
+      if (summary_var[i] %in% names(mlist)) {
+        # Get the values for the missing row
+        miss_val <- mlist[which(names(mlist) == summary_var[i])]
+        row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
+      }
+      else if (summary_var[i] == total_row_label && !count_missings) {
+        # Filter out the missing counts if the total row should exclude missings
+        row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
+      }
+      else if (summary_var[i] != total_row_label) {
+        # If we're not in a total row, build the filter
+        row_filter <- make_parsed_strings(layer$target_var, summary_var[i])
+      }
     }
 
     # Make the meta object
