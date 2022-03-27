@@ -178,18 +178,13 @@ get_vars_from_filter <- function(f) {
 #' @noRd
 build_meta <- function(table_where, layer_where, treat_grps, variables, values) {
 
-  # Variables and values should be restricted only to symbols
-  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
-  filter_variables <- variables[inds]
-  filter_values <- values[inds]
-
   # Make an assumption that the treatment variable was the first variable provided
-  filter_values[[1]] <- translate_treat_grps(filter_values[[1]], treat_grps)
+  values[[1]] <- translate_treat_grps(values[[1]], treat_grps)
 
-  filters <- make_parsed_strings(filter_variables, filter_values)
+  filters <- make_parsed_strings(variables, values)
 
   meta <- tplyr_meta(
-    names = filter_variables,
+    names = variables,
     filters = filters
   )
 
@@ -219,6 +214,11 @@ build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
   values <- list(...)
+
+  # Get rid of text provided by variables
+  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
+  variables <- variables[inds]
+  values <- values[inds]
 
   # Output vector
   meta <- vector('list', length(values[[1]]))
@@ -251,8 +251,12 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
-
   values <- list(...)
+
+  # Get rid of text provided by variables
+  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
+  variables <- variables[inds]
+  values <- values[inds]
 
   # The total row label may not pass through, so set it
   total_row_label <- ifelse(is.null(layer$total_row_label), 'Total', layer$total_row_label)
@@ -270,7 +274,6 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
     # Pull out the current row's values
     cur_values <- map(values, ~ .x[i])
-
 
     # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
     if (any(is.na(cur_values))) {
@@ -329,6 +332,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
     meta[[i]] <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
       add_filters(row_filter) %>%
       add_variables(add_vars)
+
   }
 
   meta
@@ -364,12 +368,16 @@ build_rdiff_meta <- function(meta, treat_var, comp){
 #' @noRd
 build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
 
-
   variables <- call_args(match.call())
 
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
   values <- list(...)
+
+  # Get rid of text provided by variables
+  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
+  variables <- variables[inds]
+  values <- values[inds]
 
   meta <- vector('list', length(values[[1]]))
 
