@@ -24,9 +24,10 @@ process_metadata.desc_layer <- function(x, ...) {
           meta = build_desc_meta(cur_var, table_where, where, treat_grps, !!treat_var, !!!by, !!!cols)
         )
 
+
       # Join meta table with the transposed summaries ready for formatting
       meta_sums[[i]] <- trans_sums[[i]] %>%
-        select(!!treat_var, !!!by, !!!cols, row_label) %>%
+        select(!!treat_var, match_exact(by), !!!cols, row_label) %>%
         left_join(meta_sum, by=c(as_label(treat_var), match_exact(by), match_exact(cols)))
 
       if (stats_as_columns) {
@@ -177,4 +178,46 @@ process_metadata.tplyr_riskdiff <- function(x, ...) {
 
   env_get(x, "formatted_stats_meta")
 
+}
+
+#' Process metadata for a layer of type \code{shift}
+#'
+#' @param x Layer object
+#'
+#' @return Nothing
+#' @export
+#' @noRd
+process_metadata.shift_layer <- function(x, ...) {
+  evalq({
+
+    layer <- current_env()
+
+    # Build up the metadata for the count layer
+    formatted_meta <- numeric_data %>%
+      mutate(
+        meta = build_shift_meta(
+          layer,
+          table_where,
+          where,
+          treat_grps,
+          summary_var,
+          !!treat_var,
+          !!!cols,
+          !!!by,
+          !!target_var$column
+        )
+      ) %>%
+      # Pivot table
+      pivot_wider(id_cols = c(match_exact(by), "summary_var"),
+                  names_from = c( !!treat_var, !!target_var$column, match_exact(cols)),
+                  values_from = meta,
+                  names_prefix = "var1_") %>%
+      replace_by_string_names(quos(!!!by, summary_var))
+
+    # Attach the row identifier
+    formatted_meta <- assign_row_id(formatted_meta, 's')
+
+  }, envir=x)
+
+  env_get(x, "formatted_meta")
 }
