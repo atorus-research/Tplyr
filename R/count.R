@@ -494,9 +494,8 @@ process_formatting.count_layer <- function(x, ...) {
                                   by = vars_select(names(formatted_data), starts_with("row_label")))
     }
 
-
-
-
+    # Attach the row identifier
+    formatted_data <- assign_row_id(formatted_data, 'c')
   }, envir = x)
 
   add_order_columns(x)

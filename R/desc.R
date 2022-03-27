@@ -177,7 +177,8 @@ process_formatting.desc_layer <- function(x, ...) {
     # Clean up
     rm(form_sums, i)
 
-    formatted_data
+    formatted_data <- assign_row_id(formatted_data, 'd')
+
   }, envir=x)
 
   add_order_columns(x)
