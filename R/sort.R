@@ -223,7 +223,7 @@ add_order_columns.count_layer <- function(x) {
 
       if (!is.null(nest_count) && nest_count) {
         # If the table nest should be collapsed into one row.
-        row_label_names <- vars_select(names(formatted_data), starts_with("row"))
+        row_label_names <- vars_select(names(formatted_data), starts_with("row_label"))
         # Remove first row
         formatted_data[, 1] <- NULL
         # Rename row labels
@@ -255,7 +255,6 @@ add_order_columns.count_layer <- function(x) {
           else return(isna_)
         }))
       }
-
 
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
 
