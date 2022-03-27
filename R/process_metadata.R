@@ -56,6 +56,8 @@ process_metadata.desc_layer <- function(x, ...) {
       formatted_meta <- replace_by_string_names(formatted_meta, by)
     }
 
+    formatted_meta <- assign_row_id(formatted_meta, 'd')
+
   }, envir=x)
 
   env_get(x, "formatted_meta")
@@ -76,8 +78,6 @@ process_metadata.count_layer <- function(x, ...) {
 
     # Build up the metadata for the count layer
     meta_sum <- numeric_data %>%
-      group_by(!!treat_var, !!!by, !!!cols, summary_var) %>%
-      group_keys() %>%
       mutate(
         meta = build_count_meta(
           layer,
@@ -113,6 +113,9 @@ process_metadata.count_layer <- function(x, ...) {
       formatted_meta <- full_join(formatted_meta, formatted_stats_metadata,
                                   by = vars_select(names(formatted_meta), starts_with("row_label")))
     }
+
+    # Attach the row identifier
+    formatted_meta <- assign_row_id(formatted_meta, 'c')
 
   }, envir=x)
 
