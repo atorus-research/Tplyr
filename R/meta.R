@@ -3,8 +3,6 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
 tplyr_meta <- function(names, filters) {
   meta <- new_tplyr_meta()
   meta <- add_variables(meta, names)
@@ -33,8 +31,6 @@ new_tplyr_meta <- function() {
 #'
 #' @return tplyr_meta object
 #' @export
-#'
-#' @examples
 add_variables <- function(meta, names) {
   meta$names <- append(meta$names, names)
   meta
@@ -48,8 +44,6 @@ add_variables <- function(meta, names) {
 #'
 #' @return tplyr_meta object
 #' @export
-#'
-#' @examples
 add_filters <- function(meta, filters) {
   meta$filters <- append(meta$filters, filters)
   meta
@@ -184,13 +178,18 @@ get_vars_from_filter <- function(f) {
 #' @noRd
 build_meta <- function(table_where, layer_where, treat_grps, variables, values) {
 
-  # Make an assumption that the treatment variable was the first variable provided
-  values[[1]] <- translate_treat_grps(values[[1]], treat_grps)
+  # Variables and values should be restricted only to symbols
+  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
+  filter_variables <- variables[inds]
+  filter_values <- values[inds]
 
-  filters <- make_parsed_strings(variables, values)
+  # Make an assumption that the treatment variable was the first variable provided
+  filter_values[[1]] <- translate_treat_grps(filter_values[[1]], treat_grps)
+
+  filters <- make_parsed_strings(filter_variables, filter_values)
 
   meta <- tplyr_meta(
-    names = variables,
+    names = filter_variables,
     filters = filters
   )
 
@@ -349,6 +348,42 @@ build_rdiff_meta <- function(meta, treat_var, comp){
   # Add the filter in the spot where the treatment groups are held,
   # which is always the first element (in a count layer)
   meta$filters[[1]] <- filt
+
+  meta
+}
+
+#' Build metadata for shift_layers
+#'
+#' @param target Target variable currently being summarized
+#' @param table_where Table level where filter
+#' @param layer_where Layer level where filter
+#' @param treat_grps Treatment groups from the tplyr_table parent environment
+#' @param ... All grouping variables
+#'
+#' @return tplyr_meta object
+#' @noRd
+build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
+
+
+  variables <- call_args(match.call())
+
+  # Don't want any of the named parameters here
+  variables <- variables[which(names(variables)=='')]
+  values <- list(...)
+
+  meta <- vector('list', length(values[[1]]))
+
+  # Vectorize across the input data
+  for (i in seq_along(values[[1]])) {
+
+    # Pull out the current row's values
+    cur_values <- map(values, ~ .x[i])
+
+    # Make the meta object
+    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, variables, cur_values) %>%
+      add_variables(layer$target_var$row) %>%
+      add_filters(make_parsed_strings(layer$target_var['row'], list(summary_var[i])))
+  }
 
   meta
 }
