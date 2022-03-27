@@ -67,14 +67,40 @@ build.tplyr_table <- function(x, metadata=FALSE) {
     # Format layers/table and pivot. process_formatting should return the built table!
     output_list <- purrr::map(x$layers, process_formatting)
 
-    if (metadata) {
-      metadata_list <- purrr::map(x$layers, process_metadata)
-    }
-
     output <- output_list %>%
       map2_dfr(seq_along(output_list), add_layer_index) %>%
       ungroup() %>%
       select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+
+    # Process metadata if triggered
+    if (metadata) {
+      metadata_list <- purrr::map(x$layers, process_metadata)
+
+      # Prepare metadata like the output
+      metadata <- metadata_list %>%
+        map2_dfr(seq_along(metadata_list), add_layer_index) %>%
+        ungroup() %>%
+        mutate(
+          row_id = paste0(row_id, '_', ord_layer_index)
+        ) %>%
+        select(row_id, starts_with('row_label'), starts_with('var'), everything(), -starts_with('ord'))
+
+      # Finish off the row_id with the layer indicator and put row_id up front
+      output <- output %>%
+        mutate(
+          row_id = paste0(row_id, '_', ord_layer_index)
+        ) %>%
+        select(row_id, everything())
+
+      # Write the metadata to the environment
+      env_bind(x, metadata=metadata)
+    } else {
+      # Drop row_id if metadata isn't built
+      output <- output %>%
+        select(-row_id)
+    }
+
+
 
   }, finally = {
     # Set options back to defaults
