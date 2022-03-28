@@ -527,6 +527,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        total_index = NULL, total_row_sort_value = NULL,
                        break_ties) {
 
+  if (nrow(numeric_data) == 0) return(numeric())
+
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset
   if (as_name(result_order_var) %in% c("distinct_n", "distinct_pct")) {
