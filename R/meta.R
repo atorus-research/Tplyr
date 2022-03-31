@@ -347,11 +347,14 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 #' @return tplyr_meta object
 #' @noRd
 build_rdiff_meta <- function(meta, treat_var, comp){
-  # Make a new filter that contains the current comparison being made
-  filt <- make_parsed_strings(list(treat_var), list(comp))[[1]]
-  # Add the filter in the spot where the treatment groups are held,
-  # which is always the first element (in a count layer)
-  meta$filters[[1]] <- filt
+
+  for (i in seq_along(meta)) {
+    # Make a new filter that contains the current comparison being made
+    filt <- make_parsed_strings(list(treat_var), list(comp))[[1]]
+    # Add the filter in the spot where the treatment groups are held,
+    # which is always the first element (in a count layer)
+    meta[[i]]$filters[[1]] <- filt
+  }
 
   meta
 }
