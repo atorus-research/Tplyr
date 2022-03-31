@@ -16,7 +16,7 @@ An executed \code{tplyr_table}
 }
 \description{
 The functions used to assemble a \code{tplyr_table} object and each of the layers do not trigger the processing of any data. Rather, a lazy
-execution style is used to allow you to contruct your table and then explicitly state when the data processing should happen.
+execution style is used to allow you to construct your table and then explicitly state when the data processing should happen.
 \code{build} triggers this event.
 }
 \details{
