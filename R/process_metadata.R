@@ -113,6 +113,7 @@ process_metadata.count_layer <- function(x, ...) {
 
       formatted_meta <- full_join(formatted_meta, formatted_stats_metadata,
                                   by = vars_select(names(formatted_meta), starts_with("row_label")))
+
     }
 
     # Attach the row identifier
@@ -140,9 +141,9 @@ process_metadata.tplyr_riskdiff <- function(x, ...) {
 
       # Weird looking, but this will give me
       stats_meta[[i]] <- meta_sum %>%
-        select(-!!treat_var) %>%
+        select(-!!treat_var, -any_of(c('n', 'distinct_n', 'distinct_total', 'total'))) %>%
         mutate(
-          meta = list(build_rdiff_meta(meta, treat_var, comparisons[[i]]))
+          meta = build_rdiff_meta(meta, treat_var, comparisons[[i]])
         )
 
       # Rename the meta variable
@@ -172,6 +173,14 @@ process_metadata.tplyr_riskdiff <- function(x, ...) {
       # Drop the dummied columns
       formatted_stats_meta <- formatted_stats_meta %>% select(-starts_with('rdiffx'))
 
+    }
+
+    # Handle the outer layer being NA for the outer layer
+    if (is_built_nest) {
+      formatted_stats_meta <- formatted_stats_meta %>%
+        mutate(
+          !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
+        )
     }
 
   }, envir=x)
