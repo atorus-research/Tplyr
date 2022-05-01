@@ -255,6 +255,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # Get rid of text provided by variables
   inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
+  #TODO: handle target variables provided as a string
   variables <- variables[inds]
   values <- values[inds]
 
