@@ -16,7 +16,9 @@
 get_meta_result <- function(t, row_id, column) {
   m <- t$metadata
 
-  #TODO: Handle improper row_ids
+  if (!(row_id %in% m$row_id)) {
+    stop('Invalid row_id selected. row_id must be present in built Tplyr table.', call.=FALSE)
+  }
 
   # Pull out the cell of interest
   res <- m[[which(m$row_id == row_id), column]][[1]]
@@ -45,8 +47,6 @@ get_meta_result <- function(t, row_id, column) {
 #'
 #' # TODO
 get_meta_subset <- function(t, row_id, column, add_cols = vars(USUBJID)) {
-
-  #TODO: Handle improper row_ids
 
   # Get the metadata object ready
   m <- get_meta_result(t, row_id, column)
