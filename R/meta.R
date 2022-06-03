@@ -164,6 +164,22 @@ get_vars_from_filter <- function(f) {
   syms(all.vars(quo_get_expr(f)))
 }
 
+#' Extract value of outer layer text value
+#'
+#' @param layer A Tplyr layer object
+#'
+#' @return Single element character vector
+#' @noRd
+get_character_outer <- function(layer) {
+  qlist <- layer$target_var_saved
+
+  if (!is.null(qlist) && !quo_is_symbol(qlist[[1]])) {
+    return(quo_get_expr(qlist[[1]]))
+  } else{
+    return(NA_character_)
+  }
+}
+
 #' Use available metadata to build the tplyr_meta object
 #'
 #' This is the main driver function, and layer specific variants
@@ -264,6 +280,8 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
   count_missings <- ifelse(is.null(layer$count_missings), FALSE, layer$count_missings)
   mlist <- layer$missing_count_list
 
+  # If the outer layer was provided as a text variable, get value
+  character_outer <- get_character_outer(layer)
 
   meta <- vector('list', length(values[[1]]))
 
@@ -322,6 +340,10 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
       else if (summary_var[i] == total_row_label && !count_missings) {
         # Filter out the missing counts if the total row should exclude missings
         row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
+      }
+      else if (!is.na(character_outer) && summary_var[i] == character_outer) {
+        # If the outer layer is a character string then don't provide a filter
+        row_filter <- list()
       }
       else if (summary_var[i] != total_row_label) {
         # If we're not in a total row, build the filter
