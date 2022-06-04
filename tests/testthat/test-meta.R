@@ -20,7 +20,7 @@ t1 <- tplyr_table(adsl, TRT01A, where = SAFFL == "Y", cols=SEX) %>%
       # Change the total row label
       set_total_row_label("n") %>%
       # Add a missing count row, which is made up of any NA values
-      set_missing_count(f_str("xx", n), denom_ignore=TRUE, Missing = NA)
+      set_missing_count(f_str("xx", n), denom_ignore=TRUE, Missing = NA, Empty = "Blah")
   ) %>%
   # Add a descriptive statistics layer for AGE
   add_layer(
@@ -83,5 +83,53 @@ test_that("Descriptive Statistics metadata backend assembles correctly", {
 
 test_that("Count Layer metadata backend assembles correctly", {
 
+  # Standard treatment, normal row count
+  m1 <- get_meta_subset(t1, 'c6_1', 'var1_Placebo_M')
+  m1_comp <- t1$built_target %>%
+    filter(
+      RACE == "BLACK OR AFRICAN AMERICAN",
+      SEX == "M",
+      SAFFL == "Y",
+      TRT01A == "Placebo",
+      ETHNIC == "NOT HISPANIC OR LATINO"
+    ) %>%
+    select(USUBJID, TRT01A, RACE, SEX, SAFFL, ETHNIC) %>%
+    mutate(
+      across(where(is.factor), ~as.character(.x))
+    )
+
+  expect_equal(m1, m1_comp, ignore_attr=TRUE)
+
+  # Total group, missing row
+  m2 <- get_meta_subset(t1, 'c11_1', 'var1_Total_F')
+  m2_comp <- t1$built_target %>%
+    filter(
+      RACE == "WHITE",
+      SEX == "F",
+      SAFFL == "Y",
+      TRT01A %in% c("Placebo", "Xanomeline High Dose", "Xanomeline Low Dose"),
+      is.na(ETHNIC)
+    ) %>%
+    select(USUBJID, TRT01A, RACE, SEX, SAFFL, ETHNIC) %>%
+    mutate(
+      across(where(is.factor), ~as.character(.x))
+    )
+
+  expect_equal(m2, m2_comp, ignore_attr=TRUE)
+
+  # Treated group, total row
+  m3 <- get_meta_subset(t1, 'c13_1', 'var1_Treated_F')
+  m3_comp <- t1$built_target %>%
+    filter(
+      SEX == "F",
+      SAFFL == "Y",
+      TRT01A %in% c("Xanomeline High Dose", "Xanomeline Low Dose")
+    ) %>%
+    select(USUBJID, TRT01A, SEX, SAFFL, ETHNIC, RACE) %>%
+    mutate(
+      across(where(is.factor), ~as.character(.x))
+    )
+
+  expect_equal(m3, m3_comp, ignore_attr=TRUE)
 
 })
