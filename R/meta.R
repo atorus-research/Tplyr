@@ -1,8 +1,36 @@
 #' Tplyr Metadata Object
 #'
+#' If a Tplyr table is built with the `metadata=TRUE` option specified, then
+#' metadata is assembled behind the scenes to provide traceability on each
+#' result cell derived. The functions `get_meta_result()` and
+#' `get_meta_subset()` allow you to access that metadata by using an ID provided
+#' in the row_id column and the column name of the result you'd like to access.
+#' The purpose is of the row_id variable instead of a simple row index is to
+#' provide a sort resistant reference of the originating column, so the output
+#' Tplyr table can be sorted in any order but the metadata are still easily
+#' accessible.
 #'
-#' @return
+#' The `tplyr_meta` object provided a list with two elements - names and
+#' filters. The metadata contain every column from the target data.frame of the
+#' Tplyr table that factored into the specified result cell, and the filters
+#' contains all the necessary filters to subset to data summarized to create the
+#' specified result cell. `get_meta_subset()` additionally provides a parameter to
+#' specify any additional columns you would like to include in the returned
+#' subset data frame.
+#'
+#' @param names List of symbols
+#' @param filters  List of expressions
+#'
+#' @return tplyr_meta object
 #' @export
+#'
+#' @examples
+#'
+#' tplyr_meta(
+#'    names = quos(x, y, z),
+#'    filters = quos(x == 1, y==2, z==3)
+#'  )
+#'
 tplyr_meta <- function(names, filters) {
   meta <- new_tplyr_meta()
   meta <- add_variables(meta, names)
@@ -30,7 +58,7 @@ new_tplyr_meta <- function() {
 #' @param names Variables to be added
 #'
 #' @return tplyr_meta object
-#' @export
+#' @noRd
 add_variables <- function(meta, names) {
   meta$names <- append(meta$names, names)
   meta
@@ -43,7 +71,7 @@ add_variables <- function(meta, names) {
 #' @param ... Variables to be added
 #'
 #' @return tplyr_meta object
-#' @export
+#' @noRd
 add_filters <- function(meta, filters) {
   meta$filters <- append(meta$filters, filters)
   meta
@@ -108,7 +136,6 @@ make_vect_str <- function(values) {
 #' @param values Values to be filtered
 #' @param negate  Negate the filter
 #'
-#' @return
 #' @noRd
 make_parsed_strings <- function(variables, values, negate=FALSE) {
 
