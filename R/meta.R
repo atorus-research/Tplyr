@@ -214,6 +214,22 @@ get_character_outer <- function(layer) {
   }
 }
 
+#' Check if a layer is unnested with character target
+#'
+#' @param layer A Tplyr layer object
+#'
+#' @return Boolean
+#' @noRd
+is_unnested_character <- function(layer) {
+  unnested <- is.null(layer$target_var_saved)
+
+  if (unnested) {
+    return(!quo_is_symbol(layer$target_var[[1]]))
+  } else{
+    return(FALSE)
+  }
+}
+
 #' Use available metadata to build the tplyr_meta object
 #'
 #' This is the main driver function, and layer specific variants
@@ -316,13 +332,19 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # If the outer layer was provided as a text variable, get value
   character_outer <- get_character_outer(layer)
+  unnested_character <- is_unnested_character(layer)
 
   meta <- vector('list', length(values[[1]]))
 
   # Vectorize across the input data
   for (i in seq_along(values[[1]])) {
 
-    add_vars <- layer$target_var
+    if (!unnested_character) {
+      add_vars <- layer$target_var
+    } else {
+      add_vars <- quos()
+    }
+
     row_filter <- list()
 
     # Pull out the current row's values
@@ -379,7 +401,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
         # If the outer layer is a character string then don't provide a filter
         row_filter <- list()
       }
-      else if (summary_var[i] != total_row_label) {
+      else if (summary_var[i] != total_row_label && !unnested_character) {
         # If we're not in a total row, build the filter
         row_filter <- make_parsed_strings(layer$target_var, summary_var[i])
       }
