@@ -87,8 +87,8 @@ process_metadata.count_layer <- function(x, ...) {
           treat_grps,
           summary_var,
           !!treat_var,
-          !!!cols,
-          !!!by
+          !!!by,
+          !!!cols
           )
       )
 
@@ -212,8 +212,8 @@ process_metadata.shift_layer <- function(x, ...) {
           treat_grps,
           summary_var,
           !!treat_var,
-          !!!cols,
           !!!by,
+          !!!cols,
           !!target_var$column
         )
       ) %>%
