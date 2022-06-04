@@ -45,7 +45,7 @@
 #'
 #' get_meta_result(t, 'd1_1', 'var1_4')
 #'
-#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = vars(carb))
+#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb))
 get_meta_result <- function(t, row_id, column) {
   m <- t$metadata
 
