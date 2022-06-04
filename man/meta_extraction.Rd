@@ -56,6 +56,6 @@ dat <- t \%>\% build(metadata = TRUE)
 
 get_meta_result(t, 'd1_1', 'var1_4')
 
-get_meta_subset(t, 'd1_1', 'var1_4', add_cols = vars(carb))
+get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb))
 }
 \concept{Metadata Extraction Tools}
