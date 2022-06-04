@@ -115,16 +115,50 @@ make_parsed_strings <- function(variables, values, negate=FALSE) {
   out <- vector('list', length(variables))
 
   for (i in seq_along(variables)) {
+
+    vals <- values[[i]]
+    vname <- as_label(variables[[i]])
+
+    na_present <- any(is.na(vals))
+    na_s <- paste0("is.na(",vname,")")
+    vals <- vals[which(!is.na(vals))]
+
+    pre <- ""
+    post <- ""
+    preneg <- ""
+
     if (negate) {
-      opr <- ifelse(length(values[[i]]) == 1, '!=', '%in%')
+      na_s <- paste0("!", na_s)
+      eq <- "!="
+      comb <- "&"
     } else {
-      opr <- ifelse(length(values[[i]]) == 1, '==', '%in%')
+      eq <- "=="
+      comb <- "|"
     }
 
-    if (negate && opr == '%in%') {
-      s <- paste('!', as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
-    } else{
-      s <- paste(as_label(variables[[i]]), opr, make_vect_str(values[[i]]))
+    # Store the NA string as output upfront
+    s <- na_s
+
+    if (length(vals) >= 1) {
+
+      if (length(vals) > 1) {
+        if (negate) {
+          pre <-  "!("
+          post <- ")"
+        }
+        opr <- "%in%"
+      } else{
+        opr <- eq
+      }
+
+      # Build the filter string and negate plurals if necessary
+      s <- paste0(pre, vname, " ", opr, " ", make_vect_str(vals), post)
+
+      # Tack on NA's if necessary
+      if (na_present) {
+        s <- paste0(s, comb, na_s)
+      }
+
     }
 
     out[[i]] <- str2lang(s)
