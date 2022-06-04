@@ -3,21 +3,60 @@
 #' Given a row_id value and a result column, this function will return the
 #' tplyr_meta object associated with that 'cell'.
 #'
-#' @param t A built Tplyr table
-#' @param row_id The row_id value of the desired cell
-#' @param column The result column of interest
+#' If a Tplyr table is built with the `metadata=TRUE` option specified, then
+#' metadata is assembled behind the scenes to provide traceability on each
+#' result cell derived. The functions `get_meta_result()` and
+#' `get_meta_subset()` allow you to access that metadata by using an ID provided
+#' in the row_id column and the column name of the result you'd like to access.
+#' The purpose is of the row_id variable instead of a simple row index is to
+#' provide a sort resistant reference of the originating column, so the output
+#' Tplyr table can be sorted in any order but the metadata are still easily
+#' accessible.
 #'
-#' @return a tplyr_meta object
+#' The `tplyr_meta` object provided a list with two elements - names and
+#' filters. The metadata contain every column from the target data.frame of the
+#' Tplyr table that factored into the specified result cell, and the filters
+#' contains all the necessary filters to subset to data summarized to create the
+#' specified result cell. `get_meta_subset()` additionally provides a parameter to
+#' specify any additional columns you would like to include in the returned
+#' subset data frame.
+#'
+#'
+#' @param t A built Tplyr table
+#' @param row_id The row_id value of the desired cell, provided as a character
+#'   string
+#' @param column The result column of interest, provided as a character string
+#'
+#' @return A tplyr_meta object for `get_meta_result()`, and a tibble for
+#'   `get_meta_subset()`
+#' @md
+#'
+#' @family Metadata Extraction Tools
+#' @rdname meta_extraction
 #' @export
 #'
 #' @examples
+#' t <- tplyr_table(mtcars, cyl) %>%
+#'   add_layer(
+#'     group_desc(hp)
+#'   )
 #'
-#' # TODO
+#' dat <- t %>% build(metadata = TRUE)
+#'
+#' get_meta_result(t, 'd1_1', 'var1_4')
+#'
+#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = vars(carb))
 get_meta_result <- function(t, row_id, column) {
   m <- t$metadata
 
-  if (!(row_id %in% m$row_id)) {
-    stop('Invalid row_id selected. row_id must be present in built Tplyr table.', call.=FALSE)
+  if (!inherits(row_id, 'character') || !(row_id %in% m$row_id)) {
+    stop('Invalid row_id selected. row_id must be provided as a string present in built Tplyr table.',
+         call.=FALSE)
+  }
+
+  if (!inherits(column, 'character') || !(column %in% names(m))) {
+    stop(paste0('column must provided as a character string and a valid result ',
+         'column present in the built Tplyr dataframe'), call.=FALSE)
   }
 
   # Pull out the cell of interest
@@ -30,23 +69,16 @@ get_meta_result <- function(t, row_id, column) {
   res
 }
 
-#' Extra a subset of the target data of a Tplyr table
+#' @param add_cols  Additional columns to include in subset data.frame output
 #'
-#' Given a row_id value and a result column, this function will return the
-#' subset of data from the target dataset which was used to produce that "cell"
-#'
-#' @param t A built Tplyr table
-#' @param row_id The row_id value of the desired cell
-#' @param column The result column of interest
-#' @param add_cols Additional columns
-#'
-#' @return
+#' @family Metadata Extraction Tools
+#' @rdname meta_extraction
 #' @export
-#'
-#' @examples
-#'
-#' # TODO
 get_meta_subset <- function(t, row_id, column, add_cols = vars(USUBJID)) {
+
+  if (!inherits(add_cols, 'quosures')) {
+    stop("add_cols must be provided using `dplyr::vars()`", call.=FALSE)
+  }
 
   # Get the metadata object ready
   m <- get_meta_result(t, row_id, column)
