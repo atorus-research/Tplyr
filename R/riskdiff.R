@@ -124,6 +124,15 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
   assert_that(all(names(args) %in% c('p', 'alternative', 'conf.level', 'correct')),
               msg = "All arguments provided via `args` must be valid arguments of `prop.test`")
 
+
+  for (comp in comps) {
+    assert_that(!any(duplicated(comp)),
+                msg = paste("Comparison",
+                            paste0("{",comp[1], ", ",comp[2],"}"),
+                            "has duplicated values. Comparisons must not be duplicates")
+    )
+  }
+
   # Risk diff must be run on count layers
   assert_that(inherits(layer, 'count_layer'), msg = "Risk difference can only be applied to a count layer.")
 
