@@ -19,7 +19,9 @@ process_summaries.desc_layer <- function(x, ...) {
   evalq({
     # trans_sums is the data that will pass forward to be formatted
     trans_sums <- vector("list", length(target_var))
-    # num_sums is the data that will be bound together and returned to provide the numeric internal values
+    # num_sums is the data that will be bound together and returned to provide
+    # the numeric internal values
+    # num_sums_raw is kept separate to better facililate use for prep of metadata
     num_sums_raw <- vector("list", length(target_var))
     num_sums <- vector("list", length(target_var))
 
