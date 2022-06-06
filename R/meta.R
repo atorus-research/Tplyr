@@ -413,7 +413,6 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
         summary_var[i] <- str_sub(summary_var[i], layer$indentation_length+1)
       }
 
-      #TODO: Is this redundant and will this always be the same as the inner layer?
       if (summary_var[i] %in% names(mlist)) {
         # Get the values for the missing row
         miss_val <- mlist[which(names(mlist) == summary_var[i])]
