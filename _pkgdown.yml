@@ -67,6 +67,10 @@ reference:
 - contents:
   - add_column_headers
   - header_n
+- title: Metadata Functions
+- contents:
+  - tplyr_meta
+  - starts_with('get_meta')
 - title: Helper functions
 - contents:
   - apply_row_masks
@@ -99,4 +103,8 @@ articles:
   - styled-table
   - denom
   - Tplyr
+- title: Using Metadata
+  navbar: Metadata
+  contents:
+  - metadata
 

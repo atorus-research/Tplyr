@@ -89,7 +89,7 @@ To extract the dataframe in `get_meta_subset()`, the metadata of the result cell
 get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 ```
 
-The resulting output is a new object tplyr called `tplyr_meta()`. This is a container of a relevent metadata for a specific result. The object itself is a list with two elements: `names` and `filters`.
+The resulting output is a new object Tplyr called `tplyr_meta()`. This is a container of a relevent metadata for a specific result. The object itself is a list with two elements: `names` and `filters`.
 
 The `names` element contains quosures for each variable relevant to a specific result. This will include the target variable, the `by` variables used on the layer, the `cols` variables used on the table, and all variables included in any filter condition relevant to create the result.
 
@@ -111,11 +111,37 @@ _Note: Trimmed for space_
 
 But - who says you can't let your imagination run wild? 
 
-```{r to string, results='asis'}
+```{r to string print, eval=FALSE}
 cat(c("adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
-  "   ) %>%\n",
+  ") %>%\n",
   paste("   select(", paste(purrr::map_chr(m$names, rlang::as_label), collapse=", "), ")", sep="")
 ))
 ```
+
+```
+```{r to string content, results='asis', echo=FALSE}
+cat(c("adsl %>%\n",
+  "   filter(\n      ",
+  paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
+  ") %>%\n",
+  paste("   select(", paste(purrr::map_chr(m$names, rlang::as_label), collapse=", "), ")", sep="")
+))
+```
+```
+
+## So, What Does This Get Me?
+
+So we get get metadata around a result cell, and we can get the exact results from a result cell. You just need a row ID and a column name. But - what does that get you? You can query your tables - and that's great. But how do you _use_ that.
+
+The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application:
+
+
+```{r, out.width=1100, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
+knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/")
+```
+
+_Source code available [here](https://github.com/atorus-research/Tplyr-shiny-demo)_
+
+_That's_ what this is all about. The persistent row_id and column selection enables you to use something like Shiny to automatically query a cell based on its position in a table. Using click events and a package like [reactable](https://glin.github.io/reactable/), you can pick up the row and column selected and pass that information into `get_meta_result()`. Once you get the resulting data frame, it's up to you what you do with it, and you have the world of Shiny at the tip of your fingers.
