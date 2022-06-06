@@ -11,7 +11,7 @@
 #' accessible.
 #'
 #' The `tplyr_meta` object provided a list with two elements - names and
-#' filters. The metadata contain every column from the target data.frame of the
+#' filters. The names contain every column from the target data.frame of the
 #' Tplyr table that factored into the specified result cell, and the filters
 #' contains all the necessary filters to subset to data summarized to create the
 #' specified result cell. `get_meta_subset()` additionally provides a parameter to
