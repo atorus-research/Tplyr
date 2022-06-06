@@ -13,7 +13,7 @@
 #' The `tplyr_meta` object provided a list with two elements - names and
 #' filters. The names contain every column from the target data.frame of the
 #' Tplyr table that factored into the specified result cell, and the filters
-#' contains all the necessary filters to subset to data summarized to create the
+#' contains all the necessary filters to subset the target data to create the
 #' specified result cell. `get_meta_subset()` additionally provides a parameter to
 #' specify any additional columns you would like to include in the returned
 #' subset data frame.
