@@ -140,7 +140,6 @@ process_metadata.tplyr_riskdiff <- function(x, ...) {
     for (i in seq_along(comparisons)) {
 
       # Weird looking, but this will give me just the variables needed
-      # TODO: Fix iteration to vectorize properly
       stats_meta[[i]] <- meta_sum %>%
         select(-!!treat_var, -any_of(c('n', 'distinct_n', 'distinct_total', 'total'))) %>%
         mutate(
