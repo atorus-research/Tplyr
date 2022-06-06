@@ -5,6 +5,8 @@
 #' interface to apply formatted string on any data frame within a
 #' `dplyr::mutate()` context.
 #'
+#' Note that auto-precision is not currently supported within `apply_formats()`
+#'
 #' @param format_string The desired display format. X's indicate digits. On the
 #'   left, the number of x's indicates the integer length. On the right, the
 #'   number of x's controls decimal precision and rounding. Variables are
@@ -28,6 +30,12 @@
 #'   )
 apply_formats <- function(format_string, ..., empty = c(.overall = "")) {
   format <- f_str(format_string, ..., empty=empty)
+
+  if (fmt$auto_precision) {
+    stop('Auto-precision is not currently supported within the `apply_formats()` context',
+         call.=FALSE)
+  }
+
   pmap_chr(list(...), function(...) apply_fmts(...), fmt=format)
 }
 
