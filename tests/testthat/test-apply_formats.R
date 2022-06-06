@@ -9,7 +9,7 @@ test_that("apply_formats works correctly applies f_str() formatting", {
             "105 ( 3.5)", "245 ( 3.6)", " 62 ( 3.2)", " 95 ( 3.1)", "123 ( 3.4)")
   expect_equal(out$fmt_example, comp)
 
-  expect_error({
+  expect_snapshot_error({
     mtcars %>%
       head(10) %>%
       mutate(

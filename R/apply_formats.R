@@ -31,7 +31,7 @@
 apply_formats <- function(format_string, ..., empty = c(.overall = "")) {
   format <- f_str(format_string, ..., empty=empty)
 
-  if (fmt$auto_precision) {
+  if (format$auto_precision) {
     stop('Auto-precision is not currently supported within the `apply_formats()` context',
          call.=FALSE)
   }
