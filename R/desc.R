@@ -23,7 +23,11 @@ process_summaries.desc_layer <- function(x, ...) {
     num_sums <- vector("list", length(target_var))
 
     # Get the row labels out from the format strings list
-    row_labels <- name_translator(format_strings)
+    if (using_f_strs) {
+      row_labels <- name_translator(format_strings)
+    } else {
+      row_labels <- name_translator(summary_grps)
+    }
 
     # Subset the local built_target based on where
     # Catch errors
@@ -57,23 +61,26 @@ process_summaries.desc_layer <- function(x, ...) {
         # Fill in any missing treat/col combinations
         complete(!!treat_var, !!!by, !!!cols)
 
-      # Create the transposed summary data to prepare for formatting
-      trans_sums[[i]] <- num_sums[[i]] %>%
-        # Transpose the summaries that make up the first number in a display string
-        # into the the `value` column with labels by `stat`
-        pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
-        rowwise() %>%
-        # Add in the row labels
-        mutate(
-           row_label = row_labels[[stat]]
-        )
-
-      # If precision is required, then create the variable identifier
-      if (need_prec_table) {
-        trans_sums[[i]] <- trans_sums[[i]] %>%
+      # Build traponsed summary if f_str's are being used
+      if (using_f_strs) {
+        # Create the transposed summary data to prepare for formatting
+        trans_sums[[i]] <- num_sums[[i]] %>%
+          # Transpose the summaries that make up the first number in a display string
+          # into the the `value` column with labels by `stat`
+          pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
+          rowwise() %>%
+          # Add in the row labels
           mutate(
-            precision_on = as_name(precision_on)
+            row_label = row_labels[[stat]]
           )
+
+        # If precision is required, then create the variable identifier
+        if (need_prec_table) {
+          trans_sums[[i]] <- trans_sums[[i]] %>%
+            mutate(
+              precision_on = as_name(precision_on)
+            )
+        }
       }
 
       # Numeric data needs the variable names replaced and add summary variable name
@@ -87,6 +94,16 @@ process_summaries.desc_layer <- function(x, ...) {
 
     # Bind the numeric data together within the layer
     numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
+
+    if (!using_f_strs) {
+      numeric_data <- numeric_data %>%
+        rowwise() %>%
+        # Add in the row labels
+        mutate(
+          row_label = row_labels[[stat]]
+        ) %>%
+        ungroup()
+    }
 
     # Delete the listed numeric data
     rm(num_sums)

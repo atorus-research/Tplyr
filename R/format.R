@@ -361,7 +361,8 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
            row_labels = row_labels,
            max_length = max_format_length,
            need_prec_table = need_prec_table,
-           cap = cap
+           cap = cap,
+           using_f_strs = TRUE
     )
   e
 }
@@ -402,15 +403,36 @@ set_format_strings.shift_layer <- function(e, ...) {
 #' those variables the vector names, and the names of the format_strings elements the
 #' values to allow easy creation of a \code{row_labels} variable in the data
 #'
-#' @param fmt_strings The \code{format_strings} varaible in a layer
+#' @param fmt_strings The \code{format_strings} variable in a layer
 #'
 #' @return A named character vector with the flipping applied
 #' @noRd
-name_translator <- function(fmt_strings) {
-  out <- names(fmt_strings)
-  names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
+name_translator <- function(x) {
+
+  # Handle f_str translating
+  if (any(map_lgl(x, ~ inherits(., 'f_str')))){
+    out <- names(x)
+    names(out) <- map_chr(x, ~ as_name(.$vars[[1]]))
+  } else {
+    # This needs to be a for loop for clarity because a map
+    # function would be too unreadable and overly complex
+    out <- character(length(flatten(x)))
+    i <- 1
+    # Loop the labels
+    for (l in names(x)) {
+      # Loop the variable names
+      for (n in x[[l]]) {
+        out[i] <- l
+        names(out)[i] <- as_name(n)
+        i <- i + 1
+      }
+    }
+  }
+
   out
 }
+
+
 
 #' Format a numeric value using an \code{f_str} object
 #'
@@ -485,7 +507,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #' @return Boolean
 #' @noRd
 has_format_strings <- function(e) {
-  'format_strings' %in% ls(envir=e)
+  !env_get(e, 'using_f_strs', TRUE) || ('format_strings' %in% ls(envir=e))
 }
 
 #' Pad Numeric Values
