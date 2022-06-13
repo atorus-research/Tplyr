@@ -135,11 +135,11 @@ cat(c("adsl %>%\n",
 
 So we get get metadata around a result cell, and we can get the exact results from a result cell. You just need a row ID and a column name. But - what does that get you? You can query your tables - and that's great. But how do you _use_ that.
 
-The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application:
+The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application. Click any of the result cells within the table and see what happens.
 
 
-```{r, out.width=1100, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
-knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/")
+```{r, out.width=740, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
+knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/", height = "900px")
 ```
 
 _Source code available [here](https://github.com/atorus-research/Tplyr-shiny-demo)_
