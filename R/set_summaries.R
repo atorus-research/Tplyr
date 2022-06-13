@@ -7,7 +7,7 @@
 #' establish the numbers that must be calculated.
 #'
 #' @param e Layer upon which summaries should be bound
-#' @param ... Named parameters containing lists of quosues created using `dplyr::vars()`
+#' @param ... Named parameters containing lists of quosures created using `dplyr::vars()`
 #'
 #' @return The layer environment with the summary variables binding applied
 #' @export
