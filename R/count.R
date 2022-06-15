@@ -110,6 +110,10 @@ process_summaries.count_layer <- function(x, ...) {
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
 
+  if (!using_format_strings(x)) {
+    prepare_numeric_data(x)
+  }
+
   x
 }
 
@@ -804,4 +808,29 @@ rename_missing_values <- function(x) {
       }
     }
   }, envir = x)
+}
+
+prepare_numeric_data <- function(x) {
+  evalq({
+
+    # Define the row labels established in set_summaries()
+    row_labels <- name_translator(summary_grps)
+
+    numeric_data <- numeric_data %>%
+      mutate(
+        pct = n / total,
+        distinct_pct = distinct_n / distinct_total
+      ) %>%
+      pivot_longer(cols = match_exact(summary_vars), names_to = "stat") %>%
+      rowwise() %>%
+      # Add in the row labels
+      mutate(
+        row_label = row_labels[[stat]]
+      ) %>%
+      ungroup()
+
+    # TODO : Drop unused vars, standardize names
+    # TODO: Stat data?
+
+  }, envir=x)
 }

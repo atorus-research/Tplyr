@@ -39,7 +39,7 @@ set_summaries  <- function(e, ...) {
 #' @export
 #' @rdname set_summaries
 #'
-set_summaries.desc_layer <- function(e, ...) {
+set_summaries.tplyr_layer <- function(e, ...) {
 
   # Must be named to create row labels
   # Element must all be lists of quosures

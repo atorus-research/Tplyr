@@ -379,7 +379,9 @@ set_format_strings.count_layer <- function(e, ...) {
 
   params <- count_f_str_check(...)
 
-  env_bind(e, format_strings = params)
+  env_bind(e,
+           format_strings = params,
+           using_f_strs = TRUE)
 
   e
 }
@@ -500,14 +502,28 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   )
 }
 
+#' Trigger to see if formats have explicitly been turned off
+#'
+#' set_summaries will set using_f_strs to false, and set_format_strings will set
+#' it to true, so this finds and returns that value, and assumes true if not found
+#'
+#' @param e tplyr_layer environment
+#'
+#' @return Boolean
+using_format_strings <- function(e) {
+  env_get(e, 'using_f_strs', TRUE)
+}
+
 #' Check if format strings have been applied to a layer
+#'
+#' This is dedicated to understanding a desc layer to apply its defaults
 #'
 #' @param e Layer environment
 #'
 #' @return Boolean
 #' @noRd
 has_format_strings <- function(e) {
-  !env_get(e, 'using_f_strs', TRUE) || ('format_strings' %in% ls(envir=e))
+  !using_format_strings(e) || ('format_strings' %in% ls(envir=e))
 }
 
 #' Pad Numeric Values
