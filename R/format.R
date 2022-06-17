@@ -510,6 +510,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #' @param e tplyr_layer environment
 #'
 #' @return Boolean
+#' @noRd
 using_format_strings <- function(e) {
   env_get(e, 'using_f_strs', TRUE)
 }
