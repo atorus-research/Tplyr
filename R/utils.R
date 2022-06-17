@@ -113,7 +113,7 @@ match_exact <- function(var_list) {
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
 #' @noRd
-replace_by_string_names <- function(dat, by, treat_var = NULL) {
+replace_by_string_names <- function(dat, by, treat_var = NULL, lab = "row_label") {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
 
@@ -125,9 +125,9 @@ replace_by_string_names <- function(dat, by, treat_var = NULL) {
     # If stats are present in a table and there are character values in the by variables
     # The name may be `value` or `"value"` this check catches those scenerios
     if(as_label(by[[i]]) %in% names(dat)) {
-      dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
+      dat <- rename(dat, !!paste0(lab, i) := as_label(by[[i]]))
     } else if(as_name(by[[i]]) %in% names(dat)) {
-      dat <- rename(dat, !!paste0('row_label', i) := as_name(by[[i]]))
+      dat <- rename(dat, !!paste0(lab, i) := as_name(by[[i]]))
     }
 
   }
