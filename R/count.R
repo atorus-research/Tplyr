@@ -819,7 +819,7 @@ prepare_numeric_data <- function(x) {
     numeric_data <- numeric_data %>%
       mutate(
         pct = n / total,
-        distinct_pct = distinct_n / distinct_total
+        distinct_pct = distinct_n / distinct_total,
       ) %>%
       pivot_longer(cols = match_exact(summary_vars), names_to = "stat") %>%
       rowwise() %>%
@@ -827,10 +827,36 @@ prepare_numeric_data <- function(x) {
       mutate(
         row_label = row_labels[[stat]]
       ) %>%
-      ungroup()
+      ungroup() %>%
+      select(!!treat_var, !!!cols, match_exact(by), summary_var, stat, row_label, value)
 
-    # TODO : Drop unused vars, standardize names
-    # TODO: Stat data?
+    if (length(target_var_saved) == 2) {
+      numeric_data <- numeric_data %>%
+        # Reset by var to the inner layer value
+        mutate(
+          # Sort helper for interleaving outer layers
+          sort_helper = if_else(
+            is.na(!!target_var_saved[[1]]),
+            1,
+            2
+          ),
+          !!target_var_saved[[1]] := if_else(
+            sort_helper == 1,
+            as.character(summary_var),
+            as.character(!!target_var_saved[[1]])
+          )
+        ) %>%
+        arrange(!!!by, sort_helper, summary_var) %>%
+        select(-sort_helper)
+    }
+
+    # Rename remaining vars
+    numeric_data <- numeric_data %>%
+      # Replace by variable names
+      replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
+      # Replace column names
+      replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
+      rename(param=stat)
 
   }, envir=x)
 }
