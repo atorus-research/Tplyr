@@ -82,10 +82,10 @@ get_numeric_data.tplyr_table <- function(x, layer=NULL, where=TRUE, ...) {
 
   # If not picking a specific layer, then get all the numeric data
   if (is.null(layer)) {
-    return(map(x$layers, get_numeric_data))
+    return(bind_rows(map(x$layers, get_numeric_data)))
   } else if (length(layer) > 1) {
     # If the layer variable was multiple elements then grap all of them
-    return(map(x$layers[layer], get_numeric_data))
+    return(bind_rows(map(x$layers[layer], get_numeric_data)))
   } else {
     # Otherwise, pick it out and filter
     get_numeric_data(x$layers[[layer]]) %>%
