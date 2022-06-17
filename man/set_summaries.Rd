@@ -2,17 +2,17 @@
 % Please edit documentation in R/set_summaries.R
 \name{set_summaries}
 \alias{set_summaries}
-\alias{set_summaries.desc_layer}
+\alias{set_summaries.tplyr_layer}
 \title{Set Summaries}
 \usage{
 set_summaries(e, ...)
 
-\method{set_summaries}{desc_layer}(e, ...)
+\method{set_summaries}{tplyr_layer}(e, ...)
 }
 \arguments{
 \item{e}{Layer upon which summaries should be bound}
 
-\item{...}{Named parameters containing lists of quosues created using \code{dplyr::vars()}}
+\item{...}{Named parameters containing lists of quosures created using \code{dplyr::vars()}}
 }
 \value{
 The layer environment with the summary variables binding applied
