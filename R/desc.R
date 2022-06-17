@@ -102,7 +102,12 @@ process_summaries.desc_layer <- function(x, ...) {
         mutate(
           row_label = row_labels[[stat]]
         ) %>%
-        ungroup()
+        ungroup() %>%
+        # Replace by variable names
+        replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
+        # Replace column names
+        replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
+        rename(param=stat)
     }
 
     # Delete the listed numeric data
