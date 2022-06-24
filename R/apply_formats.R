@@ -14,9 +14,7 @@
 #' @param ... The variables to be formatted using the format specified in
 #'   \code{format_string}. These must be numeric variables.
 #' @param empty The string to display when the numeric data is not available.
-#'   For desc layers, an unnamed character vector will populate within the
-#'   provided format string, set to the same width as the fitted numbers. Use a
-#'   single element character vector, with the element named '.overall' to
+#'   Use a single element character vector, with the element named '.overall' to
 #'   instead replace the whole string.
 #'
 #' @return Character vector of formatted values
