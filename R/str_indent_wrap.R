@@ -83,7 +83,7 @@ str_indent_wrap <- function(x, width=10, tab_width=5) {
 get_ind_len <- function(s) {
   inds <- str_extract(s, "^\\s+")
   inds[which(is.na(inds))] <- ""
-  map_int(inds, nchar)
+  map_int(inds, nchar, type = "width")
 }
 
 #' Proper application of str_wrap in a grouped context
