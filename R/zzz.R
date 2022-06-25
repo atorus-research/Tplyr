@@ -286,3 +286,10 @@ break_ties <- NULL
 prec_error <- NULL
 stats_as_columns <- FALSE
 comp_distinct <- NULL
+meta <- NULL
+meta_sum <- NULL
+num_sums_raw <- NULL
+row_labels <- NULL
+row_id <- NULL
+USUBJID <- NULL
+trans_sums <- NULL
