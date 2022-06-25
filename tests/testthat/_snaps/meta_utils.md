@@ -22,3 +22,7 @@
 
     add_cols must be provided using `dplyr::vars()`
 
+---
+
+    If querying metadata without a tplyr_table, a target must be provided
+

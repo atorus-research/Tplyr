@@ -80,6 +80,36 @@ t4 <- tplyr_table(adlb, TRTA, where = AVISIT != "") %>%
 dat4 <- t4 %>%
   build(metadata=TRUE)
 
+test_that("Metadata creation errors generate properly", {
+  m <- tplyr_meta()
+
+  # Not providing metadata object
+  expect_snapshot_error(add_variables(mtcars, quos(a)))
+  expect_snapshot_error(add_filters(mtcars, quos(a==1)))
+
+  # Didn't provide filter
+  expect_snapshot_error(tplyr_meta(quos(a), 'x'))
+  expect_snapshot_error(add_filters(m, 'x'))
+
+  # Didn't provide names
+  expect_snapshot_error(tplyr_meta('x'))
+  expect_snapshot_error(add_variables(m, 'x'))
+
+})
+
+test_that("Exported metadata function construct metadata properly", {
+  m <- tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3))
+
+  expect_equal(m$names, quos(a, b, c))
+  expect_equal(m$filters, quos(a==1, b==2, c==3))
+
+  m <- add_variables(m, quos(x))
+  m <- add_filters(m, quos(x=="a"))
+
+  expect_equal(m$names, quos(a, b, c, x))
+  expect_equal(m$filters, quos(a==1, b==2, c==3, x=="a"))
+})
+
 test_that("Descriptive Statistics metadata backend assembles correctly", {
 
   # Standard treatment group
@@ -259,4 +289,63 @@ test_that("Shift Layer metadata backend assembles correctly", {
     fct2chr()
 
   expect_equal(m1, m1_comp, ignore_attr=TRUE)
+})
+
+test_that("metadata queried without Tplyr table queries effectively", {
+  # Pull out the dataframes directly
+  meta <- t1$metadata
+  dat <- t1$target
+
+  m1 <- get_meta_subset(meta, 'd7_2', 'var1_Placebo_M', target = dat)
+
+  m1_comp <- t1$built_target %>%
+    filter(
+      RACE == "BLACK OR AFRICAN AMERICAN",
+      SEX == "M",
+      SAFFL == "Y",
+      TRT01A == "Placebo",
+      ETHNIC == "NOT HISPANIC OR LATINO"
+    ) %>%
+    select(USUBJID, TRT01A, RACE, SEX, SAFFL, AGE) %>%
+    fct2chr()
+
+  expect_equal(m1, m1_comp, ignore_attr=TRUE)
+})
+
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_desc(wt)
+  )
+
+test_that("Metadata extraction and extension error properly", {
+
+  expect_snapshot_error(get_metadata(mtcars))
+
+  expect_snapshot_error(get_metadata(t))
+
+  dat <- t %>% build(metadata=TRUE)
+
+  m <- tibble(
+    var1_3 = list(tplyr_meta())
+  )
+
+  expect_snapshot_error(append_metadata(t, m))
+
+  m['row_id'] <- c("d1_1")
+  expect_snapshot_error(append_metadata(t, m))
+
+})
+
+test_that("Metadata extraction and extension work properly", {
+
+  dat <- t %>% build(metadata=TRUE)
+
+  m <- tibble(
+    row_id = 'x1_1',
+    var1_3 = list(tplyr_meta())
+  )
+
+  t <- append_metadata(t, m)
+  expect_snapshot(get_metadata(t))
+
 })

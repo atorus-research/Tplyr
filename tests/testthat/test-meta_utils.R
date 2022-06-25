@@ -5,6 +5,8 @@ t <- tplyr_table(mtcars, cyl) %>%
 
 dat <- t %>% build(metadata = TRUE)
 
+m <- t$metadata
+
 test_that("Metadata extractors error properly", {
   # Invalid row ID
   expect_snapshot_error(get_meta_result(t, "bad", 'var1_4'))
@@ -23,4 +25,7 @@ test_that("Metadata extractors error properly", {
 
   # add_cols not vars
   expect_snapshot_error(get_meta_subset(t, 'd1_1', 'var1_4', add_cols = "bad"))
+
+  # get_meta_subset needs target
+  expect_snapshot_error(get_meta_subset(m, 'd1_1', 'var1_4'))
 })
