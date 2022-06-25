@@ -2,26 +2,22 @@
 % Please edit documentation in R/meta_utils.R
 \name{get_meta_result}
 \alias{get_meta_result}
-\alias{get_meta_subset}
 \title{Extract the result metadata of a Tplyr table}
 \usage{
-get_meta_result(t, row_id, column)
-
-get_meta_subset(t, row_id, column, add_cols = vars(USUBJID))
+get_meta_result(x, row_id, column)
 }
 \arguments{
-\item{t}{A built Tplyr table}
+\item{x}{A built Tplyr table or a dataframe}
 
 \item{row_id}{The row_id value of the desired cell, provided as a character
 string}
 
 \item{column}{The result column of interest, provided as a character string}
 
-\item{add_cols}{Additional columns to include in subset data.frame output}
+\item{...}{additional arguments}
 }
 \value{
-A tplyr_meta object for \code{get_meta_result()}, and a tibble for
-\code{get_meta_subset()}
+A tplyr_meta object
 }
 \description{
 Given a row_id value and a result column, this function will return the
@@ -56,6 +52,8 @@ dat <- t \%>\% build(metadata = TRUE)
 
 get_meta_result(t, 'd1_1', 'var1_4')
 
-get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb))
+m <- t$metadata
+dat <- t$target
+
+get_meta_result(t, 'd1_1', 'var1_4')
 }
-\concept{Metadata Extraction Tools}

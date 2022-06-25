@@ -4,7 +4,7 @@
 \alias{new_tplyr_meta}
 \title{Create a tplyr_meta object}
 \usage{
-new_tplyr_meta()
+new_tplyr_meta(names = list(), filters = exprs())
 }
 \value{
 tplyr_meta object
