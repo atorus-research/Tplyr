@@ -31,7 +31,7 @@
 #'    filters = quos(x == 1, y==2, z==3)
 #'  )
 #'
-tplyr_meta <- function(names, filters) {
+tplyr_meta <- function(names=list(), filters=exprs()) {
   meta <- new_tplyr_meta()
   meta <- add_variables(meta, names)
   meta <- add_filters(meta, filters)
@@ -41,11 +41,11 @@ tplyr_meta <- function(names, filters) {
 #' Create a tplyr_meta object
 #'
 #' @return tplyr_meta object
-new_tplyr_meta <- function() {
+new_tplyr_meta <- function(names = list(), filters=exprs()) {
   structure(
     list(
-      names = list(),
-      filters = exprs()
+      names = names,
+      filters = filters
     ),
     class = 'tplyr_meta'
   )
@@ -53,452 +53,163 @@ new_tplyr_meta <- function() {
 
 #' Add variables to a tplyr_meta object
 #'
+#' Add additional variable names to a `tplyr_meta()` object.
 #'
-#' @param meta tplyr_meta object
-#' @param names Variables to be added
+#' @param meta A tplyr_meta object
+#' @param names A list of names, providing variable names of interest. Provide
+#'   as a list of quosures using `rlang::quos()`
 #'
 #' @return tplyr_meta object
-#' @noRd
+#' @md
+#'
+#' @family Metadata additions
+#' @rdname metadata_additions
+#'
+#' @export
+#'
+#' @examples
+#'
+#' m <- tplyr_meta()
+#' m <- add_variables(m, quos(a, b, c))
+#' m <- add_filters(m, quos(a==1, b==2, c==3))
+#' m
 add_variables <- function(meta, names) {
+
+  if (!all(map_lgl(names, ~ is_quosure(.) && quo_is_symbol(.)))) {
+    stop("Names must be provided as a list of names", call.=FALSE)
+  }
+
+  if (!inherits(meta, 'tplyr_meta')) {
+    stop("meta must be a tplyr_meta object", call.=FALSE)
+  }
+
+  add_variables_(meta, names)
+}
+
+#' Internal application of variables onto tplyr_meta object
+#' @noRd
+add_variables_ <- function(meta, names) {
   meta$names <- append(meta$names, names)
   meta
 }
 
-#' Add variables to a tplyr_meta object
+#' @param filters A list of symbols, providing variable names of interest. Provide
+#'   as a list of quosures using `rlang::quos()`
 #'
+#' @family Metadata additions
+#' @rdname metadata_additions
 #'
-#' @param meta tplyr_meta object
-#' @param ... Variables to be added
-#'
-#' @return tplyr_meta object
-#' @noRd
+#' @export
 add_filters <- function(meta, filters) {
+
+  if (!all(map_lgl(filters, ~ is_quosure(.) && quo_is_call(.)))) {
+    stop("Filters must be provided as a list of calls", call.=FALSE)
+  }
+
+  if (!inherits(meta, 'tplyr_meta')) {
+    stop("meta must be a tplyr_meta object", call.=FALSE)
+  }
+
+  add_filters_(meta, filters)
+}
+
+#' Internal application of filters onto tplyr_meta object
+#' @noRd
+add_filters_ <- function(meta, filters) {
   meta$filters <- append(meta$filters, filters)
   meta
 }
 
-#' Return proper quoting for a given value
+#' Get the metadata dataframe from a tplyr_table
 #'
-#' This function returns whatever value should be necessary to
-#' create the string for a value that will be parsed. For example,
-#' in `x == 'hi'`, the value 'hi' must be quoted like a string. But
-#' if the input variable is numeric, such as `x == 1`, the 1 should
-#' not be provided in quotes.
+#' Pull out the metadata dataframe from a tplyr_table to work with it directly
 #'
-#' @param val Value which needs parsing
+#' @param t
 #'
-#' @return A character string
-#' @noRd
+#' @return Tplyr metadata dataframe
+#' @export
 #'
 #' @examples
+#' t <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(wt)
+#'   )
 #'
-#' get_parse_string_value('hello')
-#' get_parse_string_value(1)
-get_parse_string_value <- function(val) {
-  if (class(val) %in% c('character', 'factor') && !is.na(val)) {
-    paste0('"', val, '"')
-  } else{
-    val
+#' t %>%
+#'   build(metadata=TRUE)
+#'
+#' get_metadata(t)
+get_metadata <- function(t) {
+
+  if (!inherits(t, 'tplyr_table')) {
+    stop("t must be a tplyr_table object", call.=FALSE)
   }
+
+  if (is.null(t$metadata)){
+    stop(paste(
+      "t does not contain a metadata dataframe.",
+      "Make sure the tplyr_table was built with `build(metadata=TRUE)`"))
+  }
+
+  return(t$metadata)
 }
 
-#' Convert supplied values into a string that will parse as a vector
+#' Append the Tplyr table metadata dataframe
 #'
-#' By passing in some vector, the text necessary to create that vector is returned.
+#' `append_metadata()` allows a user to extend the Tplyr metadata data frame
+#' with user provided data. In some tables, Tplyr may be able to provided most
+#' of the data, but a user may have to extend the table with other summaries,
+#' statistics, etc. This function allows the user to extend the tplyr_table's
+#' metadata with their own metadata content using custom data frames created
+#' using the tplyr_meta() object.
 #'
-#' @param values
+#' As this is an advanced feature of Tplyr, ownership is on the user to make
+#' sure the metadata data frame is assembled properly. The only restrictions
+#' applied by `append_metadata()` are that `meta` must have a column named
+#' `row_id`, and the values in `row_id` cannot be duplicates of any `row_id`
+#' value already present in the Tplyr metadata dataframe. `tplyr_meta()` objects
+#' align with constructed dataframes using the `row_id` and output dataset
+#' column name. As such, `tplyr_meta()` objects should be inserted into a data
+#' frame using a list column.
 #'
-#' @return
-#' @noRd
 #'
+#' @param t A tplyr_table object
+#' @param meta A dataframe fitting the specifications of the details section of
+#'   this function
+#'
+#' @return A tplyr_table object
+#' @export
+#' @md
 #'
 #' @examples
+#' t <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_desc(wt)
+#'   )
 #'
-#' x <- make_vect_str(c(1,2,3))
-#' y <- parse(text = x)
-#' eval(y)
+#' t %>%
+#'   build(metadata=TRUE)
 #'
-#' x <- make_vect_str(c('a', 'b', 'c'))
-#' y <- parse(text = x)
-#' eval(y)
-make_vect_str <- function(values) {
-  inner <- paste0(map_chr(values, get_parse_string_value), collapse = ", ")
-
-  paste(c('c(', inner, ')'), collapse = "")
-}
-
-#' Create a parsed string necessary to create filter logic
+#' m <- tibble(
+#'   row_id = c('x1_1'),
+#'   var1_3 = list(tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3)))
+#' )
 #'
-#' Given a symbol and values, this function will return an expression required
-#' to subset the given variable to that set of values
-#'
-#' @param variables Variables to filter
-#' @param values Values to be filtered
-#' @param negate  Negate the filter
-#'
-#' @noRd
-make_parsed_strings <- function(variables, values, negate=FALSE) {
+#' append_metadata(t, m)
+append_metadata <- function(t, meta) {
 
-  out <- vector('list', length(variables))
-
-  for (i in seq_along(variables)) {
-
-    vals <- values[[i]]
-    vname <- as_label(variables[[i]])
-
-    na_present <- any(is.na(vals))
-    na_s <- paste0("is.na(",vname,")")
-    vals <- vals[which(!is.na(vals))]
-
-    pre <- ""
-    post <- ""
-    preneg <- ""
-
-    if (negate) {
-      na_s <- paste0("!", na_s)
-      eq <- "!="
-      comb <- "&"
-    } else {
-      eq <- "=="
-      comb <- "|"
-    }
-
-    # Store the NA string as output upfront
-    s <- na_s
-
-    if (length(vals) >= 1) {
-
-      if (length(vals) > 1) {
-        if (negate) {
-          pre <-  "!("
-          post <- ")"
-        }
-        opr <- "%in%"
-      } else{
-        opr <- eq
-      }
-
-      # Build the filter string and negate plurals if necessary
-      s <- paste0(pre, vname, " ", opr, " ", make_vect_str(vals), post)
-
-      # Tack on NA's if necessary
-      if (na_present) {
-        s <- paste0(s, comb, na_s)
-      }
-
-    }
-
-    out[[i]] <- str2lang(s)
-  }
-  out
-}
-
-#' Return the vector of treatment groups based on treatment column
-#'
-#' Given that sets of treatment groups can be combined, this function
-#' allows you to get the original treatment groups back out of the specified
-#' combination name
-#'
-#' @param value Specified treatment group
-#' @param layer Tplyr layer
-#'
-#' @return A character vector of treatment groups
-#' @noRd
-translate_treat_grps <- function(value, treat_grps) {
-  out <- as.character(value)
-  if (out %in% names(treat_grps)) {
-    out <- treat_grps[[out]]
-  }
-  out
-}
-
-#' Translate a filter expression to the symbols in the filter
-#'
-#' This function will return a list of symbols that are present
-#' in a give filter expression
-#'
-#' @param f Filter expression
-#'
-#' @return List of symbols
-#' @noRd
-get_vars_from_filter <- function(f) {
-  syms(all.vars(quo_get_expr(f)))
-}
-
-#' Extract value of outer layer text value
-#'
-#' @param layer A Tplyr layer object
-#'
-#' @return Single element character vector
-#' @noRd
-get_character_outer <- function(layer) {
-  qlist <- layer$target_var_saved
-
-  if (!is.null(qlist) && !quo_is_symbol(qlist[[1]])) {
-    return(quo_get_expr(qlist[[1]]))
-  } else{
-    return(NA_character_)
-  }
-}
-
-#' Check if a layer is unnested with character target
-#'
-#' @param layer A Tplyr layer object
-#'
-#' @return Boolean
-#' @noRd
-is_unnested_character <- function(layer) {
-  unnested <- is.null(layer$target_var_saved)
-
-  if (unnested) {
-    return(!quo_is_symbol(layer$target_var[[1]]))
-  } else{
-    return(FALSE)
-  }
-}
-
-#' Use available metadata to build the tplyr_meta object
-#'
-#' This is the main driver function, and layer specific variants
-#' adapt on top of this function
-#'
-#' @param table_where Table level where filter
-#' @param layer_where Layer level where filter
-#' @param treat_grps Treatment groups from the tplyr_table parent environment
-#' @param ... All grouping variables
-#'
-#' @return tplyr_meta object
-#' @noRd
-build_meta <- function(table_where, layer_where, treat_grps, variables, values) {
-
-  # Make an assumption that the treatment variable was the first variable provided
-  values[[1]] <- translate_treat_grps(values[[1]], treat_grps)
-
-  filters <- make_parsed_strings(variables, values)
-
-  meta <- tplyr_meta(
-    names = variables,
-    filters = filters
-  )
-
-  meta <- meta %>%
-    add_filters(layer_where) %>%
-    add_variables(get_vars_from_filter(layer_where)) %>%
-    add_filters(table_where) %>%
-    add_variables(get_vars_from_filter(table_where))
-
-  meta
-}
-
-#' Build metadata for desc_layers
-#'
-#' @param target Target variable currently being summarized
-#' @param table_where Table level where filter
-#' @param layer_where Layer level where filter
-#' @param treat_grps Treatment groups from the tplyr_table parent environment
-#' @param ... All grouping variables
-#'
-#' @return tplyr_meta object
-#' @noRd
-build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
-
-  variables <- call_args(match.call())
-
-  # Don't want any of the named parameters here
-  variables <- variables[which(names(variables)=='')]
-  values <- list(...)
-
-  # Get rid of text provided by variables
-  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
-  variables <- variables[inds]
-  values <- values[inds]
-
-  # Output vector
-  meta <- vector('list', length(values[[1]]))
-
-  # Vectorize across the input data
-  for (i in seq_along(values[[1]])) {
-    # Pull out the current row's values
-    cur_values <- map(values, ~ .x[i])
-    # Build the tplyr_meta object
-    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, variables, cur_values) %>%
-      add_variables(target)
+  if (!('row_id' %in% names(meta))) {
+    stop("The provided metadata dataset must have a column named row_id", call.=FALSE)
   }
 
-  meta
-}
-
-#' Build metadata for count_layers
-#'
-#' @param target Target variable currently being summarized
-#' @param table_where Table level where filter
-#' @param layer_where Layer level where filter
-#' @param treat_grps Treatment groups from the tplyr_table parent environment
-#' @param ... All grouping variables
-#'
-#' @return tplyr_meta object
-#' @noRd
-build_count_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
-
-  variables <- call_args(match.call())
-
-  # Don't want any of the named parameters here
-  variables <- variables[which(names(variables)=='')]
-  values <- list(...)
-
-  # Get rid of text provided by variables
-  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
-  variables <- variables[inds]
-  values <- values[inds]
-
-  # The total row label may not pass through, so set it
-  total_row_label <- ifelse(is.null(layer$total_row_label), 'Total', layer$total_row_label)
-  count_missings <- ifelse(is.null(layer$count_missings), FALSE, layer$count_missings)
-  mlist <- layer$missing_count_list
-
-  # If the outer layer was provided as a text variable, get value
-  character_outer <- get_character_outer(layer)
-  unnested_character <- is_unnested_character(layer)
-
-  meta <- vector('list', length(values[[1]]))
-
-  # Vectorize across the input data
-  for (i in seq_along(values[[1]])) {
-
-    if (!unnested_character) {
-      add_vars <- layer$target_var
-    } else {
-      add_vars <- quos()
-    }
-
-    row_filter <- list()
-
-    # Pull out the current row's values
-    cur_values <- map(values, ~ .x[i])
-
-    # The outer layer will currently be NA for the outer layer summaries, so adjust the filter appropriately
-    if (any(is.na(cur_values))) {
-
-      # Total row or outer layer
-      na_var <- variables[which(is.na(cur_values))]
-
-      # work around outer letter being NA
-      filter_variables <- variables[which(!is.na(cur_values))]
-      filter_values <- cur_values[which(!is.na(cur_values))]
-
-      if (summary_var[i] == total_row_label && !count_missings) {
-        # Filter out the missing counts if the total row should exclude missings
-        row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
-      }
-      else if (summary_var[i] %in% names(mlist)) {
-        # Get the values for the missing row
-        miss_val <- mlist[which(names(mlist) == summary_var[i])]
-        row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
-      }
-      else if (summary_var[i] != total_row_label) {
-        # Subset to outer layer value
-        row_filter <- make_parsed_strings(na_var, summary_var[i])
-      }
-
-      add_vars <- append(add_vars, na_var)
-
-    }
-    else {
-      # Inside the nested layer
-      filter_variables <- variables
-      filter_values <- cur_values
-
-      # Toss out the indentation
-      if (!is.null(layer$indentation) && str_starts(summary_var[i], layer$indentation)) {
-        summary_var[i] <- str_sub(summary_var[i], layer$indentation_length+1)
-      }
-
-      if (summary_var[i] %in% names(mlist)) {
-        # Get the values for the missing row
-        miss_val <- mlist[which(names(mlist) == summary_var[i])]
-        row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
-      }
-      else if (summary_var[i] == total_row_label && !count_missings) {
-        # Filter out the missing counts if the total row should exclude missings
-        row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
-      }
-      else if (!is.na(character_outer) && summary_var[i] == character_outer) {
-        # If the outer layer is a character string then don't provide a filter
-        row_filter <- list()
-      }
-      else if (summary_var[i] != total_row_label && !unnested_character) {
-        # If we're not in a total row, build the filter
-        row_filter <- make_parsed_strings(layer$target_var, summary_var[i])
-      }
-    }
-
-    # Make the meta object
-    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
-      add_filters(row_filter) %>%
-      add_variables(add_vars)
-
+  if (any(meta$row_id %in% t$metadata$row_id)) {
+    stop(
+      paste("row_id values in the provided metadata dataset are duplicates of",
+            "row_id values in the Tplyr metadata. All row_id values must be unique.",
+            call.=FALSE)
+    )
   }
 
-  meta
-}
-
-#' Build metadata for risk difference comparisons
-#'
-#' @param meta A tplyr_metadata object
-#' @param treat_var the treatment variable
-#' @param comp The current rdiff comparison
-#'
-#' @return tplyr_meta object
-#' @noRd
-build_rdiff_meta <- function(meta, treat_var, comp){
-
-  for (i in seq_along(meta)) {
-    # Make a new filter that contains the current comparison being made
-    filt <- make_parsed_strings(list(treat_var), list(comp))[[1]]
-    # Add the filter in the spot where the treatment groups are held,
-    # which is always the first element (in a count layer)
-    meta[[i]]$filters[[1]] <- filt
-  }
-
-  meta
-}
-
-#' Build metadata for shift_layers
-#'
-#' @param target Target variable currently being summarized
-#' @param table_where Table level where filter
-#' @param layer_where Layer level where filter
-#' @param treat_grps Treatment groups from the tplyr_table parent environment
-#' @param ... All grouping variables
-#'
-#' @return tplyr_meta object
-#' @noRd
-build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
-
-  variables <- call_args(match.call())
-
-  # Don't want any of the named parameters here
-  variables <- variables[which(names(variables)=='')]
-  values <- list(...)
-
-  # Get rid of text provided by variables
-  inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
-  variables <- variables[inds]
-  values <- values[inds]
-
-  meta <- vector('list', length(values[[1]]))
-
-  # Vectorize across the input data
-  for (i in seq_along(values[[1]])) {
-
-    # Pull out the current row's values
-    cur_values <- map(values, ~ .x[i])
-
-    # Make the meta object
-    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, variables, cur_values) %>%
-      add_variables(layer$target_var$row) %>%
-      add_filters(make_parsed_strings(layer$target_var['row'], list(summary_var[i])))
-  }
-
-  meta
+  t$metadata <- bind_rows(t$metadata, meta)
+  t
 }
