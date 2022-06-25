@@ -1,0 +1,78 @@
+---
+title: "Creating Custom Tplyr Metadata"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{custom-metadata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(Tplyr)
+library(knitr)
+load("adsl.Rdata")
+```
+
+```{r}
+adas  <- haven::read_xpt(file.path(path$adam, "adadas.xpt")) 
+adsl  <- haven::read_xpt(file.path(path$adam, "adsl.xpt")) 
+```
+
+## Step 2: Data preparation
+```{r}
+adas <- adas %>%
+  filter(
+    EFFFL == "Y",
+    ITTFL=='Y',
+    PARAMCD == 'ACTOT',
+    ANL01FL == 'Y'
+  )
+```
+
+## Step 3: Descriptive Statistics of Endpoint Variable
+```{r}
+t <- tplyr_table(adas, TRTP) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01P) %>% 
+  set_pop_where(EFFFL == "Y" & ITTFL == "Y") %>% 
+  set_distinct_by(USUBJID) %>% 
+  set_desc_layer_formats(
+    'n' = f_str('xx', n),
+    'Mean (SD)' = f_str('xx.x (xx.xx)', mean, sd),
+    'Median (Range)' = f_str('xx.x (xxx;xx)', median, min, max)
+  ) %>% 
+  add_layer(
+    group_desc(AVAL, where= AVISITN ==  0, by = "Baseline")
+  ) %>% 
+  add_layer(
+    group_desc(AVAL, where= AVISITN == 24, by = "Week 24")
+  ) %>% 
+  add_layer(
+    group_desc(CHG,  where= AVISITN == 24, by = "Change from Baseline")
+  )
+  
+hdr <- adas %>% distinct(TRTP, TRTPN) %>% arrange(TRTPN) %>% pull(TRTP)
+hdr_ext <- sapply(hdr, FUN = function(x) paste0("|", x, "\\line(N=**", x, "**)"), USE.NAMES = FALSE)
+hdr_fin <- paste(hdr_ext, collapse = "")
+# Want the header to wrap properly in the RTF file
+hdr_fin <- stringr::str_replace_all(hdr_fin, "\\|Xanomeline ", "|Xanomeline\\\\line ")
+sum_data <- t %>% 
+  build() %>% 
+  nest_rowlabels() %>% 
+  select(row_label, var1_Placebo, `var1_Xanomeline Low Dose`, `var1_Xanomeline High Dose`) %>% 
+  add_column_headers(
+     hdr_fin,
+     header_n(t)
+  )
