@@ -16,9 +16,7 @@ inferred by any separation of the 'x' values other than a decimal.}
 \code{format_string}. These must be numeric variables.}
 
 \item{empty}{The string to display when the numeric data is not available.
-For desc layers, an unnamed character vector will populate within the
-provided format string, set to the same width as the fitted numbers. Use a
-single element character vector, with the element named '.overall' to
+Use a single element character vector, with the element named '.overall' to
 instead replace the whole string.}
 }
 \value{
@@ -29,6 +27,9 @@ The \code{f_str} object in Tplyr is used to drive formatting of the outputs
 strings within a Tplyr table. This function allows a user to use the same
 interface to apply formatted string on any data frame within a
 \code{dplyr::mutate()} context.
+}
+\details{
+Note that auto-precision is not currently supported within \code{apply_formats()}
 }
 \examples{
 mtcars \%>\%
