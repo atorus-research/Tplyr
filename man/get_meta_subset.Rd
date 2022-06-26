@@ -4,12 +4,10 @@
 \alias{get_meta_subset}
 \title{Extract the subset of data based on result metadata}
 \usage{
-get_meta_subset(x, ...)
+get_meta_subset(x, row_id, column, add_cols = vars(USUBJID), ...)
 }
 \arguments{
 \item{x}{A built Tplyr table or a dataframe}
-
-\item{...}{additional arguments}
 
 \item{row_id}{The row_id value of the desired cell, provided as a character
 string}
@@ -17,6 +15,8 @@ string}
 \item{column}{The result column of interest, provided as a character string}
 
 \item{add_cols}{Additional columns to include in subset data.frame output}
+
+\item{...}{additional arguments}
 
 \item{target}{A data frame to be subset (if not pulled from a Tplyr table)}
 }

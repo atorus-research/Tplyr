@@ -4,7 +4,7 @@
 \alias{get_meta_result}
 \title{Extract the result metadata of a Tplyr table}
 \usage{
-get_meta_result(x, row_id, column)
+get_meta_result(x, row_id, column, ...)
 }
 \arguments{
 \item{x}{A built Tplyr table or a dataframe}
