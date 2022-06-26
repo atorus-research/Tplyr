@@ -46,19 +46,19 @@
 #' dat <- t$target
 #'
 #' get_meta_result(t, 'd1_1', 'var1_4')
-get_meta_result <- function(x, row_id, column) {
+get_meta_result <- function(x, row_id, column, ...) {
   UseMethod("get_meta_result")
 }
 
 #' @export
-get_meta_result.tplyr_table <- function(x, row_id, column) {
+get_meta_result.tplyr_table <- function(x, row_id, column, ...) {
   m <- x$metadata
 
   get_meta_result.data.frame(m, row_id, column)
 }
 
 #' @export
-get_meta_result.data.frame <- function(x, row_id, column) {
+get_meta_result.data.frame <- function(x, row_id, column, ...) {
   if (!inherits(row_id, 'character') || !(row_id %in% x$row_id)) {
     stop('Invalid row_id selected. row_id must be provided as a string present in built Tplyr table.',
          call.=FALSE)
@@ -131,7 +131,7 @@ get_meta_result.data.frame <- function(x, row_id, column) {
 #' dat <- t$target
 #'
 #' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb), target = target)
-get_meta_subset <- function(x, ...) {
+get_meta_subset <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
   UseMethod("get_meta_subset")
 }
 
