@@ -138,7 +138,7 @@ So we get get metadata around a result cell, and we can get the exact results fr
 The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application. Click any of the result cells within the table and see what happens.
 
 
-```{r, out.width=740, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
+```{r, out.width=850, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
 knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/", height = "900px")
 ```
 
