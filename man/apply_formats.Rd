@@ -33,6 +33,7 @@ Note that auto-precision is not currently supported within \code{apply_formats()
 }
 \examples{
 mtcars \%>\%
+  head() \%>\%
   mutate(
     fmt_example = apply_formats('xxx (xx.x)', hp, wt)
   )
