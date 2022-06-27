@@ -54,3 +54,14 @@
       6 d6_1   Missing    <tplyr_mt> <tplyr_mt> <tplyr_mt>
       7 x1_1   <NA>       <tplyr_mt> <NULL>     <NULL>    
 
+# Metadata print method is accurate
+
+    Code
+      print(x)
+    Output
+      tplyr_meta: 3 names, 4 filters
+      Names:
+          a, b, c 
+      Filters:
+          a == 1, b == 2, c == 3, x == "a" 
+

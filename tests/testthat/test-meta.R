@@ -349,3 +349,8 @@ test_that("Metadata extraction and extension work properly", {
   expect_snapshot(get_metadata(t))
 
 })
+
+test_that("Metadata print method is accurate", {
+  x <- tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3, x=="a"))
+  expect_snapshot(print(x))
+})

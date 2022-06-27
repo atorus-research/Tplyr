@@ -213,3 +213,15 @@ append_metadata <- function(t, meta) {
   t$metadata <- bind_rows(t$metadata, meta)
   t
 }
+
+#' @export
+print.tplyr_meta <- function(x, ...) {
+  cat(sprintf("tplyr_meta: %d names, %d filters\n", length(x$names), length(x$filters)))
+  cat("Names:\n")
+  names <- map_chr(x$names, as_label)
+  filters <- map_chr(x$filters, as_label)
+  cat("   ", paste(names, collapse = ", "), "\n")
+  cat("Filters:\n")
+  cat("   ", paste(filters, collapse = ", "), "\n")
+  invisible()
+}
