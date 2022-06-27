@@ -41,6 +41,7 @@ tplyr_meta <- function(names=list(), filters=exprs()) {
 #' Create a tplyr_meta object
 #'
 #' @return tplyr_meta object
+#' @noRd
 new_tplyr_meta <- function(names = list(), filters=exprs()) {
   structure(
     list(

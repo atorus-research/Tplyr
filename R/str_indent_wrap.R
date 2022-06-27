@@ -6,10 +6,10 @@
 #' character element, and use hyphenated wrapping of single words that run
 #' longer than the allotted wrapping width.
 #'
-#' The `stringr::str_wrap()` is extremely highly efficient, but in the context
-#' of table creation there are two select features missing - hyphenation for
-#' long running strings that overflow width, and respect for pre-indentation of
-#' a character element. For example, in an adverse event table, you may have
+#' The function `stringr::str_wrap()` is extremely highly efficient, but in the
+#' context of table creation there are two select features missing - hyphenation
+#' for long running strings that overflow width, and respect for pre-indentation
+#' of a character element. For example, in an adverse event table, you may have
 #' body system rows as an un-indented column, and preferred terms as indented
 #' columns. These strings may run long and require wrapping to not surpass the
 #' column width. Furthermore, for crowded tables a single word may be longer
@@ -28,13 +28,14 @@
 #'
 #' @return A character vector with string wrapping applied
 #' @export
+#' @md
 #'
 #' @examples
 #' ex_text1 <- c("RENAL AND URINARY DISORDERS", "   NEPHROLITHIASIS")
 #' ex_text2 <- c("RENAL AND URINARY DISORDERS", "\tNEPHROLITHIASIS")
 #'
-#' str_indent_wrap(ex_text1, width=8)
-#' str_indent_wrap(ex_text2, tab_width=4)
+#' cat(paste(str_indent_wrap(ex_text1, width=8), collapse="\n\n"),"\n")
+#' cat(paste(str_indent_wrap(ex_text2, tab_width=4), collapse="\n\n"),"\n")
 str_indent_wrap <- function(x, width=10, tab_width=5) {
 
   if (!inherits(x, 'character')) {
