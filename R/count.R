@@ -110,9 +110,7 @@ process_summaries.count_layer <- function(x, ...) {
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
 
-  if (!using_format_strings(x)) {
-    prepare_numeric_data(x)
-  }
+  prepare_numeric_data(x)
 
   x
 }
@@ -813,22 +811,33 @@ rename_missing_values <- function(x) {
 prepare_numeric_data <- function(x) {
   evalq({
 
-    # Define the row labels established in set_summaries()
-    row_labels <- name_translator(summary_grps)
+    if (!('summary_vars' %in% ls())) {
+      summary_vars <- format_strings$n_counts$vars
+    }
 
     numeric_data <- numeric_data %>%
       mutate(
         pct = n / total,
         distinct_pct = distinct_n / distinct_total,
       ) %>%
-      pivot_longer(cols = match_exact(summary_vars), names_to = "stat") %>%
-      rowwise() %>%
-      # Add in the row labels
-      mutate(
-        row_label = row_labels[[stat]]
-      ) %>%
-      ungroup() %>%
-      select(!!treat_var, !!!cols, match_exact(by), summary_var, stat, row_label, value)
+      pivot_longer(cols = match_exact(summary_vars), names_to = "stat")
+
+    # Define the row labels established in set_summaries()
+    # and apply them to the numeric data
+    if ('summary_grps' %in% ls()){
+      row_labels <- name_translator_numeric(summary_grps)
+      numeric_data <- numeric_data %>%
+        rowwise() %>%
+        # Add in the row labels
+        mutate(
+          row_label = row_labels[[stat]]
+        ) %>%
+        ungroup() %>%
+        select(!!treat_var, !!!cols, summary_var, match_exact(by), stat, row_label, value)
+    } else {
+      numeric_data <- numeric_data %>%
+        select(!!treat_var, !!!cols, summary_var, match_exact(by), stat, value)
+    }
 
     if (length(target_var_saved) == 2) {
       numeric_data <- numeric_data %>%
@@ -851,9 +860,17 @@ prepare_numeric_data <- function(x) {
     }
 
     # Rename remaining vars
+    if ('row_label' %in% names(numeric_data)) {
+      numeric_data <- numeric_data %>%
+        # Replace by variable names
+        replace_by_string_names(quos(summary_var, !!!by, row_label))
+    } else {
+      numeric_data <- numeric_data %>%
+        # Replace by variable names
+        replace_by_string_names(quos(summary_var, !!!by))
+    }
+
     numeric_data <- numeric_data %>%
-      # Replace by variable names
-      replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
       # Replace column names
       replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
       rename(param=stat)
