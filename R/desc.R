@@ -86,7 +86,7 @@ process_summaries.desc_layer <- function(x, ...) {
       }
 
       # Numeric data needs the variable names replaced and add summary variable name
-      num_sums[[i]] <- replace_by_string_names(num_sums[[i]], by) %>%
+      num_sums[[i]] <- num_sums[[i]] %>%
         mutate(summary_var = as_name(cur_var)) %>%
         select(summary_var, everything())
 
@@ -97,7 +97,6 @@ process_summaries.desc_layer <- function(x, ...) {
     # Bind the numeric data together within the layer
     numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
 
-
     numeric_data <- numeric_data %>%
       rowwise() %>%
       # Add in the row labels
@@ -106,7 +105,7 @@ process_summaries.desc_layer <- function(x, ...) {
       ) %>%
       ungroup() %>%
       # Replace by variable names
-      replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
+      replace_by_string_names(quos(summary_var, !!!by, row_label)) %>%
       # Replace column names
       replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
       rename(param=stat)
