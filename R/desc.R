@@ -25,8 +25,10 @@ process_summaries.desc_layer <- function(x, ...) {
     # Get the row labels out from the format strings list
     if (using_f_strs) {
       row_labels <- name_translator(format_strings)
+      row_labels_num <- name_translator_numeric(format_strings)
     } else {
-      row_labels <- name_translator(summary_grps)
+      row_labels_num <- name_translator_numeric(summary_grps)
+      row_labels <- row_labels_num
     }
 
     # Subset the local built_target based on where
@@ -61,7 +63,7 @@ process_summaries.desc_layer <- function(x, ...) {
         # Fill in any missing treat/col combinations
         complete(!!treat_var, !!!by, !!!cols)
 
-      # Build traponsed summary if f_str's are being used
+      # Build transposed summary if f_str's are being used
       if (using_f_strs) {
         # Create the transposed summary data to prepare for formatting
         trans_sums[[i]] <- num_sums[[i]] %>%
@@ -95,20 +97,19 @@ process_summaries.desc_layer <- function(x, ...) {
     # Bind the numeric data together within the layer
     numeric_data <- pivot_longer(bind_rows(num_sums), cols = match_exact(summary_vars), names_to = "stat")
 
-    if (!using_f_strs) {
-      numeric_data <- numeric_data %>%
-        rowwise() %>%
-        # Add in the row labels
-        mutate(
-          row_label = row_labels[[stat]]
-        ) %>%
-        ungroup() %>%
-        # Replace by variable names
-        replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
-        # Replace column names
-        replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
-        rename(param=stat)
-    }
+
+    numeric_data <- numeric_data %>%
+      rowwise() %>%
+      # Add in the row labels
+      mutate(
+        row_label = row_labels_num[[stat]]
+      ) %>%
+      ungroup() %>%
+      # Replace by variable names
+      replace_by_string_names(quos(!!!by, summary_var, row_label)) %>%
+      # Replace column names
+      replace_by_string_names(quos(!!treat_var, !!!cols), lab="col") %>%
+      rename(param=stat)
 
     # Delete the listed numeric data
     rm(num_sums)
