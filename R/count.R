@@ -1,7 +1,7 @@
 
 #' @noRd
 #' @export
-process_summaries.count_layer <- function(x, ...) {
+process_summaries.count_layer <- function(x, prepare_numeric = TRUE, ...) {
 
   if (env_get(x, "is_built_nest", default = FALSE)) {
     refresh_nest(x)
@@ -110,7 +110,9 @@ process_summaries.count_layer <- function(x, ...) {
   # Trigger any derivation of additional statistics
   map(x$stats, process_statistic_data)
 
-  prepare_numeric_data(x)
+  if (prepare_numeric) {
+    prepare_numeric_data(x)
+  }
 
   x
 }
