@@ -405,29 +405,42 @@ set_format_strings.shift_layer <- function(e, ...) {
 #' those variables the vector names, and the names of the format_strings elements the
 #' values to allow easy creation of a \code{row_labels} variable in the data
 #'
-#' @param fmt_strings The \code{format_strings} variable in a layer
+#' @param x The \code{format_strings} variable in a layer
 #'
 #' @return A named character vector with the flipping applied
 #' @noRd
-name_translator <- function(x) {
+name_translator <- function(fmt_strings) {
+  out <- names(fmt_strings)
+  names(out) <- map_chr(fmt_strings, ~ as_name(.x$vars[[1]]))
+  out
+}
+
+#' Extract a translation vector for f_str or summary object
+#'
+#' This provides the row labels in preparation for the numeric data output
+#'
+#' @param x The format strings list or a list of summaries
+#'
+#' @return A named character vector with the flipping applied
+#' @noRd
+name_translator_numeric <- function(x) {
 
   # Handle f_str translating
   if (any(map_lgl(x, ~ inherits(., 'f_str')))){
-    out <- names(x)
-    names(out) <- map_chr(x, ~ as_name(.$vars[[1]]))
-  } else {
-    # This needs to be a for loop for clarity because a map
-    # function would be too unreadable and overly complex
-    out <- character(length(flatten(x)))
-    i <- 1
-    # Loop the labels
-    for (l in names(x)) {
-      # Loop the variable names
-      for (n in x[[l]]) {
-        out[i] <- l
-        names(out)[i] <- as_name(n)
-        i <- i + 1
-      }
+    x <- imap(x, ~ .$vars)
+  }
+
+  # This needs to be a for loop for clarity because a map
+  # function would be too unreadable and overly complex
+  out <- character(length(flatten(x)))
+  i <- 1
+  # Loop the labels
+  for (l in names(x)) {
+    # Loop the variable names
+    for (n in x[[l]]) {
+      out[i] <- l
+      names(out)[i] <- as_name(n)
+      i <- i + 1
     }
   }
 
