@@ -445,7 +445,7 @@ process_formatting.count_layer <- function(x, ...) {
     #used to split the string.
     indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
 
-    formatted_data <- numeric_data
+    formatted_data <- num_data
 
     # if(is_built_nest && !quo_is_symbol(by[[1]])) {
     #   names(formatted_data) <- str_remove_all(names(formatted_data), "\\\"")
@@ -810,6 +810,10 @@ rename_missing_values <- function(x) {
 
 prepare_numeric_data <- function(x) {
   evalq({
+
+    # TODO: Update processing for this later - this is some ugly renaming
+    # just to prevent downstream impacts
+    num_data <- numeric_data
 
     if (!('summary_vars' %in% ls())) {
       summary_vars <- format_strings$n_counts$vars
