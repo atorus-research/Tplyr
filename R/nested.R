@@ -39,12 +39,12 @@ process_nested_count_target <- function(x) {
     }
 
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
-                                                 by = vars(!!!by), where = !!where))
+                                                 by = vars(!!!by), where = !!where), prepare_numeric=FALSE)
 
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
                                                   by = vars(!!target_var[[1]], !!!by), where = !!where) %>%
                                         set_count_row_prefix(indentation) %>%
-                                        set_denoms_by(!!!second_denoms_by))
+                                        set_denoms_by(!!!second_denoms_by), prepare_numeric=FALSE)
 
     first_layer_final <- first_layer$numeric_data
     # add_column(!!target_var[[1]] := .[["summary_var"]])
