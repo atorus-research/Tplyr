@@ -23,6 +23,7 @@ new_layer_template <- function(name, template) {
   )
 }
 
+#' @export
 use_template <- function(name) {
   template <- getOption("tplyr.layer_templates")[[name]]
 
