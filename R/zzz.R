@@ -159,7 +159,10 @@ tplyr_default_options <- list(
   tplyr.quantile_type = 7,
 
   # Rounding option default
-  tplyr.IBMRounding = FALSE
+  tplyr.IBMRounding = FALSE,
+
+  # Layer templates
+  tplyr.layer_templates = list()
 )
 
 # Carry out process on load ----
