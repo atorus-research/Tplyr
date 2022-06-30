@@ -200,14 +200,15 @@ add_order_columns.count_layer <- function(x) {
                              length(unlist(unique(built_target[, as_name(by[[1]])]))),
                              1)
 
-      all_outer <- numeric_data %>%
+
+      all_outer <- num_data %>%
         filter(!!!filter_logic) %>%
         extract(1:outer_number, )
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
         group_by(.data[[paste0("ord_layer_", formatted_col_index - 1)]]) %>%
-        do(add_data_order_nested(., formatted_col_index - 1, numeric_data,
+        do(add_data_order_nested(., formatted_col_index - 1, num_data,
                                  indentation_length = indentation_length,
                                  ordering_cols = ordering_cols,
                                  treat_var = treat_var, by = by, cols = cols,
@@ -426,7 +427,7 @@ get_data_order <- function(x, formatted_col_index) {
       if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
 
       # No processing is needed here just pass in the needed info
-      get_data_order_bycount(numeric_data, ordering_cols,
+      get_data_order_bycount(num_data, ordering_cols,
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
                              total_index, total_row_sort_value,
