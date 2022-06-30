@@ -24,13 +24,13 @@ new_layer_template <- function(name, template) {
 }
 
 #' @export
-use_template <- function(name) {
+use_template <- function(name, ...) {
   template <- getOption("tplyr.layer_templates")[[name]]
 
   if (!inherits(template, "tplyr_layer_template")) {
     stop("Invalid template - templates must be created using `new_layer_template()`")
   }
 
-  template
+  template(...)
 }
 
