@@ -16,14 +16,14 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
   # Only allow the user to use `Tplyr` functions
   assert_that(
-    get_call_name(c) %in% allowable_calls,
+    call_name(c) %in% allowable_calls,
     msg = "Functions called within `add_layer` must be part of `Tplyr`"
     )
 
   # Process the magrittr pipe
-  if (get_call_name(c) == "%>%") {
+  if (call_name(c) == "%>%") {
     # Only allow the user to use `Tplyr` functions on both sides of the pipe
-    assert_that(all(map_chr(call_args(c), get_call_name) %in% allowable_calls),
+    assert_that(all(map_chr(call_args(c), call_name) %in% allowable_calls),
                 msg="Functions called within `add_layer` must be part of `Tplyr`")
 
     # Recursively extract the left side of the magrittr call to work your way up
@@ -36,7 +36,7 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
     }
   }
   # Process the 'native' pipe (arguments logically insert as first parameter)
-  else if (!str_starts(get_call_name(c), "group_[cds]|use_template")) {
+  else if (!str_starts(call_name(c), "group_[cds]|use_template")) {
 
     # Standardize the call to get argument names and pull out the literal first argument
     # Save the call to a new variable in the process
@@ -60,25 +60,6 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
     c <- call_modify(.call=c, ...)
   }
 
-}
-
-#' Get call name from a call or quosure
-#'
-#' When using templates, the top call comes in as a quosure, so handle that
-#' capture
-#'
-#' @param c call or quosure
-#'
-#' @return character string
-#' @noRd
-get_call_name <- function(c) {
-  cname <- call_name(c)
-
-  # Get call name out of a quosure
-  if (is.null(cname)) {
-    cname <- str_extract(as_label(c), "[\\w]+(?=\\()")
-  }
-  cname
 }
 
 #' Find depth of a layer object
