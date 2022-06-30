@@ -5,6 +5,16 @@ new_layer_template <- function(name, template) {
   if (name %in% objects("package:Tplyr")) {
     stop("Template name cannot be a name already present in Tplyr's namespace")
   }
+
+  if (name %in% names(getOption("tplyr.layer_templates"))) {
+    warning(
+      sprintf("A template by the name %s already exists. Template will be overwritten.", name),
+      call. = FALSE
+    )
+    tmps <- getOption('tplyr.layer_templates')
+    options(tplyr.layer_templates = tmps[names(tmps) != name])
+  }
+
   # Make sure that the tempalte is valid
   modify_nested_call(template, examine_only = TRUE)
 
