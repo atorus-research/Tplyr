@@ -21,9 +21,19 @@ new_layer_template <- function(name, template) {
   # Make sure that the template is valid
   modify_nested_call(template, examine_only = TRUE)
 
+  # Have to convert the call to a character and collapse it to order text correctly
+  raw_template <- paste0(c(template), collapse="\n")
+
+  template_update <- str_replace_all(
+    raw_template,
+    "\\{\\s+([\\w\\.]+)\\s+\\}", # Find any text between curly brackets with the text between brackets as a group
+    "template_param('\\1')" # replace the curly brackets with template_param('text') where the group in the regex is used in replacement
+    )
+
   # Turn the template into a function, with class to mark as a template
   func <-structure(
-    paste0(c("{",template,"}"), collapse="\n"),
+    paste0(c("{",template_update,"}"), collapse="\n"),
+    raw = raw_template,
     class = c("tplyr_layer_template")
   )
 
