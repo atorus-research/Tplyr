@@ -1,9 +1,96 @@
-#' export
+#' Create, extract, remove, and use Tplyr layer templates
+#'
+#' There are several scenarios where a layer template may be useful. Some
+#' tables, like demographics tables, may have many layers that will all
+#' essentially look the same. Categorical variables will have the same count
+#' layer settings, and continuous variables will have the same desc layer
+#' settings. A template allows a user to build those settings once per layer,
+#' then reference the template when the Tplyr table is actually built.
+#'
+#' This suite of functions allows a user to create and use layer templates.
+#' Layer templates allow a user to pre-build and reuse an entire layer
+#' configuration, from the layer constructor down to all modifying functions.
+#' Furthermore, users can specify parameters they may want to be
+#' interchangeable. Additionally, layer templates are extensible, so a template
+#' can be use and then further extended with additional layer modifying
+#' functions.
+#'
+#' Layers are created using `new_layer_template()`. To use a layer, use the
+#' function `use_template()` in place of `group_count|desc|shift()`. If you want
+#' to view a specific template, use `get_layer_template()`, and to remove a
+#' layer template use `remove_layer_template()`. Layer templates themselves are
+#' stored in the option `tplyr.layer_templates`, but a user should not access
+#' this directly and instead use the Tplyr supplied functions.
+#'
+#' When providing the template layer syntax, the layer must start with a layer
+#' constructor. These are one of the function `group_count()`, `group_desc()`,
+#' or `group_shift()`. Instead of passing arguments into these function,
+#' templates are specified using an ellipsis in the constructor, i.e.
+#' `group_count(...)`. This is required, as after the template is built a user
+#' supplies these arguments via `use_template()`
+#'
+#' `use_template()` takes the `group_count|desc|shift()` arguments by default.
+#' If a user specified additional arguments in the template, these are provided
+#' in a list throught the argument `add_params`. Provide these arguments exactly
+#' as you would in a normal layer. When creating the template, these parameters
+#' can be specified by using curly brackets. See the examples for details.
+#'
+#' @param name Template name
+#' @param template Template layer syntax, starting with a layer constructor
+#'   `group_count|desc|shift`. This function should be called with an ellipsis
+#'   argument (i.e. group_count(...)).
+#'
+#' @md
+#' @export
+#'
+#' @family Layer Templates
+#' @rdname layer_templates
+#'
+#' @examples
+#'
+#' op <- options()
+#'
+#' new_layer_template(
+#'   "example_template",
+#'   group_count(...) %>%
+#'     set_format_strings(f_str('xx (xx%)', n, pct))
+#' )
+#'
+#' get_layer_template("example_template")
+#'
+#' tplyr_table(mtcars, vs) %>%
+#'   add_layer(
+#'     use_template("example_template", gear)
+#'   ) %>%
+#'   build()
+#'
+#' remove_layer_template("example_template")
+#'
+#' new_layer_template(
+#'   "example_template",
+#'   group_count(...) %>%
+#'     set_format_strings(f_str('xx (xx%)', n, pct)) %>%
+#'     set_order_count_method({sort_meth}) %>%
+#'     set_ordering_cols({sort_cols})
+#' )
+#'
+#' get_layer_template("example_template")
+#'
+#' tplyr_table(mtcars, vs) %>%
+#'   add_layer(
+#'     use_template("example_template", gear, add_params =
+#'                    list(
+#'                      sort_meth = "bycount",
+#'                      sort_cols = `1`
+#'                    ))
+#'   ) %>%
+#'   build()
+#'
+#' remove_layer_template("example_template")
+#'
+#' options(op)
 new_layer_template <- function(name, template) {
   template <- enexpr(template)
-
-  # Make sure that the template is valid
-  modify_nested_call(template, examine_only = TRUE)
 
   # Have to convert the call to a character and collapse it to order text correctly
   raw_template <- paste0(c(template), collapse="\n")
@@ -17,13 +104,15 @@ new_layer_template <- function(name, template) {
     stop(msg, call.=FALSE)
   }
 
+  # Make sure that the template is valid
+  modify_nested_call(template, examine_only = TRUE)
+
   if (name %in% names(getOption("tplyr.layer_templates"))) {
     warning(
       sprintf("A template by the name %s already exists. Template will be overwritten.", name),
       call. = FALSE
     )
-    tmps <- getOption('tplyr.layer_templates')
-    options(tplyr.layer_templates = tmps[names(tmps) != name])
+    remove_layer_template(name)
   }
 
   # Find any add_params provided into the template
@@ -45,6 +134,38 @@ new_layer_template <- function(name, template) {
   )
 }
 
+#' @family Layer Templates
+#' @rdname layer_templates
+#' @export
+remove_layer_template <- function(name) {
+  tmps <- getOption('tplyr.layer_templates')
+
+  if (name %in% names(tmps)) {
+    options(tplyr.layer_templates = tmps[names(tmps) != name])
+  } else{
+    warning(sprintf("No template named %s", name))
+  }
+}
+
+#' @family Layer Templates
+#' @rdname layer_templates
+#' @export
+get_layer_template <- function(name) {
+  tmps <- getOption('tplyr.layer_templates')
+  if (!(name %in% names(tmps))) {
+    stop(sprintf("Template %s does not exist", name), call.=FALSE)
+  }
+  tmps[[name]]
+}
+
+#' @param ... Arguments passed directly into a layer constructor, matching the
+#'   target, by, and where parameters.
+#' @param add_params Additional parameters passed into layer modifier functions.
+#'   These arguments are specified in a template within curly brackets such as
+#'   {param}. Supply as a named list, where the element name is the parameter.
+#'
+#' @family Layer Templates
+#' @rdname layer_templates
 #' @export
 use_template <- function(name, ..., add_params = NULL) {
 
@@ -62,14 +183,16 @@ use_template <- function(name, ..., add_params = NULL) {
     if (!is_named(add_params_args)) {
       stop("Arguments pass in `add_params` must be named", call.=FALSE)
     }
-  }  else {
+  }  else if (!is.null(quo_get_expr(add_params))) {
+    stop("Arguments must be passed to `add_params` in a list.", call.=FALSE)
+  } else {
     add_params_args <- list()
   }
 
-  template <- getOption("tplyr.layer_templates")[[name]]
+  template <- get_layer_template(name)
 
   if (!inherits(template, "tplyr_layer_template")) {
-    stop("Invalid template - templates must be created using `new_layer_template()`")
+    stop("Invalid template - templates must be created using `new_layer_template()`", call.=FALSE)
   }
 
   # Param checks
