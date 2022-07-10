@@ -2,11 +2,19 @@
 new_layer_template <- function(name, template) {
   template <- enexpr(template)
 
-  if (name %in% objects("package:Tplyr")) {
-    stop(
-      "Template name cannot be a name already present in Tplyr's namespace",
-      call.=FALSE
-      )
+  # Make sure that the template is valid
+  modify_nested_call(template, examine_only = TRUE)
+
+  # Have to convert the call to a character and collapse it to order text correctly
+  raw_template <- paste0(c(template), collapse="\n")
+
+  # Enforce ellipsis on layer constructors
+  if (!str_detect(raw_template, "group_(count|desc|shift)\\(\\.{3}\\)")) {
+    msg <- paste0(
+      "Invalid template - templates must start with an ellipsis (i.e. ...) passed to either ",
+      "group_count, group_desc, or group_shift. For example, group_count(...)"
+    )
+    stop(msg, call.=FALSE)
   }
 
   if (name %in% names(getOption("tplyr.layer_templates"))) {
@@ -17,12 +25,6 @@ new_layer_template <- function(name, template) {
     tmps <- getOption('tplyr.layer_templates')
     options(tplyr.layer_templates = tmps[names(tmps) != name])
   }
-
-  # Make sure that the template is valid
-  modify_nested_call(template, examine_only = TRUE)
-
-  # Have to convert the call to a character and collapse it to order text correctly
-  raw_template <- paste0(c(template), collapse="\n")
 
   # Find any add_params provided into the template
   params <- str_match_all(raw_template, "\\{\\s+([\\w\\.]+)\\s+\\}")[[1]][,2]
