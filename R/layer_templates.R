@@ -1,4 +1,4 @@
-#' Create, extract, remove, and use Tplyr layer templates
+#' Create, view, extract, remove, and use Tplyr layer templates
 #'
 #' There are several scenarios where a layer template may be useful. Some
 #' tables, like demographics tables, may have many layers that will all
@@ -17,10 +17,11 @@
 #'
 #' Layers are created using `new_layer_template()`. To use a layer, use the
 #' function `use_template()` in place of `group_count|desc|shift()`. If you want
-#' to view a specific template, use `get_layer_template()`, and to remove a
-#' layer template use `remove_layer_template()`. Layer templates themselves are
-#' stored in the option `tplyr.layer_templates`, but a user should not access
-#' this directly and instead use the Tplyr supplied functions.
+#' to view a specific template, use `get_layer_template()`. If you want to view
+#' all templates, use view_layer_templates. And to remove a layer template use
+#' `remove_layer_template()`. Layer templates themselves are stored in the
+#' option `tplyr.layer_templates`, but a user should not access this directly
+#' and instead use the Tplyr supplied functions.
 #'
 #' When providing the template layer syntax, the layer must start with a layer
 #' constructor. These are one of the function `group_count()`, `group_desc()`,
@@ -55,6 +56,8 @@
 #'   group_count(...) %>%
 #'     set_format_strings(f_str('xx (xx%)', n, pct))
 #' )
+#'
+#' view_layer_templates()
 #'
 #' get_layer_template("example_template")
 #'
@@ -122,6 +125,7 @@ new_layer_template <- function(name, template) {
   func <-structure(
     paste0(c("{",raw_template,"}"), collapse="\n"),
     params = params,
+    template_name = name,
     class = c("tplyr_layer_template")
   )
 
@@ -156,6 +160,13 @@ get_layer_template <- function(name) {
     stop(sprintf("Template %s does not exist", name), call.=FALSE)
   }
   tmps[[name]]
+}
+
+#' @family Layer Templates
+#' @rdname layer_templates
+#' @export
+view_layer_templates <- function() {
+  getOption('tplyr.layer_templates')
 }
 
 #' @param ... Arguments passed directly into a layer constructor, matching the
@@ -295,4 +306,16 @@ template_param <- function(param_name) {
   # Pull the desired parameter out and return it
   param <- add_params[[param_name]]
   param
+}
+
+#' @export
+print.tplyr_layer_template <- function(template) {
+  cat(sprintf("Template name: %s\n", attr(template, 'template_name')))
+  params <- attr(template, 'params')
+  if (is_empty(params)) {
+    params <- "None"
+  }
+  cat(sprintf("Template parameters: %s\n", paste(c(params), collapse=", ")))
+  cat("Template code:\n")
+  cat(template, "\n")
 }
