@@ -96,6 +96,7 @@ articles:
   - riskdiff
   - sort
   - options
+  - layer_templates
   - styled-table
   - denom
   - Tplyr
