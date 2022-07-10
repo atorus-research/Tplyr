@@ -38,3 +38,26 @@
 
     In use_template() the following parameters provided to add_params are missing: sort_col
 
+# Templates print appropriately
+
+    $test1
+    Template name: test1
+    Template parameters: None
+    Template code:
+    {
+    group_count(...) %>% set_format_strings(f_str("xx (xx.x%)", n, pct))
+    } 
+    
+    $test2
+    Template name: test2
+    Template parameters: sort_meth, sort_col
+    Template code:
+    {
+    group_count(...) %>% set_format_strings(f_str("xx (xx.x%)", n, pct)) %>% set_order_count_method({
+        sort_meth
+    }) %>% set_ordering_cols({
+        sort_col
+    })
+    } 
+    
+
