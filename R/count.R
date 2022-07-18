@@ -744,13 +744,26 @@ process_count_denoms <- function(x) {
       }
     }
 
-    denoms_df <- denom_target %>%
+    denoms_df_n <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(
-        n = n(),
-        distinct_n = n_distinct(!!!distinct_by, !!treat_var)
+        n = n()
         ) %>%
-      ungroup() %>%
+      ungroup()
+
+    denoms_df_dist <- pop_data %>%
+      filter(!!denom_where) %>%
+      group_by(!!pop_treat_var) %>%
+      summarize(
+        distinct_n = n_distinct(!!!distinct_by, !!pop_treat_var)
+      ) %>%
+      ungroup()
+
+    by_join <- as_name(pop_treat_var)
+    names(by_join) <- as_name(treat_var)
+
+    denoms_df <- denoms_df_n %>%
+      left_join(denoms_df_dist, by = by_join) %>%
       complete(!!!layer_params[param_apears],
                fill = list(n = 0, distinct_n = 0))
 

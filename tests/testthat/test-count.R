@@ -745,3 +745,18 @@ test_that("denom and distinct_denom values work as expected", {
 
   expect_snapshot(build(t2))
 })
+
+test_that("denoms with distinct population data populates as expected", {
+
+  tab <- tplyr_table(adae, TRTA) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count("Any Body System") %>%
+        set_distinct_by(USUBJID) %>%
+        set_format_strings(f_str("xx (xx.x%)", distinct_n, distinct_pct))
+    ) %>%
+    build()
+
+  expect_snapshot(tab)
+})
