@@ -23,8 +23,6 @@ on integer precision, and a 'dec' element for the cap on decimal precision.}
 \value{
 The layer environment with the format string binding added
 
-
-
 Returns the modified layer object.
 }
 \description{

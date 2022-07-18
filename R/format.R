@@ -49,7 +49,7 @@
 #'   different layers. When declaring a format string within a count layer,
 #'   \code{f_str} expects to see the values \code{n} or \code{distinct_n} for
 #'   event or distinct counts, \code{pct} or \code{distinct_pct} for event or
-#'   distinct percentages, or \code{denom} or \code{distinct_denom} for
+#'   distinct percentages, or \code{total} or \code{distinct_total} for
 #'   denominator calculations. But in descriptive statistic layers, \code{f_str}
 #'   parameters refer to the names of the summaries being performed, either by
 #'   built in defaults, or custom summaries declared using
@@ -569,8 +569,8 @@ count_f_str_check <- function(...) {
   for (name in names(params)) {
 
     if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct", "denom", "distinct_denom")),
-                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct", "total", "distinct_total")),
+                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, distinct_pct, total, or distinct_total")
 
       # Check to make sure both disintct(old), and distinct_n(new) aren't passed
       assert_that(!all(c("distinct", "distinct_n") %in% params[["n_counts"]]$vars),

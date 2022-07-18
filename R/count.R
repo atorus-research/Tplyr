@@ -651,11 +651,11 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
 
            map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
          },
-         "denom" = {
-           map_chr(.total, num_fmt, which(vars_ord == "denom"), fmt = count_fmt)
+         "total" = {
+           map_chr(.total, num_fmt, which(vars_ord == "total"), fmt = count_fmt)
          },
-         "distinct_denom" = {
-           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_denom"), fmt = count_fmt)
+         "distinct_total" = {
+           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
          }
   )
 

@@ -3,95 +3,9 @@
     group_count `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
     ! Problem while computing `..1 = bad == code`.
-    Caused by error:
+    Caused by error in `mask$eval_all_filter()`:
     ! object 'bad' not found
     
-
-# Total rows and missing counts are displayed correctly(0.1.5 Updates)
-
-    structure(list(row_label1 = c("6", "8", "Missing", "Total"), 
-        var1_3 = c(" 2 (13.3)", "12 (80.0)", " 1", "   15 [100.0]"
-        ), var1_4 = c(" 4 (33.3)", " 0 ( 0.0)", " 8", "   12 [100.0]"
-        ), var1_5 = c(" 1 (20.0)", " 2 (40.0)", " 2", "    5 [100.0]"
-        ), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
-        2, 3, 4)), row.names = c(NA, -4L), class = c("tbl_df", "tbl", 
-    "data.frame"))
-
----
-
-    structure(list(row_label1 = c("6", "8", "Missing", "Not Found", 
-    "Total"), var1_3 = c(" 2 (13.3)", "12 (80.0)", " 1", " 0", "   15 [100.0]"
-    ), var1_4 = c(" 4 (33.3)", " 0 ( 0.0)", " 8", " 0", "   12 [100.0]"
-    ), var1_5 = c(" 1 (20.0)", " 2 (40.0)", " 2", " 0", "    5 [100.0]"
-    ), ord_layer_index = c(1L, 1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
-    2, 3, 4, 5)), row.names = c(NA, -5L), class = c("tbl_df", "tbl", 
-    "data.frame"))
-
----
-
-    structure(list(row_label1 = c("0", "Missing", "Not Found", "Total"
-    ), var1_3 = c("15 (100.0)", " 0", " 0", "   15 [100.0]"), var1_4 = c(" 4 (33.3)", 
-    " 8", " 0", "   12 [100.0]"), var1_5 = c(" 0 ( 0.0)", " 5", " 0", 
-    "    5 [100.0]"), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
-    5689, 5690, 9999)), row.names = c(NA, -4L), class = c("tbl_df", 
-    "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("6", "8", "Missing", "Not Found", 
-    "Total"), var1_3 = c(" 2 (13.3)", "12 (80.0)", " 1", " 0", "   15 [100.0]"
-    ), var1_4 = c(" 4 (33.3)", " 0 ( 0.0)", " 8", " 0", "   12 [100.0]"
-    ), var1_5 = c(" 1 (20.0)", " 2 (40.0)", " 2", " 0", "    5 [100.0]"
-    ), ord_layer_index = c(1L, 1L, 1L, 1L, 1L), ord_layer_1 = c(4, 
-    0, 999, 1000, 9999)), row.names = c(NA, -5L), class = c("tbl_df", 
-    "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("6", "8", "Missing", "Total"), 
-        var1_3 = c(" 2 (13.3)", "12 (80.0)", " 1", "   15 [100.0]"
-        ), var1_4 = c(" 4 (33.3)", " 0 ( 0.0)", " 8", "   12 [100.0]"
-        ), var1_5 = c(" 1 (20.0)", " 2 (40.0)", " 2", "    5 [100.0]"
-        ), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(1, 
-        2, 3, 7862)), row.names = c(NA, -4L), class = c("tbl_df", 
-    "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("0", "Missing", "Total"), var1_3 = c("15 (100.0)", 
-    " 0", "   15 [100.0]"), var1_4 = c(" 4 (33.3)", " 8", "   12 [100.0]"
-    ), var1_5 = c(" 0 ( 0.0)", " 5", "    5 [100.0]"), ord_layer_index = c(1L, 
-    1L, 1L), ord_layer_1 = c(1, 3, -Inf)), row.names = c(NA, -3L), class = c("tbl_df", 
-    "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("6", "8", "Missing", "Total"), 
-        var1_3 = c(" 2 (13.3)", "12 (80.0)", " 1", "   15 [100.0]"
-        ), var1_4 = c(" 4 (33.3)", " 0 ( 0.0)", " 8", "   12 [100.0]"
-        ), var1_5 = c(" 1 (20.0)", " 2 (40.0)", " 2", "    5 [100.0]"
-        ), ord_layer_index = c(1L, 1L, 1L, 1L), ord_layer_1 = c(4, 
-        0, 8, -6795)), row.names = c(NA, -4L), class = c("tbl_df", 
-    "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("6", "8", "NA", "Total"), var1_3 = c(" 2 (13.3)", 
-    "12 (80.0)", " 1 ( 6.7)", "15 (100.0)"), var1_4 = c(" 4 (33.3)", 
-    " 0 ( 0.0)", " 8 (66.7)", "12 (100.0)"), var1_5 = c(" 1 (20.0)", 
-    " 2 (40.0)", " 2 (40.0)", " 5 (100.0)"), ord_layer_index = c(1L, 
-    1L, 1L, 1L), ord_layer_1 = c(1, 2, 3, 3)), row.names = c(NA, 
-    -4L), class = c("tbl_df", "tbl", "data.frame"))
-
----
-
-    structure(list(row_label1 = c("2", "3", "4", "6", "8", "Missing_"
-    ), var1_3 = c(" 0 ( 0.0)", " 0 ( 0.0)", " 0 ( 0.0)", " 2 (13.3)", 
-    "12 (80.0)", "   1"), var1_4 = c(" 0 ( 0.0)", " 0 ( 0.0)", " 0 ( 0.0)", 
-    " 4 (33.3)", " 0 ( 0.0)", "   8"), var1_5 = c(" 0 ( 0.0)", " 0 ( 0.0)", 
-    " 0 ( 0.0)", " 1 (20.0)", " 2 (40.0)", "   2"), ord_layer_index = c(1L, 
-    1L, 1L, 1L, 1L, 1L), ord_layer_1 = c(1, 2, 3, 4, 5, 6)), row.names = c(NA, 
-    -6L), class = c("tbl_df", "tbl", "data.frame"))
 
 # set_denom_where works as expected
 
@@ -126,14 +40,6 @@
 
     Inner layers must be data driven variables
 
-# Variable names will be coersed into symbols
-
-    The first target variable has been coerced into a symbol. You should pass variable names unquoted.
-
----
-
-    The second target variable has been coerced into a symbol.You should pass variable names unquoted.
-
 # keep_levels works as expeceted
 
     group_count `where` condition `TRUE` is invalid. Filter error:
@@ -157,16 +63,14 @@
 # denom and distinct_denom values work as expected
 
     Code
-      build(t1)
+      build(t2)
     Output
-      # A tibble: 5 x 6
-        row_label1 var1_3          var1_4          var1_5  ord_layer_index ord_layer_1
-        <chr>      <chr>           <chr>           <chr>             <int>       <dbl>
-      1 4          " 1/ 15 ( 6.7)" " 8/ 12 (66.7)" " 2/  ~               1           8
-      2 6          " 2/ 15 (13.3)" " 4/ 12 (33.3)" " 1/  ~               1           4
-      3 8          "12/ 15 (80.0)" " 0/ 12 ( 0.0)" " 2/  ~               1           0
-      4 Missing    " 0"            " 0"            " 0"                  1           0
-      5 Total      "   15 [100.0]" "   12 [100.0]" "    5~               1          12
+      # A tibble: 3 x 6
+        row_label1 var1_3            var1_4         var1_5 ord_layer_index ord_layer_1
+        <chr>      <chr>             <chr>          <chr>            <int>       <dbl>
+      1 4          "  1   3   1  15" "  2   4   8 ~ "  1 ~               1           1
+      2 6          "  1   3   2  15" "  2   4   4 ~ "  1 ~               1           2
+      3 8          "  1   3  12  15" "  0   4   0 ~ "  1 ~               1           3
 
 ---
 
@@ -179,4 +83,15 @@
       1 4          "  1   3   1  15" "  2   4   8 ~ "  1 ~               1           1
       2 6          "  1   3   2  15" "  2   4   4 ~ "  1 ~               1           2
       3 8          "  1   3  12  15" "  0   4   0 ~ "  1 ~               1           3
+
+# denoms with distinct population data populates as expected
+
+    Code
+      tab
+    Output
+      # A tibble: 1 x 6
+        row_label1      var1_Placebo `var1_Xanomeli~` `var1_Xanomeli~` ord_layer_index
+        <chr>           <chr>        <chr>            <chr>                      <int>
+      1 Any Body System 69 (80.2%)   79 (94.0%)       77 (91.7%)                     1
+      # ... with 1 more variable: ord_layer_1 <lgl>
 
