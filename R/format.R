@@ -56,9 +56,10 @@
 #'   \code{\link{set_custom_summaries}}. See \code{\link{set_format_strings}}
 #'   for some more notes about layers specific implementation.
 #'
-#'   Count and shift layers frequencies and percentages can be specified with
-#'   'n' and 'pct' respectively. Distinct values can also be presented in count
-#'   layers with the arguments 'distinct' and 'distinct_total'.
+#'   Count and shift layer frequencies, totals, and percentages can be specified
+#'   with the values 'n', 'pct' and 'total'. Distinct values can also be
+#'   presented in Count layers with the arguments 'distinct', 'distinct_pct',
+#'   and 'distinct_total'.
 #'
 #' @param format_string The desired display format. X's indicate digits. On the
 #'   left, the number of x's indicates the integer length. On the right, the
@@ -298,7 +299,7 @@ set_format_strings <- function(e, ...) {
 #' @param cap A named character vector containing an 'int' element for the cap
 #'   on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
-#' @return
+#' @return tplyr_layer object with formats attached
 #' @export
 #'
 #' @rdname set_format_strings
