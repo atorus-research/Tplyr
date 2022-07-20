@@ -755,7 +755,7 @@ process_count_denoms <- function(x) {
         ) %>%
       ungroup()
 
-    denoms_df_dist <- pop_data %>%
+    denoms_df_dist <- built_pop_data %>%
       filter(!!denom_where) %>%
       group_by(!!pop_treat_var) %>%
       summarize(

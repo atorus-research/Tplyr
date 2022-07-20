@@ -747,10 +747,14 @@ test_that("denom and distinct_denom values work as expected", {
 })
 
 test_that("denoms with distinct population data populates as expected", {
+  load(test_path("adae.Rdata"))
+  load(test_path("adsl.Rdata"))
 
   tab <- tplyr_table(adae, TRTA) %>%
     set_pop_data(adsl) %>%
     set_pop_treat_var(TRT01A) %>%
+    add_total_group %>%
+    add_treat_grps(Dosed = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
     add_layer(
       group_count("Any Body System") %>%
         set_distinct_by(USUBJID) %>%

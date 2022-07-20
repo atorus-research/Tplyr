@@ -43,6 +43,8 @@ set_denoms_by <- function(e, ...) {
   UseMethod("set_denoms_by")
 }
 
+#' @export
+#' @noRd
 set_denoms_by.shift_layer <- function(e, ...) {
 
   dots <- vars(...)
