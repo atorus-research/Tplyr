@@ -4,14 +4,17 @@
 \alias{new_layer_template}
 \alias{remove_layer_template}
 \alias{get_layer_template}
+\alias{view_layer_templates}
 \alias{use_template}
-\title{Create, extract, remove, and use Tplyr layer templates}
+\title{Create, view, extract, remove, and use Tplyr layer templates}
 \usage{
 new_layer_template(name, template)
 
 remove_layer_template(name)
 
 get_layer_template(name)
+
+view_layer_templates()
 
 use_template(name, ..., add_params = NULL)
 }
@@ -48,10 +51,11 @@ functions.
 
 Layers are created using \code{new_layer_template()}. To use a layer, use the
 function \code{use_template()} in place of \code{group_count|desc|shift()}. If you want
-to view a specific template, use \code{get_layer_template()}, and to remove a
-layer template use \code{remove_layer_template()}. Layer templates themselves are
-stored in the option \code{tplyr.layer_templates}, but a user should not access
-this directly and instead use the Tplyr supplied functions.
+to view a specific template, use \code{get_layer_template()}. If you want to view
+all templates, use \code{view_layer_templates()}. And to remove a layer template use
+\code{remove_layer_template()}. Layer templates themselves are stored in the
+option \code{tplyr.layer_templates}, but a user should not access this directly
+and instead use the Tplyr supplied functions.
 
 When providing the template layer syntax, the layer must start with a layer
 constructor. These are one of the function \code{group_count()}, \code{group_desc()},
@@ -75,6 +79,8 @@ new_layer_template(
   group_count(...) \%>\%
     set_format_strings(f_str('xx (xx\%)', n, pct))
 )
+
+view_layer_templates()
 
 get_layer_template("example_template")
 

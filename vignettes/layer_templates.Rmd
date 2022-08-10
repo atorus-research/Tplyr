@@ -22,7 +22,7 @@ load('adsl.Rdata')
 
 There are several scenarios where a layer template may be useful. Some tables, like demographics tables, may have many layers that will all essentially look the same. Categorical variables will have the same count layer settings, and continuous variables will have the same desc layer settings. A template allows a user to build those settings once per layer, then reference the template when the Tplyr table is actually built. Another scenario might be building a set of company layer templates that are built for standard tables to reduce the footprint of code across analyses. In either of these cases, the idea is the reduce the amount of redundant code necessary to create a table.
 
-Tplyr has already has a couple mechanisms to reduce redundant application of formats. For example, vignettes('tplyr_options') shows how the options `tplyr.count_layer_default_formats`, `tplyr.desc_layer_default_formats`, and `tplyr.shift_layer_default_formats` can be used to create default format string settings. Additionally, you can set formats table wide using `set_count_layer_formats()`, `set_desc_layer_formats()`, or `set_shift_layer_formats()`. But what these functions and options _don't_ allow you to do is pre-set and reuse the settings for an entire layer, so all of the additional potential layer modifying functions are ignored. This is where layer templates come in.
+Tplyr has already has a couple of mechanisms to reduce redundant application of formats. For example, `vignettes('tplyr_options')` shows how the options `tplyr.count_layer_default_formats`, `tplyr.desc_layer_default_formats`, and `tplyr.shift_layer_default_formats` can be used to create default format string settings. Additionally, you can set formats table wide using `set_count_layer_formats()`, `set_desc_layer_formats()`, or `set_shift_layer_formats()`. But what these functions and options _don't_ allow you to do is pre-set and reuse the settings for an entire layer, so all of the additional potential layer modifying functions are ignored. This is where layer templates come in.
 
 # Basic Templates 
 
@@ -49,7 +49,7 @@ tplyr_table(adsl, TRT01P) %>%
   kable()
 ```
 
-Within `use_template()`, the first parameter is the template name. After that, we supply arguments as we normally would into `group_count()`, `group_desc()`, or `group_shift()`. Additionally, note that our formats have been applied just as they would be if we used `set_format_strings()` as specified in the template. Our template was a applied, the table built with all of the settings appropriately. 
+Within `use_template()`, the first parameter is the template name. After that, we supply arguments as we normally would into `group_count()`, `group_desc()`, or `group_shift()`. Additionally, note that our formats have been applied just as they would be if we used `set_format_strings()` as specified in the template. Our template was applied, the table built with all of the settings appropriately. 
 
 An additional feature of layer templates is that they act just as any other function would in a Tplyr layer. This means that they're also extensible and can be expanded on directly within a Tplyr table. For example:
 

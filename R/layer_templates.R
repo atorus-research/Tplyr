@@ -18,7 +18,7 @@
 #' Layers are created using `new_layer_template()`. To use a layer, use the
 #' function `use_template()` in place of `group_count|desc|shift()`. If you want
 #' to view a specific template, use `get_layer_template()`. If you want to view
-#' all templates, use view_layer_templates. And to remove a layer template use
+#' all templates, use `view_layer_templates()`. And to remove a layer template use
 #' `remove_layer_template()`. Layer templates themselves are stored in the
 #' option `tplyr.layer_templates`, but a user should not access this directly
 #' and instead use the Tplyr supplied functions.
@@ -118,7 +118,11 @@ new_layer_template <- function(name, template) {
     remove_layer_template(name)
   }
 
-  # Find any add_params provided into the template
+  # Find any add_params provided into the template.
+  # The indexing here is pulling the first element out of the list, because I
+  # only pass a single element character vector. Next, I use [,2] because I know
+  # I need column two because I'm specifically requesting the group within the
+  # parens of the regex
   params <- str_match_all(raw_template, "\\{\\s+([\\w\\.]+)\\s+\\}")[[1]][,2]
 
   # Turn the template into a function, with class to mark as a template
