@@ -55,6 +55,6 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 RdMacros: lifecycle
 Config/testthat/edition: 3

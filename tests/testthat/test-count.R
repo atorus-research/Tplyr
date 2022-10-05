@@ -722,13 +722,13 @@ test_that("Posix columns don't cause the build to error out.", {
   expect_silent(build(tp_obj))
 })
 
-test_that("set_numeric_where works as expected", {
+test_that("set_numeric_threshold works as expected", {
 
   t1 <- mtcars %>%
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(10, "n") %>%
+        set_numeric_threshold(10, "n") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
@@ -739,7 +739,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(5.1, "n") %>%
+        set_numeric_threshold(5.1, "n") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
@@ -750,7 +750,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(13, "n") %>%
+        set_numeric_threshold(13, "n") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
@@ -761,7 +761,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(16, "n") %>%
+        set_numeric_threshold(16, "n") %>%
         add_total_row() %>%
        set_order_count_method("bycount")
     )
@@ -772,7 +772,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(0.5, "pct") %>%
+        set_numeric_threshold(0.5, "pct") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
@@ -783,7 +783,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(gear) %>%
     add_layer(
       group_count(cyl) %>%
-        set_numeric_where(4, "n", "3") %>%
+        set_numeric_threshold(4, "n", "3") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )
@@ -796,7 +796,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(TRTA) %>%
     add_layer(
       group_count(vars(AEBODSYS, AEDECOD)) %>%
-        set_numeric_where(3, "n", "Placebo") %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
         add_total_row()
     )
 
@@ -806,7 +806,7 @@ test_that("set_numeric_where works as expected", {
     tplyr_table(TRTA) %>%
     add_layer(
       group_count(vars(AEBODSYS, AEDECOD)) %>%
-        set_numeric_where(3, "n", "Placebo") %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
         add_total_row() %>%
         set_order_count_method("bycount")
     )

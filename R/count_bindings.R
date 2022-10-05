@@ -676,11 +676,11 @@ keep_levels <- function(e, ...) {
 #' tplyr_table(gear) %>%
 #'   add_layer(
 #'     group_count(cyl) %>%
-#'       set_numeric_where(10, "n") %>%
+#'       set_numeric_threshold(10, "n") %>%
 #'       add_total_row() %>%
 #'       set_order_count_method("bycount")
 #'   )
-set_numeric_where <- function(e, numeric_cutoff, stat, column = NULL) {
+set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
 
   assert_that(is.numeric(numeric_cutoff),
               msg = "The `numeric_cutoff` parameter must be numeric")
