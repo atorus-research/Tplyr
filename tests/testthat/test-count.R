@@ -682,7 +682,7 @@ test_that("test IBM rounding option", {
       group_count(gender, by = "Gender")  %>%
         set_format_strings(f_str("xxx (xxx%)", n, pct))
     )
-  expect_warning(tabl2 <- build(tabl2), "You have enabled IBM Rounding.")
+  expect_warning({tabl2 <- build(tabl2)}, "You have enabled IBM Rounding.")
 
   expect_equal(tabl2$var1_Placebo, c("485 ( 49%)", "515 ( 52%)"))
 
@@ -822,7 +822,7 @@ test_that("denom and distinct_denom values work as expected", {
       group_count(cyl) %>%
         set_missing_count(f_str("xx", n), Missing = NA) %>%
         add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
-        set_format_strings(f_str("xx/xxx (xx.x)", n, denom, pct)) %>%
+        set_format_strings(f_str("xx/xxx (xx.x)", n, total, pct)) %>%
         set_order_count_method("bycount")
     )
 
@@ -832,8 +832,27 @@ test_that("denom and distinct_denom values work as expected", {
     add_layer(
       group_count(cyl) %>%
         set_distinct_by(am) %>%
-        set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_denom, n, denom))
+        set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_total, n, total))
     )
 
   expect_snapshot(build(t2))
+})
+
+test_that("denoms with distinct population data populates as expected", {
+  load(test_path("adae.Rdata"))
+  load(test_path("adsl.Rdata"))
+
+  tab <- tplyr_table(adae, TRTA) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_total_group %>%
+    add_treat_grps(Dosed = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+    add_layer(
+      group_count("Any Body System") %>%
+        set_distinct_by(USUBJID) %>%
+        set_format_strings(f_str("xx (xx.x%)", distinct_n, distinct_pct))
+    ) %>%
+    build()
+
+  expect_snapshot(tab)
 })

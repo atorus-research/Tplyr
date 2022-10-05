@@ -90,7 +90,6 @@ add_layer <- function(parent, layer, name=NULL) {
 #' @param parent A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} object
 #' @param ... Layers to be added
 #'
-#' @return
 #' @export
 #'
 #' @family Layer attachment
