@@ -6,7 +6,7 @@
 #' character element, and use hyphenated wrapping of single words that run
 #' longer than the allotted wrapping width.
 #'
-#' The function `stringr::str_wrap()` is extremely highly efficient, but in the
+#' The function `stringr::str_wrap()` is highly efficient, but in the
 #' context of table creation there are two select features missing - hyphenation
 #' for long running strings that overflow width, and respect for pre-indentation
 #' of a character element. For example, in an adverse event table, you may have
