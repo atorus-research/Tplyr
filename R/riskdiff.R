@@ -179,7 +179,7 @@ prep_two_way <- function(comp) {
     two_way <- numeric_data
 
     # Nested layers need to plug the NAs left over - needs revision in the future
-    if (is_built_nest) {
+    if (is_built_nest && quo_is_symbol(by[[1]])) {
       two_way <- two_way %>%
         # Need to fill in NAs in the numeric data that
         # are patched later in formatting
