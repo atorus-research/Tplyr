@@ -180,3 +180,15 @@
       2 6          "  1   3   2  15" "  2   4   4 ~ "  1 ~               1           2
       3 8          "  1   3  12  15" "  0   4   0 ~ "  1 ~               1           3
 
+# denoms with distinct population data populates as expected
+
+    Code
+      tab
+    Output
+      # A tibble: 1 x 8
+        row_label1      var1_Dosed var1_Placebo var1_Total  `var1_Xanomeline High Do~`
+        <chr>           <chr>      <chr>        <chr>       <chr>                     
+      1 Any Body System 93 (55.4%) 32 (37.2%)   125 (49.2%) 43 (51.2%)                
+      # ... with 3 more variables: `var1_Xanomeline Low Dose` <chr>,
+      #   ord_layer_index <int>, ord_layer_1 <lgl>
+

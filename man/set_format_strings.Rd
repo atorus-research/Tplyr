@@ -23,7 +23,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.}
 \value{
 The layer environment with the format string binding added
 
-
+tplyr_layer object with formats attached
 
 Returns the modified layer object.
 }

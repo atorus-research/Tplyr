@@ -647,11 +647,11 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
 
            map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
          },
-         "denom" = {
-           map_chr(.total, num_fmt, which(vars_ord == "denom"), fmt = count_fmt)
+         "total" = {
+           map_chr(.total, num_fmt, which(vars_ord == "total"), fmt = count_fmt)
          },
-         "distinct_denom" = {
-           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_denom"), fmt = count_fmt)
+         "distinct_total" = {
+           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
          }
   )
 
@@ -740,13 +740,26 @@ process_count_denoms <- function(x) {
       }
     }
 
-    denoms_df <- denom_target %>%
+    denoms_df_n <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(
-        n = n(),
-        distinct_n = n_distinct(!!!distinct_by, !!treat_var)
+        n = n()
         ) %>%
-      ungroup() %>%
+      ungroup()
+
+    denoms_df_dist <- built_pop_data %>%
+      filter(!!denom_where) %>%
+      group_by(!!pop_treat_var) %>%
+      summarize(
+        distinct_n = n_distinct(!!!distinct_by, !!pop_treat_var)
+      ) %>%
+      ungroup()
+
+    by_join <- as_name(pop_treat_var)
+    names(by_join) <- as_name(treat_var)
+
+    denoms_df <- denoms_df_n %>%
+      left_join(denoms_df_dist, by = by_join) %>%
       complete(!!!layer_params[param_apears],
                fill = list(n = 0, distinct_n = 0))
 
