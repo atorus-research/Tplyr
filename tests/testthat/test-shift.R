@@ -67,11 +67,6 @@ test_that("group_shift outputs the expected numeric data", {
 })
 
 test_that("group_shift outputs the expected formatted data", {
-  expect_equal(dim(s1$formatted_data), c(3, 11))
-  expect_equal(dim(s2$formatted_data), c(3, 11))
-  expect_equal(dim(s3$formatted_data), c(3, 11))
-
-
   expect_equal(t4$layers[[1]]$formatted_data$row_label1, c("6", "8", "4"))
 })
 
