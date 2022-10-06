@@ -4,7 +4,7 @@
 \alias{new_layer_template}
 \alias{remove_layer_template}
 \alias{get_layer_template}
-\alias{view_layer_templates}
+\alias{get_layer_templates}
 \alias{use_template}
 \title{Create, view, extract, remove, and use Tplyr layer templates}
 \usage{
@@ -14,7 +14,7 @@ remove_layer_template(name)
 
 get_layer_template(name)
 
-view_layer_templates()
+get_layer_templates()
 
 use_template(name, ..., add_params = NULL)
 }
@@ -52,7 +52,7 @@ functions.
 Layers are created using \code{new_layer_template()}. To use a layer, use the
 function \code{use_template()} in place of \code{group_count|desc|shift()}. If you want
 to view a specific template, use \code{get_layer_template()}. If you want to view
-all templates, use \code{view_layer_templates()}. And to remove a layer template use
+all templates, use \code{get_layer_templates()}. And to remove a layer template use
 \code{remove_layer_template()}. Layer templates themselves are stored in the
 option \code{tplyr.layer_templates}, but a user should not access this directly
 and instead use the Tplyr supplied functions.
@@ -80,7 +80,7 @@ new_layer_template(
     set_format_strings(f_str('xx (xx\%)', n, pct))
 )
 
-view_layer_templates()
+get_layer_templates()
 
 get_layer_template("example_template")
 
