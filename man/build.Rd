@@ -4,28 +4,42 @@
 \alias{build}
 \title{Trigger the execution of the \code{tplyr_table}}
 \usage{
-build(x)
+build(x, metadata = FALSE)
 }
 \arguments{
 \item{x}{A \code{tplyr_table} object}
+
+\item{metadata}{Trigger to build metadata. Defaults to FALSE}
 }
 \value{
 An executed \code{tplyr_table}
 }
 \description{
-The functions used to assemble a \code{tplyr_table} object and each of the layers do not trigger the processing of any data. Rather, a lazy
-execution style is used to allow you to contruct your table and then explicitly state when the data processing should happen.
-\code{build} triggers this event.
+The functions used to assemble a \code{tplyr_table} object and
+each of the layers do not trigger the processing of any data. Rather, a lazy
+execution style is used to allow you to construct your table and then
+explicitly state when the data processing should happen. \code{build}
+triggers this event.
 }
 \details{
-When the \code{build} command is executed, all of the data processing commences. Any preprocessing necessary within the table environment
-takes place first. Next, each of the layers begins executing. Once the layers complete executing, the output of each layer is stacked
-into the resulting data frame.
+When the \code{build} command is executed, all of the data
+processing commences. Any pre-processing necessary within the table
+environment takes place first. Next, each of the layers begins executing.
+Once the layers complete executing, the output of each layer is stacked into
+the resulting data frame.
 
-Once this process is complete, any post-processing necessary within the table environment takes place, and the final output can be
-delivered. Metadata and traceability information are kept within each of the layer environments, which allows an investigation into the
-source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
-a layer using \code{\link{get_numeric_data}}.
+Once this process is complete, any post-processing necessary within the table
+environment takes place, and the final output can be delivered. Metadata and
+traceability information are kept within each of the layer environments,
+which allows an investigation into the source of the resulting datapoints.
+For example, numeric data from any summaries performed is maintained and
+accessible within a layer using \code{\link{get_numeric_data}}.
+
+The `metadata` option of build will trigger the construction of traceability
+metadata for the constructed data frame. Essentially, for every "result" that
+Tplyr produces, Tplyr can also generate the steps necessary to obtain the
+source data which produced that result from the input. For more information,
+see vignette("metadata").
 }
 \examples{
 # Load in Pipe

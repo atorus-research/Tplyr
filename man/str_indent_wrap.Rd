@@ -18,16 +18,16 @@ str_indent_wrap(x, width = 10, tab_width = 5)
 A character vector with string wrapping applied
 }
 \description{
-`str_indent_wrap()` leverages `stringr::str_wrap()` under the hood, but takes
+\code{str_indent_wrap()} leverages \code{stringr::str_wrap()} under the hood, but takes
 some extra steps to preserve any indentation that has been applied to a
 character element, and use hyphenated wrapping of single words that run
 longer than the allotted wrapping width.
 }
 \details{
-The `stringr::str_wrap()` is extremely highly efficient, but in the context
-of table creation there are two select features missing - hyphenation for
-long running strings that overflow width, and respect for pre-indentation of
-a character element. For example, in an adverse event table, you may have
+The function \code{stringr::str_wrap()} is highly efficient, but in the
+context of table creation there are two select features missing - hyphenation
+for long running strings that overflow width, and respect for pre-indentation
+of a character element. For example, in an adverse event table, you may have
 body system rows as an un-indented column, and preferred terms as indented
 columns. These strings may run long and require wrapping to not surpass the
 column width. Furthermore, for crowded tables a single word may be longer
@@ -44,6 +44,6 @@ frame. As such, users can specify the width
 ex_text1 <- c("RENAL AND URINARY DISORDERS", "   NEPHROLITHIASIS")
 ex_text2 <- c("RENAL AND URINARY DISORDERS", "\tNEPHROLITHIASIS")
 
-str_indent_wrap(ex_text1, width=8)
-str_indent_wrap(ex_text2, tab_width=4)
+cat(paste(str_indent_wrap(ex_text1, width=8), collapse="\n\n"),"\n")
+cat(paste(str_indent_wrap(ex_text2, tab_width=4), collapse="\n\n"),"\n")
 }
