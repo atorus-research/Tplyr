@@ -223,7 +223,7 @@ add_order_columns.count_layer <- function(x) {
 
       if (!is.null(nest_count) && nest_count) {
         # If the table nest should be collapsed into one row.
-        row_label_names <- vars_select(names(formatted_data), starts_with("row"))
+        row_label_names <- vars_select(names(formatted_data), starts_with("row_label"))
         # Remove first row
         formatted_data[, 1] <- NULL
         # Rename row labels
@@ -255,7 +255,6 @@ add_order_columns.count_layer <- function(x) {
           else return(isna_)
         }))
       }
-
 
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
 
@@ -527,6 +526,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        missing_index = NULL, missing_sort_value = NULL,
                        total_index = NULL, total_row_sort_value = NULL,
                        break_ties) {
+
+  if (nrow(numeric_data) == 0) return(numeric())
 
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset

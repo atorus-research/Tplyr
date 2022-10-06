@@ -31,7 +31,7 @@ reference:
   desc: Customizing the display as a table
 - contents:
   - f_str
-  - ends_with("formats")
+  - ends_with("layer_formats")
   - set_format_strings
   - set_missing_count
 - title: Sorting
@@ -42,17 +42,22 @@ reference:
   - set_result_order_var
   - set_outer_sort_position
 - title: Adding Groups and Stats
+  desc: Adding treatment groups, total rows, and risk difference
 - contents:
   - add_total_row
   - add_total_group
   - add_risk_diff
   - set_total_row_label
-- title: Summary Functions
+- title: Descriptive Statistics Layer Functions
+  desc: Descriptive statistics layer helper functions
 - contents:
   - set_custom_summaries
+  - set_precision_data
   - set_precision_by
   - set_precision_on
+  - set_stats_as_columns
 - title: Counting functions
+  desc: Count layer helper functions
 - contents:
   - set_denoms_by
   - set_distinct_by
@@ -64,15 +69,27 @@ reference:
   - set_denom_ignore
   - set_indentation
 - title: Column Headers
+  desc: Column header helpers
 - contents:
   - add_column_headers
   - header_n
-- title: Helper functions
+- title: Metadata Functions
+  desc: Tplyr metadata functions
 - contents:
+  - tplyr_meta
+  - add_variables
+  - add_filters
+  - get_metadata
+  - append_metadata
+  - starts_with('get_meta')
+- title: Helper functions
+  desc: General helper functions
+- contents:
+  - apply_formats
+  - str_indent_wrap
   - apply_row_masks
   - get_numeric_data
   - get_stats_data
-  - by
   - get_by
   - get_target_var
   - treat_var
@@ -100,4 +117,9 @@ articles:
   - styled-table
   - denom
   - Tplyr
+- title: Using Metadata
+  navbar: Metadata
+  contents:
+  - metadata
+  - custom-metadata
 

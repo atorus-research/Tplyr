@@ -21,8 +21,6 @@ add_layers(parent, ...)
 \value{
 A \code{tplyr_table} or \code{tplyr_layer}/\code{tplyr_subgroup_layer} with a new layer inserted into the \code{layer}
   binding
-
-
 }
 \description{
 \code{add_layer} attaches a \code{tplyr_layer} to a \code{tplyr_table} object. This allows

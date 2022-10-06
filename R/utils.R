@@ -319,3 +319,20 @@ ut_round <- function(x, n=0)
   # Return the rounded number
   return(y)
 }
+
+#' Assign a row identifier to a layer
+#'
+#' To link with the metadata we need an row identifier to link
+#' the metadata post sort with built data
+#'
+#' @param dat Input data that should be ordered identically to the metadata
+#' @param layer_type First character of the layer type
+#'
+#' @return Data with row_id assigned
+#' @noRd
+assign_row_id <- function(dat, layer_type) {
+  dat %>%
+    mutate(
+      row_id = paste0(layer_type, row_number())
+    )
+}

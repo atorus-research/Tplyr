@@ -174,6 +174,7 @@ process_single_count_target <- function(x) {
       numeric_data <- bind_cols(numeric_data,
                                 distinct_stat[, c("distinct_n", "distinct_total")])
     }
+
   }, envir = x)
 }
 
@@ -443,12 +444,9 @@ process_formatting.count_layer <- function(x, ...) {
     #used to split the string.
     indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
 
+    # Can I take the metadata from here and send it back to the comps during formatting?
+
     formatted_data <- numeric_data
-
-    # if(is_built_nest && !quo_is_symbol(by[[1]])) {
-    #   names(formatted_data) <- str_remove_all(names(formatted_data), "\\\"")
-    # }
-
 
     formatted_data <- formatted_data %>%
       # Mutate value based on if there is a distinct_by
@@ -475,7 +473,6 @@ process_formatting.count_layer <- function(x, ...) {
     replace_by_string_names(quos(!!!by, summary_var))
 
     if (is_built_nest) {
-
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
       # Last row label is always the inner target variable
@@ -497,9 +494,8 @@ process_formatting.count_layer <- function(x, ...) {
                                   by = vars_select(names(formatted_data), starts_with("row_label")))
     }
 
-
-
-
+    # Attach the row identifier
+    formatted_data <- assign_row_id(formatted_data, 'c')
   }, envir = x)
 
   add_order_columns(x)
@@ -651,11 +647,11 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
 
            map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
          },
-         "denom" = {
-           map_chr(.total, num_fmt, which(vars_ord == "denom"), fmt = count_fmt)
+         "total" = {
+           map_chr(.total, num_fmt, which(vars_ord == "total"), fmt = count_fmt)
          },
-         "distinct_denom" = {
-           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_denom"), fmt = count_fmt)
+         "distinct_total" = {
+           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
          }
   )
 
@@ -744,13 +740,26 @@ process_count_denoms <- function(x) {
       }
     }
 
-    denoms_df <- denom_target %>%
+    denoms_df_n <- denom_target %>%
       group_by(!!!layer_params[param_apears]) %>%
       summarize(
-        n = n(),
-        distinct_n = n_distinct(!!!distinct_by, !!treat_var)
+        n = n()
         ) %>%
-      ungroup() %>%
+      ungroup()
+
+    denoms_df_dist <- built_pop_data %>%
+      filter(!!denom_where) %>%
+      group_by(!!pop_treat_var) %>%
+      summarize(
+        distinct_n = n_distinct(!!!distinct_by, !!pop_treat_var)
+      ) %>%
+      ungroup()
+
+    by_join <- as_name(pop_treat_var)
+    names(by_join) <- as_name(treat_var)
+
+    denoms_df <- denoms_df_n %>%
+      left_join(denoms_df_dist, by = by_join) %>%
       complete(!!!layer_params[param_apears],
                fill = list(n = 0, distinct_n = 0))
 

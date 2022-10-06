@@ -22,7 +22,11 @@
 #' @export
 #'
 #' @examples
+#'
+#' library(dplyr)
+#'
 #' mtcars %>%
+#'   head() %>%
 #'   mutate(
 #'     fmt_example = apply_formats('xxx (xx.x)', hp, wt)
 #'   )

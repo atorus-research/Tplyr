@@ -32,7 +32,11 @@ interface to apply formatted string on any data frame within a
 Note that auto-precision is not currently supported within \code{apply_formats()}
 }
 \examples{
+
+library(dplyr)
+
 mtcars \%>\%
+  head() \%>\%
   mutate(
     fmt_example = apply_formats('xxx (xx.x)', hp, wt)
   )

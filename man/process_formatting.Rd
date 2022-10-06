@@ -12,7 +12,7 @@ process_formatting(x, ...)
 \item{...}{arguments passed to dispatch}
 }
 \value{
-The formatted_table object that is binded to the layer
+The formatted_table object that is bound to the layer
 }
 \description{
 This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.

@@ -1,17 +1,18 @@
-pandoc: 2.11.4
-pkgdown: 1.6.1
+pandoc: 2.17.1.1
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
   count: count.html
+  custom-metadata: custom-metadata.html
   denom: denom.html
   desc: desc.html
+  metadata: metadata.html
   options: options.html
-  readme: readme.html
   riskdiff: riskdiff.html
   shift: shift.html
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2022-02-26T16:51Z
+last_built: 2022-06-27T02:50Z
 
