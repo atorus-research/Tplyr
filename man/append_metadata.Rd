@@ -44,7 +44,7 @@ t \%>\%
 
 m <- tibble::tibble(
   row_id = c('x1_1'),
-  var1_3 = list(tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3)))
+  var1_3 = list(tplyr_meta(rlang::quos(a, b, c), rlang::quos(a==1, b==2, c==3)))
 )
 
 append_metadata(t, m)

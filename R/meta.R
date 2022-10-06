@@ -27,8 +27,8 @@
 #' @examples
 #'
 #' tplyr_meta(
-#'    names = quos(x, y, z),
-#'    filters = quos(x == 1, y==2, z==3)
+#'    names = rlang::quos(x, y, z),
+#'    filters = rlang::quos(x == 1, y==2, z==3)
 #'  )
 #'
 tplyr_meta <- function(names=list(), filters=exprs()) {
@@ -71,8 +71,8 @@ new_tplyr_meta <- function(names = list(), filters=exprs()) {
 #' @examples
 #'
 #' m <- tplyr_meta()
-#' m <- add_variables(m, quos(a, b, c))
-#' m <- add_filters(m, quos(a==1, b==2, c==3))
+#' m <- add_variables(m, rlang::quos(a, b, c))
+#' m <- add_filters(m, rlang::quos(a==1, b==2, c==3))
 #' m
 add_variables <- function(meta, names) {
 
@@ -193,7 +193,7 @@ get_metadata <- function(t) {
 #'
 #' m <- tibble::tibble(
 #'   row_id = c('x1_1'),
-#'   var1_3 = list(tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3)))
+#'   var1_3 = list(tplyr_meta(rlang::quos(a, b, c), rlang::quos(a==1, b==2, c==3)))
 #' )
 #'
 #' append_metadata(t, m)

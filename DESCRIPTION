@@ -53,8 +53,7 @@ Suggests:
     readr,
     kableExtra,
     pharmaRTF,
-    withr,
-    tibble
+    withr
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
 RdMacros: lifecycle

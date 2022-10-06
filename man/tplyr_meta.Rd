@@ -37,8 +37,8 @@ subset data frame.
 \examples{
 
 tplyr_meta(
-   names = quos(x, y, z),
-   filters = quos(x == 1, y==2, z==3)
+   names = rlang::quos(x, y, z),
+   filters = rlang::quos(x == 1, y==2, z==3)
  )
 
 }

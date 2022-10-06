@@ -2,9 +2,22 @@
 % Please edit documentation in R/meta_utils.R
 \name{get_meta_subset}
 \alias{get_meta_subset}
+\alias{get_meta_subset.data.frame}
+\alias{get_meta_subset.tplyr_table}
 \title{Extract the subset of data based on result metadata}
 \usage{
 get_meta_subset(x, row_id, column, add_cols = vars(USUBJID), ...)
+
+\method{get_meta_subset}{data.frame}(
+  x,
+  row_id,
+  column,
+  add_cols = vars(USUBJID),
+  target = NULL,
+  ...
+)
+
+\method{get_meta_subset}{tplyr_table}(x, row_id, column, add_cols = vars(USUBJID), ...)
 }
 \arguments{
 \item{x}{A built Tplyr table or a dataframe}

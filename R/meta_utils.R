@@ -112,6 +112,7 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
 #' @param ... additional arguments
 #'
 #' @return A data.frame
+#' @rdname get_meta_subset
 #' @md
 #'
 #' @export
@@ -136,6 +137,7 @@ get_meta_subset <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
 }
 
 #' @export
+#' @rdname get_meta_subset
 get_meta_subset.data.frame <- function(x, row_id, column,
                                        add_cols = vars(USUBJID), target = NULL, ...) {
   # Get the metadata object ready
@@ -156,6 +158,7 @@ get_meta_subset.data.frame <- function(x, row_id, column,
 }
 
 #' @export
+#' @rdname get_meta_subset
 get_meta_subset.tplyr_table <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
 
   # Get the metadata object ready

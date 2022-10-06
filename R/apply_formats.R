@@ -22,6 +22,9 @@
 #' @export
 #'
 #' @examples
+#'
+#' library(dplyr)
+#'
 #' mtcars %>%
 #'   head() %>%
 #'   mutate(

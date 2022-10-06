@@ -27,8 +27,8 @@ Add additional variable names to a \code{tplyr_meta()} object.
 \examples{
 
 m <- tplyr_meta()
-m <- add_variables(m, quos(a, b, c))
-m <- add_filters(m, quos(a==1, b==2, c==3))
+m <- add_variables(m, rlang::quos(a, b, c))
+m <- add_filters(m, rlang::quos(a==1, b==2, c==3))
 m
 }
 \concept{Metadata additions}
