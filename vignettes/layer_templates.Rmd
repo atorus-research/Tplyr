@@ -53,7 +53,7 @@ Within `use_template()`, the first parameter is the template name. After that, w
 
 An additional feature of layer templates is that they act just as any other function would in a Tplyr layer. This means that they're also extensible and can be expanded on directly within a Tplyr table. For example:
 
-```{r using a template}
+```{r extending a template}
 tplyr_table(adsl, TRT01P) %>% 
   add_layer(
     use_template("example_template", RACE) %>% 
@@ -99,10 +99,10 @@ In the `add_params` parameter, you must supply a list. That list must also be na
 
 # Viewing and Removing Templates
 
-If you want to view any available templates in your session, use the function `view_layer_templates()`.
+If you want to view any available templates in your session, use the function `get_layer_templates()`.
 
 ```{r view templates}
-view_layer_templates()
+get_layer_templates()
 ```
 
 You can view a specific template using `get_layer_template()`.
@@ -117,5 +117,5 @@ Finally, if you want to remove a layer from your session, use the function `remo
 
 ```{r remove a template}
 remove_layer_template("example_params")
-view_layer_templates()
+get_layer_templates()
 ```

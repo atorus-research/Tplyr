@@ -18,7 +18,7 @@
 #' Layers are created using `new_layer_template()`. To use a layer, use the
 #' function `use_template()` in place of `group_count|desc|shift()`. If you want
 #' to view a specific template, use `get_layer_template()`. If you want to view
-#' all templates, use `view_layer_templates()`. And to remove a layer template use
+#' all templates, use `get_layer_templates()`. And to remove a layer template use
 #' `remove_layer_template()`. Layer templates themselves are stored in the
 #' option `tplyr.layer_templates`, but a user should not access this directly
 #' and instead use the Tplyr supplied functions.
@@ -57,7 +57,7 @@
 #'     set_format_strings(f_str('xx (xx%)', n, pct))
 #' )
 #'
-#' view_layer_templates()
+#' get_layer_templates()
 #'
 #' get_layer_template("example_template")
 #'
@@ -169,7 +169,7 @@ get_layer_template <- function(name) {
 #' @family Layer Templates
 #' @rdname layer_templates
 #' @export
-view_layer_templates <- function() {
+get_layer_templates <- function() {
   getOption('tplyr.layer_templates')
 }
 
@@ -313,13 +313,13 @@ template_param <- function(param_name) {
 }
 
 #' @export
-print.tplyr_layer_template <- function(template) {
-  cat(sprintf("Template name: %s\n", attr(template, 'template_name')))
-  params <- attr(template, 'params')
+print.tplyr_layer_template <- function(x, ...) {
+  cat(sprintf("Template name: %s\n", attr(x, 'template_name')))
+  params <- attr(x, 'params')
   if (is_empty(params)) {
     params <- "None"
   }
   cat(sprintf("Template parameters: %s\n", paste(c(params), collapse=", ")))
   cat("Template code:\n")
-  cat(template, "\n")
+  cat(x, "\n")
 }

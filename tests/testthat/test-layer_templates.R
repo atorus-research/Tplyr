@@ -229,7 +229,7 @@ test_that("Templates are extensible", {
 })
 
 test_that("Templates print appropriately", {
-  expect_snapshot_output(view_layer_templates())
+  expect_snapshot_output(get_layer_templates())
 })
 
 options(op)
