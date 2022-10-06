@@ -29,7 +29,7 @@ get_parse_string_value <- function(val) {
 #'
 #' @param values
 #'
-#' @return
+#' @return Character string
 #' @noRd
 #'
 #'

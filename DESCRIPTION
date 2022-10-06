@@ -56,6 +56,6 @@ Suggests:
     withr,
     tibble
 VignetteBuilder: knitr
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 RdMacros: lifecycle
 Config/testthat/edition: 3

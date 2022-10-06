@@ -21,7 +21,7 @@ with user provided data. In some tables, Tplyr may be able to provided most
 of the data, but a user may have to extend the table with other summaries,
 statistics, etc. This function allows the user to extend the tplyr_table's
 metadata with their own metadata content using custom data frames created
-using the tplyr_meta() object.
+using the \code{tplyr_meta} object.
 }
 \details{
 As this is an advanced feature of Tplyr, ownership is on the user to make
@@ -42,7 +42,7 @@ t <- tplyr_table(mtcars, gear) \%>\%
 t \%>\%
   build(metadata=TRUE)
 
-m <- tibble(
+m <- tibble::tibble(
   row_id = c('x1_1'),
   var1_3 = list(tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3)))
 )

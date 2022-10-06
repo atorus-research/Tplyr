@@ -7,7 +7,7 @@
 get_metadata(t)
 }
 \arguments{
-\item{t}{}
+\item{t}{A Tplyr table with metadata built}
 }
 \value{
 Tplyr metadata dataframe
