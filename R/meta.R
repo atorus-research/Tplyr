@@ -125,7 +125,7 @@ add_filters_ <- function(meta, filters) {
 #'
 #' Pull out the metadata dataframe from a tplyr_table to work with it directly
 #'
-#' @param t
+#' @param t A Tplyr table with metadata built
 #'
 #' @return Tplyr metadata dataframe
 #' @export
@@ -162,7 +162,7 @@ get_metadata <- function(t) {
 #' of the data, but a user may have to extend the table with other summaries,
 #' statistics, etc. This function allows the user to extend the tplyr_table's
 #' metadata with their own metadata content using custom data frames created
-#' using the tplyr_meta() object.
+#' using the `tplyr_meta` object.
 #'
 #' As this is an advanced feature of Tplyr, ownership is on the user to make
 #' sure the metadata data frame is assembled properly. The only restrictions
@@ -191,7 +191,7 @@ get_metadata <- function(t) {
 #' t %>%
 #'   build(metadata=TRUE)
 #'
-#' m <- tibble(
+#' m <- tibble::tibble(
 #'   row_id = c('x1_1'),
 #'   var1_3 = list(tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3)))
 #' )
