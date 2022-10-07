@@ -161,7 +161,7 @@ add_order_columns.count_layer <- function(x) {
 
   evalq({
 
-    if(nrow(formatted_data) == 0)
+    if(nrow(formatted_data) == 0) return(formatted_data)
     if(!exists("break_ties")) break_ties <- NULL
 
     # Set all defaults for ordering

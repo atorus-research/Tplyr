@@ -3,7 +3,7 @@
     group_count `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
     ! Problem while computing `..1 = bad == code`.
-    Caused by error:
+    Caused by error in `mask$eval_all_filter()`:
     ! object 'bad' not found
     
 
@@ -154,19 +154,16 @@
 
     The number of values of your second variable must be greater than the number of levels in your first variable
 
-# denom and distinct_denom values work as expected
+# set_numeric_threshold works as expected
 
     Code
       build(t1)
     Output
-      # A tibble: 5 x 6
-        row_label1 var1_3          var1_4          var1_5  ord_layer_index ord_layer_1
-        <chr>      <chr>           <chr>           <chr>             <int>       <dbl>
-      1 4          " 1/ 15 ( 6.7)" " 8/ 12 (66.7)" " 2/  ~               1           8
-      2 6          " 2/ 15 (13.3)" " 4/ 12 (33.3)" " 1/  ~               1           4
-      3 8          "12/ 15 (80.0)" " 0/ 12 ( 0.0)" " 2/  ~               1           0
-      4 Missing    " 0"            " 0"            " 0"                  1           0
-      5 Total      "   15 [100.0]" "   12 [100.0]" "    5~               1          12
+      # A tibble: 2 x 6
+        row_label1 var1_3      var1_4        var1_5        ord_layer_index ord_layer_1
+        <chr>      <chr>       <chr>         <chr>                   <int>       <dbl>
+      1 8          12 ( 80.0%) " 0 (  0.0%)" " 2 ( 40.0%)"               1           0
+      2 Total      15 (100.0%) "12 (100.0%)" " 5 (100.0%)"               1          12
 
 ---
 
@@ -174,11 +171,126 @@
       build(t2)
     Output
       # A tibble: 3 x 6
-        row_label1 var1_3            var1_4         var1_5 ord_layer_index ord_layer_1
-        <chr>      <chr>             <chr>          <chr>            <int>       <dbl>
-      1 4          "  1   3   1  15" "  2   4   8 ~ "  1 ~               1           1
-      2 6          "  1   3   2  15" "  2   4   4 ~ "  1 ~               1           2
-      3 8          "  1   3  12  15" "  0   4   0 ~ "  1 ~               1           3
+        row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_lay~1
+        <chr>      <chr>         <chr>         <chr>                   <int>     <dbl>
+      1 4          " 1 (  6.7%)" " 8 ( 66.7%)" " 2 ( 40.0%)"               1         8
+      2 8          "12 ( 80.0%)" " 0 (  0.0%)" " 2 ( 40.0%)"               1         0
+      3 Total      "15 (100.0%)" "12 (100.0%)" " 5 (100.0%)"               1        12
+      # ... with abbreviated variable name 1: ord_layer_1
+
+---
+
+    Code
+      build(t3)
+    Output
+      # A tibble: 1 x 6
+        row_label1 var1_3      var1_4      var1_5        ord_layer_index ord_layer_1
+        <chr>      <chr>       <chr>       <chr>                   <int>       <dbl>
+      1 Total      15 (100.0%) 12 (100.0%) " 5 (100.0%)"               1          12
+
+---
+
+    Code
+      build(t4)
+    Output
+      # A tibble: 0 x 2
+      # ... with 2 variables: row_label1 <chr>, ord_layer_index <int>
+
+---
+
+    Code
+      build(t5)
+    Output
+      # A tibble: 3 x 6
+        row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_lay~1
+        <chr>      <chr>         <chr>         <chr>                   <int>     <dbl>
+      1 4          " 1 (  6.7%)" " 8 ( 66.7%)" " 2 ( 40.0%)"               1         8
+      2 8          "12 ( 80.0%)" " 0 (  0.0%)" " 2 ( 40.0%)"               1         0
+      3 Total      "15 (100.0%)" "12 (100.0%)" " 5 (100.0%)"               1        12
+      # ... with abbreviated variable name 1: ord_layer_1
+
+---
+
+    Code
+      build(t6)
+    Output
+      # A tibble: 2 x 6
+        row_label1 var1_3      var1_4        var1_5        ord_layer_index ord_layer_1
+        <chr>      <chr>       <chr>         <chr>                   <int>       <dbl>
+      1 8          12 ( 80.0%) " 0 (  0.0%)" " 2 ( 40.0%)"               1           0
+      2 Total      15 (100.0%) "12 (100.0%)" " 5 (100.0%)"               1          12
+
+---
+
+    Code
+      build(t7)
+    Output
+      # A tibble: 10 x 8
+         row_label1            row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
+         <chr>                 <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
+       1 GASTROINTESTINAL DIS~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       1     Inf
+       2 GASTROINTESTINAL DIS~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       1       1
+       3 GENERAL DISORDERS AN~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1       2     Inf
+       4 GENERAL DISORDERS AN~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1       2       1
+       5 INFECTIONS AND INFES~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
+       6 INFECTIONS AND INFES~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
+       7 SKIN AND SUBCUTANEOU~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1       4     Inf
+       8 SKIN AND SUBCUTANEOU~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1       4       1
+       9 SKIN AND SUBCUTANEOU~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1       4       2
+      10 Total                 "Total" "47 (1~ "77 (1~ "76 (1~       1       5     Inf
+      # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
+      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
+      #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
+
+---
+
+    Code
+      build(t8)
+    Output
+      # A tibble: 10 x 8
+         row_label1            row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
+         <chr>                 <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
+       1 GASTROINTESTINAL DIS~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       3     Inf
+       2 GASTROINTESTINAL DIS~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       3       2
+       3 GENERAL DISORDERS AN~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1      21     Inf
+       4 GENERAL DISORDERS AN~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1      21       5
+       5 INFECTIONS AND INFES~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
+       6 INFECTIONS AND INFES~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
+       7 SKIN AND SUBCUTANEOU~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1      26     Inf
+       8 SKIN AND SUBCUTANEOU~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1      26       2
+       9 SKIN AND SUBCUTANEOU~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1      26       7
+      10 Total                 "Total" "47 (1~ "77 (1~ "76 (1~       1      76     Inf
+      # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
+      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
+      #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
+
+# denom and distinct_denom values work as expected
+
+    Code
+      build(t1)
+    Output
+      # A tibble: 5 x 6
+        row_label1 var1_3          var1_4          var1_5          ord_layer~1 ord_l~2
+        <chr>      <chr>           <chr>           <chr>                 <int>   <dbl>
+      1 4          " 1/ 15 ( 6.7)" " 8/ 12 (66.7)" " 2/  5 (40.0)"           1       8
+      2 6          " 2/ 15 (13.3)" " 4/ 12 (33.3)" " 1/  5 (20.0)"           1       4
+      3 8          "12/ 15 (80.0)" " 0/ 12 ( 0.0)" " 2/  5 (40.0)"           1       0
+      4 Missing    " 0"            " 0"            " 0"                      1       0
+      5 Total      "   15 [100.0]" "   12 [100.0]" "    5 [100.0]"           1      12
+      # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
+
+---
+
+    Code
+      build(t2)
+    Output
+      # A tibble: 3 x 6
+        row_label1 var1_3            var1_4            var1_5          ord_l~1 ord_l~2
+        <chr>      <chr>             <chr>             <chr>             <int>   <dbl>
+      1 4          "  1   3   1  15" "  2   4   8  12" "  1   3   2  ~       1       1
+      2 6          "  1   3   2  15" "  2   4   4  12" "  1   3   1  ~       1       2
+      3 8          "  1   3  12  15" "  0   4   0  12" "  1   3   2  ~       1       3
+      # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
 
 # denoms with distinct population data populates as expected
 
@@ -186,9 +298,10 @@
       tab
     Output
       # A tibble: 1 x 8
-        row_label1      var1_Dosed var1_Placebo var1_Total  `var1_Xanomeline High Do~`
-        <chr>           <chr>      <chr>        <chr>       <chr>                     
-      1 Any Body System 93 (55.4%) 32 (37.2%)   125 (49.2%) 43 (51.2%)                
-      # ... with 3 more variables: `var1_Xanomeline Low Dose` <chr>,
-      #   ord_layer_index <int>, ord_layer_1 <lgl>
+        row_label1      var1_Dosed var1_Plac~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6
+        <chr>           <chr>      <chr>       <chr>   <chr>   <chr>     <int> <lgl>  
+      1 Any Body System 93 (55.4%) 32 (37.2%)  125 (4~ 43 (51~ 50 (59~       1 NA     
+      # ... with abbreviated variable names 1: var1_Placebo, 2: var1_Total,
+      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
+      #   5: ord_layer_index, 6: ord_layer_1
 
