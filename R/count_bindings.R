@@ -662,6 +662,8 @@ keep_levels <- function(e, ...) {
 #' distinct_n, pct, or distinct_pct) to supress values that are lesser than the
 #' cutoff.
 #'
+#'
+#'
 #' @param e A \code{count_layer} object
 #' @param numeric_cutoff A numeric value where only values greater than or equal
 #'   to will be displayed.
