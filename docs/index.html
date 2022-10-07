@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/Tplyr.html">Get started</a>
 </li>
@@ -67,19 +63,21 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -101,10 +100,22 @@
       <a href="articles/options.html">Tplyr Options</a>
     </li>
     <li>
+      <a href="articles/layer_templates.html">Layer Templates</a>
+    </li>
+    <li>
       <a href="articles/styled-table.html">Producing a Styled Table</a>
     </li>
     <li>
       <a href="articles/denom.html">Totals, Missings, and Denominators</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">Metadata</li>
+    <li>
+      <a href="articles/metadata.html">Tplyr Metadata</a>
+    </li>
+    <li>
+      <a href="articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
     </li>
   </ul>
 </li>
@@ -114,7 +125,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -132,38 +143,37 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="tplyr-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#tplyr-" class="anchor"></a>Tplyr <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<div class="section level1">
+<div class="page-header"><h1 id="tplyr-">Tplyr <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#tplyr-"></a>
 </h1></div>
 <!-- badges: start -->
 
 <p>Welcome to Tplyr! Tplyr is a grammar of data format and summary. It’s designed to simplify the creation of clinical safety summaries and help you focus on how you present your data rather than redundant summaries being performed.</p>
-<p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues">here</a>.</p>
-<p>Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf">cheatsheet!</a></p>
+<p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues" class="external-link">here</a>.</p>
+<p>Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf" class="external-link">cheatsheet!</a></p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <p>You can Tplyr install with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Install from CRAN:</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span>
-
-<span class="co"># Or install the development version:</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Install from CRAN:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or install the development version:</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="what-is-tplyr" class="section level1">
-<h1 class="hasAnchor">
-<a href="#what-is-tplyr" class="anchor"></a>What is Tplyr?</h1>
-<p><a href="https://dplyr.tidyverse.org/">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
+<div class="section level1">
+<h1 id="what-is-tplyr">What is Tplyr?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
+</h1>
+<p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
 <p><code>Tplyr</code> is designed around a similar concept, but its focus is on building summary tables within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
 <ul>
 <li>Counting for event based variables or categories</li>
 <li>Shifting, which is just counting a change in state with a ‘from’ and a ‘to’</li>
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
-<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
+<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
 <p align="center">
 <img src="articles/demo_table.png" width="800px"></p>
 <p>When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as ‘layers’, and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this.</p>
@@ -176,17 +186,17 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -301,15 +311,15 @@
 </tr>
 </tbody>
 </table>
-<div id="tplyr-is-qualified" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tplyr-is-qualified" class="anchor"></a>‘Tplyr’ is Qualified</h2>
+<div class="section level2">
+<h2 id="tplyr-is-qualified">‘Tplyr’ is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
+</h2>
 <p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing ’Tplyr includes an entire user-acceptable testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
-<p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
+<p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf" class="external-link">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
 </div>
-<div id="the-tldr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-tldr" class="anchor"></a>The TL;DR</h2>
+<div class="section level2">
+<h2 id="the-tldr">The TL;DR<a class="anchor" aria-label="anchor" href="#the-tldr"></a>
+</h2>
 <p>Here are some of the high level benefits of using <code>Tplyr</code>:</p>
 <ul>
 <li>Easy construction of table data using an intuitive syntax</li>
@@ -318,9 +328,9 @@
 </ul>
 </div>
 </div>
-<div id="where-to-go-from-here" class="section level1">
-<h1 class="hasAnchor">
-<a href="#where-to-go-from-here" class="anchor"></a>Where to go from here?</h1>
+<div class="section level1">
+<h1 id="where-to-go-from-here">Where to go from here?<a class="anchor" aria-label="anchor" href="#where-to-go-from-here"></a>
+</h1>
 <p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of ‘Tplyr’.</p>
 <ul>
 <li>The best place to start is with our Getting Started vignette at <code><a href="articles/Tplyr.html">vignette("Tplyr")</a></code>
@@ -345,74 +355,84 @@
 </li>
 </ul>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level1">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 <p>In building ‘Tplyr’, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
-<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf">Analysis and Displays Associated with Adverse Events</a></p>
-<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
-<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf">Analyses and Displays Associated with Measures of Central Tendency</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf" class="external-link">Analysis and Displays Associated with Adverse Events</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
+<p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf" class="external-link">Analyses and Displays Associated with Measures of Central Tendency</a></p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=Tplyr">https://​cloud.r-project.org/​package=Tplyr</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/atorus-research/Tplyr/">https://​github.com/​atorus-research/​Tplyr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/atorus-research/Tplyr/issues">https://​github.com/​atorus-research/​Tplyr/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=Tplyr" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/atorus-research/Tplyr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/atorus-research/Tplyr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Eli Miller <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2127-9456" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Mike Stackhouse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6030-723X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Ashley Tarasiewicz <br><small class="roles"> Author </small>  </li>
-<li>Nathan Kosiba <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5359-4234" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing Tplyr</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://ostinclinicalresearch.slack.com"><img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&amp;logo=slack"></a></li>
-<li><a href="https://RValidationHub.slack.com"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
-<li><a href="https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check"><img src="https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://app.codecov.io/gh/atorus-research/tplyr"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
-<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental-1"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li>Eli Miller <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2127-9456" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Mike Stackhouse <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6030-723X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Ashley Tarasiewicz <br><small class="roles"> Author </small>  </li>
+<li>Nathan Kosiba <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5359-4234" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://ostinclinicalresearch.slack.com" class="external-link"><img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&amp;logo=slack"></a></li>
+<li><a href="https://RValidationHub.slack.com" class="external-link"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
+<li><a href="https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check" class="external-link"><img src="https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://app.codecov.io/gh/atorus-research/tplyr" class="external-link"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
+<li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE" class="external-link"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental-1" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -420,6 +440,8 @@
 
   
 
+
+  
 
   </body>
 </html>

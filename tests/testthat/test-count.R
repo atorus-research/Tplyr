@@ -188,17 +188,6 @@ test_that("Count layers are processed as expected", {
   expect_type(c9$numeric_data$n, "double")
   expect_type(c10$numeric_data$n, "double")
 
-  expect_equal(dim(c1$formatted_data), c(3, 5))
-  expect_equal(dim(c2$formatted_data), c(6, 7))
-  expect_equal(dim(c3$formatted_data), c(12, 9))
-  expect_equal(dim(c4$formatted_data), c(12, 9))
-  expect_equal(dim(c5$formatted_data), c(13, 9))
-  expect_equal(dim(c6$formatted_data), c(3, 5))
-  expect_equal(dim(c7$formatted_data), c(9, 7))
-  expect_equal(dim(c8$formatted_data), c(3, 5))
-  expect_equal(dim(c9$formatted_data), c(9, 7))
-  expect_equal(dim(c10$formatted_data), c(3, 5))
-
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
   expect_true(all(nchar(unlist(c2$formatted_data[, 3:5])) == 11))
   expect_true(all(nchar(unlist(c3$formatted_data[, 4:6])) == 11))
@@ -297,9 +286,6 @@ test_that("Count layer clauses with invalid syntax give informative error", {
 
 
 test_that("Nested count layers can be built with text by variables", {
-  expect_equal(dim(c13$numeric_data), c(27, 8))
-  expect_equal(dim(c13$formatted_data), c(9, 9))
-
   expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
 })
 
@@ -541,7 +527,7 @@ test_that("Variable names will be coersed into symbols", {
   expect_snapshot_warning(build(t2))
 })
 
-test_that("nested count layers can be build with character value in first position and risk difference", {
+test_that("nested count layers can be built with character value in first position and risk difference", {
   suppressWarnings({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(

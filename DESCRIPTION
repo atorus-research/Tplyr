@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Grammar of Clinical Data Summary
-Version: 0.4.4
+Version: 0.4.4.9001
 Authors@R: 
     c(
     person(given = "Eli",
@@ -58,3 +58,4 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.1
 RdMacros: lifecycle
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)

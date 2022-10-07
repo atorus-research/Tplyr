@@ -264,3 +264,17 @@ test_that("Distinct or non-distinct values are chosen properly", {
   expect_true(!all(dat2$`rdiff_Xanomeline High Dose_Placebo` == dat3$`rdiff_Xanomeline High Dose_Placebo`))
 
 })
+
+test_that("Error generates when duplicating riskdiff comparison values", {
+
+  expect_snapshot_error(
+      tplyr_table(mtcars, gear) %>%
+        add_layer(
+          group_count(cyl) %>%
+            add_risk_diff(
+              c("4", "4")
+            )
+        )
+  )
+
+})

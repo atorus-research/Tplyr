@@ -18,3 +18,7 @@
 
     Invalid format names supplied. Count layers only accept the following format names: n_counts, riskdiff
 
+# Error generates when duplicating riskdiff comparison values
+
+    Comparison {4, 4} has duplicated values. Comparisons must not be duplicates
+

@@ -174,6 +174,7 @@ process_single_count_target <- function(x) {
       numeric_data <- bind_cols(numeric_data,
                                 distinct_stat[, c("distinct_n", "distinct_total")])
     }
+
   }, envir = x)
 }
 
@@ -430,7 +431,6 @@ process_formatting.count_layer <- function(x, ...) {
     replace_by_string_names(quos(!!!by, summary_var))
 
     if (is_built_nest) {
-
       # I had trouble doing this in a 'tidy' way so I just did it here.
       # First column is always the outer target variable.
       # Last row label is always the inner target variable
@@ -452,9 +452,8 @@ process_formatting.count_layer <- function(x, ...) {
                                   by = vars_select(names(formatted_data), starts_with("row_label")))
     }
 
-
-
-
+    # Attach the row identifier
+    formatted_data <- assign_row_id(formatted_data, 'c')
   }, envir = x)
 
   add_order_columns(x)

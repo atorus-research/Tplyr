@@ -36,6 +36,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -48,18 +50,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Tplyr.html">Get started</a>
 </li>
@@ -67,19 +63,21 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Table Vignettes</li>
+    </li>
+<li class="dropdown-header">Table Vignettes</li>
     <li>
       <a href="../articles/table.html">Tplyr Table Properties</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Layer Vignettes</li>
+    </li>
+<li class="dropdown-header">Layer Vignettes</li>
     <li>
       <a href="../articles/desc.html">Descriptive Statistic Layers</a>
     </li>
@@ -90,7 +88,8 @@
       <a href="../articles/shift.html">Shift Layers</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Helpers</li>
+    </li>
+<li class="dropdown-header">Helpers</li>
     <li>
       <a href="../articles/riskdiff.html">Risk Difference</a>
     </li>
@@ -101,10 +100,22 @@
       <a href="../articles/options.html">Tplyr Options</a>
     </li>
     <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
+    </li>
+    <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
     </li>
     <li>
       <a href="../articles/denom.html">Totals, Missings, and Denominators</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">Metadata</li>
+    <li>
+      <a href="../articles/metadata.html">Tplyr Metadata</a>
+    </li>
+    <li>
+      <a href="../articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
     </li>
   </ul>
 </li>
@@ -114,7 +125,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/atorus-research/Tplyr/">
+  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -129,45 +140,59 @@
 
       
 
-      </header><script src="table_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tplyr Table Properties</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/master/vignettes/table.Rmd"><code>vignettes/table.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/table.Rmd" class="external-link"><code>vignettes/table.Rmd</code></a></small>
       <div class="hidden name"><code>table.Rmd</code></div>
 
     </div>
 
     
     
-<p>Most of the work in creating a ‘Tplyr’ table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in ‘Tplyr’ is allow you to eliminate redundant code wherever possible. Adding some processing to the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us to do that. Furthermore, some settings simply need to be applied table wide.</p>
-<div id="table-parameters" class="section level2">
-<h2 class="hasAnchor">
-<a href="#table-parameters" class="anchor"></a>Table Parameters</h2>
+<p>Most of the work in creating a ‘Tplyr’ table is at the layer level,
+but there are a few overarching properties that are worth spending some
+time discussing. One of the things that we wanted to make sure we did in
+‘Tplyr’ is allow you to eliminate redundant code wherever possible.
+Adding some processing to the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us
+to do that. Furthermore, some settings simply need to be applied table
+wide.</p>
+<div class="section level2">
+<h2 id="table-parameters">Table Parameters<a class="anchor" aria-label="anchor" href="#table-parameters"></a>
+</h2>
 <p>The <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> function has 4 parameters:</p>
 <ul>
 <li>
-<strong>target</strong>: The dataset upon which summaries will be performed</li>
+<strong>target</strong>: The dataset upon which summaries will be
+performed</li>
 <li>
-<strong><code>treat_var</code></strong>: The variable containing treatment group assignments</li>
+<strong><code>treat_var</code></strong>: The variable containing
+treatment group assignments</li>
 <li>
-<strong><code>where</code></strong>: The overarching table subset criteria. Each layer will use this subset by default. The <code>where</code> parameter at the table level will be called <strong>in addition to</strong> the layer subset criteria.</li>
+<strong><code>where</code></strong>: The overarching table subset
+criteria. Each layer will use this subset by default. The
+<code>where</code> parameter at the table level will be called
+<strong>in addition to</strong> the layer subset criteria.</li>
 <li>
-<strong><code>cols</code></strong>: Grouping variables used in addition to the <code>by</code> variables set at the layer level, but will be transposed into columns in addition to <code>treat_var</code>.</li>
+<strong><code>cols</code></strong>: Grouping variables used in
+addition to the <code>by</code> variables set at the layer level, but
+will be transposed into columns in addition to
+<code>treat_var</code>.</li>
 </ul>
 <p>Let’s look at an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="va">SEX</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="va">SEX</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="5%">
@@ -315,16 +340,30 @@
 </tr>
 </tbody>
 </table>
-<p>In the example above, the <code>where</code> parameter is passed forward into both the <code>RACE</code> and <code>AGE</code> layers. Furthermore, note how the <code>cols</code> parameter works. By default, the target variables from the layers are transposed by the <code>treat_var</code> variables. The <code>cols</code> argument adds an additional variable to transpose by, and the values of these variable are added as a suffix to the variable name. You are able to use multiple <code>cols</code> variables just like <code>by</code>, by using <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code>. But use with caution - as depending on the distinct variable values in the dataset, this could get quite wide.</p>
-<p><em>Note: Treatment groups and additional column variables presented in the final output are always taken from the <strong>pre-filtered</strong> population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled.</em></p>
+<p>In the example above, the <code>where</code> parameter is passed
+forward into both the <code>RACE</code> and <code>AGE</code> layers.
+Furthermore, note how the <code>cols</code> parameter works. By default,
+the target variables from the layers are transposed by the
+<code>treat_var</code> variables. The <code>cols</code> argument adds an
+additional variable to transpose by, and the values of these variable
+are added as a suffix to the variable name. You are able to use multiple
+<code>cols</code> variables just like <code>by</code>, by using
+<code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">dplyr::vars()</a></code>. But use with caution - as depending on the
+distinct variable values in the dataset, this could get quite wide.</p>
+<p><em>Note: Treatment groups and additional column variables presented
+in the final output are always taken from the
+<strong>pre-filtered</strong> population data. This means that if a
+filter completed excludes a treatment group or group within a column
+variable, columns will still be created for those groups and will be
+empty/zero filled.</em></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">SEX</span>, <span class="va">RACE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">SEX</span>, <span class="va">RACE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="1%">
 <col width="1%">
@@ -359,17 +398,25 @@
 <th align="left">var1_Placebo_M_AMERICAN INDIAN OR ALASKA NATIVE</th>
 <th align="left">var1_Placebo_M_BLACK OR AFRICAN AMERICAN</th>
 <th align="left">var1_Placebo_M_WHITE</th>
-<th align="left">var1_Xanomeline High Dose_F_AMERICAN INDIAN OR ALASKA NATIVE</th>
-<th align="left">var1_Xanomeline High Dose_F_BLACK OR AFRICAN AMERICAN</th>
+<th align="left">var1_Xanomeline High Dose_F_AMERICAN INDIAN OR ALASKA
+NATIVE</th>
+<th align="left">var1_Xanomeline High Dose_F_BLACK OR AFRICAN
+AMERICAN</th>
 <th align="left">var1_Xanomeline High Dose_F_WHITE</th>
-<th align="left">var1_Xanomeline High Dose_M_AMERICAN INDIAN OR ALASKA NATIVE</th>
-<th align="left">var1_Xanomeline High Dose_M_BLACK OR AFRICAN AMERICAN</th>
+<th align="left">var1_Xanomeline High Dose_M_AMERICAN INDIAN OR ALASKA
+NATIVE</th>
+<th align="left">var1_Xanomeline High Dose_M_BLACK OR AFRICAN
+AMERICAN</th>
 <th align="left">var1_Xanomeline High Dose_M_WHITE</th>
-<th align="left">var1_Xanomeline Low Dose_F_AMERICAN INDIAN OR ALASKA NATIVE</th>
-<th align="left">var1_Xanomeline Low Dose_F_BLACK OR AFRICAN AMERICAN</th>
+<th align="left">var1_Xanomeline Low Dose_F_AMERICAN INDIAN OR ALASKA
+NATIVE</th>
+<th align="left">var1_Xanomeline Low Dose_F_BLACK OR AFRICAN
+AMERICAN</th>
 <th align="left">var1_Xanomeline Low Dose_F_WHITE</th>
-<th align="left">var1_Xanomeline Low Dose_M_AMERICAN INDIAN OR ALASKA NATIVE</th>
-<th align="left">var1_Xanomeline Low Dose_M_BLACK OR AFRICAN AMERICAN</th>
+<th align="left">var1_Xanomeline Low Dose_M_AMERICAN INDIAN OR ALASKA
+NATIVE</th>
+<th align="left">var1_Xanomeline Low Dose_M_BLACK OR AFRICAN
+AMERICAN</th>
 <th align="left">var1_Xanomeline Low Dose_M_WHITE</th>
 <th align="right">ord_layer_index</th>
 <th align="right">ord_layer_1</th>
@@ -529,25 +576,34 @@
 </tbody>
 </table>
 </div>
-<div id="additional-treatment-groups" class="section level2">
-<h2 class="hasAnchor">
-<a href="#additional-treatment-groups" class="anchor"></a>Additional Treatment Groups</h2>
-<p>Another important feature that works at the table level is the addition of treatment groups. By adding additional treatment groups, you’re able to do a number of things:</p>
+<div class="section level2">
+<h2 id="additional-treatment-groups">Additional Treatment Groups<a class="anchor" aria-label="anchor" href="#additional-treatment-groups"></a>
+</h2>
+<p>Another important feature that works at the table level is the
+addition of treatment groups. By adding additional treatment groups,
+you’re able to do a number of things:</p>
 <ul>
-<li>Add a ‘treated’ group to your data so you can analyze ‘treated’ vs. ‘placebo’ when you have multiple treated cohorts</li>
+<li>Add a ‘treated’ group to your data so you can analyze ‘treated’
+vs. ‘placebo’ when you have multiple treated cohorts</li>
 <li>Add a ‘total’ group so summarize the overall study population</li>
 </ul>
-<p>We’ve added the function <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within <code>treat_var</code>. Additionally, to simplify the process we added an abstraction of <code><a href="../reference/add_treat_grps.html">add_treat_grps()</a></code> named <code><a href="../reference/add_treat_grps.html">add_total_group()</a></code> to simplify the process of creating a “Total” group.</p>
+<p>We’ve added the function <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> to do this
+work for you. With this function, you can create new treatment groups by
+combining existing treatment groups from values within
+<code>treat_var</code>. Additionally, to simplify the process we added
+an abstraction of <code><a href="../reference/treat_grps.html">add_treat_grps()</a></code> named
+<code><a href="../reference/treat_grps.html">add_total_group()</a></code> to simplify the process of creating a
+“Total” group.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_treat_grps</a></span><span class="op">(</span><span class="st">'Treated'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span><span class="op">(</span><span class="st">'Treated'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="7%">
 <col width="7%">
@@ -647,26 +703,41 @@
 </tr>
 </tbody>
 </table>
-<p>Note how in the above example, there are two new columns added to the data - <code>var1_Total</code> and <code>var1_Treated</code>. The summaries for the individual cohorts are left unchanged.</p>
+<p>Note how in the above example, there are two new columns added to the
+data - <code>var1_Total</code> and <code>var1_Treated</code>. The
+summaries for the individual cohorts are left unchanged.</p>
 </div>
-<div id="population-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#population-data" class="anchor"></a>Population Data</h2>
-<p>A last and very important aspect of table level properties in ‘Tplyr’ is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
-<p>‘Tplyr’ allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter and a population treatment variable named <code>pop_treat_var</code>, as variable names may differ between the datasets.</p>
+<div class="section level2">
+<h2 id="population-data">Population Data<a class="anchor" aria-label="anchor" href="#population-data"></a>
+</h2>
+<p>A last and very important aspect of table level properties in ‘Tplyr’
+is the addition of a population dataset. In CDISC standards, datasets
+like <code>adae</code> only contain adverse events when the occur. This
+means that if a subject did not experience an adverse event, or did not
+experience an adverse event within the criteria that you’re subsetting
+for, they don’t appear in the dataset. When you’re looking at the
+proportion of subject who experienced an adverse event compared to the
+total number of subjects in that cohort, <code>adae</code> itself leaves
+you no way to calculate that total - as the subjects won’t exist in the
+data.</p>
+<p>‘Tplyr’ allows you to provide a separate population dataset to
+overcome this. Furthermore, you are also able to provide a separate
+population dataset <code>where</code> parameter and a population
+treatment variable named <code>pop_treat_var</code>, as variable names
+may differ between the datasets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/get_where.tplyr_layer.html">set_pop_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/add_layer.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/group_count.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>
-  <span class="op">)</span>
-  
-<span class="va">t</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span><span class="va">t</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="18%">
@@ -687,7 +758,7 @@
 <tbody>
 <tr class="odd">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -696,14 +767,14 @@
 <tr class="even">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
-<td align="left">5 ( 6.0%)</td>
+<td align="left">1 ( 0.1%)</td>
+<td align="left">5 ( 0.5%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -713,47 +784,47 @@
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
 <tr class="odd">
 <td align="left">ERYTHEMA</td>
-<td align="left">9 ( 10.5%)</td>
-<td align="left">14 ( 16.7%)</td>
-<td align="left">13 ( 15.5%)</td>
+<td align="left">9 ( 1.3%)</td>
+<td align="left">14 ( 1.4%)</td>
+<td align="left">13 ( 1.3%)</td>
 <td align="right">1</td>
 <td align="right">8</td>
 </tr>
 <tr class="even">
 <td align="left">HYPERHIDROSIS</td>
-<td align="left">2 ( 2.3%)</td>
-<td align="left">8 ( 9.5%)</td>
-<td align="left">4 ( 4.8%)</td>
+<td align="left">2 ( 0.3%)</td>
+<td align="left">8 ( 0.8%)</td>
+<td align="left">4 ( 0.4%)</td>
 <td align="right">1</td>
 <td align="right">9</td>
 </tr>
 <tr class="odd">
 <td align="left">PRURITUS</td>
-<td align="left">8 ( 9.3%)</td>
-<td align="left">26 ( 31.0%)</td>
-<td align="left">21 ( 25.0%)</td>
+<td align="left">8 ( 1.2%)</td>
+<td align="left">26 ( 2.6%)</td>
+<td align="left">21 ( 2.1%)</td>
 <td align="right">1</td>
 <td align="right">10</td>
 </tr>
 <tr class="even">
 <td align="left">PRURITUS GENERALISED</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">11</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH</td>
-<td align="left">4 ( 4.7%)</td>
-<td align="left">8 ( 9.5%)</td>
-<td align="left">13 ( 15.5%)</td>
+<td align="left">4 ( 0.6%)</td>
+<td align="left">8 ( 0.8%)</td>
+<td align="left">13 ( 1.3%)</td>
 <td align="right">1</td>
 <td align="right">12</td>
 </tr>
@@ -761,14 +832,14 @@
 <td align="left">RASH ERYTHEMATOUS</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">2 ( 2.4%)</td>
+<td align="left">2 ( 0.2%)</td>
 <td align="right">1</td>
 <td align="right">13</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH MACULO-PAPULAR</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">14</td>
@@ -776,7 +847,7 @@
 <tr class="even">
 <td align="left">RASH PAPULAR</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">15</td>
@@ -784,8 +855,8 @@
 <tr class="odd">
 <td align="left">RASH PRURITIC</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">2 ( 2.4%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">2 ( 0.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">16</td>
 </tr>
@@ -793,29 +864,29 @@
 <td align="left">SKIN EXFOLIATION</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">17</td>
 </tr>
 <tr class="odd">
 <td align="left">SKIN IRRITATION</td>
-<td align="left">2 ( 2.3%)</td>
-<td align="left">5 ( 6.0%)</td>
-<td align="left">6 ( 7.1%)</td>
+<td align="left">2 ( 0.3%)</td>
+<td align="left">5 ( 0.5%)</td>
+<td align="left">6 ( 0.6%)</td>
 <td align="right">1</td>
 <td align="right">18</td>
 </tr>
 <tr class="even">
 <td align="left">SKIN ODOUR ABNORMAL</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">19</td>
 </tr>
 <tr class="odd">
 <td align="left">SKIN ULCER</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -824,18 +895,32 @@
 <tr class="even">
 <td align="left">URTICARIA</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.2%)</td>
-<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">21</td>
 </tr>
 </tbody>
 </table>
-<p>In the above example, <code>AEREL</code> doesn’t exist in <code>adsl</code>, therefore we used <code><a href="../reference/get_where.tplyr_layer.html">set_pop_where()</a></code> to remove the filter criteria on the population data. Setting the population dataset where parameter to <code>TRUE</code> removes any filter applied by the population data. If <code><a href="../reference/get_where.tplyr_layer.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
-<p>Note the percentage values in the summary above. By setting the population data, ‘Tplyr’ now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
+<p>In the above example, <code>AEREL</code> doesn’t exist in
+<code>adsl</code>, therefore we used <code><a href="../reference/where.html">set_pop_where()</a></code> to
+remove the filter criteria on the population data. Setting the
+population dataset where parameter to <code>TRUE</code> removes any
+filter applied by the population data. If <code><a href="../reference/where.html">set_pop_where()</a></code>
+is not set for the population data, it will default to the
+<code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The
+same logic applies to the population treatment variable.
+<code>TRTA</code> does not exist in <code>adsl</code> either, so we used
+<code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate
+variable in <code>adsl</code>.</p>
+<p>Note the percentage values in the summary above. By setting the
+population data, ‘Tplyr’ now knew to use those values when calculating
+the percentages for the distinct counts of subjects who experienced the
+summarized adverse events. Furthermore, with the population data
+provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/header_n.html">header_n</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/header_n.html">header_n</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">TRT01A</th>
@@ -856,21 +941,28 @@
 </tr>
 </tbody>
 </table>
-<p>With the table level settings under control, now you’re ready to learn more about what ‘Tplyr’ has to offer in each layer.</p>
+<p>With the table level settings under control, now you’re ready to
+learn more about what ‘Tplyr’ has to offer in each layer.</p>
 <ul>
-<li>Learn more about descriptive statistics layers in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("desc")</a></code>
+<li>Learn more about descriptive statistics layers in
+<code>vignettes("desc")</code>
 </li>
-<li>Learn more about count and shift layers in <code><a href="../articles/count.html">vignette("count")</a></code>
+<li>Learn more about count and shift layers in
+<code><a href="../articles/count.html">vignette("count")</a></code>
 </li>
 <li>Learn more about shift layers in <code><a href="../articles/shift.html">vignette("shift")</a></code>
 </li>
-<li>Learn more about calculating risk differences in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("riskdiff")</a></code>
+<li>Learn more about calculating risk differences in
+<code>vignettes("riskdiff")</code>
 </li>
-<li>Learn more about sorting ‘Tplyr’ tables in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("sort")</a></code>
+<li>Learn more about sorting ‘Tplyr’ tables in
+<code>vignettes("sort")</code>
 </li>
-<li>Learn more about using ‘Tplyr’ options in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("options")</a></code>
+<li>Learn more about using ‘Tplyr’ options in
+<code>vignettes("options")</code>
 </li>
-<li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code><a href="https://rdrr.io/r/utils/vignette.html">vignettes("styled-table")</a></code>
+<li>And finally, learn more about producing and outputting styled tables
+using ‘Tplyr’ in <code>vignettes("styled-table")</code>
 </li>
 </ul>
 </div>
@@ -887,11 +979,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -899,6 +993,8 @@
 
   
 
+
+  
 
   </body>
 </html>

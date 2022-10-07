@@ -1,0 +1,121 @@
+---
+title: "Layer Templates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{layer_templates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(Tplyr)
+library(knitr)
+load('adsl.Rdata')
+```
+
+There are several scenarios where a layer template may be useful. Some tables, like demographics tables, may have many layers that will all essentially look the same. Categorical variables will have the same count layer settings, and continuous variables will have the same desc layer settings. A template allows a user to build those settings once per layer, then reference the template when the Tplyr table is actually built. Another scenario might be building a set of company layer templates that are built for standard tables to reduce the footprint of code across analyses. In either of these cases, the idea is the reduce the amount of redundant code necessary to create a table.
+
+Tplyr has already has a couple of mechanisms to reduce redundant application of formats. For example, `vignettes('tplyr_options')` shows how the options `tplyr.count_layer_default_formats`, `tplyr.desc_layer_default_formats`, and `tplyr.shift_layer_default_formats` can be used to create default format string settings. Additionally, you can set formats table wide using `set_count_layer_formats()`, `set_desc_layer_formats()`, or `set_shift_layer_formats()`. But what these functions and options _don't_ allow you to do is pre-set and reuse the settings for an entire layer, so all of the additional potential layer modifying functions are ignored. This is where layer templates come in.
+
+# Basic Templates 
+
+The functions `new_layer_template()` and `use_template()` allow a user to create and use layer templates. Layer templates allow a user to pre-build and reuse an entire layer configuration, from the layer constructor down to all modifying functions. Furthermore, users can specify parameters they may want to be interchangeable. Additionally, layer templates are extensible, so a template can be use and then further extended with additional layer modifying functions.
+
+Consider the following example:
+
+```{r creating a template}
+new_layer_template(
+  "example_template", 
+  group_count(...) %>% 
+    set_format_strings(f_str("xx (xx%)", n, pct))
+)
+```
+
+In this example, we've created a basic layer template. The template is named "example_template", and this is the name we'll use to reference the template when we want to use it. When the template is created, we start with the function `group_count(...)`. Note the use of the ellipsis (i.e. `...`). This is a required part of a layer template. Templates must start with a Tplyr layer constructor, which is one of the function `group_count()`, `group_desc()`, or `group_shift()`. The ellipsis is necessary because when the template is used, we are able to pass arguments directly into the layer constructor. For example:
+
+```{r using a template}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    use_template("example_template", RACE, by=ETHNIC)
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+Within `use_template()`, the first parameter is the template name. After that, we supply arguments as we normally would into `group_count()`, `group_desc()`, or `group_shift()`. Additionally, note that our formats have been applied just as they would be if we used `set_format_strings()` as specified in the template. Our template was applied, the table built with all of the settings appropriately. 
+
+An additional feature of layer templates is that they act just as any other function would in a Tplyr layer. This means that they're also extensible and can be expanded on directly within a Tplyr table. For example:
+
+```{r extending a template}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    use_template("example_template", RACE) %>% 
+      add_total_row()
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+Here we show two things - first, that the we called the template without the by variable argument from the previous example. This allows a template to have some flexibility depending on the context of its usage. Furthermore, we added the additional modifier function `add_total_row()`. In this example, we took the layer as constructed by the template and then modified that layer further. This may be useful if most but not all of a layer is reusable. The reusable portions can be put in a template, and the rest added using normal Tplyr syntax.
+
+## Templates With Parameters
+
+It's also possible to add interchangeable parameters into a layer template beyond the group constructor arguments. But this requires some special syntax. Consider the following template:
+
+```{r template with params}
+new_layer_template("example_params",
+  group_count(...) %>% 
+    set_format_strings(f_str("xx (xx.x%)", n, pct)) %>% 
+    set_order_count_method({sort_meth}) %>% 
+    set_ordering_cols({sort_col})
+ )
+```
+
+In this example, we create a template similar to the first example. But now we add two more modifying functions, `set_order_count_method()` and `set_ordering_cols()`. Within these functions, we've supplied interchangeable parameters to the template function, which are `sort_meth` and `sort_col`. In a Tplyr layer template, these parameters are supplied using curly brackets (i.e. {}).
+
+To specify these arguments when using the templater, we use the `use_template()` argument `add_params`. For example:
+
+```{r using params}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    use_template('example_params', RACE, add_params = 
+                   list(
+                     sort_meth = "bycount",
+                     sort_col = Placebo
+                   ))
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+In the `add_params` parameter, you must supply a list. That list must also be named, where the element names (in this example, `sort_meth` and `sort_col`) match the parameter names in the template itself. If there's any mismatch between a template's parameters and the parameters provided to `add_params`, you will encounter an error. The values supplied to `add_param` are then exactly the arguments that you would supply to the matching field within the template (i.e. there's no extra quoting using `quo()` necessary to pass a symbol).
+
+# Viewing and Removing Templates
+
+If you want to view any available templates in your session, use the function `get_layer_templates()`.
+
+```{r view templates}
+get_layer_templates()
+```
+
+You can view a specific template using `get_layer_template()`.
+
+```{r get a template}
+get_layer_template("example_params")
+```
+
+Note that layer templates are of class `tplyr_layer_template`. They additionally carry the attribute `params` that specifies which parameters are available in the template, which can be seen in the output above.
+
+Finally, if you want to remove a layer from your session, use the function `remove_layer_template()`
+
+```{r remove a template}
+remove_layer_template("example_params")
+get_layer_templates()
+```

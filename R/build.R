@@ -2,22 +2,33 @@
 
 #' Trigger the execution of the \code{tplyr_table}
 #'
-#' @description
-#' The functions used to assemble a \code{tplyr_table} object and each of the layers do not trigger the processing of any data. Rather, a lazy
-#' execution style is used to allow you to contruct your table and then explicitly state when the data processing should happen.
-#' \code{build} triggers this event.
+#' @description The functions used to assemble a \code{tplyr_table} object and
+#' each of the layers do not trigger the processing of any data. Rather, a lazy
+#' execution style is used to allow you to construct your table and then
+#' explicitly state when the data processing should happen. \code{build}
+#' triggers this event.
 #'
-#' @details
-#' When the \code{build} command is executed, all of the data processing commences. Any preprocessing necessary within the table environment
-#' takes place first. Next, each of the layers begins executing. Once the layers complete executing, the output of each layer is stacked
-#' into the resulting data frame.
+#' @details When the \code{build} command is executed, all of the data
+#' processing commences. Any pre-processing necessary within the table
+#' environment takes place first. Next, each of the layers begins executing.
+#' Once the layers complete executing, the output of each layer is stacked into
+#' the resulting data frame.
 #'
-#' Once this process is complete, any post-processing necessary within the table environment takes place, and the final output can be
-#' delivered. Metadata and traceability information are kept within each of the layer environments, which allows an investigation into the
-#' source of the resulting datapoints. For example, numeric data from any summaries performed is maintained and accessible within
-#' a layer using \code{\link{get_numeric_data}}.
+#' Once this process is complete, any post-processing necessary within the table
+#' environment takes place, and the final output can be delivered. Metadata and
+#' traceability information are kept within each of the layer environments,
+#' which allows an investigation into the source of the resulting datapoints.
+#' For example, numeric data from any summaries performed is maintained and
+#' accessible within a layer using \code{\link{get_numeric_data}}.
+#'
+#' The `metadata` option of build will trigger the construction of traceability
+#' metadata for the constructed data frame. Essentially, for every "result" that
+#' Tplyr produces, Tplyr can also generate the steps necessary to obtain the
+#' source data which produced that result from the input. For more information,
+#' see vignette("metadata").
 #'
 #' @param x A \code{tplyr_table} object
+#' @param metadata  Trigger to build metadata. Defaults to FALSE
 #'
 #' @return An executed \code{tplyr_table}
 #' @export
@@ -36,15 +47,14 @@
 #'   build()
 #'
 #' @seealso tplyr_table, tplyr_layer, add_layer, add_layers, layer_constructors
-build <- function(x) {
-
+build <- function(x, metadata=FALSE) {
     UseMethod("build")
 }
 
 #' tplyr_table S3 method
 #' @noRd
 #' @export
-build.tplyr_table <- function(x) {
+build.tplyr_table <- function(x, metadata=FALSE) {
 
   op <- options()
 
@@ -70,6 +80,36 @@ build.tplyr_table <- function(x) {
       map2_dfr(seq_along(output_list), add_layer_index) %>%
       ungroup() %>%
       select(starts_with('row_label'), starts_with('var'), "ord_layer_index", everything())
+
+    # Process metadata if triggered
+    if (metadata) {
+      metadata_list <- purrr::map(x$layers, process_metadata)
+
+      # Prepare metadata like the output
+      metadata <- metadata_list %>%
+        map2_dfr(seq_along(metadata_list), add_layer_index) %>%
+        ungroup() %>%
+        mutate(
+          row_id = paste0(row_id, '_', ord_layer_index)
+        ) %>%
+        select(row_id, starts_with('row_label'), starts_with('var'), everything(), -starts_with('ord'))
+
+      # Finish off the row_id with the layer indicator and put row_id up front
+      output <- output %>%
+        mutate(
+          row_id = paste0(row_id, '_', ord_layer_index)
+        ) %>%
+        select(row_id, everything())
+
+      # Write the metadata to the environment
+      env_bind(x, metadata=metadata)
+    } else {
+      # Drop row_id if metadata isn't built
+      output <- output %>%
+        select(-row_id)
+    }
+
+
 
   }, finally = {
     # Set options back to defaults
@@ -98,7 +138,7 @@ process_summaries <- function(x, ...) {
 #' @param x A tplyr_layer object
 #' @param ... arguments passed to dispatch
 #'
-#' @return The formatted_table object that is binded to the layer
+#' @return The formatted_table object that is bound to the layer
 #' @export
 #' @keywords internal
 process_formatting <- function(x, ...) {
@@ -108,6 +148,19 @@ process_formatting <- function(x, ...) {
 #' @noRd
 prepare_format_metadata <- function(x) {
   UseMethod("prepare_format_metadata")
+}
+
+#' Process layers to get metadata tables
+#'
+#' This is an internal method, but is exported to support S3 dispatch. Not intended for direct use by a user.
+#' @param x A tplyr_layer object
+#' @param ... arguments passed to dispatch
+#'
+#' @return The formatted_meta object that is bound to the layer
+#' @export
+#' @keywords internal
+process_metadata <- function(x, ...) {
+  UseMethod("process_metadata")
 }
 
 #' Fetch table formatting info from layers
