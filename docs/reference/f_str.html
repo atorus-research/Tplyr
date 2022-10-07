@@ -40,7 +40,7 @@ used to populate the string formatted output."><meta property="og:image" content
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -71,6 +71,9 @@ used to populate the string formatted output."><meta property="og:image" content
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -189,15 +192,16 @@ instead replace the whole string.</p></dd>
   different layers. When declaring a format string within a count layer,
   <code>f_str</code> expects to see the values <code>n</code> or <code>distinct_n</code> for
   event or distinct counts, <code>pct</code> or <code>distinct_pct</code> for event or
-  distinct percentages, or <code>denom</code> or <code>distinct_denom</code> for
+  distinct percentages, or <code>total</code> or <code>distinct_total</code> for
   denominator calculations. But in descriptive statistic layers, <code>f_str</code>
   parameters refer to the names of the summaries being performed, either by
   built in defaults, or custom summaries declared using
   <code><a href="set_custom_summaries.html">set_custom_summaries</a></code>. See <code><a href="set_format_strings.html">set_format_strings</a></code>
   for some more notes about layers specific implementation.</p>
-<p>Count and shift layers frequencies and percentages can be specified with
-  'n' and 'pct' respectively. Distinct values can also be presented in count
-  layers with the arguments 'distinct' and 'distinct_total'.</p>
+<p>Count and shift layer frequencies, totals, and percentages can be specified
+  with the values 'n', 'pct' and 'total'. Distinct values can also be
+  presented in Count layers with the arguments 'distinct', 'distinct_pct',
+  and 'distinct_total'.</p>
     </div>
 
     <div id="ref-examples">
@@ -268,7 +272,7 @@ instead replace the whole string.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

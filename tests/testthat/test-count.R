@@ -708,6 +708,98 @@ test_that("Posix columns don't cause the build to error out.", {
   expect_silent(build(tp_obj))
 })
 
+test_that("set_numeric_threshold works as expected", {
+
+  t1 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(10, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t1))
+
+  t2 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(5.1, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t2))
+
+  t3 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(13, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t3))
+
+  t4 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(16, "n") %>%
+        add_total_row() %>%
+       set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t4))
+
+  t5 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(0.5, "pct") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t5))
+
+  t6 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(4, "n", "3") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t6))
+
+  load(test_path("adae.Rdata"))
+
+  t7 <- adae %>%
+    tplyr_table(TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
+        add_total_row()
+    )
+
+  expect_snapshot(build(t7))
+
+  t8 <- adae %>%
+    tplyr_table(TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t8))
+})
+
 test_that("denom and distinct_denom values work as expected", {
 
 

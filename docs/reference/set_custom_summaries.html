@@ -39,7 +39,7 @@ desired summary functions."><meta property="og:image" content="/reference/figure
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,6 +70,9 @@ desired summary functions."><meta property="og:image" content="/reference/figure
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -178,11 +181,11 @@ between the name created in <code>set_custom_summaries</code> and the name used 
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="build.html">build</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1   row_label2     var1_setosa var1_versicolor var1_virginica</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Sepal Length Geometric Mean <span style="color: #949494;">"</span> 4.99<span style="color: #949494;">"</span>     <span style="color: #949494;">"</span> 5.91<span style="color: #949494;">"</span>         <span style="color: #949494;">"</span> 6.56<span style="color: #949494;">"</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: ord_layer_index &lt;int&gt;, ord_layer_1 &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ord_layer_2 &lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1   row_label2     var1_set…¹ var1_…² var1_…³ ord_l…⁴ ord_l…⁵ ord_l…⁶</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Sepal Length Geometric Mean <span style="color: #949494;">"</span> 4.99<span style="color: #949494;">"</span>    <span style="color: #949494;">"</span> 5.91<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 6.56<span style="color: #949494;">"</span>       1       1       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​var1_setosa, ²​var1_versicolor,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​var1_virginica, ⁴​ord_layer_index, ⁵​ord_layer_1, ⁶​ord_layer_2</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -197,7 +200,7 @@ between the name created in <code>set_custom_summaries</code> and the name used 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

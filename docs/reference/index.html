@@ -35,7 +35,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,6 +66,9 @@
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -256,6 +259,10 @@ based summaries, descriptive statistics summaries, or shift count summaries</p><
           <p><code><a href="set_indentation.html">set_indentation()</a></code> </p>
         </td>
         <td><p>Set the option to prefix the row_labels in the inner count_layer</p></td>
+      </tr><tr><td>
+          <p><code><a href="set_numeric_threshold.html">set_numeric_threshold()</a></code> </p>
+        </td>
+        <td><p>Set a numeric cutoff</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="column-headers">Column Headers <a href="#column-headers" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Column header helpers</p>
@@ -338,9 +345,13 @@ indentation</p></td>
         </td>
         <td><p>Set or return where binding for layer or table</p></td>
       </tr><tr><td>
-          <p><code><a href="Tplyr.html">Tplyr</a></code> </p>
+          <p><code><a href="Tplyr.html">Tplyr</a></code> <code><a href="Tplyr.html">Tplyr-package</a></code> </p>
         </td>
         <td><p>A grammar of summary data for clinical reports</p></td>
+      </tr><tr><td>
+          <p><code><a href="layer_templates.html">new_layer_template()</a></code> <code><a href="layer_templates.html">remove_layer_template()</a></code> <code><a href="layer_templates.html">get_layer_template()</a></code> <code><a href="layer_templates.html">get_layer_templates()</a></code> <code><a href="layer_templates.html">use_template()</a></code> </p>
+        </td>
+        <td><p>Create, view, extract, remove, and use Tplyr layer templates</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -354,7 +365,7 @@ indentation</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

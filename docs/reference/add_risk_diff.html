@@ -38,7 +38,7 @@ be sure to familiarize yourself with its functionality."><meta property="og:imag
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,6 +69,9 @@ be sure to familiarize yourself with its functionality."><meta property="og:imag
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -218,15 +221,16 @@ don't have enough data to truly be statistically accurate.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3     var1_4     var1_5     ord_layer_index rdiff_3_4 rdiff_3_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          3 ( 20.0%) 4 ( 33.3%) 0 (  0.0%)               1 <span style="color: #949494;">"</span>-0.133 … <span style="color: #949494;">"</span> 0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          4 ( 26.7%) 4 ( 33.3%) 2 ( 40.0%)               1 <span style="color: #949494;">"</span>-0.067 … <span style="color: #949494;">"</span>-0.133 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          3 ( 20.0%) 0 (  0.0%) 0 (  0.0%)               1 <span style="color: #949494;">"</span> 0.200 … <span style="color: #949494;">"</span> 0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          5 ( 33.3%) 4 ( 33.3%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span> 0.133 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span>-0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span>-0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: ord_layer_1 &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3     var1_4     var1_5     ord_laye…¹ rdiff…² rdiff…³ ord_l…⁴</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          3 ( 20.0%) 4 ( 33.3%) 0 (  0.0%)          1 <span style="color: #949494;">"</span>-0.13… <span style="color: #949494;">"</span> 0.20…       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          4 ( 26.7%) 4 ( 33.3%) 2 ( 40.0%)          1 <span style="color: #949494;">"</span>-0.06… <span style="color: #949494;">"</span>-0.13…       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          3 ( 20.0%) 0 (  0.0%) 0 (  0.0%)          1 <span style="color: #949494;">"</span> 0.20… <span style="color: #949494;">"</span> 0.20…       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          5 ( 33.3%) 4 ( 33.3%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span> 0.13…       4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span>-0.20…       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span>-0.20…       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​ord_layer_index, ²​rdiff_3_4, ³​rdiff_3_5,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁴​ord_layer_1</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Specify custom formats and display variables</span></span></span>
 <span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span></span></span>
@@ -258,15 +262,16 @@ don't have enough data to truly be statistically accurate.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3      var1_4      var1_5  ord_layer_index rdiff_3_4 rdiff_3_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          <span style="color: #949494;">"</span> 3 (20.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( …               1 <span style="color: #949494;">"</span> 0.200,… <span style="color: #949494;">"</span> 0.200,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          <span style="color: #949494;">"</span> 4 (26.7)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 (4…               1 <span style="color: #949494;">"</span> 0.267,… <span style="color: #949494;">"</span> 0.267,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          <span style="color: #949494;">"</span> 3 (20.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( …               1 <span style="color: #949494;">"</span> 0.200,… <span style="color: #949494;">"</span> 0.200,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          <span style="color: #949494;">"</span> 5 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (2…               1 <span style="color: #949494;">"</span> 0.333,… <span style="color: #949494;">"</span> 0.333,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (2…               1 <span style="color: #949494;">"</span> 0.000,… <span style="color: #949494;">"</span> 0.000,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (2…               1 <span style="color: #949494;">"</span> 0.000,… <span style="color: #949494;">"</span> 0.000,…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: ord_layer_1 &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3      var1_4      var1_5      ord_l…¹ rdiff…² rdiff…³ ord_l…⁴</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          <span style="color: #949494;">"</span> 3 (20.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.20… <span style="color: #949494;">"</span> 0.20…       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          <span style="color: #949494;">"</span> 4 (26.7)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 (40.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.26… <span style="color: #949494;">"</span> 0.26…       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          <span style="color: #949494;">"</span> 3 (20.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.20… <span style="color: #949494;">"</span> 0.20…       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          <span style="color: #949494;">"</span> 5 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 (33.3)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (20.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.33… <span style="color: #949494;">"</span> 0.33…       4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (20.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span> 0.00…       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 ( 0.0)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 (20.0)<span style="color: #949494;">"</span>       1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span> 0.00…       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​ord_layer_index, ²​rdiff_3_4, ³​rdiff_3_5,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁴​ord_layer_1</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Passing arguments to prop.test</span></span></span>
 <span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span></span></span>
@@ -295,15 +300,16 @@ don't have enough data to truly be statistically accurate.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3     var1_4     var1_5     ord_layer_index rdiff_3_4 rdiff_3_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          3 ( 20.0%) 4 ( 33.3%) 0 (  0.0%)               1 <span style="color: #949494;">"</span>-0.133 … <span style="color: #949494;">"</span> 0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          4 ( 26.7%) 4 ( 33.3%) 2 ( 40.0%)               1 <span style="color: #949494;">"</span>-0.067 … <span style="color: #949494;">"</span>-0.133 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          3 ( 20.0%) 0 (  0.0%) 0 (  0.0%)               1 <span style="color: #949494;">"</span> 0.200 … <span style="color: #949494;">"</span> 0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          5 ( 33.3%) 4 ( 33.3%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span> 0.133 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span>-0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)               1 <span style="color: #949494;">"</span> 0.000 … <span style="color: #949494;">"</span>-0.200 …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1 more variable: ord_layer_1 &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3     var1_4     var1_5     ord_laye…¹ rdiff…² rdiff…³ ord_l…⁴</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          3 ( 20.0%) 4 ( 33.3%) 0 (  0.0%)          1 <span style="color: #949494;">"</span>-0.13… <span style="color: #949494;">"</span> 0.20…       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          4 ( 26.7%) 4 ( 33.3%) 2 ( 40.0%)          1 <span style="color: #949494;">"</span>-0.06… <span style="color: #949494;">"</span>-0.13…       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          3 ( 20.0%) 0 (  0.0%) 0 (  0.0%)          1 <span style="color: #949494;">"</span> 0.20… <span style="color: #949494;">"</span> 0.20…       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          5 ( 33.3%) 4 ( 33.3%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span> 0.13…       4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 6          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span>-0.20…       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 8          0 (  0.0%) 0 (  0.0%) 1 ( 20.0%)          1 <span style="color: #949494;">"</span> 0.00… <span style="color: #949494;">"</span>-0.20…       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​ord_layer_index, ²​rdiff_3_4, ³​rdiff_3_5,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁴​ord_layer_1</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -318,7 +324,7 @@ don't have enough data to truly be statistically accurate.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

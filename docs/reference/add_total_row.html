@@ -38,7 +38,7 @@ strings."><meta property="og:image" content="/reference/figures/Atorus_Stickers_
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,6 +69,9 @@ strings."><meta property="og:image" content="/reference/figures/Atorus_Stickers_
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -164,12 +167,13 @@ be updated accordingly.</p>
 <span class="r-in"><span>   <span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="build.html">build</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_layer_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 4          <span style="color: #949494;">"</span> 1 (  6.7%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 8 ( 66.7%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 ( 40.0%)<span style="color: #949494;">"</span>               1           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 6          <span style="color: #949494;">"</span> 2 ( 13.3%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 ( 33.3%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 ( 20.0%)<span style="color: #949494;">"</span>               1           2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 8          <span style="color: #949494;">"</span>12 ( 80.0%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 ( 40.0%)<span style="color: #949494;">"</span>               1           3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Total      <span style="color: #949494;">"</span>  15<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>  12<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>   5<span style="color: #949494;">"</span>                      1           4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_lay…¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 4          <span style="color: #949494;">"</span> 1 (  6.7%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 8 ( 66.7%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 ( 40.0%)<span style="color: #949494;">"</span>               1         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 6          <span style="color: #949494;">"</span> 2 ( 13.3%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 4 ( 33.3%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 1 ( 20.0%)<span style="color: #949494;">"</span>               1         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 8          <span style="color: #949494;">"</span>12 ( 80.0%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 2 ( 40.0%)<span style="color: #949494;">"</span>               1         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Total      <span style="color: #949494;">"</span>  15<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>  12<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>   5<span style="color: #949494;">"</span>                      1         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable name ¹​ord_layer_1</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -184,7 +188,7 @@ be updated accordingly.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

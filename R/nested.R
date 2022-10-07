@@ -47,14 +47,33 @@ process_nested_count_target <- function(x) {
                                         set_denoms_by(!!!second_denoms_by))
 
     first_layer_final <- first_layer$numeric_data
-    # add_column(!!target_var[[1]] := .[["summary_var"]])
 
     second_layer_final <- second_layer$numeric_data %>%
+      filter_numeric(
+        numeric_cutoff = numeric_cutoff,
+        numeric_cutoff_stat = numeric_cutoff_stat,
+        numeric_cutoff_column = numeric_cutoff_column,
+        treat_var = treat_var
+      ) %>%
       group_by(!!target_var[[1]]) %>%
       do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
 
+    ignored_filter_rows <- ifelse(include_total_row,
+                                  ifelse(is.null(total_row_label),
+                                         "Total",
+                                         total_row_label),
+                                  character(0))
+
     # Bind the numeric data together
-    numeric_data <- bind_rows(first_layer_final, second_layer_final)
+    numeric_data <- bind_rows(first_layer_final, second_layer_final) %>%
+      filter_nested_numeric(
+        numeric_cutoff,
+        numeric_cutoff_stat,
+        numeric_cutoff_column,
+        treat_var,
+        target_var,
+        ignored_filter_rows
+      )
 
     # Save the original by and target_vars incase the layer is rebuilt
     by_saved <- by
@@ -108,4 +127,31 @@ filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, in
 refresh_nest <- function(x) {
   env_bind(x, by = env_get(x, "by_saved"))
   env_bind(x, target_var = env_get(x, "target_var_saved"))
+}
+
+
+filter_nested_numeric <- function(.data,
+                                  numeric_cutoff,
+                                  numeric_cutoff_stat,
+                                  numeric_cutoff_column,
+                                  treat_var,
+                                  target_var,
+                                  ignored_rows) {
+
+  if (is.null(numeric_cutoff)) {
+    return(.data)
+  }
+
+  # All of the non NA values in target_var[[1]] are what we want to keep here.
+  # Because those are the 'inner' values that passed the filter
+  vals <- .data %>%
+    {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
+    filter(!is.na(!!target_var[[1]])) %>%
+    extract2(as_name(target_var[[1]])) %>%
+    as.character()
+
+  .data %>%
+    filter(!is.na(!!target_var[[1]]) | summary_var %in% c(vals, ignored_rows))
+
+
 }

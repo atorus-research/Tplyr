@@ -22,6 +22,9 @@
     <loc>/articles/Advanced_Tables_with_tplyr.html</loc>
   </url>
   <url>
+    <loc>/articles/Tplyr.html</loc>
+  </url>
+  <url>
     <loc>/articles/alpha-release.html</loc>
   </url>
   <url>
@@ -50,6 +53,9 @@
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/layer_templates.html</loc>
   </url>
   <url>
     <loc>/articles/metadata.html</loc>
@@ -95,6 +101,9 @@
   </url>
   <url>
     <loc>/news/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Tplyr.html</loc>
   </url>
   <url>
     <loc>/reference/add_column_headers.html</loc>
@@ -152,6 +161,9 @@
   </url>
   <url>
     <loc>/reference/layer_constructors.html</loc>
+  </url>
+  <url>
+    <loc>/reference/layer_templates.html</loc>
   </url>
   <url>
     <loc>/reference/metadata_additions.html</loc>
@@ -215,6 +227,12 @@
   </url>
   <url>
     <loc>/reference/set_nest_count.html</loc>
+  </url>
+  <url>
+    <loc>/reference/set_numeric_threshold.html</loc>
+  </url>
+  <url>
+    <loc>/reference/set_numeric_where.html</loc>
   </url>
   <url>
     <loc>/reference/set_outer_sort_position.html</loc>

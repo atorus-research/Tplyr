@@ -43,7 +43,7 @@ accessible."><meta property="og:image" content="/reference/figures/Atorus_Sticke
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -74,6 +74,9 @@ accessible."><meta property="og:image" content="/reference/figures/Atorus_Sticke
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -160,8 +163,8 @@ subset data frame.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">tplyr_meta</span><span class="op">(</span></span></span>
-<span class="r-in"><span>   names <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>   filters <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">y</span><span class="op">==</span><span class="fl">2</span>, <span class="va">z</span><span class="op">==</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   names <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   filters <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">y</span><span class="op">==</span><span class="fl">2</span>, <span class="va">z</span><span class="op">==</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tplyr_meta: 3 names, 3 filters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Names:</span>
@@ -183,7 +186,7 @@ subset data frame.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

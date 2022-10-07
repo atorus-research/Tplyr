@@ -63,7 +63,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -98,6 +98,9 @@
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -251,7 +254,8 @@ named list instead of as separate parameters to a function call.</p>
 <span></span>
 <span>  <span class="co"># Shift layer defaults</span></span>
 <span>  tplyr.shift_layer_default_formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx"</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span> </span></code></pre></div>
 <p>Here you can see that ‘Tplyr’ picks up these option changes. In the
 table below, we didn’t use <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> anywhere -
 instead we let ‘Tplyr’ pick up the default formats from the options.</p>
@@ -681,12 +685,14 @@ scientific location for larger numbers.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># This is the default</span></span>
 <span><span class="fl">.0001</span></span>
 <span><span class="co">#&gt; [1] 1e-04</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># Require 5 decimal places instead</span></span>
 <span></span>
 <span><span class="fl">.0001</span></span>
 <span><span class="co">#&gt; [1] 0.0001</span></span>
 <span><span class="fl">.00001</span></span>
 <span><span class="co">#&gt; [1] 1e-05</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="co"># Only require 3 decimal places</span></span>
 <span><span class="fl">.001</span></span>
 <span><span class="co">#&gt; [1] 1e-03</span></span></code></pre></div>
@@ -937,7 +943,7 @@ in the tables below.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

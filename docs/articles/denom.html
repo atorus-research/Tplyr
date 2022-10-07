@@ -63,7 +63,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -98,6 +98,9 @@
     </li>
     <li>
       <a href="../articles/options.html">Tplyr Options</a>
+    </li>
+    <li>
+      <a href="../articles/layer_templates.html">Layer Templates</a>
     </li>
     <li>
       <a href="../articles/styled-table.html">Producing a Styled Table</a>
@@ -209,14 +212,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
+<td align="left">1 ( 0.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.5%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -225,14 +228,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
-<td align="left">5 ( 6.8%)</td>
+<td align="left">1 ( 0.2%)</td>
+<td align="left">5 ( 1.0%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.5%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -240,7 +243,7 @@ to use the population data as your denominator.</p>
 </tr>
 <tr class="odd">
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.5%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -250,7 +253,7 @@ to use the population data as your denominator.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
+<td align="left">1 ( 0.2%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -289,14 +292,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -305,14 +308,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
-<td align="left">5 ( 6.8%)</td>
+<td align="left">1 ( 0.1%)</td>
+<td align="left">5 ( 0.5%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -320,7 +323,7 @@ to use the population data as your denominator.</p>
 </tr>
 <tr class="odd">
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 3.1%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -330,7 +333,7 @@ to use the population data as your denominator.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 1.4%)</td>
+<td align="left">1 ( 0.1%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -1700,33 +1703,33 @@ specified.</p>
 <tbody>
 <tr class="odd">
 <td align="left">MILD</td>
-<td align="left">22 (59.46%)</td>
-<td align="left">72 (77.42%)</td>
-<td align="left">46 (47.92%)</td>
+<td align="left">27 (64.29%)</td>
+<td align="left">70 (76.92%)</td>
+<td align="left">44 (47.31%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">MODERATE</td>
-<td align="left">15 (40.54%)</td>
-<td align="left">20 (21.51%)</td>
-<td align="left">48 (50.00%)</td>
+<td align="left">15 (35.71%)</td>
+<td align="left">20 (21.98%)</td>
+<td align="left">44 (47.31%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">SEVERE</td>
 <td align="left">0 ( 0.00%)</td>
-<td align="left">1 ( 1.08%)</td>
-<td align="left">2 ( 2.08%)</td>
+<td align="left">1 ( 1.10%)</td>
+<td align="left">5 ( 5.38%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Missing</td>
-<td align="left">10</td>
-<td align="left">18</td>
-<td align="left">22</td>
+<td align="left">5</td>
+<td align="left">20</td>
+<td align="left">25</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
@@ -1833,7 +1836,7 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">8 ( 15.1%)</td>
+<td align="left">9 ( 17.0%)</td>
 <td align="left">2 ( 5.0%)</td>
 <td align="left">5 ( 10.0%)</td>
 <td align="right">1</td>
@@ -1843,9 +1846,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">20 ( 37.7%)</td>
-<td align="left">7 ( 17.5%)</td>
-<td align="left">12 ( 24.0%)</td>
+<td align="left">19 ( 35.8%)</td>
+<td align="left">6 ( 15.0%)</td>
+<td align="left">15 ( 30.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1853,9 +1856,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">16 ( 30.2%)</td>
+<td align="left">17 ( 32.1%)</td>
 <td align="left">23 ( 57.5%)</td>
-<td align="left">24 ( 48.0%)</td>
+<td align="left">20 ( 40.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1863,9 +1866,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">9 (17.0%)</td>
-<td align="left">8 (20.0%)</td>
-<td align="left">9 (18.0%)</td>
+<td align="left">8 (15.1%)</td>
+<td align="left">9 (22.5%)</td>
+<td align="left">10 (20.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -1883,8 +1886,8 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">3 ( 9.1%)</td>
-<td align="left">5 ( 11.4%)</td>
+<td align="left">5 ( 15.2%)</td>
+<td align="left">4 ( 9.1%)</td>
 <td align="left">2 ( 5.9%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1893,9 +1896,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">5 ( 15.2%)</td>
-<td align="left">10 ( 22.7%)</td>
-<td align="left">8 ( 23.5%)</td>
+<td align="left">8 ( 24.2%)</td>
+<td align="left">8 ( 18.2%)</td>
+<td align="left">11 ( 32.4%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -1903,9 +1906,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">18 ( 54.5%)</td>
-<td align="left">22 ( 50.0%)</td>
-<td align="left">14 ( 41.2%)</td>
+<td align="left">17 ( 51.5%)</td>
+<td align="left">21 ( 47.7%)</td>
+<td align="left">12 ( 35.3%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -1913,9 +1916,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">7 (21.2%)</td>
-<td align="left">7 (15.9%)</td>
-<td align="left">10 (29.4%)</td>
+<td align="left">3 ( 9.1%)</td>
+<td align="left">11 (25.0%)</td>
+<td align="left">9 (26.5%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -1966,9 +1969,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">All Age Groups</td>
-<td align="left">44</td>
-<td align="left">32</td>
-<td align="left">41</td>
+<td align="left">45</td>
+<td align="left">31</td>
+<td align="left">40</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">-Inf</td>
@@ -1976,9 +1979,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">8 ( 18.2%)</td>
-<td align="left">2 ( 6.2%)</td>
-<td align="left">5 ( 12.2%)</td>
+<td align="left">9 ( 20.0%)</td>
+<td align="left">2 ( 6.5%)</td>
+<td align="left">5 ( 12.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1986,9 +1989,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">20 ( 45.5%)</td>
-<td align="left">7 ( 21.9%)</td>
-<td align="left">12 ( 29.3%)</td>
+<td align="left">19 ( 42.2%)</td>
+<td align="left">6 ( 19.4%)</td>
+<td align="left">15 ( 37.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1996,9 +1999,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">16 ( 36.4%)</td>
-<td align="left">23 ( 71.9%)</td>
-<td align="left">24 ( 58.5%)</td>
+<td align="left">17 ( 37.8%)</td>
+<td align="left">23 ( 74.2%)</td>
+<td align="left">20 ( 50.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -2006,9 +2009,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">9</td>
 <td align="left">8</td>
 <td align="left">9</td>
+<td align="left">10</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -2016,9 +2019,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">All Age Groups</td>
-<td align="left">26</td>
-<td align="left">37</td>
-<td align="left">24</td>
+<td align="left">30</td>
+<td align="left">33</td>
+<td align="left">25</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">-Inf</td>
@@ -2026,9 +2029,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">3 ( 11.5%)</td>
-<td align="left">5 ( 13.5%)</td>
-<td align="left">2 ( 8.3%)</td>
+<td align="left">5 ( 16.7%)</td>
+<td align="left">4 ( 12.1%)</td>
+<td align="left">2 ( 8.0%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -2036,9 +2039,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">5 ( 19.2%)</td>
-<td align="left">10 ( 27.0%)</td>
-<td align="left">8 ( 33.3%)</td>
+<td align="left">8 ( 26.7%)</td>
+<td align="left">8 ( 24.2%)</td>
+<td align="left">11 ( 44.0%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -2046,9 +2049,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">18 ( 69.2%)</td>
-<td align="left">22 ( 59.5%)</td>
-<td align="left">14 ( 58.3%)</td>
+<td align="left">17 ( 56.7%)</td>
+<td align="left">21 ( 63.6%)</td>
+<td align="left">12 ( 48.0%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -2056,9 +2059,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">7</td>
-<td align="left">7</td>
-<td align="left">10</td>
+<td align="left">3</td>
+<td align="left">11</td>
+<td align="left">9</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -2091,7 +2094,7 @@ records were excluded.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
