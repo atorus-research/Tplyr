@@ -1,6 +1,12 @@
+url: https://atorus-research.github.io/Tplyr
 destination: docs
 
 template:
+  bootstrap: 5
+  bslib:
+    bg: "#FFFFFF"
+    fg: "#1D252D"
+    primary: "#004F5B"
   params:
     bootswatch: yeti
     ganalytics: UA-165685385-2
@@ -11,7 +17,16 @@ template:
     twitter:
       creator: "@AtorusR"
       card: summary_large_image
-
+search:
+  exclude: ['news/index.html']
+repo:
+  url:
+    home: https://github.com/atorus-research/Tplyr/
+    source: https://github.com/atorus-research/Tplyr/blob/main/
+    issue: https://github.com/atorus-research/Tplyr/issues/
+    user: https://github.com/atorus-research
+news:
+  cran_dates: true
 reference:
 - title: Build
   desc: High-level functions to create and build a table
