@@ -39,7 +39,7 @@ A data.frame
 \description{
 Given a row_id value and a result column, this function will return the
 subset of data referenced by the tplyr_meta object associated with that
-'cell'.
+'cell', which provides traceability to tie a result to its source.
 }
 \details{
 If a Tplyr table is built with the \code{metadata=TRUE} option specified, then
