@@ -87,7 +87,7 @@ Note how in the above example, there are two new columns added to the data - `va
 
 ## Population Data
 
-A last and very important aspect of table level properties in 'Tplyr' is the addition of a population dataset. In CDISC standards, datasets like `adae` only contain adverse events when the occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you're subsetting for, they don't appear in the dataset. When you're looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, `adae` itself leaves you no way to calculate that total - as the subjects won't exist in the data.
+A last and very important aspect of table level properties in 'Tplyr' is the addition of a population dataset. In CDISC standards, datasets like `adae` only contain adverse events when they occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you're subsetting for, they don't appear in the dataset. When you're looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, `adae` itself leaves you no way to calculate that total - as the subjects won't exist in the data.
 
 'Tplyr' allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter and a population treatment variable named `pop_treat_var`, as variable names may differ between the datasets.
 
