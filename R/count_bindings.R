@@ -656,6 +656,9 @@ keep_levels <- function(e, ...) {
 
 #' Set a numeric cutoff
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' In certain tables, it may be necessary to only include rows that meet numeric
 #' conditions. Rows that are less than a certain cutoff can be suppressed from
 #' the output. This function allows you to pass a cutoff, a cutoff stat(n,
@@ -674,6 +677,7 @@ keep_levels <- function(e, ...) {
 #'
 #' @return The modified Tplyr layer object
 #' @export
+#' @md
 #'
 #' @examples
 #' mtcars %>%
