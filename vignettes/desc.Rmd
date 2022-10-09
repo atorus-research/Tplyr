@@ -201,6 +201,7 @@ A lot of the nuance to formatting descriptive statistics layers has already been
 By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out. 
 
 ```{r missing}
+adlb <- 
 adlb_2 <- adlb %>% 
   filter(TRTA != "Placebo")
 
@@ -218,9 +219,14 @@ tplyr_table(adlb_2, TRTA) %>%
 
 ```
 
-Note how the entire example above has all records in `var1_Placebo` missing. 'Tplyr' gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the `f_str()` object using the `empty` parameter
+Note how the entire example above has all records in `var1_Placebo` missing. 'Tplyr' gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the `f_str()` object using the `empty` parameter.
+
+_Note: Tplyr generally respects factor levels - so in instances of a missing row or column group, if the factor level is present, then the variable or row will still generate)_
 
 ```{r missing1}
+adsl$TRT01P <- as.factor(adsl$TRT01P)
+adlb$TRTA <- as.factor(adlb$TRTA)
+
 adlb_2 <- adlb %>% 
   filter(TRTA != "Placebo")
 
@@ -240,9 +246,6 @@ tplyr_table(adlb_2, TRTA) %>%
 Look at the `empty` parameter above. Here, we use a named character vector, where the name is `.overall`. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you'd like to see. Perhaps we want a string that fills each missing space.
 
 ```{r missing2}
-adlb_2 <- adlb %>% 
-  filter(TRTA != "Placebo")
-
 tplyr_table(adlb_2, TRTA) %>% 
   set_pop_data(adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
@@ -319,4 +322,64 @@ tplyr_table(adlb, TRTA) %>%
 
 ```
 
-Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? `set_precision_on()` allows you to specify this, where the `precision_on()` variable must be one of the variables within `target_var`. Similarly, `set_precision_by()` changes the `by` variables used to determine collected precision. If no `precision_on()` variable is specified, the first variable in `target_var` is used. If no `precision_by()` variables are specified, then the default `by` variables are used.
+Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? `set_precision_on()` allows you to specify this, where the `precision_on()` variable must be one of the variables within `target_var`. Similarly, `set_precision_by()` changes the `by` variables used to determine collected precision. If no `precision_on()` variable is specified, the first variable in `target_var` is used. If no `precision_by` variables are specified, then the default `by` variables are used.
+
+### External Precision
+
+Lastly, while dynamic precision might be what you're looking for, you may not want precision driven by the data. Perhaps there's a company standard that dictates what decimal precision should be used for each separate lab test. Maybe even deeper down to the lab test and category. New in Tplyr 1.0.0 we've added the ability to take decimal precision from an external source.
+
+The principal of external precision is exactly the same as auto-precision. The only difference is that you - the user - provide the precision table that Tplyr was automatically calculating in the background. This is done using the new function `set_precision_data()`. In the output below, Notice how the precision by PARAMCD varies depending on what was specified in the data frame `prec_data`. 
+
+
+```{r external-precision}
+
+prec_data <- tibble::tribble(
+  ~PARAMCD, ~max_int, ~max_dec,
+  "BUN",   1, 0,
+  "CA",    2, 4,
+  "CK",    3, 1,
+  "GGT",   3, 0,
+  "URATE", 3, 1,
+)
+  
+tplyr_table(adlb, TRTA) %>% 
+  add_layer(
+    group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd, empty="NA")
+      ) %>% 
+      set_precision_on(AVAL) %>% 
+      set_precision_by(PARAMCD) %>%
+      set_precision_data(prec_data)
+  ) %>%
+  build() %>% 
+  head() %>% 
+  kable()
+
+```
+
+If one of your by variable groups are missing in the precision data, Tplyr can default back to using auto-precision by using the option `default=auto`. 
+
+```{r external-precision2}
+
+prec_data <- tibble::tribble(
+  ~PARAMCD, ~max_int, ~max_dec,
+  "BUN", 1, 0,
+  "CA",  2, 4,
+  "CK",  3, 1,
+  "GGT", 3, 0,
+)
+  
+tplyr_table(adlb, TRTA) %>% 
+  add_layer(
+    group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd, empty="NA")
+      ) %>% 
+      set_precision_on(AVAL) %>% 
+      set_precision_by(PARAMCD) %>%
+      set_precision_data(prec_data, default="auto")
+  ) %>%
+  build() %>% 
+  head() 
+```
