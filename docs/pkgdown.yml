@@ -15,5 +15,8 @@ articles:
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2022-10-07T18:48Z
+last_built: 2022-10-09T18:52Z
+urls:
+  reference: https://atorus-research.github.io/Tplyr/reference
+  article: https://atorus-research.github.io/Tplyr/articles
 
