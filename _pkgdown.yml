@@ -6,7 +6,7 @@ template:
   bslib:
     bg: "#FFFFFF"
     fg: "#1D252D"
-    primary: "#004F5B"
+    primary: "#1D252D"
   params:
     bootswatch: yeti
     ganalytics: UA-165685385-2
