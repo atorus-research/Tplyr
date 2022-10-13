@@ -178,43 +178,6 @@ process_single_count_target <- function(x) {
   }, envir = x)
 }
 
-#' This function resets the variables for a nested layer after it was built
-#' @noRd
-refresh_nest <- function(x) {
-  env_bind(x, by = env_get(x, "by_saved"))
-  env_bind(x, target_var = env_get(x, "target_var_saved"))
-}
-
-#' This function is meant to remove the values of an inner layer that don't
-#' appear in the target data
-#' @noRd
-filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation) {
-
-  # Is outer variable text? If it is don't filter on it
-  text_outer <- !quo_is_symbol(outer_name)
-  outer_name <- as_name(outer_name)
-  inner_name <- as_name(inner_name)
-
-  if (text_outer) {
-    target_inner_values <- target %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      paste0(indentation, .)
-  } else {
-    current_outer_value <- unique(.group[, outer_name])[[1]]
-
-    target_inner_values <- target %>%
-      filter(!!sym(outer_name) == current_outer_value) %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      paste0(indentation, .)
-  }
-
-  .group %>%
-    filter(summary_var %in% target_inner_values)
-
-}
-
 #' Process the n count data and put into summary_stat
 #'
 #' @param x Count layer
