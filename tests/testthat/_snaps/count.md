@@ -287,9 +287,9 @@
       # A tibble: 3 x 6
         row_label1 var1_3            var1_4            var1_5          ord_l~1 ord_l~2
         <chr>      <chr>             <chr>             <chr>             <int>   <dbl>
-      1 4          "  1   3   1  15" "  2   4   8  12" "  1   3   2  ~       1       1
-      2 6          "  1   3   2  15" "  2   4   4  12" "  1   3   1  ~       1       2
-      3 8          "  1   3  12  15" "  0   4   0  12" "  1   3   2  ~       1       3
+      1 4          "  1   1   1  15" "  2   2   8  12" "  1   1   2  ~       1       1
+      2 6          "  1   1   2  15" "  2   2   4  12" "  1   1   1  ~       1       2
+      3 8          "  1   1  12  15" "  0   2   0  12" "  1   1   2  ~       1       3
       # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
 
 # denoms with distinct population data populates as expected

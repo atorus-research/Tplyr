@@ -268,9 +268,8 @@ process_count_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]])) %>% ##
+      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]])) %>%
       group_by(!!!denoms_by_) %>%
-      do(get_denom_total(., denoms_by_, denoms_df, "distinct_n")) %>%
       ungroup()
 
     rm(denoms_by_)
@@ -717,9 +716,9 @@ process_count_denoms <- function(x) {
     names(by_join) <- as_name(treat_var)
 
     denoms_df <- denoms_df_n %>%
-      left_join(denoms_df_dist, by = by_join) %>%
       complete(!!!layer_params[param_apears],
-               fill = list(n = 0, distinct_n = 0))
+               fill = list(n = 0)) %>%
+      left_join(denoms_df_dist, by = by_join)
 
     if (as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%
