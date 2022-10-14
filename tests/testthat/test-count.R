@@ -782,8 +782,7 @@ test_that("set_numeric_threshold works as expected", {
     tplyr_table(TRTA) %>%
     add_layer(
       group_count(vars(AEBODSYS, AEDECOD)) %>%
-        set_numeric_threshold(3, "n", "Placebo") %>%
-        add_total_row()
+        set_numeric_threshold(3, "n", "Placebo")
     )
 
   expect_snapshot(build(t7))
@@ -793,7 +792,6 @@ test_that("set_numeric_threshold works as expected", {
     add_layer(
       group_count(vars(AEBODSYS, AEDECOD)) %>%
         set_numeric_threshold(3, "n", "Placebo") %>%
-        add_total_row() %>%
         set_order_count_method("bycount")
     )
 
@@ -841,4 +839,16 @@ test_that("denoms with distinct population data populates as expected", {
     build()
 
   expect_snapshot(tab)
+})
+
+test_that("nested count layers error out when you try to add a total row", {
+
+  # GH issue 92
+  tab <- tplyr_table(mtcars, am) %>%
+    add_layer(
+      group_count(vars(cyl, grp)) %>%
+        add_total_row()
+    )
+
+    expect_snapshot_error(build(tab))
 })

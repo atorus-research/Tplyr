@@ -225,19 +225,18 @@
     Code
       build(t7)
     Output
-      # A tibble: 10 x 8
-         row_label1            row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
-         <chr>                 <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
-       1 GASTROINTESTINAL DIS~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       1     Inf
-       2 GASTROINTESTINAL DIS~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       1       1
-       3 GENERAL DISORDERS AN~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1       2     Inf
-       4 GENERAL DISORDERS AN~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1       2       1
-       5 INFECTIONS AND INFES~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
-       6 INFECTIONS AND INFES~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
-       7 SKIN AND SUBCUTANEOU~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1       4     Inf
-       8 SKIN AND SUBCUTANEOU~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1       4       1
-       9 SKIN AND SUBCUTANEOU~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1       4       2
-      10 Total                 "Total" "47 (1~ "77 (1~ "76 (1~       1       5     Inf
+      # A tibble: 9 x 8
+        row_label1             row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
+        <chr>                  <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
+      1 GASTROINTESTINAL DISO~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       1     Inf
+      2 GASTROINTESTINAL DISO~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       1       1
+      3 GENERAL DISORDERS AND~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1       2     Inf
+      4 GENERAL DISORDERS AND~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1       2       1
+      5 INFECTIONS AND INFEST~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
+      6 INFECTIONS AND INFEST~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
+      7 SKIN AND SUBCUTANEOUS~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1       4     Inf
+      8 SKIN AND SUBCUTANEOUS~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1       4       1
+      9 SKIN AND SUBCUTANEOUS~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1       4       2
       # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
       #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
       #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
@@ -247,19 +246,18 @@
     Code
       build(t8)
     Output
-      # A tibble: 10 x 8
-         row_label1            row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
-         <chr>                 <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
-       1 GASTROINTESTINAL DIS~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       3     Inf
-       2 GASTROINTESTINAL DIS~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       3       2
-       3 GENERAL DISORDERS AN~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1      21     Inf
-       4 GENERAL DISORDERS AN~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1      21       5
-       5 INFECTIONS AND INFES~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
-       6 INFECTIONS AND INFES~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
-       7 SKIN AND SUBCUTANEOU~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1      26     Inf
-       8 SKIN AND SUBCUTANEOU~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1      26       2
-       9 SKIN AND SUBCUTANEOU~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1      26       7
-      10 Total                 "Total" "47 (1~ "77 (1~ "76 (1~       1      76     Inf
+      # A tibble: 9 x 8
+        row_label1             row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
+        <chr>                  <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
+      1 GASTROINTESTINAL DISO~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       3     Inf
+      2 GASTROINTESTINAL DISO~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       3       2
+      3 GENERAL DISORDERS AND~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1      21     Inf
+      4 GENERAL DISORDERS AND~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1      21       5
+      5 INFECTIONS AND INFEST~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
+      6 INFECTIONS AND INFEST~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
+      7 SKIN AND SUBCUTANEOUS~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1      26     Inf
+      8 SKIN AND SUBCUTANEOUS~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1      26       2
+      9 SKIN AND SUBCUTANEOUS~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1      26       7
       # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
       #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
       #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
@@ -287,9 +285,9 @@
       # A tibble: 3 x 6
         row_label1 var1_3            var1_4            var1_5          ord_l~1 ord_l~2
         <chr>      <chr>             <chr>             <chr>             <int>   <dbl>
-      1 4          "  1   3   1  15" "  2   4   8  12" "  1   3   2  ~       1       1
-      2 6          "  1   3   2  15" "  2   4   4  12" "  1   3   1  ~       1       2
-      3 8          "  1   3  12  15" "  0   4   0  12" "  1   3   2  ~       1       3
+      1 4          "  1   1   1  15" "  2   2   8  12" "  1   1   2  ~       1       1
+      2 6          "  1   1   2  15" "  2   2   4  12" "  1   1   1  ~       1       2
+      3 8          "  1   1  12  15" "  0   2   0  12" "  1   1   2  ~       1       3
       # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
 
 # denoms with distinct population data populates as expected
@@ -304,4 +302,8 @@
       # ... with abbreviated variable names 1: var1_Placebo, 2: var1_Total,
       #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
       #   5: ord_layer_index, 6: ord_layer_1
+
+# nested count layers error out when you try to add a total row
+
+    You can't include total rows in nested counts. Instead, add a seperate layer for total counts.
 

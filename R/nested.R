@@ -5,8 +5,6 @@ process_nested_count_target <- function(x) {
 
     if(is.null(indentation)) indentation <- "   "
 
-
-
     assert_that(quo_is_symbol(target_var[[2]]),
                 msg = "Inner layers must be data driven variables")
 
@@ -27,6 +25,10 @@ process_nested_count_target <- function(x) {
       warning(paste0("Factors are not currently supported in nested count layers",
                      " that have two data driven variables. Factors will be coerced into character vectors"),
               immediate. = TRUE)
+    }
+
+    if (isTRUE(include_total_row)) {
+      abort("You can't include total rows in nested counts. Instead, add a seperate layer for total counts.")
     }
 
     if (!is.null(denoms_by)) {
