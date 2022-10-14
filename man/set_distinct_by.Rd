@@ -23,8 +23,9 @@ the by variables used to determine a distinct count.
 \details{
 When a \code{distinct_by} value is set, distinct counts will be used by
 default. If you wish to combine distinct and not distinct counts, you can
-choose which to display in your \code{\link{f_str}} objects using \code{n},
-\code{pct}, \code{distinct}, and \code{distinct_pct}.
+choose which to display in your \code{f_str()} objects using \code{n},
+\code{pct}, \code{distinct_n}, and \code{distinct_pct}. Additionally, denominators
+may be presented using \code{total} and \code{distinct_total}
 }
 \examples{
 #Load in pipe

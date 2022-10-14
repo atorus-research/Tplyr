@@ -1,3 +1,20 @@
+# Tplyr 1.0.0
+
+- New features
+  - Introduction of traceability metadata framework #32
+  - Framework for creating re-usable layer templates #66
+  - Native pipe compatibility #33
+  - Automatically load magrittr pipe #22
+  - Refactor of count layer programming #28
+  - Allow external precision data for desc layers #27
+  - Allow denominators within count layers as formattable values #11
+  - Descriptive statistics layers allow stats as columns #37
+  - New experimental function `set_numeric_threshold()`
+  - Apply f_str's outside of a Tplyr table with new function `apply_formats()` #57
+  - New post processing function helper `str_indent_wrap()` for hyphen-enabled string wrapping #59
+- Bug fixes
+  - Fix errors in partially provided precision caps #20
+
 # Tplyr 0.4.4
 
 - Added new functionality per issue #10. Adds 'Both' an option for sorting outer layers of nested count.

@@ -22,6 +22,8 @@ can be supplied here as a character value.}
 The modified Tplyr layer object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 In certain tables, it may be necessary to only include rows that meet numeric
 conditions. Rows that are less than a certain cutoff can be suppressed from
 the output. This function allows you to pass a cutoff, a cutoff stat(n,

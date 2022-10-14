@@ -285,4 +285,6 @@ tplyr_table(adsl2, TRT01P) %>%
 
 Now the table is more intuitive. We used `set_missing_count()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
 
+_You may have stumbled upon this portion of the vignette while searching for how to create a total column. Tplyr allows you to do this as well with the function `add_total_group()` and read more in `vignette("table")`._ 
+
 And that's it for denominators! Happy counting!

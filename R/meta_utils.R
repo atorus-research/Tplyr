@@ -83,7 +83,7 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
 #'
 #' Given a row_id value and a result column, this function will return the
 #' subset of data referenced by the tplyr_meta object associated with that
-#' 'cell'.
+#' 'cell', which provides traceability to tie a result to its source.
 #'
 #' If a Tplyr table is built with the `metadata=TRUE` option specified, then
 #' metadata is assembled behind the scenes to provide traceability on each
