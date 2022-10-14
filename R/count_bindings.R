@@ -90,19 +90,21 @@ set_total_row_label <- function(e, total_row_label) {
 #'
 #' In some situations, count summaries may want to see distinct counts by a
 #' variable like subject. For example, the number of subjects in a population
-#' who had a particular adverse event. \code{set_distinct_by} allows you to set
+#' who had a particular adverse event. `set_distinct_by` allows you to set
 #' the by variables used to determine a distinct count.
 #'
-#' When a \code{distinct_by} value is set, distinct counts will be used by
+#' When a `distinct_by` value is set, distinct counts will be used by
 #' default. If you wish to combine distinct and not distinct counts, you can
-#' choose which to display in your \code{\link{f_str}} objects using \code{n},
-#' \code{pct}, \code{distinct}, and \code{distinct_pct}.
+#' choose which to display in your `f_str()` objects using `n`,
+#' `pct`, `distinct_n`, and `distinct_pct`. Additionally, denominators
+#' may be presented using `total` and `distinct_total`
 #'
-#' @param e A \code{count_layer/shift_layer} object
+#' @param e A `count_layer/shift_layer` object
 #' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
 #' @export
+#' @md
 #'
 #' @examples
 #' #Load in pipe
