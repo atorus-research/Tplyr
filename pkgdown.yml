@@ -1,17 +1,22 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   Tplyr: Tplyr.html
   count: count.html
+  custom-metadata: custom-metadata.html
   denom: denom.html
   desc: desc.html
+  layer_templates: layer_templates.html
+  metadata: metadata.html
   options: options.html
-  readme: readme.html
   riskdiff: riskdiff.html
   shift: shift.html
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2022-01-27T15:05Z
+last_built: 2022-10-14T21:15Z
+urls:
+  reference: https://atorus-research.github.io/Tplyr/reference
+  article: https://atorus-research.github.io/Tplyr/articles
 

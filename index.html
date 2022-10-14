@@ -4,22 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Grammar of Clinical Data Summary • Tplyr</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="A traceability focused tool created to simplify the data manipulation necessary to create clinical summaries.">
+<title>A Traceability Focused Grammar of Clinical Data Summary • Tplyr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="A Grammar of Clinical Data Summary">
-<meta property="og:description" content="A tool created to simplify the data manipulation necessary to create clinical reports.">
-<meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Traceability Focused Grammar of Clinical Data Summary">
+<meta property="og:description" content="A traceability focused tool created to simplify the data manipulation necessary to create clinical summaries.">
+<meta property="og:image" content="https://atorus-research.github.io/Tplyr/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@AtorusR">
@@ -35,135 +35,108 @@
   gtag('config', 'UA-165685385-2');
 </script>
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="index.html">Tplyr</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="articles/Tplyr.html">Get started</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="articles/Tplyr.html">Get started</a>
 </li>
-<li>
-  <a href="reference/index.html">Reference</a>
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    </li>
-<li class="dropdown-header">Table Vignettes</li>
-    <li>
-      <a href="articles/table.html">Tplyr Table Properties</a>
-    </li>
-    <li class="divider">
-    </li>
-<li class="dropdown-header">Layer Vignettes</li>
-    <li>
-      <a href="articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="articles/count.html">Count Layers</a>
-    </li>
-    <li>
-      <a href="articles/shift.html">Shift Layers</a>
-    </li>
-    <li class="divider">
-    </li>
-<li class="dropdown-header">Helpers</li>
-    <li>
-      <a href="articles/riskdiff.html">Risk Difference</a>
-    </li>
-    <li>
-      <a href="articles/sort.html">Sorting a Tplyr Table</a>
-    </li>
-    <li>
-      <a href="articles/options.html">Tplyr Options</a>
-    </li>
-    <li>
-      <a href="articles/styled-table.html">Producing a Styled Table</a>
-    </li>
-    <li>
-      <a href="articles/denom.html">Totals, Missings, and Denominators</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Table Vignettes</h6>
+    <a class="dropdown-item" href="articles/table.html">Tplyr Table Properties</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Layer Vignettes</h6>
+    <a class="dropdown-item" href="articles/desc.html">Descriptive Statistic Layers</a>
+    <a class="dropdown-item" href="articles/count.html">Count Layers</a>
+    <a class="dropdown-item" href="articles/shift.html">Shift Layers</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Helpers</h6>
+    <a class="dropdown-item" href="articles/riskdiff.html">Risk Difference</a>
+    <a class="dropdown-item" href="articles/sort.html">Sorting a Tplyr Table</a>
+    <a class="dropdown-item" href="articles/options.html">Tplyr Options</a>
+    <a class="dropdown-item" href="articles/layer_templates.html">Layer Templates</a>
+    <a class="dropdown-item" href="articles/styled-table.html">Producing a Styled Table</a>
+    <a class="dropdown-item" href="articles/denom.html">Totals, Missings, and Denominators</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Metadata</h6>
+    <a class="dropdown-item" href="articles/metadata.html">Tplyr Metadata</a>
+    <a class="dropdown-item" href="articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
   </div>
-<!--/.container -->
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/atorus-research/Tplyr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-
-<div class="section level1">
-<div class="page-header"><h1 id="tplyr-">Tplyr <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#tplyr-"></a>
-</h1></div>
+    
+  </div>
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="tplyr-">Tplyr <a class="anchor" aria-label="anchor" href="#tplyr-"></a>
+</h1>
+</div>
 <!-- badges: start -->
-
-<p>Welcome to Tplyr! Tplyr is a grammar of data format and summary. It’s designed to simplify the creation of clinical safety summaries and help you focus on how you present your data rather than redundant summaries being performed.</p>
+<p>Welcome to Tplyr! Tplyr is a traceability minded grammar of data format and summary. It’s designed to simplify the creation of common clinical summaries and help you focus on how you present your data rather than redundant summaries being performed. Furthermore, for every result Tplyr produces, it also produces the metadata necessary to give your traceability from source to summary.</p>
 <p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues" class="external-link">here</a>.</p>
-<p>Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf" class="external-link">cheatsheet!</a></p>
+<p>Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf">cheatsheet!</a></p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>You can Tplyr install with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Install from CRAN:</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span>
-
-<span class="co"># Or install the development version:</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Install from CRAN:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or install the development version:</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span>, ref<span class="op">=</span><span class="st">"devel"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="what-is-tplyr">What is Tplyr?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
 </h1>
 <p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
-<p><code>Tplyr</code> is designed around a similar concept, but its focus is on building summary tables within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
+<p><code>Tplyr</code> is designed around a similar concept, but its focus is on building summary tables common within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
 <ul>
 <li>Counting for event based variables or categories</li>
 <li>Shifting, which is just counting a change in state with a ‘from’ and a ‘to’</li>
 <li>Generating descriptive statistics around some continuous variable.</li>
 </ul>
-<p>For many of the tables that go into a clinical submission, at least when considering safety outputs, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
-<p align="center">
-<img src="articles/demo_table.png" width="800px"></p>
+<p>For many of the tables that go into a clinical submission, the tables are made up of a combination of these approaches. Consider a demographics table - and let’s use an example from the PHUSE project Standard Analyses &amp; Code Sharing - <a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses &amp; Displays Associated with Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials and Integrated Summary Documents</a>.</p>
+<p align="center"><img src="articles/demo_table.png" width="800px"></p>
 <p>When you look at this table, you can begin breaking this output down into smaller, redundant, components. These components can be viewed as ‘layers’, and the table as a whole is constructed by stacking the layers. The boxes in the image above represent how you can begin to conceptualize this.</p>
 <ul>
 <li>First we have Sex, which is made up of n (%) counts.</li>
@@ -176,23 +149,24 @@
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
 <p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AGEGR1</span>, by <span class="op">=</span> <span class="st">"Age Categories n (%)"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="14%">
+<col width="15%">
 <col width="8%">
 <col width="9%">
 <col width="18%">
-<col width="17%">
-<col width="12%">
+<col width="18%">
+<col width="11%">
 <col width="9%">
 <col width="9%">
 </colgroup>
@@ -302,7 +276,7 @@
 <div class="section level2">
 <h2 id="tplyr-is-qualified">‘Tplyr’ is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
 </h2>
-<p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing ’Tplyr includes an entire user-acceptable testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
+<p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing ’Tplyr includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
 <p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf" class="external-link">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
 </div>
 <div class="section level2">
@@ -342,6 +316,13 @@
 <li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code><a href="articles/styled-table.html">vignette("styled-table")</a></code>
 </li>
 </ul>
+<p>In the Tplyr version 1.0.0, we’ve packed a number of new features in. For deeper dives on the largest new additions:</p>
+<ul>
+<li>Learn about Tplyr’s traceability metadata in <code><a href="articles/metadata.html">vignette("metadata")</a></code> and about how it can be extended in <code>vigentte("custom-metadata")</code>
+</li>
+<li>Learn about layer templates in <code><a href="articles/layer_templates.html">vignette("layer_templates")</a></code>
+</li>
+</ul>
 </div>
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -352,10 +333,7 @@
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf" class="external-link">Analyses and Displays Associated with Measures of Central Tendency</a></p>
 </div>
 
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=Tplyr" class="external-link">View on CRAN</a></li>
@@ -400,34 +378,33 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://ostinclinicalresearch.slack.com" class="external-link"><img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&amp;logo=slack"></a></li>
+<li><a href="https://pharmaverse.org" class="external-link"><img src="http://pharmaverse.org/shields/Tplyr.svg"></a></li>
 <li><a href="https://RValidationHub.slack.com" class="external-link"><img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&amp;logo=slack"></a></li>
 <li><a href="https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check" class="external-link"><img src="https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://app.codecov.io/gh/atorus-research/tplyr" class="external-link"><img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr"></a></li>
 <li><a href="https://github.com/atorus-research/Tplyr/blob/master/LICENSE" class="external-link"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental-1" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 
-  </div>
+  </aside>
 </div>
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 

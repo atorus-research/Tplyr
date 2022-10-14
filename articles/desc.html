@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Tplyr">
 <title>Descriptive Statistic Layers • Tplyr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,14 +13,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Descriptive Statistic Layers">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Descriptive Statistic Layers">
 <meta property="og:description" content="Tplyr">
-<meta property="og:image" content="/reference/figures/Atorus_Stickers_vF_Tplyr.png">
+<meta property="og:image" content="https://atorus-research.github.io/Tplyr/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@AtorusR">
@@ -35,128 +35,104 @@
   gtag('config', 'UA-165685385-2');
 </script>
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">Tplyr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../articles/Tplyr.html">Get started</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/Tplyr.html">Get started</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    </li>
-<li class="dropdown-header">Table Vignettes</li>
-    <li>
-      <a href="../articles/table.html">Tplyr Table Properties</a>
-    </li>
-    <li class="divider">
-    </li>
-<li class="dropdown-header">Layer Vignettes</li>
-    <li>
-      <a href="../articles/desc.html">Descriptive Statistic Layers</a>
-    </li>
-    <li>
-      <a href="../articles/count.html">Count Layers</a>
-    </li>
-    <li>
-      <a href="../articles/shift.html">Shift Layers</a>
-    </li>
-    <li class="divider">
-    </li>
-<li class="dropdown-header">Helpers</li>
-    <li>
-      <a href="../articles/riskdiff.html">Risk Difference</a>
-    </li>
-    <li>
-      <a href="../articles/sort.html">Sorting a Tplyr Table</a>
-    </li>
-    <li>
-      <a href="../articles/options.html">Tplyr Options</a>
-    </li>
-    <li>
-      <a href="../articles/styled-table.html">Producing a Styled Table</a>
-    </li>
-    <li>
-      <a href="../articles/denom.html">Totals, Missings, and Denominators</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/atorus-research/Tplyr/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Table Vignettes</h6>
+    <a class="dropdown-item" href="../articles/table.html">Tplyr Table Properties</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Layer Vignettes</h6>
+    <a class="dropdown-item" href="../articles/desc.html">Descriptive Statistic Layers</a>
+    <a class="dropdown-item" href="../articles/count.html">Count Layers</a>
+    <a class="dropdown-item" href="../articles/shift.html">Shift Layers</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Helpers</h6>
+    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <a class="dropdown-item" href="../articles/sort.html">Sorting a Tplyr Table</a>
+    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
+    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
+    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
+    <a class="dropdown-item" href="../articles/denom.html">Totals, Missings, and Denominators</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Metadata</h6>
+    <a class="dropdown-item" href="../articles/metadata.html">Tplyr Metadata</a>
+    <a class="dropdown-item" href="../articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
   </div>
-<!--/.container -->
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/atorus-research/Tplyr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
+    
+  </div>
+</nav><div class="container template-article">
 
-      </header><script src="desc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Descriptive Statistic Layers</h1>
+
+
+<script src="desc_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Descriptive Statistic Layers</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/HEAD/vignettes/desc.Rmd" class="external-link"><code>vignettes/desc.Rmd</code></a></small>
-      <div class="hidden name"><code>desc.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/atorus-research/Tplyr/blob/main/vignettes/desc.Rmd" class="external-link"><code>vignettes/desc.Rmd</code></a></small>
+      <div class="d-none name"><code>desc.Rmd</code></div>
     </div>
 
     
     
 <p>Descriptive statistics in ‘Tplyr’ are created using <code><a href="../reference/layer_constructors.html">group_desc()</a></code> function when creating a layer. While <code><a href="../reference/layer_constructors.html">group_desc()</a></code> allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> where the actual summaries are declared.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span>, where<span class="op">=</span> <span class="va">SAFFL</span><span class="op">==</span><span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
-        <span class="st">"n"</span>        <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>,
-        <span class="st">"Mean (SD)"</span><span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx.x (xx.xx)"</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,
-        <span class="st">"Median"</span>   <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx.x"</span>, <span class="va">median</span><span class="op">)</span>,
-        <span class="st">"Q1, Q3"</span>   <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx, xx"</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span>,
-        <span class="st">"Min, Max"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx, xx"</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span>,
-        <span class="st">"Missing"</span>  <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">missing</span><span class="op">)</span>
-      <span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span>, where<span class="op">=</span> <span class="va">SAFFL</span><span class="op">==</span><span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">"n"</span>        <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Mean (SD)"</span><span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx.x (xx.xx)"</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Median"</span>   <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx.x"</span>, <span class="va">median</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Q1, Q3"</span>   <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx, xx"</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Min, Max"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx, xx"</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Missing"</span>  <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx"</span>, <span class="va">missing</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="9%">
@@ -331,14 +307,14 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 \]</span> That said, we still want to offer some flexibility here, so you can change the quantile algorithm by switching the <code>tplyr.quantile_type</code> option. If you’re intending to match the SAS definition, you can use Type 3. For more information, see the <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> documentation.</p>
 <p>The example below demonstrates using the default quantile algorithm in R.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Q1, Q3"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxxxx, xxxxx'</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Q1, Q3"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxxxx, xxxxx'</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -358,15 +334,15 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 \textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
 \]</span></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.quantile_type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Q1, Q3"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxxxx, xxxxx'</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.quantile_type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Q1, Q3"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxxxx, xxxxx'</span>, <span class="va">q1</span>, <span class="va">q3</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -397,19 +373,19 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p>As with any other setting in ‘Tplyr’, the layer setting will always take precedence over any other setting.</p>
 <p>Let’s look at an example.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AGE</span>, <span class="va">HEIGHTBL</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"Sepal Length"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-      <span class="fu"><a href="../reference/set_custom_summaries.html">set_custom_summaries</a></span><span class="op">(</span>
-        geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
-        <span class="st">'Geometric Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx (xx.xxx)'</span>, <span class="va">geometric_mean</span>, <span class="va">sd</span><span class="op">)</span>
-      <span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AGE</span>, <span class="va">HEIGHTBL</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"Sepal Length"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/set_custom_summaries.html">set_custom_summaries</a></span><span class="op">(</span></span>
+<span>        geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Geometric Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx (xx.xxx)'</span>, <span class="va">geometric_mean</span>, <span class="va">sd</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="7%">
@@ -451,13 +427,13 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p>Another note about custom summaries is that you’re able to overwrite the default summaries built into ‘Tplyr’ as well. Don’t like the default summary functions that we provide? Use the <code>tplyr.custom_summaries</code> option to overwrite them in your session, and add any new ones that you would like to include.</p>
 <p>For example, here we use the ‘Tplyr’ default mean.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx'</span>, <span class="va">mean</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx'</span>, <span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
@@ -486,19 +462,19 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </table>
 <p>But now, let’s overwrite <code>mean</code> using a custom summary. Let’s use a trimmed mean instead, taking 20% of observations off of both ends.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> 
-          <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span>
-            mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.var</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span>, trim<span class="op">=</span><span class="fl">0.4</span><span class="op">)</span>
-          <span class="op">)</span>
-        <span class="op">)</span>
-
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx'</span>, <span class="va">mean</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> </span>
+<span>          <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span></span>
+<span>            mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.var</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span>, trim<span class="op">=</span><span class="fl">0.4</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xx.xx'</span>, <span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
@@ -532,27 +508,39 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 </h2>
 <p>A lot of the nuance to formatting descriptive statistics layers has already been covered above, but there are a couple more tricks to getting the most out of ‘Tplyr’. One of these tricks is filling empty values.</p>
 <p>By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out.</p>
+<p><em>Note: Tplyr generally respects factor levels - so in instances of a missing row or column group, if the factor level is present, then the variable or row will still generate)</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adlb_2</span> <span class="op">&lt;-</span> <span class="va">adlb</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">TRTA</span> <span class="op">!=</span> <span class="st">"Placebo"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx (xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">adsl</span><span class="op">$</span><span class="va">TRT01P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">$</span><span class="va">TRT01P</span><span class="op">)</span></span>
+<span><span class="va">adlb</span><span class="op">$</span><span class="va">TRTA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">TRTA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">adlb_2</span> <span class="op">&lt;-</span> <span class="va">adlb</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">TRTA</span> <span class="op">!=</span> <span class="st">"Placebo"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx (xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="12%">
+<col width="12%">
+<col width="30%">
+<col width="29%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
+<th align="left">var1_Placebo</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -560,55 +548,65 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">Mean (SD)</td>
 <td align="left">5 ( 1)</td>
 <td align="left">6 ( 3)</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
 <td align="left">2 ( 0)</td>
 <td align="left">2 ( 0)</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
 <td align="left">64 ( 94)</td>
 <td align="left">58 ( 78)</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
 <td align="left">17 ( 49)</td>
 <td align="left">21 ( 27)</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
 <td align="left">271 ( 88)</td>
 <td align="left">231 ( 87)</td>
+<td align="left"></td>
 </tr>
 </tbody>
 </table>
-<p>Note how the entire example above has all records in <code>var1_Placebo</code> missing. ‘Tplyr’ gives you control over how you fill this space. Let’s say that we wanted instead to make that space say “Missing”. You can control this with the <code><a href="../reference/f_str.html">f_str()</a></code> object using the <code>empty</code> parameter</p>
+<p>Note how the entire example above has all records in <code>var1_Placebo</code> missing. ‘Tplyr’ gives you control over how you fill this space. Let’s say that we wanted instead to make that space say “Missing”. You can control this with the <code><a href="../reference/f_str.html">f_str()</a></code> object using the <code>empty</code> parameter.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adlb_2</span> <span class="op">&lt;-</span> <span class="va">adlb</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">TRTA</span> <span class="op">!=</span> <span class="st">"Placebo"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>.overall<span class="op">=</span><span class="st">"MISSING"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>.overall<span class="op">=</span><span class="st">"MISSING"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="12%">
+<col width="12%">
+<col width="30%">
+<col width="29%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
+<th align="left">var1_Placebo</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -616,55 +614,65 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">Mean (SD)</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
+<td align="left">MISSING</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
+<td align="left">MISSING</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
+<td align="left">MISSING</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
+<td align="left">MISSING</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
+<td align="left">MISSING</td>
 </tr>
 </tbody>
 </table>
 <p>Look at the <code>empty</code> parameter above. Here, we use a named character vector, where the name is <code>.overall</code>. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you’d like to see. Perhaps we want a string that fills each missing space.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adlb_2</span> <span class="op">&lt;-</span> <span class="va">adlb</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">TRTA</span> <span class="op">!=</span> <span class="st">"Placebo"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span><span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'xxx.xx (xxx.xxx)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="12%">
+<col width="12%">
+<col width="30%">
+<col width="29%">
+<col width="15%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
+<th align="left">var1_Placebo</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -672,30 +680,35 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">Mean (SD)</td>
 <td align="left">4.57 ( 1.301)</td>
 <td align="left">5.71 ( 2.940)</td>
+<td align="left">NA ( NA)</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
 <td align="left">Mean (SD)</td>
 <td align="left">2.19 ( 0.137)</td>
 <td align="left">2.15 ( 0.083)</td>
+<td align="left">NA ( NA)</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
 <td align="left">Mean (SD)</td>
 <td align="left">64.25 ( 93.986)</td>
 <td align="left">58.33 ( 77.915)</td>
+<td align="left">NA ( NA)</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
 <td align="left">Mean (SD)</td>
 <td align="left">16.75 ( 48.692)</td>
 <td align="left">21.33 ( 26.989)</td>
+<td align="left">NA ( NA)</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
 <td align="left">Mean (SD)</td>
 <td align="left">271.23 ( 88.161)</td>
 <td align="left">230.98 ( 87.006)</td>
+<td align="left">NA ( NA)</td>
 </tr>
 </tbody>
 </table>
@@ -706,27 +719,24 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <p>You may have noticed that the approach to formatting covered so far leaves a lot to be desired. Consider analyzing lab results, where you may want precision to vary based on the collected precision of the tests. Furthermore, depending on the summary being presented, you may wish to increase the precision further. For example, you may want the mean to be at collected precision +1 decimal place, and for standard deviation +2.</p>
 <p>‘Tplyr’ has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use <code>a</code> instead of <code>x</code> when creating your summaries. Note that only one <code>a</code> is needed on each side of a decimal. To use increased precision, use <code>a+n</code> where <code>n</code> is the number of additional spaces you wish to add.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
-        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>
-      <span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="8%">
-<col width="8%">
-<col width="15%">
-<col width="19%">
-<col width="18%">
 <col width="11%">
-<col width="8%">
-<col width="8%">
+<col width="11%">
+<col width="22%">
+<col width="27%">
+<col width="26%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -734,9 +744,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
-<th align="right">ord_layer_index</th>
-<th align="right">ord_layer_1</th>
-<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -745,9 +752,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">4.7430 ( 2.05463)</td>
 <td align="left">4.5696 ( 1.30148)</td>
 <td align="left">5.7120 ( 2.94018)</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
@@ -755,9 +759,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">2.165660 (0.0692494)</td>
 <td align="left">2.189362 (0.1372011)</td>
 <td align="left">2.145700 (0.0830867)</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
@@ -765,9 +766,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">72.4 ( 288.41)</td>
 <td align="left">64.2 ( 93.99)</td>
 <td align="left">58.3 ( 77.91)</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
@@ -775,9 +773,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">17.8 ( 34.77)</td>
 <td align="left">16.8 ( 48.69)</td>
 <td align="left">21.3 ( 26.99)</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
@@ -785,36 +780,31 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">235.9373 ( 83.69662)</td>
 <td align="left">271.2288 ( 88.16093)</td>
 <td align="left">230.9807 ( 87.00646)</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">1</td>
 </tr>
 </tbody>
 </table>
 <p>As you can see, the decimal precision is now varying depending on the test being performed. Notice that both the integer and the decimal side of each number fluctuate as well. <code>Tpylr</code> collects both the integer and decimal precision, and you can specify both separately. For example, you could use <code>x</code>’s to specify a default number of spaces for your integers that are used consistently across by variables, but vary the decimal precision based on collected data. You can also increment the number of spaces for both integer and decimal separately.</p>
 <p>But - this is kind of ugly, isn’t it? Do we really need all 6 decimal places collected for CA? For this reason, you’re able to set a cap on the precision that’s displayed:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
-        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,
-        cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>int<span class="op">=</span><span class="fl">3</span>, dec<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
-      <span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<table class="table">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,</span>
+<span>        cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>int<span class="op">=</span><span class="fl">3</span>, dec<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="8%">
-<col width="8%">
-<col width="14%">
-<col width="19%">
-<col width="18%">
-<col width="12%">
-<col width="9%">
-<col width="9%">
+<col width="11%">
+<col width="11%">
+<col width="20%">
+<col width="28%">
+<col width="27%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -822,9 +812,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
-<th align="right">ord_layer_index</th>
-<th align="right">ord_layer_1</th>
-<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -833,9 +820,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">4.743 ( 2.0546)</td>
 <td align="left">4.570 ( 1.3015)</td>
 <td align="left">5.712 ( 2.9402)</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
@@ -843,9 +827,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">2.166 (0.0692)</td>
 <td align="left">2.189 (0.1372)</td>
 <td align="left">2.146 (0.0831)</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
@@ -853,9 +834,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">72.4 (288.41)</td>
 <td align="left">64.2 ( 93.99)</td>
 <td align="left">58.3 ( 77.91)</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
@@ -863,9 +841,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">17.8 ( 34.77)</td>
 <td align="left">16.8 ( 48.69)</td>
 <td align="left">21.3 ( 26.99)</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
@@ -873,44 +848,39 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">235.937 ( 83.6966)</td>
 <td align="left">271.229 ( 88.1609)</td>
 <td align="left">230.981 ( 87.0065)</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">1</td>
 </tr>
 </tbody>
 </table>
 <p>Now that looks better. The <code>cap</code> argument is part of <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. You need to specify the integer and decimal caps separately. Note that integer precision works slightly differently than decimal precision. Integer precision relates to the length allotted for the left side of a decimal, but integers will not truncate. When using ‘x’ formatting, if an integer exceeds the set length, it will push the number over. If the integer side of auto-precision is not capped, the necessary length for an integer in the associated by group will be as long as necessary. Decimals, on the other hand, round to the specified length. These caps apply to the length allotted for the “a” on either the integer or the decimal. So for example, if the decimal length is capped at 2 and the selected precision is “a+1”, then 3 decimal places will be allotted.</p>
 <p>This was a basic situation, but if you’re paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don’t want that? What about multiple summary variables? How do we determine precision then? We have modifier functions for this:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">CHG</span>, <span class="va">BASE</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span>
-        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="st">"NA"</span><span class="op">)</span>,
-        cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>int<span class="op">=</span><span class="fl">3</span>, dec<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
-      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/precision_on.html">set_precision_on</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-      <span class="fu"><a href="../reference/precision_by.html">set_precision_by</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AVAL</span>, <span class="va">CHG</span>, <span class="va">BASE</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="st">"NA"</span><span class="op">)</span>,</span>
+<span>        cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>int<span class="op">=</span><span class="fl">3</span>, dec<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_on.html">set_precision_on</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_by.html">set_precision_by</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="4%">
 <col width="4%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-<col width="6%">
-<col width="9%">
-<col width="9%">
-<col width="5%">
-<col width="4%">
-<col width="4%">
+<col width="8%">
+<col width="11%">
+<col width="10%">
+<col width="8%">
+<col width="11%">
+<col width="10%">
+<col width="8%">
+<col width="11%">
+<col width="10%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
@@ -924,9 +894,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <th align="left">var3_Placebo</th>
 <th align="left">var3_Xanomeline High Dose</th>
 <th align="left">var3_Xanomeline Low Dose</th>
-<th align="right">ord_layer_index</th>
-<th align="right">ord_layer_1</th>
-<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -941,9 +908,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">5.457 ( 1.5661)</td>
 <td align="left">4.712 ( 1.6382)</td>
 <td align="left">6.497 ( 2.7940)</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">CA</td>
@@ -957,9 +921,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">2.290 (0.0923)</td>
 <td align="left">2.289 (0.0828)</td>
 <td align="left">2.304 (0.0719)</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">CK</td>
@@ -973,9 +934,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">83.4 ( 38.13)</td>
 <td align="left">84.8 ( 64.27)</td>
 <td align="left">72.3 ( 35.71)</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">GGT</td>
@@ -989,9 +947,6 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">24.2 ( 19.36)</td>
 <td align="left">18.8 ( 25.84)</td>
 <td align="left">22.7 ( 11.05)</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">URATE</td>
@@ -1005,42 +960,193 @@ m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])].
 <td align="left">272.617 ( 65.7021)</td>
 <td align="left">310.486 ( 61.8285)</td>
 <td align="left">273.608 ( 86.9470)</td>
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="right">1</td>
 </tr>
 </tbody>
 </table>
-<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code><a href="../reference/precision_on.html">set_precision_on()</a></code> allows you to specify this, where the <code>precision_on()</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code><a href="../reference/precision_by.html">set_precision_by()</a></code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on()</code> variable is specified, the first variable in <code>target_var</code> is used. If no <code>precision_by()</code> variables are specified, then the default <code>by</code> variables are used.</p>
+<p>Three variables are being summarized here - AVAL, CHG, and BASE. So which should be used for precision? <code><a href="../reference/precision_on.html">set_precision_on()</a></code> allows you to specify this, where the <code>precision_on()</code> variable must be one of the variables within <code>target_var</code>. Similarly, <code><a href="../reference/precision_by.html">set_precision_by()</a></code> changes the <code>by</code> variables used to determine collected precision. If no <code>precision_on()</code> variable is specified, the first variable in <code>target_var</code> is used. If no <code>precision_by</code> variables are specified, then the default <code>by</code> variables are used.</p>
+</div>
+<div class="section level3">
+<h3 id="external-precision">External Precision<a class="anchor" aria-label="anchor" href="#external-precision"></a>
+</h3>
+<p>Lastly, while dynamic precision might be what you’re looking for, you may not want precision driven by the data. Perhaps there’s a company standard that dictates what decimal precision should be used for each separate lab test. Maybe even deeper down to the lab test and category. New in Tplyr 1.0.0 we’ve added the ability to take decimal precision from an external source.</p>
+<p>The principal of external precision is exactly the same as auto-precision. The only difference is that you - the user - provide the precision table that Tplyr was automatically calculating in the background. This is done using the new function <code><a href="../reference/set_precision_data.html">set_precision_data()</a></code>. In the output below, Notice how the precision by PARAMCD varies depending on what was specified in the data frame <code>prec_data</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prec_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">max_int</span>, <span class="op">~</span><span class="va">max_dec</span>,</span>
+<span>  <span class="st">"BUN"</span>,   <span class="fl">1</span>, <span class="fl">0</span>,</span>
+<span>  <span class="st">"CA"</span>,    <span class="fl">2</span>, <span class="fl">4</span>,</span>
+<span>  <span class="st">"CK"</span>,    <span class="fl">3</span>, <span class="fl">1</span>,</span>
+<span>  <span class="st">"GGT"</span>,   <span class="fl">3</span>, <span class="fl">0</span>,</span>
+<span>  <span class="st">"URATE"</span>, <span class="fl">3</span>, <span class="fl">1</span>,</span>
+<span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="st">"NA"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_on.html">set_precision_on</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_by.html">set_precision_by</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/set_precision_data.html">set_precision_data</a></span><span class="op">(</span><span class="va">prec_data</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="11%">
+<col width="21%">
+<col width="27%">
+<col width="26%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">BUN</td>
+<td align="left">Mean (SD)</td>
+<td align="left">4.7 (2.05)</td>
+<td align="left">4.6 (1.30)</td>
+<td align="left">5.7 (2.94)</td>
+</tr>
+<tr class="even">
+<td align="left">CA</td>
+<td align="left">Mean (SD)</td>
+<td align="left">2.16566 ( 0.069249)</td>
+<td align="left">2.18936 ( 0.137201)</td>
+<td align="left">2.14570 ( 0.083087)</td>
+</tr>
+<tr class="odd">
+<td align="left">CK</td>
+<td align="left">Mean (SD)</td>
+<td align="left">72.43 (288.405)</td>
+<td align="left">64.25 ( 93.986)</td>
+<td align="left">58.33 ( 77.915)</td>
+</tr>
+<tr class="even">
+<td align="left">GGT</td>
+<td align="left">Mean (SD)</td>
+<td align="left">17.8 ( 34.77)</td>
+<td align="left">16.8 ( 48.69)</td>
+<td align="left">21.3 ( 26.99)</td>
+</tr>
+<tr class="odd">
+<td align="left">URATE</td>
+<td align="left">Mean (SD)</td>
+<td align="left">235.94 ( 83.697)</td>
+<td align="left">271.23 ( 88.161)</td>
+<td align="left">230.98 ( 87.006)</td>
+</tr>
+</tbody>
+</table>
+<p>If one of your by variable groups are missing in the precision data, Tplyr can default back to using auto-precision by using the option <code>default=auto</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prec_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">max_int</span>, <span class="op">~</span><span class="va">max_dec</span>,</span>
+<span>  <span class="st">"BUN"</span>, <span class="fl">1</span>, <span class="fl">0</span>,</span>
+<span>  <span class="st">"CA"</span>,  <span class="fl">2</span>, <span class="fl">4</span>,</span>
+<span>  <span class="st">"CK"</span>,  <span class="fl">3</span>, <span class="fl">1</span>,</span>
+<span>  <span class="st">"GGT"</span>, <span class="fl">3</span>, <span class="fl">0</span>,</span>
+<span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span>, empty<span class="op">=</span><span class="st">"NA"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_on.html">set_precision_on</a></span><span class="op">(</span><span class="va">AVAL</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/precision_by.html">set_precision_by</a></span><span class="op">(</span><span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/set_precision_data.html">set_precision_data</a></span><span class="op">(</span><span class="va">prec_data</span>, default<span class="op">=</span><span class="st">"auto"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unhandled precision cases were found - calculating precision based on source data</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="11%">
+<col width="22%">
+<col width="27%">
+<col width="26%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">BUN</td>
+<td align="left">Mean (SD)</td>
+<td align="left">4.7 (2.05)</td>
+<td align="left">4.6 (1.30)</td>
+<td align="left">5.7 (2.94)</td>
+</tr>
+<tr class="even">
+<td align="left">CA</td>
+<td align="left">Mean (SD)</td>
+<td align="left">2.16566 ( 0.069249)</td>
+<td align="left">2.18936 ( 0.137201)</td>
+<td align="left">2.14570 ( 0.083087)</td>
+</tr>
+<tr class="odd">
+<td align="left">CK</td>
+<td align="left">Mean (SD)</td>
+<td align="left">72.43 (288.405)</td>
+<td align="left">64.25 ( 93.986)</td>
+<td align="left">58.33 ( 77.915)</td>
+</tr>
+<tr class="even">
+<td align="left">GGT</td>
+<td align="left">Mean (SD)</td>
+<td align="left">17.8 ( 34.77)</td>
+<td align="left">16.8 ( 48.69)</td>
+<td align="left">21.3 ( 26.99)</td>
+</tr>
+<tr class="odd">
+<td align="left">URATE</td>
+<td align="left">Mean (SD)</td>
+<td align="left">235.9373 ( 83.69662)</td>
+<td align="left">271.2288 ( 88.16093)</td>
+<td align="left">230.9807 ( 87.00646)</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
