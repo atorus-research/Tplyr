@@ -5,19 +5,22 @@
 
 <!-- badges: start -->
 
-[<img src="https://img.shields.io/badge/Slack-OSTCR-blue?style=flat&logo=slack">](https://ostinclinicalresearch.slack.com)
+[<img src="http://pharmaverse.org/shields/Tplyr.svg">](https://pharmaverse.org)
 [<img src="https://img.shields.io/badge/Slack-RValidationHub-blue?style=flat&logo=slack">](https://RValidationHub.slack.com)
 [![R build
 status](https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg)](https://github.com/atorus-research/tplyr/actions?workflow=R-CMD-check)
 [<img src="https://img.shields.io/codecov/c/github/atorus-research/tplyr">](https://app.codecov.io/gh/atorus-research/tplyr)
 [<img src="https://img.shields.io/badge/License-MIT-blue.svg">](https://github.com/atorus-research/Tplyr/blob/master/LICENSE)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+<!-- badges: end -->
 
-Welcome to Tplyr! Tplyr is a grammar of data format and summary. It’s
-designed to simplify the creation of clinical safety summaries and help
-you focus on how you present your data rather than redundant summaries
-being performed.
+Welcome to Tplyr! Tplyr is a traceability minded grammar of data format
+and summary. It’s designed to simplify the creation of common clinical
+summaries and help you focus on how you present your data rather than
+redundant summaries being performed. Furthermore, for every result Tplyr
+produces, it also produces the metadata necessary to give your
+traceability from source to summary.
 
 As always, we welcome your feedback. If you spot a bug, would like to
 see a new feature, or if any documentation is unclear - submit an issue
@@ -36,7 +39,7 @@ You can Tplyr install with:
 install.packages("Tplyr")
 
 # Or install the development version:
-devtools::install_github("https://github.com/atorus-research/Tplyr.git")
+devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
 ```
 
 # What is Tplyr?
@@ -49,22 +52,22 @@ conceptually breaks things down into verbs that allow you to focus on
 *what* you want to do more than *how* you have to do it.
 
 `Tplyr` is designed around a similar concept, but its focus is on
-building summary tables within the clinical world. In the pharmaceutical
-industry, a great deal of the data presented in the outputs we create
-are very similar. For the most part, most of these tables can be broken
-down into a few categories:
+building summary tables common within the clinical world. In the
+pharmaceutical industry, a great deal of the data presented in the
+outputs we create are very similar. For the most part, most of these
+tables can be broken down into a few categories:
 
 -   Counting for event based variables or categories
 -   Shifting, which is just counting a change in state with a ‘from’ and
     a ‘to’
 -   Generating descriptive statistics around some continuous variable.
 
-For many of the tables that go into a clinical submission, at least when
-considering safety outputs, the tables are made up of a combination of
-these approaches. Consider a demographics table - and let’s use an
-example from the PHUSE project Standard Analyses & Code Sharing -
-[Analyses & Displays Associated with Demographics, Disposition, and
-Medications in Phase 2-4 Clinical Trials and Integrated Summary
+For many of the tables that go into a clinical submission, the tables
+are made up of a combination of these approaches. Consider a
+demographics table - and let’s use an example from the PHUSE project
+Standard Analyses & Code Sharing - [Analyses & Displays Associated with
+Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials
+and Integrated Summary
 Documents](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf).
 
 <p align="center">
@@ -105,6 +108,7 @@ Test Data Factory data
 [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ``` r
+
 tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
@@ -116,23 +120,23 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   kable()
 ```
 
-| row\_label1          | row\_label2 | var1\_Placebo | var1\_Xanomeline High Dose | var1\_Xanomeline Low Dose | ord\_layer\_index | ord\_layer\_1 | ord\_layer\_2 |
-|:---------------------|:------------|:--------------|:---------------------------|:--------------------------|------------------:|--------------:|--------------:|
-| Age (years)          | n           | 86            | 84                         | 84                        |                 1 |             1 |             1 |
-| Age (years)          | Mean (SD)   | 75.2 ( 8.59)  | 74.4 ( 7.89)               | 75.7 ( 8.29)              |                 1 |             1 |             2 |
-| Age (years)          | Median      | 76.0          | 76.0                       | 77.5                      |                 1 |             1 |             3 |
-| Age (years)          | Q1, Q3      | 69.2, 81.8    | 70.8, 80.0                 | 71.0, 82.0                |                 1 |             1 |             4 |
-| Age (years)          | Min, Max    | 52, 89        | 56, 88                     | 51, 88                    |                 1 |             1 |             5 |
-| Age (years)          | Missing     | 0             | 0                          | 0                         |                 1 |             1 |             6 |
-| Age Categories n (%) | &lt;65      | 14 ( 16.3%)   | 11 ( 13.1%)                | 8 ( 9.5%)                 |                 2 |             1 |             1 |
-| Age Categories n (%) | &gt;80      | 30 ( 34.9%)   | 18 ( 21.4%)                | 29 ( 34.5%)               |                 2 |             1 |             2 |
-| Age Categories n (%) | 65-80       | 42 ( 48.8%)   | 55 ( 65.5%)                | 47 ( 56.0%)               |                 2 |             1 |             3 |
+| row_label1           | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
+| Age (years)          | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
+| Age (years)          | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
+| Age (years)          | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
+| Age (years)          | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
+| Age (years)          | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
+| Age (years)          | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
+| Age Categories n (%) | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               2 |           1 |           1 |
+| Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
+| Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
 
 ## ‘Tplyr’ is Qualified
 
 We understand how important documentation and testing is within the
 pharmaceutical world. This is why outside of unit testing ’Tplyr
-includes an entire user-acceptable testing document, where requirements
+includes an entire user-acceptance testing document, where requirements
 were established, test-cases were written, and tests were independently
 programmed and executed. We do this in the hope that you can leverage
 our work within a qualified programming environment, and that we save
@@ -172,6 +176,13 @@ vignettes to help you get what you need out of ‘Tplyr’.
 -   Learn more about using ‘Tplyr’ options in `vignette("options")`
 -   And finally, learn more about producing and outputting styled tables
     using ‘Tplyr’ in `vignette("styled-table")`
+
+In the Tplyr version 1.0.0, we’ve packed a number of new features in.
+For deeper dives on the largest new additions:
+
+-   Learn about Tplyr’s traceability metadata in `vignette("metadata")`
+    and about how it can be extended in `vigentte("custom-metadata")`
+-   Learn about layer templates in `vignette("layer_templates")`
 
 # References
 

@@ -106,40 +106,6 @@ t19 <- add_layers(t19, c19)
 t20 <- add_layers(t20, c20)
 
 test_that("Count layers are built as expected", {
-  expect_setequal(names(c1), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c2), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c3), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c4), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "format_strings"))
-  expect_setequal(names(c5), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "include_total_row", "denoms_by",
-                               "total_count_format",
-                               "total_row_sort_value", "count_missings"))
-  expect_setequal(names(c6), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "distinct_by"))
-  expect_setequal(names(c7), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers"))
-  expect_setequal(names(c8), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "distinct_by", "format_strings"))
-  expect_setequal(names(c9), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "indentation"))
-  expect_setequal(names(c10), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "count_row_prefix"))
-  expect_setequal(names(c11), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "ordering_cols"))
-  expect_setequal(names(c12), c("by", "stats", "precision_on", "where",
-                               "target_var", "precision_by", "layers",
-                               "format_strings", "result_order_var", "distinct_by"))
 
   expect_equal(unname(map_chr(c1$by, as_name)), character())
   expect_equal(unname(map_chr(c2$by, as_name)), "am")
@@ -200,16 +166,16 @@ test_that("Count layers are summarized without errors and warnings", {
 
 test_that("Count layers are processed as expected", {
 
-  expect_equal(dim(c1$numeric_data), c(9, 4))
-  expect_equal(dim(c2$numeric_data), c(18, 5))
-  expect_equal(dim(c3$numeric_data), c(36, 6))
-  expect_equal(dim(c4$numeric_data), c(36, 6))
-  expect_equal(dim(c5$numeric_data), c(39, 6))
+  expect_equal(dim(c1$numeric_data), c(9, 6))
+  expect_equal(dim(c2$numeric_data), c(18, 7))
+  expect_equal(dim(c3$numeric_data), c(36, 8))
+  expect_equal(dim(c4$numeric_data), c(36, 8))
+  expect_equal(dim(c5$numeric_data), c(39, 8))
   expect_equal(dim(c6$numeric_data), c(9, 6))
-  expect_equal(dim(c7$numeric_data), c(27, 5))
+  expect_equal(dim(c7$numeric_data), c(27, 7))
   expect_equal(dim(c8$numeric_data), c(9, 6))
-  expect_equal(dim(c9$numeric_data), c(27, 5))
-  expect_equal(dim(c10$numeric_data), c(9, 4))
+  expect_equal(dim(c9$numeric_data), c(27, 7))
+  expect_equal(dim(c10$numeric_data), c(9, 6))
 
   expect_type(c1$numeric_data$n, "double")
   expect_type(c2$numeric_data$n, "double")
@@ -221,17 +187,6 @@ test_that("Count layers are processed as expected", {
   expect_type(c8$numeric_data$n, "double")
   expect_type(c9$numeric_data$n, "double")
   expect_type(c10$numeric_data$n, "double")
-
-  expect_equal(dim(c1$formatted_data), c(3, 5))
-  expect_equal(dim(c2$formatted_data), c(6, 7))
-  expect_equal(dim(c3$formatted_data), c(12, 9))
-  expect_equal(dim(c4$formatted_data), c(12, 9))
-  expect_equal(dim(c5$formatted_data), c(13, 9))
-  expect_equal(dim(c6$formatted_data), c(3, 5))
-  expect_equal(dim(c7$formatted_data), c(9, 7))
-  expect_equal(dim(c8$formatted_data), c(3, 5))
-  expect_equal(dim(c9$formatted_data), c(9, 7))
-  expect_equal(dim(c10$formatted_data), c(3, 5))
 
   expect_true(all(nchar(unlist(c1$formatted_data[, 2:4])) == 11))
   expect_true(all(nchar(unlist(c2$formatted_data[, 3:5])) == 11))
@@ -323,7 +278,7 @@ test_that("missing counts can be displayed as expected", {
 test_that("Count layer clauses with invalid syntax give informative error", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(am, where=bad == code)
+      group_count(am, where = bad == code)
     )
 
   expect_snapshot_error(build(t))
@@ -331,9 +286,6 @@ test_that("Count layer clauses with invalid syntax give informative error", {
 
 
 test_that("Nested count layers can be built with text by variables", {
-  expect_equal(dim(c13$numeric_data), c(27, 6))
-  expect_equal(dim(c13$formatted_data), c(9, 9))
-
   expect_equal(c13$formatted_data$ord_layer_2, rep(2, 9))
 })
 
@@ -524,7 +476,7 @@ test_that("distinct is changed to distinct_n with a warning", {
 
 })
 
-test_that("nested count layers can accecpt text values in the first variable", {
+test_that("Nested count layers can accept text values in the first variable", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
       group_count(vars("All Cyl", cyl))
@@ -575,7 +527,7 @@ test_that("Variable names will be coersed into symbols", {
   expect_snapshot_warning(build(t2))
 })
 
-test_that("nested count layers can be build with character value in first position and risk difference", {
+test_that("nested count layers can be built with character value in first position and risk difference", {
   suppressWarnings({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
@@ -640,7 +592,7 @@ test_that("nested count layers can be built with restrictive where logic", {
 
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl, grp), where = grp == "grp.8.5")%>%
+      group_count(vars(cyl, grp), where = grp == "grp.8.5") %>%
         set_nest_count(TRUE) %>%
         set_order_count_method('bycount') %>%
         set_ordering_cols("3")
@@ -716,7 +668,7 @@ test_that("test IBM rounding option", {
       group_count(gender, by = "Gender")  %>%
         set_format_strings(f_str("xxx (xxx%)", n, pct))
     )
-  expect_warning(tabl2 <- build(tabl2), "You have enabled IBM Rounding.")
+  expect_warning({tabl2 <- build(tabl2)}, "You have enabled IBM Rounding.")
 
   expect_equal(tabl2$var1_Placebo, c("485 ( 49%)", "515 ( 52%)"))
 
@@ -739,8 +691,10 @@ test_that("Posix columns don't cause the build to error out.", {
 #
 
   load(test_path("adae.Rdata"))
-  adsl <- haven::read_xpt(test_path("adsl.xpt")) %>%
-      mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
+  load(test_path("adsl.Rdata"))
+
+  adsl <- adsl %>%
+    mutate(fake_dttm = as.POSIXct("2019-01-01 10:10:10"), origin = "1970-01-01") %>%
     rename(TRTA = TRT01A)
 
   tp_obj <- tplyr_table(adae, TRTA) %>%
@@ -752,4 +706,149 @@ test_that("Posix columns don't cause the build to error out.", {
     )
 
   expect_silent(build(tp_obj))
+})
+
+test_that("set_numeric_threshold works as expected", {
+
+  t1 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(10, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t1))
+
+  t2 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(5.1, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t2))
+
+  t3 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(13, "n") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t3))
+
+  t4 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(16, "n") %>%
+        add_total_row() %>%
+       set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t4))
+
+  t5 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(0.5, "pct") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t5))
+
+  t6 <- mtcars %>%
+    tplyr_table(gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_numeric_threshold(4, "n", "3") %>%
+        add_total_row() %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t6))
+
+  load(test_path("adae.Rdata"))
+
+  t7 <- adae %>%
+    tplyr_table(TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_threshold(3, "n", "Placebo")
+    )
+
+  expect_snapshot(build(t7))
+
+  t8 <- adae %>%
+    tplyr_table(TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t8))
+})
+
+test_that("denom and distinct_denom values work as expected", {
+
+
+  t1 <- tplyr_table(mtcars2, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_missing_count(f_str("xx", n), Missing = NA) %>%
+        add_total_row(f_str("xxxxx [xx.x]", n, pct)) %>%
+        set_format_strings(f_str("xx/xxx (xx.x)", n, total, pct)) %>%
+        set_order_count_method("bycount")
+    )
+
+  expect_snapshot(build(t1))
+
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_distinct_by(am) %>%
+        set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_total, n, total))
+    )
+
+  expect_snapshot(build(t2))
+})
+
+test_that("denoms with distinct population data populates as expected", {
+  load(test_path("adae.Rdata"))
+  load(test_path("adsl.Rdata"))
+
+  tab <- tplyr_table(adae, TRTA) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_total_group %>%
+    add_treat_grps(Dosed = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+    add_layer(
+      group_count("Any Body System") %>%
+        set_distinct_by(USUBJID) %>%
+        set_format_strings(f_str("xx (xx.x%)", distinct_n, distinct_pct))
+    ) %>%
+    build()
+
+  expect_snapshot(tab)
+})
+
+test_that("nested count layers error out when you try to add a total row", {
+
+  # GH issue 92
+  tab <- tplyr_table(mtcars, am) %>%
+    add_layer(
+      group_count(vars(cyl, grp)) %>%
+        add_total_row()
+    )
+
+    expect_snapshot_error(build(tab))
 })

@@ -124,6 +124,15 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
   assert_that(all(names(args) %in% c('p', 'alternative', 'conf.level', 'correct')),
               msg = "All arguments provided via `args` must be valid arguments of `prop.test`")
 
+
+  for (comp in comps) {
+    assert_that(!any(duplicated(comp)),
+                msg = paste("Comparison",
+                            paste0("{",comp[1], ", ",comp[2],"}"),
+                            "has duplicated values. Comparisons must not be duplicates")
+    )
+  }
+
   # Risk diff must be run on count layers
   assert_that(inherits(layer, 'count_layer'), msg = "Risk difference can only be applied to a count layer.")
 
@@ -133,7 +142,7 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
         layer,
         comparisons = comps,
         args = args,
-        distinct = distinct
+        comp_distinct = distinct
       ),
       class=c("tplyr_statistic", "tplyr_riskdiff")
     )
@@ -170,18 +179,18 @@ prep_two_way <- function(comp) {
     two_way <- numeric_data
 
     # Nested layers need to plug the NAs left over - needs revision in the future
-    if (is_built_nest) {
+    if (is_built_nest && quo_is_symbol(by[[1]])) {
       two_way <- two_way %>%
         # Need to fill in NAs in the numeric data that
         # are patched later in formatting
         mutate(
-          !!by[[1]] := ifelse(is.na(!!by[[1]]), summary_var, !!by[[1]])
+          !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
         )
     }
 
 
     # If distinct is set and distinct values are there, use them
-    if (distinct == TRUE && any(str_detect(names(two_way), 'distinct'))) {
+    if (comp_distinct && !is.null(distinct_by)) {
       two_way <- two_way %>%
         select(-n, -total) %>%
         rename(n = distinct_n, total = distinct_total)

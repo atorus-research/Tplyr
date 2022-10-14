@@ -23,7 +23,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.}
 \value{
 The layer environment with the format string binding added
 
-
+tplyr_layer object with formats attached
 
 Returns the modified layer object.
 }
@@ -42,7 +42,7 @@ Format strings are one of the most powerful components of 'Tplyr'.
   can, while still allowing flexibility to the user.
 
   In a count layer, you can simply provide a single \code{\link{f_str}}
-  object to specify how you want your n's (and possibly percents) formatted.
+  object to specify how you want your n's, percentages, and denominators formatted.
   If you are additionally supplying a statistic, like risk difference using
   \code{\link{add_risk_diff}}, you specify the count formats using the name
   'n_counts'. The risk difference formats would then be specified using the

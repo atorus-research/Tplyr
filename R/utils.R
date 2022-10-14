@@ -9,32 +9,57 @@
 #' @return The original call object with
 #'
 #' @noRd
-#' @examples
-#'
-#' modify_nested_call(mean(c(1,2,3)) %>% print(), na.rm=TRUE)
-modify_nested_call <- function(c, allowable_calls = getNamespaceExports("Tplyr"), ...) {
-  # If the call is not from magrittr, then modify the contents and return the call
-  if (call_name(c) != "%>%") {
-    # Only allow the user to use `tplyr` functions
-    if (!is.null(allowable_calls)) {
-      assert_that(call_name(c) %in% allowable_calls, msg = "Functions called within `add_layer` must be part of `Tplyr`")
-    }
-    c <- call_modify(.call=c, ...)
+modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
-  } else {
-    if (!is.null(allowable_calls)) {
-      # Only allow the user to use `tplyr` functions
-      assert_that(all(map_chr(call_args(c), call_name) %in% c(allowable_calls, '%>%')),
-                  msg="Functions called within `add_layer` must be part of `Tplyr`")
-    }
+  # Get exports from Tplyr
+  allowable_calls = objects("package:Tplyr")
+
+  # Only allow the user to use `Tplyr` functions
+  assert_that(
+    call_name(c) %in% allowable_calls,
+    msg = "Functions called within `add_layer` must be part of `Tplyr`"
+    )
+
+  # Process the magrittr pipe
+  if (call_name(c) == "%>%") {
+    # Only allow the user to use `Tplyr` functions on both sides of the pipe
+    assert_that(all(map_chr(call_args(c), call_name) %in% allowable_calls),
+                msg="Functions called within `add_layer` must be part of `Tplyr`")
 
     # Recursively extract the left side of the magrittr call to work your way up
     e <- call_standardise(c)
-    c <- modify_nested_call(call_args(e)$lhs, allowable_calls = allowable_calls, ...)
-    # Modfify the magittr call by inserting the call retrieved from recursive command back in
-    c <- call_modify(e, lhs=c)
-    c
+    c <- modify_nested_call(call_args(e)$lhs, examine_only, ...)
+    if (!examine_only) {
+      # Modify the magittr call by inserting the call retrieved from recursive command back in
+      c <- call_modify(e, lhs=c)
+      c
+    }
   }
+  # Process the 'native' pipe (arguments logically insert as first parameter)
+  else if (!str_starts(call_name(c), "group_[cds]|use_template")) {
+
+    # Standardize the call to get argument names and pull out the literal first argument
+    # Save the call to a new variable in the process
+    e <- call_standardise(c)
+    args <- call_args(e)[1]
+
+    # Send the first parameter back down recursively through modify_nested_call and
+    # save it back to the arguments list
+    c <- modify_nested_call(call_args(c)[[1]], ...)
+
+    if (!examine_only) {
+      args[[1]] <- c
+
+      # Modify the standardized call with the modified first parameter and send it up
+      c <- call_modify(e, !!!args)
+      c
+    }
+  }
+  # If the call is not from magrittr or the pipe, then modify the contents and return the call
+  else if (!examine_only) {
+    c <- call_modify(.call=c, ...)
+  }
+
 }
 
 #' Find depth of a layer object
@@ -54,7 +79,6 @@ depth_from_table <- function(layer, i){
     return(depth_from_table(env_parent(layer), i+1))
   }
 }
-
 
 #' Convert a list of quosures to character strings
 #'
@@ -90,12 +114,15 @@ match_exact <- function(var_list) {
 #'
 #' @param dat A data.frame/tibble to have row labels renamed
 #' @param by The \code{by} object within a layer
+#' @param treat_var treatment variable quosure for use when stats_as_columns is true
 #'
 #' @return A tibble with renamed variables and row labels re-ordered to the front of the tibble
 #' @noRd
-replace_by_string_names <- function(dat, by) {
+replace_by_string_names <- function(dat, by, treat_var = NULL) {
   # By must be a list of quosures
   assert_that(is_quosures(by), msg = "`by` must be a list of quosures")
+
+  by <- append(by, treat_var)
 
   # If there were character strings in the by variables then rename them
   # with an index, starting at 1
@@ -291,4 +318,21 @@ ut_round <- function(x, n=0)
   y <- trunc(x * scale + sign(x) * 0.5) / scale
   # Return the rounded number
   return(y)
+}
+
+#' Assign a row identifier to a layer
+#'
+#' To link with the metadata we need an row identifier to link
+#' the metadata post sort with built data
+#'
+#' @param dat Input data that should be ordered identically to the metadata
+#' @param layer_type First character of the layer type
+#'
+#' @return Data with row_id assigned
+#' @noRd
+assign_row_id <- function(dat, layer_type) {
+  dat %>%
+    mutate(
+      row_id = paste0(layer_type, row_number())
+    )
 }

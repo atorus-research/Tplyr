@@ -43,6 +43,8 @@ set_denoms_by <- function(e, ...) {
   UseMethod("set_denoms_by")
 }
 
+#' @export
+#' @noRd
 set_denoms_by.shift_layer <- function(e, ...) {
 
   dots <- vars(...)
@@ -59,7 +61,7 @@ set_denoms_by.shift_layer <- function(e, ...) {
               msg = "A denom_by wasn't found as a grouping variable in the layer/table.")
 
   # If the row variable is here, rename it to summary_var
-  if(as_name(target_var$row) %in% dots_chr) {
+  if (as_name(target_var$row) %in% dots_chr) {
     dots[[which(dots_chr %in% as_name(target_var$row))]] <- quo(summary_var)
   }
 

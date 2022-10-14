@@ -1,13 +1,13 @@
 ### Formatting
 
-#' Create a \code{f_str} object
+#' Create a `f_str` object
 #'
-#' \code{f_str} objects are intended to be used within the function
-#' \code{set_format_strings}. The \code{f_str} object carries information that
-#' powers a significant amount of layer processing. The \code{format_string}
-#' parameter is capable of controlling the display of a data point and decimal
-#' precision. The variables provided in \code{...} control which data points are
-#' used to populate the string formatted output.
+#' `f_str` objects are intended to be used within the function
+#' `set_format_strings`. The `f_str` object carries information that powers a
+#' significant amount of layer processing. The `format_string` parameter is
+#' capable of controlling the display of a data point and decimal precision. The
+#' variables provided in `...` control which data points are used to populate
+#' the string formatted output.
 #'
 #' @details Format strings are one of the most powerful components of 'Tplyr'.
 #'   Traditionally, converting numeric values into strings for presentation can
@@ -19,12 +19,12 @@
 #'
 #'   Tplyr provides both manual and automatic decimal precision formatting. The
 #'   display of the numbers in the resulting data frame is controlled by the
-#'   \code{format_string} parameter. For manual precision, just like dummy
-#'   values may be presented on your mocks, integer and decimal precision is
-#'   specified by the user providing a string of 'x's for how you'd like your
-#'   numbers formatted. If you'd like 2 integers with 3 decimal places, you
-#'   specify your string as 'xx.xxx'. 'Tplyr' does the work to get the numbers
-#'   in the right place.
+#'   `format_string` parameter. For manual precision, just like dummy values may
+#'   be presented on your mocks, integer and decimal precision is specified by
+#'   the user providing a string of 'x's for how you'd like your numbers
+#'   formatted. If you'd like 2 integers with 3 decimal places, you specify your
+#'   string as 'xx.xxx'. 'Tplyr' does the work to get the numbers in the right
+#'   place.
 #'
 #'   To take this a step further, automatic decimal precision can also be
 #'   obtained based on the collected precision within the data. When creating
@@ -44,20 +44,50 @@
 #'   for the two values. Each format string is independent and relates only to
 #'   the format specified.
 #'
-#'   The other parameters of the \code{f_str} call specify what values should
-#'   fill the x's. \code{f_str} objects are used slightly differently between
-#'   different layers. When declaring a format string within a count layer,
-#'   \code{f_str} expects to see the values \code{n} and (if desired)
-#'   \code{pct}, which specifies the formatting for your n's and percent values.
-#'   But in descriptive statistic layers, \code{f_str} parameters refer to the
-#'   names of the summaries being performed, either by built in defaults, or
-#'   custom summaries declared using \code{\link{set_custom_summaries}}. See
-#'   \code{\link{set_format_strings}} for some more notes about layers specific
-#'   implementation.
+#'   The other parameters of the `f_str` call specify what values should fill
+#'   the x's. `f_str` objects are used slightly differently between different
+#'   layers. When declaring a format string within a count layer, `f_str()`
+#'   expects to see the values `n` or `distinct_n` for event or distinct counts,
+#'   `pct` or `distinct_pct` for event or distinct percentages, or `total` or
+#'   `distinct_total` for denominator calculations. But in descriptive statistic
+#'   layers, `f_str` parameters refer to the names of the summaries being
+#'   performed, either by built in defaults, or custom summaries declared using
+#'   [set_custom_summaries()]. See [set_format_strings()] for some more notes
+#'   about layers specific implementation.
 #'
-#'   Count and shift layers frequencies and percentages can be specified with
-#'   'n' and 'pct' respectively. Distinct values can also be presented in count
-#'   layers with the arguments 'distinct' and 'distinct_total'.
+#'   An `f_str()` may also be used outside of a Tplyr table. The function
+#'   [apply_formats()] allows you to apply an `f_str` within the context of
+#'   [dplyr::mutate()] or more generally a vectorized function.
+#'
+#' @section Valid `f_str()` Variables by Layer Type:
+#'
+#'   Valid variables allowed within the `...` parameter of `f_str()` differ by
+#'   layer type.
+#'
+#'   - Count layers
+#'     - `n`
+#'     - `pct`
+#'     - `total`
+#'     - `distinct_n`
+#'     - `distinct_pct`
+#'     - `distinct_total`
+#'   - Shift layers
+#'     - `n`
+#'     - `pct`
+#'     - `total`
+#'   - Desc layers
+#'     - `n`
+#'     - `mean`
+#'     - `sd`
+#'     - `median`
+#'     - `variance`
+#'     - `min`
+#'     - `max`
+#'     - `iqr`
+#'     - `q1`
+#'     - `q3`
+#'     - `missing`
+#'     - Custom summaries created by [set_custom_summaries()]
 #'
 #' @param format_string The desired display format. X's indicate digits. On the
 #'   left, the number of x's indicates the integer length. On the right, the
@@ -71,8 +101,9 @@
 #'   single element character vector, with the element named '.overall' to
 #'   instead replace the whole string.
 #'
-#' @return A \code{f_str} object
+#' @return A `f_str` object
 #' @export
+#' @md
 #'
 #' @examples
 #'
@@ -210,7 +241,7 @@ parse_fmt <- function(x) {
 #'   can, while still allowing flexibility to the user.
 #'
 #'   In a count layer, you can simply provide a single \code{\link{f_str}}
-#'   object to specify how you want your n's (and possibly percents) formatted.
+#'   object to specify how you want your n's, percentages, and denominators formatted.
 #'   If you are additionally supplying a statistic, like risk difference using
 #'   \code{\link{add_risk_diff}}, you specify the count formats using the name
 #'   'n_counts'. The risk difference formats would then be specified using the
@@ -297,7 +328,7 @@ set_format_strings <- function(e, ...) {
 #' @param cap A named character vector containing an 'int' element for the cap
 #'   on integer precision, and a 'dec' element for the cap on decimal precision.
 #'
-#' @return
+#' @return tplyr_layer object with formats attached
 #' @export
 #'
 #' @rdname set_format_strings
@@ -347,6 +378,10 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 
   # Identify if auto precision is needed
   need_prec_table <- any(map_lgl(format_strings, ~ .x$auto_precision))
+
+  # Fill in defaults if cap hasn't fully been provided
+  if (!('int' %in% names(cap))) cap['int'] <- getOption('tplyr.precision_cap')['int']
+  if (!('dec' %in% names(cap))) cap['dec'] <- getOption('tplyr.precision_cap')['dec']
 
   env_bind(e,
            format_strings = format_strings,
@@ -564,8 +599,8 @@ count_f_str_check <- function(...) {
   for (name in names(params)) {
 
     if (name == "n_counts") {
-      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct")),
-                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, or distinct_pct")
+      assert_that(all(params[['n_counts']]$vars %in% c("n", "pct", "distinct", "distinct_n", "distinct_pct", "total", "distinct_total")),
+                  msg = "f_str for n_counts in a count_layer can only be n, pct, distinct, distinct_pct, total, or distinct_total")
 
       # Check to make sure both disintct(old), and distinct_n(new) aren't passed
       assert_that(!all(c("distinct", "distinct_n") %in% params[["n_counts"]]$vars),
@@ -576,7 +611,7 @@ count_f_str_check <- function(...) {
                   msg = "You've passed duplicate parameters to `set_format_strings`")
 
       # Replace the disinct with distinct_n
-      if(any(params[["n_counts"]]$vars %in% "distinct")) {
+      if (any(params[["n_counts"]]$vars %in% "distinct")) {
         warning("The use of 'distinct' in count f_strs is discouraged. It was replaced with 'distinct_n' for consistancy.")
       }
       params[["n_counts"]]$vars[params[["n_counts"]]$vars %in% "distinct"] <- "distinct_n"

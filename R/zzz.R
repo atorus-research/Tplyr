@@ -1,17 +1,17 @@
-#' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing
+#' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing quos enexprs
 #' @importFrom rlang call_modify call_standardise call_name call_args is_call current_env quo_name trace_back is_function
-#' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym := as_name
-#' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn
-#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim
+#' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym syms := as_name
+#' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn quo_is_call
+#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim str_wrap
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
-#' @importFrom stringr str_sub str_extract str_pad str_starts str_remove_all
+#' @importFrom stringr str_sub str_extract str_pad str_starts str_remove_all str_match_all
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
-#' @importFrom magrittr %>% extract
+#' @importFrom magrittr %>% extract extract2
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group pull
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -19,6 +19,7 @@
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
 #' @importFrom forcats fct_expand fct_collapse fct_explicit_na fct_drop
+#' @importFrom utils capture.output
 NULL
 
 #' A grammar of summary data for clinical reports
@@ -134,19 +135,19 @@ tplyr_default_options <- list(
 
   # Desc layer defaults
   tplyr.desc_layer_default_formats =
-    list("n"        = f_str("xxx", n),
-         "Mean (SD)"= f_str("a.a+1 (a.a+2)", mean, sd),
-         "Median"   = f_str("a.a+1", median),
-         "Q1, Q3"   = f_str("a.a+1, a.a+1", q1, q3),
-         "Min, Max" = f_str("a.a, a.a", min, max),
-         "Missing"  = f_str("xxx", missing)
+    list("n"         = f_str("xxx", n),
+         "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd),
+         "Median"    = f_str("a.a+1", median),
+         "Q1, Q3"    = f_str("a.a+1, a.a+1", q1, q3),
+         "Min, Max"  = f_str("a.a, a.a", min, max),
+         "Missing"   = f_str("xxx", missing)
          ),
 
   # Shift layer defaults
   tplyr.shift_layer_default_formats = list(f_str("a", n)),
 
   # Precision caps for decimal and integer precision
-  tplyr.precision_cap = c('int' = 99, 'dec'=99),
+  tplyr.precision_cap = c('int' = 99, 'dec' = 99),
 
   # Custom summaries
   tplyr.custom_summaries = NULL,
@@ -158,7 +159,10 @@ tplyr_default_options <- list(
   tplyr.quantile_type = 7,
 
   # Rounding option default
-  tplyr.IBMRounding = FALSE
+  tplyr.IBMRounding = FALSE,
+
+  # Layer templates
+  tplyr.layer_templates = list()
 )
 
 # Carry out process on load ----
@@ -168,7 +172,7 @@ tplyr_default_options <- list(
 
   # Set any options that haven't been set
   toset <- !(names(tplyr_default_options) %in% names(op))
-  if(any(toset)) options(tplyr_default_options[toset])
+  if (any(toset)) options(tplyr_default_options[toset])
 
   invisible()
 }
@@ -279,6 +283,23 @@ built_target_pre_where <- NULL
 count_fmt <- NULL
 count_missings <- NULL
 has_missing_count <- FALSE
-kept_levels <-expr(TRUE)
+kept_levels <- expr(TRUE)
 levels_to_keep <- NULL
 break_ties <- NULL
+prec_error <- NULL
+stats_as_columns <- FALSE
+comp_distinct <- NULL
+numeric_cutoff <- NULL
+numeric_cutoff_stat <- NULL
+numeric_cutoff_column <- NULL
+meta <- NULL
+meta_sum <- NULL
+num_sums_raw <- NULL
+row_labels <- NULL
+row_id <- NULL
+USUBJID <- NULL
+trans_sums <- NULL
+l <- NULL
+w <- NULL
+s <- NULL
+out <- NULL

@@ -26,63 +26,102 @@ A \code{f_str} object
 }
 \description{
 \code{f_str} objects are intended to be used within the function
-\code{set_format_strings}. The \code{f_str} object carries information that
-powers a significant amount of layer processing. The \code{format_string}
-parameter is capable of controlling the display of a data point and decimal
-precision. The variables provided in \code{...} control which data points are
-used to populate the string formatted output.
+\code{set_format_strings}. The \code{f_str} object carries information that powers a
+significant amount of layer processing. The \code{format_string} parameter is
+capable of controlling the display of a data point and decimal precision. The
+variables provided in \code{...} control which data points are used to populate
+the string formatted output.
 }
 \details{
 Format strings are one of the most powerful components of 'Tplyr'.
-  Traditionally, converting numeric values into strings for presentation can
-  consume a good deal of time. Values and decimals need to align between
-  rows, rounding before trimming is sometimes forgotten - it can become a
-  tedious mess that is realistically not an important part of the analysis
-  being performed. 'Tplyr' makes this process as simple as we can, while
-  still allowing flexibility to the user.
+Traditionally, converting numeric values into strings for presentation can
+consume a good deal of time. Values and decimals need to align between
+rows, rounding before trimming is sometimes forgotten - it can become a
+tedious mess that is realistically not an important part of the analysis
+being performed. 'Tplyr' makes this process as simple as we can, while
+still allowing flexibility to the user.
 
-  Tplyr provides both manual and automatic decimal precision formatting. The
-  display of the numbers in the resulting data frame is controlled by the
-  \code{format_string} parameter. For manual precision, just like dummy
-  values may be presented on your mocks, integer and decimal precision is
-  specified by the user providing a string of 'x's for how you'd like your
-  numbers formatted. If you'd like 2 integers with 3 decimal places, you
-  specify your string as 'xx.xxx'. 'Tplyr' does the work to get the numbers
-  in the right place.
+Tplyr provides both manual and automatic decimal precision formatting. The
+display of the numbers in the resulting data frame is controlled by the
+\code{format_string} parameter. For manual precision, just like dummy values may
+be presented on your mocks, integer and decimal precision is specified by
+the user providing a string of 'x's for how you'd like your numbers
+formatted. If you'd like 2 integers with 3 decimal places, you specify your
+string as 'xx.xxx'. 'Tplyr' does the work to get the numbers in the right
+place.
 
-  To take this a step further, automatic decimal precision can also be
-  obtained based on the collected precision within the data. When creating
-  tables where results vary by some parameter, different results may call for
-  different degrees of precision. To use automatic precision, use a single
-  'a' on either the integer and decimal side. If you'd like to use increased
-  precision (i.e. you'd like mean to be collected precision +1), use 'a+1'.
-  So if you'd like both integer and and decimal precision to be based on the
-  data as collected, you can use a format like 'a.a' - or for collected+1
-  decimal precision, 'a.a+1'.  You can mix and match this with manual formats
-  as well, making format strings such as 'xx.a+1'.
+To take this a step further, automatic decimal precision can also be
+obtained based on the collected precision within the data. When creating
+tables where results vary by some parameter, different results may call for
+different degrees of precision. To use automatic precision, use a single
+'a' on either the integer and decimal side. If you'd like to use increased
+precision (i.e. you'd like mean to be collected precision +1), use 'a+1'.
+So if you'd like both integer and and decimal precision to be based on the
+data as collected, you can use a format like 'a.a' - or for collected+1
+decimal precision, 'a.a+1'.  You can mix and match this with manual formats
+as well, making format strings such as 'xx.a+1'.
 
-  If you want two numbers on the same line, you provide two sets of x's. For
-  example, if you're presenting a value like "mean (sd)" - you could provide
-  the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2). Note that you're
-  able to provide  different integer lengths and different decimal precision
-  for the two values. Each format string is independent and relates only to
-  the format specified.
+If you want two numbers on the same line, you provide two sets of x's. For
+example, if you're presenting a value like "mean (sd)" - you could provide
+the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2). Note that you're
+able to provide  different integer lengths and different decimal precision
+for the two values. Each format string is independent and relates only to
+the format specified.
 
-  The other parameters of the \code{f_str} call specify what values should
-  fill the x's. \code{f_str} objects are used slightly differently between
-  different layers. When declaring a format string within a count layer,
-  \code{f_str} expects to see the values \code{n} and (if desired)
-  \code{pct}, which specifies the formatting for your n's and percent values.
-  But in descriptive statistic layers, \code{f_str} parameters refer to the
-  names of the summaries being performed, either by built in defaults, or
-  custom summaries declared using \code{\link{set_custom_summaries}}. See
-  \code{\link{set_format_strings}} for some more notes about layers specific
-  implementation.
+The other parameters of the \code{f_str} call specify what values should fill
+the x's. \code{f_str} objects are used slightly differently between different
+layers. When declaring a format string within a count layer, \code{f_str()}
+expects to see the values \code{n} or \code{distinct_n} for event or distinct counts,
+\code{pct} or \code{distinct_pct} for event or distinct percentages, or \code{total} or
+\code{distinct_total} for denominator calculations. But in descriptive statistic
+layers, \code{f_str} parameters refer to the names of the summaries being
+performed, either by built in defaults, or custom summaries declared using
+\code{\link[=set_custom_summaries]{set_custom_summaries()}}. See \code{\link[=set_format_strings]{set_format_strings()}} for some more notes
+about layers specific implementation.
 
-  Count and shift layers frequencies and percentages can be specified with
-  'n' and 'pct' respectively. Distinct values can also be presented in count
-  layers with the arguments 'distinct' and 'distinct_total'.
+An \code{f_str()} may also be used outside of a Tplyr table. The function
+\code{\link[=apply_formats]{apply_formats()}} allows you to apply an \code{f_str} within the context of
+\code{\link[dplyr:mutate]{dplyr::mutate()}} or more generally a vectorized function.
 }
+\section{Valid \code{f_str()} Variables by Layer Type}{
+
+
+Valid variables allowed within the \code{...} parameter of \code{f_str()} differ by
+layer type.
+\itemize{
+\item Count layers
+\itemize{
+\item \code{n}
+\item \code{pct}
+\item \code{total}
+\item \code{distinct_n}
+\item \code{distinct_pct}
+\item \code{distinct_total}
+}
+\item Shift layers
+\itemize{
+\item \code{n}
+\item \code{pct}
+\item \code{total}
+}
+\item Desc layers
+\itemize{
+\item \code{n}
+\item \code{mean}
+\item \code{sd}
+\item \code{median}
+\item \code{variance}
+\item \code{min}
+\item \code{max}
+\item \code{iqr}
+\item \code{q1}
+\item \code{q3}
+\item \code{missing}
+\item Custom summaries created by \code{\link[=set_custom_summaries]{set_custom_summaries()}}
+}
+}
+}
+
 \examples{
 
 f_str("xx.x (xx.x)", mean, sd)

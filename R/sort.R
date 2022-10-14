@@ -161,6 +161,7 @@ add_order_columns.count_layer <- function(x) {
 
   evalq({
 
+    if(nrow(formatted_data) == 0) return(formatted_data)
     if(!exists("break_ties")) break_ties <- NULL
 
     # Set all defaults for ordering
@@ -202,7 +203,7 @@ add_order_columns.count_layer <- function(x) {
 
       all_outer <- numeric_data %>%
         filter(!!!filter_logic) %>%
-        extract(1:outer_number, )
+        extract(1:min(nrow(.), outer_number), )
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
@@ -218,12 +219,15 @@ add_order_columns.count_layer <- function(x) {
                                  filter_logic = filter_logic,
                                  indentation = indentation,
                                  outer_inf = outer_inf,
-                                 break_ties = break_ties)) %>%
+                                 break_ties = break_ties,
+                                 numeric_cutoff = numeric_cutoff,
+                                 numeric_cutoff_stat = numeric_cutoff_stat,
+                                 numeric_cutoff_column = numeric_cutoff_column)) %>%
         ungroup()
 
       if (!is.null(nest_count) && nest_count) {
         # If the table nest should be collapsed into one row.
-        row_label_names <- vars_select(names(formatted_data), starts_with("row"))
+        row_label_names <- vars_select(names(formatted_data), starts_with("row_label"))
         # Remove first row
         formatted_data[, 1] <- NULL
         # Rename row labels
@@ -255,7 +259,6 @@ add_order_columns.count_layer <- function(x) {
           else return(isna_)
         }))
       }
-
 
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
 
@@ -430,7 +433,10 @@ get_data_order <- function(x, formatted_col_index) {
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
                              total_index, total_row_sort_value,
-                             break_ties = break_ties)
+                             break_ties = break_ties,
+                             numeric_cutoff = numeric_cutoff,
+                             numeric_cutoff_stat = numeric_cutoff_stat,
+                             numeric_cutoff_column = numeric_cutoff_column)
 
     } else if (order_count_method == "byvarn") {
 
@@ -526,7 +532,10 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
                        missing_index = NULL, missing_sort_value = NULL,
                        total_index = NULL, total_row_sort_value = NULL,
-                       break_ties) {
+                       break_ties, numeric_cutoff, numeric_cutoff_stat,
+                       numeric_cutoff_column, nested = FALSE) {
+
+  if (nrow(numeric_data) == 0) return(numeric())
 
   # Make sure that if distinct_n is selected by set_result_order_var, that
   # there's a distinct variable in the numeric dataset
@@ -568,6 +577,11 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 
   ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
   numeric_ordering_data <- numeric_data %>%
+    {if (nested) . else filter_numeric(.,
+                                      numeric_cutoff,
+                                      numeric_cutoff_stat,
+                                      numeric_cutoff_column,
+                                      treat_var)} %>%
     filter(!!!filter_logic) %>%
 
     # Sometimes row numbers are needed for nested counts if a value in the first
@@ -697,7 +711,11 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     all_outer$..index <- all_outer %>%
       get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
                              result_order_var, vars(!!by[[1]], !!target_var),
-                             break_ties = break_ties)
+                             break_ties = break_ties,
+                             numeric_cutoff = numeric_cutoff,
+                             numeric_cutoff_stat = numeric_cutoff_stat,
+                             numeric_cutoff_column = numeric_cutoff_column,
+                             nested = TRUE)
 
     group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
       filter(summary_var == outer_value) %>%
@@ -705,10 +723,11 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
       select(..index)
   }
 
+  present_vars <- unlist(group_data[-1, row_label_vec[length(row_label_vec)]])
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% unlist(group_data[-1, row_label_vec[length(row_label_vec)]]), !is.na(!!by[[1]])) %>%
+    filter(numeric_data$summary_var %in% present_vars, !is.na(!!by[[1]])) %>%
     # Remove nesting prefix to prepare numeric data.
     mutate(summary_var := str_sub(summary_var, indentation_length))
 
@@ -722,14 +741,20 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   group_data[1, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
 
   if(tail(order_count_method, 1) == "bycount") {
-    group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
-                                                                                   ordering_cols,
-                                                                                   treat_var,
-                                                                                   head(by, -1),
-                                                                                   cols,
-                                                                                   result_order_var,
-                                                                                   target_var,
-                                                                                   break_ties = break_ties)
+    if (nrow(group_data) > 1) {
+      group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
+                                                                                     ordering_cols,
+                                                                                     treat_var,
+                                                                                     head(by, -1),
+                                                                                     cols,
+                                                                                     result_order_var,
+                                                                                     target_var,
+                                                                                     break_ties = break_ties,
+                                                                                     numeric_cutoff = numeric_cutoff,
+                                                                                     numeric_cutoff_stat = numeric_cutoff_stat,
+                                                                                     numeric_cutoff_column = numeric_cutoff_column,
+                                                                                     nested = TRUE)
+    }
   } else if(tail(order_count_method, 1) == "byvarn") {
 
     varn_df <- get_varn_values(target, target_var[[1]])
@@ -745,7 +770,9 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   } else {
 
-    group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:nrow(group_data[-1,])
+    group_row_count <- nrow(group_data[-1,])
+    # Logic for group_row_count is when numeric_where values cause unexpected results
+    group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:ifelse(group_row_count == 0, 1, group_row_count)
 
   }
 

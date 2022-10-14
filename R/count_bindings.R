@@ -90,19 +90,21 @@ set_total_row_label <- function(e, total_row_label) {
 #'
 #' In some situations, count summaries may want to see distinct counts by a
 #' variable like subject. For example, the number of subjects in a population
-#' who had a particular adverse event. \code{set_distinct_by} allows you to set
+#' who had a particular adverse event. `set_distinct_by` allows you to set
 #' the by variables used to determine a distinct count.
 #'
-#' When a \code{distinct_by} value is set, distinct counts will be used by
+#' When a `distinct_by` value is set, distinct counts will be used by
 #' default. If you wish to combine distinct and not distinct counts, you can
-#' choose which to display in your \code{\link{f_str}} objects using \code{n},
-#' \code{pct}, \code{distinct}, and \code{distinct_pct}.
+#' choose which to display in your `f_str()` objects using `n`,
+#' `pct`, `distinct_n`, and `distinct_pct`. Additionally, denominators
+#' may be presented using `total` and `distinct_total`
 #'
-#' @param e A \code{count_layer/shift_layer} object
+#' @param e A `count_layer/shift_layer` object
 #' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
 #' @export
+#' @md
 #'
 #' @examples
 #' #Load in pipe
@@ -582,6 +584,8 @@ set_denom_where <- function(e, denom_where) {
   e
 }
 
+#' @export
+#' @noRd
 set_denoms_by.count_layer <- function(e, ...) {
   dots <- vars(...)
   dots_chr <- map_chr(dots, as_name)
@@ -596,13 +600,13 @@ set_denoms_by.count_layer <- function(e, ...) {
   assert_that(all(dots_chr %in% c(by_, cols_, treat_var_, target_var_)),
               msg = "A denom_by wasn't found as a grouping variable in the layer/table.")
 
-  if(length(target_var) == 2) {
+  if (length(target_var) == 2) {
     assert_that(!(as_name(target_var[[2]]) %in% dots_chr),
                 msg = "You can not pass the second variable in `vars` as a denominator.")
   }
 
   # If the row variable is here, rename it to summary_var
-  if(as_name(target_var[[1]]) %in% dots_chr) {
+  if (as_name(target_var[[1]]) %in% dots_chr) {
     dots[dots_chr %in% as_name(target_var[[1]])] <- quos(summary_var)
   }
 
@@ -652,3 +656,50 @@ keep_levels <- function(e, ...) {
   e
 }
 
+#' Set a numeric cutoff
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' In certain tables, it may be necessary to only include rows that meet numeric
+#' conditions. Rows that are less than a certain cutoff can be suppressed from
+#' the output. This function allows you to pass a cutoff, a cutoff stat(n,
+#' distinct_n, pct, or distinct_pct) to supress values that are lesser than the
+#' cutoff.
+#'
+#'
+#'
+#' @param e A \code{count_layer} object
+#' @param numeric_cutoff A numeric value where only values greater than or equal
+#'   to will be displayed.
+#' @param stat The statistic to use when filtering out rows. Either 'n',
+#'   'distinct_n', or 'pct' are allowable
+#' @param column If only a particular column should be used to cutoff values, it
+#'   can be supplied here as a character value.
+#'
+#' @return The modified Tplyr layer object
+#' @export
+#' @md
+#'
+#' @examples
+#' mtcars %>%
+#' tplyr_table(gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       set_numeric_threshold(10, "n") %>%
+#'       add_total_row() %>%
+#'       set_order_count_method("bycount")
+#'   )
+set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
+
+  assert_that(is.numeric(numeric_cutoff),
+              msg = "The `numeric_cutoff` parameter must be numeric")
+  assert_that(stat %in% c("n", "distinct_n", "pct"),
+              msg = "Allowed values for 'stat' are 'n', 'distinct_n', or 'pct'")
+
+  env_bind(e, numeric_cutoff = numeric_cutoff)
+  env_bind(e, numeric_cutoff_stat = stat)
+  env_bind(e, numeric_cutoff_column = column)
+
+  e
+}

@@ -105,6 +105,7 @@ prepare_format_metadata.shift_layer <- function(x) {
 process_formatting.shift_layer <- function(x, ...) {
 
   evalq({
+
     formatted_data <- numeric_data %>%
       # Mutate value based on if there is a distinct_by
       mutate(n = construct_shift_string(.n=n, .total = total,
@@ -117,6 +118,8 @@ process_formatting.shift_layer <- function(x, ...) {
                   values_from = n,
                   names_prefix = "var1_") %>%
       replace_by_string_names(quos(!!!by, summary_var))
+
+    formatted_data <- assign_row_id(formatted_data, 's')
   }, envir = x)
 
   add_order_columns(x)

@@ -1,0 +1,147 @@
+---
+title: "Tplyr Metadata"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{metadata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(Tplyr)
+library(knitr)
+load("adsl.Rdata")
+```
+
+Tplyr has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?
+
+The purpose of the `tplyr_table()` object is to let Tplyr do more than just summarize data. As you build the table, all of the metadata around the table being built is maintained - the target variables being summarized, the grouped variables by row and column, the filter conditions necessary applied to the table and each layer. As a user, you provide this information to create the summary. But what about after the results are produced? Summarizing data inevitably leads to new questions. Within clinical summaries, you may want to know which subjects experienced an adverse event, or why the lab summaries of a particular visit's descriptive statistics are abnormal. Normally, you'd write a query to recreate the data that lead to that particular summary. Tplyr now allows you to immediately extract the input data or metadata that created an output result, thus providing traceability from the result back to the source.
+
+## Generating the Metadata
+
+Consider the following example:
+
+```{r table_creation}
+t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+  add_layer(
+    group_count(RACE)
+  ) %>% 
+  add_layer(
+    group_desc(AGE, where = EFFFL == "Y")
+  )
+
+dat <- t %>% build(metadata=TRUE)
+
+kable(dat)
+```
+
+To trigger the creation of metadata, the `build()` function has a new argument `metadata`. By specifying `TRUE`, the underlying metadata within Tplyr are prepared in an extractable format. This is the only action a user needs to specify for this action to take place. 
+
+When the `metadata` argument is used, a new column will be produced in the output dataframe called `row_id`. The `row_id` variable provides a persistent reference to a row of interest, even if the output dataframe is sorted. If you review `vignette("styled-table")`, note that we expect a certain amount of post processing and styling of the built data frame from Tplyr, to let you use whatever other packages you prefer. As such, this reference ID is necessary.
+
+## Extracting The Input Source
+
+So, let's cut to the chase. The most likely way you would use this metadata is to pull out the source data that created a cell. For this, we've provided the function `get_meta_subset()`. The only information that you need is the `row_id` and column name of the result cell of interest. For example, looking at the result above, what if we want to know who the 8 subjects in the Placebo group who where Black or African American:
+
+```{r meta_subset}
+get_meta_subset(t, 'c2_1', 'var1_Placebo') %>% 
+  kable()
+```
+
+By using the `row_id` and column, the dataframe is pulled right out for us. Notice that `USUBJID` was included by default, even though Tplyr there's no reference anywhere in the `tplyr_table()` to the variable `USUBJID`. This is because `get_meta_subset()` has an additional argument `add_cols` that allows you to specify additional columns you want included in the resulting dataframe, and has a default of USUBJID. So let's say we want additionally include the variable `SEX`.
+
+```{r add_vars}
+get_meta_subset(t, 'c2_1', 'var1_Placebo', add_cols = vars(USUBJID, SEX)) %>% 
+  kable()
+```
+
+Variables should be provided using `dplyr::vars()`, just like the `cols` argument on `tplyr_table()` and the `by` arguments in each layer type. 
+
+As mentioned, the input source data can be extracted for any result cell created by Tplyr. So let's say we want to know the subjects relevant for the descriptive statistics around age in the Xanomeline High Dose group:
+
+```{r desc_stats}
+get_meta_subset(t, 'd1_2', 'var1_Xanomeline High Dose') %>% 
+  head(10) %>% 
+  kable()
+```
+
+_Note: Trimmed for space_
+
+Notice how the columns returned are different. First off, within the summary above, we pulled results from the descriptive statistics layer. The target variable for this layer was `AGE`, and as such `AGE` is returned in the resulting output. Additionally, a layer level `where` argument was used to subset to `EFFFL == "Y"`, which leads to `EFFFL` being included in the output as well.
+
+## Extracting a Result Cell's Metadata
+
+To extract the dataframe in `get_meta_subset()`, the metadata of the result cell needs to first be extracted. This metadata can be directly accessed using the function `get_meta_result()`. Using the last example of `get_meta_subset()` above:
+
+```{r tplyr_meta}
+get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
+```
+
+The resulting output is a new object Tplyr called `tplyr_meta()`. This is a container of a relevent metadata for a specific result. The object itself is a list with two elements: `names` and `filters`.
+
+The `names` element contains quosures for each variable relevant to a specific result. This will include the target variable, the `by` variables used on the layer, the `cols` variables used on the table, and all variables included in any filter condition relevant to create the result.
+
+The `filters` element contains each filter condition (provided as calls) necessary to create a particular cell. This will include the table level `where` argument, the layer level `where` argument, the filter condition for the specific value of any `by` variable or `cols` variable necessary to create the cell, and similarly the filter for the treatment group of interest.
+
+The results are provided this was so that they can be unpacked directly into `dplyr` syntax when necessary, which is exactly what happens in `get_meta_subset()`. For example:
+
+```{r unpack}
+m <- get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
+
+adsl %>% 
+  filter(!!!m$filters) %>% 
+  select(!!!m$names) %>% 
+  head(10) %>% 
+  kable()
+```
+
+_Note: Trimmed for space_
+
+But - who says you can't let your imagination run wild? 
+
+```{r to string print, eval=FALSE}
+cat(c("adsl %>%\n",
+  "   filter(\n      ",
+  paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
+  ") %>%\n",
+  paste("   select(", paste(purrr::map_chr(m$names, rlang::as_label), collapse=", "), ")", sep="")
+))
+```
+
+```
+```{r to string content, results='asis', echo=FALSE}
+cat(c("adsl %>%\n",
+  "   filter(\n      ",
+  paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
+  ") %>%\n",
+  paste("   select(", paste(purrr::map_chr(m$names, rlang::as_label), collapse=", "), ")", sep="")
+))
+```
+```
+
+## So, What Does This Get Me?
+
+So we get get metadata around a result cell, and we can get the exact results from a result cell. You just need a row ID and a column name. But - what does that get you? You can query your tables - and that's great. But how do you _use_ that.
+
+The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application. Click any of the result cells within the table and see what happens.
+
+
+```{r, out.width=850, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
+knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/", height = "900px")
+```
+
+_Source code available [here](https://github.com/atorus-research/Tplyr-shiny-demo)_
+
+_That's_ what this is all about. The persistent row_id and column selection enables you to use something like Shiny to automatically query a cell based on its position in a table. Using click events and a package like [reactable](https://glin.github.io/reactable/), you can pick up the row and column selected and pass that information into `get_meta_result()`. Once you get the resulting data frame, it's up to you what you do with it, and you have the world of Shiny at the tip of your fingers.

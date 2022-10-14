@@ -1,6 +1,6 @@
 Package: Tplyr
-Title: A Grammar of Clinical Data Summary
-Version: 0.4.4
+Title: A Traceability Focused Grammar of Clinical Data Summary
+Version: 1.0.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -25,7 +25,7 @@ Authors@R:
     person(given = "Atorus Research LLC",
            role = "cph")
     )
-Description: A tool created to simplify the data manipulation necessary to create clinical reports.
+Description: A traceability focused tool created to simplify the data manipulation necessary to create clinical summaries.
 License: MIT + file LICENSE
 URL: https://github.com/atorus-research/Tplyr
 BugReports: https://github.com/atorus-research/Tplyr/issues
@@ -55,6 +55,6 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 RdMacros: lifecycle
 Config/testthat/edition: 3

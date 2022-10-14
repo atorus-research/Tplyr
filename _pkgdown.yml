@@ -1,6 +1,12 @@
+url: https://atorus-research.github.io/Tplyr
 destination: docs
 
 template:
+  bootstrap: 5
+  bslib:
+    bg: "#FFFFFF"
+    fg: "#1D252D"
+    primary: "#1D252D"
   params:
     bootswatch: yeti
     ganalytics: UA-165685385-2
@@ -11,7 +17,16 @@ template:
     twitter:
       creator: "@AtorusR"
       card: summary_large_image
-
+search:
+  exclude: ['news/index.html']
+repo:
+  url:
+    home: https://github.com/atorus-research/Tplyr/
+    source: https://github.com/atorus-research/Tplyr/blob/main/
+    issue: https://github.com/atorus-research/Tplyr/issues/
+    user: https://github.com/atorus-research
+news:
+  cran_dates: true
 reference:
 - title: Build
   desc: High-level functions to create and build a table
@@ -31,7 +46,7 @@ reference:
   desc: Customizing the display as a table
 - contents:
   - f_str
-  - ends_with("formats")
+  - ends_with("layer_formats")
   - set_format_strings
   - set_missing_count
 - title: Sorting
@@ -42,17 +57,22 @@ reference:
   - set_result_order_var
   - set_outer_sort_position
 - title: Adding Groups and Stats
+  desc: Adding treatment groups, total rows, and risk difference
 - contents:
   - add_total_row
   - add_total_group
   - add_risk_diff
   - set_total_row_label
-- title: Summary Functions
+- title: Descriptive Statistics Layer Functions
+  desc: Descriptive statistics layer helper functions
 - contents:
   - set_custom_summaries
+  - set_precision_data
   - set_precision_by
   - set_precision_on
+  - set_stats_as_columns
 - title: Counting functions
+  desc: Count layer helper functions
 - contents:
   - set_denoms_by
   - set_distinct_by
@@ -63,21 +83,35 @@ reference:
   - keep_levels
   - set_denom_ignore
   - set_indentation
+  - set_numeric_threshold
 - title: Column Headers
+  desc: Column header helpers
 - contents:
   - add_column_headers
   - header_n
-- title: Helper functions
+- title: Metadata Functions
+  desc: Tplyr metadata functions
 - contents:
+  - tplyr_meta
+  - add_variables
+  - add_filters
+  - get_metadata
+  - append_metadata
+  - starts_with('get_meta')
+- title: Helper functions
+  desc: General helper functions
+- contents:
+  - apply_formats
+  - str_indent_wrap
   - apply_row_masks
   - get_numeric_data
   - get_stats_data
-  - by
   - get_by
   - get_target_var
   - treat_var
   - get_where.tplyr_layer
   - Tplyr
+  - new_layer_template
 
 articles:
 - title: Table Vignettes
@@ -96,7 +130,13 @@ articles:
   - riskdiff
   - sort
   - options
+  - layer_templates
   - styled-table
   - denom
   - Tplyr
+- title: Using Metadata
+  navbar: Metadata
+  contents:
+  - metadata
+  - custom-metadata
 
