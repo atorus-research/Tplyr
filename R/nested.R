@@ -27,6 +27,10 @@ process_nested_count_target <- function(x) {
               immediate. = TRUE)
     }
 
+    if (isTRUE(include_total_row)) {
+      abort("You can't include total rows in nested counts. Instead, add a seperate layer for total counts.")
+    }
+
     if (!is.null(denoms_by)) {
       change_denom_ind <- map_chr(denoms_by, as_name) %in% "summary_var"
       second_denoms_by <- denoms_by
