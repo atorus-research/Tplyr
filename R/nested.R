@@ -5,8 +5,6 @@ process_nested_count_target <- function(x) {
 
     if(is.null(indentation)) indentation <- "   "
 
-
-
     assert_that(quo_is_symbol(target_var[[2]]),
                 msg = "Inner layers must be data driven variables")
 
@@ -29,6 +27,10 @@ process_nested_count_target <- function(x) {
               immediate. = TRUE)
     }
 
+    if (isTRUE(include_total_row)) {
+      abort("You can't include total rows in nested counts. Instead, add a seperate layer for total counts.")
+    }
+
     if (!is.null(denoms_by)) {
       change_denom_ind <- map_chr(denoms_by, as_name) %in% "summary_var"
       second_denoms_by <- denoms_by
@@ -47,7 +49,6 @@ process_nested_count_target <- function(x) {
                                         set_denoms_by(!!!second_denoms_by), prepare_numeric=FALSE)
 
     first_layer_final <- first_layer$numeric_data
-    # add_column(!!target_var[[1]] := .[["summary_var"]])
 
     second_layer_final <- second_layer$numeric_data %>%
       group_by(!!target_var[[1]]) %>%

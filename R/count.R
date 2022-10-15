@@ -223,43 +223,6 @@ process_nested_count_target <- function(x) {
 
 }
 
-#' This function resets the variables for a nested layer after it was built
-#' @noRd
-refresh_nest <- function(x) {
-  env_bind(x, by = env_get(x, "by_saved"))
-  env_bind(x, target_var = env_get(x, "target_var_saved"))
-}
-
-#' This function is meant to remove the values of an inner layer that don't
-#' appear in the target data
-#' @noRd
-filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation) {
-
-  # Is outer variable text? If it is don't filter on it
-  text_outer <- !quo_is_symbol(outer_name)
-  outer_name <- as_name(outer_name)
-  inner_name <- as_name(inner_name)
-
-  if (text_outer) {
-    target_inner_values <- target %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      paste0(indentation, .)
-  } else {
-    current_outer_value <- unique(.group[, outer_name])[[1]]
-
-    target_inner_values <- target %>%
-      filter(!!sym(outer_name) == current_outer_value) %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      paste0(indentation, .)
-  }
-
-  .group %>%
-    filter(summary_var %in% target_inner_values)
-
-}
-
 #' Process the n count data and put into summary_stat
 #'
 #' @param x Count layer
@@ -296,8 +259,8 @@ process_count_n <- function(x) {
     # If there is a missing_count_string, but its not in the dataset
     if (!is.null(missing_count_string) &&
 
-       !((any(unname(unlist(missing_count_list)) %in% unique(built_target[, as_name(target_var[[1]])]))) ||
-        any(is.na(built_target[, as_name(target_var[[1]])])))) {
+        !((any(unname(unlist(missing_count_list)) %in% unique(built_target[, as_name(target_var[[1]])]))) ||
+          any(is.na(built_target[, as_name(target_var[[1]])])))) {
       # This adds the missing string as a factor to the tallies. This is needed
       # to make sure the missing row is added even if there are no missing values.
       summary_stat <- summary_stat %>%
@@ -313,9 +276,8 @@ process_count_n <- function(x) {
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
-      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]])) %>% ##
+      mutate(!!as_name(target_var[[1]]) := as.character(!!target_var[[1]])) %>%
       group_by(!!!denoms_by_) %>%
-      do(get_denom_total(., denoms_by_, denoms_df, "distinct_n")) %>%
       ungroup()
 
     rm(denoms_by_)
@@ -737,8 +699,8 @@ process_count_denoms <- function(x) {
                    "` is invalid. Filter error:\n", e))
     })
 
-      # For distinct counts, we want to defer back to the
-      # population dataset. Trigger this by identifying that
+    # For distinct counts, we want to defer back to the
+    # population dataset. Trigger this by identifying that
     # the population dataset was overridden
     if (!isTRUE(try(identical(pop_data, target)))) {
       if (deparse(denom_where) != deparse(where)) {
@@ -752,7 +714,7 @@ process_count_denoms <- function(x) {
       group_by(!!!layer_params[param_apears]) %>%
       summarize(
         n = n()
-        ) %>%
+      ) %>%
       ungroup()
 
     denoms_df_dist <- built_pop_data %>%
@@ -767,9 +729,9 @@ process_count_denoms <- function(x) {
     names(by_join) <- as_name(treat_var)
 
     denoms_df <- denoms_df_n %>%
-      left_join(denoms_df_dist, by = by_join) %>%
       complete(!!!layer_params[param_apears],
-               fill = list(n = 0, distinct_n = 0))
+               fill = list(n = 0)) %>%
+      left_join(denoms_df_dist, by = by_join)
 
     if (as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%

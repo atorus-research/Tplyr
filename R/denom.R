@@ -159,14 +159,13 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
 
   sums <-  denoms_df %>%
     filter(!!!filter_logic) %>%
-    group_by(!!!vars_in_denoms) %>%
-    extract(total_extract)
+    group_by(!!!vars_in_denoms)
 
-  if (total_extract == "n") {
-    .data$total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
-  } else {
-    .data$distinct_total <- ifelse(nrow(sums) > 0, sum(sums, na.rm = TRUE), 0)
-  }
+  .data$total <- ifelse(nrow(sums) > 0, sum(sums[["n"]], na.rm = TRUE), 0)
+  # distinct_n is present for all count layers, but not shift layers, so
+  # dont' do this for shift layers
+  if ("distinct_n" %in% names(sums))
+    .data$distinct_total <- ifelse(nrow(sums) > 0, sums[["distinct_n"]], 0)
 
   .data
 
