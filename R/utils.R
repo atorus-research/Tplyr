@@ -12,7 +12,7 @@
 modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
   # Get exports from Tplyr
-  allowable_calls = objects("package:Tplyr")
+  allowable_calls = getNamespaceExports("Tplyr")
 
   # Only allow the user to use `Tplyr` functions
   assert_that(
