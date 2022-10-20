@@ -82,10 +82,44 @@ get_numeric_data.tplyr_table <- function(x, layer=NULL, where=TRUE, ...) {
 
   # If not picking a specific layer, then get all the numeric data
   if (is.null(layer)) {
-    return(bind_rows(map(x$layers, get_numeric_data)))
+    df_ls <- map(x$layers, get_numeric_data)
+    layer_type <- map(x$layers, ~class(.)[[2]])
+
+    out <- map2_dfr(df_ls, layer_type, function(data, type){
+      if(type == "desc_layer"){
+        max_label <- names(data)[str_detect(names(data), "row_label")] %>%
+          str_remove_all("row_label") %>%
+          as.numeric() %>%
+          max() %>%
+          paste0("row_label", .)
+        data <- data %>%
+          select(-row_label1,
+                 row_label1 = max_label)
+      }
+      data %>%
+        mutate(across(starts_with("row_label"), str_trim))
+    })
+    return(out)
   } else if (length(layer) > 1) {
     # If the layer variable was multiple elements then grap all of them
-    return(bind_rows(map(x$layers[layer], get_numeric_data)))
+    df_ls <-map(x$layers[layer], get_numeric_data)
+    layer_type <- map(x$layers[layer], ~class(.)[[2]])
+
+    map2_dfr(df_ls, layer_type, function(data, type){
+      if(type == "desc_layer"){
+        max_label <- names(data)[str_detect(names(data), "row_label")] %>%
+          str_remove_all("row_label") %>%
+          as.numeric() %>%
+          max() %>%
+          paste0("row_label", .)
+        data <- data %>%
+          select(-row_label1,
+                 row_label1 = max_label)
+      }
+      data %>%
+        mutate(across(starts_with("row_label"), str_trim))
+    })
+    return(out)
   } else {
     # Otherwise, pick it out and filter
     get_numeric_data(x$layers[[layer]]) %>%
@@ -212,7 +246,7 @@ get_stats_data.tplyr_table <- function(x, layer=NULL, statistic=NULL, where=TRUE
     # The provided name must exist
     missing_layers <- layer %in% names(x$layers)
     assert_that(all(missing_layers), msg=paste0("Layer(s) ", paste0(layer[!missing_layers], collapse=", "),
-                                               " do(es) not exist"))
+                                                " do(es) not exist"))
   }
 
   # If the pre-build wasn't executed then execute it
