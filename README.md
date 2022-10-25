@@ -181,7 +181,7 @@ In the Tplyr version 1.0.0, we’ve packed a number of new features in.
 For deeper dives on the largest new additions:
 
 -   Learn about Tplyr’s traceability metadata in `vignette("metadata")`
-    and about how it can be extended in `vigentte("custom-metadata")`
+    and about how it can be extended in `vignette("custom-metadata")`
 -   Learn about layer templates in `vignette("layer_templates")`
 
 # References
