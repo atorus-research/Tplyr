@@ -61,7 +61,7 @@ We've built a number of default summaries into 'Tplyr', which allows you to perf
 x <- data.frame(
   Statistic = c('N', 'Mean', "Standard Deviation", "Median", "Variance", "Minimum",
                 "Maximum", "Interquartile Range", "Q1", "Q3", "Missing"),
-  `Variable Names` = c("n", "mean", "sd", "median", "variance", "min", "max", "iqr", "q1", "q3", "missing"),
+  `Variable Names` = c("n", "mean", "sd", "median", "var", "min", "max", "iqr", "q1", "q3", "missing"),
   `Function Call` = c("n()", "mean(.var, na.rm=TRUE)", "sd(.var, na.rm=TRUE)", "median(.var, na.rm=TRUE)",
                       "var(.var, na.rm=TRUE)", "min(.var, na.rm=TRUE)", "max(.var, na.rm=TRUE)", 
                       "IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')",
