@@ -25,7 +25,7 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by 'Tplyr'.
+At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by  **Tplyr**.
 
 Let's start by looking at an example. 
 
@@ -57,7 +57,7 @@ Now let's dig in.
 
 ### Ordering Helpers
 
-Ordering helpers are columns added into 'Tplyr' tables to make sure that you can sort the display to your preference. In general, 'Tplyr' will create:
+Ordering helpers are columns added into **Tplyr** tables to make sure that you can sort the display to your preference. In general, **Tplyr** will create:
 
 - One order variable to order layers
 - One order variable for each by variable
@@ -100,7 +100,7 @@ For more information, it's well worth your time to familiarize yourself with the
 
 ## Sorting the Layers
 
-Layers are one of the fundamental building blocks of 'Tplyr'. Each layer executes independently, and at the end of a build they're bound together. The `ord_layer_index` variable allows you differentiate and sort layers after the table is built. Layers are indexed in the order in which they were added to the table using `add_layer()` or `add_layers()`. For example, let's say you wanted to reverse the order of the layers.
+Layers are one of the fundamental building blocks of **Tplyr**. Each layer executes independently, and at the end of a build they're bound together. The `ord_layer_index` variable allows you differentiate and sort layers after the table is built. Layers are indexed in the order in which they were added to the table using `add_layer()` or `add_layers()`. For example, let's say you wanted to reverse the order of the layers.
 
 ```{r}
 t %>%
@@ -121,7 +121,7 @@ These order variables will calculate based on the first applicable method below.
 
 ### Factor
 
-If there's no `VARN` variable in the target dataset, 'Tplyr' will then check if the variable you provided is a factor. If you're new to R, spending some time trying to understand factor variables is quite worthwhile. Let's look at example using the variable `ETHNIC` and see some of the advantages in practice.
+If there's no `VARN` variable in the target dataset, **Tplyr** will then check if the variable you provided is a factor. If you're new to R, spending some time trying to understand factor variables is quite worthwhile. Let's look at example using the variable `ETHNIC` and see some of the advantages in practice.
 
 ```{r}
 adsl$ETHNIC <- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
@@ -136,13 +136,13 @@ tplyr_table(adsl, TRT01A) %>%
 
 Factor variables have 'levels'. These levels are essentially what the `VARN` variables are trying to achieve - they specify the order of the different values within the associated variable. The variable we set above specifies that "HISPANIC OR LATINO" should sort first, then "NOT HISPANIC OR LATINO", and finally "DUMMY". Notice how they're not alphabetical? 
 
-A highly advantageous aspect of using factor variables in 'Tplyr' is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:
+A highly advantageous aspect of using factor variables in **Tplyr** is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:
 
 ```
 adsl$ETHNIC <- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
 ```
 
-This is converting the variable `ETHNIC` to a factor, then setting the factor levels. But it doesn't _change_ any of the values in the dataset - there are no values of "dummy" within `ETHNIC` in ADSL. Yet in the output built above, you see rows for "DUMMY". By using factors, you can insert rows into your 'Tplyr' table that don't exist in the data. This is particularly helpful if you're working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.
+This is converting the variable `ETHNIC` to a factor, then setting the factor levels. But it doesn't _change_ any of the values in the dataset - there are no values of "dummy" within `ETHNIC` in ADSL. Yet in the output built above, you see rows for "DUMMY". By using factors, you can insert rows into your **Tplyr** table that don't exist in the data. This is particularly helpful if you're working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.
 
 ### VARN
 
@@ -154,7 +154,7 @@ adsl %>%
   kable()
 ```
 
-'Tplyr' will automatically figure this out for you, and pull the `RACEN` values into the variable `ord_layer_1`.
+ **Tplyr** will automatically figure this out for you, and pull the `RACEN` values into the variable `ord_layer_1`.
 
 ```{r}
 tplyr_table(adsl, TRT01A) %>%
@@ -169,7 +169,7 @@ tplyr_table(adsl, TRT01A) %>%
 
 ### Alphabetical
 
-Lastly, If the target doesn't have a `VARN` variable in the target dataset and isn't a factor, 'Tplyr' will sort the variable alphabetically. The resulting order variable will be numeric, simply numbering each of the variable values alphabetically. Nothing fancy to it! 
+Lastly, If the target doesn't have a `VARN` variable in the target dataset and isn't a factor,**Tplyr** will sort the variable alphabetically. The resulting order variable will be numeric, simply numbering each of the variable values alphabetically. Nothing fancy to it! 
 
 ## Sorting Descriptive Statistic Summaries
 
@@ -194,16 +194,16 @@ Each of the separate "Groups" added above were indexed based on their position i
 
 ## Sorting Count Layers
 
-The order in which results appear on a frequency table can be deceptively complex and depends on the situation at hand. With this in mind, 'Tplyr' has 3 different methods of ordering the results of a count layer using the function `set_order_count_method()`:
+The order in which results appear on a frequency table can be deceptively complex and depends on the situation at hand. With this in mind,**Tplyr** has 3 different methods of ordering the results of a count layer using the function `set_order_count_method()`:
 
 1. **"byfactor"** - The default method is to sort by a factor. If the input variable is not a factor, alphabetical sorting will be used. 
 2. **"byvarn"** - Similar to a 'by' variable, a count target can be sorted with a VARN variable existing in the target dataset.
-3. **"bycount"** - This is the most complex method. Many tables require counts to be sorted based on the counts within a particular group, like a treatment variable. 'Tplyr' can populate the ordering column based on numeric values within any results column. This requires some more granular control, for which we've created the functions `set_ordering_cols()` and `set_result_order_var()` to specify the column and numeric value on which the ordering column should be based.
+3. **"bycount"** - This is the most complex method. Many tables require counts to be sorted based on the counts within a particular group, like a treatment variable. **Tplyr** can populate the ordering column based on numeric values within any results column. This requires some more granular control, for which we've created the functions `set_ordering_cols()` and `set_result_order_var()` to specify the column and numeric value on which the ordering column should be based.
 
 
 ### "byfactor" and "byvarn" 
 
-"byfactor" is the default ordering method of results for count layers. Both "byfactor" and "byvarn" behave exactly like the order variables associated with `by` variables in a 'Tplyr' table. For "byvarn", you must set the sort method using `set_order_count_method()`. 
+"byfactor" is the default ordering method of results for count layers. Both "byfactor" and "byvarn" behave exactly like the order variables associated with `by` variables in a **Tplyr** table. For "byvarn", you must set the sort method using `set_order_count_method()`. 
 
 ```{r}
 adsl$AGEGR1 <- factor(adsl$AGEGR1, c("<65", "65-80", ">80"))
@@ -310,7 +310,7 @@ tplyr_table(adae, TRTA) %>%
 
 In a layer that uses nesting, we need one more order variable - as we're now concerned with the sorting of both the outside and inside variable. Counts are being summarized for both - so we need to know how both should be sorted. Additionally, we need to make sure that, in this case, the adverse events within a body system stay within the rows of that body system.
 
-These result variables will always be the last two order variables output by 'Tplyr'. In the above example, `ord_layer_1` is for `AEBODSYS` and `ord_layer_2` is for `AEDECOD`. Note that `ord_layer_2` has `Inf` where `row_label1` and `row_label2` are both equal. This is the row that summarizes the `AEBODSYS` counts. By default, 'Tplyr' is set to assume that you will use **descending** sort on the order variable associated with the inside count variable (i.e. `AEDECOD`). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you'd like to use ascending sorting instead, we offer the function `set_outer_sort_position()`. 
+These result variables will always be the last two order variables output by **Tplyr**. In the above example, `ord_layer_1` is for `AEBODSYS` and `ord_layer_2` is for `AEDECOD`. Note that `ord_layer_2` has `Inf` where `row_label1` and `row_label2` are both equal. This is the row that summarizes the `AEBODSYS` counts. By default,  **Tplyr** is set to assume that you will use **descending** sort on the order variable associated with the inside count variable (i.e. `AEDECOD`). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you'd like to use ascending sorting instead, we offer the function `set_outer_sort_position()`. 
 
 ```{r}
 tplyr_table(adae, TRTA) %>% 

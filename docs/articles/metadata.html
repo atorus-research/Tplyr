@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tplyr Metadata">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,28 +118,29 @@
 
     
     
-<p>Tplyr has a bit of a unique design, which might feel a bit weird as
-you get used to the package. The process flow of building a
-<code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object first, and then using
+<p><strong>Tplyr</strong> has a bit of a unique design, which might feel
+a bit weird as you get used to the package. The process flow of building
+a <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object first, and then using
 <code><a href="../reference/build.html">build()</a></code> to construct the data frame is different than
 programming in the tidyverse, or creating a ggplot. Why create the
 <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object first? Why is the
 <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object different than the resulting data
 frame?</p>
-<p>The purpose of the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object is to let Tplyr
-do more than just summarize data. As you build the table, all of the
-metadata around the table being built is maintained - the target
-variables being summarized, the grouped variables by row and column, the
-filter conditions necessary applied to the table and each layer. As a
-user, you provide this information to create the summary. But what about
-after the results are produced? Summarizing data inevitably leads to new
-questions. Within clinical summaries, you may want to know which
-subjects experienced an adverse event, or why the lab summaries of a
-particular visit’s descriptive statistics are abnormal. Normally, you’d
-write a query to recreate the data that lead to that particular summary.
-Tplyr now allows you to immediately extract the input data or metadata
-that created an output result, thus providing traceability from the
-result back to the source.</p>
+<p>The purpose of the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> object is to let
+<strong>Tplyr</strong> do more than just summarize data. As you build
+the table, all of the metadata around the table being built is
+maintained - the target variables being summarized, the grouped
+variables by row and column, the filter conditions necessary applied to
+the table and each layer. As a user, you provide this information to
+create the summary. But what about after the results are produced?
+Summarizing data inevitably leads to new questions. Within clinical
+summaries, you may want to know which subjects experienced an adverse
+event, or why the lab summaries of a particular visit’s descriptive
+statistics are abnormal. Normally, you’d write a query to recreate the
+data that lead to that particular summary. <strong>Tplyr</strong> now
+allows you to immediately extract the input data or metadata that
+created an output result, thus providing traceability from the result
+back to the source.</p>
 <div class="section level2">
 <h2 id="generating-the-metadata">Generating the Metadata<a class="anchor" aria-label="anchor" href="#generating-the-metadata"></a>
 </h2>
@@ -261,9 +262,9 @@ result back to the source.</p>
 </table>
 <p>To trigger the creation of metadata, the <code><a href="../reference/build.html">build()</a></code>
 function has a new argument <code>metadata</code>. By specifying
-<code>TRUE</code>, the underlying metadata within Tplyr are prepared in
-an extractable format. This is the only action a user needs to specify
-for this action to take place.</p>
+<code>TRUE</code>, the underlying metadata within <strong>Tplyr</strong>
+are prepared in an extractable format. This is the only action a user
+needs to specify for this action to take place.</p>
 <p>When the <code>metadata</code> argument is used, a new column will be
 produced in the output dataframe called <code>row_id</code>. The
 <code>row_id</code> variable provides a persistent reference to a row of
@@ -346,13 +347,13 @@ where Black or African American:</p>
 </table>
 <p>By using the <code>row_id</code> and column, the dataframe is pulled
 right out for us. Notice that <code>USUBJID</code> was included by
-default, even though Tplyr there’s no reference anywhere in the
-<code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> to the variable <code>USUBJID</code>. This is
-because <code><a href="../reference/get_meta_subset.html">get_meta_subset()</a></code> has an additional argument
-<code>add_cols</code> that allows you to specify additional columns you
-want included in the resulting dataframe, and has a default of USUBJID.
-So let’s say we want additionally include the variable
-<code>SEX</code>.</p>
+default, even though <strong>Tplyr</strong> there’s no reference
+anywhere in the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> to the variable
+<code>USUBJID</code>. This is because <code><a href="../reference/get_meta_subset.html">get_meta_subset()</a></code> has
+an additional argument <code>add_cols</code> that allows you to specify
+additional columns you want included in the resulting dataframe, and has
+a default of USUBJID. So let’s say we want additionally include the
+variable <code>SEX</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'c2_1'</span>, <span class="st">'var1_Placebo'</span>, add_cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">SEX</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -539,7 +540,7 @@ can be directly accessed using the function
 <span><span class="co">#&gt;     TRT01P, EFFFL, SAFFL, AGE </span></span>
 <span><span class="co">#&gt; Filters:</span></span>
 <span><span class="co">#&gt;     TRT01P == c("Xanomeline High Dose"), EFFFL == "Y", SAFFL == "Y"</span></span></code></pre></div>
-<p>The resulting output is a new object Tplyr called
+<p>The resulting output is a new object <strong>Tplyr</strong> called
 <code><a href="../reference/tplyr_meta.html">tplyr_meta()</a></code>. This is a container of a relevent metadata
 for a specific result. The object itself is a list with two elements:
 <code>names</code> and <code>filters</code>.</p>

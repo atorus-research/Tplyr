@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Producing a Styled Table">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,15 +119,16 @@
     
     
 <p>In the other vignettes we talk about how to get the most out of
-‘Tplyr’ when it comes to preparing your data. The last step we need to
-cover is how to get from the data output by ‘Tplyr’ to a presentation
-ready table.</p>
+<strong>Tplyr</strong> when it comes to preparing your data. The last
+step we need to cover is how to get from the data output by
+<strong>Tplyr</strong> to a presentation ready table.</p>
 <p>There are a few things left to do after a table is built. These steps
 will vary based on what package you’re using for presentation - but
 within this vignette we will demonstrate how to use <a href="https://hughjonesd.github.io/huxtable/" class="external-link">‘huxtable’</a> to prepare
 your table and <a href="https://github.com/atorus-research/pharmaRTF" class="external-link">‘pharmaRTF’</a> to
 write the output.</p>
-<p>After a ‘Tplyr’ table is built, you will likely have to:</p>
+<p>After a <strong>Tplyr</strong> table is built, you will likely have
+to:</p>
 <ul>
 <li>Sort the table however you wish using the provided order
 variables</li>
@@ -881,23 +882,26 @@ Missing
 summaries one by one. But notice that I did some pre-processing on the
 dataset. There are some important considerations here:</p>
 <ul>
-<li>‘Tplyr’ does <strong>not</strong> do any data cleaning. We summarize
-and prepare the data that you enter. If you’re following CDISC standards
-properly, this shouldn’t be a concern - because ADaM data should already
-be formatted to be presentation ready. ‘Tplyr’ works under this
-assumption, and we won’t do any re-coding or casing changes. In this
-example, the original <code>SEX</code> values were “M” and “F” - so I
-switched them to be “Male” and “Female” instead.</li>
+<li>
+<strong>Tplyr</strong> does <strong>not</strong> do any data
+cleaning. We summarize and prepare the data that you enter. If you’re
+following CDISC standards properly, this shouldn’t be a concern -
+because ADaM data should already be formatted to be presentation ready.
+<strong>Tplyr</strong> works under this assumption, and we won’t do any
+re-coding or casing changes. In this example, the original
+<code>SEX</code> values were “M” and “F” - so I switched them to be
+“Male” and “Female” instead.</li>
 <li>The second pre-processing step does something interesting. If you
 recall from <code><a href="../articles/sort.html">vignette("sort")</a></code>, factor variables input to
-‘Tplyr’ will use the factor order for the resulting order variable.
-Another particularly useful advantage of this is dummying values. The
-adsl dataset only contains the races “WHITE”, “BLACK OR AFRICAN
-AMERICAN”, and “AMERICAN INDIAN OR ALASK NATIVE”. If you set factor
-levels prior to entering the data into ‘Tplyr’, the values will be
-dummied for you. This is particularly advantageous when a study is early
-on and data may be sparse. Your output can display complete values and
-the presentation will be consistent as data come in.</li>
+<strong>Tplyr</strong> will use the factor order for the resulting order
+variable. Another particularly useful advantage of this is dummying
+values. The adsl dataset only contains the races “WHITE”, “BLACK OR
+AFRICAN AMERICAN”, and “AMERICAN INDIAN OR ALASK NATIVE”. If you set
+factor levels prior to entering the data into <strong>Tplyr</strong>,
+the values will be dummied for you. This is particularly advantageous
+when a study is early on and data may be sparse. Your output can display
+complete values and the presentation will be consistent as data come
+in.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -1480,47 +1484,49 @@ sorting in more detail.</li>
 <li>Used the <code><a href="../reference/apply_row_masks.html">apply_row_masks()</a></code> function. Essentially,
 <strong>after</strong> your data are sorted, this function will look at
 all of your row_label variables and drop any repeating values. For
-packages like ‘huxtable’, this eases the process of making your table
-presentation ready, so you don’t need to do any cell merging once the
-‘huxtable’ table is created. Additionally, here we set the
-<code>row_breaks</code> option to <code>TRUE</code>. This will insert a
-blank row between each of your layers, which helps improve the
-presentation depending on your output. It’s important to note that the
-input dataset <strong>must</strong> still have the
-<code>ord_layer_index</code> variable attached in order for the blank
-rows to be added. Sorting should be done prior, and column
+packages like <strong>huxtable</strong>, this eases the process of
+making your table presentation ready, so you don’t need to do any cell
+merging once the <strong>huxtable</strong> table is created.
+Additionally, here we set the <code>row_breaks</code> option to
+<code>TRUE</code>. This will insert a blank row between each of your
+layers, which helps improve the presentation depending on your output.
+It’s important to note that the input dataset <strong>must</strong>
+still have the <code>ord_layer_index</code> variable attached in order
+for the blank rows to be added. Sorting should be done prior, and column
 reordering/dropping may be done after.</li>
 <li>Re-ordered the columns and dropped off the order columns. For more
 information about how to get the most out of
 <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>, you can look into ‘tidyselect’ <a href="https://tidyselect.r-lib.org/reference/select_helpers.html" class="external-link">here</a>.
 This is where the <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">tidyselect::starts_with()</a></code> comes
 from.</li>
-<li>Added the column headers. In a huxtable, your column headers are
-basically just the top rows of your data frame. The ‘Tplyr’ function
-<code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does this for you by letting you just
-enter in a string to define your headers. But there’s more to it - you
-can also create nested headers by nesting text within curly brackets
-({}), and notice that we have the treatment groups within the two stars?
-This actually allows you to take the header N values that ‘Tplyr’
-calculates for you, and use it within the column headers. As you can see
-in the first row of the output, the text shows the (N=XX) values
-populated with the proper header_n counts.</li>
+<li>Added the column headers. In a <strong>huxtable</strong>, your
+column headers are basically just the top rows of your data frame. The
+<strong>Tplyr</strong> function <code><a href="../reference/add_column_headers.html">add_column_headers()</a></code> does
+this for you by letting you just enter in a string to define your
+headers. But there’s more to it - you can also create nested headers by
+nesting text within curly brackets ({}), and notice that we have the
+treatment groups within the two stars? This actually allows you to take
+the header N values that <strong>Tplyr</strong> calculates for you, and
+use it within the column headers. As you can see in the first row of the
+output, the text shows the (N=XX) values populated with the proper
+header_n counts.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="table-styling">Table Styling<a class="anchor" aria-label="anchor" href="#table-styling"></a>
 </h3>
-<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/" class="external-link">‘gt’</a> package is always a good choice,
-and we’ve been using <a href="https://haozhu233.github.io/kableExtra/" class="external-link">‘kableExtra’</a>
+<p>There are a lot of options of where to go next. The <a href="https://gt.rstudio.com/" class="external-link"><code>gt</code></a> package is always a
+good choice, and we’ve been using <a href="https://haozhu233.github.io/kableExtra/" class="external-link"><strong>kableExtra</strong></a>
 throughout these vignettes. At the moment, with the tools we’ve made
-available in ‘Tplyr’, if you’re aiming to create RTF outputs (which is
-still a common requirement in within pharma companies), <a href="https://hughjonesd.github.io/huxtable/" class="external-link">‘huxtable’</a> and our
-package <a href="https://github.com/atorus-research/pharmaRTF" class="external-link">‘pharmaRTF’</a> will
-get you where you need to go.</p>
-<p><em>(Note: We plan to extend ‘pharmaRTF’ to support ‘GT’ when it has
-better RTF support)</em></p>
-<p>Alright - so the table is ready. Let’s prepare the ‘huxtable’
-table.</p>
+available in <strong>Tplyr</strong>, if you’re aiming to create RTF
+outputs (which is still a common requirement in within pharma
+companies), <a href="https://hughjonesd.github.io/huxtable/" class="external-link"><code>huxtable</code></a>
+and our package <a href="https://github.com/atorus-research/pharmaRTF" class="external-link"><code>pharmaRTF</code></a>
+will get you where you need to go.</p>
+<p><em>(Note: We plan to extend <strong>pharmaRTF</strong> to support
+<strong>GT</strong> when it has better RTF support)</em></p>
+<p>Alright - so the table is ready. Let’s prepare the
+<code>huxtable</code> table.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make the table</span></span>
 <span><span class="va">ht</span> <span class="op">&lt;-</span> <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/as_huxtable.html" class="external-link">as_hux</a></span><span class="op">(</span><span class="va">dat</span>, add_colnames<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1779,7 +1785,8 @@ table.</p>
 </h2>
 <p>So now this is starting to look a lot more like what we’re going for!
 The table styling is coming together. The last step is to get it into a
-final output document. So here we’ll jump into ‘pharmaRTF’</p>
+final output document. So here we’ll jump into
+<strong>pharmaRTF</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/rtf_doc.html" class="external-link">rtf_doc</a></span><span class="op">(</span><span class="va">ht</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/add_titles_footnotes.html" class="external-link">add_titles</a></span><span class="op">(</span></span>
@@ -1793,8 +1800,8 @@ final output document. So here we’ll jump into ‘pharmaRTF’</p>
 <span>  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/font_size.html" class="external-link">set_font_size</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/ignore_cell_padding.html" class="external-link">set_ignore_cell_padding</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/column_header_buffer.html" class="external-link">set_column_header_buffer</a></span><span class="op">(</span>top<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p>This may look a little messy, but ‘pharmaRTF’ syntax can be
-abbreviated by standardizing your process. Check out <a href="https://atorus-research.github.io/tf_from_file.html" class="external-link">this
+<p>This may look a little messy, but <strong>pharmaRTF</strong> syntax
+can be abbreviated by standardizing your process. Check out <a href="https://atorus-research.github.io/tf_from_file.html" class="external-link">this
 vignette</a> for instructions on how to read titles and footnotes into
 ‘pharmaRTF’ from a file.</p>
 <p>Our document is now created, all the titles and footnotes are added,
@@ -1803,10 +1810,10 @@ and settings are good to go. Last step is to write it out.</p>
 <code class="sourceCode R"><span><span class="fu">pharmaRTF</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pharmaRTF/man/write_rtf.html" class="external-link">write_rtf</a></span><span class="op">(</span><span class="va">doc</span>, file<span class="op">=</span><span class="st">'styled_example.rtf'</span><span class="op">)</span></span></code></pre></div>
 <p>And here we have it - Our table is styled and ready to go!</p>
 <p><img src="styled_example.png" width="800px"></p>
-<p>If you’d like to learn more about how to use ‘huxtable’, be sure to
-check out the <a href="https://hughjonesd.github.io/huxtable/" class="external-link">website</a>. For use
-specifically with ‘pharmaRTF’, we prepared a vignette of tips and tricks
-<a href="https://atorus-research.github.io/huxtable_tips.html" class="external-link">here</a>.</p>
+<p>If you’d like to learn more about how to use <code>huxtable</code>,
+be sure to check out the <a href="https://hughjonesd.github.io/huxtable/" class="external-link">website</a>. For use
+specifically with <code>pharmaRTF</code>, we prepared a vignette of tips
+and tricks <a href="https://atorus-research.github.io/huxtable_tips.html" class="external-link">here</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sorting a Tplyr Table">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,7 +122,7 @@
 it is. But in a handful of cases it can get quite tricky, with some odd
 situations that need to be handled carefully. For this reason, we found
 it necessary to dedicate an entire vignette to just sorting and handling
-columns output by ‘Tplyr’.</p>
+columns output by <strong>Tplyr</strong>.</p>
 <p>Let’s start by looking at an example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -372,9 +372,9 @@ reported by sex</li>
 <div class="section level3">
 <h3 id="ordering-helpers">Ordering Helpers<a class="anchor" aria-label="anchor" href="#ordering-helpers"></a>
 </h3>
-<p>Ordering helpers are columns added into ‘Tplyr’ tables to make sure
-that you can sort the display to your preference. In general, ‘Tplyr’
-will create:</p>
+<p>Ordering helpers are columns added into <strong>Tplyr</strong> tables
+to make sure that you can sort the display to your preference. In
+general, <strong>Tplyr</strong> will create:</p>
 <ul>
 <li>One order variable to order layers</li>
 <li>One order variable for each by variable</li>
@@ -848,13 +848,13 @@ helpers</a> that work with ‘dplyr’.</p>
 <div class="section level2">
 <h2 id="sorting-the-layers">Sorting the Layers<a class="anchor" aria-label="anchor" href="#sorting-the-layers"></a>
 </h2>
-<p>Layers are one of the fundamental building blocks of ‘Tplyr’. Each
-layer executes independently, and at the end of a build they’re bound
-together. The <code>ord_layer_index</code> variable allows you
-differentiate and sort layers after the table is built. Layers are
-indexed in the order in which they were added to the table using
-<code><a href="../reference/layer_attachment.html">add_layer()</a></code> or <code><a href="../reference/layer_attachment.html">add_layers()</a></code>. For example,
-let’s say you wanted to reverse the order of the layers.</p>
+<p>Layers are one of the fundamental building blocks of
+<strong>Tplyr</strong>. Each layer executes independently, and at the
+end of a build they’re bound together. The <code>ord_layer_index</code>
+variable allows you differentiate and sort layers after the table is
+built. Layers are indexed in the order in which they were added to the
+table using <code><a href="../reference/layer_attachment.html">add_layer()</a></code> or <code><a href="../reference/layer_attachment.html">add_layers()</a></code>. For
+example, let’s say you wanted to reverse the order of the layers.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"row"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1010,10 +1010,11 @@ numeric.</li>
 <h3 id="factor">Factor<a class="anchor" aria-label="anchor" href="#factor"></a>
 </h3>
 <p>If there’s no <code>VARN</code> variable in the target dataset,
-‘Tplyr’ will then check if the variable you provided is a factor. If
-you’re new to R, spending some time trying to understand factor
-variables is quite worthwhile. Let’s look at example using the variable
-<code>ETHNIC</code> and see some of the advantages in practice.</p>
+<strong>Tplyr</strong> will then check if the variable you provided is a
+factor. If you’re new to R, spending some time trying to understand
+factor variables is quite worthwhile. Let’s look at example using the
+variable <code>ETHNIC</code> and see some of the advantages in
+practice.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span><span class="op">$</span><span class="va">ETHNIC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">$</span><span class="va">ETHNIC</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>, <span class="st">"DUMMMY"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1068,19 +1069,20 @@ order of the different values within the associated variable. The
 variable we set above specifies that “HISPANIC OR LATINO” should sort
 first, then “NOT HISPANIC OR LATINO”, and finally “DUMMY”. Notice how
 they’re not alphabetical?</p>
-<p>A highly advantageous aspect of using factor variables in ‘Tplyr’ is
-that factor variables can be used to insert dummy values into your
-table. Consider this line of code from above:</p>
+<p>A highly advantageous aspect of using factor variables in
+<strong>Tplyr</strong> is that factor variables can be used to insert
+dummy values into your table. Consider this line of code from above:</p>
 <pre><code><span><span class="va">adsl</span><span class="op">$</span><span class="va">ETHNIC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">$</span><span class="va">ETHNIC</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HISPANIC OR LATINO"</span>, <span class="st">"NOT HISPANIC OR LATINO"</span>, <span class="st">"DUMMMY"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 <p>This is converting the variable <code>ETHNIC</code> to a factor, then
 setting the factor levels. But it doesn’t <em>change</em> any of the
 values in the dataset - there are no values of “dummy” within
 <code>ETHNIC</code> in ADSL. Yet in the output built above, you see rows
-for “DUMMY”. By using factors, you can insert rows into your ‘Tplyr’
-table that don’t exist in the data. This is particularly helpful if
-you’re working with data early on in a study, where certain values are
-expected, yet do not currently exist in the data. This will help you
-prepare tables that are complete even when your data are not.</p>
+for “DUMMY”. By using factors, you can insert rows into your
+<strong>Tplyr</strong> table that don’t exist in the data. This is
+particularly helpful if you’re working with data early on in a study,
+where certain values are expected, yet do not currently exist in the
+data. This will help you prepare tables that are complete even when your
+data are not.</p>
 </div>
 <div class="section level3">
 <h3 id="varn">VARN<a class="anchor" aria-label="anchor" href="#varn"></a>
@@ -1112,8 +1114,8 @@ has <code>RACEN</code>:</p>
 </tr>
 </tbody>
 </table>
-<p>‘Tplyr’ will automatically figure this out for you, and pull the
-<code>RACEN</code> values into the variable
+<p><strong>Tplyr</strong> will automatically figure this out for you,
+and pull the <code>RACEN</code> values into the variable
 <code>ord_layer_1</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1168,10 +1170,10 @@ has <code>RACEN</code>:</p>
 <h3 id="alphabetical">Alphabetical<a class="anchor" aria-label="anchor" href="#alphabetical"></a>
 </h3>
 <p>Lastly, If the target doesn’t have a <code>VARN</code> variable in
-the target dataset and isn’t a factor, ‘Tplyr’ will sort the variable
-alphabetically. The resulting order variable will be numeric, simply
-numbering each of the variable values alphabetically. Nothing fancy to
-it!</p>
+the target dataset and isn’t a factor,<strong>Tplyr</strong> will sort
+the variable alphabetically. The resulting order variable will be
+numeric, simply numbering each of the variable values alphabetically.
+Nothing fancy to it!</p>
 </div>
 </div>
 <div class="section level2">
@@ -1230,8 +1232,9 @@ the order, all you need to do is update your
 </h2>
 <p>The order in which results appear on a frequency table can be
 deceptively complex and depends on the situation at hand. With this in
-mind, ‘Tplyr’ has 3 different methods of ordering the results of a count
-layer using the function <code><a href="../reference/ordering.html">set_order_count_method()</a></code>:</p>
+mind,<strong>Tplyr</strong> has 3 different methods of ordering the
+results of a count layer using the function
+<code><a href="../reference/ordering.html">set_order_count_method()</a></code>:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>“byfactor”</strong> - The default method is to sort by a
@@ -1244,10 +1247,10 @@ dataset.</li>
 <li>
 <strong>“bycount”</strong> - This is the most complex method. Many
 tables require counts to be sorted based on the counts within a
-particular group, like a treatment variable. ‘Tplyr’ can populate the
-ordering column based on numeric values within any results column. This
-requires some more granular control, for which we’ve created the
-functions <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and
+particular group, like a treatment variable. <strong>Tplyr</strong> can
+populate the ordering column based on numeric values within any results
+column. This requires some more granular control, for which we’ve
+created the functions <code><a href="../reference/ordering.html">set_ordering_cols()</a></code> and
 <code><a href="../reference/ordering.html">set_result_order_var()</a></code> to specify the column and numeric
 value on which the ordering column should be based.</li>
 </ol>
@@ -1256,9 +1259,9 @@ value on which the ordering column should be based.</li>
 </h3>
 <p>“byfactor” is the default ordering method of results for count
 layers. Both “byfactor” and “byvarn” behave exactly like the order
-variables associated with <code>by</code> variables in a ‘Tplyr’ table.
-For “byvarn”, you must set the sort method using
-<code><a href="../reference/ordering.html">set_order_count_method()</a></code>.</p>
+variables associated with <code>by</code> variables in a
+<strong>Tplyr</strong> table. For “byvarn”, you must set the sort method
+using <code><a href="../reference/ordering.html">set_order_count_method()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span><span class="op">$</span><span class="va">AGEGR1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">$</span><span class="va">AGEGR1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;65"</span>, <span class="st">"65-80"</span>, <span class="st">"&gt;80"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># Warnings suppressed to remove 'forcats' implicit NA warning</span></span>
@@ -1368,32 +1371,32 @@ you need. The two functions that you need here are
 <tbody>
 <tr class="odd">
 <td align="left">PRURITUS</td>
-<td align="left">26 ( 4.8%) [38]</td>
+<td align="left">26 (61.9%) [38]</td>
 <td align="right">26</td>
 </tr>
 <tr class="even">
 <td align="left">ERYTHEMA</td>
-<td align="left">14 ( 2.6%) [22]</td>
+<td align="left">14 (33.3%) [22]</td>
 <td align="right">14</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH</td>
-<td align="left">11 ( 2.0%) [18]</td>
+<td align="left">11 (26.2%) [18]</td>
 <td align="right">11</td>
 </tr>
 <tr class="even">
 <td align="left">HYPERHIDROSIS</td>
-<td align="left">8 ( 1.5%) [10]</td>
+<td align="left">8 (19.0%) [10]</td>
 <td align="right">8</td>
 </tr>
 <tr class="odd">
 <td align="left">SKIN IRRITATION</td>
-<td align="left">5 ( 0.9%) [8]</td>
+<td align="left">5 (11.9%) [8]</td>
 <td align="right">5</td>
 </tr>
 <tr class="even">
 <td align="left">RASH PRURITIC</td>
-<td align="left">2 ( 0.4%) [3]</td>
+<td align="left">2 ( 4.8%) [3]</td>
 <td align="right">2</td>
 </tr>
 </tbody>
@@ -1438,32 +1441,32 @@ treatment groups?</p>
 <tbody>
 <tr class="odd">
 <td align="left">PRURITUS</td>
-<td align="left">11 ( 3.7%) [14]</td>
+<td align="left">11 (26.2%) [14]</td>
 <td align="right">11</td>
 </tr>
 <tr class="even">
 <td align="left">ERYTHEMA</td>
-<td align="left">7 ( 2.4%) [8]</td>
+<td align="left">7 (16.7%) [8]</td>
 <td align="right">7</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH</td>
-<td align="left">3 ( 1.0%) [5]</td>
+<td align="left">3 ( 7.1%) [5]</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">HYPERHIDROSIS</td>
-<td align="left">2 ( 0.7%) [2]</td>
+<td align="left">2 ( 4.8%) [2]</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH PRURITIC</td>
-<td align="left">1 ( 0.3%) [1]</td>
+<td align="left">1 ( 2.4%) [1]</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">SKIN IRRITATION</td>
-<td align="left">1 ( 0.3%) [2]</td>
+<td align="left">1 ( 2.4%) [2]</td>
 <td align="right">1</td>
 </tr>
 </tbody>
@@ -1581,17 +1584,18 @@ both should be sorted. Additionally, we need to make sure that, in this
 case, the adverse events within a body system stay within the rows of
 that body system.</p>
 <p>These result variables will always be the last two order variables
-output by ‘Tplyr’. In the above example, <code>ord_layer_1</code> is for
-<code>AEBODSYS</code> and <code>ord_layer_2</code> is for
-<code>AEDECOD</code>. Note that <code>ord_layer_2</code> has
-<code>Inf</code> where <code>row_label1</code> and
-<code>row_label2</code> are both equal. This is the row that summarizes
-the <code>AEBODSYS</code> counts. By default, ‘Tplyr’ is set to assume
-that you will use <strong>descending</strong> sort on the order variable
-associated with the inside count variable (i.e. <code>AEDECOD</code>).
-This is because in nested count layer you will often want to sort by
-descending occurrence of the inside target variable. If you’d like to
-use ascending sorting instead, we offer the function
+output by <strong>Tplyr</strong>. In the above example,
+<code>ord_layer_1</code> is for <code>AEBODSYS</code> and
+<code>ord_layer_2</code> is for <code>AEDECOD</code>. Note that
+<code>ord_layer_2</code> has <code>Inf</code> where
+<code>row_label1</code> and <code>row_label2</code> are both equal. This
+is the row that summarizes the <code>AEBODSYS</code> counts. By default,
+<strong>Tplyr</strong> is set to assume that you will use
+<strong>descending</strong> sort on the order variable associated with
+the inside count variable (i.e. <code>AEDECOD</code>). This is because
+in nested count layer you will often want to sort by descending
+occurrence of the inside target variable. If you’d like to use ascending
+sorting instead, we offer the function
 <code><a href="../reference/set_outer_sort_position.html">set_outer_sort_position()</a></code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
