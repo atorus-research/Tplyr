@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Totals, Missings, and Denominators">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,9 +142,10 @@ create an adverse event table, the adverse event dataset likely only
 contains records for subjects who experienced an adverse event. But
 subjects who did <em>not</em> have an adverse event are still part of
 the study population and must be considered in the denominator.</p>
-<p>For this reason, Tplyr allows lets you set a separate population
-dataset - but there are a couple things you need to do to trigger Tplyr
-to use the population data as your denominator.</p>
+<p>For this reason,<strong>Tplyr</strong> allows lets you set a separate
+population dataset - but there are a couple things you need to do to
+trigger <strong>Tplyr</strong> to use the population data as your
+denominator.</p>
 <p>Consider these two examples.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -177,14 +178,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -193,14 +194,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
-<td align="left">5 ( 1.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">5 (11.9%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -208,7 +209,7 @@ to use the population data as your denominator.</p>
 </tr>
 <tr class="odd">
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -218,7 +219,7 @@ to use the population data as your denominator.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -257,14 +258,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -273,14 +274,14 @@ to use the population data as your denominator.</p>
 <tr class="odd">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
-<td align="left">5 ( 0.5%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">5 ( 6.0%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -288,7 +289,7 @@ to use the population data as your denominator.</p>
 </tr>
 <tr class="odd">
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -298,7 +299,7 @@ to use the population data as your denominator.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -1086,8 +1087,9 @@ treatment variables, <code>TRTA</code>, <code>PARAM</code> and
 <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is
 the total of all record within the <strong>FROM</strong> and
 <strong>TO</strong> shift variables, within each parameter, visit, and
-treatment. This is the default, and this is how ‘Tplyr’ will create the
-denominators if <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> isn’t specified.</p>
+treatment. This is the default, and this is how <strong>Tplyr</strong>
+will create the denominators if <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> isn’t
+specified.</p>
 <p>In the next example, the percentage denominators are calculated
 row-wise, each row percentage sums to 100%.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -1376,9 +1378,9 @@ your denominator however required.</p>
 used for a denominator needs to be different than the filter used to
 count. Disposition tables are an example of this, and we’ll use that
 example to paint this picture.</p>
-<p>‘Tplyr’ offers you the ability to specifically control the filter
-used within the denominator. This is provided through the function
-<code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for
+<p><strong>Tplyr</strong>offers you the ability to specifically control
+the filter used within the denominator. This is provided through the
+function <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for
 <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is the layer level <code>where</code>
 parameter, if one was supplied. <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> allows
 you to replace this layer level filter with a custom filter of your
@@ -1668,33 +1670,33 @@ specified.</p>
 <tbody>
 <tr class="odd">
 <td align="left">MILD</td>
-<td align="left">23 (54.76%)</td>
-<td align="left">70 (77.78%)</td>
-<td align="left">44 (46.81%)</td>
+<td align="left">22 (61.11%)</td>
+<td align="left">69 (75.00%)</td>
+<td align="left">43 (43.88%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">MODERATE</td>
-<td align="left">19 (45.24%)</td>
-<td align="left">19 (21.11%)</td>
-<td align="left">46 (48.94%)</td>
+<td align="left">14 (38.89%)</td>
+<td align="left">22 (23.91%)</td>
+<td align="left">50 (51.02%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">SEVERE</td>
 <td align="left">0 ( 0.00%)</td>
-<td align="left">1 ( 1.11%)</td>
-<td align="left">4 ( 4.26%)</td>
+<td align="left">1 ( 1.09%)</td>
+<td align="left">5 ( 5.10%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Missing</td>
-<td align="left">5</td>
-<td align="left">21</td>
-<td align="left">24</td>
+<td align="left">11</td>
+<td align="left">19</td>
+<td align="left">20</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
@@ -1713,10 +1715,10 @@ your own value.</p>
 <h2 id="adding-a-total-row">Adding a ‘Total’ Row<a class="anchor" aria-label="anchor" href="#adding-a-total-row"></a>
 </h2>
 <p>In addition to missing counts, some summaries require the addition of
-a ‘Total’ row. ‘Tplyr’ has the helper function
+a ‘Total’ row. <strong>Tplyr</strong> has the helper function
 <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. Like most
-other things within ‘Tplyr’ - particularly in this vignette - this too
-has a significant bit of nuance to it.</p>
+other things within <strong>Tplyr</strong> - particularly in this
+vignette - this too has a significant bit of nuance to it.</p>
 <p>Much of this functionality is similar to
 <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. You’re able to specify a different
 format for the total, but if not specified, the associated count layer’s
@@ -1726,9 +1728,9 @@ where you want the total row to sit.</p>
 <ul>
 <li>By default, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> <em>will count missing
 values</em>, but you can exclude those values using the
-<code>count_missings</code> parameter. ‘Tplyr’ will warn you when
-<code>set_count_missing()</code> has <code>denom_ignore</code> set to
-<code>TRUE</code>, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> has
+<code>count_missings</code> parameter. <strong>Tplyr</strong> will warn
+you when <code>set_count_missing()</code> has <code>denom_ignore</code>
+set to <code>TRUE</code>, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> has
 <code>count_missings</code> set to <code>TRUE</code> and the format
 contains a percentage. Why? Because if the denominator is ignoring
 missing values but you’re still counting them in your total, the
@@ -1750,7 +1752,8 @@ matching the denominator that was used. The ‘Missing’ row tells us the
 number of missing values, but because <code>count_missings</code> is set
 to <code>TRUE</code>, the missing counts are included in the total row.
 This probably isn’t how you would choose to display things, but here
-we’re trying to show the flexibility built into ‘Tplyr’.</p>
+we’re trying to show the flexibility built into
+<strong>Tplyr</strong>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl2</span> <span class="op">&lt;-</span> <span class="va">adsl</span></span>
 <span><span class="va">adsl2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">adsl2</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"AGEGR1"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
@@ -1801,9 +1804,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">9 ( 17.0%)</td>
-<td align="left">5 ( 12.5%)</td>
-<td align="left">5 ( 10.0%)</td>
+<td align="left">8 ( 15.1%)</td>
+<td align="left">3 ( 7.5%)</td>
+<td align="left">4 ( 8.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1811,9 +1814,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">15 ( 28.3%)</td>
+<td align="left">18 ( 34.0%)</td>
 <td align="left">6 ( 15.0%)</td>
-<td align="left">12 ( 24.0%)</td>
+<td align="left">15 ( 30.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1821,9 +1824,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">18 ( 34.0%)</td>
-<td align="left">23 ( 57.5%)</td>
-<td align="left">24 ( 48.0%)</td>
+<td align="left">17 ( 32.1%)</td>
+<td align="left">22 ( 55.0%)</td>
+<td align="left">22 ( 44.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1831,8 +1834,8 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">11 (20.8%)</td>
-<td align="left">6 (15.0%)</td>
+<td align="left">10 (18.9%)</td>
+<td align="left">9 (22.5%)</td>
 <td align="left">9 (18.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1851,8 +1854,8 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">4 ( 12.1%)</td>
-<td align="left">3 ( 6.8%)</td>
+<td align="left">5 ( 15.2%)</td>
+<td align="left">4 ( 9.1%)</td>
 <td align="left">3 ( 8.8%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1861,7 +1864,7 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">6 ( 18.2%)</td>
+<td align="left">5 ( 15.2%)</td>
 <td align="left">8 ( 18.2%)</td>
 <td align="left">10 ( 29.4%)</td>
 <td align="right">1</td>
@@ -1871,9 +1874,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">15 ( 45.5%)</td>
-<td align="left">22 ( 50.0%)</td>
-<td align="left">16 ( 47.1%)</td>
+<td align="left">14 ( 42.4%)</td>
+<td align="left">26 ( 59.1%)</td>
+<td align="left">14 ( 41.2%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -1881,9 +1884,9 @@ we’re trying to show the flexibility built into ‘Tplyr’.</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">8 (24.2%)</td>
-<td align="left">11 (25.0%)</td>
-<td align="left">5 (14.7%)</td>
+<td align="left">9 (27.3%)</td>
+<td align="left">6 (13.6%)</td>
+<td align="left">7 (20.6%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -1934,8 +1937,8 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">All Age Groups</td>
-<td align="left">42</td>
-<td align="left">34</td>
+<td align="left">43</td>
+<td align="left">31</td>
 <td align="left">41</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1944,9 +1947,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">9 ( 21.4%)</td>
-<td align="left">5 ( 14.7%)</td>
-<td align="left">5 ( 12.2%)</td>
+<td align="left">8 ( 18.6%)</td>
+<td align="left">3 ( 9.7%)</td>
+<td align="left">4 ( 9.8%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1954,9 +1957,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">15 ( 35.7%)</td>
-<td align="left">6 ( 17.6%)</td>
-<td align="left">12 ( 29.3%)</td>
+<td align="left">18 ( 41.9%)</td>
+<td align="left">6 ( 19.4%)</td>
+<td align="left">15 ( 36.6%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1964,9 +1967,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">18 ( 42.9%)</td>
-<td align="left">23 ( 67.6%)</td>
-<td align="left">24 ( 58.5%)</td>
+<td align="left">17 ( 39.5%)</td>
+<td align="left">22 ( 71.0%)</td>
+<td align="left">22 ( 53.7%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1974,8 +1977,8 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">11</td>
-<td align="left">6</td>
+<td align="left">10</td>
+<td align="left">9</td>
 <td align="left">9</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1984,9 +1987,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">All Age Groups</td>
-<td align="left">25</td>
-<td align="left">33</td>
-<td align="left">29</td>
+<td align="left">24</td>
+<td align="left">38</td>
+<td align="left">27</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">-Inf</td>
@@ -1994,9 +1997,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">4 ( 16.0%)</td>
-<td align="left">3 ( 9.1%)</td>
-<td align="left">3 ( 10.3%)</td>
+<td align="left">5 ( 20.8%)</td>
+<td align="left">4 ( 10.5%)</td>
+<td align="left">3 ( 11.1%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -2004,9 +2007,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">6 ( 24.0%)</td>
-<td align="left">8 ( 24.2%)</td>
-<td align="left">10 ( 34.5%)</td>
+<td align="left">5 ( 20.8%)</td>
+<td align="left">8 ( 21.1%)</td>
+<td align="left">10 ( 37.0%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -2014,9 +2017,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">15 ( 60.0%)</td>
-<td align="left">22 ( 66.7%)</td>
-<td align="left">16 ( 55.2%)</td>
+<td align="left">14 ( 58.3%)</td>
+<td align="left">26 ( 68.4%)</td>
+<td align="left">14 ( 51.9%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -2024,9 +2027,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">8</td>
-<td align="left">11</td>
-<td align="left">5</td>
+<td align="left">9</td>
+<td align="left">6</td>
+<td align="left">7</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -2039,9 +2042,9 @@ have been excluded. Now, the total row intuitively matches the
 denominators used within each group, and we can see how many missing
 records were excluded.</p>
 <p><em>You may have stumbled upon this portion of the vignette while
-searching for how to create a total column. Tplyr allows you to do this
-as well with the function <code><a href="../reference/treat_grps.html">add_total_group()</a></code> and read more
-in <code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
+searching for how to create a total column.<strong>Tplyr</strong> allows
+you to do this as well with the function <code><a href="../reference/treat_grps.html">add_total_group()</a></code>
+and read more in <code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
 <p>And that’s it for denominators! Happy counting!</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

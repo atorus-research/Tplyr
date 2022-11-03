@@ -25,9 +25,9 @@ load("adae.Rdata")
 load("adsl.Rdata")
 ```
 
-'Tplyr' does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
+**Tplyr** does not support, nor do we intend to support, a wide array of statistical methods. Our goal is rather to take your focus as an analyst off the mundane summaries so you can focus on the interesting analysis. That said, there are some things that are common enough that we feel that it's reasonable for us to include. So let's take a look at risk difference.
 
-## 'Tplyr' Implementation
+## **Tplyr** Implementation
 
 Our current implementation of risk difference is solely built on top of the base R function `stats::prop.test()`. For any and all questions about this method, please review the `stats::prop.test()` documentation within R. 
 
@@ -197,7 +197,7 @@ suppressWarnings(build(t)) %>%
 
 ## Getting Raw Numbers
 
-Just like you can get the numeric data from a 'Tplyr' layer with `get_numeric_data()`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data()`. The function interface is almost identical to `get_numeric_data()`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in 'Tplyr' at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data()` the `statistic` parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.
+Just like you can get the numeric data from a **Tplyr** layer with `get_numeric_data()`, we've also opened up the door to extract the raw numeric data from risk difference calculations as well. This is done using the function `get_stats_data()`. The function interface is almost identical to `get_numeric_data()`, except for the extra parameter of `statistic`. Although risk difference is the only statistic implemented in **Tplyr** at the moment (outside of descriptive statistics), we understand that there are multiple methods to calculate risk difference, so we've built risk difference in a way that it could be expanded to easily add new methods in the future. And therefore, `get_stats_data()` the `statistic` parameter to allow you to differentiate in the situation where there are multiple statistical methods applied to the layer.
 
 The output of `get_stats_data()` depends on what parameters have been used:
 
