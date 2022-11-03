@@ -198,7 +198,7 @@ A lot of the nuance to formatting descriptive statistics layers has already been
 
 By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out. 
 
-_Note:**Tplyr**generally respects factor levels - so in instances of a missing row or column group, if the factor level is present, then the variable or row will still generate)_
+_Note: **Tplyr**generally respects factor levels - so in instances of a missing row or column group, if the factor level is present, then the variable or row will still generate)_
 
 ```{r missing}
 adsl$TRT01P <- as.factor(adsl$TRT01P)
