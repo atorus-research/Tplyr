@@ -350,7 +350,7 @@ tplyr_table(adlb, TRTA) %>%
 
 ```
 
-If one of your by variable groups are missing in the precision data,**Tplyr** can default back to using auto-precision by using the option `default=auto`. 
+If one of your by variable groups are missing in the precision data, **Tplyr** can default back to using auto-precision by using the option `default=auto`. 
 
 ```{r external-precision2}
 prec_data <- tibble::tribble(
