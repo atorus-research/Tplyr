@@ -25,7 +25,7 @@ load("adae.Rdata")
 load("adlb.Rdata")
 ```
 
-At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by  **Tplyr**.
+At surface level - sorting a table may seem easy, and in many cases it is. But in a handful of cases it can get quite tricky, with some odd situations that need to be handled carefully. For this reason, we found it necessary to dedicate an entire vignette to just sorting and handling columns output by **Tplyr**.
 
 Let's start by looking at an example. 
 
