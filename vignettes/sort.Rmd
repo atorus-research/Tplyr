@@ -194,7 +194,7 @@ Each of the separate "Groups" added above were indexed based on their position i
 
 ## Sorting Count Layers
 
-The order in which results appear on a frequency table can be deceptively complex and depends on the situation at hand. With this in mind,**Tplyr** has 3 different methods of ordering the results of a count layer using the function `set_order_count_method()`:
+The order in which results appear on a frequency table can be deceptively complex and depends on the situation at hand. With this in mind, **Tplyr** has 3 different methods of ordering the results of a count layer using the function `set_order_count_method()`:
 
 1. **"byfactor"** - The default method is to sort by a factor. If the input variable is not a factor, alphabetical sorting will be used. 
 2. **"byvarn"** - Similar to a 'by' variable, a count target can be sorted with a VARN variable existing in the target dataset.
