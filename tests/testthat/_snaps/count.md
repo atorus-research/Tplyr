@@ -307,3 +307,25 @@
 
     You can't include total rows in nested counts. Instead, add a seperate layer for total counts.
 
+# Tables with pop_data can accept a layer level where
+
+    Code
+      build(t)
+    Output
+      # A tibble: 59 x 6
+         row_label1                  var1_Placebo var1_Xanom~1 var1_~2 ord_l~3 ord_l~4
+         <chr>                       <chr>        <chr>        <chr>     <int>   <dbl>
+       1 ABDOMINAL PAIN              0 (  0.0%)   0 (  0.0%)   1 (  1~       1       1
+       2 AGITATION                   0 (  0.0%)   0 (  0.0%)   1 (  1~       1       2
+       3 ANXIETY                     0 (  0.0%)   0 (  0.0%)   1 (  1~       1       3
+       4 APPLICATION SITE DERMATITIS 1 (  1.2%)   3 (  3.6%)   2 (  2~       1       4
+       5 APPLICATION SITE ERYTHEMA   0 (  0.0%)   3 (  3.6%)   4 (  4~       1       5
+       6 APPLICATION SITE IRRITATION 1 (  1.2%)   3 (  3.6%)   2 (  2~       1       6
+       7 APPLICATION SITE PAIN       0 (  0.0%)   1 (  1.2%)   0 (  0~       1       7
+       8 APPLICATION SITE PRURITUS   4 (  4.7%)   6 (  7.1%)   4 (  4~       1       8
+       9 APPLICATION SITE REACTION   1 (  1.2%)   1 (  1.2%)   0 (  0~       1       9
+      10 APPLICATION SITE URTICARIA  0 (  0.0%)   0 (  0.0%)   1 (  1~       1      10
+      # ... with 49 more rows, and abbreviated variable names
+      #   1: `var1_Xanomeline High Dose`, 2: `var1_Xanomeline Low Dose`,
+      #   3: ord_layer_index, 4: ord_layer_1
+
