@@ -852,3 +852,21 @@ test_that("nested count layers error out when you try to add a total row", {
 
     expect_snapshot_error(build(tab))
 })
+
+test_that("Tables with pop_data can accept a layer level where", {
+
+  load(test_path('adsl.Rdata'))
+  load(test_path('adae.Rdata'))
+  t <- tplyr_table(adae, TRTA) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    set_pop_where(TRUE) %>%
+    add_layer(
+      group_count(AEDECOD, where = AEREL != "NONE") %>%
+        set_distinct_by(USUBJID) %>%
+        set_format_strings(f_str("xxx, [xxx] (xxx.x%) [xxx.x%]", distinct_n, n, distinct_pct, pct))
+    )
+
+  expect_snapshot(dput(build(t)))
+
+})

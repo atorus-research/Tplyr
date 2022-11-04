@@ -1,3 +1,7 @@
+# Tplyr 1.0.2
+- Bug fixes
+  - Resolve issue with `where` logic when using population data.
+
 # Tplyr 1.0.1
 - Bug fixes
   - Resolve issue where `modify_nested_call()` fails if Tplyr is not loaded (#95)
