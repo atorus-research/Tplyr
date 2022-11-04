@@ -110,7 +110,7 @@ layer type.
 \item \code{mean}
 \item \code{sd}
 \item \code{median}
-\item \code{variance}
+\item \code{var}
 \item \code{min}
 \item \code{max}
 \item \code{iqr}

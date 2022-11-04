@@ -42,7 +42,7 @@ When a \code{tplyr_table} is created, it will contain the following bindings:
 individual parameters catered to your analysis. For example, to add a total group, you can use the
 \code{\link{add_total_group}}.
 
-In future releases, we will provide vigenttes to fully demonstrate these capabilities.
+In future releases, we will provide vignettes to fully demonstrate these capabilities.
 }
 \examples{
 

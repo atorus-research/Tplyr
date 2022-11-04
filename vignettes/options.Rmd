@@ -27,19 +27,19 @@ load("adlb.Rdata")
 op <- options()
 ```
 
-One thing that we wanted to build into 'Tplyr' to make it a user friendly package is the ability to eliminate redundant code where possible. This is why there are several options available in 'Tplyr' to allow you to control things at your session level instead of each individual table, or even each individual layer. 
+One thing that we wanted to build into **Tplyr** to make it a user friendly package is the ability to eliminate redundant code where possible. This is why there are several options available in **Tplyr** to allow you to control things at your session level instead of each individual table, or even each individual layer. 
 
-The following are the options available in 'Tplyr' and their descriptions:
+The following are the options available in **Tplyr** and their descriptions:
 ```{r options_table, echo=FALSE}
 suppressMessages(read_csv('tplyr_options.csv')) %>% 
   kable(align="cl", col.names = c('Option', 'Description'))
 ```
 
-Each of these options allows you to set these settings in one place, and every 'Tplyr' table you create will inherit your option settings as defaults. This allows your table code to be more concise, and centralizes where you need to make an update when your code has to be adjusted. This vignette is dedicated to helping you understand how to leverage each of these options properly.
+Each of these options allows you to set these settings in one place, and every **Tplyr** table you create will inherit your option settings as defaults. This allows your table code to be more concise, and centralizes where you need to make an update when your code has to be adjusted. This vignette is dedicated to helping you understand how to leverage each of these options properly.
 
 ## Default Layer Formats
 
-Declaring string formats and summaries that need to be performed is one of the more verbose parts of 'Tplyr'. Furthermore, this is something that will often be fairly consistent within a study, as you'll likely want to look across a consistent set of descriptive statistics, or your count/shift tables will likely require the same sort of "n (%)" formatting.
+Declaring string formats and summaries that need to be performed is one of the more verbose parts of **Tplyr**. Furthermore, this is something that will often be fairly consistent within a study, as you'll likely want to look across a consistent set of descriptive statistics, or your count/shift tables will likely require the same sort of "n (%)" formatting.
 
 Using the format options is very similar to setting a string format. The only difference is that you need to enter the string formats as a named list instead of as separate parameters to a function call.
 
@@ -64,7 +64,7 @@ options(
  
 ```
 
-Here you can see that 'Tplyr' picks up these option changes. In the table below, we didn't use `set_format_strings()` anywhere - instead we let 'Tplyr' pick up the default formats from the options.
+Here you can see that **Tplyr** picks up these option changes. In the table below, we didn't use `set_format_strings()` anywhere - instead we let **Tplyr** pick up the default formats from the options.
 
 ```{r default_formats2}
 tplyr_table(adsl, TRT01P) %>% 
@@ -81,11 +81,11 @@ tplyr_table(adsl, TRT01P) %>%
 
 One important thing to understand about how these options work in particular is the scoping. 
 
-- 'Tplyr' options have the broadest scope, as they work across the entire session for any table.
-- Setting formats at the `tplyr_table()` level will override the 'Tplyr' options and extends to any layer of the specified type in the current table.
-- Setting formats at the `tplyr_layer()` level will always be prioritized over 'Tplyr' options and any `tplyr_table()` formats set. This has the narrowest scope and will always be used when specified.
+- **Tplyr** options have the broadest scope, as they work across the entire session for any table.
+- Setting formats at the `tplyr_table()` level will override the **Tplyr** options and extends to any layer of the specified type in the current table.
+- Setting formats at the `tplyr_layer()` level will always be prioritized over **Tplyr** options and any `tplyr_table()` formats set. This has the narrowest scope and will always be used when specified.
 
-To demonstrate, consider the following. The 'Tplyr' options remain set from the block above.
+To demonstrate, consider the following. The **Tplyr** options remain set from the block above.
 
 ```{r scoping1}
 tplyr_table(adsl, TRT01P) %>% 
@@ -111,11 +111,11 @@ In the above output:
 - The first count layer for "Categorical Age Groups" uses the specified table default using `set_count_layer_formats()`
 - The second count layer for "Ethnicity" uses the layer level format specified using `set_format_strings()`
 
-Each of the outputs ignores the 'Tpylr' option defaults.
+Each of the outputs ignores the **Tplyr** option defaults.
 
 ## Precision Cap
 
-'Tplyr' defaults to avoiding capping precision. We do this because capping precision should be a conscious decision, where you as the user specifically set the limit of how many decimal places are relevant to a specific result. One way to cap precision is by using the `cap` parameter within `set_format_strings()`. But perhaps you have a specific limit to what you'd like to see on any output. Here, we offer the `tplyr.precision_cap` option to set whatever cap you wish.
+**Tplyr** defaults to avoiding capping precision. We do this because capping precision should be a conscious decision, where you as the user specifically set the limit of how many decimal places are relevant to a specific result. One way to cap precision is by using the `cap` parameter within `set_format_strings()`. But perhaps you have a specific limit to what you'd like to see on any output. Here, we offer the `tplyr.precision_cap` option to set whatever cap you wish.
 
 ```{r precision_cap1}
 options(tplyr.precision_cap = c('int'=2, 'dec'=2))
@@ -148,11 +148,11 @@ Both layers in the above example are summarizing the same data. The top layer is
 - Integers will not be truncated - rather, the auto precision will default how much padding should be applied. If the number exceeds that number of spaces, then the length will be extended (i.e. if 2 integer places are allotted, 100 will still consume 3 places).
 - The cap applies to the spaces allotted by the 'a'. If the cap is 2, 'a+1' will not exceed 3 spaces.
 
-The bottom layer overrides the 'Tplyr' option. Instead, integers are capped at 1 space, and decimals are capped at 0. 
+The bottom layer overrides the **Tplyr** option. Instead, integers are capped at 1 space, and decimals are capped at 0. 
 
 ## Custom Summaries
 
-Custom summaries allow you to extend the capabilities of descriptive statistics layers in 'Tplyr'. Maybe our defaults don't work how you'd like them to, or maybe you have some custom functions within your organization that you commonly would like to use. Specifying the custom summaries you wish to use in every table would prove quite tedious - therefore, the `tplyr.custom_summaries` option is a better choice.
+Custom summaries allow you to extend the capabilities of descriptive statistics layers in **Tplyr**. Maybe our defaults don't work how you'd like them to, or maybe you have some custom functions within your organization that you commonly would like to use. Specifying the custom summaries you wish to use in every table would prove quite tedious - therefore, the `tplyr.custom_summaries` option is a better choice.
 
 ```{r custom_summaries1}
 options(tplyr.custom_summaries = rlang::quos(
@@ -161,9 +161,9 @@ options(tplyr.custom_summaries = rlang::quos(
 
 ```
 
-Note that the table code used to produce the output is the same. Now 'Tplyr' used the custom summary function for `geometric_mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos()`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of 'Tplyr' is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
+Note that the table code used to produce the output is the same. Now **Tplyr** used the custom summary function for `geometric_mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos()`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of **Tplyr** is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
 
-Now that geometric mean is set within the 'Tplyr' options, you can use it within your descriptive statistics layers, just like it was one of the built-in summaries.
+Now that geometric mean is set within the **Tplyr** options, you can use it within your descriptive statistics layers, just like it was one of the built-in summaries.
 
 ```{r custom_summaries2}
 tplyr_table(adsl, TRT01P) %>% 
@@ -195,7 +195,7 @@ options(scipen = -1) # Only require 3 decimal places
 .001
 
 ```
-In 'Tplyr', we have the option `tplyr.scipen`. This is the `scipen` setting that will be used _only_ while the 'Tplyr' table is being built. This allows you to use a different `scipen` setting within 'Tplyr' than your R session. The default value we use in 'Tplyr' is 9999, which is intended to totally prevent numbers from switching to scientific notation. We want this to be a conscious decision that you make in order to prevent any unexpected outputs.
+In **Tplyr**, we have the option `tplyr.scipen`. This is the `scipen` setting that will be used _only_ while the **Tplyr** table is being built. This allows you to use a different `scipen` setting within **Tplyr** than your R session. The default value we use in **Tplyr** is 9999, which is intended to totally prevent numbers from switching to scientific notation. We want this to be a conscious decision that you make in order to prevent any unexpected outputs.
 
 ```{r reset_settings1, include=FALSE}
 options(op)
@@ -218,7 +218,7 @@ suppressWarnings(build(t)) %>% # Chi-squared warnings occur with small samples
 options(op)
 ```
 
-Note that the risk-difference variables above have mostly shifted to scientific notation. This is because the limit has been shifted to .1 within the 'Tplyr' build.
+Note that the risk-difference variables above have mostly shifted to scientific notation. This is because the limit has been shifted to .1 within the **Tplyr** build.
 
 ## Quantile Algorithms
 
@@ -263,7 +263,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ## IBM Rounding 
 
-In certain cases users may want to match tables produced by other languages that IBM rounding. Tplyr offers the option 'tplyr.IBMRounding' to change the default rounding behavior of Tplyr tables. Review var1_4 in the tables below.
+In certain cases users may want to match tables produced by other languages that IBM rounding.**Tplyr** offers the option 'tplyr.IBMRounding' to change the default rounding behavior of **Tplyr** tables. Review var1_4 in the tables below.
 
 Using the default R behavior
 ```{r rounding_1}

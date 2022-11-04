@@ -25,7 +25,7 @@
 #' individual parameters catered to your analysis. For example, to add a total group, you can use the
 #' \code{\link{add_total_group}}.
 #'
-#' In future releases, we will provide vigenttes to fully demonstrate these capabilities.
+#' In future releases, we will provide vignettes to fully demonstrate these capabilities.
 #'
 #' @param target Dataset upon which summaries will be performed
 #' @param treat_var Variable containing treatment group assignments. Supply unquoted.

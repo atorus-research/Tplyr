@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Risk Difference">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,14 +118,15 @@
 
     
     
-<p>‘Tplyr’ does not support, nor do we intend to support, a wide array
-of statistical methods. Our goal is rather to take your focus as an
-analyst off the mundane summaries so you can focus on the interesting
-analysis. That said, there are some things that are common enough that
-we feel that it’s reasonable for us to include. So let’s take a look at
-risk difference.</p>
+<p><strong>Tplyr</strong> does not support, nor do we intend to support,
+a wide array of statistical methods. Our goal is rather to take your
+focus as an analyst off the mundane summaries so you can focus on the
+interesting analysis. That said, there are some things that are common
+enough that we feel that it’s reasonable for us to include. So let’s
+take a look at risk difference.</p>
 <div class="section level2">
-<h2 id="tplyr-implementation">‘Tplyr’ Implementation<a class="anchor" aria-label="anchor" href="#tplyr-implementation"></a>
+<h2 id="tplyr-implementation">
+<strong>Tplyr</strong> Implementation<a class="anchor" aria-label="anchor" href="#tplyr-implementation"></a>
 </h2>
 <p>Our current implementation of risk difference is solely built on top
 of the base R function <code><a href="https://rdrr.io/r/stats/prop.test.html" class="external-link">stats::prop.test()</a></code>. For any and all
@@ -174,50 +175,50 @@ construction, so let’s walk through it step by step.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">0.002 (-0.004, 0.007)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">-0.005 (-0.017, 0.008)</td>
-<td align="left">-0.005 (-0.017, 0.008)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">0.002 (-0.004, 0.007)</td>
-<td align="left">0.010 (-0.002, 0.022)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
+<td align="left">0.119 (-0.015, 0.253)</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
-<td align="left">5 ( 1.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">5 ( 11.9%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">-0.005 (-0.017, 0.008)</td>
-<td align="left">-0.005 (-0.017, 0.008)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.005 (-0.017, 0.008)</td>
-<td align="left">-0.005 (-0.017, 0.008)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -225,11 +226,11 @@ construction, so let’s walk through it step by step.</p>
 </tr>
 <tr class="even">
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">0.002 (-0.004, 0.008)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -309,50 +310,50 @@ be controlled in the same way you format the count summaries - using
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">0.002, 0.000, 0.002, -0.004, 0.007</td>
+<td align="left">0.024, 0.000, 0.024, -0.046, 0.094</td>
 <td align="left">0.000, 0.000, 0.000, 0.000, 0.000</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [1]</td>
+<td align="left">1 ( 2.4) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.5) [1]</td>
+<td align="left">1 ( 4.8) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">0.002, 0.000, 0.002, -0.004, 0.007</td>
-<td align="left">0.010, 0.000, 0.010, -0.002, 0.022</td>
+<td align="left">0.024, 0.000, 0.024, -0.046, 0.094</td>
+<td align="left">0.119, 0.000, 0.119, -0.015, 0.253</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [2]</td>
-<td align="left">5 ( 1.0) [8]</td>
+<td align="left">1 ( 2.4) [2]</td>
+<td align="left">5 (11.9) [8]</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.5) [3]</td>
+<td align="left">1 ( 4.8) [3]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
-<td align="left">0.000, 0.005, -0.005, -0.017, 0.008</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
+<td align="left">0.000, 0.048, -0.048, -0.174, 0.079</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.5) [1]</td>
+<td align="left">1 ( 4.8) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
@@ -360,11 +361,11 @@ be controlled in the same way you format the count summaries - using
 </tr>
 <tr class="even">
 <td align="left">0.000, 0.000, 0.000, 0.000, 0.000</td>
-<td align="left">0.002, 0.000, 0.002, -0.004, 0.008</td>
+<td align="left">0.024, 0.000, 0.024, -0.046, 0.094</td>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [2]</td>
+<td align="left">1 ( 2.4) [2]</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -432,50 +433,50 @@ but it’s not much more difficult to use:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">0.002, 0.000, 0.002, -1.000, 0.004</td>
+<td align="left">0.024, 0.000, 0.024, -1.000, 0.054</td>
 <td align="left">0.000, 0.000, 0.000, -1.000, 0.000</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [1]</td>
+<td align="left">1 ( 2.4) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.5) [1]</td>
+<td align="left">1 ( 4.8) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="left">0.002, 0.000, 0.002, -1.000, 0.004</td>
-<td align="left">0.010, 0.000, 0.010, -1.000, 0.016</td>
+<td align="left">0.024, 0.000, 0.024, -1.000, 0.054</td>
+<td align="left">0.119, 0.000, 0.119, -1.000, 0.183</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [2]</td>
-<td align="left">5 ( 1.0) [8]</td>
+<td align="left">1 ( 2.4) [2]</td>
+<td align="left">5 (11.9) [8]</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.5) [3]</td>
+<td align="left">1 ( 4.8) [3]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
 <td align="right">4</td>
 </tr>
 <tr class="odd">
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
-<td align="left">0.000, 0.005, -0.005, -1.000, 0.001</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
+<td align="left">0.000, 0.048, -0.048, -1.000, 0.012</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.5) [1]</td>
+<td align="left">1 ( 4.8) [1]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="right">1</td>
@@ -483,11 +484,11 @@ but it’s not much more difficult to use:</p>
 </tr>
 <tr class="even">
 <td align="left">0.000, 0.000, 0.000, -1.000, 0.000</td>
-<td align="left">0.002, 0.000, 0.002, -1.000, 0.005</td>
+<td align="left">0.024, 0.000, 0.024, -1.000, 0.054</td>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0) [0]</td>
 <td align="left">0 ( 0.0) [0]</td>
-<td align="left">1 ( 0.2) [2]</td>
+<td align="left">1 ( 2.4) [2]</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -567,23 +568,23 @@ counts available within the count summary.</p>
 <td align="right">Inf</td>
 </tr>
 <tr class="even">
-<td align="left">0.001 (-0.002, 0.004)</td>
+<td align="left">0.012 (-0.023, 0.047)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.001 (-0.004, 0.002)</td>
-<td align="left">-0.001 (-0.005, 0.002)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -591,23 +592,23 @@ counts available within the count summary.</p>
 <td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">0.001 (-0.002, 0.004)</td>
-<td align="left">0.005 ( 0.000, 0.010)</td>
+<td align="left">0.012 (-0.023, 0.047)</td>
+<td align="left">0.060 (-0.003, 0.122)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
-<td align="left">5 ( 0.5%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">5 ( 6.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.001 (-0.004, 0.002)</td>
-<td align="left">-0.001 (-0.005, 0.002)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -615,11 +616,11 @@ counts available within the count summary.</p>
 <td align="right">4</td>
 </tr>
 <tr class="even">
-<td align="left">-0.001 (-0.004, 0.002)</td>
-<td align="left">-0.001 (-0.005, 0.002)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
+<td align="left">-0.012 (-0.046, 0.023)</td>
 <td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -675,7 +676,7 @@ no different than single level, so no concerns there either.</p>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -684,7 +685,7 @@ no different than single level, so no concerns there either.</p>
 <td align="left">-0.021 (-0.078, 0.035)</td>
 <td align="left">-0.021 (-0.077, 0.035)</td>
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -695,8 +696,8 @@ no different than single level, so no concerns there either.</p>
 <td align="left">0.068 ( 0.008, 0.128)</td>
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
-<td align="left">5 ( 1.0%)</td>
+<td align="left">1 ( 2.4%)</td>
+<td align="left">5 ( 11.9%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
@@ -704,7 +705,7 @@ no different than single level, so no concerns there either.</p>
 <td align="left">-0.064 (-0.149, 0.021)</td>
 <td align="left">-0.064 (-0.149, 0.021)</td>
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -714,7 +715,7 @@ no different than single level, so no concerns there either.</p>
 <td align="left">-0.021 (-0.078, 0.035)</td>
 <td align="left">-0.021 (-0.077, 0.035)</td>
 <td align="left">DERMATITIS ATOPIC</td>
-<td align="left">1 ( 0.5%)</td>
+<td align="left">1 ( 4.8%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -726,7 +727,7 @@ no different than single level, so no concerns there either.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.2%)</td>
+<td align="left">1 ( 2.4%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
@@ -769,44 +770,44 @@ the column argument is used as a “by” variable. For example:</p>
 <tbody>
 <tr class="odd">
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">0.002 (-0.004, 0.008)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">ACTINIC KERATOSIS</td>
 </tr>
 <tr class="even">
-<td align="left">-0.007 (-0.025, 0.012)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">-0.007 (-0.025, 0.011)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">ALOPECIA</td>
 </tr>
 <tr class="odd">
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">0.002 (-0.004, 0.008)</td>
-<td align="left">0.005 (-0.007, 0.017)</td>
-<td align="left">0.007 (-0.006, 0.020)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
+<td align="left">0.048 (-0.053, 0.148)</td>
+<td align="left">0.071 (-0.042, 0.185)</td>
 <td align="left">BLISTER</td>
 </tr>
 <tr class="even">
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">-0.008 (-0.028, 0.013)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">-0.008 (-0.029, 0.013)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">COLD SWEAT</td>
 </tr>
 <tr class="odd">
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">-0.008 (-0.028, 0.013)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">-0.008 (-0.029, 0.013)</td>
+<td align="left">-0.048 (-0.174, 0.079)</td>
 <td align="left">DERMATITIS ATOPIC</td>
 </tr>
 <tr class="even">
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
 <td align="left">0.000 ( 0.000, 0.000)</td>
-<td align="left">0.002 (-0.005, 0.009)</td>
+<td align="left">0.024 (-0.046, 0.094)</td>
 <td align="left">DERMATITIS CONTACT</td>
 </tr>
 </tbody>
@@ -815,20 +816,20 @@ the column argument is used as a “by” variable. For example:</p>
 <div class="section level2">
 <h2 id="getting-raw-numbers">Getting Raw Numbers<a class="anchor" aria-label="anchor" href="#getting-raw-numbers"></a>
 </h2>
-<p>Just like you can get the numeric data from a ‘Tplyr’ layer with
-<code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>, we’ve also opened up the door to
-extract the raw numeric data from risk difference calculations as well.
-This is done using the function <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code>. The
-function interface is almost identical to
+<p>Just like you can get the numeric data from a <strong>Tplyr</strong>
+layer with <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>, we’ve also opened up the
+door to extract the raw numeric data from risk difference calculations
+as well. This is done using the function <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code>.
+The function interface is almost identical to
 <code><a href="../reference/get_numeric_data.html">get_numeric_data()</a></code>, except for the extra parameter of
 <code>statistic</code>. Although risk difference is the only statistic
-implemented in ‘Tplyr’ at the moment (outside of descriptive
-statistics), we understand that there are multiple methods to calculate
-risk difference, so we’ve built risk difference in a way that it could
-be expanded to easily add new methods in the future. And therefore,
-<code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> the <code>statistic</code> parameter to
-allow you to differentiate in the situation where there are multiple
-statistical methods applied to the layer.</p>
+implemented in <strong>Tplyr</strong> at the moment (outside of
+descriptive statistics), we understand that there are multiple methods
+to calculate risk difference, so we’ve built risk difference in a way
+that it could be expanded to easily add new methods in the future. And
+therefore, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> the <code>statistic</code>
+parameter to allow you to differentiate in the situation where there are
+multiple statistical methods applied to the layer.</p>
 <p>The output of <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code> depends on what
 parameters have been used:</p>
 <ul>
@@ -868,31 +869,34 @@ clearer.</p>
 <span><span class="co">#&gt; $PreferredTerm</span></span>
 <span><span class="co">#&gt; $PreferredTerm$riskdiff</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 105 × 4</span></span></span>
-<span><span class="co">#&gt;    summary_var       measure `Xanomeline High Dose_Placebo` `Xanomeline Low Do…`</span></span>
+<span><span class="co">#&gt;    summary_var       measure `Xanomeline High Dose_Placebo` Xanomeline Low Dos…¹</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ACTINIC KERATOSIS comp                           0.001<span style="text-decoration: underline;">83</span>              0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ACTINIC KERATOSIS ref                            0                    0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ACTINIC KERATOSIS dif                            0.001<span style="text-decoration: underline;">83</span>              0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ACTINIC KERATOSIS low                           -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">59</span>              0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ACTINIC KERATOSIS high                           0.007<span style="text-decoration: underline;">25</span>              0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALOPECIA          comp                           0                    0      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALOPECIA          ref                            0.004<span style="text-decoration: underline;">76</span>              0.004<span style="text-decoration: underline;">76</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALOPECIA          dif                           -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">76</span>             -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">76</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ALOPECIA          low                           -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">4</span>              -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">4</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ALOPECIA          high                           0.007<span style="text-decoration: underline;">85</span>              0.007<span style="text-decoration: underline;">92</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 95 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ACTINIC KERATOSIS comp                            0.023<span style="text-decoration: underline;">8</span>               0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ACTINIC KERATOSIS ref                             0                    0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ACTINIC KERATOSIS dif                             0.023<span style="text-decoration: underline;">8</span>               0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ACTINIC KERATOSIS low                            -<span style="color: #BB0000;">0.046</span><span style="color: #BB0000; text-decoration: underline;">1</span>               0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ACTINIC KERATOSIS high                            0.093<span style="text-decoration: underline;">7</span>               0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ALOPECIA          comp                            0                    0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ALOPECIA          ref                             0.047<span style="text-decoration: underline;">6</span>               0.047<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ALOPECIA          dif                            -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">6</span>              -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ALOPECIA          low                            -<span style="color: #BB0000;">0.174</span>               -<span style="color: #BB0000;">0.174</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ALOPECIA          high                            0.079<span style="text-decoration: underline;">2</span>               0.079<span style="text-decoration: underline;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 95 more rows, and abbreviated variable name</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ¹​`Xanomeline Low Dose_Placebo`</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $BodySystem</span></span>
 <span><span class="co">#&gt; $BodySystem$riskdiff</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   summary_var                          measure `Xanomeline Hi…` `Xanomeline Lo…`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> SKIN AND SUBCUTANEOUS TISSUE DISORD… comp                   1                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> SKIN AND SUBCUTANEOUS TISSUE DISORD… ref                    1                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> SKIN AND SUBCUTANEOUS TISSUE DISORD… dif                    0                0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> SKIN AND SUBCUTANEOUS TISSUE DISORD… low                    0                0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> SKIN AND SUBCUTANEOUS TISSUE DISORD… high                   0                0</span></span></code></pre></div>
+<span><span class="co">#&gt;   summary_var                            measure Xanomeline High Dose_…¹ Xanom…²</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> SKIN AND SUBCUTANEOUS TISSUE DISORDERS comp                          1       1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> SKIN AND SUBCUTANEOUS TISSUE DISORDERS ref                           1       1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> SKIN AND SUBCUTANEOUS TISSUE DISORDERS dif                           0       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> SKIN AND SUBCUTANEOUS TISSUE DISORDERS low                           0       0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> SKIN AND SUBCUTANEOUS TISSUE DISORDERS high                          0       0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​`Xanomeline High Dose_Placebo`,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ²​`Xanomeline Low Dose_Placebo`</span></span></span></code></pre></div>
 <p>Instead of playing around with lists, <code><a href="../reference/get_stats_data.html">get_stats_data()</a></code>
 is most advantageous if you’d like to extract out some data
 specifically. Let’s say that you’d like to see just the difference
@@ -921,38 +925,38 @@ values from the Preferred Term layer in the table above.</p>
 <tr class="odd">
 <td align="left">ACTINIC KERATOSIS</td>
 <td align="left">dif</td>
-<td align="right">0.0018315</td>
+<td align="right">0.0238095</td>
 <td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">ALOPECIA</td>
 <td align="left">dif</td>
-<td align="right">-0.0047619</td>
-<td align="right">-0.0047619</td>
+<td align="right">-0.0476190</td>
+<td align="right">-0.0476190</td>
 </tr>
 <tr class="odd">
 <td align="left">BLISTER</td>
 <td align="left">dif</td>
-<td align="right">0.0018315</td>
-<td align="right">0.0099206</td>
+<td align="right">0.0238095</td>
+<td align="right">0.1190476</td>
 </tr>
 <tr class="even">
 <td align="left">COLD SWEAT</td>
 <td align="left">dif</td>
-<td align="right">-0.0047619</td>
-<td align="right">-0.0047619</td>
+<td align="right">-0.0476190</td>
+<td align="right">-0.0476190</td>
 </tr>
 <tr class="odd">
 <td align="left">DERMATITIS ATOPIC</td>
 <td align="left">dif</td>
-<td align="right">-0.0047619</td>
-<td align="right">-0.0047619</td>
+<td align="right">-0.0476190</td>
+<td align="right">-0.0476190</td>
 </tr>
 <tr class="even">
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">dif</td>
 <td align="right">0.0000000</td>
-<td align="right">0.0019841</td>
+<td align="right">0.0238095</td>
 </tr>
 </tbody>
 </table>

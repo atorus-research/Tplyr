@@ -79,17 +79,17 @@ full_data <- bind_rows(sum_data, model_portion) %>%
 
 ```
 
-As covered in `vignette('metadata')`, Tplyr can produce metadata for any result that it calculates. But what about data that Tplyr can't produce, such as a efficacy results or some sort of custom analysis? You may still want that drill down capability either on your own or paired with an existing Tplyr table.
+As covered in `vignette('metadata')`,**Tplyr** can produce metadata for any result that it calculates. But what about data that **Tplyr** can't produce, such as a efficacy results or some sort of custom analysis? You may still want that drill down capability either on your own or paired with an existing **Tplyr** table.
 
-Take for instance Table 14-3.01 from the [CDISC Pilot](https://github.com/atorus-research/CDISC_pilot_replication). Skipping the actual construction of the table, here's the output data from Tplyr and some manual calculation:
+Take for instance Table 14-3.01 from the [CDISC Pilot](https://github.com/atorus-research/CDISC_pilot_replication). Skipping the actual construction of the table, here's the output data from **Tplyr** and some manual calculation:
 
 ```{r view data}
 kable(full_data)
 ```
 
-This is the primary efficacy table from the trial. The top portion of this table is fairly straightforward with Tplyr and can be done using descriptive statistic layers. Once you hit the p-values on the lower house, this becomes beyond Tplyr's remit. To produce the table, you can combine Tplyr output with a separate data frame analyzed and formatted yourself (but note you can still use some help from Tplyr tools like `apply_formats()`). 
+This is the primary efficacy table from the trial. The top portion of this table is fairly straightforward with **Tplyr** and can be done using descriptive statistic layers. Once you hit the p-values on the lower house, this becomes beyond Tplyr's remit. To produce the table, you can combine **Tplyr** output with a separate data frame analyzed and formatted yourself (but note you can still use some help from **Tplyr** tools like `apply_formats()`). 
 
-But what about the metadata? How do you get the drill down capabilities for that lower half of the table? We've provided a couple additional tools in Tplyr to allow you to construct your own metadata and append existing metadata present in a Tplyr table.
+But what about the metadata? How do you get the drill down capabilities for that lower half of the table? We've provided a couple additional tools in **Tplyr** to allow you to construct your own metadata and append existing metadata present in a **Tplyr** table.
 
 ## Build a `tplyr_meta` object
 
@@ -103,7 +103,7 @@ m <- tplyr_meta(
 m
 ```
 
-The `tplyr_meta()` function can take these fields immediately upon creation. If you need to dynamically create a `tplyr_meta` object such as how Tplyr constructs the objects internally), the functions `add_variables()` and `add_filters()` are available to extend an existing `tplyr_meta` object:
+The `tplyr_meta()` function can take these fields immediately upon creation. If you need to dynamically create a `tplyr_meta` object such as how **Tplyr** constructs the objects internally), the functions `add_variables()` and `add_filters()` are available to extend an existing `tplyr_meta` object:
 
 ```{r extending tplyr_meta}
 m <- m %>% 
@@ -159,11 +159,11 @@ When building a data frame for use with `tplyr_table` metadata, there are really
 - You need a column in the data frame called `row_id`
 - The `row_id` values cannot be duplicates of any other value within the existing metadata.
 
-The `row_id` values built by Tplyr will always follow the format "<first letter of layer type>n_n", where the first letter of the layer type will either be "c", "d", or "s". The next number is the layer number (i.e. the order in which the layer was inserted to the Tplyr table), and then finally the row of that layer within the output. For example, the third row of a count layer that was the second layer in the table would have a `row_id` of "c2_3". In this example, I chose "x4_n" as the format for the "x" to symbolize custom, and these data can be thought of as the fourth layer. That said, these values would typically be masked by the viewer of the table so they really just need to be unique - so you can choose whatever you want.
+The `row_id` values built by **Tplyr** will always follow the format "<first letter of layer type>n_n", where the first letter of the layer type will either be "c", "d", or "s". The next number is the layer number (i.e. the order in which the layer was inserted to the **Tplyr** table), and then finally the row of that layer within the output. For example, the third row of a count layer that was the second layer in the table would have a `row_id` of "c2_3". In this example, I chose "x4_n" as the format for the "x" to symbolize custom, and these data can be thought of as the fourth layer. That said, these values would typically be masked by the viewer of the table so they really just need to be unique - so you can choose whatever you want.
 
-## Appending Existing Tplyr Metadata 
+## Appending Existing **Tplyr** Metadata 
 
-Now that we've created our custom extension of the Tplyr metadata, let's extend the existing data frame. To do this, Tplyr has the function `append_metadata()`:
+Now that we've created our custom extension of the **Tplyr** metadata, let's extend the existing data frame. To do this, **Tplyr** has the function `append_metadata()`:
 
 ```{r extending metadata}
 t <- append_metadata(t, eff_meta)
@@ -185,7 +185,7 @@ get_meta_subset(t, 'x4_1', "var1_Xanomeline High Dose") %>%
 
 ## Metadata Without Tplyr
 
-You very well may have a scenario where you want to use these metadata functions outside of Tplyr in general. As such, there are S3 methods available to query metadata from a dataframe instead of a Tplyr table, and parameters to provide your own target data frame:
+You very well may have a scenario where you want to use these metadata functions outside of **Tplyr** in general. As such, there are S3 methods available to query metadata from a dataframe instead of a **Tplyr** table, and parameters to provide your own target data frame:
 
 ```{r metadata without Tplyr}
 get_meta_subset(eff_meta, 'x4_1', "var1_Xanomeline High Dose", target=adas) %>% 
@@ -193,7 +193,7 @@ get_meta_subset(eff_meta, 'x4_1', "var1_Xanomeline High Dose", target=adas) %>%
   kable()
 ```
 
-As with the Tplyr metadata, the only strict criteria here is that your custom metadata have a `row_id` column.
+As with the **Tplyr** metadata, the only strict criteria here is that your custom metadata have a `row_id` column.
 
 ## Tying it Together
 

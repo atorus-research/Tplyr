@@ -624,9 +624,15 @@ process_count_denoms <- function(x) {
       abort("A value(s) were set with 'denom_ignore' but no missing count was set. Your percentages/totals may not have meaning.")
     }
 
-    # Logic to determine how to subset target for denominators
+    # Logic to determine how to subset target for denominators.
     if (is.null(denom_where)) {
-      denom_where <- where
+      # If a pop_data was passed change the denom_where to the pop_data_where
+      if (!isTRUE(try(identical(pop_data, target)))) {
+        denom_where <- quo(TRUE)
+      } else {
+        # Otherwise make denom_where equal to table where
+        denom_where <- where
+      }
     }
 
     # Because the missing strings haven't replaced the missing strings, it has to happen here.
@@ -653,7 +659,9 @@ process_count_denoms <- function(x) {
       # population dataset. Trigger this by identifying that
     # the population dataset was overridden
     if (!isTRUE(try(identical(pop_data, target)))) {
-      if (deparse(denom_where) != deparse(where)) {
+      # If the denom_where doesn't match the where AND the denom_where isn't true
+      # than the user passed a custom denom_where
+      if (deparse(denom_where) != deparse(where) && !isTRUE(quo_get_expr(denom_where))) {
         warning(paste0("A `denom_where` has been set with a pop_data. The `denom_where` has been ignored.",
                        "You should use `set_pop_where` instead of `set_denom_where`.", sep = "\n"),
                 immediate. = TRUE)

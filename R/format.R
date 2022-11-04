@@ -80,7 +80,7 @@
 #'     - `mean`
 #'     - `sd`
 #'     - `median`
-#'     - `variance`
+#'     - `var`
 #'     - `min`
 #'     - `max`
 #'     - `iqr`

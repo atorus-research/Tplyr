@@ -52,7 +52,7 @@ kable(t)
 
 Another exceptionally important consideration within count layers is whether you should be using distinct counts, non-distinct counts, or some combination of both. Adverse event tables are a perfect example. Often, you're concerned about how many subjects had an adverse event in particular instead of just the number of occurrences of that adverse event. Similarly, the number occurrences of an event isn't necessarily relevant when compared to the total number of adverse events that occurred. For this reason, what you likely want to look at is instead the number of subjects who experienced an event compared to the total number of subjects in that treatment group. 
 
-'Tplyr' allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified `distinct_by` variables.
+**Tplyr** allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified `distinct_by` variables.
 
 ```{r}
 t <- tplyr_table(adae, TRTA) %>%
@@ -101,6 +101,6 @@ tplyr_table(adae, TRTA) %>%
   kable()
 ```
 
-By using `set_nest_count()`, this triggers 'Tplyr' to drop row_label1, and indent all of the AEDECOD values within row_label2. The columns are renamed appropriately as well. The default indentation used will be 3 spaces, but as you can see here - you can set the indentation however you like. This let's you use tab strings for different language-specific output types, stick with spaces, indent wider or smaller - whatever you wish. All of the existing order variables remain, so this has no impact on your ability to sort the table. 
+By using `set_nest_count()`, this triggers **Tplyr** to drop row_label1, and indent all of the AEDECOD values within row_label2. The columns are renamed appropriately as well. The default indentation used will be 3 spaces, but as you can see here - you can set the indentation however you like. This let's you use tab strings for different language-specific output types, stick with spaces, indent wider or smaller - whatever you wish. All of the existing order variables remain, so this has no impact on your ability to sort the table. 
 
 There's a lot more to counting! So be sure to check out our vignettes on sorting, shift tables, and denominators.
