@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tplyr Table Properties">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,13 +118,13 @@
 
     
     
-<p>Most of the work in creating a ‘Tplyr’ table is at the layer level,
-but there are a few overarching properties that are worth spending some
-time discussing. One of the things that we wanted to make sure we did in
-‘Tplyr’ is allow you to eliminate redundant code wherever possible.
-Adding some processing to the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us
-to do that. Furthermore, some settings simply need to be applied table
-wide.</p>
+<p>Most of the work in creating a <strong>Tplyr</strong> table is at the
+layer level, but there are a few overarching properties that are worth
+spending some time discussing. One of the things that we wanted to make
+sure we did in <strong>Tplyr</strong> is allow you to eliminate
+redundant code wherever possible. Adding some processing to the
+<code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us to do that. Furthermore, some
+settings simply need to be applied table wide.</p>
 <div class="section level2">
 <h2 id="table-parameters">Table Parameters<a class="anchor" aria-label="anchor" href="#table-parameters"></a>
 </h2>
@@ -675,21 +675,21 @@ summaries for the individual cohorts are left unchanged.</p>
 <div class="section level2">
 <h2 id="population-data">Population Data<a class="anchor" aria-label="anchor" href="#population-data"></a>
 </h2>
-<p>A last and very important aspect of table level properties in ‘Tplyr’
-is the addition of a population dataset. In CDISC standards, datasets
-like <code>adae</code> only contain adverse events when they occur. This
-means that if a subject did not experience an adverse event, or did not
-experience an adverse event within the criteria that you’re subsetting
-for, they don’t appear in the dataset. When you’re looking at the
-proportion of subject who experienced an adverse event compared to the
-total number of subjects in that cohort, <code>adae</code> itself leaves
-you no way to calculate that total - as the subjects won’t exist in the
-data.</p>
-<p>‘Tplyr’ allows you to provide a separate population dataset to
-overcome this. Furthermore, you are also able to provide a separate
-population dataset <code>where</code> parameter and a population
-treatment variable named <code>pop_treat_var</code>, as variable names
-may differ between the datasets.</p>
+<p>A last and very important aspect of table level properties in
+<strong>Tplyr</strong> is the addition of a population dataset. In CDISC
+standards, datasets like <code>adae</code> only contain adverse events
+when they occur. This means that if a subject did not experience an
+adverse event, or did not experience an adverse event within the
+criteria that you’re subsetting for, they don’t appear in the dataset.
+When you’re looking at the proportion of subject who experienced an
+adverse event compared to the total number of subjects in that cohort,
+<code>adae</code> itself leaves you no way to calculate that total - as
+the subjects won’t exist in the data.</p>
+<p><strong>Tplyr</strong> allows you to provide a separate population
+dataset to overcome this. Furthermore, you are also able to provide a
+separate population dataset <code>where</code> parameter and a
+population treatment variable named <code>pop_treat_var</code>, as
+variable names may differ between the datasets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -723,7 +723,7 @@ may differ between the datasets.</p>
 <tbody>
 <tr class="odd">
 <td align="left">ALOPECIA</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -732,14 +732,14 @@ may differ between the datasets.</p>
 <tr class="even">
 <td align="left">BLISTER</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
-<td align="left">5 ( 0.5%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">5 ( 6.0%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="odd">
 <td align="left">COLD SWEAT</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -749,47 +749,47 @@ may differ between the datasets.</p>
 <td align="left">DERMATITIS CONTACT</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">6</td>
 </tr>
 <tr class="odd">
 <td align="left">ERYTHEMA</td>
-<td align="left">9 ( 1.3%)</td>
-<td align="left">14 ( 1.4%)</td>
-<td align="left">13 ( 1.3%)</td>
+<td align="left">9 ( 10.5%)</td>
+<td align="left">14 ( 16.7%)</td>
+<td align="left">13 ( 15.5%)</td>
 <td align="right">1</td>
 <td align="right">8</td>
 </tr>
 <tr class="even">
 <td align="left">HYPERHIDROSIS</td>
-<td align="left">2 ( 0.3%)</td>
-<td align="left">8 ( 0.8%)</td>
-<td align="left">4 ( 0.4%)</td>
+<td align="left">2 ( 2.3%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="left">4 ( 4.8%)</td>
 <td align="right">1</td>
 <td align="right">9</td>
 </tr>
 <tr class="odd">
 <td align="left">PRURITUS</td>
-<td align="left">8 ( 1.2%)</td>
-<td align="left">26 ( 2.6%)</td>
-<td align="left">21 ( 2.1%)</td>
+<td align="left">8 ( 9.3%)</td>
+<td align="left">26 ( 31.0%)</td>
+<td align="left">21 ( 25.0%)</td>
 <td align="right">1</td>
 <td align="right">10</td>
 </tr>
 <tr class="even">
 <td align="left">PRURITUS GENERALISED</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">11</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH</td>
-<td align="left">4 ( 0.6%)</td>
-<td align="left">8 ( 0.8%)</td>
-<td align="left">13 ( 1.3%)</td>
+<td align="left">4 ( 4.7%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="left">13 ( 15.5%)</td>
 <td align="right">1</td>
 <td align="right">12</td>
 </tr>
@@ -797,14 +797,14 @@ may differ between the datasets.</p>
 <td align="left">RASH ERYTHEMATOUS</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">2 ( 0.2%)</td>
+<td align="left">2 ( 2.4%)</td>
 <td align="right">1</td>
 <td align="right">13</td>
 </tr>
 <tr class="odd">
 <td align="left">RASH MACULO-PAPULAR</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">14</td>
@@ -812,7 +812,7 @@ may differ between the datasets.</p>
 <tr class="even">
 <td align="left">RASH PAPULAR</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">15</td>
@@ -820,8 +820,8 @@ may differ between the datasets.</p>
 <tr class="odd">
 <td align="left">RASH PRURITIC</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">2 ( 0.2%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">2 ( 2.4%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">16</td>
 </tr>
@@ -829,29 +829,29 @@ may differ between the datasets.</p>
 <td align="left">SKIN EXFOLIATION</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">17</td>
 </tr>
 <tr class="odd">
 <td align="left">SKIN IRRITATION</td>
-<td align="left">2 ( 0.3%)</td>
-<td align="left">5 ( 0.5%)</td>
-<td align="left">6 ( 0.6%)</td>
+<td align="left">2 ( 2.3%)</td>
+<td align="left">5 ( 6.0%)</td>
+<td align="left">6 ( 7.1%)</td>
 <td align="right">1</td>
 <td align="right">18</td>
 </tr>
 <tr class="even">
 <td align="left">SKIN ODOUR ABNORMAL</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
 <td align="right">19</td>
 </tr>
 <tr class="odd">
 <td align="left">SKIN ULCER</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="left">0 ( 0.0%)</td>
 <td align="right">1</td>
@@ -860,8 +860,8 @@ may differ between the datasets.</p>
 <tr class="even">
 <td align="left">URTICARIA</td>
 <td align="left">0 ( 0.0%)</td>
-<td align="left">1 ( 0.1%)</td>
-<td align="left">1 ( 0.1%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 1.2%)</td>
 <td align="right">1</td>
 <td align="right">21</td>
 </tr>
@@ -879,10 +879,11 @@ same logic applies to the population treatment variable.
 <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate
 variable in <code>adsl</code>.</p>
 <p>Note the percentage values in the summary above. By setting the
-population data, ‘Tplyr’ now knew to use those values when calculating
-the percentages for the distinct counts of subjects who experienced the
-summarized adverse events. Furthermore, with the population data
-provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
+population data, <strong>Tplyr</strong> now knew to use those values
+when calculating the percentages for the distinct counts of subjects who
+experienced the summarized adverse events. Furthermore, with the
+population data provided, <strong>Tplyr</strong> is able to calculate
+your header N’s properly:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/header_n.html">header_n</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -907,10 +908,11 @@ provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
 </tbody>
 </table>
 <p>With the table level settings under control, now you’re ready to
-learn more about what ‘Tplyr’ has to offer in each layer.</p>
+learn more about what <strong>Tplyr</strong> has to offer in each
+layer.</p>
 <ul>
 <li>Learn more about descriptive statistics layers in
-<code>vignettes("desc")</code>
+<code><a href="../articles/desc.html">vignette("desc")</a></code>
 </li>
 <li>Learn more about count and shift layers in
 <code><a href="../articles/count.html">vignette("count")</a></code>
@@ -918,16 +920,17 @@ learn more about what ‘Tplyr’ has to offer in each layer.</p>
 <li>Learn more about shift layers in <code><a href="../articles/shift.html">vignette("shift")</a></code>
 </li>
 <li>Learn more about calculating risk differences in
-<code>vignettes("riskdiff")</code>
+<code><a href="../articles/riskdiff.html">vignette("riskdiff")</a></code>
 </li>
-<li>Learn more about sorting ‘Tplyr’ tables in
-<code>vignettes("sort")</code>
+<li>Learn more about sorting <strong>Tplyr</strong> tables in
+<code><a href="../articles/sort.html">vignette("sort")</a></code>
 </li>
-<li>Learn more about using ‘Tplyr’ options in
-<code>vignettes("options")</code>
+<li>Learn more about using <strong>Tplyr</strong> options in
+<code><a href="../articles/options.html">vignette("options")</a></code>
 </li>
 <li>And finally, learn more about producing and outputting styled tables
-using ‘Tplyr’ in <code>vignettes("styled-table")</code>
+using <strong>Tplyr</strong> in
+<code><a href="../articles/styled-table.html">vignette("styled-table")</a></code>
 </li>
 </ul>
 </div>

@@ -25,9 +25,9 @@ library(knitr)
 load("adsl.Rdata")
 ```
 
-Tplyr has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?
+**Tplyr** has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?
 
-The purpose of the `tplyr_table()` object is to let Tplyr do more than just summarize data. As you build the table, all of the metadata around the table being built is maintained - the target variables being summarized, the grouped variables by row and column, the filter conditions necessary applied to the table and each layer. As a user, you provide this information to create the summary. But what about after the results are produced? Summarizing data inevitably leads to new questions. Within clinical summaries, you may want to know which subjects experienced an adverse event, or why the lab summaries of a particular visit's descriptive statistics are abnormal. Normally, you'd write a query to recreate the data that lead to that particular summary. Tplyr now allows you to immediately extract the input data or metadata that created an output result, thus providing traceability from the result back to the source.
+The purpose of the `tplyr_table()` object is to let **Tplyr** do more than just summarize data. As you build the table, all of the metadata around the table being built is maintained - the target variables being summarized, the grouped variables by row and column, the filter conditions necessary applied to the table and each layer. As a user, you provide this information to create the summary. But what about after the results are produced? Summarizing data inevitably leads to new questions. Within clinical summaries, you may want to know which subjects experienced an adverse event, or why the lab summaries of a particular visit's descriptive statistics are abnormal. Normally, you'd write a query to recreate the data that lead to that particular summary. **Tplyr** now allows you to immediately extract the input data or metadata that created an output result, thus providing traceability from the result back to the source.
 
 ## Generating the Metadata
 
@@ -47,7 +47,7 @@ dat <- t %>% build(metadata=TRUE)
 kable(dat)
 ```
 
-To trigger the creation of metadata, the `build()` function has a new argument `metadata`. By specifying `TRUE`, the underlying metadata within Tplyr are prepared in an extractable format. This is the only action a user needs to specify for this action to take place. 
+To trigger the creation of metadata, the `build()` function has a new argument `metadata`. By specifying `TRUE`, the underlying metadata within **Tplyr** are prepared in an extractable format. This is the only action a user needs to specify for this action to take place. 
 
 When the `metadata` argument is used, a new column will be produced in the output dataframe called `row_id`. The `row_id` variable provides a persistent reference to a row of interest, even if the output dataframe is sorted. If you review `vignette("styled-table")`, note that we expect a certain amount of post processing and styling of the built data frame from Tplyr, to let you use whatever other packages you prefer. As such, this reference ID is necessary.
 
@@ -60,7 +60,7 @@ get_meta_subset(t, 'c2_1', 'var1_Placebo') %>%
   kable()
 ```
 
-By using the `row_id` and column, the dataframe is pulled right out for us. Notice that `USUBJID` was included by default, even though Tplyr there's no reference anywhere in the `tplyr_table()` to the variable `USUBJID`. This is because `get_meta_subset()` has an additional argument `add_cols` that allows you to specify additional columns you want included in the resulting dataframe, and has a default of USUBJID. So let's say we want additionally include the variable `SEX`.
+By using the `row_id` and column, the dataframe is pulled right out for us. Notice that `USUBJID` was included by default, even though **Tplyr** there's no reference anywhere in the `tplyr_table()` to the variable `USUBJID`. This is because `get_meta_subset()` has an additional argument `add_cols` that allows you to specify additional columns you want included in the resulting dataframe, and has a default of USUBJID. So let's say we want additionally include the variable `SEX`.
 
 ```{r add_vars}
 get_meta_subset(t, 'c2_1', 'var1_Placebo', add_cols = vars(USUBJID, SEX)) %>% 
@@ -89,7 +89,7 @@ To extract the dataframe in `get_meta_subset()`, the metadata of the result cell
 get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 ```
 
-The resulting output is a new object Tplyr called `tplyr_meta()`. This is a container of a relevent metadata for a specific result. The object itself is a list with two elements: `names` and `filters`.
+The resulting output is a new object **Tplyr** called `tplyr_meta()`. This is a container of a relevent metadata for a specific result. The object itself is a list with two elements: `names` and `filters`.
 
 The `names` element contains quosures for each variable relevant to a specific result. This will include the target variable, the `by` variables used on the layer, the `cols` variables used on the table, and all variables included in any filter condition relevant to create the result.
 

@@ -35,7 +35,7 @@ Make sure you have a good understand of count and shift layers before you review
 
 What do you do when your target dataset doesn't _have_ the information necessary to create your denominator? For example - when you create an adverse event table, the adverse event dataset likely only contains records for subjects who experienced an adverse event. But subjects who did _not_ have an adverse event are still part of the study population and must be considered in the denominator. 
 
-For this reason, Tplyr allows lets you set a separate population dataset - but there are a couple things you need to do to trigger Tplyr to use the population data as your denominator. 
+For this reason,**Tplyr** allows lets you set a separate population dataset - but there are a couple things you need to do to trigger **Tplyr** to use the population data as your denominator. 
 
 Consider these two examples.
 
@@ -141,7 +141,7 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-In the example above, the denominators were based on the by and treatment variables, `TRTA`, `PARAM` and `VISIT`. This creates a 3 X 3 box, where the denominator is the total of all record within the **FROM** and **TO** shift variables, within each parameter, visit, and treatment. This is the default, and this is how 'Tplyr' will create the denominators if `set_denoms_by()` isn't specified.
+In the example above, the denominators were based on the by and treatment variables, `TRTA`, `PARAM` and `VISIT`. This creates a 3 X 3 box, where the denominator is the total of all record within the **FROM** and **TO** shift variables, within each parameter, visit, and treatment. This is the default, and this is how **Tplyr** will create the denominators if `set_denoms_by()` isn't specified.
 
 In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%. 
 
@@ -179,7 +179,7 @@ Our hope is that this gives you the flexibility you need to structure your denom
 
 There are some circumstances that you'll encounter where the filter used for a denominator needs to be different than the filter used to count. Disposition tables are an example of this, and we'll use that example to paint this picture.
 
-'Tplyr' offers you the ability to specifically control the filter used within the denominator. This is provided through the function `set_denom_where()`. The default for `set_denom_where()` is the layer level `where` parameter, if one was supplied. `set_denom_where()` allows you to replace this layer level filter with a custom filter of your choosing. This is done on top of any filtering specified in the `tplyr_table()` where parameter - which means that the `set_denom_where()` filter is applied _in addition to_ any table level filtering. 
+**Tplyr**offers you the ability to specifically control the filter used within the denominator. This is provided through the function `set_denom_where()`. The default for `set_denom_where()` is the layer level `where` parameter, if one was supplied. `set_denom_where()` allows you to replace this layer level filter with a custom filter of your choosing. This is done on top of any filtering specified in the `tplyr_table()` where parameter - which means that the `set_denom_where()` filter is applied _in addition to_ any table level filtering. 
 
 Yeah we know - there are a lot of different places that filtering can happen...
 
@@ -238,16 +238,16 @@ We did one more other thing worth explaining in the example above - gave the mis
 
 ## Adding a 'Total' Row
 
-In addition to missing counts, some summaries require the addition of a 'Total' row. 'Tplyr' has the helper function `add_total_row()` to ease this process for you. Like most other things within 'Tplyr' - particularly in this vignette - this too has a significant bit of nuance to it. 
+In addition to missing counts, some summaries require the addition of a 'Total' row. **Tplyr** has the helper function `add_total_row()` to ease this process for you. Like most other things within **Tplyr** - particularly in this vignette - this too has a significant bit of nuance to it. 
 
 Much of this functionality is similar to `set_missing_count()`. You're able to specify a different format for the total, but if not specified, the associated count layer's format will be used. You're able to set your own sort value to specify where you want the total row to sit. 
 
 More nuance comes in two places:
 
-- By default, `add_total_row()` *will count missing values*, but you can exclude those values using the `count_missings` parameter. 'Tplyr' will warn you when `set_count_missing()` has `denom_ignore` set to `TRUE`, `add_total_row()` has `count_missings` set to `TRUE` and the format contains a percentage. Why? Because if the denominator is ignoring missing values but you're still counting them in your total, the percentage shown can exceed 100%. 
+- By default, `add_total_row()` *will count missing values*, but you can exclude those values using the `count_missings` parameter. **Tplyr** will warn you when `set_count_missing()` has `denom_ignore` set to `TRUE`, `add_total_row()` has `count_missings` set to `TRUE` and the format contains a percentage. Why? Because if the denominator is ignoring missing values but you're still counting them in your total, the percentage shown can exceed 100%. 
 - `add_total_row()` will throw a warning when a `by` variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using `set_denoms_by()`, which allows the user to control exactly which groups are used to form the denominator. This way the totals presented by `add_total_row()` will align with denominators specified in `set_denom_by()` and generate total rows that match the grouping of your denominator values. 
 
-In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator that was used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into 'Tplyr'.
+In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator that was used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into **Tplyr**.
 
 ```{r}
 adsl2 <- adsl
@@ -285,6 +285,6 @@ tplyr_table(adsl2, TRT01P) %>%
 
 Now the table is more intuitive. We used `set_missing_count()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
 
-_You may have stumbled upon this portion of the vignette while searching for how to create a total column. Tplyr allows you to do this as well with the function `add_total_group()` and read more in `vignette("table")`._ 
+_You may have stumbled upon this portion of the vignette while searching for how to create a total column. **Tplyr** allows you to do this as well with the function `add_total_group()` and read more in `vignette("table")`._ 
 
 And that's it for denominators! Happy counting!

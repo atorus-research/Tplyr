@@ -50,7 +50,7 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-First, let's look at the differences in the shift API. Shift layers *must* take a row and a column variable, as the layer is designed to create a box for you that explains the changes in state. The row variable will typically be your "from" variable, and the column variable will typically be your "to" variable. Behind the scenes, Tplyr breaks this down for you to properly count and present the data.
+First, let's look at the differences in the shift API. Shift layers *must* take a row and a column variable, as the layer is designed to create a box for you that explains the changes in state. The row variable will typically be your "from" variable, and the column variable will typically be your "to" variable. Behind the scenes, **Tplyr** breaks this down for you to properly count and present the data.
 
 For the most part, the last example gets us where we want to go - but there's still some that's left to be desired. It doesn’t look like there are any 'L' values for BNRIND in the dataset so we are not getting and rows containing 'L'. Let’s see if we can fix that by dummying in the possible values.
 

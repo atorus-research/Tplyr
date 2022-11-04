@@ -26,17 +26,17 @@ load("adsl.Rdata")
 load("adlb.Rdata")
 ```
 
-# How 'Tplyr' Works
+# How **Tplyr** Works
 
 When you look at a summary table within a clinical report, you can often break it down into some basic pieces. Consider this output.
 
 ![](./demo_table.png)
 
-Different variables are being summarized in chunks of the table, which we refer to as "layers". Additionally, this table really only contains a few different types of summaries, which makes many of the calculations rather redundant. This drives the motivation behind 'Tplyr'. The containing table is encapsulated within the `tplyr_table()` object, and each section, or "layer", within the summary table can be broken down into a `tplyr_layer()` object.
+Different variables are being summarized in chunks of the table, which we refer to as "layers". Additionally, this table really only contains a few different types of summaries, which makes many of the calculations rather redundant. This drives the motivation behind **Tplyr**. The containing table is encapsulated within the `tplyr_table()` object, and each section, or "layer", within the summary table can be broken down into a `tplyr_layer()` object.
 
 ## The `tplyr_table()` Object
 
-The `tplyr_table()` object is the conceptual "table" that contains all of the logic necessary to construct and display the data. 'Tplyr' tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table()` object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.
+The `tplyr_table()` object is the conceptual "table" that contains all of the logic necessary to construct and display the data. **Tplyr** tables are made up of one or more layers. Each layer contains an instruction for a summary to be performed. The `tplyr_table()` object contains those layers, and the general data, metadata, and logic necessary to prepare the data before any layers are constructed.
 
 When a `tplyr_table()` is created, it will contain the following bindings:
 
@@ -60,14 +60,14 @@ t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y")
 t
 ```
 
-## The `tplyr_layer` Object
+## The `tplyr_layer()` Object
 
-Users of 'Tplyr' interface with `tplyr_layer()` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `shift` layers summarize the counts for different changes in states. Lastly, `desc` layers create descriptive statistics.
+Users of **Tplyr** interface with `tplyr_layer()` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `shift` layers summarize the counts for different changes in states. Lastly, `desc` layers create descriptive statistics.
 
 - **Count Layers**
   - Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as `vars(OutsideVariable, InsideVariable)`. This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurrences of that adverse event.
 - **Descriptive Statistics Layers**
-  - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into 'Tplyr' already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings()`, and you can also add your own summaries using `set_custom_summaries()`. This allows you to easily implement any additional summary statistics you want presented.
+  - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into **Tplyr** already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings()`, and you can also add your own summaries using `set_custom_summaries()`. This allows you to easily implement any additional summary statistics you want presented.
 - **Shift Layers**
   - Shift layers are largely an abstraction of the count layer - and in fact, we re-use a lot of the same code to process these layers. In many shift tables, the "from" state is presented as rows in the table, and the "to" state is presented as columns. This clearly lays out how many subjects changed state between a baseline and some point in time. Shift layers give you an intuitive API to break these out, using a very similar interface as the other layers. There are also a number of modifier functions available to control nuanced aspects, such as how denominators should be applied. 
 
@@ -85,7 +85,7 @@ shf
 
 ## Adding Layers to a Table
 
-Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, 'Tplyr' is built around tidy syntax, so all of our object construction supports piping with [`magrittr`](https://magrittr.tidyverse.org/articles/magrittr.html) (i.e. `%>%`). 
+Everyone has their own style of coding - so we've tried to be flexible to an extent. Overall, **Tplyr** is built around tidy syntax, so all of our object construction supports piping with [`magrittr`](https://magrittr.tidyverse.org/articles/magrittr.html) (i.e. `%>%`). 
 
 There are two ways to add layers to a `tplyr_table()`: `add_layer()` and `add_layers()`. The difference is that `add_layer()` allows you to construct the layer within the call to `add_layer()`, whereas with `add_layers()` you can attach multiple layers that have already been constructed upfront:
 
@@ -140,7 +140,7 @@ t %>%
 
 ```
 
-But there's more you can get from 'Tplyr'. It's great to have the formatted numbers, but what about the numeric data behind the scenes? Maybe a number looks suspicious and you need to investigate _how_ you got that number. What if you want to calculate your own statistics based off of the counts? You can get that information as well using `get_numeric_data()`. This returns the numeric data from each layer as a list of data frames:
+But there's more you can get from **Tplyr**. It's great to have the formatted numbers, but what about the numeric data behind the scenes? Maybe a number looks suspicious and you need to investigate _how_ you got that number. What if you want to calculate your own statistics based off of the counts? You can get that information as well using `get_numeric_data()`. This returns the numeric data from each layer as a list of data frames:
 
 ```{r get_numeric_data}
 get_numeric_data(t) %>% 
@@ -148,15 +148,15 @@ get_numeric_data(t) %>%
   kable()
 ```
 
-By storing pertinent information, you can get more out of a 'Tplyr' object than processed data for display. And by specifying when you want to get data out of 'Tplyr', we can save you from repeatedly processing data while your constructing your outputs - which is particularly useful when that computation starts taking time.
+By storing pertinent information, you can get more out of a **Tplyr** object than processed data for display. And by specifying when you want to get data out of **Tplyr**, we can save you from repeatedly processing data while your constructing your outputs - which is particularly useful when that computation starts taking time.
 
 ## Constructing Layers
 
-The bulk of 'Tplyr' coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it's important to discuss how 'Tplyr' handles string formatting.
+The bulk of **Tplyr** coding comes from constructing your layers and specifying the work you want to be done. Before we get into this, it's important to discuss how **Tplyr** handles string formatting.
 
-### String Formatting in 'Tplyr'
+### String Formatting in **Tplyr** 
 
-String formatting in 'Tplyr' is controlled by an object called an `f_str()`, which is also the name of function you use to create these formats. To set these format strings into a `tplyr_layer()`, you use the function `set_format_strings()`, and this usage varies slightly between layer types (which is covered in other vignettes). 
+String formatting in **Tplyr** is controlled by an object called an `f_str()`, which is also the name of function you use to create these formats. To set these format strings into a `tplyr_layer()`, you use the function `set_format_strings()`, and this usage varies slightly between layer types (which is covered in other vignettes). 
 
 So - why is this object necessary. Consider this example:
 
@@ -181,7 +181,7 @@ In a perfect world, the `f_str()` calls wouldn't be necessary - but in reality t
 
 - The row labels in the `row_label2` column are taken from the left side of each `=` in `set_format_strings()`
 - The string formats, including integer length and decimal precision, and exact presentation formatting are taken from the strings within the first parameter of each `f_str()` call
-- The second and greater parameters within each `f_str()` call determine the descriptive statistic summaries that will be performed. This is connected to a number of default summaries available within 'Tplyr', but you can also create your own summaries (covered in other vignettes). The default summaries that are built in include:
+- The second and greater parameters within each `f_str()` call determine the descriptive statistic summaries that will be performed. This is connected to a number of default summaries available within **Tplyr**, but you can also create your own summaries (covered in other vignettes). The default summaries that are built in include:
   - `n` = Number of observations
   - `mean` = Mean
   - `sd` = Standard Deviation
@@ -246,7 +246,7 @@ tplyr_table(adsl, TRT01P) %>%
   kable()
 ```
 
-To override these defaults, just specify the summaries that you want to be performed using `set_format_strings()` as described above. But what if 'Tplyr' doesn't have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where `set_custom_summaries()` comes into play. Let's say you want to derive a geometric mean.
+To override these defaults, just specify the summaries that you want to be performed using `set_format_strings()` as described above. But what if **Tplyr** doesn't have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where `set_custom_summaries()` comes into play. Let's say you want to derive a geometric mean.
 
 ```{r custom_summaries}
 tplyr_table(adsl, TRT01P) %>%
@@ -266,7 +266,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 In `set_custom_summaries()`, first you name the summary being performed. This is important - that name is what you use in the `f_str()` call to incorporate it into a format. Next, you program or call the function desired. What happens in the background is that this is used in a call to `dplyr::summarize()` - so use similar syntax. Use the variable name `.var` in your custom summary function. This is necessary because it allows a generic variable name to be used when multiple target variables are specified - and therefore the function can be applied to both target variables. 
 
-Sometimes there's a need to present multiple variables summarized side by side. 'Tplyr' allows you to do this as well.
+Sometimes there's a need to present multiple variables summarized side by side. **Tplyr** allows you to do this as well.
 
 ```{r desc2}
 tplyr_table(adsl, TRT01P) %>% 
@@ -278,7 +278,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-'Tplyr' summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `dplyr::vars()` - in any situation where you'd like to use multiple variable names in a parameter, use `dplyr::vars()` to specify the variables. You can use text strings in the calls to `dplyr::vars()` as well. 
+**Tplyr** summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `dplyr::vars()` - in any situation where you'd like to use multiple variable names in a parameter, use `dplyr::vars()` to specify the variables. You can use text strings in the calls to `dplyr::vars()` as well. 
 
 ## Count Layers
 
@@ -295,7 +295,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-Sometimes it's also necessary to count summaries based on distinct values. 'Tplyr' allows you to do this as well with `set_distinct_by()`:
+Sometimes it's also necessary to count summaries based on distinct values. **Tplyr** allows you to do this as well with `set_distinct_by()`:
 
 ```{r count_distinct}
 tplyr_table(adae, TRTA) %>% 
@@ -311,7 +311,7 @@ tplyr_table(adae, TRTA) %>%
 
 There's another trick going on here - to create a summary with row label text like you see above, text strings can be used as the target variables. Here, we use this in combination with `set_distinct_by()` to count distinct subjects. 
 
-Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. 'Tplyr' has means of making this simple for the user as well.
+Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. **Tplyr** has means of making this simple for the user as well.
 
 ```{r count_nested}
 tplyr_table(adae, TRTA) %>% 
@@ -323,11 +323,11 @@ tplyr_table(adae, TRTA) %>%
   kable()
 ```
 
-Here we again use `dplyr::vars()` to specify multiple target variables. When used in a count layer, 'Tplyr' knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
+Here we again use `dplyr::vars()` to specify multiple target variables. When used in a count layer, **Tplyr** knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
 
 ## Shift Layers
 
-Lastly, let's talk about shift layers. A common example of this would be looking at a subject's lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in 'Tplyr' is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let's look at an example.
+Lastly, let's talk about shift layers. A common example of this would be looking at a subject's lab levels at baseline versus some designated evaluation point. This would tell us, for example, how many subjects were high at baseline for a lab test vs. after an intervention has been introduced. The shift layer in **Tplyr** is intended for creating shift tables that show these data as a matrix, where one state will be presented in rows and the other in columns. Let's look at an example.
 
 ```{r shift1}
 # Tplyr can use factor orders to dummy values and order presentation
@@ -344,24 +344,24 @@ tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
 
 ```
 
-The underlying process of shift tables is the same as count layers - we're counting the number of occurrences of something by a set of grouping variables. This differs in that 'Tplyr' uses the `group_shift()` API to use the same basic interface as other tables, but translate your target variables into the row variable and the column variable. Furthermore, there is some enhanced control over how denominators should behave that is necessary for a shift layer. 
+The underlying process of shift tables is the same as count layers - we're counting the number of occurrences of something by a set of grouping variables. This differs in that **Tplyr** uses the `group_shift()` API to use the same basic interface as other tables, but translate your target variables into the row variable and the column variable. Furthermore, there is some enhanced control over how denominators should behave that is necessary for a shift layer. 
 
 # Where to go from here?
 
-There's quite a bit more to learn! And we've prepared a number of other vignettes to help you get what you need out of 'Tplyr'. 
+There's quite a bit more to learn! And we've prepared a number of other vignettes to help you get what you need out of **Tplyr**. 
 
 - Learn more about table level settings in `vignette("table")`
 - Learn more about descriptive statistics layers in `vignette("desc")`
 - Learn more about count and shift layers in `vignette("count")`
 - Learn more about shift layers in `vignette("shift")`
 - Learn more about calculating risk differences in `vignette("riskdiff")`
-- Learn more about sorting 'Tplyr' tables in `vignette("sort")`
-- Learn more about using 'Tplyr' options in `vignette("options")`
-- And finally, learn more about producing and outputting styled tables using 'Tplyr' in `vignette("styled-table")`
+- Learn more about sorting **Tplyr** tables in `vignette("sort")`
+- Learn more about using **Tplyr** options in `vignette("options")`
+- And finally, learn more about producing and outputting styled tables using **Tplyr** in `vignette("styled-table")`
 
 # References
 
-In building 'Tplyr', we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.
+In building **Tplyr**, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.
 
 [Analysis and Displays Associated with Adverse Events](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf)
 

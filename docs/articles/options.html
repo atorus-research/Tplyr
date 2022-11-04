@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tplyr Options">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,13 +118,14 @@
 
     
     
-<p>One thing that we wanted to build into ‘Tplyr’ to make it a user
-friendly package is the ability to eliminate redundant code where
-possible. This is why there are several options available in ‘Tplyr’ to
-allow you to control things at your session level instead of each
-individual table, or even each individual layer.</p>
-<p>The following are the options available in ‘Tplyr’ and their
-descriptions:</p>
+<p>One thing that we wanted to build into <strong>Tplyr</strong> to make
+it a user friendly package is the ability to eliminate redundant code
+where possible. This is why there are several options available in
+<strong>Tplyr</strong> to allow you to control things at your session
+level instead of each individual table, or even each individual
+layer.</p>
+<p>The following are the options available in <strong>Tplyr</strong> and
+their descriptions:</p>
 <table class="table">
 <colgroup>
 <col width="10%">
@@ -185,20 +186,20 @@ the R default</td>
 </tbody>
 </table>
 <p>Each of these options allows you to set these settings in one place,
-and every ‘Tplyr’ table you create will inherit your option settings as
-defaults. This allows your table code to be more concise, and
-centralizes where you need to make an update when your code has to be
-adjusted. This vignette is dedicated to helping you understand how to
-leverage each of these options properly.</p>
+and every <strong>Tplyr</strong> table you create will inherit your
+option settings as defaults. This allows your table code to be more
+concise, and centralizes where you need to make an update when your code
+has to be adjusted. This vignette is dedicated to helping you understand
+how to leverage each of these options properly.</p>
 <div class="section level2">
 <h2 id="default-layer-formats">Default Layer Formats<a class="anchor" aria-label="anchor" href="#default-layer-formats"></a>
 </h2>
 <p>Declaring string formats and summaries that need to be performed is
-one of the more verbose parts of ‘Tplyr’. Furthermore, this is something
-that will often be fairly consistent within a study, as you’ll likely
-want to look across a consistent set of descriptive statistics, or your
-count/shift tables will likely require the same sort of “n (%)”
-formatting.</p>
+one of the more verbose parts of <strong>Tplyr</strong>. Furthermore,
+this is something that will often be fairly consistent within a study,
+as you’ll likely want to look across a consistent set of descriptive
+statistics, or your count/shift tables will likely require the same sort
+of “n (%)” formatting.</p>
 <p>Using the format options is very similar to setting a string format.
 The only difference is that you need to enter the string formats as a
 named list instead of as separate parameters to a function call.</p>
@@ -221,9 +222,10 @@ named list instead of as separate parameters to a function call.</p>
 <span>  tplyr.shift_layer_default_formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xxx"</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span> </span></code></pre></div>
-<p>Here you can see that ‘Tplyr’ picks up these option changes. In the
-table below, we didn’t use <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> anywhere -
-instead we let ‘Tplyr’ pick up the default formats from the options.</p>
+<p>Here you can see that <strong>Tplyr</strong> picks up these option
+changes. In the table below, we didn’t use
+<code><a href="../reference/set_format_strings.html">set_format_strings()</a></code> anywhere - instead we let
+<strong>Tplyr</strong> pick up the default formats from the options.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -351,18 +353,19 @@ instead we let ‘Tplyr’ pick up the default formats from the options.</p>
 <p>One important thing to understand about how these options work in
 particular is the scoping.</p>
 <ul>
-<li>‘Tplyr’ options have the broadest scope, as they work across the
-entire session for any table.</li>
+<li>
+<strong>Tplyr</strong> options have the broadest scope, as they work
+across the entire session for any table.</li>
 <li>Setting formats at the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level will
-override the ‘Tplyr’ options and extends to any layer of the specified
-type in the current table.</li>
+override the <strong>Tplyr</strong> options and extends to any layer of
+the specified type in the current table.</li>
 <li>Setting formats at the <code><a href="../reference/tplyr_layer.html">tplyr_layer()</a></code> level will always
-be prioritized over ‘Tplyr’ options and any <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>
-formats set. This has the narrowest scope and will always be used when
-specified.</li>
+be prioritized over <strong>Tplyr</strong> options and any
+<code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> formats set. This has the narrowest scope and
+will always be used when specified.</li>
 </ul>
-<p>To demonstrate, consider the following. The ‘Tplyr’ options remain
-set from the block above.</p>
+<p>To demonstrate, consider the following. The <strong>Tplyr</strong>
+options remain set from the block above.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/table_format_defaults.html">set_count_layer_formats</a></span><span class="op">(</span>n_counts <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (xxx%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -476,15 +479,16 @@ specified table default using
 specified using <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>
 </li>
 </ul>
-<p>Each of the outputs ignores the ‘Tpylr’ option defaults.</p>
+<p>Each of the outputs ignores the <strong>Tplyr</strong> option
+defaults.</p>
 </div>
 <div class="section level2">
 <h2 id="precision-cap">Precision Cap<a class="anchor" aria-label="anchor" href="#precision-cap"></a>
 </h2>
-<p>‘Tplyr’ defaults to avoiding capping precision. We do this because
-capping precision should be a conscious decision, where you as the user
-specifically set the limit of how many decimal places are relevant to a
-specific result. One way to cap precision is by using the
+<p><strong>Tplyr</strong> defaults to avoiding capping precision. We do
+this because capping precision should be a conscious decision, where you
+as the user specifically set the limit of how many decimal places are
+relevant to a specific result. One way to cap precision is by using the
 <code>cap</code> parameter within <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>. But
 perhaps you have a specific limit to what you’d like to see on any
 output. Here, we offer the <code>tplyr.precision_cap</code> option to
@@ -567,37 +571,39 @@ places are allotted, 100 will still consume 3 places).</li>
 <li>The cap applies to the spaces allotted by the ‘a’. If the cap is 2,
 ‘a+1’ will not exceed 3 spaces.</li>
 </ul>
-<p>The bottom layer overrides the ‘Tplyr’ option. Instead, integers are
-capped at 1 space, and decimals are capped at 0.</p>
+<p>The bottom layer overrides the <strong>Tplyr</strong> option.
+Instead, integers are capped at 1 space, and decimals are capped at
+0.</p>
 </div>
 <div class="section level2">
 <h2 id="custom-summaries">Custom Summaries<a class="anchor" aria-label="anchor" href="#custom-summaries"></a>
 </h2>
 <p>Custom summaries allow you to extend the capabilities of descriptive
-statistics layers in ‘Tplyr’. Maybe our defaults don’t work how you’d
-like them to, or maybe you have some custom functions within your
-organization that you commonly would like to use. Specifying the custom
-summaries you wish to use in every table would prove quite tedious -
-therefore, the <code>tplyr.custom_summaries</code> option is a better
-choice.</p>
+statistics layers in <strong>Tplyr</strong>. Maybe our defaults don’t
+work how you’d like them to, or maybe you have some custom functions
+within your organization that you commonly would like to use. Specifying
+the custom summaries you wish to use in every table would prove quite
+tedious - therefore, the <code>tplyr.custom_summaries</code> option is a
+better choice.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span></span>
 <span>  geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Note that the table code used to produce the output is the same. Now
-‘Tplyr’ used the custom summary function for <code>geometric_mean</code>
-as specified in the <code>tplyr.custom_summaries</code> option. Also
-note the use of <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::quos()</a></code>. We’ve done our best to mask
-this from the user everywhere possible and make the interfaces clean and
-intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and
+<strong>Tplyr</strong> used the custom summary function for
+<code>geometric_mean</code> as specified in the
+<code>tplyr.custom_summaries</code> option. Also note the use of
+<code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::quos()</a></code>. We’ve done our best to mask this from the
+user everywhere possible and make the interfaces clean and intuitive,
+but a great deal of <strong>Tplyr</strong> is built using ‘rlang’ and
 non-standard evaluation. Within this option is one of the very few
 instances where a user needs to concern themselves with the use of
 quosures. If you’d like to learn more about non-standard evaluation and
 quosures, we recommend <a href="https://adv-r.hadley.nz/metaprogramming.html" class="external-link">Section IV</a> in
 Advanced R.</p>
-<p>Now that geometric mean is set within the ‘Tplyr’ options, you can
-use it within your descriptive statistics layers, just like it was one
-of the built-in summaries.</p>
+<p>Now that geometric mean is set within the <strong>Tplyr</strong>
+options, you can use it within your descriptive statistics layers, just
+like it was one of the built-in summaries.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -661,14 +667,15 @@ scientific location for larger numbers.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="co"># Only require 3 decimal places</span></span>
 <span><span class="fl">.001</span></span>
 <span><span class="co">#&gt; [1] 1e-03</span></span></code></pre></div>
-<p>In ‘Tplyr’, we have the option <code>tplyr.scipen</code>. This is the
-<code>scipen</code> setting that will be used <em>only</em> while the
-‘Tplyr’ table is being built. This allows you to use a different
-<code>scipen</code> setting within ‘Tplyr’ than your R session. The
-default value we use in ‘Tplyr’ is 9999, which is intended to totally
-prevent numbers from switching to scientific notation. We want this to
-be a conscious decision that you make in order to prevent any unexpected
-outputs.</p>
+<p>In <strong>Tplyr</strong>, we have the option
+<code>tplyr.scipen</code>. This is the <code>scipen</code> setting that
+will be used <em>only</em> while the <strong>Tplyr</strong> table is
+being built. This allows you to use a different <code>scipen</code>
+setting within <strong>Tplyr</strong> than your R session. The default
+value we use in <strong>Tplyr</strong> is 9999, which is intended to
+totally prevent numbers from switching to scientific notation. We want
+this to be a conscious decision that you make in order to prevent any
+unexpected outputs.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.scipen <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -758,7 +765,7 @@ outputs.</p>
 </table>
 <p>Note that the risk-difference variables above have mostly shifted to
 scientific notation. This is because the limit has been shifted to .1
-within the ‘Tplyr’ build.</p>
+within the <strong>Tplyr</strong> build.</p>
 </div>
 <div class="section level2">
 <h2 id="quantile-algorithms">Quantile Algorithms<a class="anchor" aria-label="anchor" href="#quantile-algorithms"></a>
@@ -853,9 +860,9 @@ calculates quantiles. To match SAS’s definition, use Type 3:</p>
 <h2 id="ibm-rounding">IBM Rounding<a class="anchor" aria-label="anchor" href="#ibm-rounding"></a>
 </h2>
 <p>In certain cases users may want to match tables produced by other
-languages that IBM rounding. Tplyr offers the option ‘tplyr.IBMRounding’
-to change the default rounding behavior of Tplyr tables. Review var1_4
-in the tables below.</p>
+languages that IBM rounding.<strong>Tplyr</strong> offers the option
+‘tplyr.IBMRounding’ to change the default rounding behavior of
+<strong>Tplyr</strong> tables. Review var1_4 in the tables below.</p>
 <p>Using the default R behavior</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>

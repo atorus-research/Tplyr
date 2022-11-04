@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Descriptive Statistic Layers">
 <meta property="og:description" content="Tplyr">
@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,7 +118,7 @@
 
     
     
-<p>Descriptive statistics in ‘Tplyr’ are created using
+<p>Descriptive statistics in <strong>Tplyr</strong> are created using
 <code><a href="../reference/layer_constructors.html">group_desc()</a></code> function when creating a layer. While
 <code><a href="../reference/layer_constructors.html">group_desc()</a></code> allows you to set your target, by variables,
 and filter criteria, a great deal of the control of the layer comes from
@@ -242,8 +242,8 @@ summaries. The number of x’s you use on the left side of a decimal
 control the space allotted for an integer, and the right side controls
 the decimal precision. Decimals are rounded prior to string formatting -
 so no need to worry about that. Note that this forcefully sets the
-decimal and integer precision - ‘Tplyr’ can automatically determine this
-for you as well, but more on that later.</li>
+decimal and integer precision - <strong>Tplyr</strong> can automatically
+determine this for you as well, but more on that later.</li>
 <li>After the x’s there are unquoted variable names. This is where you
 specify the actual summaries that will be performed. Notice that some
 <code><a href="../reference/f_str.html">f_str()</a></code> calls have two summaries specified. This allows you
@@ -251,14 +251,15 @@ to put two summaries in the same string and present them on the same
 line.</li>
 </ol>
 <p>But where do these summary names come from? And which ones does
-‘Tplyr’ have?</p>
+<strong>Tplyr</strong> have?</p>
 <div class="section level2">
 <h2 id="built-in-summaries">Built-in Summaries<a class="anchor" aria-label="anchor" href="#built-in-summaries"></a>
 </h2>
-<p>We’ve built a number of default summaries into ‘Tplyr’, which allows
-you to perform these summaries without having to specify the functions
-to calculate them yourself. The summaries built in to ‘Tplyr’ are listed
-below. In the second column are the names that you would use within an
+<p>We’ve built a number of default summaries into
+<strong>Tplyr</strong>, which allows you to perform these summaries
+without having to specify the functions to calculate them yourself. The
+summaries built in to <strong>Tplyr</strong> are listed below. In the
+second column are the names that you would use within an
 <code><a href="../reference/f_str.html">f_str()</a></code> call to use them. In the third column, we have the
 syntax used to make the function call.</p>
 <table class="table">
@@ -295,7 +296,7 @@ syntax used to make the function call.</p>
 </tr>
 <tr class="odd">
 <td align="center">Variance</td>
-<td align="center">variance</td>
+<td align="center">var</td>
 <td align="left">var(.var, na.rm=TRUE)</td>
 </tr>
 <tr class="even">
@@ -419,8 +420,8 @@ matches the SAS definition of:</p>
 <p>It’s up to you to determine which algorithm you should use - but we
 found it necessary to provide you with the flexibility to change this
 within the default summaries.</p>
-<p>But what if ‘Tplyr’ doesn’t offer you the summaries that you
-need?</p>
+<p>But what if <strong>Tplyr</strong> doesn’t offer you the summaries
+that you need?</p>
 </div>
 </div>
 <div class="section level2">
@@ -430,10 +431,10 @@ need?</p>
 statistic that you’d like to see. That’s why we’ve opened to door to
 creating custom summaries. Custom summaries allow you to provide any
 function you’d like into a desc layer. You can focus on the derivation
-and how to calculate the number you want to see. ‘Tplyr’ can consume
-this function, and use all the existing tools within ‘Tplyr’ to produce
-the string formatted result alongside any of the default summaries we
-provide as well.</p>
+and how to calculate the number you want to see. <strong>Tplyr</strong>
+can consume this function, and use all the existing tools within
+<strong>Tplyr</strong> to produce the string formatted result alongside
+any of the default summaries we provide as well.</p>
 <p>Custom summaries may be provided in two ways:</p>
 <ul>
 <li>Through the <code>tplyr.custom_summaries</code> option set at your
@@ -441,8 +442,8 @@ session level</li>
 <li>Through the function <code><a href="../reference/set_custom_summaries.html">set_custom_summaries()</a></code> at the
 layer level</li>
 </ul>
-<p>As with any other setting in ‘Tplyr’, the layer setting will always
-take precedence over any other setting.</p>
+<p>As with any other setting in <strong>Tplyr</strong>, the layer
+setting will always take precedence over any other setting.</p>
 <p>Let’s look at an example.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -510,11 +511,11 @@ example, the custom function can be applied to each of the separate
 target variables.</li>
 </ul>
 <p>Another note about custom summaries is that you’re able to overwrite
-the default summaries built into ‘Tplyr’ as well. Don’t like the default
-summary functions that we provide? Use the
+the default summaries built into <strong>Tplyr</strong> as well. Don’t
+like the default summary functions that we provide? Use the
 <code>tplyr.custom_summaries</code> option to overwrite them in your
 session, and add any new ones that you would like to include.</p>
-<p>For example, here we use the ‘Tplyr’ default mean.</p>
+<p>For example, here we use the <strong>Tplyr</strong> default mean.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -593,11 +594,12 @@ ends.</p>
 </tr></tbody>
 </table>
 <p>Note that the table code used to produce the output is the same. Now
-‘Tplyr’ used the custom summary function for <code>mean</code> as
-specified in the <code>tplyr.custom_summaries</code> option. Also note
-the use of <code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::quos()</a></code>. We’ve done our best to mask this
-from the user everywhere possible and make the interfaces clean and
-intuitive, but a great deal of ‘Tplyr’ is built using ‘rlang’ and
+<strong>Tplyr</strong> used the custom summary function for
+<code>mean</code> as specified in the
+<code>tplyr.custom_summaries</code> option. Also note the use of
+<code><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">rlang::quos()</a></code>. We’ve done our best to mask this from the
+user everywhere possible and make the interfaces clean and intuitive,
+but a great deal of <strong>Tplyr</strong> is built using ‘rlang’ and
 non-standard evaluation. Within this option is one of the very few
 instances where a user needs to concern themselves with the use of
 quosures. If you’d like to learn more about non-standard evaluation and
@@ -609,14 +611,14 @@ Advanced R.</p>
 </h2>
 <p>A lot of the nuance to formatting descriptive statistics layers has
 already been covered above, but there are a couple more tricks to
-getting the most out of ‘Tplyr’. One of these tricks is filling empty
-values.</p>
+getting the most out of <strong>Tplyr</strong>. One of these tricks is
+filling empty values.</p>
 <p>By default, if there is no available value for a summary in a
 particular observation, the result being presented will be blanked
 out.</p>
-<p><em>Note: Tplyr generally respects factor levels - so in instances of
-a missing row or column group, if the factor level is present, then the
-variable or row will still generate)</em></p>
+<p><em>Note:<strong>Tplyr</strong>generally respects factor levels - so
+in instances of a missing row or column group, if the factor level is
+present, then the variable or row will still generate)</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span><span class="op">$</span><span class="va">TRT01P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">$</span><span class="va">TRT01P</span><span class="op">)</span></span>
 <span><span class="va">adlb</span><span class="op">$</span><span class="va">TRTA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">adlb</span><span class="op">$</span><span class="va">TRTA</span><span class="op">)</span></span>
@@ -689,10 +691,10 @@ variable or row will still generate)</em></p>
 </tbody>
 </table>
 <p>Note how the entire example above has all records in
-<code>var1_Placebo</code> missing. ‘Tplyr’ gives you control over how
-you fill this space. Let’s say that we wanted instead to make that space
-say “Missing”. You can control this with the <code><a href="../reference/f_str.html">f_str()</a></code> object
-using the <code>empty</code> parameter.</p>
+<code>var1_Placebo</code> missing. <strong>Tplyr</strong> gives you
+control over how you fill this space. Let’s say that we wanted instead
+to make that space say “Missing”. You can control this with the
+<code><a href="../reference/f_str.html">f_str()</a></code> object using the <code>empty</code> parameter.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb_2</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -844,15 +846,16 @@ tests. Furthermore, depending on the summary being presented, you may
 wish to increase the precision further. For example, you may want the
 mean to be at collected precision +1 decimal place, and for standard
 deviation +2.</p>
-<p>‘Tplyr’ has this covered using auto-precision. Auto-precision allows
-you to format your numeric summaries based on the precision of the data
-collected. This has all been built into the format strings, because a
-natural place to specify your desired format is where you specify how
-you want your data presented. If you wish to use auto-precision, use
-<code>a</code> instead of <code>x</code> when creating your summaries.
-Note that only one <code>a</code> is needed on each side of a decimal.
-To use increased precision, use <code>a+n</code> where <code>n</code> is
-the number of additional spaces you wish to add.</p>
+<p><strong>Tplyr</strong> has this covered using auto-precision.
+Auto-precision allows you to format your numeric summaries based on the
+precision of the data collected. This has all been built into the format
+strings, because a natural place to specify your desired format is where
+you specify how you want your data presented. If you wish to use
+auto-precision, use <code>a</code> instead of <code>x</code> when
+creating your summaries. Note that only one <code>a</code> is needed on
+each side of a decimal. To use increased precision, use <code>a+n</code>
+where <code>n</code> is the number of additional spaces you wish to
+add.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -920,12 +923,12 @@ the number of additional spaces you wish to add.</p>
 </table>
 <p>As you can see, the decimal precision is now varying depending on the
 test being performed. Notice that both the integer and the decimal side
-of each number fluctuate as well. <code>Tpylr</code> collects both the
-integer and decimal precision, and you can specify both separately. For
-example, you could use <code>x</code>’s to specify a default number of
-spaces for your integers that are used consistently across by variables,
-but vary the decimal precision based on collected data. You can also
-increment the number of spaces for both integer and decimal
+of each number fluctuate as well. <strong>Tplyr</strong> collects both
+the integer and decimal precision, and you can specify both separately.
+For example, you could use <code>x</code>’s to specify a default number
+of spaces for your integers that are used consistently across by
+variables, but vary the decimal precision based on collected data. You
+can also increment the number of spaces for both integer and decimal
 separately.</p>
 <p>But - this is kind of ugly, isn’t it? Do we really need all 6 decimal
 places collected for CA? For this reason, you’re able to set a cap on
@@ -1143,12 +1146,12 @@ used.</p>
 may not want precision driven by the data. Perhaps there’s a company
 standard that dictates what decimal precision should be used for each
 separate lab test. Maybe even deeper down to the lab test and category.
-New in Tplyr 1.0.0 we’ve added the ability to take decimal precision
-from an external source.</p>
+New in <strong>Tplyr</strong> 1.0.0 we’ve added the ability to take
+decimal precision from an external source.</p>
 <p>The principal of external precision is exactly the same as
 auto-precision. The only difference is that you - the user - provide the
-precision table that Tplyr was automatically calculating in the
-background. This is done using the new function
+precision table that <strong>Tplyr</strong> was automatically
+calculating in the background. This is done using the new function
 <code><a href="../reference/set_precision_data.html">set_precision_data()</a></code>. In the output below, Notice how the
 precision by PARAMCD varies depending on what was specified in the data
 frame <code>prec_data</code>.</p>
@@ -1229,9 +1232,9 @@ frame <code>prec_data</code>.</p>
 </tr>
 </tbody>
 </table>
-<p>If one of your by variable groups are missing in the precision data,
-Tplyr can default back to using auto-precision by using the option
-<code>default=auto</code>.</p>
+<p>If one of your by variable groups are missing in the precision
+data,<strong>Tplyr</strong> can default back to using auto-precision by
+using the option <code>default=auto</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prec_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">max_int</span>, <span class="op">~</span><span class="va">max_dec</span>,</span>

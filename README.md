@@ -15,12 +15,12 @@ status](https://github.com/atorus-research/tplyr/workflows/R-CMD-check/badge.svg
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-Welcome to Tplyr! Tplyr is a traceability minded grammar of data format
-and summary. It’s designed to simplify the creation of common clinical
-summaries and help you focus on how you present your data rather than
-redundant summaries being performed. Furthermore, for every result Tplyr
-produces, it also produces the metadata necessary to give your
-traceability from source to summary.
+Welcome to **Tplyr**! **Tplyr** is a traceability minded grammar of data
+format and summary. It’s designed to simplify the creation of common
+clinical summaries and help you focus on how you present your data
+rather than redundant summaries being performed. Furthermore, for every
+result **Tplyr** produces, it also produces the metadata necessary to
+give your traceability from source to summary.
 
 As always, we welcome your feedback. If you spot a bug, would like to
 see a new feature, or if any documentation is unclear - submit an issue
@@ -32,7 +32,7 @@ Take a look at the
 
 # Installation
 
-You can Tplyr install with:
+You can install **Tplyr** with:
 
 ``` r
 # Install from CRAN:
@@ -47,11 +47,12 @@ devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="de
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of
 data manipulation. So what does that allow you to do? It gives you, as a
 data analyst, the capability to easily and intuitively approach the
-problem of manipulating your data into an analysis ready form. `dplyr`
-conceptually breaks things down into verbs that allow you to focus on
-*what* you want to do more than *how* you have to do it.
+problem of manipulating your data into an analysis ready form.
+[dplyr](https://dplyr.tidyverse.org/) conceptually breaks things down
+into verbs that allow you to focus on *what* you want to do more than
+*how* you have to do it.
 
-`Tplyr` is designed around a similar concept, but its focus is on
+**Tplyr** is designed around a similar concept, but its focus is on
 building summary tables common within the clinical world. In the
 pharmaceutical industry, a great deal of the data presented in the
 outputs we create are very similar. For the most part, most of these
@@ -92,11 +93,11 @@ conceptualize this.
 
 So we have one table, with 6 summaries (7 including the next page, not
 shown) - but only 2 different approaches to summaries being performed.
-In the same way that `dplyr` is a grammar of data manipulation, `Tplyr`
-aims to be a grammar of data summary. The goal of `Tplyr` is to allow
-you to program a summary table like you see it on the page, by breaking
-a larger problem into smaller ‘layers’, and combining them together like
-you see on the page.
+In the same way that [dplyr](https://dplyr.tidyverse.org/) is a grammar
+of data manipulation, **Tplyr** aims to be a grammar of data summary.
+The goal of **Tplyr** is to allow you to program a summary table like
+you see it on the page, by breaking a larger problem into smaller
+‘layers’, and combining them together like you see on the page.
 
 Enough talking - let’s see some code. In these examples, we will be
 using data from the [PHUSE Test Data
@@ -132,10 +133,10 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
 | Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
 | Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
 
-## ‘Tplyr’ is Qualified
+## Tplyr is Qualified
 
 We understand how important documentation and testing is within the
-pharmaceutical world. This is why outside of unit testing ’Tplyr
+pharmaceutical world. This is why outside of unit testing **Tplyr**
 includes an entire user-acceptance testing document, where requirements
 were established, test-cases were written, and tests were independently
 programmed and executed. We do this in the hope that you can leverage
@@ -150,7 +151,7 @@ this report.
 
 ## The TL;DR
 
-Here are some of the high level benefits of using `Tplyr`:
+Here are some of the high level benefits of using **Tplyr**:
 
 -   Easy construction of table data using an intuitive syntax
 -   Smart string formatting for your numbers that’s easily specified by
@@ -161,7 +162,7 @@ Here are some of the high level benefits of using `Tplyr`:
 # Where to go from here?
 
 There’s quite a bit more to learn! And we’ve prepared a number of other
-vignettes to help you get what you need out of ‘Tplyr’.
+vignettes to help you get what you need out of **Tplyr**.
 
 -   The best place to start is with our Getting Started vignette at
     `vignette("Tplyr")`
@@ -172,25 +173,26 @@ vignettes to help you get what you need out of ‘Tplyr’.
 -   Learn more about percentages in `vignette("denom")`
 -   Learn more about calculating risk differences in
     `vignette("riskdiff")`
--   Learn more about sorting ‘Tplyr’ tables in `vignette("sort")`
--   Learn more about using ‘Tplyr’ options in `vignette("options")`
+-   Learn more about sorting **Tplyr** tables in `vignette("sort")`
+-   Learn more about using **Tplyr** options in `vignette("options")`
 -   And finally, learn more about producing and outputting styled tables
-    using ‘Tplyr’ in `vignette("styled-table")`
+    using **Tplyr** in `vignette("styled-table")`
 
-In the Tplyr version 1.0.0, we’ve packed a number of new features in.
-For deeper dives on the largest new additions:
+In the **Tplyr** version 1.0.0, we’ve packed a number of new features
+in. For deeper dives on the largest new additions:
 
--   Learn about Tplyr’s traceability metadata in `vignette("metadata")`
-    and about how it can be extended in `vigentte("custom-metadata")`
+-   Learn about **Tplyr’s** traceability metadata in
+    `vignette("metadata")` and about how it can be extended in
+    `vignette("custom-metadata")`
 -   Learn about layer templates in `vignette("layer_templates")`
 
 # References
 
-In building ‘Tplyr’, we needed some additional resources in addition to
-our personal experience to help guide design. PHUSE has done some great
-work to create guidance for standard outputs with collaboration between
-multiple pharmaceutical companies and the FDA. You can find some of the
-resource that we referenced below.
+In building **Tplyr**, we needed some additional resources in addition
+to our personal experience to help guide design. PHUSE has done some
+great work to create guidance for standard outputs with collaboration
+between multiple pharmaceutical companies and the FDA. You can find some
+of the resource that we referenced below.
 
 [Analysis and Displays Associated with Adverse
 Events](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf)
