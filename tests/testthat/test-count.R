@@ -864,9 +864,9 @@ test_that("Tables with pop_data can accept a layer level where", {
     add_layer(
       group_count(AEDECOD, where = AEREL != "NONE") %>%
         set_distinct_by(USUBJID) %>%
-        set_denom_where(TRUE)
+        set_format_strings(f_str("xxx, [xxx] (xxx.x%) [xxx.x%]", distinct_n, n, distinct_pct, pct))
     )
 
-  expect_snapshot(build(t))
+  expect_snapshot(dput(build(t)))
 
 })
