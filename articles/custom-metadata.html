@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,8 +117,8 @@
 
     
     
-<p>As covered in <code><a href="../articles/metadata.html">vignette('metadata')</a></code>, Tplyr can produce metadata for any result that it calculates. But what about data that Tplyr can’t produce, such as a efficacy results or some sort of custom analysis? You may still want that drill down capability either on your own or paired with an existing Tplyr table.</p>
-<p>Take for instance Table 14-3.01 from the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">CDISC Pilot</a>. Skipping the actual construction of the table, here’s the output data from Tplyr and some manual calculation:</p>
+<p>As covered in <code><a href="../articles/metadata.html">vignette('metadata')</a></code>,<strong>Tplyr</strong> can produce metadata for any result that it calculates. But what about data that <strong>Tplyr</strong> can’t produce, such as a efficacy results or some sort of custom analysis? You may still want that drill down capability either on your own or paired with an existing <strong>Tplyr</strong> table.</p>
+<p>Take for instance Table 14-3.01 from the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">CDISC Pilot</a>. Skipping the actual construction of the table, here’s the output data from <strong>Tplyr</strong> and some manual calculation:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kable</span><span class="op">(</span><span class="va">full_data</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -309,8 +309,8 @@
 </tr>
 </tbody>
 </table>
-<p>This is the primary efficacy table from the trial. The top portion of this table is fairly straightforward with Tplyr and can be done using descriptive statistic layers. Once you hit the p-values on the lower house, this becomes beyond Tplyr’s remit. To produce the table, you can combine Tplyr output with a separate data frame analyzed and formatted yourself (but note you can still use some help from Tplyr tools like <code><a href="../reference/apply_formats.html">apply_formats()</a></code>).</p>
-<p>But what about the metadata? How do you get the drill down capabilities for that lower half of the table? We’ve provided a couple additional tools in Tplyr to allow you to construct your own metadata and append existing metadata present in a Tplyr table.</p>
+<p>This is the primary efficacy table from the trial. The top portion of this table is fairly straightforward with <strong>Tplyr</strong> and can be done using descriptive statistic layers. Once you hit the p-values on the lower house, this becomes beyond Tplyr’s remit. To produce the table, you can combine <strong>Tplyr</strong> output with a separate data frame analyzed and formatted yourself (but note you can still use some help from <strong>Tplyr</strong> tools like <code><a href="../reference/apply_formats.html">apply_formats()</a></code>).</p>
+<p>But what about the metadata? How do you get the drill down capabilities for that lower half of the table? We’ve provided a couple additional tools in <strong>Tplyr</strong> to allow you to construct your own metadata and append existing metadata present in a <strong>Tplyr</strong> table.</p>
 <div class="section level2">
 <h2 id="build-a-tplyr_meta-object">Build a <code>tplyr_meta</code> object<a class="anchor" aria-label="anchor" href="#build-a-tplyr_meta-object"></a>
 </h2>
@@ -326,7 +326,7 @@
 <span><span class="co">#&gt;     a, b, c </span></span>
 <span><span class="co">#&gt; Filters:</span></span>
 <span><span class="co">#&gt;     a == 1, b == 2, c == 3</span></span></code></pre></div>
-<p>The <code><a href="../reference/tplyr_meta.html">tplyr_meta()</a></code> function can take these fields immediately upon creation. If you need to dynamically create a <code>tplyr_meta</code> object such as how Tplyr constructs the objects internally), the functions <code><a href="../reference/metadata_additions.html">add_variables()</a></code> and <code><a href="../reference/metadata_additions.html">add_filters()</a></code> are available to extend an existing <code>tplyr_meta</code> object:</p>
+<p>The <code><a href="../reference/tplyr_meta.html">tplyr_meta()</a></code> function can take these fields immediately upon creation. If you need to dynamically create a <code>tplyr_meta</code> object such as how <strong>Tplyr</strong> constructs the objects internally), the functions <code><a href="../reference/metadata_additions.html">add_variables()</a></code> and <code><a href="../reference/metadata_additions.html">add_filters()</a></code> are available to extend an existing <code>tplyr_meta</code> object:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/metadata_additions.html">add_variables</a></span><span class="op">(</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -384,12 +384,12 @@
 </li>
 <li>The <code>row_id</code> values cannot be duplicates of any other value within the existing metadata.</li>
 </ul>
-<p>The <code>row_id</code> values built by Tplyr will always follow the format “<first letter of layer type>n_n”, where the first letter of the layer type will either be “c”, “d”, or “s”. The next number is the layer number (i.e. the order in which the layer was inserted to the Tplyr table), and then finally the row of that layer within the output. For example, the third row of a count layer that was the second layer in the table would have a <code>row_id</code> of “c2_3”. In this example, I chose “x4_n” as the format for the “x” to symbolize custom, and these data can be thought of as the fourth layer. That said, these values would typically be masked by the viewer of the table so they really just need to be unique - so you can choose whatever you want.</first></p>
+<p>The <code>row_id</code> values built by <strong>Tplyr</strong> will always follow the format “<first letter of layer type>n_n”, where the first letter of the layer type will either be “c”, “d”, or “s”. The next number is the layer number (i.e. the order in which the layer was inserted to the <strong>Tplyr</strong> table), and then finally the row of that layer within the output. For example, the third row of a count layer that was the second layer in the table would have a <code>row_id</code> of “c2_3”. In this example, I chose “x4_n” as the format for the “x” to symbolize custom, and these data can be thought of as the fourth layer. That said, these values would typically be masked by the viewer of the table so they really just need to be unique - so you can choose whatever you want.</first></p>
 </div>
 <div class="section level2">
-<h2 id="appending-existing-tplyr-metadata">Appending Existing Tplyr Metadata<a class="anchor" aria-label="anchor" href="#appending-existing-tplyr-metadata"></a>
+<h2 id="appending-existing-tplyr-metadata">Appending Existing <strong>Tplyr</strong> Metadata<a class="anchor" aria-label="anchor" href="#appending-existing-tplyr-metadata"></a>
 </h2>
-<p>Now that we’ve created our custom extension of the Tplyr metadata, let’s extend the existing data frame. To do this, Tplyr has the function <code><a href="../reference/append_metadata.html">append_metadata()</a></code>:</p>
+<p>Now that we’ve created our custom extension of the <strong>Tplyr</strong> metadata, let’s extend the existing data frame. To do this, <strong>Tplyr</strong> has the function <code><a href="../reference/append_metadata.html">append_metadata()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/append_metadata.html">append_metadata</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">eff_meta</span><span class="op">)</span></span></code></pre></div>
 <p>Behind the scenes, this function simply binds the new metadata with the old in the proper section of the <code>tplyr_table</code> object. You can view the the <code>tplyr_table</code> metadata with the function <code><a href="../reference/get_metadata.html">get_metadata()</a></code>:</p>
@@ -527,7 +527,7 @@
 <div class="section level2">
 <h2 id="metadata-without-tplyr">Metadata Without Tplyr<a class="anchor" aria-label="anchor" href="#metadata-without-tplyr"></a>
 </h2>
-<p>You very well may have a scenario where you want to use these metadata functions outside of Tplyr in general. As such, there are S3 methods available to query metadata from a dataframe instead of a Tplyr table, and parameters to provide your own target data frame:</p>
+<p>You very well may have a scenario where you want to use these metadata functions outside of <strong>Tplyr</strong> in general. As such, there are S3 methods available to query metadata from a dataframe instead of a <strong>Tplyr</strong> table, and parameters to provide your own target data frame:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">eff_meta</span>, <span class="st">'x4_1'</span>, <span class="st">"var1_Xanomeline High Dose"</span>, target<span class="op">=</span><span class="va">adas</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -634,7 +634,7 @@
 </tr>
 </tbody>
 </table>
-<p>As with the Tplyr metadata, the only strict criteria here is that your custom metadata have a <code>row_id</code> column.</p>
+<p>As with the <strong>Tplyr</strong> metadata, the only strict criteria here is that your custom metadata have a <code>row_id</code> column.</p>
 </div>
 <div class="section level2">
 <h2 id="tying-it-together">Tying it Together<a class="anchor" aria-label="anchor" href="#tying-it-together"></a>

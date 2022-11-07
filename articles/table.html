@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +117,7 @@
 
     
     
-<p>Most of the work in creating a ‘Tplyr’ table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in ‘Tplyr’ is allow you to eliminate redundant code wherever possible. Adding some processing to the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us to do that. Furthermore, some settings simply need to be applied table wide.</p>
+<p>Most of the work in creating a <strong>Tplyr</strong> table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in <strong>Tplyr</strong> is allow you to eliminate redundant code wherever possible. Adding some processing to the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> level allows us to do that. Furthermore, some settings simply need to be applied table wide.</p>
 <div class="section level2">
 <h2 id="table-parameters">Table Parameters<a class="anchor" aria-label="anchor" href="#table-parameters"></a>
 </h2>
@@ -627,8 +627,8 @@
 <div class="section level2">
 <h2 id="population-data">Population Data<a class="anchor" aria-label="anchor" href="#population-data"></a>
 </h2>
-<p>A last and very important aspect of table level properties in ‘Tplyr’ is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when they occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
-<p>‘Tplyr’ allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter and a population treatment variable named <code>pop_treat_var</code>, as variable names may differ between the datasets.</p>
+<p>A last and very important aspect of table level properties in <strong>Tplyr</strong> is the addition of a population dataset. In CDISC standards, datasets like <code>adae</code> only contain adverse events when they occur. This means that if a subject did not experience an adverse event, or did not experience an adverse event within the criteria that you’re subsetting for, they don’t appear in the dataset. When you’re looking at the proportion of subject who experienced an adverse event compared to the total number of subjects in that cohort, <code>adae</code> itself leaves you no way to calculate that total - as the subjects won’t exist in the data.</p>
+<p><strong>Tplyr</strong> allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset <code>where</code> parameter and a population treatment variable named <code>pop_treat_var</code>, as variable names may differ between the datasets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -807,7 +807,7 @@
 </tbody>
 </table>
 <p>In the above example, <code>AEREL</code> doesn’t exist in <code>adsl</code>, therefore we used <code><a href="../reference/where.html">set_pop_where()</a></code> to remove the filter criteria on the population data. Setting the population dataset where parameter to <code>TRUE</code> removes any filter applied by the population data. If <code><a href="../reference/where.html">set_pop_where()</a></code> is not set for the population data, it will default to the <code>where</code> parameter used in <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code>. The same logic applies to the population treatment variable. <code>TRTA</code> does not exist in <code>adsl</code> either, so we used <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code> to change it to the appropriate variable in <code>adsl</code>.</p>
-<p>Note the percentage values in the summary above. By setting the population data, ‘Tplyr’ now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, ‘Tplyr’ is able to calculate your header N’s properly:</p>
+<p>Note the percentage values in the summary above. By setting the population data, <strong>Tplyr</strong> now knew to use those values when calculating the percentages for the distinct counts of subjects who experienced the summarized adverse events. Furthermore, with the population data provided, <strong>Tplyr</strong> is able to calculate your header N’s properly:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/header_n.html">header_n</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -831,21 +831,21 @@
 </tr>
 </tbody>
 </table>
-<p>With the table level settings under control, now you’re ready to learn more about what ‘Tplyr’ has to offer in each layer.</p>
+<p>With the table level settings under control, now you’re ready to learn more about what <strong>Tplyr</strong> has to offer in each layer.</p>
 <ul>
-<li>Learn more about descriptive statistics layers in <code>vignettes("desc")</code>
+<li>Learn more about descriptive statistics layers in <code><a href="../articles/desc.html">vignette("desc")</a></code>
 </li>
 <li>Learn more about count and shift layers in <code><a href="../articles/count.html">vignette("count")</a></code>
 </li>
 <li>Learn more about shift layers in <code><a href="../articles/shift.html">vignette("shift")</a></code>
 </li>
-<li>Learn more about calculating risk differences in <code>vignettes("riskdiff")</code>
+<li>Learn more about calculating risk differences in <code><a href="../articles/riskdiff.html">vignette("riskdiff")</a></code>
 </li>
-<li>Learn more about sorting ‘Tplyr’ tables in <code>vignettes("sort")</code>
+<li>Learn more about sorting <strong>Tplyr</strong> tables in <code><a href="../articles/sort.html">vignette("sort")</a></code>
 </li>
-<li>Learn more about using ‘Tplyr’ options in <code>vignettes("options")</code>
+<li>Learn more about using <strong>Tplyr</strong> options in <code><a href="../articles/options.html">vignette("options")</a></code>
 </li>
-<li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code>vignettes("styled-table")</code>
+<li>And finally, learn more about producing and outputting styled tables using <strong>Tplyr</strong> in <code><a href="../articles/styled-table.html">vignette("styled-table")</a></code>
 </li>
 </ul>
 </div>

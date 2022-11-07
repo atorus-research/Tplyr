@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,14 +110,14 @@
 </h1>
 </div>
 <!-- badges: start -->
-<p>Welcome to Tplyr! Tplyr is a traceability minded grammar of data format and summary. It’s designed to simplify the creation of common clinical summaries and help you focus on how you present your data rather than redundant summaries being performed. Furthermore, for every result Tplyr produces, it also produces the metadata necessary to give your traceability from source to summary.</p>
+<p>Welcome to <strong>Tplyr</strong>! <strong>Tplyr</strong> is a traceability minded grammar of data format and summary. It’s designed to simplify the creation of common clinical summaries and help you focus on how you present your data rather than redundant summaries being performed. Furthermore, for every result <strong>Tplyr</strong> produces, it also produces the metadata necessary to give your traceability from source to summary.</p>
 <p>As always, we welcome your feedback. If you spot a bug, would like to see a new feature, or if any documentation is unclear - submit an issue through GitHub right <a href="https://github.com/atorus-research/Tplyr/issues" class="external-link">here</a>.</p>
 <p>Take a look at the <a href="https://atorus-research.github.io/Tplyr_cheatsheet.pdf">cheatsheet!</a></p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p>You can Tplyr install with:</p>
+<p>You can install <strong>Tplyr</strong> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install from CRAN:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Tplyr"</span><span class="op">)</span></span>
@@ -128,8 +128,8 @@
 <div class="section level1">
 <h1 id="what-is-tplyr">What is Tplyr?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
 </h1>
-<p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <code>dplyr</code> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
-<p><code>Tplyr</code> is designed around a similar concept, but its focus is on building summary tables common within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
+<p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
+<p><strong>Tplyr</strong> is designed around a similar concept, but its focus is on building summary tables common within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
 <ul>
 <li>Counting for event based variables or categories</li>
 <li>Shifting, which is just counting a change in state with a ‘from’ and a ‘to’</li>
@@ -146,7 +146,7 @@
 <li>Ethnicity - more counting</li>
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
-<p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <code>dplyr</code> is a grammar of data manipulation, <code>Tplyr</code> aims to be a grammar of data summary. The goal of <code>Tplyr</code> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
+<p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> is a grammar of data manipulation, <strong>Tplyr</strong> aims to be a grammar of data summary. The goal of <strong>Tplyr</strong> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
 <p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -274,15 +274,15 @@
 </tbody>
 </table>
 <div class="section level2">
-<h2 id="tplyr-is-qualified">‘Tplyr’ is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
+<h2 id="tplyr-is-qualified">Tplyr is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
 </h2>
-<p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing ’Tplyr includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
+<p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing <strong>Tplyr</strong> includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
 <p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf" class="external-link">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
 </div>
 <div class="section level2">
 <h2 id="the-tldr">The TL;DR<a class="anchor" aria-label="anchor" href="#the-tldr"></a>
 </h2>
-<p>Here are some of the high level benefits of using <code>Tplyr</code>:</p>
+<p>Here are some of the high level benefits of using <strong>Tplyr</strong>:</p>
 <ul>
 <li>Easy construction of table data using an intuitive syntax</li>
 <li>Smart string formatting for your numbers that’s easily specified by the user</li>
@@ -293,7 +293,7 @@
 <div class="section level1">
 <h1 id="where-to-go-from-here">Where to go from here?<a class="anchor" aria-label="anchor" href="#where-to-go-from-here"></a>
 </h1>
-<p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of ‘Tplyr’.</p>
+<p>There’s quite a bit more to learn! And we’ve prepared a number of other vignettes to help you get what you need out of <strong>Tplyr</strong>.</p>
 <ul>
 <li>The best place to start is with our Getting Started vignette at <code><a href="articles/Tplyr.html">vignette("Tplyr")</a></code>
 </li>
@@ -309,16 +309,16 @@
 </li>
 <li>Learn more about calculating risk differences in <code><a href="articles/riskdiff.html">vignette("riskdiff")</a></code>
 </li>
-<li>Learn more about sorting ‘Tplyr’ tables in <code><a href="articles/sort.html">vignette("sort")</a></code>
+<li>Learn more about sorting <strong>Tplyr</strong> tables in <code><a href="articles/sort.html">vignette("sort")</a></code>
 </li>
-<li>Learn more about using ‘Tplyr’ options in <code><a href="articles/options.html">vignette("options")</a></code>
+<li>Learn more about using <strong>Tplyr</strong> options in <code><a href="articles/options.html">vignette("options")</a></code>
 </li>
-<li>And finally, learn more about producing and outputting styled tables using ‘Tplyr’ in <code><a href="articles/styled-table.html">vignette("styled-table")</a></code>
+<li>And finally, learn more about producing and outputting styled tables using <strong>Tplyr</strong> in <code><a href="articles/styled-table.html">vignette("styled-table")</a></code>
 </li>
 </ul>
-<p>In the Tplyr version 1.0.0, we’ve packed a number of new features in. For deeper dives on the largest new additions:</p>
+<p>In the <strong>Tplyr</strong> version 1.0.0, we’ve packed a number of new features in. For deeper dives on the largest new additions:</p>
 <ul>
-<li>Learn about Tplyr’s traceability metadata in <code><a href="articles/metadata.html">vignette("metadata")</a></code> and about how it can be extended in <code>vigentte("custom-metadata")</code>
+<li>Learn about <strong>Tplyr’s</strong> traceability metadata in <code><a href="articles/metadata.html">vignette("metadata")</a></code> and about how it can be extended in <code><a href="articles/custom-metadata.html">vignette("custom-metadata")</a></code>
 </li>
 <li>Learn about layer templates in <code><a href="articles/layer_templates.html">vignette("layer_templates")</a></code>
 </li>
@@ -327,7 +327,7 @@
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h1>
-<p>In building ‘Tplyr’, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
+<p>In building <strong>Tplyr</strong>, we needed some additional resources in addition to our personal experience to help guide design. PHUSE has done some great work to create guidance for standard outputs with collaboration between multiple pharmaceutical companies and the FDA. You can find some of the resource that we referenced below.</p>
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf" class="external-link">Analysis and Displays Associated with Adverse Events</a></p>
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf" class="external-link">Analyses and Displays Associated with Demographics, Disposition, and Medications</a></p>
 <p><a href="https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf" class="external-link">Analyses and Displays Associated with Measures of Central Tendency</a></p>
