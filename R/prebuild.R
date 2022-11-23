@@ -10,15 +10,23 @@ treatment_group_build <- function(table) {
   output <- evalq({
 
     # Make built_target a copy of target
-    built_target <- clean_attr(target) %>%
-      mutate(
-        !!treat_var := factor(!!treat_var)
-      )
+    built_target <- clean_attr(target)
 
-    built_pop_data <- clean_attr(pop_data) %>%
-      mutate(
-        !!pop_treat_var := factor(!!pop_treat_var)
-      )
+    if (!is.factor(target[[as_name(treat_var)]])) {
+      built_target <- built_target %>%
+        mutate(
+          !!treat_var := factor(!!treat_var)
+        )
+    }
+
+    built_pop_data <- clean_attr(pop_data)
+
+    if (!is.factor(pop_data[[as_name(pop_treat_var)]])) {
+      built_pop_data <- built_pop_data %>%
+        mutate(
+          !!pop_treat_var := factor(!!pop_treat_var)
+        )
+    }
 
     # Capture all source factor levels
     fct_levels <- unique(c(
