@@ -128,7 +128,7 @@ test_that("all tables have the expected dimentions", {
   expect_equal(dim(b_t2), c(3, 9))
   expect_equal(dim(b_t3), c(7, 6))
   expect_equal(dim(b_t4), c(14, 10))
-  expect_equal(dim(b_t5), c(19, 13))
+  expect_equal(dim(b_t5), c(19, 15))
   expect_equal(dim(b_t6), c(48, 15))
 })
 
