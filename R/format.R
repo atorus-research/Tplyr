@@ -125,32 +125,33 @@ f_str <- function(format_string, ..., empty=c(.overall='')) {
   # Check format string class
   assert_has_class(format_string, "character")
 
-  # Capture the format groups
+  # Do a pre-check of the format string to catch invalid auto specifications
+  if (str_detect(format_string, "AA|aa")) {
+    stop(paste0("In f_str(), only use a single 'A' or 'a' on the integer or",
+                " decimal side to trigger auto precision."), call.=TRUE)
+  }
 
-  # This regex does a few things so let's break it into pieces
-  # (a(\\+\\d)?|x+) -> a, possibly followed by + and a digit, or 1 or more x's
-  #    This captures the integer, with either the auto formats or x's
-  # (\\.(a(\\+\\d)?|x+)?)? -> a period, then possibly the same a <+digit>, or multiple x's
-  #    This captures the decimal places, but they don't have to exist
-  rx <- "(a(\\+\\d+)?|x+)(\\.(a(\\+\\d+)?|x+)?)?"
-  formats <- str_extract_all(format_string, regex(rx))[[1]]
+  # Parse out the format string sections
+  rx <- get_format_string_regex()
+  formats <- str_extract_all(format_string, rx)[[1]]
 
   # Duplicate any '%' to escape them
   format_string_1 <- str_replace_all(format_string, "%", "%%")
 
   # Make the sprintf ready string
-  repl_str <- str_replace_all(format_string_1, regex(rx), "%s")
+  repl_str <- str_replace_all(format_string_1, rx, "%s")
 
-  # Make sure that if two formats were found, two varaibles exist
+  # Make sure that if two formats were found, two variables exist
   assert_that(length(formats) == length(vars),
               msg = paste0("In `f_str` ", length(formats), " formats were entered in the format string ",
                            format_string, "but ", length(vars), " variables were assigned."))
 
   # Pull out the integer and decimal
-  settings <- map(formats, separate_int_dig)
+  settings <- map(formats, gather_settings)
 
   # A value in settings will be <0 if it's an auto format
-  auto_precision <- any(map_lgl(settings, ~any(attr(.x, 'auto'))))
+  auto_precision <- any(map_lgl(settings, ~ any(as.logical(.[c('auto_int', 'auto_dec')]))))
+  hug_formatting <- any(map_lgl(settings, ~ !is.na(.['hug_char'])))
 
   # All ellipsis variables are names
   assert_that(all(map_lgl(vars, function(x) class(x) == "name")),
@@ -164,40 +165,145 @@ f_str <- function(format_string, ..., empty=c(.overall='')) {
          size = nchar(format_string),
          repl_str = repl_str,
          auto_precision = auto_precision,
+         hug_formatting = hug_formatting,
          empty=empty
     ),
     class="f_str"
   )
 }
 
-#' Evaluate a portion of a format string to check the integer and digit lengths
+#' Generate the format string parsing regular expression
 #'
-#' @param x String to have sections counted
-#'
-#' @return A named vector with the names "int" and "dec", countaining numeric values
+#' @return A regular expression object with the compiled expression
 #'
 #' @noRd
-separate_int_dig <- function(x){
+get_format_string_regex <- function() {
 
-  # Initialize a vector and name the elements
-  out <- numeric(2)
-  names(out) <- c('int', 'dec')
-  attr(out, 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  # On the integer side, find an a that may be followed by a + and a number
+  # so this could look like a or a+1, a+2, etc.
+  int_auto <- "a(\\+\\d+)?"
 
-  # Count the characters on each side of the decimal
-  fields <- str_split(x, "\\.")[[1]]
+  # Same as above, but look for an A and a non-whitespace character preceding
+  # the A
+  int_auto_hug <- "(\\S+)A(\\+\\d+)?"
 
-  num_chars <- map(fields, parse_fmt)
-  auto <- map_lgl(num_chars, ~attr(.x, 'auto'))
-  num_chars <- as.numeric(num_chars)
-  attr(num_chars, 'auto') <- auto
+  # Look for one or more X's, with a non-whitespace character preceding
+  int_fixed_hug <- "(\\S+)X+"
 
-  # Insert the number of characters into the named vector
-  for (i in seq_along(num_chars)) {
-    out[i] <- num_chars[i]
-    attr(out, 'auto')[i] <- attr(num_chars, 'auto')[i]
+  # Look for one ore more x's
+  int_fixed <- "x+"
+
+  # Look for an A or a that may be followed by a + and a number
+  # so this could look like a or a+1, a+2, etc.
+  # A's will be invalid here but that will be caught by error checking
+  # in parse_hug_char()
+  dec_auto <- "[A|a](\\+\\d+)?"
+
+  # One or more X or x - again X is invalid but caught later
+  dec_fixed <- "[X|x]+"
+
+  # Now prepare to piece the chunks together - all of the int side pieces are
+  # combined with "or's". The decimal side comes after that, and this specifies
+  # that it will find them if they exist, but the integer side will be found
+  # even if they don't
+  joined_string <- "(%s|%s|%s|%s)(\\.(%s|%s)?)?"
+
+  # Concatenate it all together and convert it to a regex
+  regex(
+    sprintf(
+      joined_string,
+      int_auto,
+      int_auto_hug,
+      int_fixed_hug,
+      int_fixed,
+      dec_auto,
+      dec_fixed
+    )
+  )
+}
+
+#' Gather the settings for a specific format string section
+#'
+#' This function will collect specific settings about a format string section,
+#' including integer and decimal length, whether autos were turned on, and hug
+#' character settings/
+#'
+#' @param x A character string representing a format string section
+#'
+#' @return A named list of settings
+gather_settings <- function(x) {
+
+  settings <- list(
+    int = 0,
+    dec = 0,
+    auto_int = FALSE,
+    auto_dec = FALSE,
+    hug_char = NA_character_
+  )
+
+  settings <- parse_hug_char(x, settings)
+  settings <- separate_int_dig(x, settings)
+
+  settings
+}
+
+#' Find if a hug character exists and attach to settings
+#'
+#' @param x Format string section
+#' @param settings A list of settings for a format string section
+#'
+#' @return List of settings
+#' @noRd
+parse_hug_char <- function(x, settings) {
+
+  # Find hugging
+  if (str_detect(x, "X|A")) {
+
+    # Look for characters preceding X or A that aren't X or A
+    hug_char_rx <- regex("([^XA]+)[XA]")
+
+    # Search the hug character and pull out all matches
+    # x is guaranteed to be a single element vector so pull out first
+    # element of the list
+    hug_char_match <- str_match_all(x, hug_char_rx)[[1]]
+
+    # If no rows, then X or A was used with no specified hug character
+    if (nrow(hug_char_match) == 0) {
+      stop(
+        paste0("In f_str(), an 'X' or 'A' was used but no hug character ",
+               "was specified, such as a parenthesis. Use 'X' or 'A' to bind ",
+               "a character within a format string."),
+        call.=FALSE
+      )
+    }
+
+    # The match matrix can't be more than one row. If it is, it was probably
+    # because X or A were placed before and after a decimal, so show the user
+    if (nrow(hug_char_match) > 1) {
+      err_msg <- paste0(
+        "In f_str(), invalid format string specification. The following section",
+        " failed to parse:\n\t'", x,
+        "'\nThe issue is present with a hug character. Was 'X' or 'A' used after",
+        " a decimal?"
+      )
+      stop(err_msg, call.=FALSE)
+    }
+
+    # If X or A was used after the decimal at all, that's also invalid so error
+    # out as well
+    if (str_detect(hug_char_match[1,1], fixed("."))) {
+      stop(
+        paste0("In f_str(), 'X' or 'A' can only be used on the left side of a",
+               " decimal within a format string."),
+        call.=FALSE
+      )
+    }
+
+    # The hug char is in a capture group, so we pull it out of the match
+    settings$hug_char <- hug_char_match[1,2]
   }
-  out
+
+  settings
 }
 
 #' Parse a portion of a string format
@@ -211,7 +317,7 @@ separate_int_dig <- function(x){
 #' @noRd
 parse_fmt <- function(x) {
   # If it's an auto format, grab the output value
-  if (grepl('a', x)) {
+  if (grepl('a|A', x)) {
     # Pick out the digit
     add <- replace_na(as.double(str_extract(x, '\\d+')), 0)
     # Auto formats will be -1 - the specified precision
@@ -224,6 +330,36 @@ parse_fmt <- function(x) {
     attr(val, 'auto') <- FALSE
   }
   val
+}
+
+#' Evaluate a portion of a format string to check the integer and digit lengths
+#'
+#' @param x Format string section
+#' @param settings A list of settings for a format string section
+#'
+#' @return List of settings
+#'
+#' @noRd
+separate_int_dig <- function(x, settings){
+
+  # Count the characters on each side of the decimal
+  fields <- str_split(x, "\\.")[[1]]
+  # Label the split segments
+  names(fields) <- c('int', 'dec')[1:length(fields)]
+
+  # Parse out length and auto info from each field and apply to settings
+  num_chars <- map(fields, parse_fmt)
+  auto <- map_lgl(num_chars, ~attr(.x, 'auto'))
+
+  settings[names(num_chars)] <- as.numeric(num_chars)
+  settings[paste0("auto_", names(auto))] <- auto
+
+
+  # If a hug character is specified,subtract if from the integer length
+  # if (!is.na(settings$hug_char)) {
+  #   settings$int <- settings$int - nchar(settings$hug_char)
+  # }
+  settings
 }
 
 #' Set the format strings and associated summaries to be performed in a layer
@@ -462,27 +598,35 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   assert_has_class(fmt, 'f_str')
   assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
 
-  # Auto precision requires that integer and decimal are
-  # pulled from the row. If auto, settings will be the amount to add
-  # to max prec, so add those together. Otherwise pull the manually
-  # specified value
-  int_len <- ifelse(attr(fmt$settings[[i]],'auto')['int'],
-                    fmt$settings[[i]]['int'] + autos['int'],
-                    fmt$settings[[i]]['int'])
+  # Auto precision requires that integer and decimal are pulled from the row. If
+  # auto, settings will be the amount to add to max prec, so add those together.
+  # Otherwise pull the manually specified value
+  int_len <- ifelse(fmt$setting[[i]]$auto_int,
+                    fmt$setting[[i]]$int + autos['int'],
+                    fmt$setting[[i]]$int)
 
-  decimals  <- ifelse(attr(fmt$settings[[i]],'auto')['dec'],
-                    fmt$settings[[i]]['dec'] + autos['dec'],
-                    fmt$settings[[i]]['dec'])
+  decimals  <- ifelse(fmt$setting[[i]]$auto_dec,
+                      fmt$setting[[i]]$dec + autos['dec'],
+                      fmt$setting[[i]]$dec)
 
   # Set nsmall to input decimals
-  nsmall = decimals
+  nsmall <- decimals
 
   # Increment digits for to compensate for display
   if (decimals > 0) decimals <- decimals + 1
 
   # Empty return string
-  if (is.na(val)) {
-    return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
+  if (is.na(val)) {if (is.na(fmt$settings[[i]]$hug_char)) {
+      return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
+    } else{
+      return(
+        str_pad(
+          paste0(fmt$settings[[i]]$hug_char, fmt$empty[1]),
+          int_len+decimals,
+          side="left")
+      )
+    }
+
   }
 
   # Use two different rounding methods based on if someone is matching with IBM rounding
@@ -496,8 +640,8 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   }
 
   # Form the string
-  return(
-    format(
+  if (is.na(fmt$settings[[i]]$hug_char)) {
+    fmt_num <- format(
       # Round
       rounded,
       # Set width of format string
@@ -505,7 +649,21 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
       # Decimals to display
       nsmall=nsmall
     )
-  )
+  } else {
+    fmt_num <- str_pad(
+      paste0(
+        #Paste the hug character
+        fmt$settings[[i]]$hug_char,
+             format(
+               rounded,
+               nsmall=nsmall
+             )
+        ),
+      width=(int_len+decimals)
+    )
+  }
+
+  fmt_num
 }
 
 #' Check if format strings have been applied to a layer
