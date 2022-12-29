@@ -354,11 +354,11 @@ separate_int_dig <- function(x, settings){
   settings[names(num_chars)] <- as.numeric(num_chars)
   settings[paste0("auto_", names(auto))] <- auto
 
-
   # If a hug character is specified,subtract if from the integer length
-  # if (!is.na(settings$hug_char)) {
-  #   settings$int <- settings$int - nchar(settings$hug_char)
-  # }
+  if (!is.na(settings$hug_char) && settings$auto_int) {
+    settings$int <- settings$int + (nchar(settings$hug_char) - 1)
+  }
+
   settings
 }
 
