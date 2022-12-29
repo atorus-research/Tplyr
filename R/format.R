@@ -594,10 +594,6 @@ name_translator <- function(fmt_strings) {
 #' @noRd
 num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 
-  assert_that(is.numeric(val))
-  assert_has_class(fmt, 'f_str')
-  assert_that(i <= length(fmt$formats), msg="In `num_fmt` supplied ")
-
   # Auto precision requires that integer and decimal are pulled from the row. If
   # auto, settings will be the amount to add to max prec, so add those together.
   # Otherwise pull the manually specified value
