@@ -81,16 +81,18 @@ prepare_format_metadata.shift_layer <- function(x) {
 
   evalq({
 
-
     # Pull max character length from counts. Should be at least 1
     n_width <- max(c(nchar(numeric_data$n), 1L))
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
-    if(str_detect(format_strings$format_string, "a")) {
+    if(str_detect(format_strings$format_string, "a|A")) {
       # Replace the flag with however many xs
       replaced_string <- str_replace(format_strings$format_string, "a",
                                      paste(rep("x", n_width), collapse = ""))
+
+      replaced_string <- str_replace(replaced_string, "A",
+                                     paste(rep("X", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
       format_strings <- f_str(replaced_string, !!!format_strings$vars)
