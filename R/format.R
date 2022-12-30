@@ -253,6 +253,7 @@ get_format_string_regex <- function() {
 #' @param x A character string representing a format string section
 #'
 #' @return A named list of settings
+#' @noRd
 gather_settings <- function(x) {
 
   settings <- list(
