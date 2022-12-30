@@ -26,8 +26,9 @@ load("adsl.Rdata")
 load('adlb.Rdata')
 ```
 
-# NA Formatting
-A lot of the nuance to formatting descriptive statistics layers has already been covered above, but there are a couple more tricks to getting the most out of **Tplyr**. One of these tricks is filling empty values. 
+A lot of the nuance to formatting descriptive statistics layers was covered in the descriptive statistic layer vignette, but there are a couple more tricks to getting the most out of **Tplyr**. In this vignette, we'll cover some of the options in more detail.
+
+# Empty Value Formatting
 
 By default, if there is no available value for a summary in a particular observation, the result being presented will be blanked out. 
 
@@ -276,7 +277,7 @@ tplyr_table(example_adlb, TRTA, PARAMCD == "CK") %>%
 
 There are a two rules when using 'parenthesis hugging': 
 
-- Capital letters should only be used on the integer side of a number 
-- A character must precede the capital letter, otherwise there's no character to 'hug'.
+- Capital letters should only be used on the integer side of a number
+- A character must precede the capital letter, otherwise there's no character to 'hug'
 
 Aside from these rules, parenthesis hugging can be combined with all other valid format string capabilities. 
