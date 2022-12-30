@@ -1,3 +1,6 @@
+# Tplyr 1.1.0
+- This release incorporate parenthesis hugging across all layers (#117)
+
 # Tplyr 1.0.2
 - Bug fixes
   - Resolve issue with `where` logic when using population data.
