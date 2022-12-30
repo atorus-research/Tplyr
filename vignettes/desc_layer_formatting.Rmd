@@ -235,17 +235,7 @@ tplyr_table(adsl, TRT01P) %>%
 Note that if a certain number of integers are alotted, space will be left for the numbers that fill that space, but the position of the parenthesis stays fixed. In some displays, you may want the parenthesis to 'hug' your number - the "format group" width should stay fixed, the parenthesis should move to the right along with the numbers consuming less integer space. Within your `f_str()`, you can achieve this by using a capital 'X'. For example, focusing on the mean and standard deviation line:
 
 ```{r manual_hugging}
-# Mock up 0 standard deviation
-example_adlb <- adlb %>% 
-  mutate(
-    AVAL = if_else(
-      AVISIT == "End of Treatment",
-      85.301,
-      AVAL
-    )
-  )
-
-tplyr_table(example_adlb, TRTA, PARAMCD == "CK") %>% 
+tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
       set_format_strings(
@@ -261,8 +251,7 @@ tplyr_table(example_adlb, TRTA, PARAMCD == "CK") %>%
 Similarly, the same functionality works with auto precision by using a capital A. 
 
 ```{r auto_hugging}
-
-tplyr_table(example_adlb, TRTA, PARAMCD == "CK") %>% 
+tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
       set_format_strings(
