@@ -127,6 +127,7 @@ articles:
 - title: Helper Vignettes
   navbar: Helpers
   contents:
+  - desc_layer_formatting
   - riskdiff
   - sort
   - options
