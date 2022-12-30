@@ -64,18 +64,37 @@ as well, making format strings such as 'xx.a+1'.
 If you want two numbers on the same line, you provide two sets of x's. For
 example, if you're presenting a value like "mean (sd)" - you could provide
 the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2). Note that you're
-able to provide  different integer lengths and different decimal precision
+able to provide different integer lengths and different decimal precision
 for the two values. Each format string is independent and relates only to
 the format specified.
+
+As described above, when using 'x' or 'a', any other character within the
+format string will stay stationary. So for example, if your format string
+is 'xx (xxx.x)', your number may format as '12 ( 34.5)'. So the left side
+parenthesis stays fixed. In some displays, you may want the parenthesis to
+'hug' your number. Following this example, when allotting 3 spaces for the
+integer within parentheses, the parentehsis should shift to the right,
+making the numbers appear '12  (34.5)'. Using \code{f_str()} you can achieve
+this by using a capital 'X' or 'A'. For this example, the format string
+would be 'xx (XXX.x)'.
+
+There are a two rules when using 'parenthesis hugging':
+\itemize{
+\item Capital letters should only be used on the integer side of a number
+\item A character must precede the capital letter, otherwise there's no
+character to 'hug'
+}
 
 The other parameters of the \code{f_str} call specify what values should fill
 the x's. \code{f_str} objects are used slightly differently between different
 layers. When declaring a format string within a count layer, \code{f_str()}
 expects to see the values \code{n} or \code{distinct_n} for event or distinct counts,
 \code{pct} or \code{distinct_pct} for event or distinct percentages, or \code{total} or
-\code{distinct_total} for denominator calculations. But in descriptive statistic
-layers, \code{f_str} parameters refer to the names of the summaries being
-performed, either by built in defaults, or custom summaries declared using
+\code{distinct_total} for denominator calculations. Note that in an \code{f_str()}
+for a count layer 'A' or 'a' are based on n counts, and therefore don't
+make sense to use in percentages. But in descriptive statistic layers,
+\code{f_str} parameters refer to the names of the summaries being performed,
+either by built in defaults, or custom summaries declared using
 \code{\link[=set_custom_summaries]{set_custom_summaries()}}. See \code{\link[=set_format_strings]{set_format_strings()}} for some more notes
 about layers specific implementation.
 
@@ -131,5 +150,9 @@ f_str("a.a+1 (a.a+2)", mean, sd)
 f_str("xx.a (xx.a+1)", mean, sd)
 
 f_str("xx.x, xx.x, xx.x", q1, median, q3)
+
+f_str("xx (XXX.x\%)", n, pct)
+
+f_str("a.a+1 (A.a+2)", mean, sd)
 
 }
