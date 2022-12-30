@@ -49,6 +49,9 @@
     <loc>https://atorus-research.github.io/Tplyr/articles/desc.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/articles/desc_layer_formatting.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/articles/getting-started.html</loc>
   </url>
   <url>
@@ -98,9 +101,6 @@
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://atorus-research.github.io/Tplyr/reference/Tplyr.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/add_column_headers.html</loc>
