@@ -85,6 +85,29 @@ In the block above, we assembled the count and descriptive statistic summaries o
 - **Tplyr** does **not** do any data cleaning. We summarize and prepare the data that you enter. If you're following CDISC standards properly, this shouldn't be a concern - because ADaM data should already be formatted to be presentation ready. **Tplyr** works under this assumption, and we won't do any re-coding or casing changes. In this example, the original `SEX` values were "M" and "F" - so I switched them to be "Male" and "Female" instead.
 - The second pre-processing step does something interesting. If you recall from `vignette("sort")`, factor variables input to **Tplyr** will use the factor order for the resulting order variable. Another particularly useful advantage of this is dummying values. The adsl dataset only contains the races "WHITE", "BLACK OR AFRICAN AMERICAN", and "AMERICAN INDIAN OR ALASK NATIVE". If you set factor levels prior to entering the data into **Tplyr**, the values will be dummied for you. This is particularly advantageous when a study is early on and data may be sparse. Your output can display complete values and the presentation will be consistent as data come in. 
 
+Data may sometimes need additional post-processing as well. For example, sometimes statisticians may want special formatting to do things like not show a percent when a count is 0. For this the function `apply_conditional_formatting()` can be used to post process character strings based on the numbers present within the string.
+
+
+```{r post_example}
+dat %>% 
+  mutate(
+    across(starts_with('var'),
+    ~ if_else(
+      ord_layer_index %in% c(1, 3:5),
+      apply_conditional_format(
+        string = .,
+        format_group = 2,
+        condition = x == 0,
+        replacement = ""
+      ),
+      .
+      )
+    )
+  )
+```
+
+In this example, we targetted the count layers by their layer index (in `ord_layer_index`) and used `dplyr::across()` to target the result columns. Within `apply_conditional_format()` where saying take the string, look at the second number, and if it's equal to 0 then replace that entire string segment with a blank. For more information on what the `apply_conditional_format()` function, see the function documentation. For now, we'll leave this data frame unedited for the rest of the example. 
+
 ## Sorting, Column Ordering, Column Headers, and Clean-up
 
 Now that we have our data, let's make sure it's in the right order. Additionally, let's clean the data up so it's ready to present.
