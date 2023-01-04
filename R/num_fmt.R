@@ -86,7 +86,7 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #'
 #' This is generally used with a count layer
 #'
-#' @param string_ The current values of the numeric data
+#' @param x The current values of the numeric data
 #' @param right_pad The total string length, done after the left pad
 #' @param left_pad The length of the left_pad
 #'

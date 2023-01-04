@@ -212,7 +212,7 @@ get_format_string_regex <- function() {
   # Look for one or more X's, with a non-whitespace character preceding
   int_fixed_hug <- "(\\S+)X+"
 
-  # Look for one ore more x's
+  # Look for one or more x's
   int_fixed <- "x+"
 
   # Look for an A or a that may be followed by a + and a number
