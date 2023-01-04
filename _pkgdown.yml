@@ -102,6 +102,7 @@ reference:
   desc: General helper functions
 - contents:
   - apply_formats
+  - apply_conditional_format
   - str_indent_wrap
   - apply_row_masks
   - get_numeric_data
