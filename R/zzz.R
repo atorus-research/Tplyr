@@ -4,7 +4,7 @@
 #' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn quo_is_call
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim str_wrap
 #' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
-#' @importFrom stringr str_sub str_extract str_pad str_starts str_remove_all str_match_all
+#' @importFrom stringr str_sub str_sub<- str_extract str_pad str_starts str_remove_all str_match_all
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract extract2
 #' @importFrom assertthat assert_that
