@@ -1,29 +1,3 @@
-#' Return the regex for identifying format groups in populated strings
-#'
-#' This regex is the reverse of the f_str() regex, and is used to find populated
-#' format groups with real numbers rather than mock formatting
-#'
-#' @return A regular expression
-#' @noRd
-get_format_group_regex <- function() {
-  "[^\\s\\d]*\\s*(\\-?\\d+(\\.\\d+)?)\\S*"
-
-  # 0 or more non-whitespace or non-digit character
-  nwsd <- "[^\\s\\d]*"
-
-  # 0 or more whitespace
-  ws <- "\\s*"
-
-  # Positive or negative integer or decimal
-  num <- "(\\-?\\d+(\\.\\d+)?)"
-
-  # 0 or more non-whitespace
-  nws <- "\\S*"
-
-  regex(paste0(nwsd, ws, num, nws))
-
-}
-
 #' Validator for apply_conditional_format
 #'
 #' @param string Target character vector where text may be replacemed
