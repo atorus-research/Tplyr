@@ -26,8 +26,8 @@ allows you to pull out the individual format group string, while
 }
 \details{
 Format groups refer to individual segments of a string. For example, given
-the string ' 5 (34.4\%) \link{9}', there are three separate format groups, which
-are ' 5', '(34.4\%)', and '\link{9}'.
+the string ' 5 (34.4\%) [9]', there are three separate format groups, which
+are ' 5', '(34.4\%)', and '[9]'.
 }
 \examples{
 

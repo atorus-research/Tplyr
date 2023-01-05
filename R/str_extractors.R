@@ -6,8 +6,8 @@
 #' `str_extract_num()` allows you to pull out that specific numeric result.
 #'
 #' Format groups refer to individual segments of a string. For example, given
-#' the string ' 5 (34.4%) [9]', there are three separate format groups, which
-#' are ' 5', '(34.4%)', and '[9]'.
+#' the string ' 5 (34.4%) \[9]', there are three separate format groups, which
+#' are ' 5', '(34.4%)', and '\[9]'.
 #'
 #' @param string A string of number results from which to extract format groups
 #' @param format_group An integer representing format group that should be
