@@ -9,9 +9,9 @@
 #' by inferring what the user is specifying about number formatting.
 #'
 #' The 'format_group' regex is the opposite of this, and when given a string of
-#' numbers, such as ' 5 (34%) [9]' will return the separate segments of numbers
+#' numbers, such as ' 5 (34%) \[9]' will return the separate segments of numbers
 #' broken into their format groups, which in this example would be ' 5',
-#' '(34%)', and '[9]'.
+#' '(34%)', and '\[9]'.
 #'
 #' @param rx A character string with either the value 'format_string' or
 #'   'format_group'
