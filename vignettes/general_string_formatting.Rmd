@@ -27,7 +27,7 @@ load('adae.Rdata')
 
 A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of **Tplyr**, but **Tplyr** gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but **Tplyr's** focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 
 
-_Note: We've still focused on R's interactive capabilities, so be sure to check out vignette("metadata")_
+_Note: We've still focused on R's interactive capabilities, so be sure to check out `vignette("metadata")`_
 
 ## Format Strings
 
@@ -53,7 +53,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 For each layer type, when you want to configure string formatting you use the function `set_format_strings()`. Inside `set_format_strings()` you provide `f_str()` objects. Within count layers, for basic tables you can just provide a singe `f_str()` object to control general formatting. In descriptive statistic layers, you provide named parameters, and the names will become the values of `row_label1` for the statistics provided within your `f_str()` object. Regardless of the layer type, the `f_str()` object is what controls the numbers reported in your resulting table. 
 
-The table below outlines the variables available within each layer
+The table below outlines the variables available within each layer.
 
 | **Layer Type**                    | **Variables**  | **Description**                                                                                                        |
 |-----------------------------------|----------------|------------------------------------------------------------------------------------------------------------------------|
@@ -78,7 +78,7 @@ The table below outlines the variables available within each layer
 |                                   | q3             | Q3                                                                                                                     |
 |                                   | missing        | Missing (specifically NA counts)                                                               
 
-_Note: For the actual equations used in descriptive statistics layers, see vignettes("desc")_
+_Note: For the actual equations used in descriptive statistics layers, see `vignettes("desc")`_
 
 
 ## General Formatting 
@@ -181,7 +181,7 @@ tplyr_table(adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>%
   select(1:5)
 ```
 
-Note that the decimal precision varies between different lab test results. This feature is beneficial when decimal precision rules must be based on the precision of the data as collected. For more information of auto-precision for descriptive statistics layers, see vignettes("desc_layer_formatting"). 
+Note that the decimal precision varies between different lab test results. This feature is beneficial when decimal precision rules must be based on the precision of the data as collected. For more information of auto-precision for descriptive statistics layers, see `vignette("desc_layer_formatting")`. 
 
 For count layers, auto-precision can also be used surrounding the `n` counts. For example, the default format string for counts layers in **Tplyr** is set as `a (xxx.x%)`. This will auto-format the `n` result based on the maximum summarized value of `n` within the data. For example:
 

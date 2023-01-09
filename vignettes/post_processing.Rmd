@@ -201,7 +201,7 @@ For the sake of display, in this output I only select the Placebo column, but no
 
 In very much the same vein as `str_extract_fmt_group()`, the function `str_extract_num()` allows you to target a format group and extract the number from within. This can be used in any circumstance where you may want to pull a number out of a result cell, but probably the best example of this would be for a highly specific sort sequence. 
 
-Consider an adverse event table. In vignette("sort") we go over circumstances where you may want to sort by the descending occurrence of a result. We've received questions about how to establish tie breakers in this scenario, where ties should be broken sorting descending occurrence of an adverse event within the high dose group, then the low dose group, and finally the placebo group. **Tplyr** doesn't allow you to output these order variables by default, but getting these numbers is quite simple with `str_extract_num()`. Let's consider a simplified scenario
+Consider an adverse event table. In `vignette("sort")` we go over circumstances where you may want to sort by the descending occurrence of a result. We've received questions about how to establish tie breakers in this scenario, where ties should be broken sorting descending occurrence of an adverse event within the high dose group, then the low dose group, and finally the placebo group. **Tplyr** doesn't allow you to output these order variables by default, but getting these numbers is quite simple with `str_extract_num()`. Let's consider a simplified scenario
 
 ```{r num1}
 dat <- tplyr_table(adae, TRTA) %>% 
