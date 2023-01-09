@@ -1,5 +1,8 @@
 # Tplyr 1.1.0
 - This release incorporate parenthesis hugging across all layers (#117)
+- New functions `apply_conditional_formats()`, `str_extract_fmt_group()` and `str_extract_num()`
+- Vignette reorganization, as well as new vignettes added
+- Bug fix for #115
 
 # Tplyr 1.0.2
 - Bug fixes
