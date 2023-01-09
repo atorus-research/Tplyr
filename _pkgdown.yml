@@ -98,13 +98,18 @@ reference:
   - get_metadata
   - append_metadata
   - starts_with('get_meta')
+- title: Post-pocessing
+  desc: Post-pocessing functions
+- contents:
+  - str_indent_wrap
+  - apply_row_masks
+  - apply_conditional_format
+  - str_extract_fmt_group
+  - str_extract_num
+  - apply_formats
 - title: Helper functions
   desc: General helper functions
 - contents:
-  - apply_formats
-  - apply_conditional_format
-  - str_indent_wrap
-  - apply_row_masks
   - get_numeric_data
   - get_stats_data
   - get_by
@@ -113,27 +118,25 @@ reference:
   - get_where.tplyr_layer
   - Tplyr
   - new_layer_template
+  - get_tplyr_regex
 
 articles:
-- title: Table Vignettes
-  navbar: Table Vignettes
+- title: Table Basics
+  navbar: Table Basics
   contents:
   - table
-- title: Layer Vignettes
-  navbar: Layer Vignettes
+- title: Layer Basics
+  navbar: Layer Basics
   contents:
   - desc
   - count
   - shift
-- title: Helper Vignettes
-  navbar: Helpers
+- title: Table Customization
+  navbar: Table Customization
   contents:
+  - general_string_formatting
   - desc_layer_formatting
-  - riskdiff
   - sort
-  - options
-  - layer_templates
-  - styled-table
   - denom
   - Tplyr
 - title: Using Metadata
@@ -141,4 +144,15 @@ articles:
   contents:
   - metadata
   - custom-metadata
+- title: Advanced
+  navbar: Advanced
+  contents:
+  - riskdiff
+  - options
+  - layer_templates
+- title: Post-processing
+  navbar: Post-processing
+  contents:
+  - post_processing
+  - styled-table
 
