@@ -8,15 +8,17 @@ articles:
   denom: denom.html
   desc: desc.html
   desc_layer_formatting: desc_layer_formatting.html
+  general_string_formatting: general_string_formatting.html
   layer_templates: layer_templates.html
   metadata: metadata.html
   options: options.html
+  post_processing: post_processing.html
   riskdiff: riskdiff.html
   shift: shift.html
   sort: sort.html
   styled-table: styled-table.html
   table: table.html
-last_built: 2022-12-30T02:40Z
+last_built: 2023-01-09T22:15Z
 urls:
   reference: https://atorus-research.github.io/Tplyr/reference
   article: https://atorus-research.github.io/Tplyr/articles
