@@ -61,7 +61,7 @@ validate_conditional_format_params <- function(string, format_group, condition, 
 #'
 #' apply_conditional_format(string, 2, x == 0, " 0        ", full_string=TRUE)
 #'
-#' apply_conditional_format(string, 2, x == 0, "(<1%)")
+#' apply_conditional_format(string, 2, x < 1, "(<1%)")
 #'
 apply_conditional_format <- function(string, format_group, condition, replacement, full_string=FALSE) {
 
