@@ -25,13 +25,13 @@ load('adlb.Rdata')
 load('adae.Rdata')
 ```
 
-A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of Tplyr, but Tplyr gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but Tplyr's focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 
+A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of **Tplyr**, but **Tplyr** gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but **Tplyr's** focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 
 
 _Note: We've still focused on R's interactive capabilities, so be sure to check out vignette("metadata")_
 
 ## Format Strings
 
-Regardless of what layer type you use within Tplyr, control of formatting is handled by using format strings. Consider the following example.
+Regardless of what layer type you use within **Tplyr**, control of formatting is handled by using format strings. Consider the following example.
 
 ```{r example_1}
 tplyr_table(adsl, TRT01P) %>% 
@@ -83,7 +83,7 @@ _Note: For the actual equations used in descriptive statistics layers, see vigne
 
 ## General Formatting 
 
-Looking back at the Tplyr table above, let's look at the count layer's f_str() call.
+Looking back at the **Tplyr** table above, let's look at the count layer's `f_str()` call.
 
 ```{r example_2}
 f_str("xx (xx.x%)", n, pct)
@@ -95,7 +95,7 @@ This format string, `xx (xx.x%)`, has two different format groups. The first fie
 
 ## Controlling Formatting
 
-Note in the format string, the result numbers to be formatted fill the spaces of the x's. Other characters in the string are preserved as is. Tplyr's format strings have a few different valid characters to specifically control the numeric fields.
+Note in the format string, the result numbers to be formatted fill the spaces of the x's. Other characters in the string are preserved as is. **Tplyr's** format strings have a few different valid characters to specifically control the numeric fields.
 
 | **Character** | **Description**                                    |
 |:-------------:|----------------------------------------------------|
@@ -139,7 +139,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ### Uppercase 'X'
 
-The downside of the last example is that alignment between format groups is completely lost. The parenthesis in the `pct` field is now bound to the integer of the percent value, but the entire string is shifted to the right. Tplyr offers customization over this by using a concept called "parenthesis hugging". This is triggered by using an uppercase 'X' in the integer side of a format group. Consider the following example:
+The downside of the last example is that alignment between format groups is completely lost. The parenthesis in the `pct` field is now bound to the integer of the percent value, but the entire string is shifted to the right. **Tplyr** offers customization over this by using a concept called "parenthesis hugging". This is triggered by using an uppercase 'X' in the integer side of a format group. Consider the following example:
 
 ```{r example_5}
 
@@ -164,7 +164,7 @@ There are a two rules when using 'parenthesis hugging':
 
 ## Auto-precision
 
-Lastly, Tplyr also has the capability to automatically determine some widths necessary to format strings. This is done by using the character 'a' instead of 'x' in the format string. 
+Lastly, **Tplyr** also has the capability to automatically determine some widths necessary to format strings. This is done by using the character 'a' instead of 'x' in the format string. 
 
 Consider the following example.
 
@@ -183,7 +183,7 @@ tplyr_table(adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>%
 
 Note that the decimal precision varies between different lab test results. This feature is beneficial when decimal precision rules must be based on the precision of the data as collected. For more information of auto-precision for descriptive statistics layers, see vignettes("desc_layer_formatting"). 
 
-For count layers, auto-precision can also be used surrounding the `n` counts. For example, the default format string for counts layers in Tplyr is set as `a (xxx.x%)`. This will auto-format the `n` result based on the maximum summarized value of `n` within the data. For example:
+For count layers, auto-precision can also be used surrounding the `n` counts. For example, the default format string for counts layers in **Tplyr** is set as `a (xxx.x%)`. This will auto-format the `n` result based on the maximum summarized value of `n` within the data. For example:
 
 ```{r example_7}
 tplyr_table(adsl, TRT01P) %>% 
