@@ -200,7 +200,7 @@ As with the **Tplyr** metadata, the only strict criteria here is that your custo
 The vignette wouldn't be complete without the final contextual example - so here we go. Ultimately these pieces an all fit together in the context of a Shiny application and give you the desired click-through experience.
 
 ```{r, out.width=850, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}
-knitr::include_app("http://michael-stackhouse.shinyapps.io/Tplyr-efficacy-shiny-demo", height = "900px")
+knitr::include_app("https://michael-stackhouse.shinyapps.io/Tplyr-efficacy-shiny-demo", height = "900px")
 ```
 
 _Source code available [here](https://github.com/atorus-research/Tplyr-efficacy-shiny-demo)_
