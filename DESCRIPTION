@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Traceability Focused Grammar of Clinical Data Summary
-Version: 1.0.2.9000
+Version: 1.1.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -20,8 +20,12 @@ Authors@R:
     person(given = "Nathan",
            family = "Kosiba",
            email = "Nathan.Kosiba@atorusresearch.com",
-           role = "aut",
+           role = "ctb",
            comment = c(ORCID = "0000-0001-5359-4234")),
+    person(given = "Sadchla",
+           family = "Mascary",
+           email = "sadchla.mascary@atorusresearch.com",
+           role = "ctb"),
     person(given = "Atorus Research LLC",
            role = "cph")
     )
@@ -55,6 +59,6 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 RdMacros: lifecycle
 Config/testthat/edition: 3

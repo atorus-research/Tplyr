@@ -342,10 +342,13 @@ prepare_format_metadata.count_layer <- function(x) {
 
     # If a layer_width flag is present, edit the formatting string to display the maximum
     # character length
-    if (str_detect(format_strings[['n_counts']]$format_string, "a")) {
-      # Replace the flag with however many xs
+    if (str_detect(format_strings[['n_counts']]$format_string, "a|A")) {
+      # Replace 'a' with appropriate 'x'
       replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "a",
                                      paste(rep("x", n_width), collapse = ""))
+      # Replace 'A' with appropriate 'X'
+      replaced_string <- str_replace(replaced_string, "A",
+                                     paste(rep("X", n_width), collapse = ""))
 
       # Make a new f_str and replace the old one
       format_strings[['n_counts']] <- f_str(replaced_string, !!!format_strings$n_counts$vars)

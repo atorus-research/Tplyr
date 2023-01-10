@@ -1,0 +1,254 @@
+---
+title: "Post-Processing"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{post_processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE, setup}
+library(Tplyr)
+library(dplyr)
+library(knitr)
+load('adsl.Rdata')
+load('adae.Rdata')
+```
+
+We've made a large effort to make **Tplyr** tables flexible, but not everything can (or, in some cases, we think should) be handled during table construction itself. To address this, **Tplyr** has several post-processing functions that help put finishing touches on your data to help with presentation.
+
+## String wrapping
+
+Certain types of output formats don't elegantly handle string wrapping of text. For some formats, this could simply be the width of the text before a word wraps. Other formats, such as LaTex outputs to PDF (depending on the rendering engine) may wrap white space fine, but words whose character length is longer than the allotted width may print wider than the table cell. 
+
+To address this, in **Tplyr** we've added the function `str_indent_wrap()`. This is largely built on top of the function `stringr::str_wrap()` to preserve as much efficiency as possible, but two issues common in clinical outputs have been addressed:
+
+- Preceding indentation of a word is preserved. So for example, in a nested adverse event table, if the preferred term is indented, this function will wrap but preserve that words indentation with each new line. 
+- Words that exceed the specified width will be wrapped with hyphenation. 
+
+As a post-processing function, note that this function works on a **tibble or data.frame** object, and not a **Tplyr** table.
+
+Let's look at an example.
+
+```{r str_indent_wrap}
+dat <- tibble(
+  row_label1 = c("RENAL AND URINARY DISORDERS", "   NEPHROLITHIASIS"),
+  var1_Placebo = c(" 5 (50.0%)", " 3 (30.0%)")
+)
+
+dat %>% 
+  mutate(
+    row_label1 = str_indent_wrap(row_label1, width = 10)
+  )
+```
+
+_Note: We're viewing the data frame output here because HTML based outputs eliminate duplicate white spaces, which makes it difficult to see things like padded indentation_
+
+## Row Masking
+
+Row masking is the process blanking of repeat row values within a data frame to give the appearance of grouping variables. Some table packages, such as [**gt**](https://gt.rstudio.com/), will handle this for you. Other packages, like [**huxtable**](https://hughjonesd.github.io/huxtable/), have options like merging cells, but this may be a more simplistic approach. Furthermore, this is a common approach in clinical tables when data validation is done on an output dataframe. 
+
+```{r row_mask1}
+dat <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE, by = "Race n (%)")
+  ) %>% 
+  build() %>% 
+  select(1:3)
+
+kable(dat)
+```
+
+In this example, note that "Race n (%)" is duplicated for each row. We can blank this out using `apply_row_masks()
+
+```{r row_masks2}
+dat %>% 
+  apply_row_masks() %>% 
+  kable()
+```
+
+A second feature of `apply_row_masks()` is the ability to apply row breaks between different groups of data, for example, different layers of a table.
+
+```{r row_masks3}
+dat <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE, by = "Race n (%)")
+  ) %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (years)")
+  ) %>% 
+  build()
+  
+dat %>% 
+  apply_row_masks(row_breaks=TRUE) %>% 
+  kable()
+```
+
+The row breaks are inserted as blank rows. Additionally, when row breaks are inserted you'll have the additional variable `ord_break` added to the dataframe, where the value is 1 for table data rows and 2 for the newly added break rows. Character variables will have blank values (i.e. `""`) and the numeric sorting values will be `NA`.
+
+There are a few considerations when using `apply_row_masks()`:
+
+- This function is order dependent, so make sure your data are sorted before submitting to `apply_row_masks()`
+- When inserting row breaks, by default the Tpylr variable `ord_layer_index` is used. You can submit other variables via the ellipsis parameter (`...`) if you'd like to use a different variable grouping to insert rows
+
+## Conditional Formatting
+
+In some circumstances, like `add_total_row()`, **Tplyr** lets you specify special formats separate from those in `set_format_strings()`. But within the table body there's no other way to set specific, conditional formats based on the table data itself. To address this, we've added the post-processing function `apply_conditional_format()` to allow you to set conditional formats on result cells.
+
+`apply_conditional_format()` operates on a character vector, so it can generally be used within the context of `dplyr::mutate()` like any other character modifying function. It will make a 1:1 replacement of values, so it will return a character vector of equal length. Let's look at two examples.
+
+```{r apply_conditional_format1}
+string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)")
+
+apply_conditional_format(string, 2, x == 0, " 0        ", full_string=TRUE)
+
+apply_conditional_format(string, 2, x == 0, "")
+```
+
+The two examples above achieve the same result, but they work slightly differently. Let's walk throug the syntax:
+
+- The first parameter is the input character vector
+- The second parameter refers to the format group. The format group is the index of the number within the result cell you'd like to target. So in the result ` 8 (9.3%)`, there are two format groups. The value of the first is 8. The value of the second is 9.3. This controls the number that we'll use to establish our condition.
+- The third parameter is the condition that will evaluate to establish if the conditional format is applied. Here, use the variable name `x`, which takes on the value of the from your chosen format group. This condition should be a filter condition, so it must return a boolean vector of TRUE/FALSE.
+- The fourth parameter is the string value used as your replacement. 
+
+Finally, the last parameter is `full_string`, and this is the difference between the first and second examples. `apply_conditional_format()` can do two types of replacements. The first example is a full string replacement. In this case, whatever value you provide as the replacement is used verbatim when the condition evaluates to `TRUE`. If this is set to false, the **only the format group specified is replaced**. For more context, let's look at a third example.
+
+```{r apply_conditional_format2}
+apply_conditional_format(string, 2, x < 1, "(<1%)")
+```
+In this example we target the percent field using format group 2, and now our replacement text is `(<1%)`. If `full_string` uses its default value of `FALSE`, only the format group specified is replaced. `apply_conditional_format()` establishes the width of the format group targeted, and the replacement text will right align within that targetted portion of the string to ensure that the alignment of the string is preserved. 
+
+For any example within a **Tplyr** result dataframe, let's look at the example dataset from earlier. Let's say that we have `n (%)` values within the first count layer to conditional format. Using some fancy **dplyr** code, and `apply_conditional_format()`, we can make it happen. 
+
+```{r apply_conditional_format3}
+dat_new <- dat %>% 
+  mutate(
+    across(starts_with('var'),  # Apply to variables that start with `var`
+    ~ if_else(
+      ord_layer_index == 1,     # Target the count layer
+      apply_conditional_format( 
+        string = .,             # This is dplyr::across syntax
+        format_group = 2,       # The percent field
+        condition = x == 0,     # Our condition
+        replacement = ""        # Replacement value
+      ),
+      .
+      )
+    )
+  )
+
+kable(dat_new)
+```
+
+The syntax here gets a bit complicated, by using `dplyr::across()` we can apply the same function across each of the result variables, which in this the variable names start with `var`. The function here is using a [**purrr**](https://purrr.tidyverse.org/index.html) style anonymous function for simplicity. There are a couple ways you can do this in R. Referencing the documentation of [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html):
+
+- A formula, e.g. `~ . + 1`. You must use `.` to refer to the first argument. Only recommended if you require backward compatibility with older versions of R.
+- An anonymous function, e.g. `\(x) x + 1` or `function(x) x + 1`.
+
+Within that function, we're additionally using `if_else()` to only apply this function on the first layer by using the `ord_layer_index` variable. All this together, we're effectively running the `apply_conditional_formats()` function only on the first layer, and running it across all of the variables that start with `var`. 
+
+## Extracting a Format Group
+
+When **Tplyr** outputs a result, using `set_format_strings()` and `f_str()` the result are concatenated together within a single result cell. For example, within a count layer in a **Tplyr** table, there's no way to directly output the `n` and `pct` values in separate columns. If this is a result you want, then in a post-processing step you can use the function `str_extract_fmt_group()`.
+
+`str_extract_fmt_group()` allows you to reach within a result string and extract an individual format group. Consider this example:
+
+```{r fmt_group1}
+string <- c(" 5  (5.8%)", " 8  (9.3%)", "78 (90.7%)")
+
+# Get the n counts
+str_extract_fmt_group(string, 1)
+
+# Get the pct counts
+str_extract_fmt_group(string, 2)
+```
+In the first call to `str_extract_fmt_group()`, we target the n counts. The first format group from each string is extracted, preserving the allotted width of that portion of the string. Similarly, in the second group we extract all the percent counts, including the surround parentheses. 
+
+In practice, `str_extract_fmt_group()` can then be used to separate format groups into their own columns.
+
+```{r fmt_group2}
+dat <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE)
+  ) %>% 
+  build()
+
+dat %>% 
+  mutate(
+    across(starts_with('var'), 
+           ~ str_extract_fmt_group(., 1),
+           .names = "{.col}_n"),
+    across(starts_with('var'), 
+           ~ str_extract_fmt_group(., 2),
+           .names = "{.col}_pct")
+  ) %>% 
+  select(row_label1, var1_Placebo_n, var1_Placebo_pct) %>% 
+  kable()
+```
+For the sake of display, in this output I only select the Placebo column, but note that we were able to dynamically separate out the `n` results from the `pct` results. In some cases, functions such as `tidyr::separate()` could also be used to get a result like this, but `str_extract_fmt_group()` specifically targets the expected formatting of format groups, without having to craft a specific expression that may get confused over things like spaces in unexpected places. 
+
+## Highly Customized Sort Variables
+
+In very much the same vein as `str_extract_fmt_group()`, the function `str_extract_num()` allows you to target a format group and extract the number from within. This can be used in any circumstance where you may want to pull a number out of a result cell, but probably the best example of this would be for a highly specific sort sequence. 
+
+Consider an adverse event table. In `vignette("sort")` we go over circumstances where you may want to sort by the descending occurrence of a result. We've received questions about how to establish tie breakers in this scenario, where ties should be broken sorting descending occurrence of an adverse event within the high dose group, then the low dose group, and finally the placebo group. **Tplyr** doesn't allow you to output these order variables by default, but getting these numbers is quite simple with `str_extract_num()`. Let's consider a simplified scenario
+
+```{r num1}
+dat <- tplyr_table(adae, TRTA) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01A) %>% 
+  add_layer(
+    group_count(AEDECOD) %>% 
+      set_format_strings(f_str("xx (XX.x%) [A]", distinct_n, distinct_pct, n))  %>% 
+      set_distinct_by(USUBJID)
+  ) %>% 
+  build()
+
+dat %>% 
+  head() %>% 
+  kable()
+```
+Given this data, let's say we want to sort by descending occurrence of the event, using the number of subjects. That would be the first format group. And then we want to sort using high dose, then low dose, then placebo. Let's create the order variables.
+
+```{r num2}
+dat_ord <- dat  %>% 
+  mutate(
+    across(starts_with('var1'),
+           ~str_extract_num(., 1),
+           .names = "{.col}_ord")
+  ) 
+
+dat_ord %>% 
+  head() %>% 
+  select(row_label1, matches('^var.*ord$'))
+```
+
+Now we effectively have additional order variables necessary to do the sort sequence desired. 
+
+## External Data Formatting
+
+The last post processing function worth mentioning isn't necessarily meant for post-processing data from **Tplyr** itself. We understand that **Tplyr** can't produce every single summary you'd need for a clinical trial - and we never intended it to be able to do this. But we built **Tplyr** to try to work effectively with other packages and tools. **Tplyr**'s string formatting tools work quite well, so we've externalized this capability using the function `apply_formats()`.
+
+As a basic example, let's look at the `mtcars` data.
+
+```{r apply_formats}
+mtcars %>% 
+  mutate(
+    new_column = apply_formats("xx (xx.x)", gear, mpg)
+  ) %>% 
+  select(gear, mpg, new_column) %>% 
+  head() %>% 
+  kable()
+```
+
+Here we were able to leverage the string formatting available in `f_str()`, but apply it generically in another data frame within `dplyr::mutate()`. This allows you to format other data, outside of **Tplyr**, but still bring some of the quality of life that Tplyr has to offer.
