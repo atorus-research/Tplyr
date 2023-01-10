@@ -1,11 +1,12 @@
 # Count layer clauses with invalid syntax give informative error
 
-    group_count `where` condition `bad == code` is invalid. Filter error:
+    i In index: 1.
+    Caused by error in `value[[3L]]()`:
+    ! group_count `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
     ! Problem while computing `..1 = bad == code`.
     Caused by error in `mask$eval_all_filter()`:
     ! object 'bad' not found
-    
 
 # Total rows and missing counts are displayed correctly(0.1.5 Updates)
 
@@ -124,7 +125,9 @@
 
 # Nested count layers can accept text values in the first variable
 
-    Inner layers must be data driven variables
+    i In index: 1.
+    Caused by error:
+    ! Inner layers must be data driven variables
 
 # Variable names will be coersed into symbols
 
@@ -136,15 +139,17 @@
 
 # keep_levels works as expeceted
 
-    group_count `where` condition `TRUE` is invalid. Filter error:
+    i In index: 1.
+    Caused by error in `value[[3L]]()`:
+    ! group_count `where` condition `TRUE` is invalid. Filter error:
     Error: level passed to `kept_levels` not found: 10 20 
-    
 
 ---
 
-    group_count `where` condition `TRUE` is invalid. Filter error:
+    i In index: 1.
+    Caused by error in `value[[3L]]()`:
+    ! group_count `where` condition `TRUE` is invalid. Filter error:
     Error: level passed to `kept_levels` not found: nothere 
-    
 
 # nested count layers handle `set_denoms_by` as expected
 
@@ -152,7 +157,9 @@
 
 # nested count layers will error out if second variable is bigger than the first
 
-    The number of values of your second variable must be greater than the number of levels in your first variable
+    i In index: 1.
+    Caused by error:
+    ! The number of values of your second variable must be greater than the number of levels in your first variable
 
 # set_numeric_threshold works as expected
 
@@ -305,7 +312,9 @@
 
 # nested count layers error out when you try to add a total row
 
-    You can't include total rows in nested counts. Instead, add a seperate layer for total counts.
+    i In index: 1.
+    Caused by error:
+    ! You can't include total rows in nested counts. Instead, add a seperate layer for total counts.
 
 # Tables with pop_data can accept a layer level where
 

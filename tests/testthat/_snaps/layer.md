@@ -84,13 +84,19 @@
 
 # Desc layers only accept numeric variables
 
-    Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
+    i In index: 1.
+    Caused by error:
+    ! Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
 
 ---
 
-    Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
+    i In index: 2.
+    Caused by error:
+    ! Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
 
 ---
 
-    Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
+    i In index: 1.
+    Caused by error:
+    ! Target variable `supp` is not numeric. Target variables must be numeric for desc layers.
 
