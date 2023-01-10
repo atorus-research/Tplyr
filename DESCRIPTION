@@ -22,6 +22,10 @@ Authors@R:
            email = "Nathan.Kosiba@atorusresearch.com",
            role = "ctb",
            comment = c(ORCID = "0000-0001-5359-4234")),
+    person(given = "Sadchla",
+           family = "Mascary",
+           email = "sadchla.mascary@atorusresearch.com",
+           role = "ctb"),
     person(given = "Atorus Research LLC",
            role = "cph")
     )
