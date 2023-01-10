@@ -43,7 +43,7 @@ validate_conditional_format_params <- function(string, format_group, condition, 
 #' replacement text can refill the "format group" while preserving the original
 #' width and alignment of the target string.
 #'
-#' @param string Target character vector where text may be replacemed
+#' @param string Target character vector where text may be replaced
 #' @param format_group An integer representing the targeted numeric field within
 #'   the string, numbered from left to right
 #' @param condition An expression, using the variable name 'x' as the target
