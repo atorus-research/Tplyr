@@ -1,6 +1,6 @@
 #' Validator for apply_conditional_format
 #'
-#' @param string Target character vector where text may be replacemed
+#' @param string Target character vector where text may be replaced
 #' @param format_group An integer representing the targeted numeric field within
 #'   the string, numbered from left to right
 #' @param condition An expression, using the variable name 'x' as the target
