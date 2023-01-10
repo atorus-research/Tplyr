@@ -13,7 +13,7 @@ apply_conditional_format(
 )
 }
 \arguments{
-\item{string}{Target character vector where text may be replacemed}
+\item{string}{Target character vector where text may be replaced}
 
 \item{format_group}{An integer representing the targeted numeric field within
 the string, numbered from left to right}

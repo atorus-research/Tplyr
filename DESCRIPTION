@@ -20,7 +20,7 @@ Authors@R:
     person(given = "Nathan",
            family = "Kosiba",
            email = "Nathan.Kosiba@atorusresearch.com",
-           role = "aut",
+           role = "ctb",
            comment = c(ORCID = "0000-0001-5359-4234")),
     person(given = "Atorus Research LLC",
            role = "cph")
