@@ -10,6 +10,14 @@ test_that("Error is thrown when format doesn't match variables", {
   expect_snapshot_error(f_str("xx.x", a, b))
 })
 
+# Hug character errors generate properly
+test_that("Hug character format string errors generate properly in f_str()", {
+  expect_error(f_str("(AA.a+1)", a), "*only use a single 'A' or 'a'*")
+  expect_error(f_str("XX", a), "*an 'X' or 'A' was used but no hug character*")
+  expect_error(f_str("xx.X", a), "*'X' or 'A' can only be used*")
+  expect_error(f_str("(X.X)", a), "*The following section failed to parse*")
+})
+
 # Variables are picked up appropriately
 test_that("Variables are properly captured", {
   fmt1 <- f_str('xx', a)
@@ -42,6 +50,13 @@ fmt17 <- f_str("xx.a (xx.a+2)", a, b)
 fmt18 <- f_str("xx.a (xx.a+2%) [a.xx]", a, b, c)
 fmt19 <- f_str("xx.a --->>>> xx.xx <<<------ a%, xx.a+1%%", a, b, c, d)
 fmt20 <- f_str("xx.a+12 --->>>> xx.xx <<<------ a+123%, xx.a+1234%%", a, b, c, d)
+fmt21 <- f_str("(X.x)", a)
+fmt22 <- f_str("(A.x)", a)
+fmt23 <- f_str("(A+1.x)", a)
+fmt24 <- f_str("({[X.x)]}", a)
+fmt25 <- f_str("({[A.x)]}", a)
+fmt26 <- f_str("({[A+1.x)]}", a)
+
 
 # Regex tests
 test_that("Format strings are parsed correctly", {
@@ -65,6 +80,12 @@ test_that("Format strings are parsed correctly", {
   expect_equal(fmt18$formats, c("xx.a", "xx.a+2", "a.xx"))
   expect_equal(fmt19$formats, c("xx.a", "xx.xx", "a", "xx.a+1"))
   expect_equal(fmt20$formats, c("xx.a+12", "xx.xx", "a+123", "xx.a+1234"))
+  expect_equal(fmt21$formats, c("(X.x"))
+  expect_equal(fmt22$formats, c("(A.x"))
+  expect_equal(fmt23$formats, c("(A+1.x"))
+  expect_equal(fmt24$formats, c("({[X.x"))
+  expect_equal(fmt25$formats, c("({[A.x"))
+  expect_equal(fmt26$formats, c("({[A+1.x"))
 
 })
 
@@ -90,124 +111,148 @@ test_that("Replacement strings are parsed correctly", {
   expect_equal(fmt18$repl_str, "%s (%s%%) [%s]")
   expect_equal(fmt19$repl_str, "%s --->>>> %s <<<------ %s%%, %s%%%%")
   expect_equal(fmt20$repl_str, "%s --->>>> %s <<<------ %s%%, %s%%%%")
+  expect_equal(fmt21$repl_str, "%s)")
+  expect_equal(fmt22$repl_str, "%s)")
+  expect_equal(fmt23$repl_str, "%s)")
+  expect_equal(fmt24$repl_str, "%s)]}")
+  expect_equal(fmt25$repl_str, "%s)]}")
+  expect_equal(fmt26$repl_str, "%s)]}")
 })
 
 # Auto precision is detected and precision formats are properly set
 test_that("Format string setting and autoprecision are detected appropriately", {
 
   #f_str("xx", a)
-  s1 <- list(c('int'=2,'dec'=0))
-  attr(s1[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s1 <- list(list(int=2, dec=0, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt1$settings, s1)
 
   #f_str("a", a)
-  s2 <- list(c('int'=0,'dec'=0))
-  attr(s2[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s2 <- list(list(int=0, dec=0, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt2$settings, s2)
 
   #f_str("a+1", a)
-  s3 <- list(c('int'=1,'dec'=0))
-  attr(s3[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s3 <- list(list(int=1, dec=0, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt3$settings, s3)
 
   #f_str("a+2", a)
-  s4 <- list(c('int'=2,'dec'=0))
-  attr(s4[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s4 <- list(list(int=2, dec=0, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt4$settings, s4)
 
   #f_str("xx.x", a)
-  s5 <- list(c('int'=2,'dec'=1))
-  attr(s5[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s5 <- list(list(int=2, dec=1, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt5$settings, s5)
 
   #f_str("xx.xx", a)
-  s6 <- list(c('int'=2,'dec'=2))
-  attr(s6[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s6 <- list(list(int=2, dec=2, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt6$settings, s6)
 
   #f_str("a.xx", a)
-  s7 <- list(c('int'=0,'dec'=2))
-  attr(s7[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s7 <- list(list(int=0, dec=2, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt7$settings, s7)
 
   #f_str("xx.a", a)
-  s8 <- list(c('int'=2,'dec'=0))
-  attr(s8[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s8 <- list(list(int=2, dec=0, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_))
   expect_equal(fmt8$settings, s8)
 
   #f_str("a+1.xx", a)
-  s9 <- list(c('int'=1,'dec'=2))
-  attr(s9[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s9 <- list(list(int=1, dec=2, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt9$settings, s9)
 
   #f_str("a+2.xx", a)
-  s10 <- list(c('int'=2,'dec'=2))
-  attr(s10[[1]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s10 <- list(list(int=2, dec=2, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_))
   expect_equal(fmt10$settings, s10)
 
   #f_str("xx.a+1", a)
-  s11 <- list(c('int'=2,'dec'=1))
-  attr(s11[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s11 <- list(list(int=2, dec=1, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_))
   expect_equal(fmt11$settings, s11)
 
   #f_str("xx.a+2", a)
-  s12 <- list(c('int'=2,'dec'=2))
-  attr(s12[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s12 <- list(list(int=2, dec=2, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_))
   expect_equal(fmt12$settings, s12)
 
   #f_str("xx xx", a, b)
-  s13 <- list(c('int'=2,'dec'=0), c('int'=2,'dec'=0))
-  attr(s13[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
-  attr(s13[[2]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s13 <- list(
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_)
+    )
   expect_equal(fmt13$settings, s13)
 
   #f_str("xx.x xx", a, b)
-  s14 <- list(c('int'=2,'dec'=1), c('int'=2,'dec'=0))
-  attr(s14[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
-  attr(s14[[2]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s14 <- list(
+    list(int=2, dec=1, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_)
+  )
   expect_equal(fmt14$settings, s14)
 
   #f_str("xx.x xx.xx", a, b)
-  s15 <- list(c('int'=2,'dec'=1), c('int'=2,'dec'=2))
-  attr(s15[[1]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
-  attr(s15[[2]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
+  s15 <- list(
+    list(int=2, dec=1, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=2, dec=2, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_)
+  )
   expect_equal(fmt15$settings, s15)
 
   #f_str("xx.a xx.a+1", a, b)
-  s16 <- list(c('int'=2,'dec'=0), c('int'=2,'dec'=1))
-  attr(s16[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s16[[2]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s16 <- list(
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=2, dec=1, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_)
+  )
   expect_equal(fmt16$settings, s16)
 
   #f_str("xx.a (xx.a+2)", a, b)
-  s17 <- list(c('int'=2,'dec'=0), c('int'=2,'dec'=2))
-  attr(s17[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s17[[2]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s17 <- list(
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=2, dec=2, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_)
+  )
   expect_equal(fmt17$settings, s17)
 
   #f_str("xx.a (xx.a+2%) [a.xx]", a, b, c)
-  s18 <- list(c('int'=2,'dec'=0), c('int'=2,'dec'=2), c('int'=0,'dec'=2))
-  attr(s18[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s18[[2]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s18[[3]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
+  s18 <- list(
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=2, dec=2, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=0, dec=2, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_)
+  )
   expect_equal(fmt18$settings, s18)
 
   #f_str("xx.a --->>>> xx.xx <<<------ a%, xx.a+1%%", a, b, c, d)
-  s19 <- list(c('int'=2,'dec'=0), c('int'=2,'dec'=2), c('int'=0,'dec'=0), c('int'=2,'dec'=1))
-  attr(s19[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s19[[2]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
-  attr(s19[[3]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
-  attr(s19[[4]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s19 <- list(
+    list(int=2, dec=0, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=2, dec=2, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=0, dec=0, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=2, dec=1, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_)
+  )
   expect_equal(fmt19$settings, s19)
 
   #f_str("xx.a+12 --->>>> xx.xx <<<------ a+123%, xx.a+1234%%", a, b, c, d)
-  s20 <- list(c('int'=2,'dec'=12), c('int'=2,'dec'=2), c('int'=123,'dec'=0), c('int'=2,'dec'=1234))
-  attr(s20[[1]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
-  attr(s20[[2]], 'auto') <- c('int'=FALSE, 'dec'=FALSE)
-  attr(s20[[3]], 'auto') <- c('int'=TRUE, 'dec'=FALSE)
-  attr(s20[[4]], 'auto') <- c('int'=FALSE, 'dec'=TRUE)
+  s20 <- list(
+    list(int=2, dec=12, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_),
+    list(int=2, dec=2, auto_int=FALSE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=123, dec=0, auto_int=TRUE, auto_dec=FALSE, hug_char=NA_character_),
+    list(int=2, dec=1234, auto_int=FALSE, auto_dec=TRUE, hug_char=NA_character_)
+  )
   expect_equal(fmt20$settings, s20)
 
+  # f_str("(X.x)", a)
+  s21 <- list(list(int=2, dec=1, auto_int=FALSE, auto_dec=FALSE, hug_char="("))
+  expect_equal(fmt21$settings, s21)
+
+  # f_str("(A.x)", a)
+  s22 <- list(list(int=0, dec=1, auto_int=TRUE, auto_dec=FALSE, hug_char="("))
+  expect_equal(fmt22$settings, s22)
+
+  # f_str("(A+1.x)", a)
+  s23 <- list(list(int=1, dec=1, auto_int=TRUE, auto_dec=FALSE, hug_char="("))
+  expect_equal(fmt23$settings, s23)
+
+  # f_str("({[X.x)]}", a)
+  s24 <- list(list(int=4, dec=1, auto_int=FALSE, auto_dec=FALSE, hug_char="({["))
+  expect_equal(fmt24$settings, s24)
+
+  # f_str("({[A.x)]}", a)
+  s25 <- list(list(int=2, dec=1, auto_int=TRUE, auto_dec=FALSE, hug_char="({["))
+  expect_equal(fmt25$settings, s25)
+
+  # f_str("({[A+1.a+1)]}", a)
+  s26 <- list(list(int=3, dec=1, auto_int=TRUE, auto_dec=FALSE, hug_char="({["))
+  expect_equal(fmt26$settings, s26)
+
 })
-
-

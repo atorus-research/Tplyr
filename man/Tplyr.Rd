@@ -119,11 +119,12 @@ Authors:
 \itemize{
   \item Eli Miller \email{Eli.Miller@AtorusResearch.com} (\href{https://orcid.org/0000-0002-2127-9456}{ORCID})
   \item Ashley Tarasiewicz \email{Ashley.Tarasiewicz@atorusresearch.com}
-  \item Nathan Kosiba \email{Nathan.Kosiba@atorusresearch.com} (\href{https://orcid.org/0000-0001-5359-4234}{ORCID})
 }
 
 Other contributors:
 \itemize{
+  \item Nathan Kosiba \email{Nathan.Kosiba@atorusresearch.com} (\href{https://orcid.org/0000-0001-5359-4234}{ORCID}) [contributor]
+  \item Sadchla Mascary \email{sadchla.mascary@atorusresearch.com} [contributor]
   \item Atorus Research LLC [copyright holder]
 }
 

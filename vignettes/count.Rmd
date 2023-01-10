@@ -69,6 +69,24 @@ kable(t)
 
 You may have seen tables before like the one above. This display shows the number of subjects who experienced an adverse event, the percentage of subjects within the given treatment group who experienced that event, and then the total number of occurrences of that event. Using `set_distinct_by()` triggered the derivation of `distinct_n` and `distinct_pct` in addition to the `n` and `pct` created within `group_count`. The display of the values is then controlled by the `f_str()` call in `set_format_strings()`.
 
+An additional option for formatting the numbers above would be using 'parenthesis hugging'. To trigger this, on the integer side of a number use a capital 'X' or a capital 'A'. For example:
+
+```{r}
+t <- tplyr_table(adae, TRTA) %>%
+  add_layer(
+    group_count(AEDECOD) %>%
+      set_distinct_by(USUBJID) %>%
+      set_format_strings(f_str("xxx (XXX.xx%) [A]", distinct_n, distinct_pct, n))
+  ) %>%
+  build() %>%
+  head() %>% 
+  select(row_label1, `var1_Xanomeline Low Dose`)
+
+t
+```
+
+As can be seen above, when using parenthesis hugging, the width of a specified format group is preserved, but the preceding character (or characters) to the left of the 'X' or 'A' is pulled to the right to 'hug' the specified number. 
+
 ## Nested Count Summaries
 
 Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of "Other" summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.

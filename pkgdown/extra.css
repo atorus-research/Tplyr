@@ -1,0 +1,4 @@
+.bg-primary .dropdown-menu {
+  overflow: auto;
+  max-height: 100vh;
+}

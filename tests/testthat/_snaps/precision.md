@@ -1,12 +1,16 @@
 # Missing by variables are handled as specified in precision data
 
-    The precision data provided is missing by variable cases:
+    i In index: 1.
+    Caused by error:
+    ! The precision data provided is missing by variable cases:
                vs
     Datsun 710  1
 
 ---
 
-    The precision data provided is missing by variable cases:
+    i In index: 1.
+    Caused by error:
+    ! The precision data provided is missing by variable cases:
                vs
     Datsun 710  1
 
@@ -52,7 +56,9 @@
 
 ---
 
-    By variable types mismatch between precision dataset and target data
+    i In index: 1.
+    Caused by error:
+    ! By variable types mismatch between precision dataset and target data
 
 # Partially provided decimal precision caps populate correctly
 

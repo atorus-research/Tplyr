@@ -1,0 +1,221 @@
+---
+title: "General String Formatting"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{general_string_formatting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE, setup}
+library(Tplyr)
+library(dplyr)
+library(tidyr)
+load('adsl.Rdata')
+load('adlb.Rdata')
+load('adae.Rdata')
+```
+
+A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of **Tplyr**, but **Tplyr** gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but **Tplyr's** focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 
+
+_Note: We've still focused on R's interactive capabilities, so be sure to check out `vignette("metadata")`_
+
+## Format Strings
+
+Regardless of what layer type you use within **Tplyr**, control of formatting is handled by using format strings. Consider the following example.
+
+```{r example_1}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE) %>% 
+      set_format_strings(
+        f_str("xx (xx.x%)", n, pct)
+      )
+  ) %>% 
+  add_layer(
+    group_desc(AGE) %>% 
+      set_format_strings(
+        "Mean (SD)" = f_str("xx.x (xx.xx)", mean, sd)
+      )
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+For each layer type, when you want to configure string formatting you use the function `set_format_strings()`. Inside `set_format_strings()` you provide `f_str()` objects. Within count layers, for basic tables you can just provide a singe `f_str()` object to control general formatting. In descriptive statistic layers, you provide named parameters, and the names will become the values of `row_label1` for the statistics provided within your `f_str()` object. Regardless of the layer type, the `f_str()` object is what controls the numbers reported in your resulting table. 
+
+The table below outlines the variables available within each layer.
+
+| **Layer Type**                    | **Variables**  | **Description**                                                                                                        |
+|-----------------------------------|----------------|------------------------------------------------------------------------------------------------------------------------|
+| **Count Layers**                  | n              | Non-distinct counts                                                                                                    |
+|                                   | pct            | Ratio of non-distinct counts to non-distinct total                                                                     |
+|                                   | total          | Non-distinct total                                                                                                     |
+|                                   | distinct_n     | Distinct counts (must use `set_distinct_by()`)                                                                         |
+|                                   | distinct_pct   | Ratio of distinct counts to distinct total. If population data are set, distinct_total pulled from population data.    |
+|                                   | distinct_total | Distinct total (must use `set_distinct_by()`). If population data are set, distinct_total pulled from population data. |
+| **Shift layers**                  | n              | Ratio of non-distinct counts to non-distinct total                                                                     |
+|                                   | pct            | Ratio of non-distinct counts to non-distinct total                                                                     |
+|                                   | total          | Non-distinct total                                                                                                     |
+| **Descriptive Statistics Layers** | n              | N                                                                                                                      |
+|                                   | mean           | Mean                                                                                                                   |
+|                                   | sd             | Standard Deviation                                                                                                     |
+|                                   | median         | Median                                                                                                                 |
+|                                   | var            | Variance                                                                                                               |
+|                                   | min            | Minimum                                                                                                                |
+|                                   | max            | Maximum                                                                                                                |
+|                                   | iqr            | Interquartile Range                                                                                                    |
+|                                   | q1             | Q1                                                                                                                     |
+|                                   | q3             | Q3                                                                                                                     |
+|                                   | missing        | Missing (specifically NA counts)                                                               
+
+_Note: For the actual equations used in descriptive statistics layers, see `vignettes("desc")`_
+
+
+## General Formatting 
+
+Looking back at the **Tplyr** table above, let's look at the count layer's `f_str()` call.
+
+```{r example_2}
+f_str("xx (xx.x%)", n, pct)
+```
+
+You can see from the print method of the `f_str()` object that we capture the "format string", here `xx (xx.x%)`, and metadata surrounding it. This string details exactly where numbers should be placed within the output result and what that result should look like. This is done by breaking the string down into "format groups", which are the separate numeric fields and their surrounding characters within the format string.
+
+This format string, `xx (xx.x%)`, has two different format groups. The first field is `xx`, which attaches to the variable `n`. The second is `(xx.x%)`, which attaches to the variable `pct`. When the result is formatted, the first format group, `xx`, will be output with a total width of 2 characters, and space for 2 integers. The second format group will be output with a total width of 7 characters, with space for 2 integers and 1 decimal place. For the final result, these two fields are concatenated together, and the total width of the string will consistently be 10 characters. Note though that formatting will not truncate integers, and instead the total width of the string will be expanded, skewing alignment. Decimal points are always rounded off to the specified precision. 
+
+## Controlling Formatting
+
+Note in the format string, the result numbers to be formatted fill the spaces of the x's. Other characters in the string are preserved as is. **Tplyr's** format strings have a few different valid characters to specifically control the numeric fields.
+
+| **Character** | **Description**                                    |
+|:-------------:|----------------------------------------------------|
+|     **x**     | One character, preserve width                      |
+|     **X**     | One character, hug character to the left           |
+|     **a**     | Auto precision, preserve width                     |
+|     **A**     | Auto precision, hug character to the left          |
+|    **a+n**    | Auto precision + n, preserve width                 |
+|    **A+n**    | Auto precision + n, preserve character to the left |
+
+
+### Lowercase 'x'
+
+As detailed in the first example, when using a lower case 'x', the exact width of space allotted by the x's will be preserved. Note the `var1_Placebo` row below.
+
+```{r example_3}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE) %>% 
+      set_format_strings(
+        f_str("xx (xx.x%)", n, pct)
+      )
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+Both the integer width for the `n` counts and the space to the right of the opening parenthesis of the `pct` field are preserved. This guarentees that (when using a monospace font) the non-numeric characters within the format strings will remain in the same place. Given that integers don't truncate, if these spaces are undesired, integers will automatically increase width. In the example below, if the `n` or `pct` result exceeds 10, the width of the output string automatically expands. You can trigger this behaivor by using a single 'x' in the integer side of a format group.
+
+```{r example_4}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE) %>% 
+      set_format_strings(
+        f_str("x (x.x%)", n, pct)
+      )
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+### Uppercase 'X'
+
+The downside of the last example is that alignment between format groups is completely lost. The parenthesis in the `pct` field is now bound to the integer of the percent value, but the entire string is shifted to the right. **Tplyr** offers customization over this by using a concept called "parenthesis hugging". This is triggered by using an uppercase 'X' in the integer side of a format group. Consider the following example:
+
+```{r example_5}
+
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE) %>% 
+      set_format_strings(
+        f_str("xx (XX.x%)", n, pct)
+      )
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+Now the total string width has been preserved properly. The change here is that instead of pulling the right side of the format group in, essentially aligning left on the format group, the parenthesis has been moved to the right towards the integer side of the `pct` field, "hugging" the numeric results of the percent. 
+
+
+There are a two rules when using 'parenthesis hugging':
+
+- Capital letters should only be used on the integer side of a number
+- A character must precede the capital letter, otherwise there's no character to 'hug'
+
+## Auto-precision
+
+Lastly, **Tplyr** also has the capability to automatically determine some widths necessary to format strings. This is done by using the character 'a' instead of 'x' in the format string. 
+
+Consider the following example.
+
+```{r example_6}
+tplyr_table(adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>% 
+  add_layer(
+    group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a (a.a+1)', mean, sd)
+      ) %>% 
+      set_precision_by(PARAMCD)
+  ) %>% 
+  build() %>% 
+  select(1:5)
+```
+
+Note that the decimal precision varies between different lab test results. This feature is beneficial when decimal precision rules must be based on the precision of the data as collected. For more information of auto-precision for descriptive statistics layers, see `vignette("desc_layer_formatting")`. 
+
+For count layers, auto-precision can also be used surrounding the `n` counts. For example, the default format string for counts layers in **Tplyr** is set as `a (xxx.x%)`. This will auto-format the `n` result based on the maximum summarized value of `n` within the data. For example:
+
+```{r example_7}
+tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE) %>% 
+      set_format_strings(f_str("a (xxx.x%)", n, pct))
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+Given that the maximum count was >=10 and <100, the integer width for `n` was assigned as 2. Note that auto-precision for percents will not auto-format based on available percentages. The count filled by `a` will be based on the `n` result.
+
+For both layer types, a capital `A` follows the same logic as `X`, but is triggered using auto-precision. Take this example of an adverse event table:
+
+```{r example_8} 
+tplyr_table(adae, TRTA) %>% 
+  set_pop_data(adsl) %>% 
+  set_pop_treat_var(TRT01A) %>% 
+  add_layer(
+    group_count(AEDECOD) %>% 
+      set_format_strings(f_str("a (XX.x%) [A]", distinct_n, distinct_pct, n)) %>% 
+      set_distinct_by(USUBJID)
+  ) %>% 
+  build() %>% 
+  select(1:3)
+```
+
+To go over each format group:
+
+- The distinct n count has been spaced based on the width of the maximum `n` value
+- The percent field will have a maximum width of 2 characters, but the opening parenthesis will hug the integer of the percent value to the right
+- The event counts within brackets (`[]`) have been auto formatted based on the maximum `n` value, and the opening bracket will hug the `n` count to the right. 
+
+This vignette has focused on the specifics of formatting using `f_str()` objects. For more details on layer specifics, check out the individual layer vignettes. 

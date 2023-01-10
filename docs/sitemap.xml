@@ -49,6 +49,12 @@
     <loc>https://atorus-research.github.io/Tplyr/articles/desc.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/articles/desc_layer_formatting.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/articles/general_string_formatting.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/articles/getting-started.html</loc>
   </url>
   <url>
@@ -65,6 +71,9 @@
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/articles/options.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/articles/post_processing.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/articles/readme.html</loc>
@@ -115,6 +124,9 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/append_metadata.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/apply_conditional_format.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/apply_formats.html</loc>
   </url>
   <url>
@@ -145,6 +157,9 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/get_stats_data.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/get_tplyr_regex.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/header_n.html</loc>
   </url>
   <url>
@@ -163,7 +178,13 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/layer_templates.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/meta_extraction.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/metadata_additions.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/new_tplyr_meta.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/ordering.html</loc>
@@ -242,6 +263,9 @@
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/set_total_row_label.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/str_extractors.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/str_indent_wrap.html</loc>

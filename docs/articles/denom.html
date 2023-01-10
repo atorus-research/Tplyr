@@ -14,10 +14,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Totals, Missings, and Denominators">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Totals, Missings, and Denominators">
 <meta property="og:description" content="Tplyr">
 <meta property="og:image" content="https://atorus-research.github.io/Tplyr/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
@@ -43,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,25 +62,32 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Table Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Table Basics</h6>
     <a class="dropdown-item" href="../articles/table.html">Tplyr Table Properties</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Layer Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Layer Basics</h6>
     <a class="dropdown-item" href="../articles/desc.html">Descriptive Statistic Layers</a>
     <a class="dropdown-item" href="../articles/count.html">Count Layers</a>
     <a class="dropdown-item" href="../articles/shift.html">Shift Layers</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Helpers</h6>
-    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
+    <a class="dropdown-item" href="../articles/general_string_formatting.html">General String Formatting</a>
+    <a class="dropdown-item" href="../articles/desc_layer_formatting.html">Advanced Descriptive Statistic Layer Formatting</a>
     <a class="dropdown-item" href="../articles/sort.html">Sorting a Tplyr Table</a>
-    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
-    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
-    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
     <a class="dropdown-item" href="../articles/denom.html">Totals, Missings, and Denominators</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Metadata</h6>
     <a class="dropdown-item" href="../articles/metadata.html">Tplyr Metadata</a>
     <a class="dropdown-item" href="../articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Advanced</h6>
+    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
+    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Post-processing</h6>
+    <a class="dropdown-item" href="../articles/post_processing.html">Post-Processing</a>
+    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
   </div>
 </li>
 <li class="nav-item">
@@ -1670,33 +1678,33 @@ specified.</p>
 <tbody>
 <tr class="odd">
 <td align="left">MILD</td>
-<td align="left">22 (61.11%)</td>
-<td align="left">69 (75.00%)</td>
-<td align="left">43 (43.88%)</td>
+<td align="left">22 (59.46%)</td>
+<td align="left">73 (76.84%)</td>
+<td align="left">42 (44.68%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">MODERATE</td>
-<td align="left">14 (38.89%)</td>
-<td align="left">22 (23.91%)</td>
-<td align="left">50 (51.02%)</td>
+<td align="left">15 (40.54%)</td>
+<td align="left">21 (22.11%)</td>
+<td align="left">47 (50.00%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">SEVERE</td>
 <td align="left">0 ( 0.00%)</td>
-<td align="left">1 ( 1.09%)</td>
-<td align="left">5 ( 5.10%)</td>
+<td align="left">1 ( 1.05%)</td>
+<td align="left">5 ( 5.32%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Missing</td>
-<td align="left">11</td>
-<td align="left">19</td>
-<td align="left">20</td>
+<td align="left">10</td>
+<td align="left">16</td>
+<td align="left">24</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
@@ -1804,8 +1812,8 @@ we’re trying to show the flexibility built into
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">8 ( 15.1%)</td>
-<td align="left">3 ( 7.5%)</td>
+<td align="left">7 ( 13.2%)</td>
+<td align="left">5 ( 12.5%)</td>
 <td align="left">4 ( 8.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1814,7 +1822,7 @@ we’re trying to show the flexibility built into
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">18 ( 34.0%)</td>
+<td align="left">17 ( 32.1%)</td>
 <td align="left">6 ( 15.0%)</td>
 <td align="left">15 ( 30.0%)</td>
 <td align="right">1</td>
@@ -1825,8 +1833,8 @@ we’re trying to show the flexibility built into
 <td align="left">F</td>
 <td align="left">65-80</td>
 <td align="left">17 ( 32.1%)</td>
-<td align="left">22 ( 55.0%)</td>
-<td align="left">22 ( 44.0%)</td>
+<td align="left">23 ( 57.5%)</td>
+<td align="left">23 ( 46.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1834,9 +1842,9 @@ we’re trying to show the flexibility built into
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">10 (18.9%)</td>
-<td align="left">9 (22.5%)</td>
-<td align="left">9 (18.0%)</td>
+<td align="left">12 (22.6%)</td>
+<td align="left">6 (15.0%)</td>
+<td align="left">8 (16.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -1854,8 +1862,8 @@ we’re trying to show the flexibility built into
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">5 ( 15.2%)</td>
-<td align="left">4 ( 9.1%)</td>
+<td align="left">3 ( 9.1%)</td>
+<td align="left">5 ( 11.4%)</td>
 <td align="left">3 ( 8.8%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1866,7 +1874,7 @@ we’re trying to show the flexibility built into
 <td align="left">&gt;80</td>
 <td align="left">5 ( 15.2%)</td>
 <td align="left">8 ( 18.2%)</td>
-<td align="left">10 ( 29.4%)</td>
+<td align="left">12 ( 35.3%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -1874,9 +1882,9 @@ we’re trying to show the flexibility built into
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">14 ( 42.4%)</td>
-<td align="left">26 ( 59.1%)</td>
-<td align="left">14 ( 41.2%)</td>
+<td align="left">17 ( 51.5%)</td>
+<td align="left">18 ( 40.9%)</td>
+<td align="left">16 ( 47.1%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -1884,9 +1892,9 @@ we’re trying to show the flexibility built into
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">9 (27.3%)</td>
-<td align="left">6 (13.6%)</td>
-<td align="left">7 (20.6%)</td>
+<td align="left">8 (24.2%)</td>
+<td align="left">13 (29.5%)</td>
+<td align="left">3 ( 8.8%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -1937,9 +1945,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">All Age Groups</td>
-<td align="left">43</td>
-<td align="left">31</td>
 <td align="left">41</td>
+<td align="left">34</td>
+<td align="left">42</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">-Inf</td>
@@ -1947,9 +1955,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">8 ( 18.6%)</td>
-<td align="left">3 ( 9.7%)</td>
-<td align="left">4 ( 9.8%)</td>
+<td align="left">7 ( 17.1%)</td>
+<td align="left">5 ( 14.7%)</td>
+<td align="left">4 ( 9.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1957,9 +1965,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">18 ( 41.9%)</td>
-<td align="left">6 ( 19.4%)</td>
-<td align="left">15 ( 36.6%)</td>
+<td align="left">17 ( 41.5%)</td>
+<td align="left">6 ( 17.6%)</td>
+<td align="left">15 ( 35.7%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1967,9 +1975,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">17 ( 39.5%)</td>
-<td align="left">22 ( 71.0%)</td>
-<td align="left">22 ( 53.7%)</td>
+<td align="left">17 ( 41.5%)</td>
+<td align="left">23 ( 67.6%)</td>
+<td align="left">23 ( 54.8%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1977,9 +1985,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">10</td>
-<td align="left">9</td>
-<td align="left">9</td>
+<td align="left">12</td>
+<td align="left">6</td>
+<td align="left">8</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -1987,9 +1995,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">All Age Groups</td>
-<td align="left">24</td>
-<td align="left">38</td>
-<td align="left">27</td>
+<td align="left">25</td>
+<td align="left">31</td>
+<td align="left">31</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">-Inf</td>
@@ -1997,9 +2005,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">5 ( 20.8%)</td>
-<td align="left">4 ( 10.5%)</td>
-<td align="left">3 ( 11.1%)</td>
+<td align="left">3 ( 12.0%)</td>
+<td align="left">5 ( 16.1%)</td>
+<td align="left">3 ( 9.7%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -2007,9 +2015,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">5 ( 20.8%)</td>
-<td align="left">8 ( 21.1%)</td>
-<td align="left">10 ( 37.0%)</td>
+<td align="left">5 ( 20.0%)</td>
+<td align="left">8 ( 25.8%)</td>
+<td align="left">12 ( 38.7%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -2017,9 +2025,9 @@ you’ll see this:</p>
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">14 ( 58.3%)</td>
-<td align="left">26 ( 68.4%)</td>
-<td align="left">14 ( 51.9%)</td>
+<td align="left">17 ( 68.0%)</td>
+<td align="left">18 ( 58.1%)</td>
+<td align="left">16 ( 51.6%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -2027,9 +2035,9 @@ you’ll see this:</p>
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">9</td>
-<td align="left">6</td>
-<td align="left">7</td>
+<td align="left">8</td>
+<td align="left">13</td>
+<td align="left">3</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
@@ -2042,9 +2050,10 @@ have been excluded. Now, the total row intuitively matches the
 denominators used within each group, and we can see how many missing
 records were excluded.</p>
 <p><em>You may have stumbled upon this portion of the vignette while
-searching for how to create a total column.<strong>Tplyr</strong> allows
-you to do this as well with the function <code><a href="../reference/treat_grps.html">add_total_group()</a></code>
-and read more in <code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
+searching for how to create a total column. <strong>Tplyr</strong>
+allows you to do this as well with the function
+<code><a href="../reference/treat_grps.html">add_total_group()</a></code> and read more in
+<code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
 <p>And that’s it for denominators! Happy counting!</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -2060,7 +2069,7 @@ and read more in <code><a href="../articles/table.html">vignette("table")</a></c
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>
