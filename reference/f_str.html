@@ -4,7 +4,7 @@ set_format_strings. The f_str object carries information that powers a
 significant amount of layer processing. The format_string parameter is
 capable of controlling the display of a data point and decimal precision. The
 variables provided in ... control which data points are used to populate
-the string formatted output."><title>Create a f_str object — f_str • Tplyr</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create a f_str object — f_str"><meta property="og:description" content="f_str objects are intended to be used within the function
+the string formatted output."><title>Create a f_str object — f_str • Tplyr</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Create a f_str object — f_str"><meta property="og:description" content="f_str objects are intended to be used within the function
 set_format_strings. The f_str object carries information that powers a
 significant amount of layer processing. The format_string parameter is
 capable of controlling the display of a data point and decimal precision. The
@@ -26,7 +26,7 @@ the string formatted output."><meta property="og:image" content="https://atorus-
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,25 +43,32 @@ the string formatted output."><meta property="og:image" content="https://atorus-
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Table Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Table Basics</h6>
     <a class="dropdown-item" href="../articles/table.html">Tplyr Table Properties</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Layer Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Layer Basics</h6>
     <a class="dropdown-item" href="../articles/desc.html">Descriptive Statistic Layers</a>
     <a class="dropdown-item" href="../articles/count.html">Count Layers</a>
     <a class="dropdown-item" href="../articles/shift.html">Shift Layers</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Helpers</h6>
-    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
+    <a class="dropdown-item" href="../articles/general_string_formatting.html">General String Formatting</a>
+    <a class="dropdown-item" href="../articles/desc_layer_formatting.html">Advanced Descriptive Statistic Layer Formatting</a>
     <a class="dropdown-item" href="../articles/sort.html">Sorting a Tplyr Table</a>
-    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
-    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
-    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
     <a class="dropdown-item" href="../articles/denom.html">Totals, Missings, and Denominators</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Metadata</h6>
     <a class="dropdown-item" href="../articles/metadata.html">Tplyr Metadata</a>
     <a class="dropdown-item" href="../articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Advanced</h6>
+    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
+    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Post-processing</h6>
+    <a class="dropdown-item" href="../articles/post_processing.html">Post-Processing</a>
+    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
   </div>
 </li>
 <li class="nav-item">
@@ -160,17 +167,31 @@ as well, making format strings such as 'xx.a+1'.</p>
 <p>If you want two numbers on the same line, you provide two sets of x's. For
 example, if you're presenting a value like "mean (sd)" - you could provide
 the string 'xx.xx (xx.xxx)', or perhaps 'a.a+1 (a.a+2). Note that you're
-able to provide  different integer lengths and different decimal precision
+able to provide different integer lengths and different decimal precision
 for the two values. Each format string is independent and relates only to
 the format specified.</p>
-<p>The other parameters of the <code>f_str</code> call specify what values should fill
+<p>As described above, when using 'x' or 'a', any other character within the
+format string will stay stationary. So for example, if your format string
+is 'xx (xxx.x)', your number may format as '12 ( 34.5)'. So the left side
+parenthesis stays fixed. In some displays, you may want the parenthesis to
+'hug' your number. Following this example, when allotting 3 spaces for the
+integer within parentheses, the parentehsis should shift to the right,
+making the numbers appear '12  (34.5)'. Using <code>f_str()</code> you can achieve
+this by using a capital 'X' or 'A'. For this example, the format string
+would be 'xx (XXX.x)'.</p>
+<p>There are a two rules when using 'parenthesis hugging':</p><ul><li><p>Capital letters should only be used on the integer side of a number</p></li>
+<li><p>A character must precede the capital letter, otherwise there's no
+character to 'hug'</p></li>
+</ul><p>The other parameters of the <code>f_str</code> call specify what values should fill
 the x's. <code>f_str</code> objects are used slightly differently between different
 layers. When declaring a format string within a count layer, <code>f_str()</code>
 expects to see the values <code>n</code> or <code>distinct_n</code> for event or distinct counts,
 <code>pct</code> or <code>distinct_pct</code> for event or distinct percentages, or <code>total</code> or
-<code>distinct_total</code> for denominator calculations. But in descriptive statistic
-layers, <code>f_str</code> parameters refer to the names of the summaries being
-performed, either by built in defaults, or custom summaries declared using
+<code>distinct_total</code> for denominator calculations. Note that in an <code>f_str()</code>
+for a count layer 'A' or 'a' are based on n counts, and therefore don't
+make sense to use in percentages. But in descriptive statistic layers,
+<code>f_str</code> parameters refer to the names of the summaries being performed,
+either by built in defaults, or custom summaries declared using
 <code><a href="set_custom_summaries.html">set_custom_summaries()</a></code>. See <code><a href="set_format_strings.html">set_format_strings()</a></code> for some more notes
 about layers specific implementation.</p>
 <p>An <code>f_str()</code> may also be used outside of a Tplyr table. The function
@@ -263,6 +284,30 @@ layer type.</p><ul><li><p>Count layers</p><ul><li><p><code>n</code></p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	decimal length: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total Format Size: 16</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">f_str</span><span class="op">(</span><span class="st">"xx (XXX.x%)"</span>, <span class="va">n</span>, <span class="va">pct</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *** Format String ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> xx (XXX.x%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *** vars, extracted formats, and settings ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n formated as: xx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	integer length: 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	decimal length: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pct formated as: (XXX.x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	integer length: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	decimal length: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total Format Size: 11</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">f_str</span><span class="op">(</span><span class="st">"a.a+1 (A.a+2)"</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *** Format String ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a.a+1 (A.a+2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *** vars, extracted formats, and settings ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean formated as: a.a+1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	integer length: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	decimal length: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sd formated as: (A.a+2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	integer length: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	decimal length: 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total Format Size: 13</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -270,11 +315,11 @@ layer type.</p><ul><li><p>Count layers</p><ul><li><p><code>n</code></p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+  <p></p><p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>

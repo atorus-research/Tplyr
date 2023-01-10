@@ -14,10 +14,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Totals, Missings, and Denominators">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Totals, Missings, and Denominators">
 <meta property="og:description" content="Tplyr">
 <meta property="og:image" content="https://atorus-research.github.io/Tplyr/reference/figures/Atorus_Stickers_vF_Tplyr.png">
 <meta property="og:image:alt" content="Tplyr Hex Sticker">
@@ -43,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,25 +62,32 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Table Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Table Basics</h6>
     <a class="dropdown-item" href="../articles/table.html">Tplyr Table Properties</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Layer Vignettes</h6>
+    <h6 class="dropdown-header" data-toc-skip>Layer Basics</h6>
     <a class="dropdown-item" href="../articles/desc.html">Descriptive Statistic Layers</a>
     <a class="dropdown-item" href="../articles/count.html">Count Layers</a>
     <a class="dropdown-item" href="../articles/shift.html">Shift Layers</a>
     <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Helpers</h6>
-    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
+    <a class="dropdown-item" href="../articles/general_string_formatting.html">General String Formatting</a>
+    <a class="dropdown-item" href="../articles/desc_layer_formatting.html">Advanced Descriptive Statistic Layer Formatting</a>
     <a class="dropdown-item" href="../articles/sort.html">Sorting a Tplyr Table</a>
-    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
-    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
-    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
     <a class="dropdown-item" href="../articles/denom.html">Totals, Missings, and Denominators</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Metadata</h6>
     <a class="dropdown-item" href="../articles/metadata.html">Tplyr Metadata</a>
     <a class="dropdown-item" href="../articles/custom-metadata.html">Creating Custom Tplyr Metadata</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Advanced</h6>
+    <a class="dropdown-item" href="../articles/riskdiff.html">Risk Difference</a>
+    <a class="dropdown-item" href="../articles/options.html">Tplyr Options</a>
+    <a class="dropdown-item" href="../articles/layer_templates.html">Layer Templates</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Post-processing</h6>
+    <a class="dropdown-item" href="../articles/post_processing.html">Post-Processing</a>
+    <a class="dropdown-item" href="../articles/styled-table.html">Producing a Styled Table</a>
   </div>
 </li>
 <li class="nav-item">
@@ -106,7 +114,8 @@
 
 
 
-<script src="denom_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Totals, Missings, and Denominators</h1>
             
@@ -117,14 +126,34 @@
 
     
     
-<p>Counting is pretty easy, right? There’s not all that much to it. With a few considerations we can cover most of the scenarios that users will encounter while using Tplyr. Denominators, on the other hand, get <em><em>a lot</em></em> more complicated. Why? Because there are a lot of ways to do it. What values do we exclude from the denominator? What variables establish denominator grouping? Does the denominator use a different filter than the values being counted? If you’ve programmed enough of these tables, you know that it’s all very situational.</p>
-<p>Given the complexity, we’ve spent a lot of time trying to make this easy for you, the user. In doing this it became very clear that denominators needed their own vignette. Additionally, a few other things go hand in hand with denominators.</p>
-<p>Make sure you have a good understand of count and shift layers before you review this content. If you’ve done your due diligence, then - here we go.</p>
+<p>Counting is pretty easy, right? There’s not all that much to it. With
+a few considerations we can cover most of the scenarios that users will
+encounter while using Tplyr. Denominators, on the other hand, get
+<em><em>a lot</em></em> more complicated. Why? Because there are a lot
+of ways to do it. What values do we exclude from the denominator? What
+variables establish denominator grouping? Does the denominator use a
+different filter than the values being counted? If you’ve programmed
+enough of these tables, you know that it’s all very situational.</p>
+<p>Given the complexity, we’ve spent a lot of time trying to make this
+easy for you, the user. In doing this it became very clear that
+denominators needed their own vignette. Additionally, a few other things
+go hand in hand with denominators.</p>
+<p>Make sure you have a good understand of count and shift layers before
+you review this content. If you’ve done your due diligence, then - here
+we go.</p>
 <div class="section level2">
 <h2 id="population-data-in-the-denominator">Population Data in the Denominator<a class="anchor" aria-label="anchor" href="#population-data-in-the-denominator"></a>
 </h2>
-<p>What do you do when your target dataset doesn’t <em>have</em> the information necessary to create your denominator? For example - when you create an adverse event table, the adverse event dataset likely only contains records for subjects who experienced an adverse event. But subjects who did <em>not</em> have an adverse event are still part of the study population and must be considered in the denominator.</p>
-<p>For this reason,<strong>Tplyr</strong> allows lets you set a separate population dataset - but there are a couple things you need to do to trigger <strong>Tplyr</strong> to use the population data as your denominator.</p>
+<p>What do you do when your target dataset doesn’t <em>have</em> the
+information necessary to create your denominator? For example - when you
+create an adverse event table, the adverse event dataset likely only
+contains records for subjects who experienced an adverse event. But
+subjects who did <em>not</em> have an adverse event are still part of
+the study population and must be considered in the denominator.</p>
+<p>For this reason,<strong>Tplyr</strong> allows lets you set a separate
+population dataset - but there are a couple things you need to do to
+trigger <strong>Tplyr</strong> to use the population data as your
+denominator.</p>
 <p>Consider these two examples.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -286,23 +315,41 @@
 </table>
 <p>There are three things done above that use the population data:</p>
 <ul>
-<li>Population data must be set in the first place using <code><a href="../reference/where.html">set_pop_where()</a></code> and the population treatment variable must be specified using <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code>
+<li>Population data must be set in the first place using
+<code><a href="../reference/where.html">set_pop_where()</a></code> and the population treatment variable must
+be specified using <code><a href="../reference/pop_treat_var.html">set_pop_treat_var()</a></code>
 </li>
 <li>
-<code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> must be used. Why? Because when you need to use a separate population dataset, the target dataset is likely more than one record per subject. So <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> in this scenario would be used to get distinct counts per subject. In this example, we’re looking at the number of unique subjects who experienced a specific adverse event.</li>
-<li>The population denominator is then used when calculating <code>distinct_pct</code>. It is also worth noting that the default count layer formats use distinct values.</li>
+<code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> must be used. Why? Because when you
+need to use a separate population dataset, the target dataset is likely
+more than one record per subject. So <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> in
+this scenario would be used to get distinct counts per subject. In this
+example, we’re looking at the number of unique subjects who experienced
+a specific adverse event.</li>
+<li>The population denominator is then used when calculating
+<code>distinct_pct</code>. It is also worth noting that the default
+count layer formats use distinct values.</li>
 </ul>
-<p>Note that if you need more control over the values used in the denominator from the population data, you can set a separate filter on the population data used <code><a href="../reference/where.html">set_pop_where()</a></code>.</p>
-<p>Fortunately, denominators are much simpler when they’re kept within a single dataset. Just kidding! Let’s get weird.</p>
+<p>Note that if you need more control over the values used in the
+denominator from the population data, you can set a separate filter on
+the population data used <code><a href="../reference/where.html">set_pop_where()</a></code>.</p>
+<p>Fortunately, denominators are much simpler when they’re kept within a
+single dataset. Just kidding! Let’s get weird.</p>
 </div>
 <div class="section level2">
 <h2 id="denominator-grouping">Denominator Grouping<a class="anchor" aria-label="anchor" href="#denominator-grouping"></a>
 </h2>
-<p>When you’re looking within a single dataset, there are a couple factors that you need to consider for a denominator. The first is which grouping variables create those denominators. Let’s look at this from two perspectives - count layers and shift layers.</p>
+<p>When you’re looking within a single dataset, there are a couple
+factors that you need to consider for a denominator. The first is which
+grouping variables create those denominators. Let’s look at this from
+two perspectives - count layers and shift layers.</p>
 <div class="section level3">
 <h3 id="count-layers">Count layers<a class="anchor" aria-label="anchor" href="#count-layers"></a>
 </h3>
-<p>Most of the complexity of denominators comes from nuanced situations. A solid 80% of the time, defaults will work. For example, in a frequency table, you will typically want data within a column to sum to 100%. For example:</p>
+<p>Most of the complexity of denominators comes from nuanced situations.
+A solid 80% of the time, defaults will work. For example, in a frequency
+table, you will typically want data within a column to sum to 100%. For
+example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>DCSREAS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">DCSREAS</span> <span class="op">==</span> <span class="st">''</span>, <span class="st">'Completed'</span>, <span class="va">DCSREAS</span><span class="op">)</span><span class="op">)</span></span>
@@ -413,7 +460,10 @@
 </tr>
 </tbody>
 </table>
-<p>By default, when not using the population data strategy shown above, a count layer assumes that you want columns to sum to 100%. But that’s not always the case. Perhaps you’d like to break this summary down by sex presented row-wise.</p>
+<p>By default, when not using the population data strategy shown above,
+a count layer assumes that you want columns to sum to 100%. But that’s
+not always the case. Perhaps you’d like to break this summary down by
+sex presented row-wise.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -645,7 +695,11 @@
 </tr>
 </tbody>
 </table>
-<p>Ok - so, now this is a little bit off. By breaking sex down as a row group, the denominators are still the total treatment group. Does that make sense? 34 female Placebo group subjects completed, but that calculated 39.5% also includes male subjects in the denominator. Let’s fix this using <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>.</p>
+<p>Ok - so, now this is a little bit off. By breaking sex down as a row
+group, the denominators are still the total treatment group. Does that
+make sense? 34 female Placebo group subjects completed, but that
+calculated 39.5% also includes male subjects in the denominator. Let’s
+fix this using <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -878,18 +932,30 @@
 </tr>
 </tbody>
 </table>
-<p>Ok - much better. <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> now changed the denominator grouping for us, so the denominator used for those 34 female Placebo subjects are now the total number of female Placebo subjects. Makes sense, right? <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> allows you to specify:</p>
+<p>Ok - much better. <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> now changed the
+denominator grouping for us, so the denominator used for those 34 female
+Placebo subjects are now the total number of female Placebo subjects.
+Makes sense, right? <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> allows you to
+specify:</p>
 <ul>
 <li>The treatment variable</li>
 <li>any <code>cols</code> variables specified at the table level</li>
 <li>any <code>by</code> variables specified at the layer level</li>
 </ul>
-<p>Depending on your presentation, what you require may change - but the flexibility is there to choose what you need.</p>
+<p>Depending on your presentation, what you require may change - but the
+flexibility is there to choose what you need.</p>
 </div>
 <div class="section level3">
 <h3 id="shift-layers">Shift layers<a class="anchor" aria-label="anchor" href="#shift-layers"></a>
 </h3>
-<p>A major part of the shift API is the control of the denominators used in the calculation of the percentages. In shift tables, most percentages are relative to the “box” that is formed from the “from” and “to” groups of the shift for each treatment group. Just like the count layers, the <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the treatment variable, <code>cols</code> argument, <code>by</code> variables. The difference with shift layers is that now you can also include your target variables used for the row or column.</p>
+<p>A major part of the shift API is the control of the denominators used
+in the calculation of the percentages. In shift tables, most percentages
+are relative to the “box” that is formed from the “from” and “to” groups
+of the shift for each treatment group. Just like the count layers, the
+<code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> functions any variable name from the
+treatment variable, <code>cols</code> argument, <code>by</code>
+variables. The difference with shift layers is that now you can also
+include your target variables used for the row or column.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -1024,8 +1090,16 @@
 </tr>
 </tbody>
 </table>
-<p>In the example above, the denominators were based on the by and treatment variables, <code>TRTA</code>, <code>PARAM</code> and <code>VISIT</code>. This creates a 3 X 3 box, where the denominator is the total of all record within the <strong>FROM</strong> and <strong>TO</strong> shift variables, within each parameter, visit, and treatment. This is the default, and this is how <strong>Tplyr</strong> will create the denominators if <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> isn’t specified.</p>
-<p>In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%.</p>
+<p>In the example above, the denominators were based on the by and
+treatment variables, <code>TRTA</code>, <code>PARAM</code> and
+<code>VISIT</code>. This creates a 3 X 3 box, where the denominator is
+the total of all record within the <strong>FROM</strong> and
+<strong>TO</strong> shift variables, within each parameter, visit, and
+treatment. This is the default, and this is how <strong>Tplyr</strong>
+will create the denominators if <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code> isn’t
+specified.</p>
+<p>In the next example, the percentage denominators are calculated
+row-wise, each row percentage sums to 100%.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where<span class="op">=</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -1161,7 +1235,11 @@
 </tr>
 </tbody>
 </table>
-<p>While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, <code>TRTA</code> and <code>ANRIND</code> the layer will use those denominators when determining the percentages.</p>
+<p>While not practical, in this last example the denominators are
+changed to be based on the entire column instead of the 3 x 3 box. By
+passing the column variables, <code>TRTA</code> and <code>ANRIND</code>
+the layer will use those denominators when determining the
+percentages.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adlb</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -1297,17 +1375,46 @@
 </tr>
 </tbody>
 </table>
-<p>Our hope is that this gives you the flexibility you need to structure your denominator however required.</p>
+<p>Our hope is that this gives you the flexibility you need to structure
+your denominator however required.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="controlling-the-denominator-filter">Controlling the Denominator Filter<a class="anchor" aria-label="anchor" href="#controlling-the-denominator-filter"></a>
 </h2>
-<p>There are some circumstances that you’ll encounter where the filter used for a denominator needs to be different than the filter used to count. Disposition tables are an example of this, and we’ll use that example to paint this picture.</p>
-<p><strong>Tplyr</strong>offers you the ability to specifically control the filter used within the denominator. This is provided through the function <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is the layer level <code>where</code> parameter, if one was supplied. <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> allows you to replace this layer level filter with a custom filter of your choosing. This is done on top of any filtering specified in the <code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> where parameter - which means that the <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> filter is applied <em>in addition to</em> any table level filtering.</p>
-<p>Yeah we know - there are a lot of different places that filtering can happen…</p>
-<p>So let’s take the example shown below. The first layer has no layer level filtering applied, so the table level <code>where</code> is the only filter applied. The second layer has a layer level filter applied, so the denominators will be based on that layer level filter. Notice how in this case, the percentages in the second layer add up to 100%. This is because the denominator only includes values used in that layer.</p>
-<p>The third layer has a layer level filter applied, but additionally uses <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> in this example is actually <em>removing</em> the layer level filter for the denominators. This is because in R, when you filter using <code>TRUE</code>, the filter returns all records. So by using <code>TRUE</code> in <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>, the layer level filter is effectively removed. This causes the denominator to include all values available from the table and not just those selected for that layer - so for this layer, the percentages will <em>not add up to 100%</em>. This is important - this allows the percentages from Layer 3 to sum to the total percentage of “DISCONTINUED” from Layer 1.</p>
+<p>There are some circumstances that you’ll encounter where the filter
+used for a denominator needs to be different than the filter used to
+count. Disposition tables are an example of this, and we’ll use that
+example to paint this picture.</p>
+<p><strong>Tplyr</strong>offers you the ability to specifically control
+the filter used within the denominator. This is provided through the
+function <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The default for
+<code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> is the layer level <code>where</code>
+parameter, if one was supplied. <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> allows
+you to replace this layer level filter with a custom filter of your
+choosing. This is done on top of any filtering specified in the
+<code><a href="../reference/tplyr_table.html">tplyr_table()</a></code> where parameter - which means that the
+<code><a href="../reference/set_denom_where.html">set_denom_where()</a></code> filter is applied <em>in addition to</em>
+any table level filtering.</p>
+<p>Yeah we know - there are a lot of different places that filtering can
+happen…</p>
+<p>So let’s take the example shown below. The first layer has no layer
+level filtering applied, so the table level <code>where</code> is the
+only filter applied. The second layer has a layer level filter applied,
+so the denominators will be based on that layer level filter. Notice how
+in this case, the percentages in the second layer add up to 100%. This
+is because the denominator only includes values used in that layer.</p>
+<p>The third layer has a layer level filter applied, but additionally
+uses <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>. The <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>
+in this example is actually <em>removing</em> the layer level filter for
+the denominators. This is because in R, when you filter using
+<code>TRUE</code>, the filter returns all records. So by using
+<code>TRUE</code> in <code><a href="../reference/set_denom_where.html">set_denom_where()</a></code>, the layer level
+filter is effectively removed. This causes the denominator to include
+all values available from the table and not just those selected for that
+layer - so for this layer, the percentages will <em>not add up to
+100%</em>. This is important - this allows the percentages from Layer 3
+to sum to the total percentage of “DISCONTINUED” from Layer 1.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl2</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>DISCONTEXT <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">DISCONFL</span> <span class="op">==</span> <span class="st">'Y'</span>, <span class="st">'DISCONTINUED'</span>, <span class="st">'COMPLETED'</span><span class="op">)</span><span class="op">)</span></span>
@@ -1512,9 +1619,30 @@
 <div class="section level2">
 <h2 id="missing-counts">Missing Counts<a class="anchor" aria-label="anchor" href="#missing-counts"></a>
 </h2>
-<p>Missing counts are a tricky area for frequency tables, and they play directly in with denominators as well. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator?</p>
-<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new <code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. If not specified, the associated count layer’s format will be used. Using the <code>...</code> parameter, you are able to specify the row label desired for missing values and values that you determine to be considered ‘missing’. For example, you may have NA values in the target variable, and then values like “Not Collected” that you also wish to consider “missing”. <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> allows you to group those together. Actually - you’re able to establish as many different “missing” groups as you want - even though that scenario is fairly unlikely.</p>
-<p>In the example below 50 random values are removed and NA is specified as the missing string. This leads us to another parameter - <code>denom_ignore</code>. By default, if you specify missing values they will still be considered within the denominator, but when you have missing counts, you may wish to exclude them from the totals being summarized. By setting <code>denom_ignore</code> to TRUE, your denominators will ignore any groups of missing values that you’ve specified.</p>
+<p>Missing counts are a tricky area for frequency tables, and they play
+directly in with denominators as well. These values raise a number of
+questions. For example, do you want to format the missing counts the
+same way as the event counts? Do you want to present missing counts with
+percentages? Do missing counts belong in the denominator?</p>
+<p>The <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> function can take a new
+<code><a href="../reference/f_str.html">f_str()</a></code> object to set the display of missing values. If not
+specified, the associated count layer’s format will be used. Using the
+<code>...</code> parameter, you are able to specify the row label
+desired for missing values and values that you determine to be
+considered ‘missing’. For example, you may have NA values in the target
+variable, and then values like “Not Collected” that you also wish to
+consider “missing”. <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> allows you to group
+those together. Actually - you’re able to establish as many different
+“missing” groups as you want - even though that scenario is fairly
+unlikely.</p>
+<p>In the example below 50 random values are removed and NA is specified
+as the missing string. This leads us to another parameter -
+<code>denom_ignore</code>. By default, if you specify missing values
+they will still be considered within the denominator, but when you have
+missing counts, you may wish to exclude them from the totals being
+summarized. By setting <code>denom_ignore</code> to TRUE, your
+denominators will ignore any groups of missing values that you’ve
+specified.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adae2</span> <span class="op">&lt;-</span> <span class="va">adae</span></span>
 <span><span class="va">adae2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">adae2</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"AESEV"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
@@ -1550,52 +1678,90 @@
 <tbody>
 <tr class="odd">
 <td align="left">MILD</td>
-<td align="left">27 (62.79%)</td>
-<td align="left">71 (76.34%)</td>
-<td align="left">43 (47.78%)</td>
+<td align="left">21 (53.85%)</td>
+<td align="left">63 (73.26%)</td>
+<td align="left">45 (44.55%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="left">MODERATE</td>
-<td align="left">16 (37.21%)</td>
-<td align="left">21 (22.58%)</td>
-<td align="left">43 (47.78%)</td>
+<td align="left">18 (46.15%)</td>
+<td align="left">22 (25.58%)</td>
+<td align="left">54 (53.47%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">SEVERE</td>
 <td align="left">0 ( 0.00%)</td>
-<td align="left">1 ( 1.08%)</td>
-<td align="left">4 ( 4.44%)</td>
+<td align="left">1 ( 1.16%)</td>
+<td align="left">2 ( 1.98%)</td>
 <td align="right">1</td>
 <td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Missing</td>
-<td align="left">4</td>
-<td align="left">18</td>
-<td align="left">28</td>
+<td align="left">8</td>
+<td align="left">25</td>
+<td align="left">17</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
 </tr>
 </tbody>
 </table>
-<p>We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you’ll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.</p>
+<p>We did one more other thing worth explaining in the example above -
+gave the missing count its own sort value. If you leave this field null,
+it will simply be the maximum value in the order layer plus 1, to put
+the Missing counts at the bottom during an ascending sort. But tables
+can be sorted a lot of different ways, as you’ll see in the sort
+vignette. So instead of trying to come up with novel ways for you to
+control where the missing row goes - we decided to just let you specify
+your own value.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-a-total-row">Adding a ‘Total’ Row<a class="anchor" aria-label="anchor" href="#adding-a-total-row"></a>
 </h2>
-<p>In addition to missing counts, some summaries require the addition of a ‘Total’ row. <strong>Tplyr</strong> has the helper function <code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. Like most other things within <strong>Tplyr</strong> - particularly in this vignette - this too has a significant bit of nuance to it.</p>
-<p>Much of this functionality is similar to <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. You’re able to specify a different format for the total, but if not specified, the associated count layer’s format will be used. You’re able to set your own sort value to specify where you want the total row to sit.</p>
+<p>In addition to missing counts, some summaries require the addition of
+a ‘Total’ row. <strong>Tplyr</strong> has the helper function
+<code><a href="../reference/add_total_row.html">add_total_row()</a></code> to ease this process for you. Like most
+other things within <strong>Tplyr</strong> - particularly in this
+vignette - this too has a significant bit of nuance to it.</p>
+<p>Much of this functionality is similar to
+<code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. You’re able to specify a different
+format for the total, but if not specified, the associated count layer’s
+format will be used. You’re able to set your own sort value to specify
+where you want the total row to sit.</p>
 <p>More nuance comes in two places:</p>
 <ul>
-<li>By default, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> <em>will count missing values</em>, but you can exclude those values using the <code>count_missings</code> parameter. <strong>Tplyr</strong> will warn you when <code>set_count_missing()</code> has <code>denom_ignore</code> set to <code>TRUE</code>, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> has <code>count_missings</code> set to <code>TRUE</code> and the format contains a percentage. Why? Because if the denominator is ignoring missing values but you’re still counting them in your total, the percentage shown can exceed 100%.</li>
+<li>By default, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> <em>will count missing
+values</em>, but you can exclude those values using the
+<code>count_missings</code> parameter. <strong>Tplyr</strong> will warn
+you when <code>set_count_missing()</code> has <code>denom_ignore</code>
+set to <code>TRUE</code>, <code><a href="../reference/add_total_row.html">add_total_row()</a></code> has
+<code>count_missings</code> set to <code>TRUE</code> and the format
+contains a percentage. Why? Because if the denominator is ignoring
+missing values but you’re still counting them in your total, the
+percentage shown can exceed 100%.</li>
 <li>
-<code><a href="../reference/add_total_row.html">add_total_row()</a></code> will throw a warning when a <code>by</code> variable is used, because it becomes ambiguous what total should be calculated. You can rectify this by using <code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>, which allows the user to control exactly which groups are used to form the denominator. This way the totals presented by <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will align with denominators specified in <code>set_denom_by()</code> and generate total rows that match the grouping of your denominator values.</li>
+<code><a href="../reference/add_total_row.html">add_total_row()</a></code> will throw a warning when a
+<code>by</code> variable is used, because it becomes ambiguous what
+total should be calculated. You can rectify this by using
+<code><a href="../reference/set_denoms_by.html">set_denoms_by()</a></code>, which allows the user to control exactly
+which groups are used to form the denominator. This way the totals
+presented by <code><a href="../reference/add_total_row.html">add_total_row()</a></code> will align with denominators
+specified in <code>set_denom_by()</code> and generate total rows that
+match the grouping of your denominator values.</li>
 </ul>
-<p>In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator that was used. The ‘Missing’ row tells us the number of missing values, but because <code>count_missings</code> is set to <code>TRUE</code>, the missing counts are included in the total row. This probably isn’t how you would choose to display things, but here we’re trying to show the flexibility built into <strong>Tplyr</strong>.</p>
+<p>In the example below, we summarize age groups by sex. The
+denominators are determined by treatment group and sex, and since we are
+not excluding any values from the denominator, the total row ends up
+matching the denominator that was used. The ‘Missing’ row tells us the
+number of missing values, but because <code>count_missings</code> is set
+to <code>TRUE</code>, the missing counts are included in the total row.
+This probably isn’t how you would choose to display things, but here
+we’re trying to show the flexibility built into
+<strong>Tplyr</strong>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">adsl2</span> <span class="op">&lt;-</span> <span class="va">adsl</span></span>
 <span><span class="va">adsl2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">adsl2</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>, <span class="st">"AGEGR1"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
@@ -1656,9 +1822,9 @@
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">20 ( 37.7%)</td>
-<td align="left">5 ( 12.5%)</td>
-<td align="left">14 ( 28.0%)</td>
+<td align="left">18 ( 34.0%)</td>
+<td align="left">6 ( 15.0%)</td>
+<td align="left">15 ( 30.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1667,8 +1833,8 @@
 <td align="left">F</td>
 <td align="left">65-80</td>
 <td align="left">18 ( 34.0%)</td>
-<td align="left">21 ( 52.5%)</td>
-<td align="left">23 ( 46.0%)</td>
+<td align="left">16 ( 40.0%)</td>
+<td align="left">21 ( 42.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1676,9 +1842,9 @@
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">8 (15.1%)</td>
-<td align="left">9 (22.5%)</td>
-<td align="left">9 (18.0%)</td>
+<td align="left">10 (18.9%)</td>
+<td align="left">13 (32.5%)</td>
+<td align="left">10 (20.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -1698,7 +1864,7 @@
 <td align="left">&lt;65</td>
 <td align="left">4 ( 12.1%)</td>
 <td align="left">3 ( 6.8%)</td>
-<td align="left">1 ( 2.9%)</td>
+<td align="left">3 ( 8.8%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -1706,9 +1872,9 @@
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">5 ( 15.2%)</td>
-<td align="left">9 ( 20.5%)</td>
-<td align="left">11 ( 32.4%)</td>
+<td align="left">8 ( 24.2%)</td>
+<td align="left">11 ( 25.0%)</td>
+<td align="left">9 ( 26.5%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -1716,9 +1882,9 @@
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">17 ( 51.5%)</td>
+<td align="left">16 ( 48.5%)</td>
 <td align="left">24 ( 54.5%)</td>
-<td align="left">13 ( 38.2%)</td>
+<td align="left">16 ( 47.1%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -1726,17 +1892,22 @@
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">7 (21.2%)</td>
-<td align="left">8 (18.2%)</td>
-<td align="left">9 (26.5%)</td>
+<td align="left">5 (15.2%)</td>
+<td align="left">6 (13.6%)</td>
+<td align="left">6 (17.6%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
 </tr>
 </tbody>
 </table>
-<p>The default text for the Total row is “Total”, but we provide <code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text used in your display.</p>
-<p>Let’s look at a more practical version of the table above. If you display missings, you probably want to exclude them from the total. Here we do that using <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. So more commonly, you’ll see this:</p>
+<p>The default text for the Total row is “Total”, but we provide
+<code><a href="../reference/set_total_row_label.html">set_total_row_label()</a></code> to allow you to customize the text
+used in your display.</p>
+<p>Let’s look at a more practical version of the table above. If you
+display missings, you probably want to exclude them from the total. Here
+we do that using <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code>. So more commonly,
+you’ll see this:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl2</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -1774,9 +1945,9 @@
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">All Age Groups</td>
-<td align="left">45</td>
-<td align="left">31</td>
-<td align="left">41</td>
+<td align="left">43</td>
+<td align="left">27</td>
+<td align="left">40</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">-Inf</td>
@@ -1784,9 +1955,9 @@
 <tr class="even">
 <td align="left">F</td>
 <td align="left">&lt;65</td>
-<td align="left">7 ( 15.6%)</td>
-<td align="left">5 ( 16.1%)</td>
-<td align="left">4 ( 9.8%)</td>
+<td align="left">7 ( 16.3%)</td>
+<td align="left">5 ( 18.5%)</td>
+<td align="left">4 ( 10.0%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
@@ -1794,9 +1965,9 @@
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">&gt;80</td>
-<td align="left">20 ( 44.4%)</td>
-<td align="left">5 ( 16.1%)</td>
-<td align="left">14 ( 34.1%)</td>
+<td align="left">18 ( 41.9%)</td>
+<td align="left">6 ( 22.2%)</td>
+<td align="left">15 ( 37.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2</td>
@@ -1804,9 +1975,9 @@
 <tr class="even">
 <td align="left">F</td>
 <td align="left">65-80</td>
-<td align="left">18 ( 40.0%)</td>
-<td align="left">21 ( 67.7%)</td>
-<td align="left">23 ( 56.1%)</td>
+<td align="left">18 ( 41.9%)</td>
+<td align="left">16 ( 59.3%)</td>
+<td align="left">21 ( 52.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">3</td>
@@ -1814,9 +1985,9 @@
 <tr class="odd">
 <td align="left">F</td>
 <td align="left">Missing</td>
-<td align="left">8</td>
-<td align="left">9</td>
-<td align="left">9</td>
+<td align="left">10</td>
+<td align="left">13</td>
+<td align="left">10</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">Inf</td>
@@ -1824,9 +1995,9 @@
 <tr class="even">
 <td align="left">M</td>
 <td align="left">All Age Groups</td>
-<td align="left">26</td>
-<td align="left">36</td>
-<td align="left">25</td>
+<td align="left">28</td>
+<td align="left">38</td>
+<td align="left">28</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">-Inf</td>
@@ -1834,9 +2005,9 @@
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">&lt;65</td>
-<td align="left">4 ( 15.4%)</td>
-<td align="left">3 ( 8.3%)</td>
-<td align="left">1 ( 4.0%)</td>
+<td align="left">4 ( 14.3%)</td>
+<td align="left">3 ( 7.9%)</td>
+<td align="left">3 ( 10.7%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">1</td>
@@ -1844,9 +2015,9 @@
 <tr class="even">
 <td align="left">M</td>
 <td align="left">&gt;80</td>
-<td align="left">5 ( 19.2%)</td>
-<td align="left">9 ( 25.0%)</td>
-<td align="left">11 ( 44.0%)</td>
+<td align="left">8 ( 28.6%)</td>
+<td align="left">11 ( 28.9%)</td>
+<td align="left">9 ( 32.1%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">2</td>
@@ -1854,9 +2025,9 @@
 <tr class="odd">
 <td align="left">M</td>
 <td align="left">65-80</td>
-<td align="left">17 ( 65.4%)</td>
-<td align="left">24 ( 66.7%)</td>
-<td align="left">13 ( 52.0%)</td>
+<td align="left">16 ( 57.1%)</td>
+<td align="left">24 ( 63.2%)</td>
+<td align="left">16 ( 57.1%)</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">3</td>
@@ -1864,17 +2035,25 @@
 <tr class="even">
 <td align="left">M</td>
 <td align="left">Missing</td>
-<td align="left">7</td>
-<td align="left">8</td>
-<td align="left">9</td>
+<td align="left">5</td>
+<td align="left">6</td>
+<td align="left">6</td>
 <td align="right">1</td>
 <td align="right">2</td>
 <td align="right">Inf</td>
 </tr>
 </tbody>
 </table>
-<p>Now the table is more intuitive. We used <code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.</p>
-<p><em>You may have stumbled upon this portion of the vignette while searching for how to create a total column. <strong>Tplyr</strong> allows you to do this as well with the function <code><a href="../reference/treat_grps.html">add_total_group()</a></code> and read more in <code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
+<p>Now the table is more intuitive. We used
+<code><a href="../reference/set_missing_count.html">set_missing_count()</a></code> to update our denominators, so missing
+have been excluded. Now, the total row intuitively matches the
+denominators used within each group, and we can see how many missing
+records were excluded.</p>
+<p><em>You may have stumbled upon this portion of the vignette while
+searching for how to create a total column. <strong>Tplyr</strong>
+allows you to do this as well with the function
+<code><a href="../reference/treat_grps.html">add_total_group()</a></code> and read more in
+<code><a href="../articles/table.html">vignette("table")</a></code>.</em></p>
 <p>And that’s it for denominators! Happy counting!</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -1885,12 +2064,12 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz, Nathan Kosiba.</p>
+<p>Developed by Eli Miller, Mike Stackhouse, Ashley Tarasiewicz.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>
