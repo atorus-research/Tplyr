@@ -302,8 +302,8 @@ clean_attr <- function(dat) {
 
 #' Simulate IBM rounding
 #'
-#' This logic is from the github issue
-#' https://github.com/atorus-research/Tplyr/issues/9
+#' This logic is from the stackoverflow issue
+#' https://stackoverflow.com/questions/12688717/round-up-from-5
 #'
 #' @param x The numeric values to round
 #' @param n The number of decimal rounding points
@@ -314,10 +314,13 @@ ut_round <- function(x, n=0)
 {
   # x is the value to be rounded
   # n is the precision of the rounding
-  scale <- 10^n
-  y <- trunc(x * scale + sign(x) * 0.5) / scale
+  posneg <- sign(x)                                         
+  e <- abs(x) * 10^n                                  
+  e <- e + 0.5 + sqrt(.Machine$double.eps)
+  e <- trunc(e)
+  e <- e / 10^n
   # Return the rounded number
-  return(y)
+  return(e*posneg)
 }
 
 #' Assign a row identifier to a layer
