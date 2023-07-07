@@ -26,3 +26,24 @@ test_that("this_denom can be called after a group_by and gives totals", {
 
   expect_equal(df2, tibble(total = rep(c(15, 12, 5), c(15, 12, 5))))
 })
+
+test_that("can build when data has no rows and population data is set (#131)", {
+
+  load(test_path("adae.Rdata"))
+  load(test_path("adsl.Rdata"))
+
+  t <- adae %>%
+    tplyr_table(TRTA) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(
+        TRTEMFL,
+        where = TRTEMFL == "Y" & AESER == "Y" & AEREL == "REMOTE"
+      ) %>%
+        set_distinct_by(USUBJID)
+    )
+
+  expect_no_error(build(t))
+
+})
