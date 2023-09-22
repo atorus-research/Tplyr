@@ -163,7 +163,6 @@ process_single_count_target <- function(x) {
       mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
       ungroup()
 
-
     if (!is.null(distinct_stat)) {
       if (include_total_row) {
         distinct_stat <- distinct_stat %>%
@@ -678,9 +677,12 @@ process_count_denoms <- function(x) {
         ) %>%
       ungroup()
 
+    # If user specified treatment var as a denom by then remove it
+    dist_grp <- denoms_by[-which(map_lgl(denoms_by, ~ as_name(.) == as_name(pop_treat_var)))]
+
     denoms_df_dist <- built_pop_data %>%
       filter(!!denom_where) %>%
-      group_by(!!pop_treat_var) %>%
+      group_by(!!pop_treat_var, !!!dist_grp) %>%
       summarize(
         distinct_n = n_distinct(!!!distinct_by, !!pop_treat_var)
       ) %>%
