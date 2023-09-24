@@ -678,7 +678,13 @@ process_count_denoms <- function(x) {
       ungroup()
 
     # If user specified treatment var as a denom by then remove it
+    # and if inside a nested layer, rename summary_var in the denoms_by
+    # for building this table
     dist_grp <- denoms_by[-which(map_lgl(denoms_by, ~ as_name(.) == as_name(pop_treat_var)))]
+    is_svar <- map_lgl(dist_grp, ~as_name(.) == "summary_var")
+    if (any(is_svar)) {
+      dist_grp[[which(is_svar)]] <- layer_params[[1]]
+    }
 
     denoms_df_dist <- built_pop_data %>%
       filter(!!denom_where) %>%
@@ -688,13 +694,15 @@ process_count_denoms <- function(x) {
       ) %>%
       ungroup()
 
-    by_join <- as_name(pop_treat_var)
-    names(by_join) <- as_name(treat_var)
+    # Create merge variables to get the denoms dataframe merged correctly
+    by_join <- map_chr(append(dist_grp, pop_treat_var, after=0), as_name)
+    names(by_join) <- map_chr(append(dist_grp, treat_var, after=0), as_name)
+
 
     denoms_df <- denoms_df_n %>%
-      complete(!!!layer_params[param_apears],
-               fill = list(n = 0)) %>%
-      left_join(denoms_df_dist, by = by_join)
+      left_join(denoms_df_dist, by = by_join) #%>%
+      # complete(!!!layer_params[param_apears],
+      #          fill = list(n = 0, distinct_n=0))
 
     if (as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%
@@ -734,7 +742,7 @@ rename_missing_values <- function(x) {
           # Replace the implicit values in built_target
           built_target <- built_target %>%
             mutate(!!target_var[[1]] := fct_expand(!!target_var[[1]], "(Missing)")) %>%
-            mutate(!!target_var[[1]] := fct_explicit_na(!!target_var[[1]]))
+            mutate(!!target_var[[1]] := fct_na_value_to_level(!!target_var[[1]], level="(Missing)"))
 
         }
         built_target <- built_target %>%
