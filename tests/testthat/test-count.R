@@ -639,7 +639,29 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
                  " 0 (  0.0%)", " 2 (100.0%)", "12 (100.0%)", " 7 ( 58.3%)",
                  " 5 ( 41.7%)"))
 
+  # Tests added to capture #136
+  expect_snapshot(
+    # Results have been manually verified
+    # Denom for cyl == 4 is 11
+    tplyr_table(mtcars, gear, cols=vs) %>%
+      add_layer(
+        group_count(vars(cyl,grp)) %>%
+          set_denoms_by(cyl)
+      ) %>%
+      build() %>%
+      as.data.frame()
+  )
 
+  expect_snapshot(
+    # Results have been manually verified
+    # Denom for gear == 3, vs = 0 is 12
+    tplyr_table(mtcars, gear, cols=vs) %>%
+      add_layer(
+        group_count(vars(cyl,grp))
+      ) %>%
+      build() %>%
+      as.data.frame()
+  )
 
 })
 

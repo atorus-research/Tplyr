@@ -680,7 +680,13 @@ process_count_denoms <- function(x) {
     # If user specified treatment var as a denom by then remove it
     # and if inside a nested layer, rename summary_var in the denoms_by
     # for building this table
-    dist_grp <- denoms_by[-which(map_lgl(denoms_by, ~ as_name(.) == as_name(pop_treat_var)))]
+    dist_grp <- denoms_by
+    which_is_treatvar <- which(
+      map_lgl(denoms_by, ~ as_name(.) %in% c(as_name(pop_treat_var), as_name(treat_var)))
+    )
+    if (length(which_is_treatvar) > 0) {
+      dist_grp <- dist_grp[-which_is_treatvar]
+    }
     is_svar <- map_lgl(dist_grp, ~as_name(.) == "summary_var")
     if (any(is_svar)) {
       dist_grp[[which(is_svar)]] <- layer_params[[1]]
@@ -708,6 +714,8 @@ process_count_denoms <- function(x) {
       denoms_df <- denoms_df %>%
         rename("summary_var" := !!target_var[[1]])
     }
+
+    rm(by_join, denoms_df_n, denoms_df_dist, dist_grp, is_svar, which_is_treatvar)
 
   }, envir = x)
 
