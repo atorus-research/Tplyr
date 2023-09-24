@@ -41,18 +41,32 @@
 # Metadata extraction and extension work properly
 
     Code
-      get_metadata(t)
+      as.data.frame(get_metadata(t))
     Output
-      # A tibble: 7 x 5
-        row_id row_label1 var1_3     var1_4     var1_5    
-        <chr>  <chr>      <list>     <list>     <list>    
-      1 d1_1   n          <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      2 d2_1   Mean (SD)  <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      3 d3_1   Median     <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      4 d4_1   Q1, Q3     <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      5 d5_1   Min, Max   <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      6 d6_1   Missing    <tplyr_mt> <tplyr_mt> <tplyr_mt>
-      7 x1_1   <NA>       <tplyr_mt> <NULL>     <NULL>    
+        row_id row_label1                                   var1_3
+      1   d1_1          n ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      2   d2_1  Mean (SD) ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      3   d3_1     Median ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      4   d4_1     Q1, Q3 ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      5   d5_1   Min, Max ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      6   d6_1    Missing ~gear, ~wt, gear == c("3"), ~TRUE, ~TRUE
+      7   x1_1       <NA>                                     NULL
+                                          var1_4
+      1 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      2 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      3 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      4 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      5 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      6 ~gear, ~wt, gear == c("4"), ~TRUE, ~TRUE
+      7                                     NULL
+                                          var1_5
+      1 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      2 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      3 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      4 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      5 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      6 ~gear, ~wt, gear == c("5"), ~TRUE, ~TRUE
+      7                                     NULL
 
 # Metadata print method is accurate
 

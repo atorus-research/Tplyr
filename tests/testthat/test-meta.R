@@ -338,15 +338,13 @@ test_that("Metadata extraction and extension error properly", {
 
 test_that("Metadata extraction and extension work properly", {
 
-  dat <- t %>% build(metadata=TRUE)
-
   m <- tibble(
     row_id = 'x1_1',
     var1_3 = list(tplyr_meta())
   )
 
   t <- append_metadata(t, m)
-  expect_snapshot(get_metadata(t))
+  expect_snapshot(as.data.frame(get_metadata(t)))
 
 })
 
