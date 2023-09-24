@@ -18,7 +18,7 @@
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
-#' @importFrom forcats fct_expand fct_collapse fct_explicit_na fct_drop
+#' @importFrom forcats fct_expand fct_collapse fct_na_value_to_level fct_drop
 #' @importFrom utils capture.output
 NULL
 
