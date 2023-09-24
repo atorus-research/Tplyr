@@ -719,7 +719,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t1))
+  expect_snapshot(as.data.frame(build(t1)))
 
   t2 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -730,7 +730,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t2))
+  expect_snapshot(as.data.frame(build(t2)))
 
   t3 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -741,7 +741,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t3))
+  expect_snapshot(as.data.frame(build(t3)))
 
   t4 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -752,7 +752,7 @@ test_that("set_numeric_threshold works as expected", {
        set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t4))
+  expect_snapshot(as.data.frame(build(t4)))
 
   t5 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -763,7 +763,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t5))
+  expect_snapshot(as.data.frame(build(t5)))
 
   t6 <- mtcars %>%
     tplyr_table(gear) %>%
@@ -774,7 +774,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t6))
+  expect_snapshot(as.data.frame(build(t6)))
 
   load(test_path("adae.Rdata"))
 
@@ -785,7 +785,7 @@ test_that("set_numeric_threshold works as expected", {
         set_numeric_threshold(3, "n", "Placebo")
     )
 
-  expect_snapshot(build(t7))
+  expect_snapshot(as.data.frame(build(t7)))
 
   t8 <- adae %>%
     tplyr_table(TRTA) %>%
@@ -795,7 +795,7 @@ test_that("set_numeric_threshold works as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t8))
+  expect_snapshot(as.data.frame(build(t8)))
 })
 
 test_that("denom and distinct_denom values work as expected", {
@@ -810,7 +810,7 @@ test_that("denom and distinct_denom values work as expected", {
         set_order_count_method("bycount")
     )
 
-  expect_snapshot(build(t1))
+  expect_snapshot(as.data.frame(build(t1)))
 
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
@@ -819,7 +819,7 @@ test_that("denom and distinct_denom values work as expected", {
         set_format_strings(f_str("xxx xxx xxx xxx", distinct_n, distinct_total, n, total))
     )
 
-  expect_snapshot(build(t2))
+  expect_snapshot(as.data.frame(build(t2)))
 })
 
 test_that("denoms with distinct population data populates as expected", {
@@ -838,7 +838,7 @@ test_that("denoms with distinct population data populates as expected", {
     ) %>%
     build()
 
-  expect_snapshot(tab)
+  expect_snapshot(as.data.frame(tab))
 })
 
 test_that("nested count layers error out when you try to add a total row", {
@@ -867,6 +867,6 @@ test_that("Tables with pop_data can accept a layer level where", {
         set_format_strings(f_str("xxx, [xxx] (xxx.x%) [xxx.x%]", distinct_n, n, distinct_pct, pct))
     )
 
-  expect_snapshot(dput(build(t)))
+  expect_snapshot(as.data.frame(build(t)))
 
 })
