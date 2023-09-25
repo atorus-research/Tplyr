@@ -595,3 +595,13 @@
       58          87
       59          88
 
+# Regression test to make sure cols produce correct denom
+
+    Code
+      t
+    Output
+                              row_label1        var1_0_F        var1_0_M
+      1 Subjects with at least one event  19 (35.8) [53]  13 (39.4) [33]
+              var1_54_F       var1_54_M       var1_81_F       var1_81_M
+      1  27 (54.0) [50]  23 (67.6) [34]  17 (42.5) [40]  26 (59.1) [44]
+

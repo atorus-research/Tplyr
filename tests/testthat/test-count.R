@@ -892,3 +892,21 @@ test_that("Tables with pop_data can accept a layer level where", {
   expect_snapshot(as.data.frame(build(t)))
 
 })
+
+test_that("Regression test to make sure cols produce correct denom", {
+  load(test_path('adsl.Rdata'))
+  load(test_path('adae.Rdata'))
+  t <- tplyr_table(adae,TRTAN, cols=SEX) %>%
+    set_pop_data(adsl) %>%
+    set_pop_treat_var(TRT01AN) %>%
+    add_layer(
+      group_count("Subjects with at least one event") %>%
+        set_distinct_by(USUBJID) %>%
+        set_format_strings(f_str("xxx (xx.x) [xx]", distinct_n, distinct_pct, distinct_total))
+    ) %>%
+    build() %>%
+    select(-starts_with('ord')) %>%
+    as.data.frame()
+
+  expect_snapshot(t)
+})

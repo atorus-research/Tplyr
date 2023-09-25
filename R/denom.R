@@ -164,8 +164,35 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
     .data$total <- ifelse(nrow(sums) > 0, sum(sums[["n"]], na.rm = TRUE), 0)
     # distinct_n is present for all count layers, but not shift layers, so
     # dont' do this for shift layers
-    if ("distinct_n" %in% names(sums))
-      .data$distinct_total <- ifelse(nrow(sums) > 0, sums[["distinct_n"]], 0)
+    if ("distinct_n" %in% names(sums)) {
+
+      merge_vars <- names(sums)[!(names(sums) %in% c('n', 'distinct_n'))]
+      dist_tot <- sums %>%
+        select(everything(), -n, distinct_total = distinct_n)
+
+      # summary_var may be used for grouping denoms so only toss it if
+      # it's not in denoms_by
+      if (!('summary_var' %in% map_chr(vars_in_denoms, as_name)) & 'summary_var' %in% names(sums)) {
+        merge_vars <- merge_vars[merge_vars != 'summary_var']
+        dist_tot <- dist_tot %>%
+          select(-summary_var)
+      }
+
+      dist_tot <- dist_tot %>% distinct()
+
+      .data <- .data %>%
+        left_join(
+          dist_tot, by = merge_vars
+        )
+
+      if (length(vars_in_denoms) == 1) {
+        # If just treatment group then we can assume should just be filled (i.e.
+        # one denom and no other cols to consider)
+        .data <- .data %>% fill(distinct_total, .direction='downup')
+      }
+
+      # .data$distinct_total <- ifelse(nrow(sums) > 0, sums[["distinct_n"]], 0)
+    }
 
   .data
 
