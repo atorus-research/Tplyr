@@ -741,9 +741,7 @@ process_count_denoms <- function(x) {
 
 
     denoms_df <- denoms_df_n %>%
-      left_join(denoms_df_dist, by = by_join) #%>%
-    # complete(!!!layer_params[param_apears],
-    #          fill = list(n = 0, distinct_n=0))
+      left_join(denoms_df_dist, by = by_join)
 
     if (as_name(target_var[[1]]) %in% names(target)) {
       denoms_df <- denoms_df %>%

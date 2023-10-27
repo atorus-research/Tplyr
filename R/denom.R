@@ -184,14 +184,6 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
         left_join(
           dist_tot, by = merge_vars
         )
-
-      if (length(vars_in_denoms) == 1) {
-        # If just treatment group then we can assume should just be filled (i.e.
-        # one denom and no other cols to consider)
-        .data <- .data %>% fill(distinct_total, .direction='downup')
-      }
-
-      # .data$distinct_total <- ifelse(nrow(sums) > 0, sums[["distinct_n"]], 0)
     }
 
   .data
