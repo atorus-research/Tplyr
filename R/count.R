@@ -165,11 +165,18 @@ process_single_count_target <- function(x) {
 
     # But if a summary_stat variable is factor, then the denoms needs to match this
     # This happens if sorting was triggered for the variable as a factor
+    # fct_cols will be a named logical vector of the variable names, where TRUE
+    # is the summary_stat variables that are factors
     fct_cols <- map_lgl(summary_stat, is.factor)
 
     if (any(fct_cols)) {
+      # From the bool vector of fct_cols, grab the names of the ones that
+      # are TRUE
+      # Create a regular expression like var1|var2|var3
       fct_cols_ns <- paste(names(fct_cols[fct_cols]), collapse="|")
 
+      # Reset each factor variable to have the appropriate levels for the denom
+      # so that 0 filling can happen appropriately later on
       denoms_df_prep <- denoms_df_prep %>%
         mutate(
           across(matches(fct_cols_ns), ~ factor(., levels=levels(summary_stat[[cur_column()]])))
