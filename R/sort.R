@@ -686,7 +686,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   # Pull out dots
-  list2env(list(...), envir = environment())
+  list2env(list2(...), envir = environment())
 
   # Here are the names of the formatted data row labels. We usually only work with the last
   row_label_vec <- vars_select(names(group_data), starts_with("row_label"))

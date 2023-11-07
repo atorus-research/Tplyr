@@ -47,7 +47,7 @@ build_desc_meta <- function(target, table_where, layer_where, treat_grps, ...) {
 
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
-  values <- list(...)
+  values <- list2(...)
 
   # Get rid of text provided by variables
   inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
@@ -85,7 +85,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
-  values <- list(...)
+  values <- list2(...)
 
   # Get rid of text provided by variables
   inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))
@@ -220,7 +220,7 @@ build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # Don't want any of the named parameters here
   variables <- variables[which(names(variables)=='')]
-  values <- list(...)
+  values <- list2(...)
 
   # Get rid of text provided by variables
   inds <- which(map_lgl(unname(variables), ~ quo_class(.) == "name"))

@@ -319,7 +319,7 @@ get_desc_layer_formats <- function(obj) {
 #' @rdname table_format_defaults
 set_desc_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
-  env_bind(obj, desc_layer_formats = list(...))
+  env_bind(obj, desc_layer_formats = list2(...))
   obj
 }
 
@@ -337,8 +337,8 @@ get_count_layer_formats <- function(obj) {
 set_count_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
 
-  if (length(list(...)) > 0) params <- count_f_str_check(...)
-  else params <- list(...)
+  if (length(list2(...)) > 0) params <- count_f_str_check(...)
+  else params <- list2(...)
 
   env_bind(obj, count_layer_formats = params)
   obj
@@ -355,6 +355,6 @@ get_shift_layer_formats <- function(obj) {
 #' @rdname table_format_defaults
 set_shift_layer_formats <- function(obj, ...) {
   # Bind the formats into the table
-  env_bind(obj, shift_layer_formats = list(...))
+  env_bind(obj, shift_layer_formats = list2(...))
   obj
 }

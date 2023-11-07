@@ -360,7 +360,7 @@ count_f_str_check <- function(...) {
   }
 
   # Grab the named parameters
-  params <- list(...)
+  params <- list2(...)
 
   # Currently supported format names
   valid_names <- c("n_counts", "riskdiff")

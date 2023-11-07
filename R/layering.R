@@ -100,10 +100,10 @@ add_layers <- function(parent, ...) {
   # Parent exists
   assert_that(!missing(parent), msg = "`parent` parameter must be provided")
   # all objects are Tplyr layers
-  map(list(...), assert_is_layer)
+  map(list2(...), assert_is_layer)
 
   # Insert the layer into the parent object
-  parent$layers <- append(parent$layers, list(...))
+  parent$layers <- append(parent$layers, list2(...))
   parent
 }
 
