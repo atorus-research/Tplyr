@@ -154,7 +154,11 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
   # Filter denoms dataset
   vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_df))]
   filter_logic <- map(vars_in_denoms, function(x) {
-    expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+    if (nrow(.data) > 0) {
+      expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+    } else {
+      FALSE
+    }
   })
 
   sums <-  denoms_df %>%
