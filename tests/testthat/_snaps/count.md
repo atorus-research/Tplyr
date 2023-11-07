@@ -4,8 +4,8 @@
     Caused by error in `value[[3L]]()`:
     ! group_count `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
-    ! Problem while computing `..1 = bad == code`.
-    Caused by error in `mask$eval_all_filter()`:
+    i In argument: `bad == code`.
+    Caused by error:
     ! object 'bad' not found
 
 # Total rows and missing counts are displayed correctly(0.1.5 Updates)
@@ -155,6 +155,60 @@
 
     You can not pass the second variable in `vars` as a denominator.
 
+---
+
+    Code
+      tplyr_table(mtcars, gear, cols = vs) %>% add_layer(group_count(vars(cyl, grp)) %>%
+        set_denoms_by(cyl)) %>% build() %>% as.data.frame()
+    Output
+        row_label1 row_label2    var1_3_0    var1_3_1    var1_4_0    var1_4_1
+      1          4          4  0 (  0.0%)  1 (  9.1%)  0 (  0.0%)  8 ( 72.7%)
+      2          4      grp.4  0 (  0.0%)  1 (  9.1%)  0 (  0.0%)  3 ( 27.3%)
+      3          4    grp.4.5  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)  5 ( 45.5%)
+      4          6          6  0 (  0.0%)  2 ( 28.6%)  2 ( 28.6%)  2 ( 28.6%)
+      5          6      grp.6  0 (  0.0%)  0 (  0.0%)  1 ( 14.3%)  1 ( 14.3%)
+      6          6    grp.6.5  0 (  0.0%)  2 ( 28.6%)  1 ( 14.3%)  1 ( 14.3%)
+      7          8          8 12 ( 85.7%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+      8          8      grp.8  7 ( 50.0%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+      9          8    grp.8.5  5 ( 35.7%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+           var1_5_0    var1_5_1 ord_layer_index ord_layer_1 ord_layer_2
+      1  1 (  9.1%)  1 (  9.1%)               1           1         Inf
+      2  1 (  9.1%)  0 (  0.0%)               1           1           1
+      3  0 (  0.0%)  1 (  9.1%)               1           1           2
+      4  1 ( 14.3%)  0 (  0.0%)               1           2         Inf
+      5  0 (  0.0%)  0 (  0.0%)               1           2           1
+      6  1 ( 14.3%)  0 (  0.0%)               1           2           2
+      7  2 ( 14.3%)  0 (  0.0%)               1           3         Inf
+      8  2 ( 14.3%)  0 (  0.0%)               1           3           1
+      9  0 (  0.0%)  0 (  0.0%)               1           3           2
+
+---
+
+    Code
+      tplyr_table(mtcars, gear, cols = vs) %>% add_layer(group_count(vars(cyl, grp))) %>%
+        build() %>% as.data.frame()
+    Output
+        row_label1 row_label2    var1_3_0    var1_3_1    var1_4_0    var1_4_1
+      1          4          4  0 (  0.0%)  1 ( 33.3%)  0 (  0.0%)  8 ( 80.0%)
+      2          4      grp.4  0 (  0.0%)  1 ( 33.3%)  0 (  0.0%)  3 ( 30.0%)
+      3          4    grp.4.5  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)  5 ( 50.0%)
+      4          6          6  0 (  0.0%)  2 ( 66.7%)  2 (100.0%)  2 ( 20.0%)
+      5          6      grp.6  0 (  0.0%)  0 (  0.0%)  1 ( 50.0%)  1 ( 10.0%)
+      6          6    grp.6.5  0 (  0.0%)  2 ( 66.7%)  1 ( 50.0%)  1 ( 10.0%)
+      7          8          8 12 (100.0%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+      8          8      grp.8  7 ( 58.3%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+      9          8    grp.8.5  5 ( 41.7%)  0 (  0.0%)  0 (  0.0%)  0 (  0.0%)
+           var1_5_0    var1_5_1 ord_layer_index ord_layer_1 ord_layer_2
+      1  1 ( 25.0%)  1 (100.0%)               1           1         Inf
+      2  1 ( 25.0%)  0 (  0.0%)               1           1           1
+      3  0 (  0.0%)  1 (100.0%)               1           1           2
+      4  1 ( 25.0%)  0 (  0.0%)               1           2         Inf
+      5  0 (  0.0%)  0 (  0.0%)               1           2           1
+      6  1 ( 25.0%)  0 (  0.0%)               1           2           2
+      7  2 ( 50.0%)  0 (  0.0%)               1           3         Inf
+      8  2 ( 50.0%)  0 (  0.0%)               1           3           1
+      9  0 (  0.0%)  0 (  0.0%)               1           3           2
+
 # nested count layers will error out if second variable is bigger than the first
 
     i In index: 1.
@@ -164,151 +218,190 @@
 # set_numeric_threshold works as expected
 
     Code
-      build(t1)
+      as.data.frame(build(t1))
     Output
-      # A tibble: 2 x 6
-        row_label1 var1_3      var1_4        var1_5        ord_layer_index ord_layer_1
-        <chr>      <chr>       <chr>         <chr>                   <int>       <dbl>
-      1 8          12 ( 80.0%) " 0 (  0.0%)" " 2 ( 40.0%)"               1           0
-      2 Total      15 (100.0%) "12 (100.0%)" " 5 (100.0%)"               1          12
+        row_label1      var1_3      var1_4      var1_5 ord_layer_index ord_layer_1
+      1          8 12 ( 80.0%)  0 (  0.0%)  2 ( 40.0%)               1           0
+      2      Total 15 (100.0%) 12 (100.0%)  5 (100.0%)               1          12
 
 ---
 
     Code
-      build(t2)
+      as.data.frame(build(t2))
     Output
-      # A tibble: 3 x 6
-        row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_lay~1
-        <chr>      <chr>         <chr>         <chr>                   <int>     <dbl>
-      1 4          " 1 (  6.7%)" " 8 ( 66.7%)" " 2 ( 40.0%)"               1         8
-      2 8          "12 ( 80.0%)" " 0 (  0.0%)" " 2 ( 40.0%)"               1         0
-      3 Total      "15 (100.0%)" "12 (100.0%)" " 5 (100.0%)"               1        12
-      # ... with abbreviated variable name 1: ord_layer_1
+        row_label1      var1_3      var1_4      var1_5 ord_layer_index ord_layer_1
+      1          4  1 (  6.7%)  8 ( 66.7%)  2 ( 40.0%)               1           8
+      2          8 12 ( 80.0%)  0 (  0.0%)  2 ( 40.0%)               1           0
+      3      Total 15 (100.0%) 12 (100.0%)  5 (100.0%)               1          12
 
 ---
 
     Code
-      build(t3)
+      as.data.frame(build(t3))
     Output
-      # A tibble: 1 x 6
-        row_label1 var1_3      var1_4      var1_5        ord_layer_index ord_layer_1
-        <chr>      <chr>       <chr>       <chr>                   <int>       <dbl>
-      1 Total      15 (100.0%) 12 (100.0%) " 5 (100.0%)"               1          12
+        row_label1      var1_3      var1_4      var1_5 ord_layer_index ord_layer_1
+      1      Total 15 (100.0%) 12 (100.0%)  5 (100.0%)               1          12
 
 ---
 
     Code
-      build(t4)
+      as.data.frame(build(t4))
     Output
-      # A tibble: 0 x 2
-      # ... with 2 variables: row_label1 <chr>, ord_layer_index <int>
+      [1] row_label1      ord_layer_index
+      <0 rows> (or 0-length row.names)
 
 ---
 
     Code
-      build(t5)
+      as.data.frame(build(t5))
     Output
-      # A tibble: 3 x 6
-        row_label1 var1_3        var1_4        var1_5        ord_layer_index ord_lay~1
-        <chr>      <chr>         <chr>         <chr>                   <int>     <dbl>
-      1 4          " 1 (  6.7%)" " 8 ( 66.7%)" " 2 ( 40.0%)"               1         8
-      2 8          "12 ( 80.0%)" " 0 (  0.0%)" " 2 ( 40.0%)"               1         0
-      3 Total      "15 (100.0%)" "12 (100.0%)" " 5 (100.0%)"               1        12
-      # ... with abbreviated variable name 1: ord_layer_1
+        row_label1      var1_3      var1_4      var1_5 ord_layer_index ord_layer_1
+      1          4  1 (  6.7%)  8 ( 66.7%)  2 ( 40.0%)               1           8
+      2          8 12 ( 80.0%)  0 (  0.0%)  2 ( 40.0%)               1           0
+      3      Total 15 (100.0%) 12 (100.0%)  5 (100.0%)               1          12
 
 ---
 
     Code
-      build(t6)
+      as.data.frame(build(t6))
     Output
-      # A tibble: 2 x 6
-        row_label1 var1_3      var1_4        var1_5        ord_layer_index ord_layer_1
-        <chr>      <chr>       <chr>         <chr>                   <int>       <dbl>
-      1 8          12 ( 80.0%) " 0 (  0.0%)" " 2 ( 40.0%)"               1           0
-      2 Total      15 (100.0%) "12 (100.0%)" " 5 (100.0%)"               1          12
+        row_label1      var1_3      var1_4      var1_5 ord_layer_index ord_layer_1
+      1          8 12 ( 80.0%)  0 (  0.0%)  2 ( 40.0%)               1           0
+      2      Total 15 (100.0%) 12 (100.0%)  5 (100.0%)               1          12
 
 ---
 
     Code
-      build(t7)
+      as.data.frame(build(t7))
     Output
-      # A tibble: 9 x 8
-        row_label1             row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
-        <chr>                  <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
-      1 GASTROINTESTINAL DISO~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       1     Inf
-      2 GASTROINTESTINAL DISO~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       1       1
-      3 GENERAL DISORDERS AND~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1       2     Inf
-      4 GENERAL DISORDERS AND~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1       2       1
-      5 INFECTIONS AND INFEST~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
-      6 INFECTIONS AND INFEST~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
-      7 SKIN AND SUBCUTANEOUS~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1       4     Inf
-      8 SKIN AND SUBCUTANEOUS~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1       4       1
-      9 SKIN AND SUBCUTANEOUS~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1       4       2
-      # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
-      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
-      #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
+                                                  row_label1
+      1                           GASTROINTESTINAL DISORDERS
+      2                           GASTROINTESTINAL DISORDERS
+      3 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
+      4 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
+      5                          INFECTIONS AND INFESTATIONS
+      6                          INFECTIONS AND INFESTATIONS
+      7               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+      8               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+      9               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+                                                  row_label2 var1_Placebo
+      1                           GASTROINTESTINAL DISORDERS   6 ( 12.8%)
+      2                                            DIARRHOEA   3 (  6.4%)
+      3 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  11 ( 23.4%)
+      4                            APPLICATION SITE PRURITUS   4 (  8.5%)
+      5                          INFECTIONS AND INFESTATIONS   5 ( 10.6%)
+      6                    UPPER RESPIRATORY TRACT INFECTION   4 (  8.5%)
+      7               SKIN AND SUBCUTANEOUS TISSUE DISORDERS   7 ( 14.9%)
+      8                                             ERYTHEMA   4 (  8.5%)
+      9                                             PRURITUS   3 (  6.4%)
+        var1_Xanomeline High Dose var1_Xanomeline Low Dose ord_layer_index
+      1                6 (  7.8%)               3 (  3.9%)               1
+      2                1 (  1.3%)               2 (  2.6%)               1
+      3               21 ( 27.3%)              21 ( 27.6%)               1
+      4                7 (  9.1%)               5 (  6.6%)               1
+      5                4 (  5.2%)               3 (  3.9%)               1
+      6                1 (  1.3%)               1 (  1.3%)               1
+      7               21 ( 27.3%)              26 ( 34.2%)               1
+      8                3 (  3.9%)               2 (  2.6%)               1
+      9                8 ( 10.4%)               7 (  9.2%)               1
+        ord_layer_1 ord_layer_2
+      1           1         Inf
+      2           1           1
+      3           2         Inf
+      4           2           1
+      5           3         Inf
+      6           3           1
+      7           4         Inf
+      8           4           1
+      9           4           2
 
 ---
 
     Code
-      build(t8)
+      as.data.frame(build(t8))
     Output
-      # A tibble: 9 x 8
-        row_label1             row_l~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6 ord_l~7
-        <chr>                  <chr>   <chr>   <chr>   <chr>     <int>   <dbl>   <dbl>
-      1 GASTROINTESTINAL DISO~ "GASTR~ " 6 ( ~ " 6 ( ~ " 3 ( ~       1       3     Inf
-      2 GASTROINTESTINAL DISO~ "   DI~ " 3 ( ~ " 1 ( ~ " 2 ( ~       1       3       2
-      3 GENERAL DISORDERS AND~ "GENER~ "11 ( ~ "21 ( ~ "21 ( ~       1      21     Inf
-      4 GENERAL DISORDERS AND~ "   AP~ " 4 ( ~ " 7 ( ~ " 5 ( ~       1      21       5
-      5 INFECTIONS AND INFEST~ "INFEC~ " 5 ( ~ " 4 ( ~ " 3 ( ~       1       3     Inf
-      6 INFECTIONS AND INFEST~ "   UP~ " 4 ( ~ " 1 ( ~ " 1 ( ~       1       3       1
-      7 SKIN AND SUBCUTANEOUS~ "SKIN ~ " 7 ( ~ "21 ( ~ "26 ( ~       1      26     Inf
-      8 SKIN AND SUBCUTANEOUS~ "   ER~ " 4 ( ~ " 3 ( ~ " 2 ( ~       1      26       2
-      9 SKIN AND SUBCUTANEOUS~ "   PR~ " 3 ( ~ " 8 ( ~ " 7 ( ~       1      26       7
-      # ... with abbreviated variable names 1: row_label2, 2: var1_Placebo,
-      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
-      #   5: ord_layer_index, 6: ord_layer_1, 7: ord_layer_2
+                                                  row_label1
+      1                           GASTROINTESTINAL DISORDERS
+      2                           GASTROINTESTINAL DISORDERS
+      3 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
+      4 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS
+      5                          INFECTIONS AND INFESTATIONS
+      6                          INFECTIONS AND INFESTATIONS
+      7               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+      8               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+      9               SKIN AND SUBCUTANEOUS TISSUE DISORDERS
+                                                  row_label2 var1_Placebo
+      1                           GASTROINTESTINAL DISORDERS   6 ( 12.8%)
+      2                                            DIARRHOEA   3 (  6.4%)
+      3 GENERAL DISORDERS AND ADMINISTRATION SITE CONDITIONS  11 ( 23.4%)
+      4                            APPLICATION SITE PRURITUS   4 (  8.5%)
+      5                          INFECTIONS AND INFESTATIONS   5 ( 10.6%)
+      6                    UPPER RESPIRATORY TRACT INFECTION   4 (  8.5%)
+      7               SKIN AND SUBCUTANEOUS TISSUE DISORDERS   7 ( 14.9%)
+      8                                             ERYTHEMA   4 (  8.5%)
+      9                                             PRURITUS   3 (  6.4%)
+        var1_Xanomeline High Dose var1_Xanomeline Low Dose ord_layer_index
+      1                6 (  7.8%)               3 (  3.9%)               1
+      2                1 (  1.3%)               2 (  2.6%)               1
+      3               21 ( 27.3%)              21 ( 27.6%)               1
+      4                7 (  9.1%)               5 (  6.6%)               1
+      5                4 (  5.2%)               3 (  3.9%)               1
+      6                1 (  1.3%)               1 (  1.3%)               1
+      7               21 ( 27.3%)              26 ( 34.2%)               1
+      8                3 (  3.9%)               2 (  2.6%)               1
+      9                8 ( 10.4%)               7 (  9.2%)               1
+        ord_layer_1 ord_layer_2
+      1           3         Inf
+      2           3           2
+      3          21         Inf
+      4          21           5
+      5           3         Inf
+      6           3           1
+      7          26         Inf
+      8          26           2
+      9          26           7
 
 # denom and distinct_denom values work as expected
 
     Code
-      build(t1)
+      as.data.frame(build(t1))
     Output
-      # A tibble: 5 x 6
-        row_label1 var1_3          var1_4          var1_5          ord_layer~1 ord_l~2
-        <chr>      <chr>           <chr>           <chr>                 <int>   <dbl>
-      1 4          " 1/ 15 ( 6.7)" " 8/ 12 (66.7)" " 2/  5 (40.0)"           1       8
-      2 6          " 2/ 15 (13.3)" " 4/ 12 (33.3)" " 1/  5 (20.0)"           1       4
-      3 8          "12/ 15 (80.0)" " 0/ 12 ( 0.0)" " 2/  5 (40.0)"           1       0
-      4 Missing    " 0"            " 0"            " 0"                      1       0
-      5 Total      "   15 [100.0]" "   12 [100.0]" "    5 [100.0]"           1      12
-      # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
+        row_label1        var1_3        var1_4        var1_5 ord_layer_index
+      1          4  1/ 15 ( 6.7)  8/ 12 (66.7)  2/  5 (40.0)               1
+      2          6  2/ 15 (13.3)  4/ 12 (33.3)  1/  5 (20.0)               1
+      3          8 12/ 15 (80.0)  0/ 12 ( 0.0)  2/  5 (40.0)               1
+      4    Missing             0             0             0               1
+      5      Total    15 [100.0]    12 [100.0]     5 [100.0]               1
+        ord_layer_1
+      1           8
+      2           4
+      3           0
+      4           0
+      5          12
 
 ---
 
     Code
-      build(t2)
+      as.data.frame(build(t2))
     Output
-      # A tibble: 3 x 6
-        row_label1 var1_3            var1_4            var1_5          ord_l~1 ord_l~2
-        <chr>      <chr>             <chr>             <chr>             <int>   <dbl>
-      1 4          "  1   1   1  15" "  2   2   8  12" "  1   1   2  ~       1       1
-      2 6          "  1   1   2  15" "  2   2   4  12" "  1   1   1  ~       1       2
-      3 8          "  1   1  12  15" "  0   2   0  12" "  1   1   2  ~       1       3
-      # ... with abbreviated variable names 1: ord_layer_index, 2: ord_layer_1
+        row_label1          var1_3          var1_4          var1_5 ord_layer_index
+      1          4   1   1   1  15   2   2   8  12   1   1   2   5               1
+      2          6   1   1   2  15   2   2   4  12   1   1   1   5               1
+      3          8   1   1  12  15   0   2   0  12   1   1   2   5               1
+        ord_layer_1
+      1           1
+      2           2
+      3           3
 
 # denoms with distinct population data populates as expected
 
     Code
-      tab
+      as.data.frame(tab)
     Output
-      # A tibble: 1 x 8
-        row_label1      var1_Dosed var1_Plac~1 var1_~2 var1_~3 var1_~4 ord_l~5 ord_l~6
-        <chr>           <chr>      <chr>       <chr>   <chr>   <chr>     <int> <lgl>  
-      1 Any Body System 93 (55.4%) 32 (37.2%)  125 (4~ 43 (51~ 50 (59~       1 NA     
-      # ... with abbreviated variable names 1: var1_Placebo, 2: var1_Total,
-      #   3: `var1_Xanomeline High Dose`, 4: `var1_Xanomeline Low Dose`,
-      #   5: ord_layer_index, 6: ord_layer_1
+             row_label1 var1_Dosed var1_Placebo  var1_Total var1_Xanomeline High Dose
+      1 Any Body System 93 (55.4%)   32 (37.2%) 125 (49.2%)                43 (51.2%)
+        var1_Xanomeline Low Dose ord_layer_index ord_layer_1
+      1               50 (59.5%)               1          NA
 
 # nested count layers error out when you try to add a total row
 
@@ -319,121 +412,196 @@
 # Tables with pop_data can accept a layer level where
 
     Code
-      dput(build(t))
+      as.data.frame(build(t))
     Output
-      structure(list(row_label1 = c("ABDOMINAL PAIN", "AGITATION", 
-      "ANXIETY", "APPLICATION SITE DERMATITIS", "APPLICATION SITE ERYTHEMA", 
-      "APPLICATION SITE IRRITATION", "APPLICATION SITE PAIN", "APPLICATION SITE PRURITUS", 
-      "APPLICATION SITE REACTION", "APPLICATION SITE URTICARIA", "APPLICATION SITE VESICLES", 
-      "APPLICATION SITE WARMTH", "ATRIAL HYPERTROPHY", "BLISTER", "BUNDLE BRANCH BLOCK RIGHT", 
-      "BURNING SENSATION", "CARDIAC FAILURE CONGESTIVE", "CHILLS", 
-      "COMPLEX PARTIAL SEIZURES", "CONFUSIONAL STATE", "CONSTIPATION", 
-      "CYSTITIS", "DERMATITIS CONTACT", "DIARRHOEA", "DIZZINESS", "ELECTROCARDIOGRAM T WAVE INVERSION", 
-      "EPISTAXIS", "ERYTHEMA", "FATIGUE", "HALLUCINATION, VISUAL", 
-      "HEART RATE INCREASED", "HEART RATE IRREGULAR", "HYPERHIDROSIS", 
-      "HYPONATRAEMIA", "HYPOTENSION", "INCREASED APPETITE", "INFLAMMATION", 
-      "IRRITABILITY", "MALAISE", "MYALGIA", "MYOCARDIAL INFARCTION", 
-      "NAUSEA", "OEDEMA PERIPHERAL", "PRURITUS", "PRURITUS GENERALISED", 
-      "RASH", "RASH MACULO-PAPULAR", "RASH PRURITIC", "SINUS BRADYCARDIA", 
-      "SKIN EXFOLIATION", "SKIN IRRITATION", "SUPRAVENTRICULAR EXTRASYSTOLES", 
-      "SYNCOPE", "TACHYCARDIA", "TRANSIENT ISCHAEMIC ATTACK", "UPPER RESPIRATORY TRACT INFECTION", 
-      "URTICARIA", "VOMITING", "WOUND"), var1_Placebo = c("  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  4, [  4] (  4.7%) [  8.5%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  1, [  2] (  1.2%) [  4.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  2, [  2] (  2.3%) [  4.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  3, [  4] (  3.5%) [  8.5%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  1, [  1] (  1.2%) [  2.1%]", 
-      "  3, [  3] (  3.5%) [  6.4%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  2.1%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]"
-      ), `var1_Xanomeline High Dose` = c("  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  3, [  3] (  3.6%) [  3.9%]", "  3, [  3] (  3.6%) [  3.9%]", 
-      "  3, [  4] (  3.6%) [  5.2%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  6, [  7] (  7.1%) [  9.1%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  3, [  3] (  3.6%) [  3.9%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  2, [  2] (  2.4%) [  2.6%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  8, [  8] (  9.5%) [ 10.4%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  1, [  2] (  1.2%) [  2.6%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  2] (  1.2%) [  2.6%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  0, [  0] (  0.0%) [  0.0%]"
-      ), `var1_Xanomeline Low Dose` = c("  1, [  1] (  1.2%) [  1.3%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  4, [  4] (  4.8%) [  5.3%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  4, [  4] (  4.8%) [  5.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  2] (  1.2%) [  2.6%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  2, [  2] (  2.4%) [  2.6%]", "  3, [  4] (  3.6%) [  5.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  2, [  2] (  2.4%) [  2.6%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  2, [  2] (  2.4%) [  2.6%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  6, [  6] (  7.1%) [  7.9%]", "  1, [  2] (  1.2%) [  2.6%]", 
-      "  3, [  4] (  3.6%) [  5.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  0, [  0] (  0.0%) [  0.0%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  3, [  3] (  3.6%) [  3.9%]", 
-      "  1, [  1] (  1.2%) [  1.3%]", "  2, [  2] (  2.4%) [  2.6%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  2] (  1.2%) [  2.6%]", 
-      "  0, [  0] (  0.0%) [  0.0%]", "  1, [  1] (  1.2%) [  1.3%]"
-      ), ord_layer_index = c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 
-      1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 
-      1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 
-      1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 
-      1L), ord_layer_1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 
-      17, 19, 20, 21, 23, 24, 25, 26, 30, 32, 33, 34, 35, 36, 37, 40, 
-      42, 44, 45, 47, 49, 50, 51, 52, 54, 55, 56, 57, 60, 63, 65, 66, 
-      67, 68, 69, 72, 73, 74, 76, 78, 79, 80, 82, 84, 87, 88)), row.names = c(NA, 
-      -59L), class = c("tbl_df", "tbl", "data.frame"))
+                                 row_label1                 var1_Placebo
+      1                      ABDOMINAL PAIN   0, [  0] (  0.0%) [  0.0%]
+      2                           AGITATION   0, [  0] (  0.0%) [  0.0%]
+      3                             ANXIETY   0, [  0] (  0.0%) [  0.0%]
+      4         APPLICATION SITE DERMATITIS   1, [  1] (  1.2%) [  2.1%]
+      5           APPLICATION SITE ERYTHEMA   0, [  0] (  0.0%) [  0.0%]
+      6         APPLICATION SITE IRRITATION   1, [  1] (  1.2%) [  2.1%]
+      7               APPLICATION SITE PAIN   0, [  0] (  0.0%) [  0.0%]
+      8           APPLICATION SITE PRURITUS   4, [  4] (  4.7%) [  8.5%]
+      9           APPLICATION SITE REACTION   1, [  1] (  1.2%) [  2.1%]
+      10         APPLICATION SITE URTICARIA   0, [  0] (  0.0%) [  0.0%]
+      11          APPLICATION SITE VESICLES   1, [  1] (  1.2%) [  2.1%]
+      12            APPLICATION SITE WARMTH   0, [  0] (  0.0%) [  0.0%]
+      13                 ATRIAL HYPERTROPHY   1, [  1] (  1.2%) [  2.1%]
+      14                            BLISTER   0, [  0] (  0.0%) [  0.0%]
+      15          BUNDLE BRANCH BLOCK RIGHT   1, [  1] (  1.2%) [  2.1%]
+      16                  BURNING SENSATION   0, [  0] (  0.0%) [  0.0%]
+      17         CARDIAC FAILURE CONGESTIVE   1, [  1] (  1.2%) [  2.1%]
+      18                             CHILLS   1, [  2] (  1.2%) [  4.3%]
+      19           COMPLEX PARTIAL SEIZURES   0, [  0] (  0.0%) [  0.0%]
+      20                  CONFUSIONAL STATE   1, [  1] (  1.2%) [  2.1%]
+      21                       CONSTIPATION   1, [  1] (  1.2%) [  2.1%]
+      22                           CYSTITIS   0, [  0] (  0.0%) [  0.0%]
+      23                 DERMATITIS CONTACT   0, [  0] (  0.0%) [  0.0%]
+      24                          DIARRHOEA   2, [  2] (  2.3%) [  4.3%]
+      25                          DIZZINESS   0, [  0] (  0.0%) [  0.0%]
+      26 ELECTROCARDIOGRAM T WAVE INVERSION   1, [  1] (  1.2%) [  2.1%]
+      27                          EPISTAXIS   0, [  0] (  0.0%) [  0.0%]
+      28                           ERYTHEMA   3, [  4] (  3.5%) [  8.5%]
+      29                            FATIGUE   0, [  0] (  0.0%) [  0.0%]
+      30              HALLUCINATION, VISUAL   0, [  0] (  0.0%) [  0.0%]
+      31               HEART RATE INCREASED   1, [  1] (  1.2%) [  2.1%]
+      32               HEART RATE IRREGULAR   1, [  1] (  1.2%) [  2.1%]
+      33                      HYPERHIDROSIS   0, [  0] (  0.0%) [  0.0%]
+      34                      HYPONATRAEMIA   1, [  1] (  1.2%) [  2.1%]
+      35                        HYPOTENSION   0, [  0] (  0.0%) [  0.0%]
+      36                 INCREASED APPETITE   1, [  1] (  1.2%) [  2.1%]
+      37                       INFLAMMATION   0, [  0] (  0.0%) [  0.0%]
+      38                       IRRITABILITY   1, [  1] (  1.2%) [  2.1%]
+      39                            MALAISE   0, [  0] (  0.0%) [  0.0%]
+      40                            MYALGIA   0, [  0] (  0.0%) [  0.0%]
+      41              MYOCARDIAL INFARCTION   0, [  0] (  0.0%) [  0.0%]
+      42                             NAUSEA   1, [  1] (  1.2%) [  2.1%]
+      43                  OEDEMA PERIPHERAL   1, [  1] (  1.2%) [  2.1%]
+      44                           PRURITUS   3, [  3] (  3.5%) [  6.4%]
+      45               PRURITUS GENERALISED   0, [  0] (  0.0%) [  0.0%]
+      46                               RASH   0, [  0] (  0.0%) [  0.0%]
+      47                RASH MACULO-PAPULAR   0, [  0] (  0.0%) [  0.0%]
+      48                      RASH PRURITIC   0, [  0] (  0.0%) [  0.0%]
+      49                  SINUS BRADYCARDIA   0, [  0] (  0.0%) [  0.0%]
+      50                   SKIN EXFOLIATION   0, [  0] (  0.0%) [  0.0%]
+      51                    SKIN IRRITATION   0, [  0] (  0.0%) [  0.0%]
+      52     SUPRAVENTRICULAR EXTRASYSTOLES   1, [  1] (  1.2%) [  2.1%]
+      53                            SYNCOPE   0, [  0] (  0.0%) [  0.0%]
+      54                        TACHYCARDIA   1, [  1] (  1.2%) [  2.1%]
+      55         TRANSIENT ISCHAEMIC ATTACK   0, [  0] (  0.0%) [  0.0%]
+      56  UPPER RESPIRATORY TRACT INFECTION   1, [  1] (  1.2%) [  2.1%]
+      57                          URTICARIA   0, [  0] (  0.0%) [  0.0%]
+      58                           VOMITING   0, [  0] (  0.0%) [  0.0%]
+      59                              WOUND   0, [  0] (  0.0%) [  0.0%]
+            var1_Xanomeline High Dose     var1_Xanomeline Low Dose ord_layer_index
+      1    0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      2    0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      3    0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      4    3, [  3] (  3.6%) [  3.9%]   2, [  2] (  2.4%) [  2.6%]               1
+      5    3, [  3] (  3.6%) [  3.9%]   4, [  4] (  4.8%) [  5.3%]               1
+      6    3, [  4] (  3.6%) [  5.2%]   2, [  2] (  2.4%) [  2.6%]               1
+      7    1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      8    6, [  7] (  7.1%) [  9.1%]   4, [  4] (  4.8%) [  5.3%]               1
+      9    1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      10   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      11   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      12   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      13   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      14   0, [  0] (  0.0%) [  0.0%]   1, [  2] (  1.2%) [  2.6%]               1
+      15   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      16   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      17   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      18   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      19   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      20   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      21   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      22   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      23   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      24   1, [  1] (  1.2%) [  1.3%]   2, [  2] (  2.4%) [  2.6%]               1
+      25   1, [  1] (  1.2%) [  1.3%]   3, [  4] (  3.6%) [  5.3%]               1
+      26   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      27   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      28   3, [  3] (  3.6%) [  3.9%]   1, [  1] (  1.2%) [  1.3%]               1
+      29   0, [  0] (  0.0%) [  0.0%]   2, [  2] (  2.4%) [  2.6%]               1
+      30   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      31   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      32   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      33   2, [  2] (  2.4%) [  2.6%]   1, [  1] (  1.2%) [  1.3%]               1
+      34   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      35   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      36   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      37   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      38   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      39   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      40   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      41   1, [  1] (  1.2%) [  1.3%]   2, [  2] (  2.4%) [  2.6%]               1
+      42   2, [  2] (  2.4%) [  2.6%]   0, [  0] (  0.0%) [  0.0%]               1
+      43   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      44   8, [  8] (  9.5%) [ 10.4%]   6, [  6] (  7.1%) [  7.9%]               1
+      45   0, [  0] (  0.0%) [  0.0%]   1, [  2] (  1.2%) [  2.6%]               1
+      46   2, [  2] (  2.4%) [  2.6%]   3, [  4] (  3.6%) [  5.3%]               1
+      47   1, [  2] (  1.2%) [  2.6%]   0, [  0] (  0.0%) [  0.0%]               1
+      48   1, [  1] (  1.2%) [  1.3%]   1, [  1] (  1.2%) [  1.3%]               1
+      49   1, [  1] (  1.2%) [  1.3%]   0, [  0] (  0.0%) [  0.0%]               1
+      50   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      51   1, [  1] (  1.2%) [  1.3%]   3, [  3] (  3.6%) [  3.9%]               1
+      52   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      53   1, [  1] (  1.2%) [  1.3%]   2, [  2] (  2.4%) [  2.6%]               1
+      54   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      55   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+      56   0, [  0] (  0.0%) [  0.0%]   0, [  0] (  0.0%) [  0.0%]               1
+      57   1, [  2] (  1.2%) [  2.6%]   1, [  2] (  1.2%) [  2.6%]               1
+      58   2, [  2] (  2.4%) [  2.6%]   0, [  0] (  0.0%) [  0.0%]               1
+      59   0, [  0] (  0.0%) [  0.0%]   1, [  1] (  1.2%) [  1.3%]               1
+         ord_layer_1
+      1            1
+      2            2
+      3            3
+      4            4
+      5            5
+      6            6
+      7            7
+      8            8
+      9            9
+      10          10
+      11          11
+      12          12
+      13          15
+      14          17
+      15          19
+      16          20
+      17          21
+      18          23
+      19          24
+      20          25
+      21          26
+      22          30
+      23          32
+      24          33
+      25          34
+      26          35
+      27          36
+      28          37
+      29          40
+      30          42
+      31          44
+      32          45
+      33          47
+      34          49
+      35          50
+      36          51
+      37          52
+      38          54
+      39          55
+      40          56
+      41          57
+      42          60
+      43          63
+      44          65
+      45          66
+      46          67
+      47          68
+      48          69
+      49          72
+      50          73
+      51          74
+      52          76
+      53          78
+      54          79
+      55          80
+      56          82
+      57          84
+      58          87
+      59          88
+
+# Regression test to make sure cols produce correct denom
+
+    Code
+      t
+    Output
+                              row_label1        var1_0_F        var1_0_M
+      1 Subjects with at least one event  19 (35.8) [53]  13 (39.4) [33]
+              var1_54_F       var1_54_M       var1_81_F       var1_81_M
+      1  27 (54.0) [50]  23 (67.6) [34]  17 (42.5) [40]  26 (59.1) [44]
 

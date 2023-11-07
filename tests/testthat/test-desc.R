@@ -132,14 +132,12 @@ test_that("Stats as columns properly transposes the built data", {
         set_stats_as_columns()
     )
 
-  expect_silent(build(t2))
-
-  d2 <- build(t2)
+  expect_silent(d2 <- build(t2))
 
   t2_exp_names <- c('row_label1', 'var1_n_0', 'var1_sd_0', 'var1_n_1', 'var1_sd_1', 'var2_n_0',
                     'var2_sd_0', 'var2_n_1', 'var2_sd_1', 'ord_layer_index', 'ord_layer_1')
 
   expect_equal(names(d2), t2_exp_names)
-  expect_snapshot_output(d2)
+  expect_snapshot(as.data.frame(d2))
 
 })

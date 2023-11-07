@@ -27,7 +27,7 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
                 msg="Functions called within `add_layer` must be part of `Tplyr`")
 
     # Recursively extract the left side of the magrittr call to work your way up
-    e <- call_standardise(c)
+    e <- tplyr_call_standardise(c)
     c <- modify_nested_call(call_args(e)$lhs, examine_only, ...)
     if (!examine_only) {
       # Modify the magittr call by inserting the call retrieved from recursive command back in
@@ -40,7 +40,7 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
     # Standardize the call to get argument names and pull out the literal first argument
     # Save the call to a new variable in the process
-    e <- call_standardise(c)
+    e <- tplyr_call_standardise(c)
     args <- call_args(e)[1]
 
     # Send the first parameter back down recursively through modify_nested_call and

@@ -6,8 +6,8 @@
 
     tplyr_table `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
-    ! Problem while computing `..1 = bad == code`.
-    Caused by error in `mask$eval_all_filter()`:
+    i In argument: `bad == code`.
+    Caused by error:
     ! object 'bad' not found
     
 
@@ -15,8 +15,8 @@
 
     Population data `pop_where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
-    ! Problem while computing `..1 = bad == code`.
-    Caused by error in `mask$eval_all_filter()`:
+    i In argument: `bad == code`.
+    Caused by error:
     ! object 'bad' not found
     If the population data and target data subsets should be different, use `set_pop_where`.
 
