@@ -27,7 +27,7 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
                 msg="Functions called within `add_layer` must be part of `Tplyr`")
 
     # Recursively extract the left side of the magrittr call to work your way up
-    e <- call_standardise(c)
+    e <- tplyr_call_standardise(c)
     c <- modify_nested_call(call_args(e)$lhs, examine_only, ...)
     if (!examine_only) {
       # Modify the magittr call by inserting the call retrieved from recursive command back in
@@ -40,7 +40,7 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
     # Standardize the call to get argument names and pull out the literal first argument
     # Save the call to a new variable in the process
-    e <- call_standardise(c)
+    e <- tplyr_call_standardise(c)
     args <- call_args(e)[1]
 
     # Send the first parameter back down recursively through modify_nested_call and
@@ -302,8 +302,8 @@ clean_attr <- function(dat) {
 
 #' Simulate IBM rounding
 #'
-#' This logic is from the github issue
-#' https://github.com/atorus-research/Tplyr/issues/9
+#' This logic is from the stackoverflow issue
+#' https://stackoverflow.com/questions/12688717/round-up-from-5
 #'
 #' @param x The numeric values to round
 #' @param n The number of decimal rounding points
@@ -314,10 +314,13 @@ ut_round <- function(x, n=0)
 {
   # x is the value to be rounded
   # n is the precision of the rounding
-  scale <- 10^n
-  y <- trunc(x * scale + sign(x) * 0.5) / scale
+  posneg <- sign(x)                                         
+  e <- abs(x) * 10^n                                  
+  e <- e + 0.5 + sqrt(.Machine$double.eps)
+  e <- trunc(e)
+  e <- e / 10^n
   # Return the rounded number
-  return(y)
+  return(e * posneg)
 }
 
 #' Assign a row identifier to a layer

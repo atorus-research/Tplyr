@@ -11,14 +11,14 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group pull
-#' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches
+#' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with fill
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
 #' @importFrom tibble tibble rownames_to_column add_column
 #' @importFrom lifecycle deprecate_soft deprecate_stop
 #' @importFrom stats var
-#' @importFrom forcats fct_expand fct_collapse fct_explicit_na fct_drop
+#' @importFrom forcats fct_expand fct_collapse fct_na_value_to_level fct_drop
 #' @importFrom utils capture.output
 NULL
 

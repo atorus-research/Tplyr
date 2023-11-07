@@ -4,7 +4,7 @@
     Caused by error in `value[[3L]]()`:
     ! group_shift `where` condition `bad == code` is invalid. Filter error:
     Error in `filter()`:
-    ! Problem while computing `..1 = bad == code`.
-    Caused by error in `mask$eval_all_filter()`:
+    i In argument: `bad == code`.
+    Caused by error:
     ! object 'bad' not found
 
