@@ -675,6 +675,19 @@ test_that("test IBM rounding option", {
   options(tplyr.IBMRounding = FALSE)
 })
 
+test_that("test specific rounding proplem #124", {
+  vec <- c(2.64, -3.20, -2.88, 2.95)
+  mvec <- mean(vec)
+
+  options(tplyr.IBMRounding = TRUE)
+
+  rounded <- ut_round(mvec, 3)
+
+  expect_equal(rounded, -0.123)
+
+  options(tplyr.IBMRounding = FALSE)
+})
+
 test_that("nested count layers will error out if second variable is bigger than the first", {
   mtcars <- mtcars2
   mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
