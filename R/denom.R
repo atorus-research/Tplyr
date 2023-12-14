@@ -154,7 +154,11 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
   # Filter denoms dataset
   vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_df))]
   filter_logic <- map(vars_in_denoms, function(x) {
-    expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+    if (nrow(.data) > 0) {
+      expr(!!sym(as_name(x)) == !!unique(.data[, as_name(x)])[[1]])
+    } else {
+      FALSE
+    }
   })
 
   sums <-  denoms_df %>%
@@ -164,8 +168,27 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
     .data$total <- ifelse(nrow(sums) > 0, sum(sums[["n"]], na.rm = TRUE), 0)
     # distinct_n is present for all count layers, but not shift layers, so
     # dont' do this for shift layers
-    if ("distinct_n" %in% names(sums))
-      .data$distinct_total <- ifelse(nrow(sums) > 0, sums[["distinct_n"]], 0)
+    if ("distinct_n" %in% names(sums)) {
+
+      merge_vars <- names(sums)[!(names(sums) %in% c('n', 'distinct_n'))]
+      dist_tot <- sums %>%
+        select(everything(), -n, distinct_total = distinct_n)
+
+      # summary_var may be used for grouping denoms so only toss it if
+      # it's not in denoms_by
+      if (!('summary_var' %in% map_chr(vars_in_denoms, as_name)) & 'summary_var' %in% names(sums)) {
+        merge_vars <- merge_vars[merge_vars != 'summary_var']
+        dist_tot <- dist_tot %>%
+          select(-summary_var)
+      }
+
+      dist_tot <- dist_tot %>% distinct()
+
+      .data <- .data %>%
+        left_join(
+          dist_tot, by = merge_vars
+        )
+    }
 
   .data
 

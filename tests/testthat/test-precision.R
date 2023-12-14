@@ -167,12 +167,12 @@ test_that("Missing by variables are handled as specified in precision data",{
     build(t)
   })
 
-  expect_snapshot_output({
+  expect_snapshot({
     t <- tplyr_table(mtcars, gear)
     l <- group_desc(t, wt, by = vs) %>%
       set_precision_data(prec2, default="auto")
     t <- add_layers(t, l)
-    build(t)
+    as.data.frame(build(t))
   })
 
 })
@@ -249,5 +249,5 @@ test_that("Partially provided decimal precision caps populate correctly", {
   expect_silent(d <- build(t))
 
   # Manually verified these results look appropriate
-  expect_snapshot_output(print(d %>% select(starts_with('var1'))))
+  expect_snapshot(as.data.frame(d %>% select(starts_with('var1'))))
 })
