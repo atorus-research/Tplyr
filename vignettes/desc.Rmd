@@ -77,7 +77,9 @@ x %>%
 
 ### Notes About Built-in's
 
-Note that the only non-default option being used in any of the function calls above is `na.rm=TRUE`. For most of the functions, this is likely fine - but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:
+Note that the only non-default option being used in any of the function calls above is `na.rm=TRUE`. It's important to note that for `min` and `max`, when `na.rm=TRUE` is used with a vector that is all `NA`, these functions return `Inf` and `-Inf` respectively. When formatting the numbers, this is unexpected and also inconsistent with how other descriptive statistic functions, which return `NA`. Therefore, just for `min` and `max`, `Inf`'s are converted to `NA` so that they'll align with the behavior of the `empty` parameter in `f_str()`. 
+
+Using default settings of most descriptive statistic functions is typically fine, but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:
 
 $$
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
