@@ -39,4 +39,6 @@ tab <- tplyr_table(iris, Species)
 
 pop_data(tab) <- mtcars
 
+tab <- tplyr_table(iris, Species) \%>\%
+  set_pop_data(mtcars)
 }
