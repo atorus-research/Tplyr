@@ -256,3 +256,25 @@ test_that("Format string setting and autoprecision are detected appropriately", 
   expect_equal(fmt26$settings, s26)
 
 })
+
+test_that("Ellipsis unpacking of external variables functions effectively - (#111)", {
+
+  # Define a list of f_str's
+  num_formats <- list(
+    "N"         = f_str("xx", n),
+    "Mean (SD)" = f_str("xx.x (xx.xx)", mean, sd),
+    "Median"    = f_str("xx.x", median),
+    "Q1"        = f_str("xx", q1),
+    "Q3"        = f_str("xx", q3),
+    "Min"       = f_str("xx", min),
+    "Max"       = f_str("xx", max)
+  )
+
+  # `add_layers()` example, create the tplyr_table
+  t <- tplyr_table(iris, Species)
+
+  l <- group_desc(t, Petal.Length) %>%
+    set_format_strings(!!!num_formats)
+
+  expect_identical(num_formats, l$format_strings)
+})

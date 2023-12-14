@@ -81,13 +81,13 @@ build_header_n <- function(table) {
 
 add_treat_grps <- function(table, ...) {
 
-  assert_that(is_named(list(...)), msg="Treatment group arguments must have names")
+  assert_that(is_named(list2(...)), msg="Treatment group arguments must have names")
 
   assert_that(inherits(table, "tplyr_table"),
                    msg = "Treatment groups can only be added to `tplyr_table` objects")
 
   # Check parameters
-  fargs <- list(...)
+  fargs <- list2(...)
 
     # Bind the specified treatment groups to the table
   env_bind(table, treat_grps = append(treat_grps(table), fargs))

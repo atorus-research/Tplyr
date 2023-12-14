@@ -457,7 +457,7 @@ set_result_order_var <- function(e, result_order_var) {
 #'   build()
 set_missing_count <- function(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...) {
 
-  missings <- list(...)
+  missings <- list2(...)
   assert_that(length(missings) > 0, msg = "No missing values were specified.")
 
   if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
@@ -644,7 +644,7 @@ set_denoms_by.count_layer <- function(e, ...) {
 #'  build()
 #'
 keep_levels <- function(e, ...) {
-  dots <- list(...)
+  dots <- list2(...)
   assert_that(all(map_lgl(dots, is.character)),
               msg = "must pass character values to `keep_levels`")
 

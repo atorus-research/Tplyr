@@ -38,7 +38,7 @@ apply_formats <- function(format_string, ..., empty = c(.overall = "")) {
          call.=FALSE)
   }
 
-  pmap_chr(list(...), function(...) apply_fmts(...), fmt=format)
+  pmap_chr(list2(...), function(...) apply_fmts(...), fmt=format)
 }
 
 #' Application of individual format string
@@ -53,7 +53,7 @@ apply_formats <- function(format_string, ..., empty = c(.overall = "")) {
 #' @return An individually formatted string
 #' @noRd
 apply_fmts <- function(..., fmt) {
-  nums <- list(...)
+  nums <- list2(...)
   repl <- vector('list', length(fmt$settings))
   for (i in seq_along(fmt$settings)) {
     repl[[i]] <- num_fmt(nums[[i]], i, fmt=fmt)

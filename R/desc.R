@@ -225,7 +225,7 @@ get_summaries <- function(e = caller_env()) {
 #' @noRd
 construct_desc_string <- function(..., .fmt_str=NULL) {
   # Unpack names into current namespace for ease
-  list2env(list(...), envir=environment())
+  list2env(list2(...), envir=environment())
 
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]

@@ -115,7 +115,7 @@
 add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
 
   # grab the ellipsis args into a list
-  comps <- list(...)
+  comps <- list2(...)
 
   # Must be character, must have 2 elements
   assert_that(all(map_lgl(comps, is.character)), all(map_lgl(comps, ~ length(.x) == 2)),
@@ -242,7 +242,7 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
     high = NA
   )
 
-  out <- append(list(...), out)
+  out <- append(list2(...), out)
   # Rename
 
   # Totals in the 2 way must be positive
@@ -265,10 +265,10 @@ riskdiff <- function(diff_group, n_comp, n_ref, total_comp, total_ref, args=list
 
 construct_riskdiff_string <- function(..., .fmt_str=NULL) {
   # Unpack names into current namespace for ease
-  list2env(list(...), envir=environment())
+  list2env(list2(...), envir=environment())
 
   # Return empty when necessary
-  if (any(is.na(list(...)))) {
+  if (any(is.na(list2(...)))) {
     return(.fmt_str$empty)
   }
 
