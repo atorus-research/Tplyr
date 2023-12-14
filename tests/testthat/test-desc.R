@@ -141,3 +141,24 @@ test_that("Stats as columns properly transposes the built data", {
   expect_snapshot(as.data.frame(d2))
 
 })
+
+test_that("Infinites aren't produced from min/max", {
+  dat <- tibble::tribble(
+    ~x1, ~x2,
+    'a',   1,
+    'a',   2,
+    'b',  NA,
+  )
+
+  t <- tplyr_table(dat, x1) %>%
+    add_layer(
+      group_desc(x2) %>%
+        set_format_strings(
+          "Min, Max" = f_str("xx, xx", min, max)
+        )
+    )
+
+  x <- suppressWarnings(build(t))
+
+  expect_equal(x$var1_b, "")
+})

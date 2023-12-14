@@ -188,6 +188,9 @@ process_formatting.desc_layer <- function(x, ...) {
   env_get(x, "formatted_data")
 }
 
+# Small helper function to help with builtins
+inf_to_na <- function(x) if_else(is.infinite(x), NA, x)
+
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
 #'
 #' @param e the environment summaries are stored in.
@@ -203,8 +206,8 @@ get_summaries <- function(e = caller_env()) {
     sd      = sd(.var, na.rm=TRUE),
     median  = median(.var, na.rm=TRUE),
     var     = var(.var, na.rm=TRUE),
-    min     = min(.var, na.rm=TRUE),
-    max     = max(.var, na.rm=TRUE),
+    min     = inf_to_na(min(.var, na.rm=TRUE)),
+    max     = inf_to_na(max(.var, na.rm=TRUE)),
     iqr     = IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')),
     q1      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[2]],
     q3      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[4]],
