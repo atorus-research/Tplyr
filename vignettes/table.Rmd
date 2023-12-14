@@ -115,7 +115,7 @@ header_n(t) %>%
   kable()
 ```
 
-Note: it’s expected the set_distinct_by() function is used with population data. This is because it does not make sense to use population data denominators unless you have distinct counts. The entire point of population data is to use subject counts, so non-distinct counts would potentially count multiple records per subject and then the percentage doesn’t make any sense.
+Note: it’s expected the `set_distinct_by()` function is used with population data. This is because it does not make sense to use population data denominators unless you have distinct counts. The entire point of population data is to use subject counts, so non-distinct counts would potentially count multiple records per subject and then the percentage doesn’t make any sense.
 
 With the table level settings under control, now you're ready to learn more about what **Tplyr** has to offer in each layer. 
 
