@@ -273,7 +273,6 @@ test_that("Ellipsis unpacking of external variables functions effectively - (#11
   # `add_layers()` example, create the tplyr_table
   t <- tplyr_table(iris, Species)
 
-  # This won't work - Error in !num_formats : invalid argument type
   l <- group_desc(t, Petal.Length) %>%
     set_format_strings(!!!num_formats)
 
