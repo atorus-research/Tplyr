@@ -89,6 +89,8 @@ set_header_n <- function(table, value) {
 #'
 #' pop_data(tab) <- mtcars
 #'
+#' tab <- tplyr_table(iris, Species) %>%
+#'   set_pop_data(mtcars)
 #' @export
 #' @rdname pop_data
 pop_data <- function(table) {
@@ -108,6 +110,7 @@ pop_data <- function(table) {
 #'
 #' @export
 #' @rdname pop_data
+#'
 set_pop_data <- function(table, pop_data) {
   pop_data_name <- enexpr(pop_data)
   # table should be a data.frame
