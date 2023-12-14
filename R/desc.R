@@ -60,7 +60,6 @@ process_summaries.desc_layer <- function(x, ...) {
         # Fill in any missing treat/col combinations
         complete(!!treat_var, !!!by, !!!cols)
 
-
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums_raw[[i]] %>%
         # Transpose the summaries that make up the first number in a display string
