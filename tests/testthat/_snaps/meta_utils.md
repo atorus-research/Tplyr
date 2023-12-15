@@ -20,7 +20,7 @@
 
 ---
 
-    add_cols must be provided using `dplyr::vars()`
+    add_cols must be provided using `rlang::quos()`
 
 ---
 

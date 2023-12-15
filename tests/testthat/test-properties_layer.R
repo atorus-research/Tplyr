@@ -33,7 +33,7 @@ test_that("by binds as expected", {
   set_by(tab, Species2)
   expect_equal(get_by(tab), quos(Species2))
 
-  set_by(tab, vars(Species2, Sepal.Width))
+  set_by(tab, quos(Species2, Sepal.Width))
   expect_equal(unname(map_chr(get_by(tab), as_name)), c("Species2", "Sepal.Width"))
 })
 
@@ -42,8 +42,8 @@ test_that("by raises expected errors", {
     group_count(Species)
 
   expect_snapshot_error(set_by(tab, list(Species)))
-  expect_snapshot_error(set_by(tab, vars(Species, list())))
-  expect_snapshot_error(set_by(tab, vars(Species, 2)))
+  expect_snapshot_error(set_by(tab, quos(Species, list())))
+  expect_snapshot_error(set_by(tab, quos(Species, 2)))
 })
 
 ##### where tests #####

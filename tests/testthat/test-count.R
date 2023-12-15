@@ -32,25 +32,25 @@ c1 <- group_count(t1, cyl)
 # Add in by
 c2 <- group_count(t2, cyl, by = am)
 # Add in multiple bys
-c3 <- group_count(t3, cyl, by = vars(am, vs))
+c3 <- group_count(t3, cyl, by = quos(am, vs))
 # Multiple bys and different f_str
-c4 <- group_count(t4, cyl, by = vars(am, vs)) %>%
+c4 <- group_count(t4, cyl, by = quos(am, vs)) %>%
   set_format_strings(f_str("xxx", n))
 # Multiple bys and total row
-c5 <- group_count(t5, cyl, by = vars(am, vs)) %>%
+c5 <- group_count(t5, cyl, by = quos(am, vs)) %>%
   add_total_row() %>%
   set_denoms_by(gear)
 # Add distinct by
 c6 <- group_count(t6, cyl) %>%
   set_distinct_by(cyl)
 # Multiple target_vars
-c7 <- group_count(t7, vars(cyl, grp))
+c7 <- group_count(t7, quos(cyl, grp))
 # Distinct count and Event count
 c8 <- group_count(t8, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct_n)) %>%
   set_distinct_by(am)
 # Change indentation
-c9 <- group_count(t9, vars(cyl, grp)) %>%
+c9 <- group_count(t9, quos(cyl, grp)) %>%
   set_indentation("")
 # Change row prefix
 c10 <- group_count(t10, cyl) %>%
@@ -63,18 +63,18 @@ c12 <- group_count(t12, cyl) %>%
   set_format_strings(f_str("xx (xx.x%) [xx]", n, pct, distinct_n)) %>%
   set_result_order_var(distinct_n) %>%
   set_distinct_by(am)
-c13 <- group_count(t13, vars(cyl, grp), by = "Test")
-c14 <- group_count(t14, vars(cyl, grp)) %>%
+c13 <- group_count(t13, quos(cyl, grp), by = "Test")
+c14 <- group_count(t14, quos(cyl, grp)) %>%
   set_outer_sort_position("asc")
 c15 <- group_count(t15, cyl) %>%
-  set_distinct_by(vars(am, vs))
+  set_distinct_by(quos(am, vs))
 c16 <- group_count(t16, cyl) %>%
-  set_distinct_by(vars(am,vs))
+  set_distinct_by(quos(am,vs))
 #Check for warning with by, total row and no denom_by
-c17 <- group_count(t17, cyl, by = vars(am, vs)) %>%
+c17 <- group_count(t17, cyl, by = quos(am, vs)) %>%
   add_total_row()
 # Warning shouldn't raise here because they are both strings
-c18 <- group_count(t18, cyl, by = vars("am", "vs")) %>%
+c18 <- group_count(t18, cyl, by = quos("am", "vs")) %>%
   add_total_row()
 c19 <- group_count(t19, cyl, by = am) %>%
   set_denoms_by(am) %>%
@@ -479,7 +479,7 @@ test_that("distinct is changed to distinct_n with a warning", {
 test_that("Nested count layers can accept text values in the first variable", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars("All Cyl", cyl))
+      group_count(quos("All Cyl", cyl))
     )
 
   expect_silent(build(t))
@@ -497,14 +497,14 @@ test_that("Nested count layers can accept text values in the first variable", {
 
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl, "Txt"))
+      group_count(quos(cyl, "Txt"))
     )
   expect_snapshot_error(build(t2))
 
   mtcars$cyl <- factor(as.character(mtcars$cyl), c("4", "6", "8", "25"))
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars("all cyl", cyl))
+      group_count(quos("all cyl", cyl))
     ) %>%
     build()
 
@@ -522,7 +522,7 @@ test_that("Variable names will be coersed into symbols", {
 
   t2 <- tplyr_table(mtcars2, gear) %>%
     add_layer(
-      group_count(vars("all cyl", "cyl"))
+      group_count(quos("all cyl", "cyl"))
     )
   expect_snapshot_warning(build(t2))
 })
@@ -531,7 +531,7 @@ test_that("nested count layers can be built with character value in first positi
   suppressWarnings({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
-        group_count(vars("all_cyl", cyl)) %>%
+        group_count(quos("all_cyl", cyl)) %>%
           add_risk_diff(
             c("4", "5"),
             c("3", "5")
@@ -557,7 +557,7 @@ test_that("keep_levels works as expeceted", {
     build()
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars("all cyl", cyl)) %>%
+      group_count(quos("all cyl", cyl)) %>%
         keep_levels("8") %>%
         set_format_strings(f_str("xxx (xxx%)", n, pct))
     ) %>%
@@ -580,7 +580,7 @@ test_that("keep_levels works as expeceted", {
   mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
   t4 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl, grp)) %>%
+      group_count(quos(cyl, grp)) %>%
         keep_levels("nothere")
     )
   expect_snapshot_error(build(t4))
@@ -592,7 +592,7 @@ test_that("nested count layers can be built with restrictive where logic", {
 
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl, grp), where = grp == "grp.8.5") %>%
+      group_count(quos(cyl, grp), where = grp == "grp.8.5") %>%
         set_nest_count(TRUE) %>%
         set_order_count_method('bycount') %>%
         set_ordering_cols("3")
@@ -610,14 +610,14 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
   expect_snapshot_error({
     t1 <- tplyr_table(mtcars, gear) %>%
       add_layer(
-        group_count(vars(cyl,grp)) %>%
+        group_count(quos(cyl,grp)) %>%
           set_denoms_by(grp)
       )
   })
 
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl,grp)) %>%
+      group_count(quos(cyl,grp)) %>%
         set_denoms_by(cyl)
     ) %>%
     build()
@@ -629,7 +629,7 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
 
   t3 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(cyl,grp)) %>%
+      group_count(quos(cyl,grp)) %>%
         set_denoms_by(cyl, gear)
     ) %>%
     build()
@@ -645,7 +645,7 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
     # Denom for cyl == 4 is 11
     tplyr_table(mtcars, gear, cols=vs) %>%
       add_layer(
-        group_count(vars(cyl,grp)) %>%
+        group_count(quos(cyl,grp)) %>%
           set_denoms_by(cyl)
       ) %>%
       build() %>%
@@ -657,7 +657,7 @@ test_that("nested count layers handle `set_denoms_by` as expected", {
     # Denom for gear == 3, vs = 0 is 12
     tplyr_table(mtcars, gear, cols=vs) %>%
       add_layer(
-        group_count(vars(cyl,grp))
+        group_count(quos(cyl,grp))
       ) %>%
       build() %>%
       as.data.frame()
@@ -716,7 +716,7 @@ test_that("nested count layers will error out if second variable is bigger than 
 
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(vars(grp, cyl))
+      group_count(quos(grp, cyl))
     )
 
   expect_snapshot_error(build(t))
@@ -816,7 +816,7 @@ test_that("set_numeric_threshold works as expected", {
   t7 <- adae %>%
     tplyr_table(TRTA) %>%
     add_layer(
-      group_count(vars(AEBODSYS, AEDECOD)) %>%
+      group_count(quos(AEBODSYS, AEDECOD)) %>%
         set_numeric_threshold(3, "n", "Placebo")
     )
 
@@ -825,7 +825,7 @@ test_that("set_numeric_threshold works as expected", {
   t8 <- adae %>%
     tplyr_table(TRTA) %>%
     add_layer(
-      group_count(vars(AEBODSYS, AEDECOD)) %>%
+      group_count(quos(AEBODSYS, AEDECOD)) %>%
         set_numeric_threshold(3, "n", "Placebo") %>%
         set_order_count_method("bycount")
     )
@@ -881,7 +881,7 @@ test_that("nested count layers error out when you try to add a total row", {
   # GH issue 92
   tab <- tplyr_table(mtcars, am) %>%
     add_layer(
-      group_count(vars(cyl, grp)) %>%
+      group_count(quos(cyl, grp)) %>%
         add_total_row()
     )
 

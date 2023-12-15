@@ -4,7 +4,7 @@
 \alias{tplyr_table}
 \title{Create a Tplyr table object}
 \usage{
-tplyr_table(target, treat_var, where = TRUE, cols = vars())
+tplyr_table(target, treat_var, where = TRUE, cols = quos())
 }
 \arguments{
 \item{target}{Dataset upon which summaries will be performed}

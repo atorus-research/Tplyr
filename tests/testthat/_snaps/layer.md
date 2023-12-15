@@ -22,45 +22,45 @@
 
     Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.
 
-# `by` must me a string, a variable name, or multiple variables submitted using `dplyr::vars`
+# `by` must me a string, a variable name, or multiple variables submitted using `rlang::quos`
 
-    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
-
----
-
-    Invalid input to `~list("a", "b")`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `~c("a", "b")`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `~list("a", "b")`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `~c("a", "b")`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
-
-# `target_var` must me a string, a variable name, or multiple variables submitted using `dplyr::vars`
-
-    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `~list("a", "b")`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `by`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
+
+# `target_var` must me a string, a variable name, or multiple variables submitted using `rlang::quos`
+
+    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `~c("a", "b")`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `~list("a", "b")`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `~c("a", "b")`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 ---
 
-    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `dplyr::vars`.
+    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
+
+---
+
+    Invalid input to `target_var`. Submit either a string, a variable name, or multiple variable names using `rlang::quos`.
 
 # `target_var` must exist in target dataset
 

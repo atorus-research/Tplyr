@@ -17,7 +17,7 @@ to be performed. Must be a variable within the target dataset. Enter
 unquoted - i.e. target_var = AEBODSYS.}
 
 \item{by}{A string, a variable name, or a list of variable names supplied
-using \code{dplyr::vars}}
+using \code{rlang::quos}}
 
 \item{where}{Call. Filter logic used to subset the target data when
 performing a summary.}
@@ -72,7 +72,7 @@ using the layer constructor functions \code{\link{group_count}},
 \examples{
 tab <- tplyr_table(iris, Sepal.Width)
 
-l <- group_count(tab, by=vars('Label Text', Species),
+l <- group_count(tab, by=quos('Label Text', Species),
                  target_var=Species, where= Sepal.Width < 5.5,
                  cols = Species)
 

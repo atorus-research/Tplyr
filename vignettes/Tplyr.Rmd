@@ -278,7 +278,7 @@ tplyr_table(adsl, TRT01P) %>%
 
 ```
 
-**Tplyr** summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `dplyr::vars()` - in any situation where you'd like to use multiple variable names in a parameter, use `dplyr::vars()` to specify the variables. You can use text strings in the calls to `dplyr::vars()` as well. 
+**Tplyr** summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `rlang::quos()` - in any situation where you'd like to use multiple variable names in a parameter, use `rlang::quos()` to specify the variables. You can use text strings in the calls to `rlang::quos()` as well. 
 
 ## Count Layers
 
@@ -323,7 +323,7 @@ tplyr_table(adae, TRTA) %>%
   kable()
 ```
 
-Here we again use `dplyr::vars()` to specify multiple target variables. When used in a count layer, **Tplyr** knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
+Here we again use `rlang::quos()` to specify multiple target variables. When used in a count layer, **Tplyr** knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
 
 ## Shift Layers
 

@@ -12,15 +12,15 @@ t4 <- tplyr_table(mtcars2, gear)
 
 t5 <- tplyr_table(mtcars, gear)
 
-s1 <- group_shift(t1, vars(row = cyl, column = cyl2)) %>%
+s1 <- group_shift(t1, quos(row = cyl, column = cyl2)) %>%
   set_format_strings(f_str("a", n))
-s2 <- group_shift(t2, vars(row = cyl, column = cyl2)) %>%
+s2 <- group_shift(t2, quos(row = cyl, column = cyl2)) %>%
   set_format_strings(f_str("a (xx.xx%)", n, pct))
-s3 <- group_shift(t3, vars(row = cyl, column = cyl2)) %>%
+s3 <- group_shift(t3, quos(row = cyl, column = cyl2)) %>%
   set_format_strings(f_str("a (xx.xx%)", n, pct)) %>%
   set_denoms_by(cyl)
-s4 <- group_shift(t4, vars(row = cyl, column = cyl2))
-s5 <- group_shift(t5, vars(row = cyl, column = cyl2)) %>%
+s4 <- group_shift(t4, quos(row = cyl, column = cyl2))
+s5 <- group_shift(t5, quos(row = cyl, column = cyl2)) %>%
   set_denom_where(vs == 1) %>%
   set_format_strings(f_str("xx (xx.x%)", n, pct))
 
@@ -73,7 +73,7 @@ test_that("group_shift outputs the expected formatted data", {
 test_that("Shift layer clauses with invalid syntax give informative error", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_shift(vars(row=vs, column=am), where=bad == code)
+      group_shift(quos(row=vs, column=am), where=bad == code)
     )
 
   expect_snapshot_error(build(t))

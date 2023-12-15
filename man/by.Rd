@@ -13,7 +13,7 @@ set_by(layer, by)
 \item{layer}{A \code{tplyr_layer} object}
 
 \item{by}{A string, a variable name, or a list of variable names supplied
-using \code{dplyr::vars}.}
+using \code{rlang::quos}.}
 }
 \value{
 For \code{get_by}, the \code{by} binding of the supplied layer. For
@@ -28,5 +28,5 @@ library(magrittr)
 iris$Species2 <- iris$Species
 lay <- tplyr_table(iris, Species) \%>\%
   group_count(Species) \%>\%
-  set_by(vars(Species2, Sepal.Width))
+  set_by(quos(Species2, Sepal.Width))
 }

@@ -14,15 +14,15 @@ t8 <- tplyr_table(mtcars, gear, cols=vs)
 
 d1 <- group_desc(t1, mpg)
 d2 <- group_desc(t2, mpg, by = am)
-d3 <- group_desc(t3, mpg, by = vars(am, vs))
+d3 <- group_desc(t3, mpg, by = quos(am, vs))
 d4 <- group_desc(t4, mpg) %>%
   set_custom_summaries(mean_squared = mean(.var, na.rm=TRUE)**2) %>%
   set_format_strings(
     "Mean Squared" = f_str("xx.xx", mean_squared)
   )
-d5 <- group_desc(t5, vars(mpg, wt))
+d5 <- group_desc(t5, quos(mpg, wt))
 # Update for custom summaries - two target variables
-d6 <- group_desc(t6, vars(mpg, wt)) %>%
+d6 <- group_desc(t6, quos(mpg, wt)) %>%
   set_custom_summaries(mean_squared = mean(.var, na.rm=TRUE)**2) %>%
   set_format_strings(
     "Mean Squared" = f_str("xx.xx", mean_squared)
@@ -104,7 +104,7 @@ test_that("Stats as columns properly transposes the built data", {
 
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_desc(vars(wt, drat)) %>%
+      group_desc(quos(wt, drat)) %>%
         set_format_strings(
           "n"        = f_str("xx", n),
           "sd"       = f_str("xx.x", sd, empty = c(.overall = "BLAH"))
@@ -124,7 +124,7 @@ test_that("Stats as columns properly transposes the built data", {
   # Check that cols evaluate properly as well
   t2 <- tplyr_table(mtcars, gear, cols=am) %>%
     add_layer(
-      group_desc(vars(wt, drat)) %>%
+      group_desc(quos(wt, drat)) %>%
         set_format_strings(
           "n"        = f_str("xx", n),
           "sd"       = f_str("xx.x", sd, empty = c(.overall = "BLAH"))

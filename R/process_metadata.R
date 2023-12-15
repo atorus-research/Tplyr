@@ -34,14 +34,14 @@ process_metadata.desc_layer <- function(x, ...) {
         # Transpose the metadata identical to the summary
         form_meta[[i]] <- meta_sums[[i]] %>%
           pivot_wider(id_cols=c(!!treat_var, match_exact(by)),
-                      names_from = match_exact(vars(row_label, !!!cols)),
+                      names_from = match_exact(quos(row_label, !!!cols)),
                       names_prefix = paste0('var', i, "_"),
                       values_from = meta
           )
       } else {
         form_meta[[i]] <- meta_sums[[i]] %>%
           pivot_wider(id_cols=c('row_label', match_exact(by)),
-                      names_from = match_exact(vars(!!treat_var, !!!cols)),
+                      names_from = match_exact(quos(!!treat_var, !!!cols)),
                       names_prefix = paste0('var', i, "_"),
                       values_from = meta
           )

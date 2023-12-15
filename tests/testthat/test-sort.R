@@ -22,7 +22,7 @@ test_that("A group_count layer can be ordered properly with factors", {
 
   t3 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(cyl, by = vars(am, vs))
+      group_count(cyl, by = quos(am, vs))
     )
   b_t3 <- build(t3) %>%
     arrange(ord_layer_1, ord_layer_2, ord_layer_3)
@@ -38,7 +38,7 @@ test_that("A group_count layer can be ordered properly with factors", {
 test_that("A group_count layer can be ordered properly by counts", {
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(cyl, by = vars(am,vs)) %>%
+      group_count(cyl, by = quos(am,vs)) %>%
         set_order_count_method("bycount")
     )
   b_t1 <- build(t1) %>%
@@ -56,7 +56,7 @@ test_that("A group_count layer can be ordered properly by counts", {
 
   t2 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(cyl, by = vars(am, vs)) %>%
+      group_count(cyl, by = quos(am, vs)) %>%
         set_order_count_method("bycount") %>%
         set_ordering_cols("3")
     )
@@ -79,7 +79,7 @@ test_that("A group_count layer can be ordered properly by a VARN", {
   mtcars$cylN <- mtcars$cyl
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
-      group_count(cyl, by = vars(vs, am)) %>%
+      group_count(cyl, by = quos(vs, am)) %>%
         set_order_count_method("byvarn")
     )
   b_t1 <- build(t1) %>%
@@ -102,20 +102,20 @@ test_that("A nested group_count layer can be ordered properly", {
 
   t <- tplyr_table(iris, treat) %>%
     add_layer(
-      group_count(vars(Species, grp))
+      group_count(quos(Species, grp))
     )
   b_t <- build(t)
 
   t2 <- tplyr_table(iris, treat) %>%
     add_layer(
-      group_count(vars(Species, grp)) %>%
+      group_count(quos(Species, grp)) %>%
         set_order_count_method("bycount", break_ties = "asc")
     )
   b_t2 <- build(t2)
 
   t3 <- tplyr_table(iris, treat) %>%
     add_layer(
-      group_count(vars(Species, grp)) %>%
+      group_count(quos(Species, grp)) %>%
         set_order_count_method("bycount", break_ties = "desc")
     )
   b_t3 <- build(t3)
@@ -152,7 +152,7 @@ adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
   add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
+    group_count(quos(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%
       set_result_order_var(n) %>%
       set_order_count_method(c("byvarn", "byvarn"))
@@ -169,7 +169,7 @@ adsl2 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
   add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
+    group_count(quos(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%
       set_result_order_var(n) %>%
       set_order_count_method(c("bycount", "bycount"))
@@ -186,7 +186,7 @@ adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
   add_total_group() %>%
   add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
   add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
+    group_count(quos(EOSSTT, DCDECOD)) %>%
       set_ordering_cols(Placebo, `65-80`) %>%
       set_result_order_var(n) %>%
       set_order_count_method(c("byfactor", "byfactor"))

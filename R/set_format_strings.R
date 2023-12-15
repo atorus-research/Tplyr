@@ -82,7 +82,7 @@
 #' # In a shift layer
 #' tplyr_table(mtcars, am) %>%
 #'   add_layer(
-#'     group_shift(vars(row=gear, column=carb), by=cyl) %>%
+#'     group_shift(quos(row=gear, column=carb), by=cyl) %>%
 #'     set_format_strings(f_str("xxx (xx.xx%)", n, pct))
 #'   ) %>%
 #'   build()
@@ -157,9 +157,9 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 
   env_bind(e,
            format_strings = format_strings,
-           summary_vars = vars(!!!summary_vars),
-           keep_vars = vars(!!!keep_vars),
-           trans_vars = vars(!!!trans_vars),
+           summary_vars = quos(!!!summary_vars),
+           keep_vars = quos(!!!keep_vars),
+           trans_vars = quos(!!!trans_vars),
            row_labels = row_labels,
            max_length = max_format_length,
            need_prec_table = need_prec_table,

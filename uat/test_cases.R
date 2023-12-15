@@ -379,12 +379,12 @@ test_that('T9',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(vars(EOSSTT, DCDECOD)) %>%
+        group_count(quos(EOSSTT, DCDECOD)) %>%
           set_format_strings(f_str("xxx", n)) %>%
           keep_levels("COMPLETED", "DEATH")
       ) %>%
       add_layer(
-        group_count(vars("Discontinuation", DCDECOD)) %>%
+        group_count(quos("Discontinuation", DCDECOD)) %>%
           set_format_strings(f_str("xxx", n)) %>%
           keep_levels("COMPLETED", "DEATH")
       )
@@ -1119,7 +1119,7 @@ test_that('T20',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
+        group_count(quos(AEBODSYS, AEDECOD)) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       ) %>%
       add_layer(
@@ -1127,19 +1127,19 @@ test_that('T20',{
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       ) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD), by = SEX) %>%
+        group_count(quos(AEBODSYS, AEDECOD), by = SEX) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       ) %>%
       add_layer(
-        group_count(vars("CODED TERM", AEDECOD)) %>%
+        group_count(quos("CODED TERM", AEDECOD)) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       ) %>%
       add_layer(
-        group_count(vars("CODED TERM", AEDECOD), by = SEX) %>%
+        group_count(quos("CODED TERM", AEDECOD), by = SEX) %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       ) %>%
       add_layer(
-        group_count(vars("CODED TERM", AEDECOD), by = "TERMED") %>%
+        group_count(quos("CODED TERM", AEDECOD), by = "TERMED") %>%
           add_risk_diff(c('Xanomeline High Dose','Placebo'))
       )
 
@@ -1817,7 +1817,7 @@ test_that('T29',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), where=(ANRIND != "" & BNRIND != "")) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND), where=(ANRIND != "" & BNRIND != "")) %>%
           set_format_strings(f_str("xxx (xxx.x%)", n, pct))
       )
 
@@ -1876,7 +1876,7 @@ test_that('T30',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=SEX)
+        group_shift(quos(row=ANRIND, column=BNRIND), by=SEX)
       )
     build(t)
     test_30 <- get_numeric_data(t)[[1]]
@@ -1918,7 +1918,7 @@ test_that('T31',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(RACE, SEX))
+        group_shift(quos(row=ANRIND, column=BNRIND), by=quos(RACE, SEX))
       )
     build(t)
     test_31 <- get_numeric_data(t)[[1]]
@@ -1960,7 +1960,7 @@ test_that('T32',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND_FACTOR, column=BNRIND_FACTOR), where=(ANRIND != "" & BNRIND != "")) %>%
+        group_shift(quos(row=ANRIND_FACTOR, column=BNRIND_FACTOR), where=(ANRIND != "" & BNRIND != "")) %>%
           set_format_strings(f_str("xxx (xxx.x%)", n, pct)) %>%
           set_denom_where(TRUE)
       )
@@ -2020,7 +2020,7 @@ test_that('T33',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND)) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
@@ -2074,7 +2074,7 @@ test_that('T34',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND)) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
@@ -2126,7 +2126,7 @@ test_that('T35',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND)) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
 
@@ -2180,7 +2180,7 @@ test_that('T36',{
       set_pop_data(adsl) %>%
       set_pop_treat_var(TRT01P) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND),
+        group_shift(quos(row=ANRIND, column=BNRIND),
                     where=(PARAMCD == "BILI" & AVISIT == "Week 2")) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct))
       )
@@ -2236,7 +2236,7 @@ test_that('T37',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adlb, TRTA) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND), by=vars(PARAMCD, AVISIT)) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND), by=quos(PARAMCD, AVISIT)) %>%
           set_format_strings(f_str("xxx (xxx.x%)",n,pct)) %>%
           set_denoms_by(TRTA, PARAMCD, AVISIT)
       )
@@ -2328,7 +2328,7 @@ test_that('T39',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        group_count(RACE, by = vars("Ethnicity", ETHNIC, "Race"))
+        group_count(RACE, by = quos("Ethnicity", ETHNIC, "Race"))
       )
 
     test_39 <- build(t)
@@ -2744,7 +2744,7 @@ test_that('T46',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD), where = (AOCC02FL == 'Y')) %>%
+        group_count(quos(AEBODSYS, AEDECOD), where = (AOCC02FL == 'Y')) %>%
           set_order_count_method("bycount") %>%
           set_ordering_cols("Xanomeline High Dose")
       )
@@ -3083,10 +3083,10 @@ test_that('T50',{
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       set_shift_layer_formats(f_str('xxxx (xxx.x%)',n,pct)) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
+        group_shift(quos(row=ANRIND, column=BNRIND))
       ) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND)) %>%
+        group_shift(quos(row=ANRIND, column=BNRIND)) %>%
           set_format_strings(f_str("xxx",n))
       )
 
@@ -3285,7 +3285,7 @@ test_that('T53',{
 
     t <- tplyr_table(adlb, TRTA, where=(PARAMCD == "BILI" & AVISIT == "Week 2" & ANRIND != "" & BNRIND != "")) %>%
       add_layer(
-        group_shift(vars(row=ANRIND, column=BNRIND))
+        group_shift(quos(row=ANRIND, column=BNRIND))
       )
 
     test_53 <- build(t)
@@ -3694,7 +3694,7 @@ test_that('T60',{
     #outputs should be sent to "~/uat/output" folder
     t <- tplyr_table(adae, TRTA) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
+        group_count(quos(AEBODSYS, AEDECOD)) %>%
           set_format_strings(f_str('xxx', n))
       ) %>%
       build() %>%
@@ -3831,7 +3831,7 @@ test_that('T62',{
       set_pop_treat_var(TRT01P) %>%
       set_distinct_by(USUBJID) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
+        group_count(quos(AEBODSYS, AEDECOD)) %>%
           add_risk_diff(c('Treated','Placebo'))
       )
 
@@ -3918,7 +3918,7 @@ test_that('T63',{
       set_pop_treat_var(TRT01P) %>%
       set_distinct_by(USUBJID) %>%
       add_layer(
-        group_count(vars(AEBODSYS, AEDECOD)) %>%
+        group_count(quos(AEBODSYS, AEDECOD)) %>%
           add_risk_diff(c('Treated','Placebo'))
       )
 

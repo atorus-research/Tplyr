@@ -100,7 +100,7 @@ depth_from_table <- function(layer, i){
 #' iris %>%
 #'   group_by(Species) %>%
 #'   summarize(mean=mean(Sepal.Length), median = median(Sepal.Length)) %>%
-#'   pivot_longer(cols = match_exact(vars(mean, median)))
+#'   pivot_longer(cols = match_exact(quos(mean, median)))
 #'
 match_exact <- function(var_list) {
   # Should have been a list of quosures on input
@@ -314,8 +314,8 @@ ut_round <- function(x, n=0)
 {
   # x is the value to be rounded
   # n is the precision of the rounding
-  posneg <- sign(x)                                         
-  e <- abs(x) * 10^n                                  
+  posneg <- sign(x)
+  e <- abs(x) * 10^n
   e <- e + 0.5 + sqrt(.Machine$double.eps)
   e <- trunc(e)
   e <- e / 10^n

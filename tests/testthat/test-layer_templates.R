@@ -102,7 +102,7 @@ test_that("Template errors correctly upon execution", {
   expect_snapshot_error(
     tplyr_table(adsl, TRT01P) %>%
       add_layer(
-        use_template('test2', RACE, add_params = vars(USUBJID))
+        use_template('test2', RACE, add_params = quos(USUBJID))
       )
   )
 
@@ -135,7 +135,7 @@ test_that("Template errors correctly upon execution", {
         use_template('test2', RACE, add_params = list(
           sort_meth = "bycount",
           sort_col = Placebo,
-          test = vars(a, b, c)
+          test = quos(a, b, c)
         ))
       )
   )

@@ -139,7 +139,7 @@ process_formatting.desc_layer <- function(x, ...) {
       if (stats_as_columns) {
         form_sums[[i]] <- trans_sums[[i]] %>%
           pivot_wider(id_cols=c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
-                      names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
+                      names_from = match_exact(quos(row_label, !!!cols)), # Pull the names from treatment and cols argument
                       names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                       values_from = display_string # Use the created display_string variable for values
           )
@@ -147,7 +147,7 @@ process_formatting.desc_layer <- function(x, ...) {
       } else {
         form_sums[[i]] <- trans_sums[[i]] %>%
           pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
-                      names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
+                      names_from = match_exact(quos(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
                       names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
                       values_from = display_string # Use the created display_string variable for values
         )
@@ -173,7 +173,7 @@ process_formatting.desc_layer <- function(x, ...) {
     # formatted_data <- formatted_data %>%
     #   rowwise() %>%
     #   # Replace NA values with the proper empty strings
-    #   mutate_at(vars(starts_with('var')), ~ replace_na(.x, format_strings[[row_label]]$empty))
+    #   mutate_at(quos(starts_with('var')), ~ replace_na(.x, format_strings[[row_label]]$empty))
 
 
     # Clean up

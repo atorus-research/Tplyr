@@ -13,7 +13,7 @@ set_precision_by(layer, precision_by)
 \item{layer}{A \code{tplyr_layer} object}
 
 \item{precision_by}{A string, a variable name, or a list of variable names supplied
-using \code{dplyr::vars}.}
+using \code{rlang::quos}.}
 }
 \value{
 For \code{get_precision_by}, the precision_by binding of the supplied
@@ -31,7 +31,7 @@ by variables
 library(magrittr)
 lay <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
-    group_desc(mpg, by=vars(carb, am)) \%>\%
+    group_desc(mpg, by=quos(carb, am)) \%>\%
     set_precision_by(carb)
   )
 }

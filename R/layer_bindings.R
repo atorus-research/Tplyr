@@ -50,13 +50,13 @@ set_target_var <- function(layer, target_var) {
 #' iris$Species2 <- iris$Species
 #' lay <- tplyr_table(iris, Species) %>%
 #'   group_count(Species) %>%
-#'   set_by(vars(Species2, Sepal.Width))
+#'   set_by(quos(Species2, Sepal.Width))
 get_by <- function(layer) {
   env_get(layer, "by")
 }
 
 #' @param by A string, a variable name, or a list of variable names supplied
-#'   using \code{dplyr::vars}.
+#'   using \code{rlang::quos}.
 #'
 #' @export
 #' @rdname by
@@ -111,7 +111,7 @@ set_where.tplyr_layer <- function(obj, where) {
 #' library(magrittr)
 #' lay <- tplyr_table(mtcars, gear) %>%
 #'   add_layer(
-#'     group_desc(mpg, by=vars(carb, am)) %>%
+#'     group_desc(mpg, by=quos(carb, am)) %>%
 #'     set_precision_by(carb)
 #'   )
 get_precision_by <- function(layer) {
@@ -119,7 +119,7 @@ get_precision_by <- function(layer) {
 }
 
 #' @param precision_by A string, a variable name, or a list of variable names supplied
-#'   using \code{dplyr::vars}.
+#'   using \code{rlang::quos}.
 #'
 #' @export
 #' @rdname precision_by
@@ -155,7 +155,7 @@ set_precision_by <- function(layer, precision_by) {
 #' library(magrittr)
 #' lay <- tplyr_table(mtcars, gear) %>%
 #'   add_layer(
-#'     group_desc(vars(mpg, disp), by=vars(carb, am)) %>%
+#'     group_desc(quos(mpg, disp), by=quos(carb, am)) %>%
 #'     set_precision_on(disp)
 #'   )
 get_precision_on <- function(layer) {
@@ -163,7 +163,7 @@ get_precision_on <- function(layer) {
 }
 
 #' @param precision_on A string, a variable name, or a list of variable names
-#'   supplied using \code{dplyr::vars}.
+#'   supplied using \code{rlang::quos}.
 #'
 #' @export
 #' @rdname precision_on
@@ -229,7 +229,7 @@ set_precision_data <- function(layer, prec, default = c("error", "auto")) {
   precision_by_syms <- map(precision_by, sym)
 
   # Insert the by variables in the layer and let set_precision_by validate
-  set_precision_by(layer, vars(!!!precision_by_syms))
+  set_precision_by(layer, quos(!!!precision_by_syms))
 
   # Checks
   # max_int and max_dec are both on precision dataset

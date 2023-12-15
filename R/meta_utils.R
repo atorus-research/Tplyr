@@ -126,25 +126,25 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
 #'
 #' dat <- t %>% build(metadata = TRUE)
 #'
-#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb))
+#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = rlang::quos(carb))
 #'
 #' m <- t$metadata
 #' dat <- t$target
 #'
-#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb), target = target)
-get_meta_subset <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
+#' get_meta_subset(t, 'd1_1', 'var1_4', add_cols = rlang::quos(carb), target = target)
+get_meta_subset <- function(x, row_id, column, add_cols = quos(USUBJID), ...) {
   UseMethod("get_meta_subset")
 }
 
 #' @export
 #' @rdname get_meta_subset
 get_meta_subset.data.frame <- function(x, row_id, column,
-                                       add_cols = vars(USUBJID), target = NULL, ...) {
+                                       add_cols = quos(USUBJID), target = NULL, ...) {
   # Get the metadata object ready
   m <- get_meta_result(x, row_id, column)
 
   if (!inherits(add_cols, 'quosures')) {
-    stop("add_cols must be provided using `dplyr::vars()`", call.=FALSE)
+    stop("add_cols must be provided using `rlang::quos()`", call.=FALSE)
   }
 
   # Subset and return the data
@@ -159,13 +159,13 @@ get_meta_subset.data.frame <- function(x, row_id, column,
 
 #' @export
 #' @rdname get_meta_subset
-get_meta_subset.tplyr_table <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
+get_meta_subset.tplyr_table <- function(x, row_id, column, add_cols = quos(USUBJID), ...) {
 
   # Get the metadata object ready
   m <- get_meta_result(x, row_id, column)
 
   if (!inherits(add_cols, 'quosures')) {
-    stop("add_cols must be provided using `dplyr::vars()`", call.=FALSE)
+    stop("add_cols must be provided using `rlang::quos()`", call.=FALSE)
   }
 
   # Subset and return the data

@@ -591,7 +591,7 @@ set_denom_where <- function(e, denom_where) {
 #' @export
 #' @noRd
 set_denoms_by.count_layer <- function(e, ...) {
-  dots <- vars(...)
+  dots <- quos(...)
   dots_chr <- map_chr(dots, as_name)
 
   # Pull these variables to make sure the denoms used make sense
