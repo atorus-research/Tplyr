@@ -444,7 +444,7 @@ test_that("set_denom_where errors for incompatible object type", {
   t1 <- tplyr_table(mtcars, gear)
 
   # Modify the object type to make it incompatible
-  class(t) <- "environment"
+  class(t1) <- "environment"
 
   # Function errors
   t1 <- set_denom_where(t1, mpg != 21) %>%
