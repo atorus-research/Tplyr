@@ -2,8 +2,10 @@
 #'
 #' @param .x The number of levels to indent
 #' @param .y Input variable for which indentation will be done
+#' @param indent Indentation string to be used, which is multiplied at each indentation level
 #'
 #' @return Character string with indentation applied
+#' @noRd
 add_indentation <- function(.x, .y, indent = "  ") {
   paste(c(rep("",.x-1), .y), collapse=indent)
 }

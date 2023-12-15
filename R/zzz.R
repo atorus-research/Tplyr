@@ -3,7 +3,7 @@
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym syms := as_name
 #' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn quo_is_call
 #' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim str_wrap
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr map2_chr walk
 #' @importFrom stringr str_sub str_sub<- str_extract str_pad str_starts str_remove_all str_match_all
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract extract2
@@ -11,7 +11,7 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with fill
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -303,3 +303,8 @@ l <- NULL
 w <- NULL
 s <- NULL
 out <- NULL
+og_row <- NULL
+desc <- NULL
+id <- NULL
+stub_sort <- NULL
+
