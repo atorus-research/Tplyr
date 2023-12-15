@@ -185,6 +185,7 @@ set_format_strings.count_layer <- function(e, ...) {
   e
 }
 
+#' @export
 set_format_strings.shift_layer <- function(e, ...) {
 
   dots <- list2(...)
