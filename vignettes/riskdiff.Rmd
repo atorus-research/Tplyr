@@ -140,7 +140,7 @@ t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DI
   set_pop_treat_var(TRT01A) %>% 
   set_pop_where(TRUE) %>% 
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+    group_count(quos(AEBODSYS, AEDECOD)) %>% 
       set_distinct_by(USUBJID) %>% 
       add_risk_diff(
         c('Xanomeline High Dose', 'Placebo'),

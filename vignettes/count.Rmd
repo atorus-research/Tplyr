@@ -98,7 +98,7 @@ The example below demonstrates how to do a nested summary. Look at the first row
 ```{r}
 tplyr_table(adae, TRTA) %>%
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD))
+    group_count(quos(AEBODSYS, AEDECOD))
   ) %>%
   build() %>%
   head() %>% 
@@ -110,7 +110,7 @@ This accomplishes what we needed, but it's not exactly the presentation you migh
 ```{r} 
 tplyr_table(adae, TRTA) %>%
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+    group_count(quos(AEBODSYS, AEDECOD)) %>% 
       set_nest_count(TRUE) %>% 
       set_indentation("--->")
   ) %>%

@@ -55,7 +55,7 @@ In the example above, the `where` parameter is passed forward into both the `RAC
 _Note: Treatment groups and additional column variables presented in the final output are always taken from the **pre-filtered** population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled._
 
 ```{r table_params2}
-tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
+tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = quos(SEX, RACE)) %>% 
   add_layer(
     group_desc(AGE, by = "Age (Years)")
   ) %>% 

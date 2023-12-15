@@ -139,7 +139,7 @@ Let's look at an example.
 ```{r multi-custom}
 tplyr_table(adsl, TRT01P) %>%
   add_layer(
-    group_desc(vars(AGE, HEIGHTBL), by = "Sepal Length") %>%
+    group_desc(quos(AGE, HEIGHTBL), by = "Sepal Length") %>%
       set_custom_summaries(
         geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))
       ) %>%

@@ -300,7 +300,7 @@ Nested count layers add one more piece to the puzzle. As a reminder, nested coun
 ```{r}
 tplyr_table(adae, TRTA) %>% 
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD))
+    group_count(quos(AEBODSYS, AEDECOD))
   ) %>% 
   build() %>% 
   head() %>% 
@@ -315,7 +315,7 @@ These result variables will always be the last two order variables output by **T
 ```{r}
 tplyr_table(adae, TRTA) %>% 
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+    group_count(quos(AEBODSYS, AEDECOD)) %>% 
       set_outer_sort_position("asc")
   ) %>% 
   build() %>% 
@@ -332,7 +332,7 @@ Another consideration of nested sorting is whether or not you want to sort both 
 ```{r}
 tplyr_table(adsl, TRT01A) %>%
   add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
+    group_count(quos(EOSSTT, DCDECOD)) %>%
       set_order_count_method(c("byfactor", "bycount"))
   ) %>%
   build() %>%
@@ -348,7 +348,7 @@ If only one method is provided, that method will automatically be applied to bot
 tplyr_table(adsl, TRT01A) %>%
   add_total_group() %>%
   add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
+    group_count(quos(EOSSTT, DCDECOD)) %>%
       set_order_count_method("bycount") %>%
       #set_order_count_method("bycount", "bycount") %>% This is functionally the same.
       set_ordering_cols(Total)
@@ -366,7 +366,7 @@ Shift tables keep things relatively simple when it comes to sorting and use the 
 ```{r}
 tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT))
+    group_shift(quos(row = BNRIND, column = ANRIND), by = quos(PARAM, AVISIT))
   ) %>%
   build() %>%
   select(-starts_with('var1')) %>% 
@@ -387,7 +387,7 @@ adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
 
 tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT))
+    group_shift(quos(row = BNRIND, column = ANRIND), by = quos(PARAM, AVISIT))
   ) %>%
   build() %>%
   select(-starts_with('var1')) %>% 

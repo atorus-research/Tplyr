@@ -176,13 +176,13 @@ unpack_vars <- function(quo_list, allow_character=TRUE) {
 
   # Unpack the `quo_list` group to ensure that the type is `list_of<quosures>`
   # It had to be a 1 item list, so check if that element is a `call`
-  # The only valid use of a `call` is to provide multiple variables using `vars`
+  # The only valid use of a `call` is to provide multiple variables using `quos`
   c <- quo_get_expr(quo_list[[1]])
   if (is.call(c)) {
     # If it's a call, we need to pull it out a level
     quo_list <- tryCatch({
       # If it's in here, the call has to be to rlang::quos
-      if (call_name(c) != "vars") abort("Multiple variables should be using rlang::quos")
+      if (call_name(c) != "quos") abort("Multiple variables should be using rlang::quos")
 
       # Evaluate the quosure sort_vars getting the expression
       eval(c, envir=caller_env())
