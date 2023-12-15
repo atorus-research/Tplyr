@@ -22,7 +22,6 @@ library(tidyr)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adsl.Rdata")
 ```
 
 **Tplyr** has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?

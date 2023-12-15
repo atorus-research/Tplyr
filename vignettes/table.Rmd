@@ -21,8 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
 ```
 
 Most of the work in creating a **Tplyr** table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in **Tplyr** is allow you to eliminate redundant code wherever possible. Adding some processing to the `tplyr_table()` level allows us to do that. Furthermore, some settings simply need to be applied table wide.

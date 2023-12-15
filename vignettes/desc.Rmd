@@ -21,8 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adlb.Rdata")
-load("adsl.Rdata")
 ```
 
 Descriptive statistics in **Tplyr** are created using `group_desc()` function when creating a layer. While `group_desc()` allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from `set_format_strings()` where the actual summaries are declared. 

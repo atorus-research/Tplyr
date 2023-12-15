@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr)
 library(tidyr)
-load('adsl.Rdata')
-load('adlb.Rdata')
-load('adae.Rdata')
 ```
 
 A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of **Tplyr**, but **Tplyr** gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but **Tplyr's** focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 

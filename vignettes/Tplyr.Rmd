@@ -21,9 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
-load("adlb.Rdata")
 ```
 
 # How **Tplyr** Works

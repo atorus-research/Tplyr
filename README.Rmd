@@ -17,8 +17,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("vignettes/adae.Rdata")
-load("vignettes/adsl.Rdata")
 ```
 
 # *Tplyr* <img src="man/figures/logo.png" align="right" alt="" width="120" />

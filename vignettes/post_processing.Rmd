@@ -20,8 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr)
 library(knitr)
-load('adsl.Rdata')
-load('adae.Rdata')
 ```
 
 We've made a large effort to make **Tplyr** tables flexible, but not everything can (or, in some cases, we think should) be handled during table construction itself. To address this, **Tplyr** has several post-processing functions that help put finishing touches on your data to help with presentation.

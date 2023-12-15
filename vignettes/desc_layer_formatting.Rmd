@@ -21,9 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adlb.Rdata")
-load("adsl.Rdata")
-load('adlb.Rdata')
 ```
 
 A lot of the nuance to formatting descriptive statistics layers was covered in the descriptive statistic layer vignette, but there are a couple more tricks to getting the most out of **Tplyr**. In this vignette, we'll cover some of the options in more detail.

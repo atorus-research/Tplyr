@@ -21,7 +21,6 @@ library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
 library(kableExtra)
-load("adsl.Rdata")
 ```
 
 In the other vignettes we talk about how to get the most out of **Tplyr** when it comes to preparing your data. The last step we need to cover is how to get from the data output by **Tplyr** to a presentation ready table.
