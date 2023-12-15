@@ -577,7 +577,7 @@ set_denom_where <- function(e, denom_where) {
   denom_where <- enquo(denom_where)
 
   if (!(inherits(e, 'tplyr_layer') | inherits(e, 'tplyr_table'))) {
-    stop('Object type should be ', call.=FALSE)
+    stop('Object type should be either "tplyr_layer" or "tplyr_table"', call.=FALSE)
   }
 
   assert_that(is_logical_or_call(denom_where),
