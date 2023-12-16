@@ -134,7 +134,7 @@ This was a basic situation, but if you're paying close attention, you may have s
 ```{r precision3}
 tplyr_table(adlb, TRTA) %>% 
   add_layer(
-    group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
+    group_desc(quos(AVAL, CHG, BASE), by = PARAMCD) %>% 
       set_format_strings(
         'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd, empty="NA"),
         cap = c(int=3, dec=2)
@@ -237,7 +237,7 @@ Note that if a certain number of integers are alotted, space will be left for th
 ```{r manual_hugging}
 tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
-    group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
+    group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>% 
       set_format_strings(
         TEST = f_str("xxx.x (XXX.x)", mean, sd, empty="NA")
       ) %>% 
@@ -253,7 +253,7 @@ Similarly, the same functionality works with auto precision by using a capital A
 ```{r auto_hugging}
 tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
-    group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
+    group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>% 
       set_format_strings(
         TEST = f_str("a.a (A.a)", mean, sd, empty="NA")
       ) %>% 

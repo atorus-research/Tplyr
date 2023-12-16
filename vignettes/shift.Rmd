@@ -43,7 +43,7 @@ Let's look at an example.
 ```{r}
 tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
+    group_shift(quos(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
   ) %>%
   build() %>%
   head(20) %>%
@@ -61,7 +61,7 @@ adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
 adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))
 tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
+    group_shift(quos(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
   ) %>%
   build() %>%
   head(20) %>%

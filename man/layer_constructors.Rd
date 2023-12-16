@@ -7,11 +7,11 @@
 \title{Create a \code{count}, \code{desc}, or \code{shift} layer for discrete count
 based summaries, descriptive statistics summaries, or shift count summaries}
 \usage{
-group_count(parent, target_var, by = vars(), where = TRUE, ...)
+group_count(parent, target_var, by = quos(), where = TRUE, ...)
 
-group_desc(parent, target_var, by = vars(), where = TRUE, ...)
+group_desc(parent, target_var, by = quos(), where = TRUE, ...)
 
-group_shift(parent, target_var, by = vars(), where = TRUE, ...)
+group_shift(parent, target_var, by = quos(), where = TRUE, ...)
 }
 \arguments{
 \item{parent}{Required. The parent environment of the layer. This must be the
@@ -51,7 +51,7 @@ This family of functions specifies the type of summary that is
   Count layers are also capable of producing counts of nested relationships.
   For example, if you want to produce counts of an overall outside group, and
   then the subgroup counts within that group, you can specify the target
-  variable as vars(OutsideVariable, InsideVariable). This allows you to do
+  variable as quos(OutsideVariable, InsideVariable). This allows you to do
   tables like Adverse Events where you want to see the Preferred Terms within
   Body Systems, all in one layer. Further control over denominators is
   available using the function \code{\link{set_denoms_by}} and distinct
@@ -69,7 +69,7 @@ This family of functions specifies the type of summary that is
   shift layer displays an endpoint's 'shift' throughout the duration of the
   study. It is an abstraction over the count layer, however we have provided
   an interface that is more efficient and intuitive. Targets are passed as
-  named symbols using \code{dplyr::vars}. Generally the baseline is passed
+  named symbols using \code{rlang::quos}. Generally the baseline is passed
   with the name 'row' and the shift is passed with the name 'column'. Both
   counts (n) and percentages (pct) are supported and can be specified with
   the \code{\link{set_format_strings}} function. To allow for flexibility
@@ -93,7 +93,7 @@ t <- tplyr_table(iris, Species) \%>\%
 
 t <- tplyr_table(mtcars, am) \%>\%
   add_layer(
-    group_shift(vars(row=gear, column=carb), by=cyl)
+    group_shift(quos(row=gear, column=carb), by=cyl)
   )
 }
 \seealso{

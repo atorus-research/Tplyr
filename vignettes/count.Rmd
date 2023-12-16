@@ -91,14 +91,14 @@ As can be seen above, when using parenthesis hugging, the width of a specified f
 
 Certain summary tables present counts within groups. One example could be in a disposition table where a disposition reason of "Other" summarizes what those other reasons were. A very common example is an Adverse Event table that displays counts for body systems, and then the events within those body systems. This is again a nuanced situation - there are two variables being summarized: The body system counts, and the advert event counts.
 
-One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don't want you to have to do that. Instead, we handle this complexity for you. This is done in `group_count()` by submitting two target variables with `dplyr::vars()`. The first variable should be your grouping variable that you want summarized, which we refer to as the "Outside" variable, and the second should have the narrower scope, which we call the "Inside" variable. 
+One way to approach this would be creating two summaries. One summarizing the body system, and another summarizing the preferred terms by body system, and then merging the two together. But we don't want you to have to do that. Instead, we handle this complexity for you. This is done in `group_count()` by submitting two target variables with `rlang::quos()`. The first variable should be your grouping variable that you want summarized, which we refer to as the "Outside" variable, and the second should have the narrower scope, which we call the "Inside" variable. 
 
 The example below demonstrates how to do a nested summary. Look at the first row - here `row_label1` and `row_label2` are both "CARDIAC DISORDERS". This line is the summary for `AEBODSYS.` In the rows below that, `row_label1` continues on with the value "CARDIAC DISORDERS", but `row_label2` changes. These are the summaries for `AEDECOD`.
 
 ```{r}
 tplyr_table(adae, TRTA) %>%
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD))
+    group_count(quos(AEBODSYS, AEDECOD))
   ) %>%
   build() %>%
   head() %>% 
@@ -110,7 +110,7 @@ This accomplishes what we needed, but it's not exactly the presentation you migh
 ```{r} 
 tplyr_table(adae, TRTA) %>%
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+    group_count(quos(AEBODSYS, AEDECOD)) %>% 
       set_nest_count(TRUE) %>% 
       set_indentation("--->")
   ) %>%

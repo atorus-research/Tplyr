@@ -103,7 +103,7 @@ tplyr_table(mtcars, gear) \%>\%
 # In a shift layer
 tplyr_table(mtcars, am) \%>\%
   add_layer(
-    group_shift(vars(row=gear, column=carb), by=cyl) \%>\%
+    group_shift(quos(row=gear, column=carb), by=cyl) \%>\%
     set_format_strings(f_str("xxx (xx.xx\%)", n, pct))
   ) \%>\%
   build()

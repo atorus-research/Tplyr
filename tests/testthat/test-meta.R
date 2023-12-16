@@ -57,7 +57,7 @@ t2 <- tplyr_table(adae, TRTA) %>%
       )
   ) %>%
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD))
+    group_count(quos(AEBODSYS, AEDECOD))
   )
 
 dat2 <- suppressWarnings(t2 %>% build(metadata=TRUE))
@@ -65,7 +65,7 @@ dat2 <- suppressWarnings(t2 %>% build(metadata=TRUE))
 # Table to test out character outer for count layers
 t3 <- tplyr_table(adsl, TRT01A) %>%
   add_layer(
-    group_count(vars("Outer string", RACE))
+    group_count(quos("Outer string", RACE))
   )
 
 dat3 <- t3 %>%
@@ -74,7 +74,7 @@ dat3 <- t3 %>%
 # Table for testing of Shift layers
 t4 <- tplyr_table(adlb, TRTA, where = AVISIT != "") %>%
   add_layer(
-    group_shift(vars(row = BNRIND, column=ANRIND), by=AVISIT)
+    group_shift(quos(row = BNRIND, column=ANRIND), by=AVISIT)
   )
 
 dat4 <- t4 %>%

@@ -41,10 +41,10 @@ process_nested_count_target <- function(x) {
     }
 
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
-                                                 by = vars(!!!by), where = !!where))
+                                                 by = quos(!!!by), where = !!where))
 
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
-                                                  by = vars(!!target_var[[1]], !!!by), where = !!where) %>%
+                                                  by = quos(!!target_var[[1]], !!!by), where = !!where) %>%
                                         set_count_row_prefix(indentation) %>%
                                         set_denoms_by(!!!second_denoms_by))
 
@@ -82,8 +82,8 @@ process_nested_count_target <- function(x) {
     target_var_saved <- target_var
     is_built_nest <- TRUE
 
-    by <- vars(!!target_var[[1]], !!!by)
-    target_var <- vars(!!target_var[[2]])
+    by <- quos(!!target_var[[1]], !!!by)
+    target_var <- quos(!!target_var[[2]])
 
 
   }, envir = x)

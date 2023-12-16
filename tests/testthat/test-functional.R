@@ -31,7 +31,7 @@ t3 <- tplyr_table(mtcars, gear) %>%
 ##### T4 Complex desc layer #####
 t4 <- tplyr_table(mtcars, gear) %>%
   add_layer(
-    group_desc(mpg, by = vars("am", am)) %>%
+    group_desc(mpg, by = quos("am", am)) %>%
       set_format_strings(
         "n"        = f_str("xx", n),
         "Mean (SD)"= f_str("xx.x", mean),
@@ -70,10 +70,10 @@ t6 <- tplyr_table(mtcars, gear, col = am) %>%
   add_total_group() %>%
   set_where(mpg > 15) %>%
   add_layer(
-    group_count(carb, by = vars("Carb count", vs))
+    group_count(carb, by = quos("Carb count", vs))
   ) %>%
   add_layer(
-    group_count(cyl, by = vars(vs, carb)) %>%
+    group_count(cyl, by = quos(vs, carb)) %>%
       set_format_strings(f_str("xxx", n))
   ) %>%
   add_layer(

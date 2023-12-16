@@ -26,7 +26,7 @@
 #'   either "counts" for categorical counts, "desc" for descriptive statistics,
 #'   or "shift" for shift table counts
 #' @param by A string, a variable name, or a list of variable names supplied
-#'   using \code{dplyr::vars}
+#'   using \code{rlang::quos}
 #' @param target_var Symbol. Required, The variable name on which the summary is
 #'   to be performed. Must be a variable within the target dataset. Enter
 #'   unquoted - i.e. target_var = AEBODSYS.
@@ -63,7 +63,7 @@
 #' @examples
 #' tab <- tplyr_table(iris, Sepal.Width)
 #'
-#' l <- group_count(tab, by=vars('Label Text', Species),
+#' l <- group_count(tab, by=quos('Label Text', Species),
 #'                  target_var=Species, where= Sepal.Width < 5.5,
 #'                  cols = Species)
 #'

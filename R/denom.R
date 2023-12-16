@@ -65,7 +65,7 @@ this_denom <- function(.data, header_n, treat_var) {
 #' @examples
 #' library(dplyr)
 #'
-#' t <- tplyr_table(mtcars, gear, cols = vars(cyl, am))
+#' t <- tplyr_table(mtcars, gear, cols = quos(cyl, am))
 #'
 #' get_header_n_value(t, 3, 6, 0)
 #' # Returns the number of cars that have 3 gears, 6 cylinders, and auto transmission

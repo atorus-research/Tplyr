@@ -13,7 +13,7 @@ set_precision_on(layer, precision_on)
 \item{layer}{A \code{tplyr_layer} object}
 
 \item{precision_on}{A string, a variable name, or a list of variable names
-supplied using \code{dplyr::vars}.}
+supplied using \code{rlang::quos}.}
 }
 \value{
 For \code{get_precision_on}, the precision_on binding of the supplied
@@ -29,7 +29,7 @@ variables.
 library(magrittr)
 lay <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
-    group_desc(vars(mpg, disp), by=vars(carb, am)) \%>\%
+    group_desc(quos(mpg, disp), by=quos(carb, am)) \%>\%
     set_precision_on(disp)
   )
 }

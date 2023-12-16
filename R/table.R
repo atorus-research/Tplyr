@@ -40,7 +40,7 @@
 #'
 #' tab <- tplyr_table(iris, Species, where = Sepal.Length < 5.8)
 #'
-tplyr_table <- function(target, treat_var, where = TRUE, cols = vars()) {
+tplyr_table <- function(target, treat_var, where = TRUE, cols = quos()) {
 
   if(missing(target)){
     # return a blank environment if no table information is passed. This can be

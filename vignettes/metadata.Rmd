@@ -63,11 +63,11 @@ get_meta_subset(t, 'c2_1', 'var1_Placebo') %>%
 By using the `row_id` and column, the dataframe is pulled right out for us. Notice that `USUBJID` was included by default, even though **Tplyr** there's no reference anywhere in the `tplyr_table()` to the variable `USUBJID`. This is because `get_meta_subset()` has an additional argument `add_cols` that allows you to specify additional columns you want included in the resulting dataframe, and has a default of USUBJID. So let's say we want additionally include the variable `SEX`.
 
 ```{r add_vars}
-get_meta_subset(t, 'c2_1', 'var1_Placebo', add_cols = vars(USUBJID, SEX)) %>% 
+get_meta_subset(t, 'c2_1', 'var1_Placebo', add_cols = quos(USUBJID, SEX)) %>% 
   kable()
 ```
 
-Variables should be provided using `dplyr::vars()`, just like the `cols` argument on `tplyr_table()` and the `by` arguments in each layer type. 
+Variables should be provided using `rlang::quos()`, just like the `cols` argument on `tplyr_table()` and the `by` arguments in each layer type. 
 
 As mentioned, the input source data can be extracted for any result cell created by Tplyr. So let's say we want to know the subjects relevant for the descriptive statistics around age in the Xanomeline High Dose group:
 

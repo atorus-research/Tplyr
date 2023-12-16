@@ -709,8 +709,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   } else if(order_count_method[1] == "bycount") {
 
     all_outer$..index <- all_outer %>%
-      get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
-                             result_order_var, vars(!!by[[1]], !!target_var),
+      get_data_order_bycount(ordering_cols, treat_var, quos(!!!head(by, -1)), cols,
+                             result_order_var, quos(!!by[[1]], !!target_var),
                              break_ties = break_ties,
                              numeric_cutoff = numeric_cutoff,
                              numeric_cutoff_stat = numeric_cutoff_stat,

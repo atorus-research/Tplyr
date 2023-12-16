@@ -6,18 +6,18 @@
 \alias{get_meta_subset.tplyr_table}
 \title{Extract the subset of data based on result metadata}
 \usage{
-get_meta_subset(x, row_id, column, add_cols = vars(USUBJID), ...)
+get_meta_subset(x, row_id, column, add_cols = quos(USUBJID), ...)
 
 \method{get_meta_subset}{data.frame}(
   x,
   row_id,
   column,
-  add_cols = vars(USUBJID),
+  add_cols = quos(USUBJID),
   target = NULL,
   ...
 )
 
-\method{get_meta_subset}{tplyr_table}(x, row_id, column, add_cols = vars(USUBJID), ...)
+\method{get_meta_subset}{tplyr_table}(x, row_id, column, add_cols = quos(USUBJID), ...)
 }
 \arguments{
 \item{x}{A built Tplyr table or a dataframe}
@@ -69,10 +69,10 @@ t <- tplyr_table(mtcars, cyl) \%>\%
 
 dat <- t \%>\% build(metadata = TRUE)
 
-get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb))
+get_meta_subset(t, 'd1_1', 'var1_4', add_cols = rlang::quos(carb))
 
 m <- t$metadata
 dat <- t$target
 
-get_meta_subset(t, 'd1_1', 'var1_4', add_cols = dplyr::vars(carb), target = target)
+get_meta_subset(t, 'd1_1', 'var1_4', add_cols = rlang::quos(carb), target = target)
 }

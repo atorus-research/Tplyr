@@ -67,7 +67,7 @@ test_that("Hug character formatting applies properly for desc layers", {
   # Single hug character, desc layer, manual
   x <- tplyr_table(y, TRTA) %>%
     add_layer(
-      group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>%
+      group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>%
         set_format_strings(
           TEST = f_str("xxx.x (XX.x)", mean, sd, empty="NA")
         ) %>%
@@ -81,7 +81,7 @@ test_that("Hug character formatting applies properly for desc layers", {
   # Multi hug character, desc layer, manual
   x <- tplyr_table(y, TRTA) %>%
     add_layer(
-      group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>%
+      group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>%
         set_format_strings(
           TEST = f_str("xxx.x {(XX.x)}", mean, sd, empty="NA")
         ) %>%
@@ -95,7 +95,7 @@ test_that("Hug character formatting applies properly for desc layers", {
   # Single hug character, desc layer, auto
   x <- tplyr_table(y, TRTA) %>%
     add_layer(
-      group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>%
+      group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>%
         set_format_strings(
           TEST = f_str("xxx.x (A.x)", mean, sd, empty="NA")
         ) %>%
@@ -109,7 +109,7 @@ test_that("Hug character formatting applies properly for desc layers", {
   # Multi hug character, desc layer, auto
   x <- tplyr_table(y, TRTA) %>%
     add_layer(
-      group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>%
+      group_desc(AVAL, by=quos(PARAMCD, AVISIT)) %>%
         set_format_strings(
           TEST = f_str("xxx.x {(A.x)}", mean, sd, empty="NA")
         ) %>%
@@ -126,7 +126,7 @@ test_that("Hug character formatting applies properly for shift layers", {
   # Shift layer, single hug char, manual and auto
   x <- tplyr_table(adlb, TRTA, where=VISIT %in% c("SCREENING 1", "UNSCHEDULED 1.1")) %>%
     add_layer(
-      group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT)) %>%
+      group_shift(quos(row = BNRIND, column = ANRIND), by = quos(PARAM, VISIT)) %>%
         set_format_strings(f_str("(A) (XXX.x%)", n, pct))
     ) %>%
     build() %>%
@@ -137,7 +137,7 @@ test_that("Hug character formatting applies properly for shift layers", {
   # Shift layer, multi hug char, manual and auto
   x <- tplyr_table(adlb, TRTA, where=VISIT %in% c("SCREENING 1", "UNSCHEDULED 1.1")) %>%
     add_layer(
-      group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT)) %>%
+      group_shift(quos(row = BNRIND, column = ANRIND), by = quos(PARAM, VISIT)) %>%
         set_format_strings(f_str("((A)) {(XXX.x%)}", n, pct))
     ) %>%
     build() %>%

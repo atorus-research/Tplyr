@@ -437,7 +437,7 @@ test_that("Quantile switch works properly", {
 test_that("Shift layer defaults are created as expected", {
   t <- tplyr_table(mtcars, gear)
 
-  s1 <- group_shift(t, vars(row = cyl, column = mpg))
+  s1 <- group_shift(t, quos(row = cyl, column = mpg))
 
   expect_equal(gather_defaults(s1)[[1]], f_str("a", n))
 })
@@ -451,7 +451,7 @@ test_that("Shift layer defaults can be changed" ,{
 
   t <- tplyr_table(mtcars, gear)
 
-  s1 <- group_shift(t, vars(row = cyl, column = mpg))
+  s1 <- group_shift(t, quos(row = cyl, column = mpg))
 
   expect_equal(gather_defaults(s1)[[1]], f_str("xxxx (xxxx.xxx%) *****", n, pct))
 
@@ -463,7 +463,7 @@ test_that("Shift layer defaults can be changed" ,{
 test_that("Shift layer defaults can be overridden", {
   t <- tplyr_table(mtcars, gear)
 
-  s1 <- group_shift(t, vars(row = cyl, column = mpg)) %>%
+  s1 <- group_shift(t, quos(row = cyl, column = mpg)) %>%
     set_format_strings(f_str("xx (xx.xx%)", n, pct))
 
   expect_equal(gather_defaults(s1)[[1]], f_str("a", n))

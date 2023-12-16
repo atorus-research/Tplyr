@@ -135,7 +135,7 @@ add_layers <- function(parent, ...) {
 #'   Count layers are also capable of producing counts of nested relationships.
 #'   For example, if you want to produce counts of an overall outside group, and
 #'   then the subgroup counts within that group, you can specify the target
-#'   variable as vars(OutsideVariable, InsideVariable). This allows you to do
+#'   variable as quos(OutsideVariable, InsideVariable). This allows you to do
 #'   tables like Adverse Events where you want to see the Preferred Terms within
 #'   Body Systems, all in one layer. Further control over denominators is
 #'   available using the function \code{\link{set_denoms_by}} and distinct
@@ -153,7 +153,7 @@ add_layers <- function(parent, ...) {
 #'   shift layer displays an endpoint's 'shift' throughout the duration of the
 #'   study. It is an abstraction over the count layer, however we have provided
 #'   an interface that is more efficient and intuitive. Targets are passed as
-#'   named symbols using \code{dplyr::vars}. Generally the baseline is passed
+#'   named symbols using \code{rlang::quos}. Generally the baseline is passed
 #'   with the name 'row' and the shift is passed with the name 'column'. Both
 #'   counts (n) and percentages (pct) are supported and can be specified with
 #'   the \code{\link{set_format_strings}} function. To allow for flexibility
@@ -190,22 +190,22 @@ add_layers <- function(parent, ...) {
 #'
 #' t <- tplyr_table(mtcars, am) %>%
 #'   add_layer(
-#'     group_shift(vars(row=gear, column=carb), by=cyl)
+#'     group_shift(quos(row=gear, column=carb), by=cyl)
 #'   )
-group_count <- function(parent, target_var, by=vars(), where=TRUE, ...) {
+group_count <- function(parent, target_var, by=quos(), where=TRUE, ...) {
   tplyr_layer(parent, type='count', by=enquos(by), target_var=enquos(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @family Layer Construction Functions
 #' @export
-group_desc <- function(parent, target_var, by=vars(), where=TRUE, ...) {
+group_desc <- function(parent, target_var, by=quos(), where=TRUE, ...) {
   tplyr_layer(parent, type='desc', by=enquos(by), target_var=enquos(target_var), where=enquo(where), ...)
 }
 
 #' @rdname layer_constructors
 #' @family Layer Construction Functions
 #' @export
-group_shift <- function(parent, target_var, by=vars(), where=TRUE, ...) {
+group_shift <- function(parent, target_var, by=quos(), where=TRUE, ...) {
   tplyr_layer(parent, type='shift', by=enquos(by), target_var=enquos(target_var), where=enquo(where), ...)
 }

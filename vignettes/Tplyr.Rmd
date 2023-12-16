@@ -65,7 +65,7 @@ t
 Users of **Tplyr** interface with `tplyr_layer()` objects using the `group_<type>` family of functions. This family specifies the type of summary that is to be performed within a layer. `count` layers are used to create summary counts of some discrete variable. `shift` layers summarize the counts for different changes in states. Lastly, `desc` layers create descriptive statistics.
 
 - **Count Layers**
-  - Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as `vars(OutsideVariable, InsideVariable)`. This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurrences of that adverse event.
+  - Count layers allow you to easily create summaries based on counting distinct or non-distinct occurrences of values within a variable. Additionally, this layer allows you to create n (%) summaries where you're also summarizing the proportion of instances a value occurs compared to some denominator. Count layers are also capable of producing counts of nested relationships. For example, if you want to produce counts of an overall outside group, and then the subgroup counts within that group, you can simply specify the target variable as `quos(OutsideVariable, InsideVariable)`. This allows you to do tables like Adverse Events where you want to see the Preferred Terms within Body Systems, all in one layer. Count layers can also distinguish between distinct and non-distinct counts. Using some specified by variable, you can count the unique occurrences of some variable within the specified by grouping, including the target. This allows you to do a summary like unique subjects and their proportion experiencing some adverse event, and the number of total occurrences of that adverse event.
 - **Descriptive Statistics Layers**
   - Descriptive statistics layers perform summaries on continuous variables. There are a number of summaries built into **Tplyr** already that you can perform, including n, mean, median, standard deviation, variance, min, max, interquartile range, Q1, Q3, and missing value counts. From these available summaries, the default presentation of a descriptive statistics layer will output 'n', 'Mean (SD)', 'Median', 'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries using `set_format_strings()`, and you can also add your own summaries using `set_custom_summaries()`. This allows you to easily implement any additional summary statistics you want presented.
 - **Shift Layers**
@@ -78,7 +78,7 @@ cnt
 dsc <- group_desc(t, AGE)
 dsc
 
-shf <- group_shift(t, vars(row=COMP8FL, column=COMP24FL))
+shf <- group_shift(t, quos(row=COMP8FL, column=COMP24FL))
 shf
 
 ```
@@ -271,14 +271,14 @@ Sometimes there's a need to present multiple variables summarized side by side. 
 ```{r desc2}
 tplyr_table(adsl, TRT01P) %>% 
   add_layer(
-    group_desc(vars(AGE, AVGDD), by = "Age and Avg. Daily Dose")
+    group_desc(quos(AGE, AVGDD), by = "Age and Avg. Daily Dose")
   ) %>% 
   build() %>% 
   kable()
 
 ```
 
-**Tplyr** summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `dplyr::vars()` - in any situation where you'd like to use multiple variable names in a parameter, use `dplyr::vars()` to specify the variables. You can use text strings in the calls to `dplyr::vars()` as well. 
+**Tplyr** summarizes both variables and merges them together. This makes creating tables where you need to compare BASE, AVAL, and CHG next to each other nice and simple. Note the use of `rlang::quos()` - in any situation where you'd like to use multiple variable names in a parameter, use `rlang::quos()` to specify the variables. You can use text strings in the calls to `rlang::quos()` as well. 
 
 ## Count Layers
 
@@ -316,14 +316,14 @@ Adverse event tables often call for counting AEs of something like a body system
 ```{r count_nested}
 tplyr_table(adae, TRTA) %>% 
   add_layer(
-    group_count(vars(AEBODSYS, AEDECOD))
+    group_count(quos(AEBODSYS, AEDECOD))
   ) %>% 
   build() %>% 
   head() %>% 
   kable()
 ```
 
-Here we again use `dplyr::vars()` to specify multiple target variables. When used in a count layer, **Tplyr** knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
+Here we again use `rlang::quos()` to specify multiple target variables. When used in a count layer, **Tplyr** knows automatically that the first variable is a grouping variable for the second variable, and counts shall be produced for both then merged together.
 
 ## Shift Layers
 
@@ -336,7 +336,7 @@ adlb$BNRIND <- factor(adlb$BNRIND, c("L", "N", "H"))
 
 tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
   add_layer(
-    group_shift(vars(row=BNRIND, column=ANRIND), by=PARAM) %>% 
+    group_shift(quos(row=BNRIND, column=ANRIND), by=PARAM) %>% 
       set_format_strings(f_str("xx (xxx%)", n, pct))
   ) %>% 
   build() %>% 
