@@ -2,5 +2,5 @@
 # this is a copy of the PHUSE Test Data Factory data, trimmed down for size
 
 load("data-raw/adas.Rdata")
-
-usethis::use_data(adas, overwrite = TRUE)
+tplyr_adas <- adas
+usethis::use_data(tplyr_adas, overwrite = TRUE)

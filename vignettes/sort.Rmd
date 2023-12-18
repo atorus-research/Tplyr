@@ -27,7 +27,7 @@ At surface level - sorting a table may seem easy, and in many cases it is. But i
 Let's start by looking at an example. 
 
 ```{r}
-t <- tplyr_table(adsl, TRT01A) %>%
+t <- tplyr_table(tplyr_adsl, TRT01A) %>%
   add_total_group() %>%
   add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
   add_layer(
@@ -121,8 +121,8 @@ These order variables will calculate based on the first applicable method below.
 If there's no `VARN` variable in the target dataset, **Tplyr** will then check if the variable you provided is a factor. If you're new to R, spending some time trying to understand factor variables is quite worthwhile. Let's look at example using the variable `ETHNIC` and see some of the advantages in practice.
 
 ```{r}
-adsl$ETHNIC <- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
-tplyr_table(adsl, TRT01A) %>%
+tplyr_adsl$ETHNIC <- factor(tplyr_adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(EOSSTT, by = ETHNIC)
   ) %>%
@@ -136,7 +136,7 @@ Factor variables have 'levels'. These levels are essentially what the `VARN` var
 A highly advantageous aspect of using factor variables in **Tplyr** is that factor variables can be used to insert dummy values into your table. Consider this line of code from above:
 
 ```
-adsl$ETHNIC <- factor(adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
+tplyr_adsl$ETHNIC <- factor(tplyr_adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
 ```
 
 This is converting the variable `ETHNIC` to a factor, then setting the factor levels. But it doesn't _change_ any of the values in the dataset - there are no values of "dummy" within `ETHNIC` in ADSL. Yet in the output built above, you see rows for "DUMMY". By using factors, you can insert rows into your **Tplyr** table that don't exist in the data. This is particularly helpful if you're working with data early on in a study, where certain values are expected, yet do not currently exist in the data. This will help you prepare tables that are complete even when your data are not.
@@ -146,7 +146,7 @@ This is converting the variable `ETHNIC` to a factor, then setting the factor le
 To demonstrate the use of `VARN` sorting, consider the variable `RACE.` In `ADSL`, `RACE` also has `RACEN`:
 
 ```{r}
-adsl %>% 
+tplyr_adsl %>% 
   distinct(RACEN, RACE) %>% 
   kable()
 ```
@@ -154,7 +154,7 @@ adsl %>%
  **Tplyr** will automatically figure this out for you, and pull the `RACEN` values into the variable `ord_layer_1`.
 
 ```{r}
-tplyr_table(adsl, TRT01A) %>%
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(EOSSTT, by = RACE)
   ) %>%
@@ -173,7 +173,7 @@ Lastly, If the target doesn't have a `VARN` variable in the target dataset and i
 After the `by` variables, each layer will sort results slightly differently. We'll start with the most simple case - descriptive statistic layers. As the user, you have full control over the order in which results present using `set_format_strings()`. Results will be ordered based on the order in which you create your `f_str()` objects. 
 
 ```{r}
-tplyr_table(adsl, TRT01A) %>%
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_desc(HEIGHTBL) %>% 
       set_format_strings(
@@ -203,10 +203,10 @@ The order in which results appear on a frequency table can be deceptively comple
 "byfactor" is the default ordering method of results for count layers. Both "byfactor" and "byvarn" behave exactly like the order variables associated with `by` variables in a **Tplyr** table. For "byvarn", you must set the sort method using `set_order_count_method()`. 
 
 ```{r}
-adsl$AGEGR1 <- factor(adsl$AGEGR1, c("<65", "65-80", ">80"))
+tplyr_adsl$AGEGR1 <- factor(tplyr_adsl$AGEGR1, c("<65", "65-80", ">80"))
 # Warnings suppressed to remove 'forcats' implicit NA warning
 suppressWarnings({
-  tplyr_table(adsl, TRT01A) %>%
+  tplyr_table(tplyr_adsl, TRT01A) %>%
     add_layer(
       group_count(AGEGR1) %>%
         # This is the default and not needed
@@ -219,7 +219,7 @@ suppressWarnings({
 ```
 
 ```{r}
-tplyr_table(adsl, TRT01A) %>%
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(RACE) %>%
       set_order_count_method("byvarn")
@@ -239,7 +239,7 @@ Using count-based sorting is where things get more complicated. There are multip
 We've created helper functions to aid in making this step more intuitive from a user perspective, and to maintain the flexibility that you need. The two functions that you need here are `set_ordering_cols()` and `set_result_order_var()`.
 
 ```{r}
-tplyr_table(adae, TRTA) %>%
+tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>% 
       # This will present 3 numbers in a cell
@@ -267,7 +267,7 @@ The next question that we need to answer when sorting by counts is which result 
 But what if you have an additional column variable on top of the treatment groups?
 
 ```{r}
-tplyr_table(adae, TRTA, cols=SEX) %>%
+tplyr_table(tplyr_adae, TRTA, cols=SEX) %>%
   add_layer(
     group_count(AEDECOD) %>% 
       # This will present 3 numbers in a cell
@@ -295,7 +295,7 @@ Here we're ordering on the female subjects in the "Xanomeline High Dose" cohort.
 Nested count layers add one more piece to the puzzle. As a reminder, nested count layers are count summaries that are summarizing both a grouping variable, and a variable that's being grouped. The best example is probably Adverse Event tables, where we want to see adverse events that occurred within different body systems.
 
 ```{r}
-tplyr_table(adae, TRTA) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
   ) %>% 
@@ -310,7 +310,7 @@ In a layer that uses nesting, we need one more order variable - as we're now con
 These result variables will always be the last two order variables output by **Tplyr**. In the above example, `ord_layer_1` is for `AEBODSYS` and `ord_layer_2` is for `AEDECOD`. Note that `ord_layer_2` has `Inf` where `row_label1` and `row_label2` are both equal. This is the row that summarizes the `AEBODSYS` counts. By default, **Tplyr** is set to assume that you will use **descending** sort on the order variable associated with the inside count variable (i.e. `AEDECOD`). This is because in nested count layer you will often want to sort by descending occurrence of the inside target variable. If you'd like to use ascending sorting instead, we offer the function `set_outer_sort_position()`. 
 
 ```{r}
-tplyr_table(adae, TRTA) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
       set_outer_sort_position("asc")
@@ -327,7 +327,7 @@ Notice that the `Inf` has now switched to `-Inf` to ensure that the `AEBODSYS` r
 Another consideration of nested sorting is whether or not you want to sort both result variables the same way. Do you want to sort both by counts? Or do you want to sort one alphabetically and the other by count? Or maybe one has a `VARN` variable associated with it? For this reason, `set_order_count_method()` can take in a 2-element character vector, where the first element specifies the outside variable and the second the inside variable.
 
 ```{r}
-tplyr_table(adsl, TRT01A) %>%
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
       set_order_count_method(c("byfactor", "bycount"))
@@ -342,7 +342,7 @@ In the example above, `EOSTT` is ordered alphabetically (recall that using "byfa
 If only one method is provided, that method will automatically be applied to both variables. So in the example below, "bycount" is applied to both `EOSTT` and `DSDECOD`. 
 
 ```{r}
-tplyr_table(adsl, TRT01A) %>%
+tplyr_table(tplyr_adsl, TRT01A) %>%
   add_total_group() %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
@@ -361,7 +361,7 @@ tplyr_table(adsl, TRT01A) %>%
 Shift tables keep things relatively simple when it comes to sorting and use the "byfactor" method seen above. We encourage this primarily because you likely want the benefits of factor variables on a shift layer. For example, consider this table:
 
 ```{r}
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT))
   ) %>%
@@ -379,10 +379,10 @@ There are a few problems here:
 Using factor variables cleans this right up for us:
 
 ```{r}
-adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))
-adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
+tplyr_adlb$BNRIND <- factor(tplyr_adlb$BNRIND, levels=c("L", "N", "H"))
+tplyr_adlb$ANRIND <- factor(tplyr_adlb$ANRIND, levels=c("L", "N", "H"))
 
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT))
   ) %>%

@@ -1,7 +1,7 @@
 # get_data_labels
 
     Code
-      get_data_labels(adsl)
+      get_data_labels(tplyr_adsl)
     Output
       # A tibble: 49 x 2
          name    label                              
@@ -21,7 +21,7 @@
 ---
 
     Code
-      get_data_labels(adae)
+      get_data_labels(tplyr_adae)
     Output
       # A tibble: 55 x 2
          name    label                    
@@ -41,7 +41,7 @@
 ---
 
     Code
-      get_data_labels(adas)
+      get_data_labels(tplyr_adas)
     Output
       # A tibble: 40 x 2
          name    label                              
@@ -61,7 +61,7 @@
 ---
 
     Code
-      get_data_labels(adlb)
+      get_data_labels(tplyr_adlb)
     Output
       # A tibble: 46 x 2
          name    label                              

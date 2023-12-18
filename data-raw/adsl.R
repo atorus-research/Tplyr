@@ -2,5 +2,5 @@
 # this is a copy of the PHUSE Test Data Factory data, trimmed down for size
 
 load("data-raw/adsl.Rdata")
-
-usethis::use_data(adsl, overwrite = TRUE)
+tplyr_adsl <- adsl
+usethis::use_data(tplyr_adsl, overwrite = TRUE)

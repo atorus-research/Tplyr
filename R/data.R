@@ -8,7 +8,7 @@
 #'
 #' @source https://github.com/phuse-org/TestDataFactory
 #'
-"adsl"
+"tplyr_adsl"
 
 
 #' ADAE Data
@@ -21,7 +21,7 @@
 #'
 #' @source https://github.com/phuse-org/TestDataFactory
 #'
-"adae"
+"tplyr_adae"
 
 #' ADAS Data
 #'
@@ -33,7 +33,7 @@
 #'
 #' @source https://github.com/phuse-org/TestDataFactory
 #'
-"adas"
+"tplyr_adas"
 
 #' ADLB Data
 #'
@@ -45,7 +45,7 @@
 #'
 #' @source https://github.com/phuse-org/TestDataFactory
 #'
-"adlb"
+"tplyr_adlb"
 
 
 #' Get Data Labels

@@ -56,7 +56,7 @@ _Note: We're viewing the data frame output here because HTML based outputs elimi
 Row masking is the process blanking of repeat row values within a data frame to give the appearance of grouping variables. Some table packages, such as [**gt**](https://gt.rstudio.com/), will handle this for you. Other packages, like [**huxtable**](https://hughjonesd.github.io/huxtable/), have options like merging cells, but this may be a more simplistic approach. Furthermore, this is a common approach in clinical tables when data validation is done on an output dataframe. 
 
 ```{r row_mask1}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
   ) %>% 
@@ -77,7 +77,7 @@ dat %>%
 A second feature of `apply_row_masks()` is the ability to apply row breaks between different groups of data, for example, different layers of a table.
 
 ```{r row_masks3}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
   ) %>% 
@@ -207,7 +207,7 @@ In the first call to `str_extract_fmt_group()`, we target the n counts. The firs
 In practice, `str_extract_fmt_group()` can then be used to separate format groups into their own columns.
 
 ```{r fmt_group2}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE)
   ) %>% 
@@ -234,8 +234,8 @@ In very much the same vein as `str_extract_fmt_group()`, the function `str_extra
 Consider an adverse event table. In `vignette("sort")` we go over circumstances where you may want to sort by the descending occurrence of a result. We've received questions about how to establish tie breakers in this scenario, where ties should be broken sorting descending occurrence of an adverse event within the high dose group, then the low dose group, and finally the placebo group. **Tplyr** doesn't allow you to output these order variables by default, but getting these numbers is quite simple with `str_extract_num()`. Let's consider a simplified scenario
 
 ```{r num1}
-dat <- tplyr_table(adae, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+dat <- tplyr_table(tplyr_adae, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   add_layer(
     group_count(AEDECOD) %>% 

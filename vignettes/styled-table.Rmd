@@ -42,7 +42,7 @@ Let's build a demographics table to see how this all works.
 ## Preparing the data
 
 ```{r demog_table}
-adsl <- adsl %>% 
+tplyr_adsl <- tplyr_adsl %>% 
   mutate(
     SEX = recode(SEX, M = "Male", F = "Female"), 
     RACE = factor(RACE, c("AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN", "BLACK OR AFRICAN AMERICAN", 

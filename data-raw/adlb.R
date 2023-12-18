@@ -2,5 +2,5 @@
 # this is a copy of the PHUSE Test Data Factory data, trimmed down for size
 
 load("data-raw/adlb.Rdata")
-
-usethis::use_data(adlb, overwrite = TRUE)
+tplyr_adlb <- adlb
+usethis::use_data(tplyr_adlb, overwrite = TRUE)

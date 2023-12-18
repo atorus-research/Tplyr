@@ -32,7 +32,7 @@ Our current implementation of risk difference is solely built on top of the base
 Risk difference is built on top of count layers, as it's a comparison of proportions. To add a risk difference calculation into a count layer, you simply use the function `add_risk_diff()`. We made a large effort to make this flow very naturally with the count layer construction, so let's walk through it step by step.
 
 ```{r riskdiff1}
-t <- tplyr_table(adae, TRTA) %>% 
+t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -66,7 +66,7 @@ The default values presented within formatted strings in the built table will be
 You have a good bit of control over these values though, and this can be controlled in the same way you format the count summaries - using `set_format_strings()`.
 
 ```{r riskdiff2}
-t <- tplyr_table(adae, TRTA) %>% 
+t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -98,7 +98,7 @@ Take a look at the `rdiff` columns now - you'll see they have 5 values. These ar
 You have the same control over the formatting of the display of these values here as you do with the count summaries. Taking things a step further, you can also pass forward arguments to `stats::prop.test()` using a named list and the `args` argument in `add_risk_diff()`. This wasn't done using the ellipsis (i.e. `...`) like typical R functions because it's already used to capture a varying number of comparisons, but it's not much more difficult to use:
 
 ```{r riskdiff3}
-t <- tplyr_table(adae, TRTA) %>% 
+t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -133,8 +133,8 @@ For more information on these parameters, see the documentation for `stats::prop
 The default of `add_risk_diff()` works on the distinct counts available within the count summary. 
 
 ```{r riskdiff4}
-t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
-  set_pop_data(adsl) %>% 
+t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   set_pop_where(TRUE) %>% 
   add_layer(
@@ -155,7 +155,7 @@ suppressWarnings(build(t)) %>%
 If for whatever reason you'd like to run risk difference on the non-distinct counts, switch the `distinct` argument to FALSE. `add_risk_diff()` also will function on multi-level summaries no different than single level, so no concerns there either.
 
 ```{r riskdiff5}
-t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
+t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -176,7 +176,7 @@ suppressWarnings(build(t)) %>%
 Risk difference also works with the `cols` argument, but it's important to understand how the comparisons work in these situation. Here, it's still the treatment groups that are compared - but the column argument is used as a "by" variable. For example:
 
 ```{r riskdiff6}
-t <- tplyr_table(adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
+t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -206,7 +206,7 @@ The output of `get_stats_data()` depends on what parameters have been used:
 This works best when layers are named, as it makes the output much clearer.
 
 ```{r riskdiff7}
-t <- tplyr_table(adae, TRTA) %>% 
+t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(name="PreferredTerm",
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 

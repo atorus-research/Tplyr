@@ -78,7 +78,7 @@ Enough talking - let's see some code. In these examples, we will be using data f
 
 ```{r initial_demo}
 
-tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
