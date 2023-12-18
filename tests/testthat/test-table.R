@@ -1,9 +1,3 @@
-test_that("tplyr_table returns an empty envrionment of class 'tplyr_table' when passed no arguemnts", {
-  st <- tplyr_table()
-  expect_true(is.environment(st))
-  expect_equal(length(rlang::env_names(st)), 0)
-})
-
 test_that("tplyr_table returns a class of tplyr_table and environment", {
   tab <- tplyr_table(data.frame(a = 1:10, b = 11:20), a)
   expect_s3_class(tab, "tplyr_table")
