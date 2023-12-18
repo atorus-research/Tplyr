@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
-load("adsl.Rdata")
-load("adae.Rdata")
-load("adlb.Rdata")
 ```
 
 Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in seeing how a subject's results related to normal ranges. The 'change in state' would refer to how that subject's results were at baseline versus different points of measure. Shift tables allow you to see the distribution of how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
@@ -41,7 +38,7 @@ One thing to note - the `group_shift()` API is intended to be used on shift tabl
 Let's look at an example.
 
 ```{r}
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
   ) %>%
@@ -57,9 +54,9 @@ For the most part, the last example gets us where we want to go - but there's st
 ## Filling Missing Groups Using Factors
 
 ```{r}
-adlb$ANRIND <- factor(adlb$ANRIND, levels=c("L", "N", "H"))
-adlb$BNRIND <- factor(adlb$BNRIND, levels=c("L", "N", "H"))
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_adlb$ANRIND <- factor(tplyr_adlb$ANRIND, levels=c("L", "N", "H"))
+tplyr_adlb$BNRIND <- factor(tplyr_adlb$BNRIND, levels=c("L", "N", "H"))
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT))
   ) %>%

@@ -21,9 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
-load("adlb.Rdata")
 ```
 
 # How **Tplyr** Works
@@ -56,7 +53,7 @@ When a `tplyr_table()` is created, it will contain the following bindings:
 The function `tplyr_table()` allows you a basic interface to instantiate the object. Modifier functions are available to change individual parameters catered to your analysis.
 
 ```{r tplyr_table}
-t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y")
+t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y")
 t
 ```
 
@@ -90,7 +87,7 @@ Everyone has their own style of coding - so we've tried to be flexible to an ext
 There are two ways to add layers to a `tplyr_table()`: `add_layer()` and `add_layers()`. The difference is that `add_layer()` allows you to construct the layer within the call to `add_layer()`, whereas with `add_layers()` you can attach multiple layers that have already been constructed upfront:
 
 ```{r add_layer}
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)")
   )
@@ -100,7 +97,7 @@ t <- tplyr_table(adsl, TRT01P) %>%
 Within `add_layer()`, the syntax to constructing the count layer for Age Categories was written on the fly. `add_layer()` is special in that it also allows you to use piping to use modifier functions on the layer being constructed
 
 ```{r add_layer_with_piping}
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)") %>% 
       set_format_strings(f_str("xx (xx.x%)", n, pct)) %>% 
@@ -112,7 +109,7 @@ t <- tplyr_table(adsl, TRT01P) %>%
 `add_layers()`, on the other hand, lets you isolate the code to construct a particular layer if you wanted to separate things out more. Some might find this cleaner to work with if you have a large number of layers being constructed.
 
 ```{r add_layers}
-t <- tplyr_table(adsl, TRT01P) 
+t <- tplyr_table(tplyr_adsl, TRT01P) 
 
 l1 <- group_count(t, AGEGR1, by = "Age categories n (%)")
 l2 <- group_desc(t, AGE, by = "Age (years)")
@@ -129,7 +126,7 @@ Notice that when you construct a `tplyr_table()` or a `tplyr_layer()` that what 
 To generate the data from a `tplyr_table()` object, you use the function `build()`:
 
 ```{r build}
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)")
   )
@@ -162,7 +159,7 @@ So - why is this object necessary. Consider this example:
 
 ```{r format_strings_1}
 
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)") %>% 
       set_format_strings(
@@ -199,7 +196,7 @@ This simple user input controls a significant amount of work in the back end of 
 `f_str()` objects are also used with count layers as well to control the data presentation. Instead of specifying the summaries performed, you use `n`, `pct`, `distinct_n`, and `distinct_pct` for your parameters and specify how you would like the values displayed. Using `distinct_n` and `distinct_pct` should be combined with specifying a `distinct_by()` variable using `set_distinct_by()`. 
 
 ```{r format_strings_2}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
       set_format_strings(f_str('xx (xx.x)',n,pct))
@@ -207,7 +204,7 @@ tplyr_table(adsl, TRT01P) %>%
   build() %>% 
   kable()
 
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
       set_format_strings(f_str('xx',n))
@@ -220,7 +217,7 @@ tplyr_table(adsl, TRT01P) %>%
 Really - format strings allow you to present your data however you like.
 
 ```{r format_strings_3}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
       set_format_strings(f_str('xx (•◡•) xx.x%',n,pct))
@@ -238,7 +235,7 @@ But should you? Probably not.
 As covered under string formatting, `set_format_strings()` controls a great deal of what happens within a descriptive statistics layer. Note that there are some built in defaults to what's output:
 
 ```{r desc1}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
@@ -249,7 +246,7 @@ tplyr_table(adsl, TRT01P) %>%
 To override these defaults, just specify the summaries that you want to be performed using `set_format_strings()` as described above. But what if **Tplyr** doesn't have a built in function to do the summary statistic that you want to see? Well - you can make your own! This is where `set_custom_summaries()` comes into play. Let's say you want to derive a geometric mean.
 
 ```{r custom_summaries}
-tplyr_table(adsl, TRT01P) %>%
+tplyr_table(tplyr_adsl, TRT01P) %>%
   add_layer(
     group_desc(AGE, by = "Sepal Length") %>%
       set_custom_summaries(
@@ -269,7 +266,7 @@ In `set_custom_summaries()`, first you name the summary being performed. This is
 Sometimes there's a need to present multiple variables summarized side by side. **Tplyr** allows you to do this as well.
 
 ```{r desc2}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(vars(AGE, AVGDD), by = "Age and Avg. Daily Dose")
   ) %>% 
@@ -285,7 +282,7 @@ tplyr_table(adsl, TRT01P) %>%
 Count layers generally allow you to create "n" and "n (%)" count type summaries. There are a few extra features here as well. Let's say that you want a total row within your counts. This can be done with `add_total_row()`:
 
 ```{r count_total1}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
       add_total_row()
@@ -298,7 +295,7 @@ tplyr_table(adsl, TRT01P) %>%
 Sometimes it's also necessary to count summaries based on distinct values. **Tplyr** allows you to do this as well with `set_distinct_by()`:
 
 ```{r count_distinct}
-tplyr_table(adae, TRTA) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count('Subjects with at least one adverse event') %>% 
       set_distinct_by(USUBJID) %>% 
@@ -314,7 +311,7 @@ There's another trick going on here - to create a summary with row label text li
 Adverse event tables often call for counting AEs of something like a body system and counting actual events within that body system. **Tplyr** has means of making this simple for the user as well.
 
 ```{r count_nested}
-tplyr_table(adae, TRTA) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
   ) %>% 
@@ -331,10 +328,10 @@ Lastly, let's talk about shift layers. A common example of this would be looking
 
 ```{r shift1}
 # Tplyr can use factor orders to dummy values and order presentation
-adlb$ANRIND <- factor(adlb$ANRIND, c("L", "N", "H"))
-adlb$BNRIND <- factor(adlb$BNRIND, c("L", "N", "H"))
+tplyr_adlb$ANRIND <- factor(tplyr_adlb$ANRIND, c("L", "N", "H"))
+tplyr_adlb$BNRIND <- factor(tplyr_adlb$BNRIND, c("L", "N", "H"))
 
-tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where = PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row=BNRIND, column=ANRIND), by=PARAM) %>% 
       set_format_strings(f_str("xx (xxx%)", n, pct))

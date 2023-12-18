@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr)
 library(tidyr)
-load('adsl.Rdata')
-load('adlb.Rdata')
-load('adae.Rdata')
 ```
 
 A key focus of producing a clinical table is ensuring that the formatting of the table is in line with the statistician and clinician's expectations. Organizations often have strict standards around this which vary between organizations. Much of this falls outside the scope of **Tplyr**, but **Tplyr** gives _great_ focus to how the numeric results on the page are formatted. R has vast capabilities when it comes to HTML and interactive tables, but **Tplyr's** focus on string formatting is designed for those traditional, PDF document printable pages. The aim to make it as simple as possible to get what you need to work with a typical monospace fonts. 
@@ -34,7 +31,7 @@ _Note: We've still focused on R's interactive capabilities, so be sure to check 
 Regardless of what layer type you use within **Tplyr**, control of formatting is handled by using format strings. Consider the following example.
 
 ```{r example_1}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
       set_format_strings(
@@ -112,7 +109,7 @@ Note in the format string, the result numbers to be formatted fill the spaces of
 As detailed in the first example, when using a lower case 'x', the exact width of space allotted by the x's will be preserved. Note the `var1_Placebo` row below.
 
 ```{r example_3}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
       set_format_strings(
@@ -126,7 +123,7 @@ tplyr_table(adsl, TRT01P) %>%
 Both the integer width for the `n` counts and the space to the right of the opening parenthesis of the `pct` field are preserved. This guarentees that (when using a monospace font) the non-numeric characters within the format strings will remain in the same place. Given that integers don't truncate, if these spaces are undesired, integers will automatically increase width. In the example below, if the `n` or `pct` result exceeds 10, the width of the output string automatically expands. You can trigger this behaivor by using a single 'x' in the integer side of a format group.
 
 ```{r example_4}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
       set_format_strings(
@@ -143,7 +140,7 @@ The downside of the last example is that alignment between format groups is comp
 
 ```{r example_5}
 
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
       set_format_strings(
@@ -169,7 +166,7 @@ Lastly, **Tplyr** also has the capability to automatically determine some widths
 Consider the following example.
 
 ```{r example_6}
-tplyr_table(adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>% 
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
       set_format_strings(
@@ -186,7 +183,7 @@ Note that the decimal precision varies between different lab test results. This 
 For count layers, auto-precision can also be used surrounding the `n` counts. For example, the default format string for counts layers in **Tplyr** is set as `a (xxx.x%)`. This will auto-format the `n` result based on the maximum summarized value of `n` within the data. For example:
 
 ```{r example_7}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
       set_format_strings(f_str("a (xxx.x%)", n, pct))
@@ -200,8 +197,8 @@ Given that the maximum count was >=10 and <100, the integer width for `n` was as
 For both layer types, a capital `A` follows the same logic as `X`, but is triggered using auto-precision. Take this example of an adverse event table:
 
 ```{r example_8} 
-tplyr_table(adae, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   add_layer(
     group_count(AEDECOD) %>% 

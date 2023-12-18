@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup, echo=FALSE}
 library(Tplyr)
 library(knitr)
-load('adsl.Rdata')
 ```
 
 There are several scenarios where a layer template may be useful. Some tables, like demographics tables, may have many layers that will all essentially look the same. Categorical variables will have the same count layer settings, and continuous variables will have the same desc layer settings. A template allows a user to build those settings once per layer, then reference the template when the **Tplyr** table is actually built. Another scenario might be building a set of company layer templates that are built for standard tables to reduce the footprint of code across analyses. In either of these cases, the idea is the reduce the amount of redundant code necessary to create a table.
@@ -41,7 +40,7 @@ new_layer_template(
 In this example, we've created a basic layer template. The template is named "example_template", and this is the name we'll use to reference the template when we want to use it. When the template is created, we start with the function `group_count(...)`. Note the use of the ellipsis (i.e. `...`). This is a required part of a layer template. Templates must start with a **Tplyr** layer constructor, which is one of the function `group_count()`, `group_desc()`, or `group_shift()`. The ellipsis is necessary because when the template is used, we are able to pass arguments directly into the layer constructor. For example:
 
 ```{r using a template}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template("example_template", RACE, by=ETHNIC)
   ) %>% 
@@ -54,7 +53,7 @@ Within `use_template()`, the first parameter is the template name. After that, w
 An additional feature of layer templates is that they act just as any other function would in a **Tplyr** layer. This means that they're also extensible and can be expanded on directly within a **Tplyr** table. For example:
 
 ```{r extending a template}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template("example_template", RACE) %>% 
       add_total_row()
@@ -83,7 +82,7 @@ In this example, we create a template similar to the first example. But now we a
 To specify these arguments when using the templater, we use the `use_template()` argument `add_params`. For example:
 
 ```{r using params}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template('example_params', RACE, add_params = 
                    list(

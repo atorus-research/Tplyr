@@ -21,8 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
 ```
 
 Most of the work in creating a **Tplyr** table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in **Tplyr** is allow you to eliminate redundant code wherever possible. Adding some processing to the `tplyr_table()` level allows us to do that. Furthermore, some settings simply need to be applied table wide.
@@ -39,7 +37,7 @@ The `tplyr_table()` function has 4 parameters:
 Let's look at an example:
 
 ```{r table_params1}
-tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
+tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
   add_layer(
     group_count(RACE, by = "Race")
   ) %>% 
@@ -55,7 +53,7 @@ In the example above, the `where` parameter is passed forward into both the `RAC
 _Note: Treatment groups and additional column variables presented in the final output are always taken from the **pre-filtered** population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled._
 
 ```{r table_params2}
-tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
+tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
   add_layer(
     group_desc(AGE, by = "Age (Years)")
   ) %>% 
@@ -73,7 +71,7 @@ Another important feature that works at the table level is the addition of treat
 We've added the function `add_treat_grps()` to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within `treat_var`. Additionally, to simplify the process we added an abstraction of `add_treat_grps()` named `add_total_group()` to simplify the process of creating a "Total" group.
 
 ```{r treat_grps}
-tplyr_table(adsl, TRT01P) %>%
+tplyr_table(tplyr_adsl, TRT01P) %>%
   add_treat_grps('Treated' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
   add_total_group() %>% 
   add_layer(
@@ -92,8 +90,8 @@ A last and very important aspect of table level properties in **Tplyr** is the a
 **Tplyr** allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter and a population treatment variable named `pop_treat_var`, as variable names may differ between the datasets.
 
 ```{r pop_data1}
-t <- tplyr_table(adae, TRTA, where = AEREL != "NONE") %>% 
-  set_pop_data(adsl) %>% 
+t <- tplyr_table(tplyr_adae, TRTA, where = AEREL != "NONE") %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   set_pop_where(TRUE) %>% 
   add_layer(
