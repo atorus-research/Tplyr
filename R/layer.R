@@ -101,18 +101,10 @@ as_tplyr_layer.tplyr_layer <- function(parent, target_var, by, where, type, ...)
   layer
 }
 
-#' S3 method for tplyr layer creation of \code{tplyr_subgroup_layer}  object as parent
-#' @noRd
-as_tplyr_layer.tplyr_subgroup_layer <- function(parent, target_var, by, where, type, ...) {
-  layer <- new_tplyr_layer(parent, target_var, by, where, type, ...)
-  class(layer) <- unique(append('tplyr_subgroup_layer', class(layer)))
-  layer
-}
-
 #' S3 method to produce error for unsupported objects as parent
 #' @noRd
 as_tplyr_layer.default <- function(parent, target_var, by, where, type, ...) {
-  stop('Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.')
+  stop('Must provide `tplyr_table` object from the `Tplyr` package.', call.=FALSE)
 }
 
 #' Create a new tplyr layer

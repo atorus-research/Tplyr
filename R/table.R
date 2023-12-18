@@ -41,16 +41,7 @@
 #' tab <- tplyr_table(iris, Species, where = Sepal.Length < 5.8)
 #'
 tplyr_table <- function(target, treat_var, where = TRUE, cols = vars()) {
-
-  if(missing(target)){
-    # return a blank environment if no table information is passed. This can be
-    # used as a placeholder when creating a table if the dataset is not available.
-    return(structure(rlang::env(),
-                     class = c("tplyr_table", "environment")))
-  }
-
   target_name <- enexpr(target)
-
   new_tplyr_table(target, enquo(treat_var), enquo(where), enquos(cols), target_name)
 }
 
