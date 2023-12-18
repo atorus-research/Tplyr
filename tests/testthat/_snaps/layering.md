@@ -8,7 +8,7 @@
 
 # Parent argument is a valid class (pass through to `tplyr_layer`)
 
-    Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.
+    Must provide `tplyr_table` object from the `Tplyr` package.
 
 # Only `Tplyr` methods are allowed in the `layer` parameter
 

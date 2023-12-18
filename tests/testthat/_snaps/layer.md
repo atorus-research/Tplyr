@@ -20,7 +20,7 @@
 
 # Parent must be a `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer`
 
-    Must provide `tplyr_table`, `tplyr_layer`, or `tplyr_subgroup_layer` object from the `tplyr` package.
+    Must provide `tplyr_table` object from the `Tplyr` package.
 
 # `by` must me a string, a variable name, or multiple variables submitted using `dplyr::vars`
 
