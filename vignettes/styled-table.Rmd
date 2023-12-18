@@ -49,7 +49,7 @@ tplyr_adsl <- tplyr_adsl %>%
                           "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER", "WHITE", "MULTIPLE"))
   )
 
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_total_group() %>% 
   add_layer(name = 'Sex', 
     group_count(SEX, by = "Sex n (%)") %>% 
