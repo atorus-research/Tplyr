@@ -103,7 +103,7 @@ There are a few considerations when using `apply_row_masks()`:
 Different table formats call for different handling of row labels, depending on the preferences of an individual organization and the specifics of the table at hand. **Tplyr** inherently creates row labels as separate columns, but similar to the way that count layers nest the inner and the outer layer, we also offer the `collapse_row_labels()` function to pull multiple row labels into a single column. 
 
 ```{r collapse_row_labels}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = vars("Race n (%)", SEX))
   ) %>% 
