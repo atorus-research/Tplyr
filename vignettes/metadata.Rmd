@@ -22,7 +22,6 @@ library(tidyr)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adsl.Rdata")
 ```
 
 **Tplyr** has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?
@@ -34,7 +33,7 @@ The purpose of the `tplyr_table()` object is to let **Tplyr** do more than just 
 Consider the following example:
 
 ```{r table_creation}
-t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_count(RACE)
   ) %>% 
@@ -100,7 +99,7 @@ The results are provided this was so that they can be unpacked directly into `dp
 ```{r unpack}
 m <- get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 
-adsl %>% 
+tplyr_adsl %>% 
   filter(!!!m$filters) %>% 
   select(!!!m$names) %>% 
   head(10) %>% 
@@ -112,7 +111,7 @@ _Note: Trimmed for space_
 But - who says you can't let your imagination run wild? 
 
 ```{r to string print, eval=FALSE}
-cat(c("adsl %>%\n",
+cat(c("tplyr_adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
   ") %>%\n",
@@ -122,7 +121,7 @@ cat(c("adsl %>%\n",
 
 ```
 ```{r to string content, results='asis', echo=FALSE}
-cat(c("adsl %>%\n",
+cat(c("tplyr_adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
   ") %>%\n",

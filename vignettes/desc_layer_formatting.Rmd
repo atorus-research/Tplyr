@@ -21,9 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adlb.Rdata")
-load("adsl.Rdata")
-load('adlb.Rdata')
 ```
 
 A lot of the nuance to formatting descriptive statistics layers was covered in the descriptive statistic layer vignette, but there are a couple more tricks to getting the most out of **Tplyr**. In this vignette, we'll cover some of the options in more detail.
@@ -35,14 +32,14 @@ By default, if there is no available value for a summary in a particular observa
 _Note: **Tplyr** generally respects factor levels - so in instances of a missing row or column group, if the factor level is present, then the variable or row will still generate)_
 
 ```{r missing}
-adsl$TRT01P <- as.factor(adsl$TRT01P)
-adlb$TRTA <- as.factor(adlb$TRTA)
+tplyr_adsl$TRT01P <- as.factor(tplyr_adsl$TRT01P)
+tplyr_adlb$TRTA <- as.factor(tplyr_adlb$TRTA)
 
-adlb_2 <- adlb %>% 
+tplyr_adlb_2 <- tplyr_adlb %>% 
   filter(TRTA != "Placebo")
 
-tplyr_table(adlb_2, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+tplyr_table(tplyr_adlb_2, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
   add_layer(
     group_desc(AVAL, by=PARAMCD) %>% 
@@ -57,8 +54,8 @@ tplyr_table(adlb_2, TRTA) %>%
 Note how the entire example above has all records in `var1_Placebo` missing. **Tplyr** gives you control over how you fill this space. Let's say that we wanted instead to make that space say "Missing". You can control this with the `f_str()` object using the `empty` parameter.
 
 ```{r missing1}
-tplyr_table(adlb_2, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+tplyr_table(tplyr_adlb_2, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
   add_layer(
     group_desc(AVAL, by=PARAMCD) %>% 
@@ -73,8 +70,8 @@ tplyr_table(adlb_2, TRTA) %>%
 Look at the `empty` parameter above. Here, we use a named character vector, where the name is `.overall`. When this name is used, if all elements within the cell are missing, they will be filled with the specified text. Otherwise, the provided string will fill just the missing parameter. In some cases, this may not be what you'd like to see. Perhaps we want a string that fills each missing space.
 
 ```{r missing2}
-tplyr_table(adlb_2, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+tplyr_table(tplyr_adlb_2, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
   add_layer(
     group_desc(AVAL, by=PARAMCD) %>% 
@@ -95,7 +92,7 @@ You may have noticed that the approach to formatting covered so far leaves a lot
 **Tplyr** has this covered using auto-precision. Auto-precision allows you to format your numeric summaries based on the precision of the data collected. This has all been built into the format strings, because a natural place to specify your desired format is where you specify how you want your data presented. If you wish to use auto-precision, use `a` instead of `x` when creating your summaries. Note that only one `a` is needed on each side of a decimal. To use increased precision, use `a+n` where `n` is the number of additional spaces you wish to add. 
 
 ```{r autoprecision1}
-tplyr_table(adlb, TRTA) %>% 
+tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
       set_format_strings(
@@ -113,7 +110,7 @@ As you can see, the decimal precision is now varying depending on the test being
 But - this is kind of ugly, isn't it? Do we really need all 6 decimal places collected for CA? For this reason, you're able to set a cap on the precision that's displayed:
 
 ```{r autoprecision2}
-tplyr_table(adlb, TRTA) %>% 
+tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
       set_format_strings(
@@ -132,7 +129,7 @@ Now that looks better. The `cap` argument is part of `set_format_strings()`. You
 This was a basic situation, but if you're paying close attention, you may have some questions. What if you have more by variables, like by visit AND test. Do we then calculate precision by visit and test? What if collected precision is different per visit and we don't want that? What about multiple summary variables? How do we determine precision then? We have modifier functions for this:
 
 ```{r precision3}
-tplyr_table(adlb, TRTA) %>% 
+tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
       set_format_strings(
@@ -167,7 +164,7 @@ prec_data <- tibble::tribble(
   "URATE", 3, 1,
 )
   
-tplyr_table(adlb, TRTA) %>% 
+tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
       set_format_strings(
@@ -195,7 +192,7 @@ prec_data <- tibble::tribble(
   "GGT", 3, 0,
 )
   
-tplyr_table(adlb, TRTA) %>% 
+tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
       set_format_strings(
@@ -216,7 +213,7 @@ tplyr_table(adlb, TRTA) %>%
 By default, when using 'x' or 'a', any other character within a format string will stay stationary. Consider the standard example from the descriptive statistic layer vignette.
 
 ```{r standard}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
       set_format_strings(
@@ -235,7 +232,7 @@ tplyr_table(adsl, TRT01P) %>%
 Note that if a certain number of integers are alotted, space will be left for the numbers that fill that space, but the position of the parenthesis stays fixed. In some displays, you may want the parenthesis to 'hug' your number - the "format group" width should stay fixed, the parenthesis should move to the right along with the numbers consuming less integer space. Within your `f_str()`, you can achieve this by using a capital 'X'. For example, focusing on the mean and standard deviation line:
 
 ```{r manual_hugging}
-tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
+tplyr_table(tplyr_adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
       set_format_strings(
@@ -251,7 +248,7 @@ tplyr_table(adlb, TRTA, PARAMCD == "CK") %>%
 Similarly, the same functionality works with auto precision by using a capital A. 
 
 ```{r auto_hugging}
-tplyr_table(adlb, TRTA, PARAMCD == "CK") %>% 
+tplyr_table(tplyr_adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
       set_format_strings(

@@ -701,6 +701,7 @@ test_that("test IBM rounding option", {
       group_count(gender, by = "Gender")  %>%
         set_format_strings(f_str("xxx (xxx%)", n, pct))
     )
+
   expect_warning({tabl2 <- build(tabl2)}, "You have enabled IBM Rounding.")
 
   expect_equal(tabl2$var1_Placebo, c("485 ( 49%)", "515 ( 52%)"))

@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
-load("adsl.Rdata")
-load("adae.Rdata")
-load("adlb.Rdata")
 ```
 
 At the surface, counting sounds pretty simple, right? You just want to know how many occurrences of something there are. Well - unfortunately, it's not that easy. And in clinical reports, there's quite a bit of nuance that goes into the different types of frequency tables that need to be created. Fortunately, we’ve added a good bit of flexibility into `group_count()` to help you get what you need when creating these reports, whether you’re creating a demographics table, adverse events, or lab results.
@@ -32,7 +29,7 @@ At the surface, counting sounds pretty simple, right? You just want to know how 
 Let's start with a basic example. This table demonstrates the distribution of subject disposition across treatment groups. Additionally, we're sorting by descending total occurrences using the "Total" group. 
 
 ```{r}
-t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
+t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
   add_total_group() %>%
   add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
   add_layer(
@@ -55,7 +52,7 @@ Another exceptionally important consideration within count layers is whether you
 **Tplyr** allows you to focus on these distinct counts and distinct percents within some grouping variable, like subject. Additionally, you can mix and match with the distinct counts with non-distinct counts in the same row too. The `set_distinct_by()` function sets the variables used to calculate the distinct occurrences of some value using the specified `distinct_by` variables.
 
 ```{r}
-t <- tplyr_table(adae, TRTA) %>%
+t <- tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>%
       set_distinct_by(USUBJID) %>%
@@ -72,7 +69,7 @@ You may have seen tables before like the one above. This display shows the numbe
 An additional option for formatting the numbers above would be using 'parenthesis hugging'. To trigger this, on the integer side of a number use a capital 'X' or a capital 'A'. For example:
 
 ```{r}
-t <- tplyr_table(adae, TRTA) %>%
+t <- tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>%
       set_distinct_by(USUBJID) %>%
@@ -96,7 +93,7 @@ One way to approach this would be creating two summaries. One summarizing the bo
 The example below demonstrates how to do a nested summary. Look at the first row - here `row_label1` and `row_label2` are both "CARDIAC DISORDERS". This line is the summary for `AEBODSYS.` In the rows below that, `row_label1` continues on with the value "CARDIAC DISORDERS", but `row_label2` changes. These are the summaries for `AEDECOD`.
 
 ```{r}
-tplyr_table(adae, TRTA) %>%
+tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
   ) %>%
@@ -108,7 +105,7 @@ tplyr_table(adae, TRTA) %>%
 This accomplishes what we needed, but it's not exactly the presentation you might hope for. We have a solution for this as well.
 
 ```{r} 
-tplyr_table(adae, TRTA) %>%
+tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
       set_nest_count(TRUE) %>% 

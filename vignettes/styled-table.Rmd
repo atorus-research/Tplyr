@@ -21,7 +21,6 @@ library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
 library(kableExtra)
-load("adsl.Rdata")
 ```
 
 In the other vignettes we talk about how to get the most out of **Tplyr** when it comes to preparing your data. The last step we need to cover is how to get from the data output by **Tplyr** to a presentation ready table.
@@ -43,14 +42,14 @@ Let's build a demographics table to see how this all works.
 ## Preparing the data
 
 ```{r demog_table}
-adsl <- adsl %>% 
+tplyr_adsl <- tplyr_adsl %>% 
   mutate(
     SEX = recode(SEX, M = "Male", F = "Female"), 
     RACE = factor(RACE, c("AMERICAN INDIAN OR ALASKA NATIVE", "ASIAN", "BLACK OR AFRICAN AMERICAN", 
                           "NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER", "WHITE", "MULTIPLE"))
   )
 
-t <- tplyr_table(adsl, TRT01P) %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_total_group() %>% 
   add_layer(name = 'Sex', 
     group_count(SEX, by = "Sex n (%)") %>% 

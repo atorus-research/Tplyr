@@ -17,8 +17,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("vignettes/adae.Rdata")
-load("vignettes/adsl.Rdata")
 ```
 
 # *Tplyr* <img src="man/figures/logo.png" align="right" alt="" width="120" />
@@ -76,11 +74,10 @@ When you look at this table, you can begin breaking this output down into smalle
 So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. 
 In the same way that [dplyr](https://dplyr.tidyverse.org/) is a grammar of data manipulation, **Tplyr** aims to be a grammar of data summary. The goal of **Tplyr** is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller 'layers', and combining them together like you see on the page. 
 
-Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://advance.phuse.global/display/WEL/Test+Dataset+Factory) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
+Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://advance.phuse.global/display/WEL/Test+Dataset+Factory) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). We've packaged some subsets of that data into **Tplyr**, which you can use to replicate our examples and run our vignette code yourself. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ```{r initial_demo}
-
-tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
@@ -89,7 +86,6 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   ) %>% 
   build() %>% 
   kable()
-
 ```
 
 ## *Tplyr* is Qualified
