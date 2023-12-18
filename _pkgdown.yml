@@ -105,12 +105,13 @@ reference:
 - title: Post-pocessing
   desc: Post-pocessing functions
 - contents:
-  - str_indent_wrap
-  - apply_row_masks
   - apply_conditional_format
+  - apply_formats
+  - apply_row_masks
+  - collapse_row_labels
   - str_extract_fmt_group
   - str_extract_num
-  - apply_formats
+  - str_indent_wrap
 - title: Helper functions
   desc: General helper functions
 - contents:
@@ -122,6 +123,14 @@ reference:
   - get_where.tplyr_layer
   - Tplyr
   - get_tplyr_regex
+- title: Data
+  desc: Tplyr Built-in Datasets
+- contents:
+  - tplyr_adae
+  - tplyr_adas
+  - tplyr_adlb
+  - tplyr_adsl
+  - get_data_labels
 
 articles:
 - title: Table Basics
