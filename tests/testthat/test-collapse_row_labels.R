@@ -1,16 +1,16 @@
 dat <- tibble::tribble(
   ~row_label1, ~row_label2, ~row_label3, ~row_label4, ~var1,
-  "A",         "C",         "G",         "M",    1L,
-  "A",         "C",         "G",         "N",    2L,
-  "A",         "C",         "H",         "O",    3L,
-  "A",         "D",         "H",         "P",    4L,
-  "A",         "D",         "I",         "Q",    5L,
-  "A",         "D",         "I",         "R",    6L,
-  "B",         "E",         "J",         "S",    7L,
-  "B",         "E",         "J",         "T",    8L,
-  "B",         "E",         "K",         "U",    9L,
-  "B",         "F",         "K",         "V",   10L,
-  "B",         "F",         "L",         "W",   11L
+  "A",         "C",         "G",         "M",         1L,
+  "A",         "C",         "G",         "N",         2L,
+  "A",         "C",         "H",         "O",         3L,
+  "A",         "D",         "H",         "P",         4L,
+  "A",         "D",         "I",         "Q",         5L,
+  "A",         "D",         "I",         "R",         6L,
+  "B",         "E",         "J",         "S",         7L,
+  "B",         "E",         "J",         "T",         8L,
+  "B",         "E",         "K",         "U",         9L,
+  "B",         "F",         "K",         "V",         10L,
+  "B",         "F",         "L",         "W",         11L
 )
 
 
