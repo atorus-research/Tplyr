@@ -440,6 +440,17 @@ test_that("set_denom_where works as expected", {
   expect_snapshot_output(dput(t13))
 })
 
+test_that("set_denom_where errors for incompatible object type", {
+  t1 <- tplyr_table(mtcars, gear)
+
+  # Modify the object type to make it incompatible
+  class(t1) <- "environment"
+
+  # Function errors
+  t1 <- set_denom_where(t1, mpg != 21) %>%
+    expect_error("Object type should be")
+})
+
 test_that("missing counts can be set without a format and it inherits the layer format", {
   t1 <- tplyr_table(mtcars, gear) %>%
     add_layer(
