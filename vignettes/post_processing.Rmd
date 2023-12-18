@@ -98,6 +98,38 @@ There are a few considerations when using `apply_row_masks()`:
 - This function is order dependent, so make sure your data are sorted before submitting to `apply_row_masks()`
 - When inserting row breaks, by default the Tpylr variable `ord_layer_index` is used. You can submit other variables via the ellipsis parameter (`...`) if you'd like to use a different variable grouping to insert rows
 
+## Collapsing Row Labels
+
+Different table formats call for different handling of row labels, depending on the preferences of an individual organization and the specifics of the table at hand. **Tplyr** inherently creates row labels as separate columns, but similar to the way that count layers nest the inner and the outer layer, we also offer the `collapse_row_labels()` function to pull multiple row labels into a single column. 
+
+```{r collapse_row_labels}
+dat <- tplyr_table(adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE, by = vars("Race n (%)", SEX))
+  ) %>% 
+  add_layer(
+    group_desc(AGE, by = vars("Age (years)", SEX))
+  ) %>% 
+  build()
+
+collapse_row_labels(dat, row_label1, row_label2, row_label3) %>% 
+  select(row_label, var1_Placebo)
+```
+By default, indentation is set to 2 spaces, but by using the `indent` parameter you can change this to any string you desire.
+
+```{r collapse_row_labels2}
+collapse_row_labels(dat, row_label1, row_label2, row_label3, indent = "&nbsp;&nbsp;") %>% 
+  select(row_label, var1_Placebo) %>% 
+  kable(escape=FALSE)
+```
+You also have control over which columns you collapse, allowing you to keep separate row labels if you don't want all collapsed together
+
+```{r collapse_row_labels3} 
+collapse_row_labels(dat, row_label1, row_label2, indent = "&nbsp;&nbsp;") %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  kable(escape=FALSE)
+```
+
 ## Conditional Formatting
 
 In some circumstances, like `add_total_row()`, **Tplyr** lets you specify special formats separate from those in `set_format_strings()`. But within the table body there's no other way to set specific, conditional formats based on the table data itself. To address this, we've added the post-processing function `apply_conditional_format()` to allow you to set conditional formats on result cells.
