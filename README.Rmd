@@ -19,7 +19,7 @@ library(Tplyr)
 library(knitr)
 ```
 
-# *Tplyr* <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# **Tplyr** <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 [<img src="http://pharmaverse.org/shields/Tplyr.svg">](https://pharmaverse.org)
@@ -48,7 +48,7 @@ install.packages("Tplyr")
 devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
 ```
 
-# What is *Tplyr*? 
+# What is **Tplyr**? 
 
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. [dplyr](https://dplyr.tidyverse.org/) conceptually breaks things down into verbs that allow you to focus on _what_ you want to do more than _how_ you have to do it.
 
@@ -88,7 +88,7 @@ tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
   kable()
 ```
 
-## *Tplyr* is Qualified
+## **Tplyr** is Qualified
 
 We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing **Tplyr** includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.
 

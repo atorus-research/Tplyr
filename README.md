@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# *Tplyr* <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# **Tplyr** <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -42,7 +42,7 @@ install.packages("Tplyr")
 devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
 ```
 
-# What is *Tplyr*?
+# What is **Tplyr**?
 
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of
 data manipulation. So what does that allow you to do? It gives you, as a
@@ -134,7 +134,7 @@ tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
 | Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
 | Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
 
-## *Tplyr* is Qualified
+## **Tplyr** is Qualified
 
 We understand how important documentation and testing is within the
 pharmaceutical world. This is why outside of unit testing **Tplyr**
