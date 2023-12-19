@@ -127,6 +127,50 @@ You also have control over which columns you collapse, allowing you to keep sepa
 ```{r collapse_row_labels3} 
 collapse_row_labels(dat, row_label1, row_label2, indent = "&nbsp;&nbsp;") %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
+  head() %>% 
+  kable()
+```
+
+## Leading Spaces in HTML Files
+
+Another helper function we've made available is `replace_leading_whitespace()`. In the table created above, note that the `indent` parameter was set using `&nbsp;`, which is a non-breaking space. This can be used in HTML files to preserve leading white spaces instead of automatically stripping them in the display, as viewing utilities usually do. Ever noticed that in your data viewers you typically don't see leading spaces? Yeah - that's why!
+
+Let's take the example from above and not change the `indent` parameter.
+
+```{r replace_leading_whitespace1}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  kable()
+```
+
+In indented rows, the spaces still exist, and we can see that in the dataframe output itself.
+
+```{r replace_leading_whitespace2}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  head()
+```
+
+But the HTML view strips them off when we pass it into the `kable()` function. `replace_leading_whitespace()` will take care of this for us by converting the spaces. Note that you'll see the `&nbsp;` in the raw data itself.
+
+```{r replace_leading_whitespace3}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  mutate(
+    across(where(is.character), ~ replace_leading_whitespace(.))
+  ) %>% 
+  head()
+```
+
+But now when we want to use this in a display, the `&nbsp;` characters will show as leading whitespace within our HTML table. Note that you'll need to prevent escaping special characters for this to work, or the raw text will display. In `kable()` you can use `escape=FALSE` do this.
+
+```{r replace_leading_whitespace4}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  mutate(
+    across(where(is.character), ~ replace_leading_whitespace(.))
+  ) %>% 
+  head() %>% 
   kable(escape=FALSE)
 ```
 
