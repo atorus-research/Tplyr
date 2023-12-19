@@ -26,6 +26,14 @@ Authors@R:
            family = "Mascary",
            email = "sadchla.mascary@atorusresearch.com",
            role = "ctb"),
+    person(given = "Andrew",
+           family = "Bates",
+           email = "andrew.bates@atorusresearch.com",
+           role = "ctb"),
+    person(given = "Shiyu",
+           family = "Chen",
+           email = "shiyu.chen@atorusresearch.com",
+           role = "ctb"),
     person(given = "Atorus Research LLC",
            role = "cph")
     )
