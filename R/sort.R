@@ -207,7 +207,7 @@ add_order_columns.count_layer <- function(x) {
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
-        group_by(.data[[paste0("ord_layer_", formatted_col_index - 1)]]) %>%
+        group_by(.data[[paste0("row_label", formatted_col_index - 1)]]) %>%
         do(add_data_order_nested(., formatted_col_index - 1, numeric_data,
                                  indentation_length = indentation_length,
                                  ordering_cols = ordering_cols,
@@ -724,10 +724,11 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   }
 
   present_vars <- unlist(group_data[-1, row_label_vec[length(row_label_vec)]])
+
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% present_vars, !is.na(!!by[[1]])) %>%
+    filter(numeric_data$summary_var %in% present_vars, !!by[[1]] == outer_value) %>%
     # Remove nesting prefix to prepare numeric data.
     mutate(summary_var := str_sub(summary_var, indentation_length))
 
