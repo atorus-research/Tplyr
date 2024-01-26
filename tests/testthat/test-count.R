@@ -905,6 +905,9 @@ test_that("nested count layers error out when you try to add a total row", {
     )
 
     expect_snapshot_error(build(tab))
+
+  # The weird use of mtcars2 makes us have to overwrite this again
+  mtcars <- mtcars2
 })
 
 test_that("Tables with pop_data can accept a layer level where", {
