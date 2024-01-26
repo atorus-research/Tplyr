@@ -12,6 +12,10 @@
 #' use \code{set_denoms_by()}, and the grouping of \code{add_total_row()} will
 #' be updated accordingly.
 #'
+#' Note that when using \code{add_total_row()} with \code{set_pop_data()}, you
+#' should call \code{add_total_row()} AFTER calling \code{set_pop_data()},
+#' otherwise there is potential for unexpected behaivior with treatment groups.
+#'
 #' @param e A \code{count_layer} object
 #' @param fmt An f_str object used to format the total row. If none is provided,
 #'   display is based on the layer formatting.

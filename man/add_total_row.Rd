@@ -33,6 +33,10 @@ total and the application of denominators becomes ambiguous. You will be
 warned specifically if a percent is included in the format. To rectify this,
 use \code{set_denoms_by()}, and the grouping of \code{add_total_row()} will
 be updated accordingly.
+
+Note that when using \code{add_total_row()} with \code{set_pop_data()}, you
+should call \code{add_total_row()} AFTER calling \code{set_pop_data()},
+otherwise there is potential for unexpected behaivior with treatment groups.
 }
 \examples{
 # Load in Pipe
