@@ -209,11 +209,21 @@
       8  2 ( 50.0%)  0 (  0.0%)               1           3           1
       9  0 (  0.0%)  0 (  0.0%)               1           3           2
 
-# nested count layers will error out if second variable is bigger than the first
+# nested count can accept data if second variable is bigger than the first
 
-    i In index: 1.
-    Caused by error:
-    ! The number of values of your second variable must be greater than the number of levels in your first variable
+    Code
+      x
+    Output
+                           row_label1                    row_label2  var1_TRT1
+      1 Antiemetics and antinauseants Antiemetics and antinauseants 1 ( 50.0%)
+      2 Antiemetics and antinauseants    Promethazine hydrochloride 1 ( 50.0%)
+      3                 Psycholeptics                 Psycholeptics 1 ( 50.0%)
+      4                 Psycholeptics    Promethazine hydrochloride 1 ( 50.0%)
+         var1_TRT2 ord_layer_index ord_layer_1 ord_layer_2
+      1 0 (  0.0%)               1           1         Inf
+      2 0 (  0.0%)               1           1           1
+      3 1 (100.0%)               1           2         Inf
+      4 1 (100.0%)               1           2           1
 
 # set_numeric_threshold works as expected
 

@@ -722,16 +722,23 @@ test_that("test specific rounding proplem #124", {
   options(tplyr.IBMRounding = FALSE)
 })
 
-test_that("nested count layers will error out if second variable is bigger than the first", {
-  mtcars <- mtcars2
-  mtcars$grp <- paste0("grp.", as.numeric(mtcars$cyl) + rep(c(0, 0.5), 16))
+test_that("nested count can accept data if second variable is bigger than the first", {
+  test_adcm <- data.frame(
+    SUBJID = c("1", "2", "3"),
+    ATC2 = c("Antiemetics and antinauseants", "Psycholeptics", "Psycholeptics"),
+    CMDECOD = c("Promethazine hydrochloride", "Promethazine hydrochloride", "Promethazine hydrochloride"),
+    TRT101A = c("TRT1", "TRT2", "TRT1")
+  )
 
-  t <- tplyr_table(mtcars, gear) %>%
+  x <- test_adcm %>%
+    tplyr_table(TRT101A) %>%
     add_layer(
-      group_count(vars(grp, cyl))
-    )
+      group_count(vars(ATC2, CMDECOD))
+    ) %>%
+    build() %>%
+    as.data.frame()
 
-  expect_snapshot_error(build(t))
+  expect_snapshot(x)
 })
 
 test_that("Posix columns don't cause the build to error out.", {
@@ -898,6 +905,9 @@ test_that("nested count layers error out when you try to add a total row", {
     )
 
     expect_snapshot_error(build(tab))
+
+  # The weird use of mtcars2 makes us have to overwrite this again
+  mtcars <- mtcars2
 })
 
 test_that("Tables with pop_data can accept a layer level where", {
