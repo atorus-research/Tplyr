@@ -711,27 +711,3 @@ set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
 
   e
 }
-
-#' Set variables to limit to data values only rather than fully completing all
-#' possible levels
-#'
-#' @param e A tplyr_layer
-#' @param ... Subset of variables within by or target variables
-#'
-#' @return
-#' @export
-set_limit_data_by <- function(e, ...) {
-  dots <- enquos(...)
-  dots_chr <- map_chr(dots, as_name)
-
-  # Pull these variables to make sure the denoms used make sense
-  by_ <- map_chr(env_get(e, "by"), as_name)
-  tv_ <- map_chr(env_get(e, "target_var"), as_name)
-
-  if (!all(dots_chr %in% c(by_, tv_))) {
-    stop("Complete by variables must be included in by variables set on layer", call.=FALSE)
-  }
-
-  env_bind(e, limit_data_by = dots)
-  e
-}

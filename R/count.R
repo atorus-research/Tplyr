@@ -257,22 +257,9 @@ process_count_n <- function(x) {
     }
 
     complete_levels <- summary_stat %>%
-      # complete all combinations of factors to include combinations that don't exist.
-      # add 0 for combinations that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols,
-               fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0))
-
-    # Apply data limits specified by setter
-    if (exists("limit_data_by")) {
-      # Find the combinations actually in the data
-      groups_in_data <- summary_stat %>%
-        distinct(!!!limit_data_by)
-
-      # Join back to limit the completed levels based on the preferred
-      # data driven ones
-      complete_levels <- groups_in_data %>%
-        left_join(complete_levels, by = map_chr(limit_data_by, as_name))
-    }
+      complete_and_limit(treat_var, by, target_var, cols,
+                         limit = exists("limit_data_by"),
+                         .fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0))
 
     summary_stat <- complete_levels %>%
       # Change the treat_var and first target_var to characters to resolve any
