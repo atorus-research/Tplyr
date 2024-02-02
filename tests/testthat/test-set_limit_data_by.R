@@ -62,3 +62,39 @@ test_that("Descriptive statistics data limiting works properly", {
   expect_equal(cnts3$n, c(6, 18, 18))
 })
 
+test_that("Descriptive statistics data limiting works properly", {
+
+  t1 <- tplyr_table(adpe, TRT01A) %>%
+    add_layer(
+      group_count(AVALC, by = vars(PECAT, PARAM, AVISIT))
+    )
+
+  x1 <- build(t1)
+
+  cnts1 <- count(x1, row_label1, row_label2)
+  expect_equal(cnts1$n, c(9, 9, 9, 9))
+
+  t2 <- tplyr_table(adpe, TRT01A) %>%
+    add_layer(
+      group_count(AVALC, by = vars(PECAT, PARAM, AVISIT)) %>%
+        set_limit_data_by(PARAM, AVISIT)
+    )
+
+  x2 <- build(t2)
+
+  cnts2 <- count(x2, row_label1, row_label2)
+  expect_equal(cnts2$n, c(3, 9, 3, 9))
+
+  t3 <- tplyr_table(adpe, TRT01A) %>%
+    add_layer(
+      group_count(AVALC, by = vars(PECAT, PARAM, AVISIT)) %>%
+        set_limit_data_by(PECAT, PARAM, AVISIT)
+    )
+
+  x3 <- build(t3)
+
+  cnts3 <- count(x3, row_label1, row_label2)
+  expect_equal(cnts3$n, c(3, 9, 9))
+})
+
+

@@ -257,8 +257,7 @@ process_count_n <- function(x) {
     }
 
     complete_levels <- summary_stat %>%
-      complete_and_limit(treat_var, by, target_var, cols,
-                         limit = exists("limit_data_by"),
+      complete_and_limit(treat_var, by, cols, target_var, limit_data_by,
                          .fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0))
 
     summary_stat <- complete_levels %>%
