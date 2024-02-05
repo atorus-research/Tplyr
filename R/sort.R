@@ -702,6 +702,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   ##### Outer nest values #####
   # The value of the outer label
   outer_value <- group_data[1, tail(row_label_vec, 1)][[1]]
+  # Reserve for joins
+  mrg_by <- paste0("row_label", seq_along(by))[-1]
 
   if(order_count_method[1] == "byvarn") {
     varn_df <- get_varn_values(target, as_name(by[[1]]))
@@ -709,13 +711,7 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     all_outer$..index <- group_data[1,] %>%
       get_data_order_byvarn(varn_df, by[[1]], final_col, total_row_sort_value = total_row_sort_value)
 
-    group_data[
-      group_data[[tail(row_label_vec, 1)]] == outer_value,
-      paste0("ord_layer_", final_col)
-      ] <- all_outer %>%
-        filter(summary_var == outer_value) %>%
-        ungroup() %>%
-        select(..index)
+
 
   } else if(order_count_method[1] == "bycount") {
     all_outer$..index <- all_outer %>%
@@ -726,14 +722,27 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                              numeric_cutoff_stat = numeric_cutoff_stat,
                              numeric_cutoff_column = numeric_cutoff_column,
                              nested = TRUE)
+  }
 
-    group_data[
-      group_data[[tail(row_label_vec, 1)]] == outer_value,
-      paste0("ord_layer_", final_col)
-      ] <- all_outer %>%
+
+  # Grab the index created above and insert it into group data
+  if (order_count_method[1] %in% c("bycount", "byvarn")){
+    if (length(mrg_by) == 0) {
+      group_data[,paste0("ord_layer_", final_col)] <- all_outer %>%
         filter(summary_var == outer_value) %>%
         ungroup() %>%
-        select(..index)
+        pull(..index)
+    } else {
+      group_data[,paste0("ord_layer_", final_col)] <- group_data %>%
+        left_join(
+          all_outer %>%
+            filter(summary_var == outer_value) %>%
+            replace_by_string_names(c(by, quo(summary_var))) %>%
+            select(starts_with('row'), ..index, -c(row_label1, !!treat_var)),
+          by = mrg_by
+        ) %>%
+        pull(..index)
+    }
   }
 
   outer_nest_rows <- group_data %>%
