@@ -98,3 +98,32 @@ test_that("Descriptive statistics data limiting works properly", {
 })
 
 
+test_that("Nested count layers limit data accurately", {
+
+  t_ae1 <- tplyr_table(tplyr_adae, TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD), by = vars(AESEV, AEOUT)) %>%
+        set_limit_data_by(AEOUT, AEDECOD)
+    )
+
+  t_ae_df1 <- t_ae1 %>%
+    build() %>% select(-starts_with('ord'))
+
+  t_ae2 <- tplyr_table(tplyr_adae, TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD), by = vars(AESEV, AEOUT)) %>%
+        set_limit_data_by(AESEV, AEOUT, AEDECOD)
+    )
+
+  t_ae_df2 <- t_ae2 %>%
+    build() %>% select(-starts_with('ord'))
+
+  dropped_rows <- anti_join(
+    t_ae_df1,
+    t_ae_df2,
+    by=names(t_ae_df1)
+  )
+
+  check <- c(dropped_rows$var1_Placebo, dropped_rows$`var1_Xanomeline High Dose`, dropped_rows$`var1_Xanomeline Low Dose`)
+  expect_true(all(check == " 0 (  0.0%)"))
+})

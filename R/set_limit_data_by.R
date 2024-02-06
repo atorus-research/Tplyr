@@ -48,15 +48,16 @@ set_limit_data_by.desc_layer <- function(e, ...) {
 #' General function used to process the steps to pad levels in data, or limit to
 #' combinations available in the data itself
 #'
-#' @param dat
-#' @param treat_var
-#' @param by
-#' @param cols
-#' @param target_var
-#' @param limit
-#' @param .fill
-#' TODO: Figure out best way to pass the data limiting into this function, because it doesn't exist unless distinctly set.
-complete_and_limit <- function(dat, treat_var, by, cols, target_var=quos(), limit_data_by, .fill=list()) {
+#' @param dat Input dataset
+#' @param treat_var treat_var from tplyr_table
+#' @param by by from tplyr_layer
+#' @param cols cols from tplyr_table
+#' @param target_var target_var from tplyr_layer
+#' @param limit_data_by The variables to limit data by
+#' @param .fill .fill parameter passed onto dplyr::complete
+#'
+#' @noRd
+complete_and_limit <- function(dat, treat_var, by, cols, target_var=quos(), limit_data_by, .fill=list(), outer=FALSE) {
 
   complete_levels <- dat %>%
     # complete all combinations of factors to include combinations that don't exist.
@@ -66,6 +67,11 @@ complete_and_limit <- function(dat, treat_var, by, cols, target_var=quos(), limi
 
   # Apply data limits specified by setter
   if (!is.null(limit_data_by)) {
+    # Outer layer won't have the target variable to limit by
+    if (outer) {
+      limit_data_by <- limit_data_by[map_chr(limit_data_by, as_name) %in% names(dat)]
+    }
+
     # Find the combinations actually in the data
     groups_in_data <- dat %>%
       distinct(!!!limit_data_by)

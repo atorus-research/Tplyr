@@ -101,6 +101,7 @@ process_summaries.count_layer <- function(x, ...) {
 
     process_count_denoms(x)
 
+    outer <- FALSE
     process_single_count_target(x)
 
   }
@@ -256,9 +257,13 @@ process_count_n <- function(x) {
                                                names(missing_count_list)))
     }
 
+    # Need to mark this for nested counts
+    if (!exists('outer_')) outer_ <- FALSE
+
     complete_levels <- summary_stat %>%
       complete_and_limit(treat_var, by, cols, target_var, limit_data_by,
-                         .fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0))
+                         .fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0),
+                         outer=outer_)
 
     summary_stat <- complete_levels %>%
       # Change the treat_var and first target_var to characters to resolve any

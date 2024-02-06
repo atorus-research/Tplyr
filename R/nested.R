@@ -32,9 +32,11 @@ process_nested_count_target <- function(x) {
       second_denoms_by <- denoms_by
     }
 
+    outer_ <- TRUE
     first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
                                                  by = vars(!!!by), where = !!where))
 
+    outer_ <- FALSE
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
                                                   by = vars(!!target_var[[1]], !!!by), where = !!where) %>%
                                         set_count_row_prefix(indentation) %>%
