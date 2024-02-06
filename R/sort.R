@@ -728,12 +728,12 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   # Grab the index created above and insert it into group data
   if (order_count_method[1] %in% c("bycount", "byvarn")){
     if (length(mrg_by) == 0) {
-      group_data[,paste0("ord_layer_", final_col)] <- all_outer %>%
+      group_data[,"ord_layer_1"] <- all_outer %>%
         filter(summary_var == outer_value) %>%
         ungroup() %>%
         pull(..index)
     } else {
-      group_data[,paste0("ord_layer_", final_col)] <- group_data %>%
+      group_data[,"ord_layer_1"] <- group_data %>%
         left_join(
           all_outer %>%
             filter(summary_var == outer_value) %>%
