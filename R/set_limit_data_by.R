@@ -30,6 +30,12 @@ set_limit_data_by.count_layer <- function(e, ...) {
 
 #' @export
 #' @noRd
+set_limit_data_by.shift_layer <- function(e, ...) {
+  set_limit_data_by.count_layer(e, ...)
+}
+
+#' @export
+#' @noRd
 set_limit_data_by.desc_layer <- function(e, ...) {
   dots <- enquos(...)
   dots_chr <- map_chr(dots, as_name)
