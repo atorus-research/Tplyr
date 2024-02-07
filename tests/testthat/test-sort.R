@@ -283,7 +283,7 @@ test_that("Nested counts with by variables process properly", {
 
   # This is verifying that the right number of combinations of row_labels exist, and that
   # there aren't duplicate order values for the outer layer
-  expect_equal(nrow(count(t_ae_df1, row_label2, row_label3, ord_layer_3)), 6)
+  expect_equal(nrow(dplyr::count(t_ae_df1, row_label2, row_label3, ord_layer_3)), 6)
 
   t_ae2 <- tplyr_table(tplyr_adae, TRTA) %>%
     add_layer(
@@ -297,6 +297,6 @@ test_that("Nested counts with by variables process properly", {
     build()
 
   # Same test but now working with a text outer layer and one by variable
-  expect_equal(nrow(count(t_ae_df2, row_label2, ord_layer_2)), 2)
+  expect_equal(nrow(dplyr::count(t_ae_df2, row_label2, ord_layer_2)), 2)
 
 })

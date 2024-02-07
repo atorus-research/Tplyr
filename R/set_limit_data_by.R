@@ -1,11 +1,50 @@
-#' Set variables to limit to data values only rather than fully completing all
-#' possible levels
+#' Set variables to limit reported data values only to those that exist rather
+#' than fully completing all possible levels
+#'
+#' This function allows you to select a combination of by variables or
+#' potentially target variables for which you only want to display values
+#' present in the data. By default, Tplyr will create a cartesian combination of
+#' potential values of the data. For example, if you have 2 by variables
+#' present, then each potential combination of those by variables will have a
+#' row present in the final table. `set_limit_data_by()` allows you to choose
+#' the by variables whose combination you wish to limit to values physically
+#' present in the available data.
 #'
 #' @param e A tplyr_layer
 #' @param ... Subset of variables within by or target variables
 #'
-#' @return
+#' @return a tplyr_table
+#' @md
 #' @export
+#'
+#' @examples
+#'
+#' tplyr_table(tplyr_adpe, TRT01A) %>%
+#'   add_layer(
+#'     group_desc(AVAL, by = vars(PECAT, PARAM, AVISIT))
+#'   ) %>%
+#'   build()
+#'
+#' tplyr_table(tplyr_adpe, TRT01A) %>%
+#'   add_layer(
+#'     group_desc(AVAL, by = vars(PECAT, PARAM, AVISIT)) %>%
+#'       set_limit_data_by(PARAM, AVISIT)
+#'   ) %>%
+#'   build()
+#'
+#' tplyr_table(tplyr_adpe, TRT01A) %>%
+#'   add_layer(
+#'     group_count(AVALC, by = vars(PECAT, PARAM, AVISIT)) %>%
+#'       set_limit_data_by(PARAM, AVISIT)
+#'   ) %>%
+#'   build()
+#'
+#' tplyr_table(tplyr_adpe, TRT01A) %>%
+#'   add_layer(
+#'     group_count(AVALC, by = vars(PECAT, PARAM, AVISIT)) %>%
+#'       set_limit_data_by(PECAT, PARAM, AVISIT)
+#'   ) %>%
+#'   build()
 set_limit_data_by <- function(e, ...) {
   UseMethod("set_limit_data_by")
 }
@@ -61,6 +100,7 @@ set_limit_data_by.desc_layer <- function(e, ...) {
 #' @param target_var target_var from tplyr_layer
 #' @param limit_data_by The variables to limit data by
 #' @param .fill .fill parameter passed onto dplyr::complete
+#' @param outer Whether to bypass variables if working through the outer layer
 #'
 #' @noRd
 complete_and_limit <- function(dat, treat_var, by, cols, target_var=quos(), limit_data_by, .fill=list(), outer=FALSE) {

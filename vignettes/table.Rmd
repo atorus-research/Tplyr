@@ -115,6 +115,58 @@ header_n(t) %>%
 
 Note: it’s expected the `set_distinct_by()` function is used with population data. This is because it does not make sense to use population data denominators unless you have distinct counts. The entire point of population data is to use subject counts, so non-distinct counts would potentially count multiple records per subject and then the percentage doesn’t make any sense.
 
+## Data Completion
+
+When creating summary tables, often we have to mock up the potential values of data, even if those values aren't present in the data we're summarizing. **Tplyr** does its best effort to do this for you. Let's consider the following dataset:
+
+```{r data_comp, echo=FALSE}
+kable(head(tplyr_adpe))
+```
+Let's say we want to create a count summary for this dataset, and report it by PARAM and AVISIT. Note that in the data, `PARAM=="HEAD"` is only collected at screening, while `LUNGS` is collected at Screening, Day -1, and Day 5. 
+
+```{r data_comp1}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT))
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  head(18) %>% 
+  kable()
+
+```
+
+By default, given the `by` variables of PARAM and AVISIT, all of the potential visits have dummy rows created that are 0 filled - meaning results of 0 records for all treatment groups are presented. However, that might not be what you wish to present. Perhaps `HEAD` was only intended to be collected at the Screening visit so it's unnecessary to present other visits. To address this, you can use the `set_limit_data_by()` function.
+
+```{r data_comp2}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 
+      set_limit_data_by(PARAM, AVISIT)
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  head(12) %>% 
+  kable()
+```
+
+Here you can see that now records for `HEAD` only present the screening visit. For count and shift layers, you can additionally dig further in to use target variables:
+
+```{r data_comp3}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 
+      set_limit_data_by(PARAM, AVISIT, AVALC)
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  kable()
+```
+
+This effectively limits to the values present in the data itself.
+
+## Where to Go From Here
+
 With the table level settings under control, now you're ready to learn more about what **Tplyr** has to offer in each layer. 
 
 - Learn more about descriptive statistics layers in `vignette("desc")`
