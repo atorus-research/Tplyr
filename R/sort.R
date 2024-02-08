@@ -804,20 +804,6 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
     varn_df <- get_varn_values(target, target_var[[1]])
 
-
-
-<<<<<<< HEAD
-    group_data[-1, paste0("ord_layer_", final_col + 1)] <- get_data_order_byvarn(filtered_group_data,
-                                                                                 varn_df,
-                                                                                 target_var[[1]],
-                                                                                 length(by) + 1,
-                                                                                 indentation,
-                                                                                 total_row_sort_value = total_row_sort_value,
-                                                                                 missing_subjects_sort_value = missing_subjects_sort_value)
-
-  } else {
-    group_row_count <- nrow(group_data[-1,])
-=======
     group_data[
       (outer_nest_rows + 1): nrow(group_data),
       paste0("ord_layer_", final_col + 1)
@@ -826,10 +812,10 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                  target_var[[1]],
                                  length(by) + 1,
                                  indentation,
-                                 total_row_sort_value = total_row_sort_value)
+                                 total_row_sort_value = total_row_sort_value,
+                                 missing_subjects_sort_value = missing_subjects_sort_value)
   } else {
     group_row_count <- nrow(group_data[(outer_nest_rows + 1): nrow(group_data),])
->>>>>>> gh_issue_84
     # Logic for group_row_count is when numeric_where values cause unexpected results
     group_data[
       (outer_nest_rows + 1): nrow(group_data),
