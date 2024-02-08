@@ -108,6 +108,7 @@ process_summaries.count_layer <- function(x, ...) {
 
     process_count_denoms(x)
 
+    outer <- FALSE
     process_single_count_target(x)
 
   }
@@ -128,7 +129,7 @@ process_summaries.count_layer <- function(x, ...) {
 #' If include_total_row is true a row will be added with a total row labeled
 #' with total_row_label.
 #'
-#' Complete is used to complete the combinaions of by, treat_var, and target_var
+#' Complete is used to complete the combinations of by, treat_var, and target_var
 #'
 #' @noRd
 process_single_count_target <- function(x) {
@@ -251,11 +252,15 @@ process_count_n <- function(x) {
                                                names(missing_count_list)))
     }
 
-    summary_stat <- summary_stat %>%
-      # complete all combinations of factors to include combinations that don't exist.
-      # add 0 for combinations that don't exist
-      complete(!!treat_var, !!!by, !!!target_var, !!!cols,
-               fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0)) %>%
+    # Need to mark this for nested counts
+    if (!exists('outer_')) outer_ <- FALSE
+
+    complete_levels <- summary_stat %>%
+      complete_and_limit(treat_var, by, cols, target_var, limit_data_by,
+                         .fill = list(n = 0, total = 0, distinct_n = 0, distinct_total = 0),
+                         outer=outer_)
+
+    summary_stat <- complete_levels %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%
