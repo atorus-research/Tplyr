@@ -438,6 +438,7 @@ get_data_order <- function(x, formatted_col_index) {
 
       if(!is.null(missing_string)) missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
       if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
+
       if(!is.null(missing_subjects_row_label)) {
         missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
       }
@@ -446,7 +447,8 @@ get_data_order <- function(x, formatted_col_index) {
       get_data_order_bycount(numeric_data, ordering_cols,
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
-                             total_index, total_row_sort_value, missing_subjects_sort_value,
+                             total_index, total_row_sort_value,
+                             missing_subjects_index, missing_subjects_sort_value,
                              break_ties = break_ties,
                              numeric_cutoff = numeric_cutoff,
                              numeric_cutoff_stat = numeric_cutoff_stat,
@@ -548,6 +550,7 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
                        missing_index = NULL, missing_sort_value = NULL,
                        total_index = NULL, total_row_sort_value = NULL,
+                       missing_subjects_index = NULL,
                        missing_subjects_sort_value = NULL,
                        break_ties, numeric_cutoff, numeric_cutoff_stat,
                        numeric_cutoff_column, nested = FALSE) {
@@ -780,12 +783,15 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
     mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
                                                              indentation_length + 1))
 
-
+  # Pick up here = we need to get the missing_subjects_index, but the label
+  # isn't so need to find the index and then pass that into get_data_order_bycount
+  browser()
   # The first row is always the first thing in the order so make it Inf
   group_data[1:outer_nest_rows, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
 
   if(tail(order_count_method, 1) == "bycount") {
     if (nrow(group_data) > 1) {
+      browser()
       group_data[
         (outer_nest_rows + 1): nrow(group_data),
         paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
@@ -796,6 +802,8 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                        result_order_var,
                                                                        target_var,
                                                                        break_ties = break_ties,
+                                                                       missing_subjects_index = missing_subjects_index,
+                                                                       missing_subjects_sort_value = missing_subjects_sort_value,
                                                                        numeric_cutoff = numeric_cutoff,
                                                                        numeric_cutoff_stat = numeric_cutoff_stat,
                                                                        numeric_cutoff_column = numeric_cutoff_column,

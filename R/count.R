@@ -362,7 +362,7 @@ process_missing_subjects_row <- function(x) {
       ungroup() %>%
       count(!!treat_var, !!!cols, !!!by, name="n_present") %>%
       # complete based on missing groupings
-      complete(!!treat_var, !!!cols, !!!by, fill = list(distinct_n = 0)) %>%
+      complete(!!treat_var, !!!cols, !!!by, fill = list(n_present = 0)) %>%
       left_join(
         header_n %>% rename(header_tots = n), by = mrg_vars
       ) %>%

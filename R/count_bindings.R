@@ -767,7 +767,7 @@ set_missing_subjects_row_label <- function(e, missing_subjects_row_label) {
   assert_has_class(missing_subjects_row_label, "character")
   assert_that(length(missing_subjects_row_label) == 1)
   if("shift_layer" %in% class(e)) {
-    rlang::abort("`missing_subjects_row_label` for shift layers is not yet supported")
+    rlang::abort("`set_missing_subjects_row_label` for shift layers is not yet supported")
   }
   assert_inherits_class(e, "count_layer")
 

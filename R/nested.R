@@ -36,10 +36,9 @@ process_nested_count_target <- function(x) {
     fl <- group_count(current_env(), target_var = !!target_var[[1]],
                       by = vars(!!!by), where = !!where)
     fl$include_missing_subjects_row <- FALSE
-    first_layer <- process_summaries(fl)
     outer_ <- TRUE
-    first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
-                                                 by = vars(!!!by), where = !!where))
+    first_layer <- process_summaries(fl)
+
 
     outer_ <- FALSE
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
