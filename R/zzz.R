@@ -308,3 +308,7 @@ stub_sort <- NULL
 include_missing_subjects_row <- NULL
 missing_subjects_row_label <- NULL
 missing_subjects_stat <- NULL
+missing_subjects_count_format <- NULL
+missing_subject_rows <- NULL
+missing_subject_vars_ord <- NULL
+string_ms <- NULL

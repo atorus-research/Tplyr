@@ -534,6 +534,7 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   if (is.null(max_n_width)) max_n_width <- 0
   missing_rows <- FALSE
   total_rows <- FALSE
+  missing_subject_rows <- FALSE
 
   # Add in the missing format if its null and there are missing counts
   if (has_missing_count && is.null(missing_f_str)) {
@@ -621,6 +622,7 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 
   # Put the vector strings together. Only include parts of str_all that aren't null
   # nm is non-missing, m is missing, t is total, ms is missing subjects
+  browser()
   string_nm <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
   if (!is.null(missing_vars_ord)) string_m <-  do.call(sprintf, missing_str_all[!map_lgl(missing_str_all, is.null)])
   if (!is.null(total_vars_ord)) string_t <- do.call(sprintf, total_str_all[!map_lgl(total_str_all, is.null)])
