@@ -39,6 +39,13 @@ process_summaries.count_layer <- function(x, ...) {
                                         sep = " ")))
       }
 
+      # Do this here to make sure that defaults are available everywhere else
+      # Downstream
+      if (is.null(include_total_row)) include_total_row <- FALSE
+      if (is.null(total_row_label)) total_row_label <- "Total"
+      if (is.null(include_missing_subjects_row)) include_missing_subjects_row <- FALSE
+      if (is.null(missing_subjects_row_label)) missing_subjects_row_label <- "Missing"
+
       # Save this for the denominator where, but only if it hasn't been saved yet.
       if (is.null(built_target_pre_where)) built_target_pre_where <- built_target
 
@@ -126,11 +133,6 @@ process_summaries.count_layer <- function(x, ...) {
 #' @noRd
 process_single_count_target <- function(x) {
   evalq({
-
-    if (is.null(include_total_row)) include_total_row <- FALSE
-    if (is.null(total_row_label)) total_row_label <- "Total"
-    if (is.null(include_missing_subjects_row)) include_missing_subjects_row <- FALSE
-    if (is.null(missing_subjects_row_label)) missing_subjects_row_label <- "Missing"
 
     # The current environment should be the layer itself
     process_count_n(current_env())
@@ -330,9 +332,7 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
       # ungroup right away to make sure the complete works
-      ungroup() %>%
-      # complete based on missing groupings
-      complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
+      ungroup()
   }, envir = x)
 }
 
@@ -349,27 +349,28 @@ process_missing_subjects_row <- function(x) {
     # Create the merge variables to join the header_n data
     mrg_vars <- map_chr(c(pop_treat_var, cols, denoms_by[needed_denoms_by]), as_name)
     names(mrg_vars)[1] <- as_name(treat_var)
-
     # create a data.frame to create total counts
     missing_subjects_stat <- built_target %>%
       # Use distinct if this is a distinct total row
       # Group by all column variables
-      group_by(!!treat_var, !!!cols, !!!by, !!!distinct_by) %>%
-      distinct() %>%
+      distinct(!!treat_var, !!!cols, !!!by, !!!distinct_by) %>%
       ungroup() %>%
-      count(!!treat_var, !!!cols, !!!by, name="distinct_n") %>%
+      count(!!treat_var, !!!cols, !!!by, name="n_present") %>%
+      # complete based on missing groupings
+      complete(!!treat_var, !!!cols, !!!by, fill = list(distinct_n = 0)) %>%
       left_join(
-        header_n %>% rename(distinct_total = n), by = mrg_vars
+        header_n %>% rename(header_tots = n), by = mrg_vars
       ) %>%
       # Create a variable to label the totals when it is merged in.
-      mutate(!!as_name(target_var[[1]]) := missing_subjects_row_label) %>%
+      mutate(
+        !!as_name(target_var[[1]]) := missing_subjects_row_label,
+        distinct_n = header_tots - n_present
+      ) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
       # ungroup right away to make sure the complete works
-      ungroup() %>%
-      # complete based on missing groupings
-      complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
+      ungroup()
   }, envir = x)
 }
 
@@ -461,6 +462,7 @@ process_formatting.count_layer <- function(x, ...) {
                                total_count_format = total_count_format,
                                missing_subjects_count_format = missing_subjects_count_format,
                                total_row_label = total_row_label,
+                               missing_subjects_row_label = missing_subjects_row_label,
                                has_missing_count = has_missing_count)
       }) %>%
       # Pivot table
@@ -521,13 +523,19 @@ process_formatting.count_layer <- function(x, ...) {
 #'   target variable.
 #' @param indentation_length If this is a nested count layer. The row prefixes
 #'   must be removed
+#' @param total_count_format f_str for total counts
+#' @param missing_subjects_count_format f_str for missing subjects
+#' @param total_row_label Label string for total rows
+#' @param missing_subjects_row_label Label string for missing subjects
+#' @param has_missing_count Boolean for if missing counts are present
 #'
 #' @return A tibble replacing the original counts
 #' @noRd
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
                                    missing_f_str, summary_var, indentation_length, total_count_format,
-                                   missing_subjects_count_format, total_row_label, has_missing_count) {
+                                   missing_subjects_count_format, total_row_label, missing_subjects_row_label,
+                                   has_missing_count) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
@@ -581,7 +589,6 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
                                                   vars_ord)
   }
 
-
   # Logic for missing
   # Same logic as above, just add for missing
   missing_str_all <- vector("list", 5)
@@ -622,19 +629,16 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 
   # Put the vector strings together. Only include parts of str_all that aren't null
   # nm is non-missing, m is missing, t is total, ms is missing subjects
-  browser()
   string_nm <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
   if (!is.null(missing_vars_ord)) string_m <-  do.call(sprintf, missing_str_all[!map_lgl(missing_str_all, is.null)])
   if (!is.null(total_vars_ord)) string_t <- do.call(sprintf, total_str_all[!map_lgl(total_str_all, is.null)])
   if (!is.null(missing_subject_vars_ord)) string_ms <- do.call(sprintf, missing_subs_str_all[!map_lgl(missing_subs_str_all, is.null)])
   # string_ is the final string to return. Merge the missing, non-missing, and others together
-  string_ <- character(length(string_nm) + length(string_m) + length(string_t))
+  string_ <- character(sum(length(string_nm), length(string_m), length(string_t), length(string_ms)))
   string_[rows_] <- string_nm
   string_[total_rows] <-   string_t
   string_[missing_rows] <-  string_m
   string_[missing_subject_rows] <-  string_ms
-
-  browser()
   # Left pad set to 0 meaning it won't pad to the left at all
   # right pad is set to the maximum n count in the table
   string_ <- pad_formatted_data(string_, 0, max_n_width)

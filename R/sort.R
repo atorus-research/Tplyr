@@ -222,7 +222,9 @@ add_order_columns.count_layer <- function(x) {
                                  break_ties = break_ties,
                                  numeric_cutoff = numeric_cutoff,
                                  numeric_cutoff_stat = numeric_cutoff_stat,
-                                 numeric_cutoff_column = numeric_cutoff_column)) %>%
+                                 numeric_cutoff_column = numeric_cutoff_column,
+                                 missing_subjects_row_label = missing_subjects_row_label,
+                                 missing_subjects_sort_value = missing_subjects_sort_value)) %>%
         ungroup()
 
       if (!is.null(nest_count) && nest_count) {
@@ -428,6 +430,9 @@ get_data_order <- function(x, formatted_col_index) {
 
       if(!is.null(missing_string)) missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
       if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
+      if(!is.null(missing_subjects_row_label)) {
+        missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
+      }
 
       # No processing is needed here just pass in the needed info
       get_data_order_bycount(numeric_data, ordering_cols,
@@ -611,7 +616,7 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   }
 
   if(!is.null(missing_subjects_index) && !is.null(missing_subjects_sort_value)) {
-    numeric_ordering_data[missing_subjects_sort_value,] <-  missing_subjects_sort_value
+    numeric_ordering_data[missing_subjects_index,] <-  missing_subjects_sort_value
   }
 
   # This is the numeric index that the numeric data is in. radix was chosen because
@@ -783,11 +788,13 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                                                                                  missing_subjects_sort_value = missing_subjects_sort_value)
 
   } else {
-
     group_row_count <- nrow(group_data[-1,])
     # Logic for group_row_count is when numeric_where values cause unexpected results
     group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:ifelse(group_row_count == 0, 1, group_row_count)
 
+    # missing_subjects_row_label not passing in here
+    missing_rows <- group_data[[paste0('row_label', final_col+1)]] == paste0(indentation, missing_subjects_row_label)
+    group_data[missing_rows, paste0("ord_layer_", final_col + 1)] <- missing_subjects_sort_value
   }
 
   group_data
