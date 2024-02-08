@@ -11,7 +11,7 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc count
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with fill
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -312,3 +312,4 @@ missing_subjects_count_format <- NULL
 missing_subject_rows <- NULL
 missing_subject_vars_ord <- NULL
 string_ms <- NULL
+missing_subjects_sort_value <- NULL
