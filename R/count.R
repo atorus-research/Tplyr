@@ -129,6 +129,8 @@ process_single_count_target <- function(x) {
 
     if (is.null(include_total_row)) include_total_row <- FALSE
     if (is.null(total_row_label)) total_row_label <- "Total"
+    if (is.null(include_missing_subjects_row)) include_missing_subjects_row <- FALSE
+    if (is.null(missing_subjects_row_label)) missing_subjects_row_label <- "Missing"
 
     # The current environment should be the layer itself
     process_count_n(current_env())
@@ -148,6 +150,10 @@ process_single_count_target <- function(x) {
         warning("Your total row is ignoring certain values. The 'pct' in this row may not be 100%",
                 immediate. = TRUE)
       }
+    }
+
+    if (include_missing_subjects_row) {
+      process_missing_subjects_row(current_env())
     }
 
     if (is.null(count_row_prefix)) count_row_prefix <- ""
@@ -186,17 +192,16 @@ process_single_count_target <- function(x) {
     }
 
     # rbind tables together
-    numeric_data <- summary_stat %>%
-      bind_rows(total_stat) %>%
+    numeric_data <- bind_rows(summary_stat, total_stat, missing_subjects_stat) %>%
       rename("summary_var" = !!target_var[[1]]) %>%
       group_by(!!!denoms_by) %>%
       do(get_denom_total(., denoms_by, denoms_df_prep, "n")) %>%
       mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
       ungroup()
 
-
     if (!is.null(distinct_stat)) {
       if (include_total_row) {
+
         distinct_stat <- distinct_stat %>%
           bind_rows(total_stat_denom) %>%
           group_by(!!!denoms_by) %>%
@@ -275,6 +280,25 @@ process_count_n <- function(x) {
 
 }
 
+
+#' Get Logical vector that is used to remove the treat_var and cols
+#'
+#' In total row and missing subject counts, denoms_by needs to be stripped of
+#' cols and treat_var variables, otherwise it will error out in the group_by
+#'
+#' @param denoms_by The layer denoms by
+#' @param treat_var table treat var
+#' @param cols tables cols vars
+#'
+#' @return list of quosures
+#' @noRd
+get_needed_denoms_by <- function(denoms_by, treat_var, cols) {
+  map_lgl(denoms_by, function(x, treat_var, cols) {
+    all(as_name(x) != as_name(treat_var),
+        as_name(x) != map_chr(cols, as_name))
+  }, treat_var, cols)
+}
+
 #' Process the amounts for a total row
 #'
 #' @param x A Count layer
@@ -290,16 +314,8 @@ no denoms_by variable was set. This may cause unexpected results. If you wish to
 change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
     }
 
-    # Make sure the denoms_by is stripped
-    # Stripped of cols and treat_var variables, otherwise it will error out in the group_by
-    # I thought of replacing the group by with !!!unique(c(treat_var, cols, denoms_by))
-    # but that doesn't work due to the denoms_by having an environment set
-
     # Logical vector that is used to remove the treat_var and cols
-    needed_denoms_by <- map_lgl(denoms_by, function(x, treat_var, cols) {
-      all(as_name(x) != as_name(treat_var),
-          as_name(x) != map_chr(cols, as_name))
-    }, treat_var, cols)
+    needed_denoms_by <- get_needed_denoms_by(denoms_by, treat_var, cols)
 
     #Create an expression to evaluate filter
     if (!count_missings) {
@@ -322,6 +338,43 @@ change this behavior, use `set_denoms_by()`.", immediate. = TRUE)
       ungroup() %>%
       # Create a variable to label the totals when it is merged in.
       mutate(!!as_name(target_var[[1]]) := total_row_label) %>%
+      # Create variables to carry forward 'by'. Only pull out the ones that
+      # aren't symbols
+      group_by(!!!extract_character_from_quo(by)) %>%
+      # ungroup right away to make sure the complete works
+      ungroup() %>%
+      # complete based on missing groupings
+      complete(!!treat_var, !!!cols, fill = list(n = 0, total = 0))
+  }, envir = x)
+}
+
+#' Process the amounts for a missing subjects row
+#'
+#' @param x A Count layer
+#' @noRd
+process_missing_subjects_row <- function(x) {
+  evalq({
+
+    # Logical vector that is used to remove the treat_var and cols
+    needed_denoms_by <- get_needed_denoms_by(denoms_by, treat_var, cols)
+
+    # Create the merge variables to join the header_n data
+    mrg_vars <- map_chr(c(pop_treat_var, cols, denoms_by[needed_denoms_by]), as_name)
+    names(mrg_vars)[1] <- as_name(treat_var)
+
+    # create a data.frame to create total counts
+    missing_subjects_stat <- built_target %>%
+      # Use distinct if this is a distinct total row
+      # Group by all column variables
+      group_by(!!treat_var, !!!cols, !!!by, !!!distinct_by) %>%
+      distinct() %>%
+      ungroup() %>%
+      count(!!treat_var, !!!cols, !!!by, name="distinct_n") %>%
+      left_join(
+        header_n %>% rename(distinct_total = n), by = mrg_vars
+      ) %>%
+      # Create a variable to label the totals when it is merged in.
+      mutate(!!as_name(target_var[[1]]) := missing_subjects_row_label) %>%
       # Create variables to carry forward 'by'. Only pull out the ones that
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
