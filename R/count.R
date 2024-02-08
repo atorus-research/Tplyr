@@ -199,18 +199,6 @@ process_single_count_target <- function(x) {
       mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
       ungroup()
 
-    if (!is.null(distinct_stat)) {
-      if (include_total_row) {
-
-        distinct_stat <- distinct_stat %>%
-          bind_rows(total_stat_denom) %>%
-          group_by(!!!denoms_by) %>%
-          do(get_denom_total(., denoms_by, denoms_df, "distinct_n"))
-      }
-      numeric_data <- bind_cols(numeric_data,
-                                distinct_stat[, c("distinct_n", "distinct_total")])
-    }
-
     rm(denoms_df_prep, fct_cols)
 
   }, envir = x)
