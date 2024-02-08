@@ -459,6 +459,7 @@ process_formatting.count_layer <- function(x, ...) {
                                summary_var = summary_var,
                                indentation_length = indentation_length,
                                total_count_format = total_count_format,
+                               missing_subjects_count_format = missing_subjects_count_format,
                                total_row_label = total_row_label,
                                has_missing_count = has_missing_count)
       }) %>%
@@ -526,7 +527,7 @@ process_formatting.count_layer <- function(x, ...) {
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
                                    missing_f_str, summary_var, indentation_length, total_count_format,
-                                   total_row_label, has_missing_count) {
+                                   missing_subjects_count_format, total_row_label, has_missing_count) {
 
   ## Added this for processing formatting in nested count layers where this won't be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
@@ -556,6 +557,12 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
     total_vars_ord <- map_chr(total_count_format$vars, as_name)
   }
 
+  ## Pull out string information for missing subject rows
+  if (!is.null(missing_subjects_count_format)) {
+    missing_subject_rows <- summary_var %in% missing_subjects_row_label
+    missing_subject_vars_ord <- map_chr(missing_subjects_count_format$vars, as_name)
+  }
+
   vars_ord <- map_chr(count_fmt$vars, as_name)
 
   # str_all is a list that contains character vectors for each parameter that might be calculated
@@ -563,9 +570,14 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
   # Append the repl_str to be passed to do.call
   str_all[1] <- count_fmt$repl_str
   # Iterate over every variable
+  rows_ <- !missing_rows & !total_rows & !missing_subject_rows
   for (i in seq_along(vars_ord)) {
-    str_all[[i + 1]] <-  count_string_switch_help(vars_ord[i], count_fmt, .n[!missing_rows & !total_rows], .total[!missing_rows & !total_rows],
-                                                  .distinct_n[!missing_rows & !total_rows], .distinct_total[!missing_rows & !total_rows], vars_ord)
+    str_all[[i + 1]] <-  count_string_switch_help(vars_ord[i], count_fmt,
+                                                  .n[rows_],
+                                                  .total[rows_],
+                                                  .distinct_n[rows_],
+                                                  .distinct_total[rows_],
+                                                  vars_ord)
   }
 
 
@@ -595,20 +607,32 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
                                                        total_vars_ord)
   }
 
+  missing_subs_str_all <- vector("list", 5)
+  missing_subs_str_all[1] <- missing_subjects_count_format$repl_str
+  for (i in seq_along(missing_subject_vars_ord)) {
+    missing_subs_str_all[[i + 1]] <- count_string_switch_help(missing_subject_vars_ord[i],
+                                                              missing_subjects_count_format,
+                                                              .n[missing_subject_rows],
+                                                              .total[missing_subject_rows],
+                                                              .distinct_n[missing_subject_rows],
+                                                              .distinct_total[missing_subject_rows],
+                                                              missing_subject_vars_ord)
+  }
+
   # Put the vector strings together. Only include parts of str_all that aren't null
-  # nm is non-missing, m is mising, and t is total.
+  # nm is non-missing, m is missing, t is total, ms is missing subjects
   string_nm <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
   if (!is.null(missing_vars_ord)) string_m <-  do.call(sprintf, missing_str_all[!map_lgl(missing_str_all, is.null)])
   if (!is.null(total_vars_ord)) string_t <- do.call(sprintf, total_str_all[!map_lgl(total_str_all, is.null)])
+  if (!is.null(missing_subject_vars_ord)) string_ms <- do.call(sprintf, missing_subs_str_all[!map_lgl(missing_subs_str_all, is.null)])
   # string_ is the final string to return. Merge the missing, non-missing, and others together
   string_ <- character(length(string_nm) + length(string_m) + length(string_t))
-  string_[!missing_rows & !total_rows] <- string_nm
+  string_[rows_] <- string_nm
   string_[total_rows] <-   string_t
   string_[missing_rows] <-  string_m
+  string_[missing_subject_rows] <-  string_ms
 
-
-
-
+  browser()
   # Left pad set to 0 meaning it won't pad to the left at all
   # right pad is set to the maximum n count in the table
   string_ <- pad_formatted_data(string_, 0, max_n_width)

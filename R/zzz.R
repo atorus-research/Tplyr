@@ -199,7 +199,6 @@ display_string <- NULL
 built_target <- NULL
 table_where <- NULL
 distinct_by <- NULL
-distinct_stat <- NULL
 summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
@@ -277,7 +276,6 @@ missing_sort_value <- NULL
 missing_index <- NULL
 total_index <- NULL
 process_distinct_total <- FALSE
-total_stat_denom <- NULL
 denom_where <- NULL
 built_target_pre_where <- NULL
 count_fmt <- NULL
@@ -307,4 +305,6 @@ og_row <- NULL
 desc <- NULL
 id <- NULL
 stub_sort <- NULL
-
+include_missing_subjects_row <- NULL
+missing_subjects_row_label <- NULL
+missing_subjects_stat <- NULL
