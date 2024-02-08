@@ -314,8 +314,8 @@ ut_round <- function(x, n=0)
 {
   # x is the value to be rounded
   # n is the precision of the rounding
-  posneg <- sign(x)                                         
-  e <- abs(x) * 10^n                                  
+  posneg <- sign(x)
+  e <- abs(x) * 10^n
   e <- e + 0.5 + sqrt(.Machine$double.eps)
   e <- trunc(e)
   e <- e / 10^n
