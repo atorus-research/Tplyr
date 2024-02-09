@@ -615,3 +615,27 @@
               var1_54_F       var1_54_M       var1_81_F       var1_81_M
       1  27 (54.0) [50]  23 (67.6) [34]  17 (42.5) [40]  26 (59.1) [44]
 
+# Error checking for add_missing_subjects_row()
+
+    Argument `fmt` does not inherit "f_str". Classes: character
+
+---
+
+    Argument `sort_value` does not inherit "numeric". Classes: character
+
+---
+
+    Argument `e` does not inherit "count_layer". Classes: tplyr_layer, desc_layer, environment
+
+---
+
+    Argument `missing_subjects_row_label` must be character. Instead a class of "numeric" was passed.
+
+---
+
+    length(missing_subjects_row_label) not equal to 1
+
+---
+
+    Argument `e` does not inherit "count_layer". Classes: tplyr_layer, desc_layer, environment
+

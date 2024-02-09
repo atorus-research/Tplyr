@@ -375,7 +375,8 @@ process_missing_subjects_row <- function(x) {
       # aren't symbols
       group_by(!!!extract_character_from_quo(by)) %>%
       # ungroup right away to make sure the complete works
-      ungroup()
+      ungroup() %>%
+      select(-c(n_present, header_tots))
   }, envir = x)
 }
 
