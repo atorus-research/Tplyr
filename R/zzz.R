@@ -314,4 +314,5 @@ missing_subject_vars_ord <- NULL
 string_ms <- NULL
 missing_subjects_sort_value <- NULL
 limit_data_by <- NULL
-
+n_present <- NULL
+header_tots <- NULL

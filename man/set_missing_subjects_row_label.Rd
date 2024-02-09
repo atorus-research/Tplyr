@@ -9,7 +9,7 @@ set_missing_subjects_row_label(e, missing_subjects_row_label)
 \arguments{
 \item{e}{A \code{count_layer} object}
 
-\item{total_row_label}{A character to label the total row}
+\item{missing_subjects_row_label}{A character to label the total row}
 }
 \value{
 The modified \code{count_layer} object
@@ -23,7 +23,7 @@ t <- tplyr_table(mtcars, gear) \%>\%
   add_layer(
     group_count(cyl) \%>\%
       add_missing_subjects_row() \%>\%
-      set_missing_subjects_label("Missing")
+      set_missing_subjects_row_label("Missing")
   )
 build(t)
 }

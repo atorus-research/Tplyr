@@ -714,8 +714,15 @@ set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
 
 #' Add a missing subject row into a count summary.
 #'
+#' This function calculates the number of subjects missing from a particular
+#' group of results. The calculation is done by examining the total number of
+#' subjects potentially available from the Header N values within the result
+#' column, and finding the difference with the total number of subjects present
+#' in the result group. Note that for accurate results, the subject variable
+#' needs to be defined using the `set_distinct_by()` function. As with other
+#' methods, this function instructs how distinct results should be identified.
 #'
-#' @param e A \code{count_layer} object
+#' @param e A `count_layer` object
 #' @param fmt An f_str object used to format the total row. If none is provided,
 #'   display is based on the layer formatting.
 #' @param sort_value The value that will appear in the ordering column for total
@@ -748,7 +755,7 @@ add_missing_subjects_row <- function(e, fmt = NULL, sort_value = NULL) {
 #' Set the label for the missing subjects row
 #'
 #' @param e A \code{count_layer} object
-#' @param total_row_label A character to label the total row
+#' @param missing_subjects_row_label A character to label the total row
 #'
 #' @return The modified \code{count_layer} object
 #' @export
@@ -759,7 +766,7 @@ add_missing_subjects_row <- function(e, fmt = NULL, sort_value = NULL) {
 #'   add_layer(
 #'     group_count(cyl) %>%
 #'       add_missing_subjects_row() %>%
-#'       set_missing_subjects_label("Missing")
+#'       set_missing_subjects_row_label("Missing")
 #'   )
 #' build(t)
 set_missing_subjects_row_label <- function(e, missing_subjects_row_label) {

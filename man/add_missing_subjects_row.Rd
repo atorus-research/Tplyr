@@ -7,7 +7,7 @@
 add_missing_subjects_row(e, fmt = NULL, sort_value = NULL)
 }
 \arguments{
-\item{e}{A \code{count_layer} object}
+\item{e}{A `count_layer` object}
 
 \item{fmt}{An f_str object used to format the total row. If none is provided,
 display is based on the layer formatting.}
@@ -16,7 +16,13 @@ display is based on the layer formatting.}
 rows. This must be a numeric value.}
 }
 \description{
-Add a missing subject row into a count summary.
+This function calculates the number of subjects missing from a particular
+group of results. The calculation is done by examining the total number of
+subjects potentially available from the Header N values within the result
+column, and finding the difference with the total number of subjects present
+in the result group. Note that for accurate results, the subject variable
+needs to be defined using the `set_distinct_by()` function. As with other
+methods, this function instructs how distinct results should be identified.
 }
 \examples{
 

@@ -233,6 +233,32 @@ t %>%
 
 We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you'll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.
 
+## Missing Subjects
+
+Missing counts and counting missing subjects work two different ways within Tplyr. Missing counts, as described above, will examine the records present in the data and collect and missing values. But for these results to be counted, they need to first be provided within the input data itself. On the other hand, missing subjects are calculated by looking at the difference between the potential number of subjects within the column (i.e. the combination of the treatment variables and column variables) and the number of subjects actually present. Consider this example:
+
+```{r missing_subs1}
+  missing_subs <- tplyr_table(tplyr_adae, TRTA) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_nest_count(TRUE) %>% 
+        set_distinct_by(USUBJID) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf) %>% 
+        set_missing_subjects_row_label("Missing Subjects")
+    ) %>%
+    build()
+
+  tail(missing_subs) %>% 
+    select(-starts_with('ord')) %>% 
+    kable()
+```
+
+In the example above, we produce a nested count layer. Using the function `add_missing_subjects_row()`. This triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default for Missing. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. Lastly, you can provide an `f_str()` to format the missing subjects row separately from the rest of the layer, but whatever format is applied to the layer will apply otherwise.
+
+Note that in nested count layers, missing subject rows will generate for each independent group within the outer layer. Outer layers cannot have missing subject rows calculated individually. This would best be done in an independent layer itself, as the result would apply to the whole input target dataset. 
+
 ## Adding a 'Total' Row
 
 In addition to missing counts, some summaries require the addition of a 'Total' row. **Tplyr** has the helper function `add_total_row()` to ease this process for you. Like most other things within **Tplyr** - particularly in this vignette - this too has a significant bit of nuance to it. 
