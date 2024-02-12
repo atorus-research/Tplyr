@@ -255,7 +255,7 @@ Missing counts and counting missing subjects work two different ways within Tply
     kable()
 ```
 
-In the example above, we produce a nested count layer. Using the function `add_missing_subjects_row()`. This triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default for Missing. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. Lastly, you can provide an `f_str()` to format the missing subjects row separately from the rest of the layer, but whatever format is applied to the layer will apply otherwise.
+In the example above, we produce a nested count layer. The function `add_missing_subjects_row()` triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default to 'Missing'. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. Lastly, you can provide an `f_str()` to format the missing subjects row separately from the rest of the layer, but whatever format is applied to the layer will apply otherwise.
 
 Note that in nested count layers, missing subject rows will generate for each independent group within the outer layer. Outer layers cannot have missing subject rows calculated individually. This would best be done in an independent layer itself, as the result would apply to the whole input target dataset. 
 
