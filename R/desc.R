@@ -59,22 +59,6 @@ process_summaries.desc_layer <- function(x, ...) {
         ungroup()
 
       num_sums_raw[[i]] <- complete_and_limit(cmplt1, treat_var, by, cols, limit_data_by=limit_data_by)
-      # num_sums_raw[[i]] <- cmplt1 %>%
-      #   # complete all combinations of factors to include combinations that don't exist.
-      #   # add 0 for combinations that don't exist
-      #   complete(!!treat_var, !!!by, !!!cols)
-      #
-      # # Apply data limits specified by setter
-      # if (exists("limit_data_by")) {
-      #   # Find the combinations actually in the data
-      #   groups_in_data <- cmplt1 %>%
-      #     distinct(!!!limit_data_by)
-      #
-      #   # Join back to limit the completed levels based on the preferred
-      #   # data driven ones
-      #   num_sums_raw[[i]] <- groups_in_data %>%
-      #     left_join(num_sums_raw[[i]], by = map_chr(limit_data_by, as_name))
-      # }
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums_raw[[i]] %>%

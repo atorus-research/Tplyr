@@ -108,7 +108,6 @@ process_summaries.count_layer <- function(x, ...) {
 
     process_count_denoms(x)
 
-    outer <- FALSE
     process_single_count_target(x)
 
   }
