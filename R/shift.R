@@ -39,7 +39,6 @@ process_summaries.shift_layer <- function(x, ...) {
 process_shift_n <- function(x) {
 
   evalq({
-
     numeric_data <- built_target %>%
       # Group by variables including target variables and count them
       group_by(!!treat_var, !!!by, !!!unname(target_var), !!!cols) %>%
@@ -47,7 +46,9 @@ process_shift_n <- function(x) {
       ungroup() %>%
       # complete all combinations of factors to include combinations that don't exist.
       # add 0 for combinations that don't exist
-      complete(!!treat_var, !!!by, !!!unname(target_var), !!!cols, fill = list(n = 0)) %>%
+      # complete(!!treat_var, !!!by, !!!unname(target_var), !!!cols, fill = list(n = 0)) %>%
+      complete_and_limit(treat_var, by, cols, unname(target_var),
+                         limit_data_by, .fill = list(n = 0)) %>%
       # Change the treat_var and first target_var to characters to resolve any
       # issues if there are total rows and the original column is numeric
       mutate(!!treat_var := as.character(!!treat_var)) %>%

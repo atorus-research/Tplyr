@@ -47,6 +47,14 @@
 #'
 "tplyr_adlb"
 
+#' ADPE Data
+#'
+#' A mock-up dataset that is fit for testing data limiting
+#'
+#' @format A data.frame with 21 rows and 8 columns.
+#'
+#'
+"tplyr_adpe"
 
 #' Get Data Labels
 #'
