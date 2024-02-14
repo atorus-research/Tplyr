@@ -945,3 +945,163 @@ test_that("Regression test to make sure cols produce correct denom", {
 
   expect_snapshot(t)
 })
+
+test_that("Error checking for add_missing_subjects_row()", {
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_count(AEDECOD) %>%
+          add_missing_subjects_row("blah")
+      )
+  )
+
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_count(AEDECOD) %>%
+          add_missing_subjects_row(f_str("xx", distinct_n), sort_value = "x")
+      )
+  )
+
+  expect_error({
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_shift(vars(AEBODSYS, AEDECOD)) %>%
+          add_missing_subjects_row(f_str("xx", distinct_n))
+      )
+    }, "`add_missing_subjects_row` for shift layers"
+  )
+
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_desc(RACEN) %>%
+          add_missing_subjects_row(f_str("xx", distinct_n))
+      )
+  )
+
+  ## ----
+
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_count(AEDECOD) %>%
+          set_missing_subjects_row_label(3)
+      )
+  )
+
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_count(AEDECOD) %>%
+          set_missing_subjects_row_label(c("x", "y"))
+      )
+  )
+
+  expect_error({
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_shift(vars(AEBODSYS, AEDECOD)) %>%
+          set_missing_subjects_row_label("x")
+      )}, "`set_missing_subjects_row_label` for shift layers"
+  )
+
+  expect_snapshot_error(
+    tplyr_table(tplyr_adae, TRTA) %>%
+      add_layer(
+        group_desc(RACEN) %>%
+          set_missing_subjects_row_label("x")
+      )
+  )
+
+})
+
+test_that("Missing subjects row calculates correctly", {
+  x <- tplyr_table(tplyr_adlb, TRTA, cols=SEX) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(ANRIND, by = vars(PARAM, AVISIT)) %>%
+        set_distinct_by(USUBJID) %>%
+        add_missing_subjects_row(f_str("xx", distinct_n))
+    ) %>%
+    build()
+
+  # Check 1
+  in_res1 <- x %>%
+    filter(row_label3 == "Missing", row_label1 == "Blood Urea Nitrogen (mmol/L)", row_label2 == "Week 12") %>%
+    pull(var1_Placebo_F) %>%
+    as.numeric()
+
+  pop1 <- tplyr_adsl %>%
+    filter(TRT01A == "Placebo", SEX == "F") %>%
+    nrow()
+
+  dat1 <- tplyr_adlb %>%
+    filter(PARAM == "Blood Urea Nitrogen (mmol/L)", AVISIT == "Week 12", TRTA == "Placebo", SEX == "F") %>%
+    distinct(USUBJID) %>%
+    nrow()
+
+  expect_equal(pop1-dat1, in_res1)
+
+  # Check 2
+  in_res2 <- x %>%
+    filter(row_label3 == "Missing", row_label1 == "Gamma Glutamyl Transferase (U/L)", row_label2 == "Week 24") %>%
+    pull(`var1_Xanomeline Low Dose_M`) %>%
+    as.numeric()
+
+  pop2 <- tplyr_adsl %>%
+    filter(TRT01A == "Xanomeline Low Dose", SEX == "M") %>%
+    nrow()
+
+  dat2 <- tplyr_adlb %>%
+    filter(PARAM == "Gamma Glutamyl Transferase (U/L)", AVISIT == "Week 24", TRTA == "Xanomeline Low Dose", SEX == "M") %>%
+    distinct(USUBJID) %>%
+    nrow()
+
+  expect_equal(pop2-dat2, in_res2)
+
+})
+
+test_that("Missing counts on nested count layers function correctly", {
+  x <- tplyr_table(tplyr_adae, TRTA) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_distinct_by(USUBJID) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf)
+    ) %>%
+    build()
+
+  expect_equal(nrow(x %>% filter(row_label2 == "   Missing")), 1)
+  expect_equal(tail(x, 1)$ord_layer_2, Inf)
+
+  # Verify that bycount works for missing values and sort value is assigned correctly
+  x <- tplyr_table(tplyr_adae, TRTA) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_distinct_by(USUBJID) %>%
+        set_order_count_method("bycount") %>%
+        set_ordering_cols("Xanomeline High Dose") %>%
+        set_result_order_var(distinct_n) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = 99999)
+    ) %>%
+    build()
+
+  expect_equal(tail(x, 1)$ord_layer_2, 99999)
+
+  # Also test that label reassignment flows
+  x <- tplyr_table(tplyr_adsl, TRT01A) %>%
+    add_layer(
+      group_count(vars(SEX, RACE)) %>%
+        set_order_count_method(c("byfactor", "byvarn")) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = 99999) %>%
+        set_missing_subjects_row_label("New label")
+    ) %>%
+    build()
+
+  expect_equal(filter(x, row_label2 == "   New label")$ord_layer_2, c(99999, 99999))
+})

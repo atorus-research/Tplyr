@@ -711,3 +711,74 @@ set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
 
   e
 }
+
+#' Add a missing subject row into a count summary.
+#'
+#' This function calculates the number of subjects missing from a particular
+#' group of results. The calculation is done by examining the total number of
+#' subjects potentially available from the Header N values within the result
+#' column, and finding the difference with the total number of subjects present
+#' in the result group. Note that for accurate results, the subject variable
+#' needs to be defined using the `set_distinct_by()` function. As with other
+#' methods, this function instructs how distinct results should be identified.
+#'
+#' @param e A `count_layer` object
+#' @param fmt An f_str object used to format the total row. If none is provided,
+#'   display is based on the layer formatting.
+#' @param sort_value The value that will appear in the ordering column for total
+#'   rows. This must be a numeric value.
+#'
+#' @export
+#' @examples
+#'
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_missing_subjects_row(f_str("xxxx", n))
+#'    ) %>%
+#'    build()
+add_missing_subjects_row <- function(e, fmt = NULL, sort_value = NULL) {
+  if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
+  if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`add_missing_subjects_row` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
+
+  env_bind(e, include_missing_subjects_row = TRUE)
+  env_bind(e, missing_subjects_count_format = fmt)
+  env_bind(e, missing_subjects_sort_value = sort_value)
+
+  e
+}
+
+#' Set the label for the missing subjects row
+#'
+#' @param e A \code{count_layer} object
+#' @param missing_subjects_row_label A character to label the total row
+#'
+#' @return The modified \code{count_layer} object
+#' @export
+#'
+#' @examples
+#'
+#' t <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_missing_subjects_row() %>%
+#'       set_missing_subjects_row_label("Missing")
+#'   )
+#' build(t)
+set_missing_subjects_row_label <- function(e, missing_subjects_row_label) {
+
+  assert_has_class(missing_subjects_row_label, "character")
+  assert_that(length(missing_subjects_row_label) == 1)
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`set_missing_subjects_row_label` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
+
+  env_bind(e, missing_subjects_row_label = missing_subjects_row_label)
+
+  e
+}

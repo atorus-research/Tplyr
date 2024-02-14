@@ -11,7 +11,7 @@
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc count
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with fill
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -199,7 +199,6 @@ display_string <- NULL
 built_target <- NULL
 table_where <- NULL
 distinct_by <- NULL
-distinct_stat <- NULL
 summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
@@ -277,7 +276,6 @@ missing_sort_value <- NULL
 missing_index <- NULL
 total_index <- NULL
 process_distinct_total <- FALSE
-total_stat_denom <- NULL
 denom_where <- NULL
 built_target_pre_where <- NULL
 count_fmt <- NULL
@@ -307,4 +305,14 @@ og_row <- NULL
 desc <- NULL
 id <- NULL
 stub_sort <- NULL
-
+include_missing_subjects_row <- NULL
+missing_subjects_row_label <- NULL
+missing_subjects_stat <- NULL
+missing_subjects_count_format <- NULL
+missing_subject_rows <- NULL
+missing_subject_vars_ord <- NULL
+string_ms <- NULL
+missing_subjects_sort_value <- NULL
+limit_data_by <- NULL
+n_present <- NULL
+header_tots <- NULL

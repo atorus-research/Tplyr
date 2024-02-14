@@ -49,16 +49,16 @@ process_summaries.desc_layer <- function(x, ...) {
       summaries <- get_summaries()[match_exact(summary_vars)]
 
       # Create the numeric summary data
-      num_sums_raw[[i]] <- built_target %>%
+      cmplt1 <- built_target %>%
         # Rename the current variable to make each iteration use a generic name
         rename(.var = !!cur_var) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
         summarize(!!!summaries) %>%
-        ungroup() %>%
-        # Fill in any missing treat/col combinations
-        complete(!!treat_var, !!!by, !!!cols)
+        ungroup()
+
+      num_sums_raw[[i]] <- complete_and_limit(cmplt1, treat_var, by, cols, limit_data_by=limit_data_by)
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums_raw[[i]] %>%
