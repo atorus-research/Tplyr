@@ -3,7 +3,7 @@
 
 ## Test Environments
 
-* Local Ubuntu 18.04.4 devtools::check
+* Local Ubuntu 22.04.3 devtools::check
 * Latest Ubuntu CI with latest tidyverse
 * Github release action with windows, linux, and osx check
 * RHub Check
