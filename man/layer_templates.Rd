@@ -30,7 +30,7 @@ target, by, and where parameters.}
 
 \item{add_params}{Additional parameters passed into layer modifier functions.
 These arguments are specified in a template within curly brackets such as
-{param}. Supply as a named list, where the element name is the parameter.}
+\{param\}. Supply as a named list, where the element name is the parameter.}
 }
 \description{
 There are several scenarios where a layer template may be useful. Some

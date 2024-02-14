@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Traceability Focused Grammar of Clinical Data Summary
-Version: 1.1.0.9000
+Version: 1.2.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -33,6 +33,10 @@ Authors@R:
     person(given = "Shiyu",
            family = "Chen",
            email = "shiyu.chen@atorusresearch.com",
+           role = "ctb"),
+    person(given = "Oleksii",
+           family = "Mikryukov",
+           email = "alex.mikryukov@atorusresearch.com",
            role = "ctb"),
     person(given = "Atorus Research LLC",
            role = "cph")

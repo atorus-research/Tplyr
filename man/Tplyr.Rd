@@ -125,6 +125,9 @@ Other contributors:
 \itemize{
   \item Nathan Kosiba \email{Nathan.Kosiba@atorusresearch.com} (\href{https://orcid.org/0000-0001-5359-4234}{ORCID}) [contributor]
   \item Sadchla Mascary \email{sadchla.mascary@atorusresearch.com} [contributor]
+  \item Andrew Bates \email{andrew.bates@atorusresearch.com} [contributor]
+  \item Shiyu Chen \email{shiyu.chen@atorusresearch.com} [contributor]
+  \item Oleksii Mikryukov \email{alex.mikryukov@atorusresearch.com} [contributor]
   \item Atorus Research LLC [copyright holder]
 }
 

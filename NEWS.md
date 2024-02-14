@@ -1,3 +1,18 @@
+# Tplyr 1.2.0
+- Resolve #62 Add data vignette data into the package (thanks for the suggestion @thebioengineer)
+- Resolve #74 Add an example of piping in set_pop_data
+- Resolve #83 Add the `add_missing_subjects()` function 
+- Resolve #84 Add `set_limit_data_by()` function
+- Resolve #111, #148 Allow ellipsis argument unpacking outside of `add_layer()`
+- Resolve #129 Add `collapse_row_labels()` function
+- Resolve #134 Clarify how population data works to trigger denominators
+- Resolve #75, #146, #166 Fix nested count layer handling where one inner layer value exists in multiple outer layer groups
+- Resolve #21, #152 Fix handling of Inf, -Inf in desc layer for min and max
+- Resolve #154 Fix namespace scoping for execution of Tplyr tables within non-global environments
+- Resolve #155 Dead code clean-up
+- Resolve #170 Add `replace_leading_whitespace()` post-processing function
+- Resolve #173 Fix nested count layer sort variable behavior when using by variables
+
 # Tplyr 1.1.0
 - This release incorporate parenthesis hugging across all layers (#117)
 - New functions `apply_conditional_formats()`, `str_extract_fmt_group()` and `str_extract_num()`
