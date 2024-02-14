@@ -177,7 +177,7 @@ get_layer_templates <- function() {
 #'   target, by, and where parameters.
 #' @param add_params Additional parameters passed into layer modifier functions.
 #'   These arguments are specified in a template within curly brackets such as
-#'   {param}. Supply as a named list, where the element name is the parameter.
+#'   \{param\}. Supply as a named list, where the element name is the parameter.
 #'
 #' @family Layer Templates
 #' @rdname layer_templates
