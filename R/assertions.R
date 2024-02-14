@@ -42,22 +42,7 @@ assert_has_class <- function(x, should_be) {
 
   # Is the argument the class that it should be?
   if (class(x) != should_be){
-    # Grab the trace back into an object
-    trc <- trace_back()
-    # Look at the length of the traceback
-    max_length <- length(trc$calls)
-    # If it's >1 we're inside a function, so grab the name
-    if (max_length > 1){
-      # Pull the name out of the call stack
-      cname <- call_name(trc$calls[[max_length - 1]])
-      # Make a display string
-      func_str <- paste0('` in function `', cname, '`')
-    } else {
-      # Filler
-      func_str <- '`'
-    }
-    # Abort and show error
-    abort(paste0('Argument `', param, func_str, ' must be ',
+    abort(paste0('Argument `', param, '` must be ',
                  should_be, '. Instead a class of "', class(x),
                  '" was passed.'))
   }
@@ -75,24 +60,9 @@ assert_inherits_class <- function(x, should_have) {
 
   # Is the argument the class that it should be?
   if (!inherits(x, should_have)){
-
-    # Grab the trace back into an object
-    trc <- trace_back()
-    # Look at the length of the traceback
-    max_length <- max(trc$indices)
-    # If it's >1 we're innside a function, so grab the name
-    if (max_length > 1){
-      # Pull the name out of the call stack
-      cname <- call_name(trc$calls[[max_length - 1]])
-      # Make a display string
-      func_str <- paste0('` in function `', cname, '`')
-    } else {
-      # Filler
-      func_str <- '`'
-    }
     # Abort and show error
-    abort(paste0('Argument `', param, func_str,
-                 ' does not inherit "', should_have,
+    abort(paste0('Argument `', param,
+                 '` does not inherit "', should_have,
                  '". Classes: ', paste(class(x), collapse=", ")))
   }
 }
@@ -197,15 +167,6 @@ unpack_vars <- function(quo_list, allow_character=TRUE) {
   quo_list
 }
 
-#' Check if a quosure is null or contains a call
-#'
-#' @param quo_var A quosure object to check
-#'
-#' @noRd
-is_null_or_call <- function(quo_var) {
-  quo_is_null(quo_var) || inherits(quo_get_expr(quo_var), "call")
-}
-
 #' Check if a quosure is null or contains a logical value
 #'
 #' @param quo_var A quosure object to check
@@ -221,14 +182,6 @@ is_logical_or_call <- function(quo_var) {
 assert_is_layer <- function(object) {
  assert_inherits_class(object, "tplyr_layer")
 }
-
-#' @param object Object to check if its a layer
-#'
-#' @noRd
-assert_is_table <- function(object) {
-  assert_inherits_class(object, "tplyr_table")
-}
-
 
 #' Return the class of the expression inside a quosure
 #'

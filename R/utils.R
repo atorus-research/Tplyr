@@ -12,7 +12,7 @@
 modify_nested_call <- function(c, examine_only=FALSE, ...) {
 
   # Get exports from Tplyr
-  allowable_calls = getNamespaceExports("Tplyr")
+  allowable_calls <- getNamespaceExports("Tplyr")
 
   # Only allow the user to use `Tplyr` functions
   assert_that(
@@ -154,22 +154,6 @@ replace_by_string_names <- function(dat, by, treat_var = NULL) {
     mutate_at(row_labels, ~ as.character(.x)) # Coerce all row labels into character
 }
 
-#' Get the unique levels/factors of a dataset
-#'
-#' @param e An environment, generally a table or a layer object
-#' @param x A target variable to get the levels/unique values of
-#'
-#' @return Unique target values
-#' @noRd
-get_target_levels <- function(e, x) {
-  # If its a factor just return the levels
-  if(is.factor(env_get(e, "target", inherit = TRUE)[, as_name(x)])) levels(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
-  # Otherwise return the unique values
-  else {
-    unique(env_get(e, "built_target", inherit = TRUE)[, as_name(x)])
-  }
-}
-
 #' Replace repeating row label variables with blanks in preparation for display.
 #'
 #' Depending on the display package being used, row label values may need to be
@@ -265,22 +249,6 @@ extract_character_from_quo <- function(var_list) {
   is_symbol_ <- map_lgl(var_list, quo_is_symbol)
 
   var_list[!is_symbol_]
-}
-
-#' Get maximum string format recursivly
-#'
-#' @param lay A layer object
-#'
-#' @return Maximum length of sub layers
-#' @noRd
-get_max_length <- function(lay) {
-  # Initalize max_ to -1
-  max_ <- -1L
-  # Get maximum length of all sub layers
-  if(length(lay$layers) > 0) max_ <- max(map_int(lay$layers, get_max_length))
-
-  # return greatest between sub layers and current layer
-  max(max_, lay$format_strings$size)
 }
 
 #' Clean variable attributes
