@@ -24,3 +24,4 @@
 ^rsconnect$
 ^data-raw$
 ^scratch.R$
+^CRAN-SUBMISSION$
