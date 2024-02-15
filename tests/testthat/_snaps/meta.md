@@ -8,6 +8,14 @@
 
 ---
 
+    meta must be a tplyr_meta object
+
+---
+
+    join_meta must be a tplyr_meta object
+
+---
+
     Filters must be provided as a list of calls
 
 ---
@@ -21,6 +29,10 @@
 ---
 
     Names must be provided as a list of names
+
+---
+
+    on must be provided as a list of names
 
 # Metadata extraction and extension error properly
 
@@ -75,7 +87,18 @@
     Output
       tplyr_meta: 3 names, 4 filters
       Names:
-          a, b, c 
+           a, b, c 
       Filters:
-          a == 1, b == 2, c == 3, x == "a" 
+           a == 1, b == 2, c == 3, x == "a" 
+
+# Anti-join extraction works properly
+
+    	Population data was not set separately from the target data.
+    	Missing subject counts may be misleading in this scenario.
+    	Did you mean to use `set_missing_count() instead?
+
+---
+
+    The `on` variable specified is missing from either the target data or the population data subsets.
+      Try adding the `on` variables to the `add_cols` parameter
 

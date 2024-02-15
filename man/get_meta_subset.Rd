@@ -14,6 +14,7 @@ get_meta_subset(x, row_id, column, add_cols = vars(USUBJID), ...)
   column,
   add_cols = vars(USUBJID),
   target = NULL,
+  pop_data = NULL,
   ...
 )
 
