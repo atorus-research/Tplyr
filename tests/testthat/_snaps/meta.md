@@ -102,3 +102,23 @@
     The `on` variable specified is missing from either the target data or the population data subsets.
       Try adding the `on` variables to the `add_cols` parameter
 
+# Tplyr meta print method works as expected
+
+    Code
+      print(meta2)
+    Output
+      tplyr_meta: 11 names, 5 filters
+      Names:
+           TRTP, EFFFL, ITTFL, ANL01FL, SITEGR1, AVISIT, AVISITN, PARAMCD, AVAL, BASE, CHG 
+      Filters:
+           EFFFL == "Y", ITTFL == "Y", PARAMCD == "ACTOT", ANL01FL == "Y", AVISITN == 24 
+      Anti-join:
+          Join Meta:
+              tplyr_meta: 4 names, 2 filters
+              Names:
+                   TRT01P, EFFFL, ITTFL, SITEGR1 
+              Filters:
+                   EFFFL == "Y", ITTFL == "Y" 
+          On:
+              USUBJID 
+

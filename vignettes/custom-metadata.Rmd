@@ -159,6 +159,21 @@ When building a data frame for use with `tplyr_table` metadata, there are really
 
 The `row_id` values built by **Tplyr** will always follow the format "<first letter of layer type>n_n", where the first letter of the layer type will either be "c", "d", or "s". The next number is the layer number (i.e. the order in which the layer was inserted to the **Tplyr** table), and then finally the row of that layer within the output. For example, the third row of a count layer that was the second layer in the table would have a `row_id` of "c2_3". In this example, I chose "x4_n" as the format for the "x" to symbolize custom, and these data can be thought of as the fourth layer. That said, these values would typically be masked by the viewer of the table so they really just need to be unique - so you can choose whatever you want.
 
+### Anti-joins
+
+If the custom metadata you're constructing requires references to data outside your target dataset, this is also possible with a `tplyr_meta` object. If you're looking for non-overlap with the target dataset, you can use an anti-join. Anti-joins can be added to a `tplyr_meta` object using the `add_anti_join()` function.
+
+
+```{r anti_join1}
+meta %>% 
+  add_anti_join(
+    join_meta = tplyr_meta(
+      names = quos(TRT01P, EFFFL, ITTFL, SITEGR1),
+      filters = quos(EFFFL == "Y", ITTFL == "Y")
+    ),
+    on = quos(USUBJID)
+  )
+```
 ## Appending Existing **Tplyr** Metadata 
 
 Now that we've created our custom extension of the **Tplyr** metadata, let's extend the existing data frame. To do this, **Tplyr** has the function `append_metadata()`:

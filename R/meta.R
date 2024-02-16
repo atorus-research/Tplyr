@@ -229,7 +229,7 @@ print.tplyr_meta <- function(x, ...) {
     cat("    Join Meta:\n")
     cat(paste0("        ", capture.output(x$anti_join$join_meta), "\n"), sep="")
     cat("    On:\n")
-    aj_on <- map_chr(x$names, as_label)
+    aj_on <- map_chr(x$anti_join$on, as_label)
     cat("       ", paste0(aj_on, collapse = ", "), "\n")
   }
   invisible()
@@ -280,17 +280,17 @@ add_anti_join_ <- function(meta, aj) {
 #' @examples
 #'
 #' tm <- tplyr_meta(
-#'   quos(TRT01A, SEX, ETHNIC, RACE),
-#'   quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")
+#'   rlang::quos(TRT01A, SEX, ETHNIC, RACE),
+#'   rlang::quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")
 #' )
 #'
 #' tm %>%
 #'   add_anti_join(
 #'     tplyr_meta(
-#'       quos(TRT01A, ETHNIC),
-#'       quos(TRT01A == "Placebo", ETHNIC == "HISPANIC OR LATINO")
+#'       rlang::quos(TRT01A, ETHNIC),
+#'       rlang::quos(TRT01A == "Placebo", ETHNIC == "HISPANIC OR LATINO")
 #'     ),
-#'     on = quos(USUBJID)
+#'     on = rlang::quos(USUBJID)
 #'   )
 add_anti_join <- function(meta, join_meta, on){
 

@@ -33,6 +33,9 @@ string}
 \item{...}{additional arguments}
 
 \item{target}{A data frame to be subset (if not pulled from a Tplyr table)}
+
+\item{pop_data}{A data frame to be subset through an anti-join (if not pulled
+from a Tplyr table)}
 }
 \value{
 A data.frame

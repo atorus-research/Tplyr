@@ -436,3 +436,21 @@ test_that("Anti-join extraction works properly", {
   expect_equal(unique(sbst$TRT01A), "Placebo")
 
 })
+
+test_that("Tplyr meta print method works as expected", {
+  meta <- tplyr_meta(
+    names = quos(TRTP, EFFFL, ITTFL, ANL01FL, SITEGR1, AVISIT, AVISITN, PARAMCD, AVAL, BASE, CHG),
+    filters = quos(EFFFL == "Y", ITTFL == "Y", PARAMCD == "ACTOT", ANL01FL == "Y", AVISITN == 24)
+  )
+
+  meta2 <- meta %>%
+    add_anti_join(
+      join_meta = tplyr_meta(
+        names = quos(TRT01P, EFFFL, ITTFL, SITEGR1),
+        filters = quos(EFFFL == "Y", ITTFL == "Y")
+      ),
+      on = quos(USUBJID)
+    )
+
+  expect_snapshot(print(meta2))
+})

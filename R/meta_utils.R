@@ -113,6 +113,8 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
 #' @param column The result column of interest, provided as a character string
 #' @param add_cols  Additional columns to include in subset data.frame output
 #' @param target A data frame to be subset (if not pulled from a Tplyr table)
+#' @param pop_data A data frame to be subset through an anti-join (if not pulled
+#'   from a Tplyr table)
 #' @param ... additional arguments
 #'
 #' @return A data.frame

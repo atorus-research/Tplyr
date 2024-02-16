@@ -31,16 +31,16 @@ values present in the population data that are missing from the target data.
 \examples{
 
 tm <- tplyr_meta(
-  quos(TRT01A, SEX, ETHNIC, RACE),
-  quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")
+  rlang::quos(TRT01A, SEX, ETHNIC, RACE),
+  rlang::quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")
 )
 
 tm \%>\%
   add_anti_join(
     tplyr_meta(
-      quos(TRT01A, ETHNIC),
-      quos(TRT01A == "Placebo", ETHNIC == "HISPANIC OR LATINO")
+      rlang::quos(TRT01A, ETHNIC),
+      rlang::quos(TRT01A == "Placebo", ETHNIC == "HISPANIC OR LATINO")
     ),
-    on = quos(USUBJID)
+    on = rlang::quos(USUBJID)
   )
 }
