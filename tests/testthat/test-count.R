@@ -1094,14 +1094,17 @@ test_that("Missing counts on nested count layers function correctly", {
   expect_equal(tail(x, 1)$ord_layer_2, 99999)
 
   # Also test that label reassignment flows
-  x <- tplyr_table(tplyr_adsl, TRT01A) %>%
-    add_layer(
-      group_count(vars(SEX, RACE)) %>%
-        set_order_count_method(c("byfactor", "byvarn")) %>%
-        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = 99999) %>%
-        set_missing_subjects_row_label("New label")
-    ) %>%
-    build()
+  # The warning here is intentional
+  expect_snapshot_warning({
+    x <- tplyr_table(tplyr_adsl, TRT01A) %>%
+      add_layer(
+        group_count(vars(SEX, RACE)) %>%
+          set_order_count_method(c("byfactor", "byvarn")) %>%
+          add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = 99999) %>%
+          set_missing_subjects_row_label("New label")
+      ) %>%
+      build()
+  })
 
   expect_equal(filter(x, row_label2 == "   New label")$ord_layer_2, c(99999, 99999))
 })

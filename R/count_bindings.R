@@ -745,6 +745,13 @@ add_missing_subjects_row <- function(e, fmt = NULL, sort_value = NULL) {
   }
   assert_inherits_class(e, "count_layer")
 
+  if (identical(env_get(env_parent(e), 'target'), env_get(env_parent(e), 'pop_data'))) {
+    warning(paste("\tPopulation data was not set separately from the target data.",
+                  "\tMissing subject counts may be misleading in this scenario.",
+                  "\tDid you mean to use `set_missing_count() instead?",
+                  sep="\n"))
+  }
+
   env_bind(e, include_missing_subjects_row = TRUE)
   env_bind(e, missing_subjects_count_format = fmt)
   env_bind(e, missing_subjects_sort_value = sort_value)

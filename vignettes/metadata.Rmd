@@ -119,6 +119,51 @@ cat(c("tplyr_adsl %>%\n",
 ))
 ```
 
+### Anti Joins
+
+Most data presented within a table refers back to the target dataset from which data are being summarized. In some cases, data presented may refer to information _excluded_ from the summary. This is the case when you use the **Tplyr** function `add_missing_subjects_row()`. In this case, the counts presented refer to data excluded from the target which are present in the population data. The metadata thus needs to refer to that excluded data. To handle this, there's an additional field called an 'Anti Join'. Consider this example:
+
+```{r anti_join1}
+t <- tplyr_table(tplyr_adae, TRTA) %>%
+  set_pop_data(tplyr_adsl) %>%
+  set_pop_treat_var(TRT01A) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD)) %>%
+      set_distinct_by(USUBJID) %>%
+      add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf)
+  )
+
+x <- build(t, metadata=TRUE)
+
+tail(x) %>% 
+  select(starts_with('row'), var1_Placebo) %>% 
+  kable()
+```
+
+The missing row in this example counts the subjects within their respective treatment groups who do *not* have any adverse events for the body system "SKIN AND SUBCUTANEOUS TISSUE DISORDERS". Here's what the metadata for the result for the Placebo treatment group looks like.
+
+```{r anti_join2}
+m <- get_meta_result(t, 'c23_1', 'var1_Placebo')
+m
+```
+
+This result has the addition field of 'Anti-join'. This element has two fields, which are the join metadata, and the "on" field, which specifies a merging variable to be used when "anti-joining" with the target data. The join metadata here refers to the data of interest from the population data. Note that while the metadata for the target data has variable names and filter conditions referring to AEBODSYS and AEDECOD, these variables are _not_ present within the join metadata, because that information is not present within the population data. 
+
+While the usual joins we work with focus on the overlap between two sets, an anti-join looks at the non-overlap. The metadata provided here will specifically give us "The subjects within the Placebo treatment group who do **not** have an adverse event within the body system 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'". 
+
+Extracting this metadata works very much the same way as extracting other results.
+
+```{r anti_join3}
+head(get_meta_subset(t, 'c23_1', 'var1_Placebo'))
+```
+
+If you're not working with the `tplyr_table` object, then there's some additional information you need to provide to the function.
+
+```{r anti_join4}
+head(get_meta_subset(t$metadata, 'c23_1', 'var1_Placebo', 
+                     target=t$target, pop_data=t$pop_data))
+```
+
 ```
 ```{r to string content, results='asis', echo=FALSE}
 cat(c("tplyr_adsl %>%\n",

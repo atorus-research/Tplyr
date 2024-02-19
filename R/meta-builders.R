@@ -94,12 +94,16 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
 
   # The total row label may not pass through, so set it
   total_row_label <- ifelse(is.null(layer$total_row_label), 'Total', layer$total_row_label)
+  missing_subjects_row_label <- ifelse(is.null(layer$total_row_label), 'Missing', layer$missing_subjects_row_label)
   count_missings <- ifelse(is.null(layer$count_missings), FALSE, layer$count_missings)
   mlist <- layer$missing_count_list
 
   # If the outer layer was provided as a text variable, get value
   character_outer <- get_character_outer(layer)
   unnested_character <- is_unnested_character(layer)
+
+  # Pull out table object to use later
+  tbl <- env_parent(layer)
 
   meta <- vector('list', length(values[[1]]))
 
@@ -113,6 +117,7 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
     }
 
     row_filter <- list()
+    aj <- NULL
 
     # Pull out the current row's values
     cur_values <- map(values, ~ .x[i])
@@ -130,21 +135,26 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
       if (summary_var[i] == total_row_label && !count_missings) {
         # Filter out the missing counts if the total row should exclude missings
         row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
-      }
-      else if (summary_var[i] %in% names(mlist)) {
+      } else if (summary_var[i] == missing_subjects_row_label) {
+        # Special handling for missing subject rows
+        # Make a meta object for the pop data
+        pop_filt_inds <- which(filter_variables %in% unlist(list(tbl$treat_var, tbl$cols)))
+        pop_filt_vars <- filter_variables[pop_filt_inds]
+        pop_filt_vals <- filter_values[pop_filt_inds]
+        pop_meta <- build_meta(tbl$pop_where, quo(TRUE), treat_grps, pop_filt_vars, pop_filt_vals)
+        aj <- new_anti_join(join_meta=pop_meta, on=layer$distinct_by)
+      } else if (summary_var[i] %in% names(mlist)) {
         # Get the values for the missing row
         miss_val <- mlist[which(names(mlist) == summary_var[i])]
         row_filter <- make_parsed_strings(layer$target_var, list(miss_val))
-      }
-      else if (summary_var[i] != total_row_label) {
+      } else if (summary_var[i] != total_row_label) {
         # Subset to outer layer value
         row_filter <- make_parsed_strings(na_var, summary_var[i])
       }
 
       add_vars <- append(add_vars, na_var)
 
-    }
-    else {
+    } else {
       # Inside the nested layer
       filter_variables <- variables
       filter_values <- cur_values
@@ -162,6 +172,18 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
       else if (summary_var[i] == total_row_label && !count_missings) {
         # Filter out the missing counts if the total row should exclude missings
         row_filter <- make_parsed_strings(layer$target_var, list(mlist), negate=TRUE)
+      } else if (summary_var[i] == missing_subjects_row_label) {
+        # Special handling for missing subject rows
+        # Make a meta object for the pop data
+        pop_filt_inds <- which(filter_variables %in% unlist(list(tbl$treat_var, tbl$cols)))
+        pop_filt_vars <- filter_variables[pop_filt_inds]
+        pop_filt_vals <- filter_values[pop_filt_inds]
+        # Reset to the pop treat value
+        pop_filt_vars[[
+          which(map_chr(pop_filt_vars, as_label) == as_label(tbl$treat_var))
+          ]] <- tbl$pop_treat_var
+        pop_meta <- build_meta(tbl$pop_where, quo(TRUE), treat_grps, pop_filt_vars, pop_filt_vals)
+        aj <- new_anti_join(join_meta=pop_meta, on=layer$distinct_by)
       }
       else if (!is.na(character_outer) && summary_var[i] == character_outer) {
         # If the outer layer is a character string then don't provide a filter
@@ -176,8 +198,8 @@ build_count_meta <- function(layer, table_where, layer_where, treat_grps, summar
     # Make the meta object
     meta[[i]] <- build_meta(table_where, layer_where, treat_grps, filter_variables, filter_values) %>%
       add_filters_(row_filter) %>%
-      add_variables_(add_vars)
-
+      add_variables_(add_vars) %>%
+      add_anti_join_(aj)
   }
 
   meta

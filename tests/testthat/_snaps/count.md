@@ -639,3 +639,9 @@
 
     Argument `e` does not inherit "count_layer". Classes: tplyr_layer, desc_layer, environment
 
+# Missing counts on nested count layers function correctly
+
+    	Population data was not set separately from the target data.
+    	Missing subject counts may be misleading in this scenario.
+    	Did you mean to use `set_missing_count() instead?
+

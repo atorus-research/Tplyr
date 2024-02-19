@@ -62,7 +62,9 @@ reference:
   - add_total_row
   - add_total_group
   - add_risk_diff
+  - add_missing_subjects_row
   - set_total_row_label
+  - set_missing_subjects_row_label
 - title: Descriptive Statistics Layer Functions
   desc: Descriptive statistics layer helper functions
 - contents:
@@ -84,6 +86,7 @@ reference:
   - set_denom_ignore
   - set_indentation
   - set_numeric_threshold
+  - set_limit_data_by
 - title: Column Headers
   desc: Column header helpers
 - contents:
@@ -95,6 +98,7 @@ reference:
   - tplyr_meta
   - add_variables
   - add_filters
+  - add_anti_join
   - get_metadata
   - append_metadata
   - starts_with('get_meta')
@@ -109,6 +113,7 @@ reference:
   - apply_formats
   - apply_row_masks
   - collapse_row_labels
+  - replace_leading_whitespace
   - str_extract_fmt_group
   - str_extract_num
   - str_indent_wrap
@@ -130,6 +135,7 @@ reference:
   - tplyr_adas
   - tplyr_adlb
   - tplyr_adsl
+  - tplyr_adpe
   - get_data_labels
 
 articles:
