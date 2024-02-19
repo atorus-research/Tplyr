@@ -1,3 +1,6 @@
+# Tplyr 1.2.1
+- Resolve #178 to add metadata handling for missing subjects, and add the `add_anti_join()` function
+
 # Tplyr 1.2.0
 - Resolve #62 Add data vignette data into the package (thanks for the suggestion @thebioengineer)
 - Resolve #74 Add an example of piping in set_pop_data
