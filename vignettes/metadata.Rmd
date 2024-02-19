@@ -121,7 +121,7 @@ cat(c("tplyr_adsl %>%\n",
 
 ### Anti Joins
 
-Most data presented within a table refers back to the target dataset from which data are being summarized. In some cases, data presented may refer to information _excluded_ from the summary. This is the case when you use the **Tplyr** function `add_missing_subjects_row()`. In this case, the counts presented refer to data excluded from the target which are present into the population data. The metadata thus need to refer to that excluded data. To handle this, there's an additional field called an 'Anti Join'. Consider this example:
+Most data presented within a table refers back to the target dataset from which data are being summarized. In some cases, data presented may refer to information _excluded_ from the summary. This is the case when you use the **Tplyr** function `add_missing_subjects_row()`. In this case, the counts presented refer to data excluded from the target which are present in the population data. The metadata thus needs to refer to that excluded data. To handle this, there's an additional field called an 'Anti Join'. Consider this example:
 
 ```{r anti_join1}
 t <- tplyr_table(tplyr_adae, TRTA) %>%
