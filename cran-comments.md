@@ -1,5 +1,5 @@
-## Submission 1.2.0
-* Several bug fixes and the addition of new functions `add_missing_subjects()`, `set_limit_data_by()`, `collapse_row_labels()`, and `replace_leading_whitespace()`
+## Submission 1.2.1
+* Added metadata handling for features introduced in 1.2.0, added function `add_anti_join()`
 
 ## Test Environments
 
