@@ -259,7 +259,7 @@ add_anti_join_ <- function(meta, aj) {
 #' Add an anti-join onto a tplyr_meta object
 #'
 #' An anti-join allows a tplyr_meta object to refer to data that should be
-#' extract from a separate dataset, like the population data of a Tplyr table,
+#' extracted from a separate dataset, like the population data of a Tplyr table,
 #' that is unavailable in the target dataset. The primary use case for this is
 #' the presentation of missing subjects, which in a Tplyr table is presented
 #' using the function `add_missing_subjects_row()`. The missing subjects
