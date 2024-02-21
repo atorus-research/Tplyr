@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,7 +157,7 @@ will be transposed into columns in addition to
 </ul>
 <p>Let’s look at an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="va">SEX</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="va">SEX</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -330,7 +330,7 @@ filter completed excludes a treatment group or group within a column
 variable, columns will still be created for those groups and will be
 empty/zero filled.</em></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">SEX</span>, <span class="va">RACE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span>, where<span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span><span class="st">"Y"</span>, cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">SEX</span>, <span class="va">RACE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (Years)"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -568,7 +568,7 @@ an abstraction of <code><a href="../reference/treat_grps.html">add_treat_grps()<
 <code><a href="../reference/treat_grps.html">add_total_group()</a></code> to simplify the process of creating a
 “Total” group.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/treat_grps.html">add_treat_grps</a></span><span class="op">(</span><span class="st">'Treated'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Xanomeline High Dose"</span>, <span class="st">"Xanomeline Low Dose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -699,8 +699,8 @@ separate population dataset <code>where</code> parameter and a
 population treatment variable named <code>pop_treat_var</code>, as
 variable names may differ between the datasets.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adae</span>, <span class="va">TRTA</span>, where <span class="op">=</span> <span class="va">AEREL</span> <span class="op">!=</span> <span class="st">"NONE"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">tplyr_adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/where.html">set_pop_where</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -915,6 +915,443 @@ your header N’s properly:</p>
 </tr>
 </tbody>
 </table>
+<p>Note: it’s expected the <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> function is
+used with population data. This is because it does not make sense to use
+population data denominators unless you have distinct counts. The entire
+point of population data is to use subject counts, so non-distinct
+counts would potentially count multiple records per subject and then the
+percentage doesn’t make any sense.</p>
+</div>
+<div class="section level2">
+<h2 id="data-completion">Data Completion<a class="anchor" aria-label="anchor" href="#data-completion"></a>
+</h2>
+<p>When creating summary tables, often we have to mock up the potential
+values of data, even if those values aren’t present in the data we’re
+summarizing. <strong>Tplyr</strong> does its best effort to do this for
+you. Let’s consider the following dataset:</p>
+<table class="table">
+<colgroup>
+<col width="12%">
+<col width="15%">
+<col width="9%">
+<col width="9%">
+<col width="10%">
+<col width="18%">
+<col width="7%">
+<col width="18%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">USUBJID</th>
+<th align="left">AVISIT</th>
+<th align="left">PECAT</th>
+<th align="left">PARAM</th>
+<th align="left">TRT01A</th>
+<th align="left">AVALC</th>
+<th align="right">AVAL</th>
+<th align="left">BASEC</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">101-001</td>
+<td align="left">Screening</td>
+<td align="left">A</td>
+<td align="left">Head</td>
+<td align="left">TRT A</td>
+<td align="left">Normal</td>
+<td align="right">1</td>
+<td align="left">Abnormal</td>
+</tr>
+<tr class="even">
+<td align="left">101-001</td>
+<td align="left">Screening</td>
+<td align="left">A</td>
+<td align="left">Lungs</td>
+<td align="left">TRT A</td>
+<td align="left">Normal</td>
+<td align="right">2</td>
+<td align="left">Semi-Normal</td>
+</tr>
+<tr class="odd">
+<td align="left">101-001</td>
+<td align="left">Day -1</td>
+<td align="left">A</td>
+<td align="left">Lungs</td>
+<td align="left">TRT A</td>
+<td align="left">Normal</td>
+<td align="right">3</td>
+<td align="left">Normal</td>
+</tr>
+<tr class="even">
+<td align="left">101-001</td>
+<td align="left">Day 5</td>
+<td align="left">A</td>
+<td align="left">Lungs</td>
+<td align="left">TRT A</td>
+<td align="left">Normal</td>
+<td align="right">4</td>
+<td align="left">Normal</td>
+</tr>
+<tr class="odd">
+<td align="left">101-002</td>
+<td align="left">Screening</td>
+<td align="left">A</td>
+<td align="left">Head</td>
+<td align="left">TRT B</td>
+<td align="left">Semi-Normal</td>
+<td align="right">5</td>
+<td align="left">Normal</td>
+</tr>
+<tr class="even">
+<td align="left">101-002</td>
+<td align="left">Screening</td>
+<td align="left">A</td>
+<td align="left">Lungs</td>
+<td align="left">TRT B</td>
+<td align="left">Normal</td>
+<td align="right">6</td>
+<td align="left">Normal</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s say we want to create a count summary for this dataset, and
+report it by PARAM and AVISIT. Note that in the data,
+<code>PARAM=="HEAD"</code> is only collected at screening, while
+<code>LUNGS</code> is collected at Screening, Day -1, and Day 5.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adpe</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AVALC</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'ord'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">row_label3</th>
+<th align="left">var1_TRT A</th>
+<th align="left">var1_TRT B</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 14.3%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Head</td>
+<td align="left">Day -1</td>
+<td align="left">Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Day -1</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Head</td>
+<td align="left">Day -1</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Day 5</td>
+<td align="left">Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Head</td>
+<td align="left">Day 5</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Day 5</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Normal</td>
+<td align="left">4 ( 28.6%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+</tbody>
+</table>
+<p>By default, given the <code>by</code> variables of PARAM and AVISIT,
+all of the potential visits have dummy rows created that are 0 filled -
+meaning results of 0 records for all treatment groups are presented.
+However, that might not be what you wish to present. Perhaps
+<code>HEAD</code> was only intended to be collected at the Screening
+visit so it’s unnecessary to present other visits. To address this, you
+can use the <code><a href="../reference/set_limit_data_by.html">set_limit_data_by()</a></code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adpe</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AVALC</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_limit_data_by.html">set_limit_data_by</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'ord'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">row_label3</th>
+<th align="left">var1_TRT A</th>
+<th align="left">var1_TRT B</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 14.3%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Normal</td>
+<td align="left">4 ( 28.6%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Abnormal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+</tbody>
+</table>
+<p>Here you can see that now records for <code>HEAD</code> only present
+the screening visit. For count and shift layers, you can additionally
+dig further in to use target variables:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adpe</span>, <span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AVALC</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_limit_data_by.html">set_limit_data_by</a></span><span class="op">(</span><span class="va">PARAM</span>, <span class="va">AVISIT</span>, <span class="va">AVALC</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'ord'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">row_label3</th>
+<th align="left">var1_TRT A</th>
+<th align="left">var1_TRT B</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Screening</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day -1</td>
+<td align="left">Normal</td>
+<td align="left">4 ( 28.6%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Normal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">2 ( 28.6%)</td>
+</tr>
+<tr class="even">
+<td align="left">Lungs</td>
+<td align="left">Day 5</td>
+<td align="left">Abnormal</td>
+<td align="left">2 ( 14.3%)</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Head</td>
+<td align="left">Screening</td>
+<td align="left">Semi-Normal</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 14.3%)</td>
+</tr>
+</tbody>
+</table>
+<p>This effectively limits to the values present in the data itself.</p>
+</div>
+<div class="section level2">
+<h2 id="where-to-go-from-here">Where to Go From Here<a class="anchor" aria-label="anchor" href="#where-to-go-from-here"></a>
+</h2>
 <p>With the table level settings under control, now you’re ready to
 learn more about what <strong>Tplyr</strong> has to offer in each
 layer.</p>

@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,8 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="tplyr-">Tplyr <a class="anchor" aria-label="anchor" href="#tplyr-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="tplyr-">
+<strong>Tplyr</strong> <a class="anchor" aria-label="anchor" href="#tplyr-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -135,7 +136,7 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/atorus-research/Tplyr.git"</span>, ref<span class="op">=</span><span class="st">"devel"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
-<h1 id="what-is-tplyr">What is Tplyr?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
+<h1 id="what-is-tplyr">What is <strong>Tplyr</strong>?<a class="anchor" aria-label="anchor" href="#what-is-tplyr"></a>
 </h1>
 <p><a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> conceptually breaks things down into verbs that allow you to focus on <em>what</em> you want to do more than <em>how</em> you have to do it.</p>
 <p><strong>Tplyr</strong> is designed around a similar concept, but its focus is on building summary tables common within the clinical world. In the pharmaceutical industry, a great deal of the data presented in the outputs we create are very similar. For the most part, most of these tables can be broken down into a few categories:</p>
@@ -157,10 +158,9 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> is a grammar of data manipulation, <strong>Tplyr</strong> aims to be a grammar of data summary. The goal of <strong>Tplyr</strong> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. We’ve packaged some subsets of that data into <strong>Tplyr</strong>, which you can use to replicate our examples and run our vignette code yourself. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
@@ -284,7 +284,8 @@
 </tbody>
 </table>
 <div class="section level2">
-<h2 id="tplyr-is-qualified">Tplyr is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
+<h2 id="tplyr-is-qualified">
+<strong>Tplyr</strong> is Qualified<a class="anchor" aria-label="anchor" href="#tplyr-is-qualified"></a>
 </h2>
 <p>We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing <strong>Tplyr</strong> includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.</p>
 <p>You can find the qualification document within this repository right <a href="https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf" class="external-link">here</a>. The ‘uat’ folder additionally contains all of the raw files, programmatic tests, specifications, and test cases necessary to create this report.</p>
@@ -328,7 +329,7 @@
 </ul>
 <p>In the <strong>Tplyr</strong> version 1.0.0, we’ve packed a number of new features in. For deeper dives on the largest new additions:</p>
 <ul>
-<li>Learn about <strong>Tplyr’s</strong> traceability metadata in <code><a href="articles/metadata.html">vignette("metadata")</a></code> and about how it can be extended in <code><a href="articles/custom-metadata.html">vignette("custom-metadata")</a></code>
+<li>Learn about <strong>Tplyr</strong>’s traceability metadata in <code><a href="articles/metadata.html">vignette("metadata")</a></code> and about how it can be extended in <code><a href="articles/custom-metadata.html">vignette("custom-metadata")</a></code>
 </li>
 <li>Learn about layer templates in <code><a href="articles/layer_templates.html">vignette("layer_templates")</a></code>
 </li>

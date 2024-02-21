@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -154,7 +154,7 @@ back to the source.</p>
 </h2>
 <p>Consider the following example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -545,9 +545,9 @@ can be directly accessed using the function
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_result.html">get_meta_result</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'d1_2'</span>, <span class="st">'var1_Xanomeline High Dose'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; tplyr_meta: 4 names, 3 filters</span></span>
 <span><span class="co">#&gt; Names:</span></span>
-<span><span class="co">#&gt;     TRT01P, EFFFL, SAFFL, AGE </span></span>
+<span><span class="co">#&gt;      TRT01P, EFFFL, SAFFL, AGE </span></span>
 <span><span class="co">#&gt; Filters:</span></span>
-<span><span class="co">#&gt;     TRT01P == c("Xanomeline High Dose"), EFFFL == "Y", SAFFL == "Y"</span></span></code></pre></div>
+<span><span class="co">#&gt;      TRT01P == c("Xanomeline High Dose"), EFFFL == "Y", SAFFL == "Y"</span></span></code></pre></div>
 <p>The resulting output is a new object <strong>Tplyr</strong> called
 <code><a href="../reference/tplyr_meta.html">tplyr_meta()</a></code>. This is a container of a relevent metadata
 for a specific result. The object itself is a list with two elements:
@@ -570,7 +570,7 @@ what happens in <code><a href="../reference/get_meta_subset.html">get_meta_subse
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_meta_result.html">get_meta_result</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'d1_2'</span>, <span class="st">'var1_Xanomeline High Dose'</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">tplyr_adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">m</span><span class="op">$</span><span class="va">filters</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="op">!</span><span class="va">m</span><span class="op">$</span><span class="va">names</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -648,19 +648,164 @@ what happens in <code><a href="../reference/get_meta_subset.html">get_meta_subse
 <p><em>Note: Trimmed for space</em></p>
 <p>But - who says you can’t let your imagination run wild?</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"adsl %&gt;%\n"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tplyr_adsl %&gt;%\n"</span>,</span>
 <span>  <span class="st">"   filter(\n      "</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">filters</span>, <span class="op">~</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/as_label.html" class="external-link">as_label</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span>, collpase<span class="op">=</span><span class="st">",\n      "</span><span class="op">)</span>,</span>
 <span>  <span class="st">") %&gt;%\n"</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"   select("</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">names</span>, <span class="fu">rlang</span><span class="fu">::</span><span class="va"><a href="https://rlang.r-lib.org/reference/as_label.html" class="external-link">as_label</a></span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">", "</span><span class="op">)</span>, <span class="st">")"</span>, sep<span class="op">=</span><span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<div class="section level3">
+<h3 id="anti-joins">Anti Joins<a class="anchor" aria-label="anchor" href="#anti-joins"></a>
+</h3>
+<p>Most data presented within a table refers back to the target dataset
+from which data are being summarized. In some cases, data presented may
+refer to information <em>excluded</em> from the summary. This is the
+case when you use the <strong>Tplyr</strong> function
+<code><a href="../reference/add_missing_subjects_row.html">add_missing_subjects_row()</a></code>. In this case, the counts
+presented refer to data excluded from the target which are present in
+the population data. The metadata thus needs to refer to that excluded
+data. To handle this, there’s an additional field called an ‘Anti Join’.
+Consider this example:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">tplyr_adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/set_distinct_by.html">set_distinct_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="../reference/add_missing_subjects_row.html">add_missing_subjects_row</a></span><span class="op">(</span><span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">"xx (XX.x%)"</span>, <span class="va">distinct_n</span>, <span class="va">distinct_pct</span><span class="op">)</span>, sort_value <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="va">t</span>, metadata<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'row'</span><span class="op">)</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="49%">
+<col width="25%">
+<col width="16%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_id</th>
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">c18_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN EXFOLIATION</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">c19_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN IRRITATION</td>
+<td align="left">3 ( 3.5%)</td>
+</tr>
+<tr class="odd">
+<td align="left">c20_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN ODOUR ABNORMAL</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">c21_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">SKIN ULCER</td>
+<td align="left">1 ( 1.2%)</td>
+</tr>
+<tr class="odd">
+<td align="left">c22_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">URTICARIA</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">c23_1</td>
+<td align="left">SKIN AND SUBCUTANEOUS TISSUE DISORDERS</td>
+<td align="left">Missing</td>
+<td align="left">65 ( 75.6%)</td>
+</tr>
+</tbody>
+</table>
+<p>The missing row in this example counts the subjects within their
+respective treatment groups who do <em>not</em> have any adverse events
+for the body system “SKIN AND SUBCUTANEOUS TISSUE DISORDERS”. Here’s
+what the metadata for the result for the Placebo treatment group looks
+like.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_meta_result.html">get_meta_result</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'c23_1'</span>, <span class="st">'var1_Placebo'</span><span class="op">)</span></span>
+<span><span class="va">m</span></span>
+<span><span class="co">#&gt; tplyr_meta: 3 names, 4 filters</span></span>
+<span><span class="co">#&gt; Names:</span></span>
+<span><span class="co">#&gt;      TRTA, AEBODSYS, AEDECOD </span></span>
+<span><span class="co">#&gt; Filters:</span></span>
+<span><span class="co">#&gt;      TRTA == c("Placebo"), AEBODSYS == c("SKIN AND SUBCUTANEOUS TISSUE DISORDERS"), TRUE, TRUE </span></span>
+<span><span class="co">#&gt; Anti-join:</span></span>
+<span><span class="co">#&gt;     Join Meta:</span></span>
+<span><span class="co">#&gt;         tplyr_meta: 1 names, 3 filters</span></span>
+<span><span class="co">#&gt;         Names:</span></span>
+<span><span class="co">#&gt;              TRT01A </span></span>
+<span><span class="co">#&gt;         Filters:</span></span>
+<span><span class="co">#&gt;              TRT01A == c("Placebo"), TRUE, TRUE </span></span>
+<span><span class="co">#&gt;     On:</span></span>
+<span><span class="co">#&gt;         USUBJID</span></span></code></pre></div>
+<p>This result has the addition field of ‘Anti-join’. This element has
+two fields, which are the join metadata, and the “on” field, which
+specifies a merging variable to be used when “anti-joining” with the
+target data. The join metadata here refers to the data of interest from
+the population data. Note that while the metadata for the target data
+has variable names and filter conditions referring to AEBODSYS and
+AEDECOD, these variables are <em>not</em> present within the join
+metadata, because that information is not present within the population
+data.</p>
+<p>While the usual joins we work with focus on the overlap between two
+sets, an anti-join looks at the non-overlap. The metadata provided here
+will specifically give us “The subjects within the Placebo treatment
+group who do <strong>not</strong> have an adverse event within the body
+system ‘SKIN AND SUBCUTANEOUS TISSUE DISORDERS’”.</p>
+<p>Extracting this metadata works very much the same way as extracting
+other results.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'c23_1'</span>, <span class="st">'var1_Placebo'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   USUBJID     TRT01A </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 01-701-1015 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 01-701-1047 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 01-701-1118 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 01-701-1153 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 01-701-1203 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 01-701-1234 Placebo</span></span></code></pre></div>
+<p>If you’re not working with the <code>tplyr_table</code> object, then
+there’s some additional information you need to provide to the
+function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">t</span><span class="op">$</span><span class="va">metadata</span>, <span class="st">'c23_1'</span>, <span class="st">'var1_Placebo'</span>, </span>
+<span>                     target<span class="op">=</span><span class="va">t</span><span class="op">$</span><span class="va">target</span>, pop_data<span class="op">=</span><span class="va">t</span><span class="op">$</span><span class="va">pop_data</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   USUBJID     TRT01A </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 01-701-1015 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 01-701-1047 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 01-701-1118 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 01-701-1153 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 01-701-1203 Placebo</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 01-701-1234 Placebo</span></span></code></pre></div>
+<pre><code><span><span class="va">tplyr_adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>       <span class="va">TRT01P</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Xanomeline High Dose"</span><span class="op">)</span> ,</span>
-<span>       <span class="va">EFFFL</span> <span class="op">==</span> <span class="st">"Y"</span> ,</span>
-<span>       <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span> ,</span>
+<span>       <span class="va">TRTA</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Placebo"</span><span class="op">)</span> ,</span>
+<span>       <span class="va">AEBODSYS</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SKIN AND SUBCUTANEOUS TISSUE DISORDERS"</span><span class="op">)</span> ,</span>
+<span>       <span class="cn">TRUE</span> ,</span>
+<span>       <span class="cn">TRUE</span> ,</span>
 <span>       <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TRT01P</span>, <span class="va">EFFFL</span>, <span class="va">SAFFL</span>, <span class="va">AGE</span><span class="op">)</span></span></code></pre>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TRTA</span>, <span class="va">AEBODSYS</span>, <span class="va">AEDECOD</span><span class="op">)</span></span></code></pre>
+</div>
 </div>
 <div class="section level2">
 <h2 id="so-what-does-this-get-me">So, What Does This Get Me?<a class="anchor" aria-label="anchor" href="#so-what-does-this-get-me"></a>
@@ -669,7 +814,7 @@ what happens in <code><a href="../reference/get_meta_subset.html">get_meta_subse
 results from a result cell. You just need a row ID and a column name.
 But - what does that get you? You can query your tables - and that’s
 great. But how do you <em>use</em> that.</p>
-<p>The idea behind this is really to support <a href="https://shiny.rstudio.com/" class="external-link">Shiny</a>. Consider this minimal
+<p>The idea behind this is really to support <a href="https://shiny.posit.co/" class="external-link">Shiny</a>. Consider this minimal
 application. Click any of the result cells within the table and see what
 happens.</p>
 <iframe src="https://michael-stackhouse.shinyapps.io/Tplyr-shiny-demo/?showcase=0" width="850" height="900px" data-external="1" style="border: 1px solid #464646;" allowfullscreen allow="autoplay">

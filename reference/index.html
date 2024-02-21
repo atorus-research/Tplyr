@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -221,9 +221,19 @@ based summaries, descriptive statistics summaries, or shift count summaries</dd>
         <dd>Add risk difference to a count layer</dd>
       </dl><dl><dt>
           
+          <code><a href="add_missing_subjects_row.html">add_missing_subjects_row()</a></code> 
+        </dt>
+        <dd>Add a missing subject row into a count summary.</dd>
+      </dl><dl><dt>
+          
           <code><a href="set_total_row_label.html">set_total_row_label()</a></code> 
         </dt>
         <dd>Set the label for the total row</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_missing_subjects_row_label.html">set_missing_subjects_row_label()</a></code> 
+        </dt>
+        <dd>Set the label for the missing subjects row</dd>
       </dl></div><div class="section level2">
       <h2 id="descriptive-statistics-layer-functions">Descriptive Statistics Layer Functions<a class="anchor" aria-label="anchor" href="#descriptive-statistics-layer-functions"></a></h2>
       
@@ -321,6 +331,12 @@ based summaries, descriptive statistics summaries, or shift count summaries</dd>
           <code><a href="set_numeric_threshold.html">set_numeric_threshold()</a></code> 
         </dt>
         <dd>Set a numeric cutoff</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_limit_data_by.html">set_limit_data_by()</a></code> 
+        </dt>
+        <dd>Set variables to limit reported data values only to those that exist rather
+than fully completing all possible levels</dd>
       </dl></div><div class="section level2">
       <h2 id="column-headers">Column Headers<a class="anchor" aria-label="anchor" href="#column-headers"></a></h2>
       
@@ -363,6 +379,11 @@ based summaries, descriptive statistics summaries, or shift count summaries</dd>
           <code><a href="metadata_additions.html">add_variables()</a></code> <code><a href="metadata_additions.html">add_filters()</a></code> 
         </dt>
         <dd>Add variables to a tplyr_meta object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_anti_join.html">add_anti_join()</a></code> 
+        </dt>
+        <dd>Add an anti-join onto a tplyr_meta object</dd>
       </dl><dl><dt>
           
           <code><a href="get_metadata.html">get_metadata()</a></code> 
@@ -412,10 +433,14 @@ based summaries, descriptive statistics summaries, or shift count summaries</dd>
 
       <dl><dt>
           
-          <code><a href="str_indent_wrap.html">str_indent_wrap()</a></code> 
+          <code><a href="apply_conditional_format.html">apply_conditional_format()</a></code> 
         </dt>
-        <dd>Wrap strings to a specific width with hyphenation while preserving
-indentation</dd>
+        <dd>Conditional reformatting of a pre-populated string of numbers</dd>
+      </dl><dl><dt>
+          
+          <code><a href="apply_formats.html">apply_formats()</a></code> 
+        </dt>
+        <dd>Apply Format Strings outside of a Tplyr table</dd>
       </dl><dl><dt>
           
           <code><a href="apply_row_masks.html">apply_row_masks()</a></code> 
@@ -423,9 +448,14 @@ indentation</dd>
         <dd>Replace repeating row label variables with blanks in preparation for display.</dd>
       </dl><dl><dt>
           
-          <code><a href="apply_conditional_format.html">apply_conditional_format()</a></code> 
+          <code><a href="collapse_row_labels.html">collapse_row_labels()</a></code> 
         </dt>
-        <dd>Conditional reformatting of a pre-populated string of numbers</dd>
+        <dd>Collapse row labels into a single column</dd>
+      </dl><dl><dt>
+          
+          <code><a href="replace_leading_whitespace.html">replace_leading_whitespace()</a></code> 
+        </dt>
+        <dd>Reformat strings with leading whitespace for HTML</dd>
       </dl><dl><dt>
           
           <code><a href="str_extractors.html">str_extract_fmt_group()</a></code> <code><a href="str_extractors.html">str_extract_num()</a></code> 
@@ -433,9 +463,10 @@ indentation</dd>
         <dd>Extract format group strings or numbers</dd>
       </dl><dl><dt>
           
-          <code><a href="apply_formats.html">apply_formats()</a></code> 
+          <code><a href="str_indent_wrap.html">str_indent_wrap()</a></code> 
         </dt>
-        <dd>Apply Format Strings outside of a Tplyr table</dd>
+        <dd>Wrap strings to a specific width with hyphenation while preserving
+indentation</dd>
       </dl></div><div class="section level2">
       <h2 id="helper-functions">Helper functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a></h2>
       
@@ -487,6 +518,47 @@ indentation</dd>
           <code><a href="get_tplyr_regex.html">get_tplyr_regex()</a></code> 
         </dt>
         <dd>Retrieve one of Tplyr's regular expressions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
+      
+      <p class="section-desc"></p><p>Tplyr Built-in Datasets</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="tplyr_adae.html">tplyr_adae</a></code> 
+        </dt>
+        <dd>ADAE Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tplyr_adas.html">tplyr_adas</a></code> 
+        </dt>
+        <dd>ADAS Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tplyr_adlb.html">tplyr_adlb</a></code> 
+        </dt>
+        <dd>ADLB Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tplyr_adsl.html">tplyr_adsl</a></code> 
+        </dt>
+        <dd>ADSL Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="tplyr_adpe.html">tplyr_adpe</a></code> 
+        </dt>
+        <dd>ADPE Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_data_labels.html">get_data_labels()</a></code> 
+        </dt>
+        <dd>Get Data Labels</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

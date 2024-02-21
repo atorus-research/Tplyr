@@ -22,7 +22,7 @@ strings."><meta property="og:image" content="https://atorus-research.github.io/T
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,6 +134,9 @@ total and the application of denominators becomes ambiguous. You will be
 warned specifically if a percent is included in the format. To rectify this,
 use <code><a href="set_denoms_by.html">set_denoms_by()</a></code>, and the grouping of <code>add_total_row()</code> will
 be updated accordingly.</p>
+<p>Note that when using <code>add_total_row()</code> with <code><a href="pop_data.html">set_pop_data()</a></code>, you
+should call <code>add_total_row()</code> AFTER calling <code><a href="pop_data.html">set_pop_data()</a></code>,
+otherwise there is potential for unexpected behaivior with treatment groups.</p>
     </div>
 
     <div class="section level2">

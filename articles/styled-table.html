@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,14 +152,14 @@ variables</li>
 <h3 id="preparing-the-data">Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">adsl</span> <span class="op">&lt;-</span> <span class="va">adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">tplyr_adsl</span> <span class="op">&lt;-</span> <span class="va">tplyr_adsl</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    SEX <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html" class="external-link">recode</a></span><span class="op">(</span><span class="va">SEX</span>, M <span class="op">=</span> <span class="st">"Male"</span>, F <span class="op">=</span> <span class="st">"Female"</span><span class="op">)</span>, </span>
 <span>    RACE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RACE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AMERICAN INDIAN OR ALASKA NATIVE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"BLACK OR AFRICAN AMERICAN"</span>, </span>
 <span>                          <span class="st">"NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER"</span>, <span class="st">"WHITE"</span>, <span class="st">"MULTIPLE"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/treat_grps.html">add_total_group</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Sex'</span>, </span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">SEX</span>, by <span class="op">=</span> <span class="st">"Sex n (%)"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -186,703 +186,282 @@ variables</li>
 <span></span>
 <span><span class="va">dat</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-row_label1
-</th>
-<th style="text-align:left;">
-row_label2
-</th>
-<th style="text-align:left;">
-var1_Placebo
-</th>
-<th style="text-align:left;">
-var1_Total
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose
-</th>
-<th style="text-align:right;">
-ord_layer_index
-</th>
-<th style="text-align:right;">
-ord_layer_1
-</th>
-<th style="text-align:right;">
-ord_layer_2
-</th>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="11%">
+<col width="22%">
+<col width="7%">
+<col width="7%">
+<col width="14%">
+<col width="13%">
+<col width="8%">
+<col width="6%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Total</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Sex n (%)
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:left;">
-53 ( 61.6%)
-</td>
-<td style="text-align:left;">
-143 ( 56.3%)
-</td>
-<td style="text-align:left;">
-40 ( 47.6%)
-</td>
-<td style="text-align:left;">
-50 ( 59.5%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="odd">
+<td align="left">Sex n (%)</td>
+<td align="left">Female</td>
+<td align="left">53 ( 61.6%)</td>
+<td align="left">143 ( 56.3%)</td>
+<td align="left">40 ( 47.6%)</td>
+<td align="left">50 ( 59.5%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Sex n (%)
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-33 ( 38.4%)
-</td>
-<td style="text-align:left;">
-111 ( 43.7%)
-</td>
-<td style="text-align:left;">
-44 ( 52.4%)
-</td>
-<td style="text-align:left;">
-34 ( 40.5%)
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="even">
+<td align="left">Sex n (%)</td>
+<td align="left">Male</td>
+<td align="left">33 ( 38.4%)</td>
+<td align="left">111 ( 43.7%)</td>
+<td align="left">44 ( 52.4%)</td>
+<td align="left">34 ( 40.5%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Sex n (%)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="odd">
+<td align="left">Sex n (%)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-n
-</td>
-<td style="text-align:left;">
-86
-</td>
-<td style="text-align:left;">
-254
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="even">
+<td align="left">Age (Years)</td>
+<td align="left">n</td>
+<td align="left">86</td>
+<td align="left">254</td>
+<td align="left">84</td>
+<td align="left">84</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-Mean (SD)
-</td>
-<td style="text-align:left;">
-75.2 ( 8.59)
-</td>
-<td style="text-align:left;">
-75.1 ( 8.25)
-</td>
-<td style="text-align:left;">
-74.4 ( 7.89)
-</td>
-<td style="text-align:left;">
-75.7 ( 8.29)
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="odd">
+<td align="left">Age (Years)</td>
+<td align="left">Mean (SD)</td>
+<td align="left">75.2 ( 8.59)</td>
+<td align="left">75.1 ( 8.25)</td>
+<td align="left">74.4 ( 7.89)</td>
+<td align="left">75.7 ( 8.29)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-Median
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.0
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.5
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="even">
+<td align="left">Age (Years)</td>
+<td align="left">Median</td>
+<td align="left">76.0</td>
+<td align="left">77.0</td>
+<td align="left">76.0</td>
+<td align="left">77.5</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-Q1, Q3
-</td>
-<td style="text-align:left;">
-69.2, 81.8
-</td>
-<td style="text-align:left;">
-70.0, 81.0
-</td>
-<td style="text-align:left;">
-70.8, 80.0
-</td>
-<td style="text-align:left;">
-71.0, 82.0
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
+<tr class="odd">
+<td align="left">Age (Years)</td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.2, 81.8</td>
+<td align="left">70.0, 81.0</td>
+<td align="left">70.8, 80.0</td>
+<td align="left">71.0, 82.0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-Min, Max
-</td>
-<td style="text-align:left;">
-52, 89
-</td>
-<td style="text-align:left;">
-51, 89
-</td>
-<td style="text-align:left;">
-56, 88
-</td>
-<td style="text-align:left;">
-51, 88
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-5
-</td>
+<tr class="even">
+<td align="left">Age (Years)</td>
+<td align="left">Min, Max</td>
+<td align="left">52, 89</td>
+<td align="left">51, 89</td>
+<td align="left">56, 88</td>
+<td align="left">51, 88</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="left">Age (Years)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-&lt;65
-</td>
-<td style="text-align:left;">
-14 ( 16.3%)
-</td>
-<td style="text-align:left;">
-33 ( 13.0%)
-</td>
-<td style="text-align:left;">
-11 ( 13.1%)
-</td>
-<td style="text-align:left;">
-8 ( 9.5%)
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="even">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="left">14 ( 16.3%)</td>
+<td align="left">33 ( 13.0%)</td>
+<td align="left">11 ( 13.1%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-&gt;80
-</td>
-<td style="text-align:left;">
-30 ( 34.9%)
-</td>
-<td style="text-align:left;">
-77 ( 30.3%)
-</td>
-<td style="text-align:left;">
-18 ( 21.4%)
-</td>
-<td style="text-align:left;">
-29 ( 34.5%)
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&gt;80</td>
+<td align="left">30 ( 34.9%)</td>
+<td align="left">77 ( 30.3%)</td>
+<td align="left">18 ( 21.4%)</td>
+<td align="left">29 ( 34.5%)</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-65-80
-</td>
-<td style="text-align:left;">
-42 ( 48.8%)
-</td>
-<td style="text-align:left;">
-144 ( 56.7%)
-</td>
-<td style="text-align:left;">
-55 ( 65.5%)
-</td>
-<td style="text-align:left;">
-47 ( 56.0%)
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="even">
+<td align="left">Age Categories n (%)</td>
+<td align="left">65-80</td>
+<td align="left">42 ( 48.8%)</td>
+<td align="left">144 ( 56.7%)</td>
+<td align="left">55 ( 65.5%)</td>
+<td align="left">47 ( 56.0%)</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-AMERICAN INDIAN OR ALASKA NATIVE
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-1 ( 0.4%)
-</td>
-<td style="text-align:left;">
-1 ( 1.2%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 0.4%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-ASIAN
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left">ASIAN</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-BLACK OR AFRICAN AMERICAN
-</td>
-<td style="text-align:left;">
-8 ( 9.3%)
-</td>
-<td style="text-align:left;">
-23 ( 9.1%)
-</td>
-<td style="text-align:left;">
-9 ( 10.7%)
-</td>
-<td style="text-align:left;">
-6 ( 7.1%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">8 ( 9.3%)</td>
+<td align="left">23 ( 9.1%)</td>
+<td align="left">9 ( 10.7%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4
-</td>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left">NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-WHITE
-</td>
-<td style="text-align:left;">
-78 ( 90.7%)
-</td>
-<td style="text-align:left;">
-230 ( 90.6%)
-</td>
-<td style="text-align:left;">
-74 ( 88.1%)
-</td>
-<td style="text-align:left;">
-78 ( 92.9%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-5
-</td>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">WHITE</td>
+<td align="left">78 ( 90.7%)</td>
+<td align="left">230 ( 90.6%)</td>
+<td align="left">74 ( 88.1%)</td>
+<td align="left">78 ( 92.9%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">5</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-MULTIPLE
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-6
-</td>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left">MULTIPLE</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">6</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-7
-</td>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">7</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Ethnicity n (%)
-</td>
-<td style="text-align:left;">
-HISPANIC OR LATINO
-</td>
-<td style="text-align:left;">
-3 ( 3.5%)
-</td>
-<td style="text-align:left;">
-12 ( 4.7%)
-</td>
-<td style="text-align:left;">
-3 ( 3.6%)
-</td>
-<td style="text-align:left;">
-6 ( 7.1%)
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
+<tr class="odd">
+<td align="left">Ethnicity n (%)</td>
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">3 ( 3.5%)</td>
+<td align="left">12 ( 4.7%)</td>
+<td align="left">3 ( 3.6%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Ethnicity n (%)
-</td>
-<td style="text-align:left;">
-NOT HISPANIC OR LATINO
-</td>
-<td style="text-align:left;">
-83 ( 96.5%)
-</td>
-<td style="text-align:left;">
-242 ( 95.3%)
-</td>
-<td style="text-align:left;">
-81 ( 96.4%)
-</td>
-<td style="text-align:left;">
-78 ( 92.9%)
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2
-</td>
+<tr class="even">
+<td align="left">Ethnicity n (%)</td>
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">83 ( 96.5%)</td>
+<td align="left">242 ( 95.3%)</td>
+<td align="left">81 ( 96.4%)</td>
+<td align="left">78 ( 92.9%)</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Ethnicity n (%)
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-3
-</td>
+<tr class="odd">
+<td align="left">Ethnicity n (%)</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">3</td>
 </tr>
 </tbody>
 </table>
@@ -977,556 +556,254 @@ Additionally, let’s clean the data up so it’s ready to present.</p>
 <span><span class="va">dat</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<thead><tr>
-<th style="text-align:left;">
-row_label1
-</th>
-<th style="text-align:left;">
-row_label2
-</th>
-<th style="text-align:left;">
-var1_Placebo
-</th>
-<th style="text-align:left;">
-var1_Xanomeline Low Dose
-</th>
-<th style="text-align:left;">
-var1_Xanomeline High Dose
-</th>
-<th style="text-align:left;">
-var1_Total
-</th>
+<colgroup>
+<col width="12%">
+<col width="25%">
+<col width="11%">
+<col width="19%">
+<col width="19%">
+<col width="11%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Total</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Placebo(N=86)
-</td>
-<td style="text-align:left;">
-Xanomeline Low Dose(N=84)
-</td>
-<td style="text-align:left;">
-Xanomeline High Dose(N=84)
-</td>
-<td style="text-align:left;">
-Total(N=254)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Placebo(N=86)</td>
+<td align="left">Xanomeline Low Dose(N=84)</td>
+<td align="left">Xanomeline High Dose(N=84)</td>
+<td align="left">Total(N=254)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Sex n (%)
-</td>
-<td style="text-align:left;">
-Female
-</td>
-<td style="text-align:left;">
-53 ( 61.6%)
-</td>
-<td style="text-align:left;">
-50 ( 59.5%)
-</td>
-<td style="text-align:left;">
-40 ( 47.6%)
-</td>
-<td style="text-align:left;">
-143 ( 56.3%)
-</td>
+<tr class="even">
+<td align="left">Sex n (%)</td>
+<td align="left">Female</td>
+<td align="left">53 ( 61.6%)</td>
+<td align="left">50 ( 59.5%)</td>
+<td align="left">40 ( 47.6%)</td>
+<td align="left">143 ( 56.3%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-33 ( 38.4%)
-</td>
-<td style="text-align:left;">
-34 ( 40.5%)
-</td>
-<td style="text-align:left;">
-44 ( 52.4%)
-</td>
-<td style="text-align:left;">
-111 ( 43.7%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Male</td>
+<td align="left">33 ( 38.4%)</td>
+<td align="left">34 ( 40.5%)</td>
+<td align="left">44 ( 52.4%)</td>
+<td align="left">111 ( 43.7%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age (Years)
-</td>
-<td style="text-align:left;">
-n
-</td>
-<td style="text-align:left;">
-86
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:left;">
-84
-</td>
-<td style="text-align:left;">
-254
-</td>
+<tr class="even">
+<td align="left">Age (Years)</td>
+<td align="left">n</td>
+<td align="left">86</td>
+<td align="left">84</td>
+<td align="left">84</td>
+<td align="left">254</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Mean (SD)
-</td>
-<td style="text-align:left;">
-75.2 ( 8.59)
-</td>
-<td style="text-align:left;">
-75.7 ( 8.29)
-</td>
-<td style="text-align:left;">
-74.4 ( 7.89)
-</td>
-<td style="text-align:left;">
-75.1 ( 8.25)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Mean (SD)</td>
+<td align="left">75.2 ( 8.59)</td>
+<td align="left">75.7 ( 8.29)</td>
+<td align="left">74.4 ( 7.89)</td>
+<td align="left">75.1 ( 8.25)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Median
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.5
-</td>
-<td style="text-align:left;">
-76.0
-</td>
-<td style="text-align:left;">
-77.0
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Median</td>
+<td align="left">76.0</td>
+<td align="left">77.5</td>
+<td align="left">76.0</td>
+<td align="left">77.0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Q1, Q3
-</td>
-<td style="text-align:left;">
-69.2, 81.8
-</td>
-<td style="text-align:left;">
-71.0, 82.0
-</td>
-<td style="text-align:left;">
-70.8, 80.0
-</td>
-<td style="text-align:left;">
-70.0, 81.0
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.2, 81.8</td>
+<td align="left">71.0, 82.0</td>
+<td align="left">70.8, 80.0</td>
+<td align="left">70.0, 81.0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Min, Max
-</td>
-<td style="text-align:left;">
-52, 89
-</td>
-<td style="text-align:left;">
-51, 88
-</td>
-<td style="text-align:left;">
-56, 88
-</td>
-<td style="text-align:left;">
-51, 89
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Min, Max</td>
+<td align="left">52, 89</td>
+<td align="left">51, 88</td>
+<td align="left">56, 88</td>
+<td align="left">51, 89</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Age Categories n (%)
-</td>
-<td style="text-align:left;">
-&lt;65
-</td>
-<td style="text-align:left;">
-14 ( 16.3%)
-</td>
-<td style="text-align:left;">
-8 ( 9.5%)
-</td>
-<td style="text-align:left;">
-11 ( 13.1%)
-</td>
-<td style="text-align:left;">
-33 ( 13.0%)
-</td>
+<tr class="odd">
+<td align="left">Age Categories n (%)</td>
+<td align="left">&lt;65</td>
+<td align="left">14 ( 16.3%)</td>
+<td align="left">8 ( 9.5%)</td>
+<td align="left">11 ( 13.1%)</td>
+<td align="left">33 ( 13.0%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-&gt;80
-</td>
-<td style="text-align:left;">
-30 ( 34.9%)
-</td>
-<td style="text-align:left;">
-29 ( 34.5%)
-</td>
-<td style="text-align:left;">
-18 ( 21.4%)
-</td>
-<td style="text-align:left;">
-77 ( 30.3%)
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">&gt;80</td>
+<td align="left">30 ( 34.9%)</td>
+<td align="left">29 ( 34.5%)</td>
+<td align="left">18 ( 21.4%)</td>
+<td align="left">77 ( 30.3%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-65-80
-</td>
-<td style="text-align:left;">
-42 ( 48.8%)
-</td>
-<td style="text-align:left;">
-47 ( 56.0%)
-</td>
-<td style="text-align:left;">
-55 ( 65.5%)
-</td>
-<td style="text-align:left;">
-144 ( 56.7%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">65-80</td>
+<td align="left">42 ( 48.8%)</td>
+<td align="left">47 ( 56.0%)</td>
+<td align="left">55 ( 65.5%)</td>
+<td align="left">144 ( 56.7%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Race n (%)
-</td>
-<td style="text-align:left;">
-AMERICAN INDIAN OR ALASKA NATIVE
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-1 ( 1.2%)
-</td>
-<td style="text-align:left;">
-1 ( 0.4%)
-</td>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">1 ( 1.2%)</td>
+<td align="left">1 ( 0.4%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-ASIAN
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">ASIAN</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-BLACK OR AFRICAN AMERICAN
-</td>
-<td style="text-align:left;">
-8 ( 9.3%)
-</td>
-<td style="text-align:left;">
-6 ( 7.1%)
-</td>
-<td style="text-align:left;">
-9 ( 10.7%)
-</td>
-<td style="text-align:left;">
-23 ( 9.1%)
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">8 ( 9.3%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="left">9 ( 10.7%)</td>
+<td align="left">23 ( 9.1%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-WHITE
-</td>
-<td style="text-align:left;">
-78 ( 90.7%)
-</td>
-<td style="text-align:left;">
-78 ( 92.9%)
-</td>
-<td style="text-align:left;">
-74 ( 88.1%)
-</td>
-<td style="text-align:left;">
-230 ( 90.6%)
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">WHITE</td>
+<td align="left">78 ( 90.7%)</td>
+<td align="left">78 ( 92.9%)</td>
+<td align="left">74 ( 88.1%)</td>
+<td align="left">230 ( 90.6%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-MULTIPLE
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
-<td style="text-align:left;">
-0 ( 0.0%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">MULTIPLE</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
+<td align="left">0 ( 0.0%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Ethnicity n (%)
-</td>
-<td style="text-align:left;">
-HISPANIC OR LATINO
-</td>
-<td style="text-align:left;">
-3 ( 3.5%)
-</td>
-<td style="text-align:left;">
-6 ( 7.1%)
-</td>
-<td style="text-align:left;">
-3 ( 3.6%)
-</td>
-<td style="text-align:left;">
-12 ( 4.7%)
-</td>
+<tr class="even">
+<td align="left">Ethnicity n (%)</td>
+<td align="left">HISPANIC OR LATINO</td>
+<td align="left">3 ( 3.5%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="left">3 ( 3.6%)</td>
+<td align="left">12 ( 4.7%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-NOT HISPANIC OR LATINO
-</td>
-<td style="text-align:left;">
-83 ( 96.5%)
-</td>
-<td style="text-align:left;">
-78 ( 92.9%)
-</td>
-<td style="text-align:left;">
-81 ( 96.4%)
-</td>
-<td style="text-align:left;">
-242 ( 95.3%)
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">NOT HISPANIC OR LATINO</td>
+<td align="left">83 ( 96.5%)</td>
+<td align="left">78 ( 92.9%)</td>
+<td align="left">81 ( 96.4%)</td>
+<td align="left">242 ( 95.3%)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Missing
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
-<td style="text-align:left;">
-0
-</td>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 </tr>
 </tbody>
 </table>

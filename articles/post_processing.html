@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,7 +187,7 @@ have options like merging cells, but this may be a more simplistic
 approach. Furthermore, this is a common approach in clinical tables when
 data validation is done on an output dataframe.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -253,7 +253,7 @@ We can blank this out using `apply_row_masks()</p>
 apply row breaks between different groups of data, for example,
 different layers of a table.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="st">"Race n (%)"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -431,6 +431,426 @@ different variable grouping to insert rows</li>
 </ul>
 </div>
 <div class="section level2">
+<h2 id="collapsing-row-labels">Collapsing Row Labels<a class="anchor" aria-label="anchor" href="#collapsing-row-labels"></a>
+</h2>
+<p>Different table formats call for different handling of row labels,
+depending on the preferences of an individual organization and the
+specifics of the table at hand. <strong>Tplyr</strong> inherently
+creates row labels as separate columns, but similar to the way that
+count layers nest the inner and the outer layer, we also offer the
+<code><a href="../reference/collapse_row_labels.html">collapse_row_labels()</a></code> function to pull multiple row labels
+into a single column.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="st">"Race n (%)"</span>, <span class="va">SEX</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="st">"Age (years)"</span>, <span class="va">SEX</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span>, <span class="va">row_label3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">var1_Placebo</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 26 × 2</span></span></span>
+<span><span class="co">#&gt;    row_label                              var1_Placebo </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> <span style="color: #949494;">"</span>Race n (%)<span style="color: #949494;">"</span>                           <span style="color: #949494;">""</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> <span style="color: #949494;">"</span>  F<span style="color: #949494;">"</span>                                  <span style="color: #949494;">""</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> <span style="color: #949494;">"</span>    AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> <span style="color: #949494;">"</span>    BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span> 5 (  5.8%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> <span style="color: #949494;">"</span>    WHITE<span style="color: #949494;">"</span>                            <span style="color: #949494;">"</span>48 ( 55.8%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> <span style="color: #949494;">"</span>Race n (%)<span style="color: #949494;">"</span>                           <span style="color: #949494;">""</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> <span style="color: #949494;">"</span>  M<span style="color: #949494;">"</span>                                  <span style="color: #949494;">""</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> <span style="color: #949494;">"</span>    AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">"</span>    BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span> 3 (  3.5%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">"</span>    WHITE<span style="color: #949494;">"</span>                            <span style="color: #949494;">"</span>30 ( 34.9%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 16 more rows</span></span></span></code></pre></div>
+<p>By default, indentation is set to 2 spaces, but by using the
+<code>indent</code> parameter you can change this to any string you
+desire.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span>, <span class="va">row_label3</span>, indent <span class="op">=</span> <span class="st">"&amp;nbsp;&amp;nbsp;"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span>escape<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="81%">
+<col width="18%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label</th>
+<th align="left">var1_Placebo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">    AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">    BLACK OR AFRICAN AMERICAN</td>
+<td align="left">5 ( 5.8%)</td>
+</tr>
+<tr class="odd">
+<td align="left">    WHITE</td>
+<td align="left">48 ( 55.8%)</td>
+</tr>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">  M</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">    AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">    BLACK OR AFRICAN AMERICAN</td>
+<td align="left">3 ( 3.5%)</td>
+</tr>
+<tr class="even">
+<td align="left">    WHITE</td>
+<td align="left">30 ( 34.9%)</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">    n</td>
+<td align="left">53</td>
+</tr>
+<tr class="even">
+<td align="left">    Mean (SD)</td>
+<td align="left">76.4 ( 8.73)</td>
+</tr>
+<tr class="odd">
+<td align="left">    Median</td>
+<td align="left">78.0</td>
+</tr>
+<tr class="even">
+<td align="left">    Q1, Q3</td>
+<td align="left">70.0, 84.0</td>
+</tr>
+<tr class="odd">
+<td align="left">    Min, Max</td>
+<td align="left">59, 89</td>
+</tr>
+<tr class="even">
+<td align="left">    Missing</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">  M</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">    n</td>
+<td align="left">33</td>
+</tr>
+<tr class="even">
+<td align="left">    Mean (SD)</td>
+<td align="left">73.4 ( 8.15)</td>
+</tr>
+<tr class="odd">
+<td align="left">    Median</td>
+<td align="left">74.0</td>
+</tr>
+<tr class="even">
+<td align="left">    Q1, Q3</td>
+<td align="left">69.0, 80.0</td>
+</tr>
+<tr class="odd">
+<td align="left">    Min, Max</td>
+<td align="left">52, 85</td>
+</tr>
+<tr class="even">
+<td align="left">    Missing</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>You also have control over which columns you collapse, allowing you
+to keep separate row labels if you don’t want all collapsed together</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span>, indent <span class="op">=</span> <span class="st">"&amp;nbsp;&amp;nbsp;"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">row_label3</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label</th>
+<th align="left">row_label3</th>
+<th align="left">var1_Placebo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">  F</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">5 ( 5.8%)</td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left">WHITE</td>
+<td align="left">48 ( 55.8%)</td>
+</tr>
+<tr class="odd">
+<td align="left">  M</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">  M</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">3 ( 3.5%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="leading-spaces-in-html-files">Leading Spaces in HTML Files<a class="anchor" aria-label="anchor" href="#leading-spaces-in-html-files"></a>
+</h2>
+<p>Another helper function we’ve made available is
+<code><a href="../reference/replace_leading_whitespace.html">replace_leading_whitespace()</a></code>. In the table created above,
+note that the <code>indent</code> parameter was set using
+<code>&amp;nbsp;</code>, which is a non-breaking space. This can be used
+in HTML files to preserve leading white spaces instead of automatically
+stripping them in the display, as viewing utilities usually do. Ever
+noticed that in your data viewers you typically don’t see leading
+spaces? Yeah - that’s why!</p>
+<p>Let’s take the example from above and not change the
+<code>indent</code> parameter.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">row_label3</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label</th>
+<th align="left">row_label3</th>
+<th align="left">var1_Placebo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">F</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">5 ( 5.8%)</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="left">WHITE</td>
+<td align="left">48 ( 55.8%)</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">3 ( 3.5%)</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">WHITE</td>
+<td align="left">30 ( 34.9%)</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">F</td>
+<td align="left">n</td>
+<td align="left">53</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="left">Mean (SD)</td>
+<td align="left">76.4 ( 8.73)</td>
+</tr>
+<tr class="odd">
+<td align="left">F</td>
+<td align="left">Median</td>
+<td align="left">78.0</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="left">Q1, Q3</td>
+<td align="left">70.0, 84.0</td>
+</tr>
+<tr class="odd">
+<td align="left">F</td>
+<td align="left">Min, Max</td>
+<td align="left">59, 89</td>
+</tr>
+<tr class="even">
+<td align="left">F</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">n</td>
+<td align="left">33</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="left">Mean (SD)</td>
+<td align="left">73.4 ( 8.15)</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">Median</td>
+<td align="left">74.0</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.0, 80.0</td>
+</tr>
+<tr class="odd">
+<td align="left">M</td>
+<td align="left">Min, Max</td>
+<td align="left">52, 85</td>
+</tr>
+<tr class="even">
+<td align="left">M</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>In indented rows, the spaces still exist, and we can see that in the
+dataframe output itself.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">row_label3</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
+<span><span class="co">#&gt;   row_label    row_label3                         var1_Placebo </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Race n (%)<span style="color: #949494;">"</span> <span style="color: #949494;">""</span>                                 <span style="color: #949494;">""</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>  F<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>  F<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span> 5 (  5.8%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> <span style="color: #949494;">"</span>  F<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>WHITE<span style="color: #949494;">"</span>                            <span style="color: #949494;">"</span>48 ( 55.8%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> <span style="color: #949494;">"</span>  M<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span> 0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> <span style="color: #949494;">"</span>  M<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span> 3 (  3.5%)<span style="color: #949494;">"</span></span></span></code></pre></div>
+<p>But the HTML view strips them off when we pass it into the
+<code>kable()</code> function. <code><a href="../reference/replace_leading_whitespace.html">replace_leading_whitespace()</a></code>
+will take care of this for us by converting the spaces. Note that you’ll
+see the <code>&amp;nbsp;</code> in the raw data itself.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">row_label3</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.character</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="../reference/replace_leading_whitespace.html">replace_leading_whitespace</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
+<span><span class="co">#&gt;   row_label     row_label3                         var1_Placebo      </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Race n (%)    <span style="color: #949494;">""</span>                                 <span style="color: #949494;">""</span>                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> &amp;nbsp;&amp;nbsp;F <span style="color: #949494;">"</span>AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span>&amp;nbsp;0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> &amp;nbsp;&amp;nbsp;F <span style="color: #949494;">"</span>BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>&amp;nbsp;5 (  5.8%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> &amp;nbsp;&amp;nbsp;F <span style="color: #949494;">"</span>WHITE<span style="color: #949494;">"</span>                            <span style="color: #949494;">"</span>48 ( 55.8%)<span style="color: #949494;">"</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> &amp;nbsp;&amp;nbsp;M <span style="color: #949494;">"</span>AMERICAN INDIAN OR ALASKA NATIVE<span style="color: #949494;">"</span> <span style="color: #949494;">"</span>&amp;nbsp;0 (  0.0%)<span style="color: #949494;">"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> &amp;nbsp;&amp;nbsp;M <span style="color: #949494;">"</span>BLACK OR AFRICAN AMERICAN<span style="color: #949494;">"</span>        <span style="color: #949494;">"</span>&amp;nbsp;3 (  3.5%)<span style="color: #949494;">"</span></span></span></code></pre></div>
+<p>But now when we want to use this in a display, the
+<code>&amp;nbsp;</code> characters will show as leading whitespace
+within our HTML table. Note that you’ll need to prevent escaping special
+characters for this to work, or the raw text will display. In
+<code>kable()</code> you can use <code>escape=FALSE</code> do this.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/collapse_row_labels.html">collapse_row_labels</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">row_label1</span>, <span class="va">row_label2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">row_label</span>, <span class="va">row_label3</span>, <span class="va">var1_Placebo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.character</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="../reference/replace_leading_whitespace.html">replace_leading_whitespace</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span>escape<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">row_label</th>
+<th align="left">row_label3</th>
+<th align="left">var1_Placebo</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left"> 0 ( 0.0%)</td>
+</tr>
+<tr class="odd">
+<td align="left">  F</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left"> 5 ( 5.8%)</td>
+</tr>
+<tr class="even">
+<td align="left">  F</td>
+<td align="left">WHITE</td>
+<td align="left">48 ( 55.8%)</td>
+</tr>
+<tr class="odd">
+<td align="left">  M</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left"> 0 ( 0.0%)</td>
+</tr>
+<tr class="even">
+<td align="left">  M</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left"> 3 ( 3.5%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="conditional-formatting">Conditional Formatting<a class="anchor" aria-label="anchor" href="#conditional-formatting"></a>
 </h2>
 <p>In some circumstances, like <code><a href="../reference/add_total_row.html">add_total_row()</a></code>,
@@ -445,7 +865,7 @@ vector, so it can generally be used within the context of
 <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> like any other character modifying
 function. It will make a 1:1 replacement of values, so it will return a
 character vector of equal length. Let’s look at two examples.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">string</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" 0  (0.0%)"</span>, <span class="st">" 8  (9.3%)"</span>, <span class="st">"78 (90.7%)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/apply_conditional_format.html">apply_conditional_format</a></span><span class="op">(</span><span class="va">string</span>, <span class="fl">2</span>, <span class="va">x</span> <span class="op">==</span> <span class="fl">0</span>, <span class="st">" 0        "</span>, full_string<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
@@ -478,7 +898,7 @@ case, whatever value you provide as the replacement is used verbatim
 when the condition evaluates to <code>TRUE</code>. If this is set to
 false, the <strong>only the format group specified is replaced</strong>.
 For more context, let’s look at a third example.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/apply_conditional_format.html">apply_conditional_format</a></span><span class="op">(</span><span class="va">string</span>, <span class="fl">2</span>, <span class="va">x</span> <span class="op">&lt;</span> <span class="fl">1</span>, <span class="st">"(&lt;1%)"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] " 0   (&lt;1%)" " 8  (9.3%)" "78 (90.7%)"</span></span></code></pre></div>
 <p>In this example we target the percent field using format group 2, and
@@ -494,7 +914,7 @@ let’s look at the example dataset from earlier. Let’s say that we have
 <code>n (%)</code> values within the first count layer to conditional
 format. Using some fancy <strong>dplyr</strong> code, and
 <code><a href="../reference/apply_conditional_format.html">apply_conditional_format()</a></code>, we can make it happen.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat_new</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'var'</span><span class="op">)</span>,  <span class="co"># Apply to variables that start with `var`</span></span>
@@ -512,116 +932,246 @@ format. Using some fancy <strong>dplyr</strong> code, and
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="va">dat_new</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
-<col width="8%">
-<col width="22%">
-<col width="8%">
-<col width="17%">
-<col width="16%">
-<col width="10%">
-<col width="8%">
-<col width="8%">
+<col width="6%">
+<col width="6%">
+<col width="19%">
+<col width="7%">
+<col width="15%">
+<col width="14%">
+<col width="9%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>
 <th align="left">row_label2</th>
+<th align="left">row_label3</th>
 <th align="left">var1_Placebo</th>
 <th align="left">var1_Xanomeline High Dose</th>
 <th align="left">var1_Xanomeline Low Dose</th>
 <th align="right">ord_layer_index</th>
 <th align="right">ord_layer_1</th>
 <th align="right">ord_layer_2</th>
+<th align="right">ord_layer_3</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">Race n (%)</td>
+<td align="left">F</td>
+<td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">F</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">5 ( 5.8%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="left">6 ( 7.1%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Race n (%)</td>
+<td align="left">F</td>
+<td align="left">WHITE</td>
+<td align="left">48 ( 55.8%)</td>
+<td align="left">34 ( 40.5%)</td>
+<td align="left">44 ( 52.4%)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">M</td>
 <td align="left">AMERICAN INDIAN OR ALASKA NATIVE</td>
 <td align="left">0</td>
 <td align="left">1 ( 1.2%)</td>
 <td align="left">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">Race n (%)</td>
-<td align="left">BLACK OR AFRICAN AMERICAN</td>
-<td align="left">8 ( 9.3%)</td>
-<td align="left">9 ( 10.7%)</td>
-<td align="left">6 ( 7.1%)</td>
-<td align="right">1</td>
-<td align="right">1</td>
 <td align="right">2</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="left">Race n (%)</td>
+<td align="left">M</td>
+<td align="left">BLACK OR AFRICAN AMERICAN</td>
+<td align="left">3 ( 3.5%)</td>
+<td align="left">3 ( 3.6%)</td>
+<td align="left">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Race n (%)</td>
+<td align="left">M</td>
 <td align="left">WHITE</td>
-<td align="left">78 ( 90.7%)</td>
-<td align="left">74 ( 88.1%)</td>
-<td align="left">78 ( 92.9%)</td>
+<td align="left">30 ( 34.9%)</td>
+<td align="left">40 ( 47.6%)</td>
+<td align="left">34 ( 40.5%)</td>
 <td align="right">1</td>
 <td align="right">1</td>
+<td align="right">2</td>
 <td align="right">3</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Age (years)</td>
+<td align="left">F</td>
 <td align="left">n</td>
-<td align="left">86</td>
-<td align="left">84</td>
-<td align="left">84</td>
+<td align="left">53</td>
+<td align="left">40</td>
+<td align="left">50</td>
 <td align="right">2</td>
 <td align="right">1</td>
 <td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">F</td>
+<td align="left">Mean (SD)</td>
+<td align="left">76.4 ( 8.73)</td>
+<td align="left">74.7 ( 7.67)</td>
+<td align="left">75.7 ( 8.09)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="left">Age (years)</td>
-<td align="left">Mean (SD)</td>
-<td align="left">75.2 ( 8.59)</td>
-<td align="left">74.4 ( 7.89)</td>
-<td align="left">75.7 ( 8.29)</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">Age (years)</td>
+<td align="left">F</td>
 <td align="left">Median</td>
-<td align="left">76.0</td>
+<td align="left">78.0</td>
 <td align="left">76.0</td>
 <td align="left">77.5</td>
 <td align="right">2</td>
 <td align="right">1</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="left">Age (years)</td>
-<td align="left">Q1, Q3</td>
-<td align="left">69.2, 81.8</td>
-<td align="left">70.8, 80.0</td>
-<td align="left">71.0, 82.0</td>
-<td align="right">2</td>
 <td align="right">1</td>
-<td align="right">4</td>
+<td align="right">3</td>
 </tr>
 <tr class="even">
 <td align="left">Age (years)</td>
-<td align="left">Min, Max</td>
-<td align="left">52, 89</td>
-<td align="left">56, 88</td>
-<td align="left">51, 88</td>
+<td align="left">F</td>
+<td align="left">Q1, Q3</td>
+<td align="left">70.0, 84.0</td>
+<td align="left">72.0, 79.0</td>
+<td align="left">72.0, 81.0</td>
 <td align="right">2</td>
 <td align="right">1</td>
-<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
 </tr>
 <tr class="odd">
 <td align="left">Age (years)</td>
+<td align="left">F</td>
+<td align="left">Min, Max</td>
+<td align="left">59, 89</td>
+<td align="left">56, 88</td>
+<td align="left">54, 87</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">F</td>
 <td align="left">Missing</td>
 <td align="left">0</td>
 <td align="left">0</td>
 <td align="left">0</td>
 <td align="right">2</td>
 <td align="right">1</td>
+<td align="right">1</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">n</td>
+<td align="left">33</td>
+<td align="left">44</td>
+<td align="left">34</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">Mean (SD)</td>
+<td align="left">73.4 ( 8.15)</td>
+<td align="left">74.1 ( 8.16)</td>
+<td align="left">75.6 ( 8.69)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">Median</td>
+<td align="left">74.0</td>
+<td align="left">77.0</td>
+<td align="left">77.5</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">Q1, Q3</td>
+<td align="left">69.0, 80.0</td>
+<td align="left">69.0, 80.2</td>
+<td align="left">68.2, 82.0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">Min, Max</td>
+<td align="left">52, 85</td>
+<td align="left">56, 86</td>
+<td align="left">51, 88</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">Age (years)</td>
+<td align="left">M</td>
+<td align="left">Missing</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2</td>
 <td align="right">6</td>
 </tr>
 </tbody>
@@ -660,7 +1210,7 @@ post-processing step you can use the function
 <p><code><a href="../reference/str_extractors.html">str_extract_fmt_group()</a></code> allows you to reach within a
 result string and extract an individual format group. Consider this
 example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">string</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" 5  (5.8%)"</span>, <span class="st">" 8  (9.3%)"</span>, <span class="st">"78 (90.7%)"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the n counts</span></span>
@@ -677,8 +1227,8 @@ in the second group we extract all the percent counts, including the
 surround parentheses.</p>
 <p>In practice, <code><a href="../reference/str_extractors.html">str_extract_fmt_group()</a></code> can then be used to
 separate format groups into their own columns.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -746,9 +1296,9 @@ then the low dose group, and finally the placebo group.
 <strong>Tplyr</strong> doesn’t allow you to output these order variables
 by default, but getting these numbers is quite simple with
 <code><a href="../reference/str_extractors.html">str_extract_num()</a></code>. Let’s consider a simplified scenario</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/pop_data.html">set_pop_data</a></span><span class="op">(</span><span class="va">tplyr_adsl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/pop_treat_var.html">set_pop_treat_var</a></span><span class="op">(</span><span class="va">TRT01A</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_count</a></span><span class="op">(</span><span class="va">AEDECOD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -832,7 +1382,7 @@ by default, but getting these numbers is quite simple with
 of the event, using the number of subjects. That would be the first
 format group. And then we want to sort using high dose, then low dose,
 then placebo. Let’s create the order variables.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat_ord</span> <span class="op">&lt;-</span> <span class="va">dat</span>  <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">'var1'</span><span class="op">)</span>,</span>
@@ -869,7 +1419,7 @@ effectively with other packages and tools. <strong>Tplyr</strong>’s
 string formatting tools work quite well, so we’ve externalized this
 capability using the function <code><a href="../reference/apply_formats.html">apply_formats()</a></code>.</p>
 <p>As a basic example, let’s look at the <code>mtcars</code> data.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    new_column <span class="op">=</span> <span class="fu"><a href="../reference/apply_formats.html">apply_formats</a></span><span class="op">(</span><span class="st">"xx (xx.x)"</span>, <span class="va">gear</span>, <span class="va">mpg</span><span class="op">)</span></span>

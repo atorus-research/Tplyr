@@ -20,7 +20,7 @@ subset of data referenced by the tplyr_meta object associated with that
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,6 +106,7 @@ subset of data referenced by the tplyr_meta object associated with that
 <span>  <span class="va">column</span>,</span>
 <span>  add_cols <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span>,</span>
 <span>  target <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pop_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -138,6 +139,11 @@ string</p></dd>
 
 <dt>target</dt>
 <dd><p>A data frame to be subset (if not pulled from a Tplyr table)</p></dd>
+
+
+<dt>pop_data</dt>
+<dd><p>A data frame to be subset through an anti-join (if not pulled
+from a Tplyr table)</p></dd>
 
 </dl></div>
     <div class="section level2">

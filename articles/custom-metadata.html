@@ -44,7 +44,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -354,9 +354,9 @@ these fields as a list of quosures:</p>
 <span><span class="va">m</span></span>
 <span><span class="co">#&gt; tplyr_meta: 3 names, 3 filters</span></span>
 <span><span class="co">#&gt; Names:</span></span>
-<span><span class="co">#&gt;     a, b, c </span></span>
+<span><span class="co">#&gt;      a, b, c </span></span>
 <span><span class="co">#&gt; Filters:</span></span>
-<span><span class="co">#&gt;     a == 1, b == 2, c == 3</span></span></code></pre></div>
+<span><span class="co">#&gt;      a == 1, b == 2, c == 3</span></span></code></pre></div>
 <p>The <code><a href="../reference/tplyr_meta.html">tplyr_meta()</a></code> function can take these fields
 immediately upon creation. If you need to dynamically create a
 <code>tplyr_meta</code> object such as how <strong>Tplyr</strong>
@@ -371,9 +371,9 @@ available to extend an existing <code>tplyr_meta</code> object:</p>
 <span><span class="va">m</span></span>
 <span><span class="co">#&gt; tplyr_meta: 4 names, 4 filters</span></span>
 <span><span class="co">#&gt; Names:</span></span>
-<span><span class="co">#&gt;     a, b, c, x </span></span>
+<span><span class="co">#&gt;      a, b, c, x </span></span>
 <span><span class="co">#&gt; Filters:</span></span>
-<span><span class="co">#&gt;     a == 1, b == 2, c == 3, x == "a"</span></span></code></pre></div>
+<span><span class="co">#&gt;      a == 1, b == 2, c == 3, x == "a"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="building-your-own-metadata-table">Building your own metadata table<a class="anchor" aria-label="anchor" href="#building-your-own-metadata-table"></a>
@@ -447,6 +447,39 @@ format for the “x” to symbolize custom, and these data can be thought of
 as the fourth layer. That said, these values would typically be masked
 by the viewer of the table so they really just need to be unique - so
 you can choose whatever you want.</first></p>
+<div class="section level3">
+<h3 id="anti-joins">Anti-joins<a class="anchor" aria-label="anchor" href="#anti-joins"></a>
+</h3>
+<p>If the custom metadata you’re constructing requires references to
+data outside your target dataset, this is also possible with a
+<code>tplyr_meta</code> object. If you’re looking for non-overlap with
+the target dataset, you can use an anti-join. Anti-joins can be added to
+a <code>tplyr_meta</code> object using the <code><a href="../reference/add_anti_join.html">add_anti_join()</a></code>
+function.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">meta</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/add_anti_join.html">add_anti_join</a></span><span class="op">(</span></span>
+<span>    join_meta <span class="op">=</span> <span class="fu"><a href="../reference/tplyr_meta.html">tplyr_meta</a></span><span class="op">(</span></span>
+<span>      names <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">TRT01P</span>, <span class="va">EFFFL</span>, <span class="va">ITTFL</span>, <span class="va">SITEGR1</span><span class="op">)</span>,</span>
+<span>      filters <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">EFFFL</span> <span class="op">==</span> <span class="st">"Y"</span>, <span class="va">ITTFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    on <span class="op">=</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; tplyr_meta: 11 names, 5 filters</span></span>
+<span><span class="co">#&gt; Names:</span></span>
+<span><span class="co">#&gt;      TRTP, EFFFL, ITTFL, ANL01FL, SITEGR1, AVISIT, AVISITN, PARAMCD, AVAL, BASE, CHG </span></span>
+<span><span class="co">#&gt; Filters:</span></span>
+<span><span class="co">#&gt;      EFFFL == "Y", ITTFL == "Y", PARAMCD == "ACTOT", ANL01FL == "Y", AVISITN == 24 </span></span>
+<span><span class="co">#&gt; Anti-join:</span></span>
+<span><span class="co">#&gt;     Join Meta:</span></span>
+<span><span class="co">#&gt;         tplyr_meta: 4 names, 2 filters</span></span>
+<span><span class="co">#&gt;         Names:</span></span>
+<span><span class="co">#&gt;              TRT01P, EFFFL, ITTFL, SITEGR1 </span></span>
+<span><span class="co">#&gt;         Filters:</span></span>
+<span><span class="co">#&gt;              EFFFL == "Y", ITTFL == "Y" </span></span>
+<span><span class="co">#&gt;     On:</span></span>
+<span><span class="co">#&gt;         USUBJID</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="appending-existing-tplyr-metadata">Appending Existing <strong>Tplyr</strong> Metadata<a class="anchor" aria-label="anchor" href="#appending-existing-tplyr-metadata"></a>
@@ -455,13 +488,13 @@ you can choose whatever you want.</first></p>
 <strong>Tplyr</strong> metadata, let’s extend the existing data frame.
 To do this, <strong>Tplyr</strong> has the function
 <code><a href="../reference/append_metadata.html">append_metadata()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/append_metadata.html">append_metadata</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">eff_meta</span><span class="op">)</span></span></code></pre></div>
 <p>Behind the scenes, this function simply binds the new metadata with
 the old in the proper section of the <code>tplyr_table</code> object.
 You can view the the <code>tplyr_table</code> metadata with the function
 <code><a href="../reference/get_metadata.html">get_metadata()</a></code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 × 6</span></span></span>
 <span><span class="co">#&gt;    row_id row_label1              row_label2 var1_Placebo var1_Xanomeline High…¹</span></span>
@@ -486,7 +519,7 @@ You can view the the <code>tplyr_table</code> metadata with the function
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: `var1_Xanomeline Low Dose` &lt;list&gt;</span></span></span></code></pre></div>
 <p>Finally, as with the automatically created metadata from Tplyr, we
 can query these result cells just the same:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'x4_1'</span>, <span class="st">"var1_Xanomeline High Dose"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -615,8 +648,8 @@ metadata functions outside of <strong>Tplyr</strong> in general. As
 such, there are S3 methods available to query metadata from a dataframe
 instead of a <strong>Tplyr</strong> table, and parameters to provide
 your own target data frame:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">eff_meta</span>, <span class="st">'x4_1'</span>, <span class="st">"var1_Xanomeline High Dose"</span>, target<span class="op">=</span><span class="va">adas</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_meta_subset.html">get_meta_subset</a></span><span class="op">(</span><span class="va">eff_meta</span>, <span class="st">'x4_1'</span>, <span class="st">"var1_Xanomeline High Dose"</span>, target<span class="op">=</span><span class="va">tplyr_adas</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">

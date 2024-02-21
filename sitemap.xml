@@ -82,7 +82,13 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/Tplyr.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/add_anti_join.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/add_column_headers.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/add_missing_subjects_row.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/add_risk_diff.html</loc>
@@ -109,7 +115,13 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/by.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/collapse_row_labels.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/f_str.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/get_data_labels.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/get_meta_result.html</loc>
@@ -184,6 +196,9 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/process_summaries.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/replace_leading_whitespace.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.html</loc>
   </url>
   <url>
@@ -205,7 +220,13 @@
     <loc>https://atorus-research.github.io/Tplyr/reference/set_indentation.html</loc>
   </url>
   <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/set_limit_data_by.html</loc>
+  </url>
+  <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/set_missing_count.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/set_missing_subjects_row_label.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/set_nest_count.html</loc>
@@ -236,6 +257,21 @@
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/target_var.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_adae.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_adas.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_adlb.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_adpe.html</loc>
+  </url>
+  <url>
+    <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_adsl.html</loc>
   </url>
   <url>
     <loc>https://atorus-research.github.io/Tplyr/reference/tplyr_layer.html</loc>
