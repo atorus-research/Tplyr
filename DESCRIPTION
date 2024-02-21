@@ -43,7 +43,7 @@ Authors@R:
     )
 Description: A traceability focused tool created to simplify the data manipulation necessary to create clinical summaries.
 License: MIT + file LICENSE
-URL: https://github.com/atorus-research/Tplyr
+URL: https://atorus-research.github.io/Tplyr/, https://github.com/atorus-research/Tplyr
 BugReports: https://github.com/atorus-research/Tplyr/issues
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
