@@ -22,3 +22,6 @@
 ^Makefile$
 ^Jenkinsfile$
 ^rsconnect$
+^data-raw$
+^scratch.R$
+^CRAN-SUBMISSION$

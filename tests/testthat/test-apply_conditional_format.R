@@ -4,17 +4,17 @@ test_string2 <- c(" 0 ( 0.0%)", " 8 ( 9.3%)", "78 (90.7%) [ 5]", "12", "Howdy ya
 test_that("Test input validation and warning generation", {
   expect_error(
     apply_conditional_format(c(1), 2, x == 0, "(<1%)", full_string=TRUE),
-     "Paramter `string`"
+     "Parameter `string`"
   )
 
   expect_error(
     apply_conditional_format(test_string1, "bad", x == 0, "(<1%)", full_string=TRUE),
-    "Paramter `format_group`"
+    "Parameter `format_group`"
   )
 
   expect_error(
     apply_conditional_format(test_string1, 1.1, x == 0, "(<1%)", full_string=TRUE),
-    "Paramter `format_group`"
+    "Parameter `format_group`"
   )
 
   expect_error(
@@ -24,12 +24,12 @@ test_that("Test input validation and warning generation", {
 
   expect_error(
     apply_conditional_format(test_string1, 2, x == 0, 1, full_string=TRUE),
-    "Paramter `replacement"
+    "Parameter `replacement"
   )
 
   expect_error(
     apply_conditional_format(test_string1, 2, x == 0, "(<1%)", full_string="TRUE"),
-    "Paramter `full_string`"
+    "Parameter `full_string`"
   )
 
   expect_warning(

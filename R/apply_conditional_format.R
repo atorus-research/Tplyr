@@ -11,15 +11,15 @@
 #' @noRd
 validate_conditional_format_params <- function(string, format_group, condition, replacement, full_string) {
   if (!inherits(string, "character")) {
-    stop("Paramter `string` must be a character vector", call.=FALSE)
+    stop("Parameter `string` must be a character vector", call.=FALSE)
   }
 
   if (!inherits(format_group, "numeric") || (inherits(format_group, "numeric") && format_group %% 1 != 0)) {
-    stop("Paramter `format_group` must be an integer", call.=FALSE)
+    stop("Parameter `format_group` must be an integer", call.=FALSE)
   }
 
   if (!inherits(replacement, "character")) {
-    stop("Paramter `replacement` must be a string", call.=FALSE)
+    stop("Parameter `replacement` must be a string", call.=FALSE)
   }
 
   # Condition statement must use the variable name 'x'
@@ -28,7 +28,7 @@ validate_conditional_format_params <- function(string, format_group, condition, 
   }
 
   if (!inherits(full_string, "logical")) {
-    stop("Paramter `full_string` must be bool", call.=FALSE)
+    stop("Parameter `full_string` must be bool", call.=FALSE)
   }
 
 }

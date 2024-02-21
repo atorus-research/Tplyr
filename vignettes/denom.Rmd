@@ -20,9 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr, warn.conflicts = FALSE)
 library(knitr)
-load("adsl.Rdata")
-load("adae.Rdata")
-load("adlb.Rdata")
 ```
 
 Counting is pretty easy, right? There's not all that much to it. With a few considerations we can cover most of the scenarios that users will encounter while using Tplyr. Denominators, on the other hand, get *_a lot_* more complicated. Why? Because there are a lot of ways to do it. What values do we exclude from the denominator? What variables establish denominator grouping? Does the denominator use a different filter than the values being counted? If you've programmed enough of these tables, you know that it's all very situational. 
@@ -40,7 +37,7 @@ For this reason,**Tplyr** allows lets you set a separate population dataset - bu
 Consider these two examples.
 
 ```{r}
-tplyr_table(adae, TRTA) %>% 
+tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       set_distinct_by(USUBJID) %>% 
@@ -52,8 +49,8 @@ tplyr_table(adae, TRTA) %>%
 ```
 
 ```{r}
-tplyr_table(adae, TRTA) %>% 
-  set_pop_data(adsl) %>%
+tplyr_table(tplyr_adae, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>%
   set_pop_treat_var(TRT01A) %>%
   add_layer(
     group_count(AEDECOD) %>% 
@@ -84,10 +81,10 @@ When you're looking within a single dataset, there are a couple factors that you
 Most of the complexity of denominators comes from nuanced situations. A solid 80% of the time, defaults will work. For example, in a frequency table, you will typically want data within a column to sum to 100%. For example:
 
 ```{r}
-adsl <- adsl %>% 
+tplyr_adsl <- tplyr_adsl %>% 
   mutate(DCSREAS = ifelse(DCSREAS == '', 'Completed', DCSREAS))
          
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(DCSREAS)
   ) %>% 
@@ -97,7 +94,7 @@ tplyr_table(adsl, TRT01P) %>%
 By default, when not using the population data strategy shown above, a count layer assumes that you want columns to sum to 100%. But that's not always the case. Perhaps you'd like to break this summary down by sex presented row-wise.
 
 ```{r}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(DCSREAS, by=SEX)
   ) %>% 
@@ -108,7 +105,7 @@ tplyr_table(adsl, TRT01P) %>%
 Ok - so, now this is a little bit off. By breaking sex down as a row group, the denominators are still the total treatment group. Does that make sense? 34 female Placebo group subjects completed, but that calculated 39.5% also includes male subjects in the denominator. Let's fix this using `set_denoms_by()`.
 
 ```{r}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(DCSREAS, by=SEX) %>% 
       set_denoms_by(SEX, TRT01P)
@@ -130,7 +127,7 @@ Depending on your presentation, what you require may change - but the flexibilit
 A major part of the shift API is the control of the denominators used in the calculation of the percentages. In shift tables, most percentages are relative to the "box" that is formed from the "from" and "to" groups of the shift for each treatment group. Just like the count layers, the `set_denoms_by()` functions any variable name from the treatment variable, `cols` argument, `by` variables. The difference with shift layers is that now you can also include your target variables used for the row or column.
 
 ```{r} 
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
       set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
@@ -146,7 +143,7 @@ In the example above, the denominators were based on the by and treatment variab
 In the next example, the percentage denominators are calculated row-wise, each row percentage sums to 100%. 
 
 ```{r}
-tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
       set_format_strings(f_str("xx (xxx.x%)", n, pct)) %>%
@@ -161,7 +158,7 @@ tplyr_table(adlb, TRTA, where=PARAMCD == "CK") %>%
 While not practical, in this last example the denominators are changed to be based on the entire column instead of the 3 x 3 box. By passing the column variables, `TRTA` and `ANRIND` the layer will use those denominators when determining the percentages. 
 
 ```{r}
-tplyr_table(adlb, TRTA, where = PARAMCD == "CK") %>%
+tplyr_table(tplyr_adlb, TRTA, where = PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
       set_format_strings(f_str("xx (xx.xx%)", n, pct)) %>%
@@ -188,10 +185,10 @@ So let's take the example shown below. The first layer has no layer level filter
 The third layer has a layer level filter applied, but additionally uses `set_denom_where()`. The `set_denom_where()` in this example is actually *removing* the layer level filter for the denominators. This is because in R, when you filter using `TRUE`, the filter returns all records. So by using `TRUE` in `set_denom_where()`, the layer level filter is effectively removed. This causes the denominator to include all values available from the table and not just those selected for that layer - so for this layer, the percentages will *not add up to 100%*. This is important - this allows the percentages from Layer 3 to sum to the total percentage of "DISCONTINUED" from Layer 1. 
 
 ```{r}
-adsl2 <- adsl %>% 
+tplyr_adsl2 <- tplyr_adsl %>% 
   mutate(DISCONTEXT = if_else(DISCONFL == 'Y', 'DISCONTINUED', 'COMPLETED'))
 
-t <- tplyr_table(adsl2, TRT01P, where = SAFFL == 'Y') %>%
+t <- tplyr_table(tplyr_adsl2, TRT01P, where = SAFFL == 'Y') %>%
   add_layer(
     group_count(DISCONTEXT)
   ) %>%
@@ -218,10 +215,10 @@ The `set_missing_count()` function can take a new `f_str()` object to set the di
 In the example below 50 random values are removed and NA is specified as the missing string. This leads us to another parameter - `denom_ignore`. By default, if you specify missing values they will still be considered within the denominator, but when you have missing counts, you may wish to exclude them from the totals being summarized. By setting `denom_ignore` to TRUE, your denominators will ignore any groups of missing values that you've specified. 
 
 ```{r}
-adae2 <- adae
-adae2[sample(nrow(adae2), 50), "AESEV"] <- NA
+tplyr_adae2 <- tplyr_adae
+tplyr_adae2[sample(nrow(tplyr_adae2), 50), "AESEV"] <- NA
 
-t <- tplyr_table(adae2, TRTA) %>%
+t <- tplyr_table(tplyr_adae2, TRTA) %>%
   add_layer(
     group_count(AESEV) %>%
       set_format_strings(f_str("xxx (xx.xx%)", n, pct)) %>%
@@ -235,6 +232,32 @@ t %>%
 ```
 
 We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you'll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.
+
+## Missing Subjects
+
+Missing counts and counting missing subjects work two different ways within Tplyr. Missing counts, as described above, will examine the records present in the data and collect and missing values. But for these results to be counted, they need to first be provided within the input data itself. On the other hand, missing subjects are calculated by looking at the difference between the potential number of subjects within the column (i.e. the combination of the treatment variables and column variables) and the number of subjects actually present. Consider this example:
+
+```{r missing_subs1}
+  missing_subs <- tplyr_table(tplyr_adae, TRTA) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_nest_count(TRUE) %>% 
+        set_distinct_by(USUBJID) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf) %>% 
+        set_missing_subjects_row_label("Missing Subjects")
+    ) %>%
+    build()
+
+  tail(missing_subs) %>% 
+    select(-starts_with('ord')) %>% 
+    kable()
+```
+
+In the example above, we produce a nested count layer. The function `add_missing_subjects_row()` triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default to 'Missing'. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. Lastly, you can provide an `f_str()` to format the missing subjects row separately from the rest of the layer, but whatever format is applied to the layer will apply otherwise.
+
+Note that in nested count layers, missing subject rows will generate for each independent group within the outer layer. Outer layers cannot have missing subject rows calculated individually. This would best be done in an independent layer itself, as the result would apply to the whole input target dataset. 
 
 ## Adding a 'Total' Row
 
@@ -250,10 +273,10 @@ More nuance comes in two places:
 In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator that was used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into **Tplyr**.
 
 ```{r}
-adsl2 <- adsl
-adsl2[sample(nrow(adsl2), 50), "AGEGR1"] <- NA
+tplyr_adsl2 <- tplyr_adsl
+tplyr_adsl2[sample(nrow(tplyr_adsl2), 50), "AGEGR1"] <- NA
 
-tplyr_table(adsl2, TRT01P) %>% 
+tplyr_table(tplyr_adsl2, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by=SEX) %>% 
       set_denoms_by(TRT01P, SEX) %>%  # This gives me a Total row each group
@@ -270,7 +293,7 @@ The default text for the Total row is "Total", but we provide `set_total_row_lab
 Let's look at a more practical version of the table above. If you display missings, you probably want to exclude them from the total. Here we do that using `set_missing_count()`.  So more commonly, you'll see this:
 
 ```{r}
-tplyr_table(adsl2, TRT01P) %>% 
+tplyr_table(tplyr_adsl2, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by=SEX) %>% 
       set_denoms_by(TRT01P, SEX) %>%  # This gives me a Total row each group

@@ -21,9 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
-load("adlb.Rdata")
 op <- options()
 ```
 
@@ -67,7 +64,7 @@ options(
 Here you can see that **Tplyr** picks up these option changes. In the table below, we didn't use `set_format_strings()` anywhere - instead we let **Tplyr** pick up the default formats from the options.
 
 ```{r default_formats2}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
@@ -88,7 +85,7 @@ One important thing to understand about how these options work in particular is 
 To demonstrate, consider the following. The **Tplyr** options remain set from the block above.
 
 ```{r scoping1}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   set_count_layer_formats(n_counts = f_str("xx (xxx%)", n, pct)) %>% 
   set_desc_layer_formats("Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd)) %>% 
   add_layer(
@@ -124,7 +121,7 @@ options(tplyr.precision_cap = c('int'=2, 'dec'=2))
 Similar to the layer defaults, setting a precision cap at the layer level will override the `tplyr.precision_cap` option.
 
 ```{r precision_cap2}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(HEIGHTBL, by = "Height at Baseline") %>% 
       set_format_strings(
@@ -166,7 +163,7 @@ Note that the table code used to produce the output is the same. Now **Tplyr** u
 Now that geometric mean is set within the **Tplyr** options, you can use it within your descriptive statistics layers, just like it was one of the built-in summaries.
 
 ```{r custom_summaries2}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE) %>% 
       set_format_strings('Geometric Mean' = f_str('xx.xx', geometric_mean))
@@ -203,7 +200,7 @@ options(op)
 
 ```{r scipen2}
 options(tplyr.scipen = -3)
-t <- tplyr_table(adae, TRTA) %>% 
+t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
       add_risk_diff(c('Xanomeline Low Dose', 'Placebo'))
@@ -232,7 +229,7 @@ $$
 The example below demonstrates using the default quantile algorithm in R
 
 ```{r quantile1}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
       set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
@@ -251,7 +248,7 @@ $$
 ```{r quantile2}
 options(tplyr.quantile_type = 3)
 
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
       set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))

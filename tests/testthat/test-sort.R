@@ -264,3 +264,39 @@ test_that("by variables get sorted with varn/factors in the correct order", {
   expect_equal(t3[["row_label1"]], c("1", "1", "1", "0", "0", "0"))
   expect_equal(t3[["ord_layer_1"]], c(1, 1, 1, 2, 2, 2))
 })
+
+
+# Added to address #175
+test_that("Nested counts with by variables process properly", {
+
+  t_ae1 <- tplyr_table(tplyr_adae, TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD), by = vars(AESEV, AEOUT))
+      %>%
+        set_order_count_method("bycount") %>%
+        set_ordering_cols("Xanomeline High Dose") %>%
+        set_result_order_var(distinct_n)
+    )
+
+  t_ae_df1 <- t_ae1 %>%
+    build()
+
+  # This is verifying that the right number of combinations of row_labels exist, and that
+  # there aren't duplicate order values for the outer layer
+  expect_equal(nrow(dplyr::count(t_ae_df1, row_label2, row_label3, ord_layer_3)), 6)
+
+  t_ae2 <- tplyr_table(tplyr_adae, TRTA) %>%
+    add_layer(
+      group_count(vars("testing", AEDECOD), by=AEOUT) %>%
+        set_order_count_method("bycount") %>%
+        set_ordering_cols("Xanomeline High Dose") %>%
+        set_result_order_var(distinct_n)
+    )
+
+  t_ae_df2 <- t_ae2 %>%
+    build()
+
+  # Same test but now working with a text outer layer and one by variable
+  expect_equal(nrow(dplyr::count(t_ae_df2, row_label2, ord_layer_2)), 2)
+
+})

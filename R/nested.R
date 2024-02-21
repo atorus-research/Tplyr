@@ -8,14 +8,6 @@ process_nested_count_target <- function(x) {
     assert_that(quo_is_symbol(target_var[[2]]),
                 msg = "Inner layers must be data driven variables")
 
-    if(quo_is_symbol(target_var[[1]])){
-      first_var_length <- length(unique(target[[as_name(target_var[[1]])]]))
-      second_var_length <- length(unique(target[[as_name(target_var[[2]])]]))
-
-      assert_that(second_var_length >= first_var_length,
-                  msg = "The number of values of your second variable must be greater than the number of levels in your first variable")
-    }
-
     if(is.factor(target[[as_name(target_var[[1]])]])) {
       warning(paste0("Factors are not currently supported in nested count layers",
                      " that have two data driven variables. Factors will be coerced into character vectors"),
@@ -40,9 +32,15 @@ process_nested_count_target <- function(x) {
       second_denoms_by <- denoms_by
     }
 
-    first_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[1]],
-                                                 by = vars(!!!by), where = !!where))
+    # Missing subject counts should not occur in the outer layer
+    fl <- group_count(current_env(), target_var = !!target_var[[1]],
+                      by = vars(!!!by), where = !!where)
+    fl$include_missing_subjects_row <- FALSE
+    outer_ <- TRUE
+    first_layer <- process_summaries(fl)
 
+
+    outer_ <- FALSE
     second_layer <- process_summaries(group_count(current_env(), target_var = !!target_var[[2]],
                                                   by = vars(!!target_var[[1]], !!!by), where = !!where) %>%
                                         set_count_row_prefix(indentation) %>%
@@ -58,7 +56,8 @@ process_nested_count_target <- function(x) {
         treat_var = treat_var
       ) %>%
       group_by(!!target_var[[1]]) %>%
-      do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation))
+      do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation,
+                                   missing_subjects_row_label))
 
     ignored_filter_rows <- ifelse(include_total_row,
                                   ifelse(is.null(total_row_label),
@@ -93,7 +92,8 @@ process_nested_count_target <- function(x) {
 #' This function is meant to remove the values of an inner layer that don't
 #' appear in the target data
 #' @noRd
-filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation) {
+filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation,
+                                      missing_subjects_row_label) {
 
   # Is outer variable text? If it is don't filter on it
   text_outer <- !quo_is_symbol(outer_name)
@@ -116,8 +116,12 @@ filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, in
       filter(!!sym(outer_name) == current_outer_value) %>%
       select(any_of(inner_name)) %>%
       unlist() %>%
-      paste0(indentation, .)
+      paste0(indentation, .) %>%
+      unique()
   }
+
+  target_inner_values <- c(target_inner_values %>% unique(),
+                           paste0(indentation, missing_subjects_row_label))
 
   .group %>%
     filter(summary_var %in% target_inner_values)

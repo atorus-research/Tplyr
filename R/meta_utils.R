@@ -54,7 +54,7 @@ get_meta_result <- function(x, row_id, column, ...) {
 get_meta_result.tplyr_table <- function(x, row_id, column, ...) {
   m <- x$metadata
 
-  get_meta_result.data.frame(m, row_id, column)
+  get_meta_result.data.frame(m, row_id, column, ...)
 }
 
 #' @export
@@ -67,6 +67,10 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
   if (!inherits(column, 'character') || !(column %in% names(x))) {
     stop(paste0('column must provided as a character string and a valid result ',
                 'column present in the built Tplyr dataframe'), call.=FALSE)
+  }
+
+  if (length(list(...)) > 0) {
+    warning("Extra arguments were provided to get_meta_result() that will not be used.", immediate.=TRUE)
   }
 
   # Pull out the cell of interest
@@ -109,6 +113,8 @@ get_meta_result.data.frame <- function(x, row_id, column, ...) {
 #' @param column The result column of interest, provided as a character string
 #' @param add_cols  Additional columns to include in subset data.frame output
 #' @param target A data frame to be subset (if not pulled from a Tplyr table)
+#' @param pop_data A data frame to be subset through an anti-join (if not pulled
+#'   from a Tplyr table)
 #' @param ... additional arguments
 #'
 #' @return A data.frame
@@ -139,7 +145,8 @@ get_meta_subset <- function(x, row_id, column, add_cols = vars(USUBJID), ...) {
 #' @export
 #' @rdname get_meta_subset
 get_meta_subset.data.frame <- function(x, row_id, column,
-                                       add_cols = vars(USUBJID), target = NULL, ...) {
+                                       add_cols = vars(USUBJID),
+                                       target = NULL, pop_data = NULL, ...) {
   # Get the metadata object ready
   m <- get_meta_result(x, row_id, column)
 
@@ -152,9 +159,33 @@ get_meta_subset.data.frame <- function(x, row_id, column,
     stop("If querying metadata without a tplyr_table, a target must be provided", call.=FALSE)
   }
 
-  target %>%
+  if (length(list(...)) > 0) {
+    warning("Extra arguments were provided to get_meta_subset() that will not be used.", immediate.=TRUE)
+  }
+
+  out <- target %>%
     filter(!!!m$filters) %>%
     select(!!!add_cols, !!!m$names)
+
+  if (!is.null(m$anti_join)) {
+    aj <- m$anti_join
+    pd <- pop_data %>%
+      filter(!!!aj$join_meta$filters) %>%
+      select(!!!aj$on, !!!add_cols, !!!aj$join_meta$names)
+
+    mrg_var <- map_chr(aj$on, as_name)
+    names(mrg_var) <- mrg_var
+
+    if (!(mrg_var %in% names(pd)) | !(mrg_var %in% names(out))) {
+      stop(paste0(
+        "The `on` variable specified is missing from either the target data or the population data subsets.\n  ",
+        "Try adding the `on` variables to the `add_cols` parameter")
+      )
+    }
+    out <- anti_join(pd, out, by=mrg_var)
+  }
+
+  out
 }
 
 #' @export
@@ -164,13 +195,7 @@ get_meta_subset.tplyr_table <- function(x, row_id, column, add_cols = vars(USUBJ
   # Get the metadata object ready
   m <- get_meta_result(x, row_id, column)
 
-  if (!inherits(add_cols, 'quosures')) {
-    stop("add_cols must be provided using `dplyr::vars()`", call.=FALSE)
-  }
-
-  # Subset and return the data
-  x$target %>%
-    filter(!!!m$filters) %>%
-    select(!!!add_cols, !!!m$names)
+  get_meta_subset(x$metadata, row_id, column, add_cols = add_cols,
+                  target = x$target, pop_data = x$pop_data)
 }
 

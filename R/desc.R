@@ -49,16 +49,16 @@ process_summaries.desc_layer <- function(x, ...) {
       summaries <- get_summaries()[match_exact(summary_vars)]
 
       # Create the numeric summary data
-      num_sums_raw[[i]] <- built_target %>%
+      cmplt1 <- built_target %>%
         # Rename the current variable to make each iteration use a generic name
         rename(.var = !!cur_var) %>%
         # Group by treatment, provided by variable, and provided column variables
         group_by(!!treat_var, !!!by, !!!cols) %>%
         # Execute the summaries
         summarize(!!!summaries) %>%
-        ungroup() %>%
-        # Fill in any missing treat/col combinations
-        complete(!!treat_var, !!!by, !!!cols)
+        ungroup()
+
+      num_sums_raw[[i]] <- complete_and_limit(cmplt1, treat_var, by, cols, limit_data_by=limit_data_by)
 
       # Create the transposed summary data to prepare for formatting
       trans_sums[[i]] <- num_sums_raw[[i]] %>%
@@ -188,6 +188,9 @@ process_formatting.desc_layer <- function(x, ...) {
   env_get(x, "formatted_data")
 }
 
+# Small helper function to help with builtins
+inf_to_na <- function(x) if_else(is.infinite(x), NA, x)
+
 #' Get the summaries to be passed forward into \code{dplyr::summarize()}
 #'
 #' @param e the environment summaries are stored in.
@@ -203,8 +206,8 @@ get_summaries <- function(e = caller_env()) {
     sd      = sd(.var, na.rm=TRUE),
     median  = median(.var, na.rm=TRUE),
     var     = var(.var, na.rm=TRUE),
-    min     = min(.var, na.rm=TRUE),
-    max     = max(.var, na.rm=TRUE),
+    min     = inf_to_na(min(.var, na.rm=TRUE)),
+    max     = inf_to_na(max(.var, na.rm=TRUE)),
     iqr     = IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')),
     q1      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[2]],
     q3      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[4]],
@@ -225,7 +228,7 @@ get_summaries <- function(e = caller_env()) {
 #' @noRd
 construct_desc_string <- function(..., .fmt_str=NULL) {
   # Unpack names into current namespace for ease
-  list2env(list(...), envir=environment())
+  list2env(list2(...), envir=environment())
 
   # Get the current format to be applied
   fmt <- .fmt_str[[row_label]]

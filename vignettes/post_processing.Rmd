@@ -20,8 +20,6 @@ knitr::opts_chunk$set(
 library(Tplyr)
 library(dplyr)
 library(knitr)
-load('adsl.Rdata')
-load('adae.Rdata')
 ```
 
 We've made a large effort to make **Tplyr** tables flexible, but not everything can (or, in some cases, we think should) be handled during table construction itself. To address this, **Tplyr** has several post-processing functions that help put finishing touches on your data to help with presentation.
@@ -58,7 +56,7 @@ _Note: We're viewing the data frame output here because HTML based outputs elimi
 Row masking is the process blanking of repeat row values within a data frame to give the appearance of grouping variables. Some table packages, such as [**gt**](https://gt.rstudio.com/), will handle this for you. Other packages, like [**huxtable**](https://hughjonesd.github.io/huxtable/), have options like merging cells, but this may be a more simplistic approach. Furthermore, this is a common approach in clinical tables when data validation is done on an output dataframe. 
 
 ```{r row_mask1}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
   ) %>% 
@@ -79,7 +77,7 @@ dat %>%
 A second feature of `apply_row_masks()` is the ability to apply row breaks between different groups of data, for example, different layers of a table.
 
 ```{r row_masks3}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
   ) %>% 
@@ -99,6 +97,82 @@ There are a few considerations when using `apply_row_masks()`:
 
 - This function is order dependent, so make sure your data are sorted before submitting to `apply_row_masks()`
 - When inserting row breaks, by default the Tpylr variable `ord_layer_index` is used. You can submit other variables via the ellipsis parameter (`...`) if you'd like to use a different variable grouping to insert rows
+
+## Collapsing Row Labels
+
+Different table formats call for different handling of row labels, depending on the preferences of an individual organization and the specifics of the table at hand. **Tplyr** inherently creates row labels as separate columns, but similar to the way that count layers nest the inner and the outer layer, we also offer the `collapse_row_labels()` function to pull multiple row labels into a single column. 
+
+```{r collapse_row_labels}
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_count(RACE, by = vars("Race n (%)", SEX))
+  ) %>% 
+  add_layer(
+    group_desc(AGE, by = vars("Age (years)", SEX))
+  ) %>% 
+  build()
+
+collapse_row_labels(dat, row_label1, row_label2, row_label3) %>% 
+  select(row_label, var1_Placebo)
+```
+By default, indentation is set to 2 spaces, but by using the `indent` parameter you can change this to any string you desire.
+
+```{r collapse_row_labels2}
+collapse_row_labels(dat, row_label1, row_label2, row_label3, indent = "&nbsp;&nbsp;") %>% 
+  select(row_label, var1_Placebo) %>% 
+  kable(escape=FALSE)
+```
+You also have control over which columns you collapse, allowing you to keep separate row labels if you don't want all collapsed together
+
+```{r collapse_row_labels3} 
+collapse_row_labels(dat, row_label1, row_label2, indent = "&nbsp;&nbsp;") %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  head() %>% 
+  kable()
+```
+
+## Leading Spaces in HTML Files
+
+Another helper function we've made available is `replace_leading_whitespace()`. In the table created above, note that the `indent` parameter was set using `&nbsp;`, which is a non-breaking space. This can be used in HTML files to preserve leading white spaces instead of automatically stripping them in the display, as viewing utilities usually do. Ever noticed that in your data viewers you typically don't see leading spaces? Yeah - that's why!
+
+Let's take the example from above and not change the `indent` parameter.
+
+```{r replace_leading_whitespace1}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  kable()
+```
+
+In indented rows, the spaces still exist, and we can see that in the dataframe output itself.
+
+```{r replace_leading_whitespace2}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  head()
+```
+
+But the HTML view strips them off when we pass it into the `kable()` function. `replace_leading_whitespace()` will take care of this for us by converting the spaces. Note that you'll see the `&nbsp;` in the raw data itself.
+
+```{r replace_leading_whitespace3}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  mutate(
+    across(where(is.character), ~ replace_leading_whitespace(.))
+  ) %>% 
+  head()
+```
+
+But now when we want to use this in a display, the `&nbsp;` characters will show as leading whitespace within our HTML table. Note that you'll need to prevent escaping special characters for this to work, or the raw text will display. In `kable()` you can use `escape=FALSE` do this.
+
+```{r replace_leading_whitespace4}
+collapse_row_labels(dat, row_label1, row_label2) %>% 
+  select(row_label, row_label3, var1_Placebo) %>% 
+  mutate(
+    across(where(is.character), ~ replace_leading_whitespace(.))
+  ) %>% 
+  head() %>% 
+  kable(escape=FALSE)
+```
 
 ## Conditional Formatting
 
@@ -177,7 +251,7 @@ In the first call to `str_extract_fmt_group()`, we target the n counts. The firs
 In practice, `str_extract_fmt_group()` can then be used to separate format groups into their own columns.
 
 ```{r fmt_group2}
-dat <- tplyr_table(adsl, TRT01P) %>% 
+dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE)
   ) %>% 
@@ -204,8 +278,8 @@ In very much the same vein as `str_extract_fmt_group()`, the function `str_extra
 Consider an adverse event table. In `vignette("sort")` we go over circumstances where you may want to sort by the descending occurrence of a result. We've received questions about how to establish tie breakers in this scenario, where ties should be broken sorting descending occurrence of an adverse event within the high dose group, then the low dose group, and finally the placebo group. **Tplyr** doesn't allow you to output these order variables by default, but getting these numbers is quite simple with `str_extract_num()`. Let's consider a simplified scenario
 
 ```{r num1}
-dat <- tplyr_table(adae, TRTA) %>% 
-  set_pop_data(adsl) %>% 
+dat <- tplyr_table(tplyr_adae, TRTA) %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   add_layer(
     group_count(AEDECOD) %>% 

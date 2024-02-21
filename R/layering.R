@@ -74,10 +74,10 @@ add_layer <- function(parent, layer, name=NULL) {
 
   # Insert the `parent` argument into the topmost call of the layer code
   # (i.e. if any pipes %>% then pull out the left most call and modify it)
-  l <- modify_nested_call(layer, parent=parent)
+  l <- quo_get_expr(modify_nested_call(layer, parent=parent))
 
   # Evaluate the layer and grab `tplyr_layer` or `tplyr_subgroup_layer` object
-  executed_layer <- list(eval(quo_get_expr(l)))
+  executed_layer <- list(eval(l, envir=caller_env()))
 
   # Attach the name
   names(executed_layer) <- name
@@ -100,10 +100,10 @@ add_layers <- function(parent, ...) {
   # Parent exists
   assert_that(!missing(parent), msg = "`parent` parameter must be provided")
   # all objects are Tplyr layers
-  map(list(...), assert_is_layer)
+  map(list2(...), assert_is_layer)
 
   # Insert the layer into the parent object
-  parent$layers <- append(parent$layers, list(...))
+  parent$layers <- append(parent$layers, list2(...))
   parent
 }
 

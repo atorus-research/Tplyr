@@ -1,17 +1,17 @@
 #' @importFrom rlang env enquo enquos caller_env abort inform is_quosure quo_get_expr quo_is_null env_get env_bind env_has quo_is_missing quos enexprs
-#' @importFrom rlang call_modify call_standardise call_name call_args is_call current_env quo_name trace_back is_function
+#' @importFrom rlang call_modify call_name call_args is_call current_env quo_name trace_back is_function list2
 #' @importFrom rlang expr exprs enexprs enexpr is_named env_parent env_label is_logical is_empty is_quosures quo_is_symbol sym syms := as_name
 #' @importFrom rlang quos quo env_names env_bind_active as_label eval_tidy warn quo_is_call
-#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim str_wrap
-#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr walk
-#' @importFrom stringr str_sub str_sub<- str_extract str_pad str_starts str_remove_all str_match_all
+#' @importFrom stringr str_split str_extract_all regex str_detect str_replace_all str_replace str_locate_all fixed str_count str_trim str_wrap str_count
+#' @importFrom purrr flatten map map_lgl pmap_chr imap reduce map_chr map_int map_dbl map_dfr pmap_dfr walk2 map2 map2_dfr map2_chr walk
+#' @importFrom stringr str_sub str_sub<- str_extract str_pad str_starts str_remove_all str_match_all str_match
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract extract2
 #' @importFrom assertthat assert_that
 #' @importFrom stats IQR median sd quantile var
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join row_number between mutate_if
-#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches
+#' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc count
 #' @importFrom tidyr complete nesting pivot_wider pivot_longer replace_na starts_with fill
 #' @importFrom utils str head tail
 #' @importFrom tidyselect all_of vars_select any_of
@@ -199,7 +199,6 @@ display_string <- NULL
 built_target <- NULL
 table_where <- NULL
 distinct_by <- NULL
-distinct_stat <- NULL
 summary_vars <- NULL
 trans_vars <- NULL
 stat <- NULL
@@ -277,7 +276,6 @@ missing_sort_value <- NULL
 missing_index <- NULL
 total_index <- NULL
 process_distinct_total <- FALSE
-total_stat_denom <- NULL
 denom_where <- NULL
 built_target_pre_where <- NULL
 count_fmt <- NULL
@@ -303,3 +301,18 @@ l <- NULL
 w <- NULL
 s <- NULL
 out <- NULL
+og_row <- NULL
+desc <- NULL
+id <- NULL
+stub_sort <- NULL
+include_missing_subjects_row <- NULL
+missing_subjects_row_label <- NULL
+missing_subjects_stat <- NULL
+missing_subjects_count_format <- NULL
+missing_subject_rows <- NULL
+missing_subject_vars_ord <- NULL
+string_ms <- NULL
+missing_subjects_sort_value <- NULL
+limit_data_by <- NULL
+n_present <- NULL
+header_tots <- NULL

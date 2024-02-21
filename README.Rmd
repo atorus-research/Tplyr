@@ -17,11 +17,9 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("vignettes/adae.Rdata")
-load("vignettes/adsl.Rdata")
 ```
 
-# *Tplyr* <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# **Tplyr** <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 [<img src="http://pharmaverse.org/shields/Tplyr.svg">](https://pharmaverse.org)
@@ -50,7 +48,7 @@ install.packages("Tplyr")
 devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
 ```
 
-# What is *Tplyr*? 
+# What is **Tplyr**? 
 
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of data manipulation. So what does that allow you to do? It gives you, as a data analyst, the capability to easily and intuitively approach the problem of manipulating your data into an analysis ready form. [dplyr](https://dplyr.tidyverse.org/) conceptually breaks things down into verbs that allow you to focus on _what_ you want to do more than _how_ you have to do it.
 
@@ -76,11 +74,10 @@ When you look at this table, you can begin breaking this output down into smalle
 So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. 
 In the same way that [dplyr](https://dplyr.tidyverse.org/) is a grammar of data manipulation, **Tplyr** aims to be a grammar of data summary. The goal of **Tplyr** is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller 'layers', and combining them together like you see on the page. 
 
-Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://advance.phuse.global/display/WEL/Test+Dataset+Factory) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
+Enough talking - let's see some code. In these examples, we will be using data from the [PHUSE Test Data Factory]( https://advance.phuse.global/display/WEL/Test+Dataset+Factory) based on the [original pilot project submission package](https://github.com/atorus-research/CDISC_pilot_replication). We've packaged some subsets of that data into **Tplyr**, which you can use to replicate our examples and run our vignette code yourself. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ```{r initial_demo}
-
-tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
@@ -89,10 +86,9 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
   ) %>% 
   build() %>% 
   kable()
-
 ```
 
-## *Tplyr* is Qualified
+## **Tplyr** is Qualified
 
 We understand how important documentation and testing is within the pharmaceutical world. This is why outside of unit testing **Tplyr** includes an entire user-acceptance testing document, where requirements were established, test-cases were written, and tests were independently programmed and executed. We do this in the hope that you can leverage our work within a qualified programming environment, and that we save you a substantial amount of trouble in getting it there.
 

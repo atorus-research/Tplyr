@@ -86,6 +86,8 @@ test_that("Metadata creation errors generate properly", {
   # Not providing metadata object
   expect_snapshot_error(add_variables(mtcars, quos(a)))
   expect_snapshot_error(add_filters(mtcars, quos(a==1)))
+  expect_snapshot_error(add_anti_join(mtcars, m, quos(a==1)))
+  expect_snapshot_error(add_anti_join(m, mtcars, quos(a==1)))
 
   # Didn't provide filter
   expect_snapshot_error(tplyr_meta(quos(a), 'x'))
@@ -94,6 +96,7 @@ test_that("Metadata creation errors generate properly", {
   # Didn't provide names
   expect_snapshot_error(tplyr_meta('x'))
   expect_snapshot_error(add_variables(m, 'x'))
+  expect_snapshot_error(add_anti_join(m, m, 'x'))
 
 })
 
@@ -105,9 +108,12 @@ test_that("Exported metadata function construct metadata properly", {
 
   m <- add_variables(m, quos(x))
   m <- add_filters(m, quos(x=="a"))
+  m2 <- add_anti_join(m, m, quos(y))
 
   expect_equal(m$names, quos(a, b, c, x))
   expect_equal(m$filters, quos(a==1, b==2, c==3, x=="a"))
+  expect_equal(m2$anti_join$join_meta, m)
+  expect_equal(m2$anti_join$on, quos(y))
 })
 
 test_that("Descriptive Statistics metadata backend assembles correctly", {
@@ -351,4 +357,100 @@ test_that("Metadata extraction and extension work properly", {
 test_that("Metadata print method is accurate", {
   x <- tplyr_meta(quos(a, b, c), quos(a==1, b==2, c==3, x=="a"))
   expect_snapshot(print(x))
+})
+
+
+test_that("Anti-join extraction works properly", {
+
+  # This is purposefully a convoluted warning that's unrealistic, hence the
+  # warning that's generating.
+  expect_snapshot_warning({
+    t <- tplyr_table(tplyr_adsl, TRT01A, cols = ETHNIC) %>%
+      add_layer(
+        group_count(RACE, by = SEX) %>%
+          set_distinct_by(USUBJID) %>%
+          add_missing_subjects_row()
+      )
+  })
+
+  x <- build(t, metadata=TRUE)
+
+  # Check that the object looks right
+  res <- get_meta_result(t, 'c7_1', 'var1_Placebo_HISPANIC OR LATINO')
+
+  expect_equal(unname(map_chr(res$names, as_label)), c("TRT01A", "SEX", "ETHNIC", "RACE"))
+  expect_equal(
+    unname(map_chr(res$filters, as_label)),
+    c("TRT01A == c(\"Placebo\")", "SEX == c(\"F\")", "ETHNIC == c(\"HISPANIC OR LATINO\")",
+      "TRUE", "TRUE")
+    )
+  expect_equal(unname(map_chr(res$anti_join$join_meta$names, as_label)), c("TRT01A", "ETHNIC"))
+  expect_equal(
+    unname(map_chr(res$anti_join$join_meta$filters, as_label)),
+    c("TRT01A == c(\"Placebo\")", "ETHNIC == c(\"HISPANIC OR LATINO\")", "TRUE", "TRUE")
+  )
+  expect_equal(as_label(res$anti_join$on[[1]]), "USUBJID")
+
+  # Variables needed for the merge aren't there
+  expect_snapshot_error(get_meta_subset(t, 'c7_1', 'var1_Placebo_HISPANIC OR LATINO', add_cols = quos(SITEID)))
+
+
+  sbst <- get_meta_subset(t, 'c7_1', 'var1_Placebo_HISPANIC OR LATINO')
+
+
+  cmp <- tplyr_adsl %>% filter(
+      USUBJID == "01-701-1023"
+    )
+
+  # The counted subjects will include female, so this subject would have to be male
+  # Again - this is a weird example that wouldn't be used in practice, but this is the
+  # row variable
+  expect_true(cmp$SEX == "M")
+  # Since this is column, these would both match the metadata
+  expect_true(cmp$TRT01A == "Placebo")
+  expect_true(cmp$ETHNIC == "HISPANIC OR LATINO")
+
+  # and then selecting out the columns these should match
+  expect_equal(
+    sbst,
+    cmp %>%
+      select(USUBJID, TRT01A, ETHNIC)
+  )
+
+  # Now for a real example, but also test for nested counts
+  t <- tplyr_table(tplyr_adae, TRTA) %>%
+    set_pop_data(tplyr_adsl) %>%
+    set_pop_treat_var(TRT01A) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_distinct_by(USUBJID) %>%
+        add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf)
+    )
+
+  x <- build(t, metadata=TRUE)
+
+  sbst <- get_meta_subset(t, 'c23_1', 'var1_Placebo')
+
+  # If you manually check out x, the count here is 65
+  expect_equal(nrow(sbst), 65)
+  expect_equal(unique(sbst$TRT01A), "Placebo")
+
+})
+
+test_that("Tplyr meta print method works as expected", {
+  meta <- tplyr_meta(
+    names = quos(TRTP, EFFFL, ITTFL, ANL01FL, SITEGR1, AVISIT, AVISITN, PARAMCD, AVAL, BASE, CHG),
+    filters = quos(EFFFL == "Y", ITTFL == "Y", PARAMCD == "ACTOT", ANL01FL == "Y", AVISITN == 24)
+  )
+
+  meta2 <- meta %>%
+    add_anti_join(
+      join_meta = tplyr_meta(
+        names = quos(TRT01P, EFFFL, ITTFL, SITEGR1),
+        filters = quos(EFFFL == "Y", ITTFL == "Y")
+      ),
+      on = quos(USUBJID)
+    )
+
+  expect_snapshot(print(meta2))
 })

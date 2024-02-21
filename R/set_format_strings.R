@@ -130,7 +130,7 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
 
 
   # Pick off the ellipsis
-  format_strings <- list(...)
+  format_strings <- list2(...)
 
 
   # Get the list of variable names that need to be transposed
@@ -185,9 +185,10 @@ set_format_strings.count_layer <- function(e, ...) {
   e
 }
 
+#' @export
 set_format_strings.shift_layer <- function(e, ...) {
 
-  dots <- list(...)
+  dots <- list2(...)
 
   assert_that(all(dots$vars %in% c("n", "pct")),
               msg = "formats in shift layers can only be n")

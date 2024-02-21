@@ -14,6 +14,7 @@ get_meta_subset(x, row_id, column, add_cols = vars(USUBJID), ...)
   column,
   add_cols = vars(USUBJID),
   target = NULL,
+  pop_data = NULL,
   ...
 )
 
@@ -32,6 +33,9 @@ string}
 \item{...}{additional arguments}
 
 \item{target}{A data frame to be subset (if not pulled from a Tplyr table)}
+
+\item{pop_data}{A data frame to be subset through an anti-join (if not pulled
+from a Tplyr table)}
 }
 \value{
 A data.frame

@@ -21,8 +21,6 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adae.Rdata")
-load("adsl.Rdata")
 ```
 
 Most of the work in creating a **Tplyr** table is at the layer level, but there are a few overarching properties that are worth spending some time discussing. One of the things that we wanted to make sure we did in **Tplyr** is allow you to eliminate redundant code wherever possible. Adding some processing to the `tplyr_table()` level allows us to do that. Furthermore, some settings simply need to be applied table wide.
@@ -39,7 +37,7 @@ The `tplyr_table()` function has 4 parameters:
 Let's look at an example:
 
 ```{r table_params1}
-tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
+tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
   add_layer(
     group_count(RACE, by = "Race")
   ) %>% 
@@ -55,7 +53,7 @@ In the example above, the `where` parameter is passed forward into both the `RAC
 _Note: Treatment groups and additional column variables presented in the final output are always taken from the **pre-filtered** population data. This means that if a filter completed excludes a treatment group or group within a column variable, columns will still be created for those groups and will be empty/zero filled._
 
 ```{r table_params2}
-tplyr_table(adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
+tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
   add_layer(
     group_desc(AGE, by = "Age (Years)")
   ) %>% 
@@ -73,7 +71,7 @@ Another important feature that works at the table level is the addition of treat
 We've added the function `add_treat_grps()` to do this work for you. With this function, you can create new treatment groups by combining existing treatment groups from values within `treat_var`. Additionally, to simplify the process we added an abstraction of `add_treat_grps()` named `add_total_group()` to simplify the process of creating a "Total" group.
 
 ```{r treat_grps}
-tplyr_table(adsl, TRT01P) %>%
+tplyr_table(tplyr_adsl, TRT01P) %>%
   add_treat_grps('Treated' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
   add_total_group() %>% 
   add_layer(
@@ -92,8 +90,8 @@ A last and very important aspect of table level properties in **Tplyr** is the a
 **Tplyr** allows you to provide a separate population dataset to overcome this. Furthermore, you are also able to provide a separate population dataset `where` parameter and a population treatment variable named `pop_treat_var`, as variable names may differ between the datasets.
 
 ```{r pop_data1}
-t <- tplyr_table(adae, TRTA, where = AEREL != "NONE") %>% 
-  set_pop_data(adsl) %>% 
+t <- tplyr_table(tplyr_adae, TRTA, where = AEREL != "NONE") %>% 
+  set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
   set_pop_where(TRUE) %>% 
   add_layer(
@@ -114,6 +112,60 @@ Note the percentage values in the summary above. By setting the population data,
 header_n(t) %>% 
   kable()
 ```
+
+Note: it’s expected the `set_distinct_by()` function is used with population data. This is because it does not make sense to use population data denominators unless you have distinct counts. The entire point of population data is to use subject counts, so non-distinct counts would potentially count multiple records per subject and then the percentage doesn’t make any sense.
+
+## Data Completion
+
+When creating summary tables, often we have to mock up the potential values of data, even if those values aren't present in the data we're summarizing. **Tplyr** does its best effort to do this for you. Let's consider the following dataset:
+
+```{r data_comp, echo=FALSE}
+kable(head(tplyr_adpe))
+```
+Let's say we want to create a count summary for this dataset, and report it by PARAM and AVISIT. Note that in the data, `PARAM=="HEAD"` is only collected at screening, while `LUNGS` is collected at Screening, Day -1, and Day 5. 
+
+```{r data_comp1}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT))
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  head(18) %>% 
+  kable()
+
+```
+
+By default, given the `by` variables of PARAM and AVISIT, all of the potential visits have dummy rows created that are 0 filled - meaning results of 0 records for all treatment groups are presented. However, that might not be what you wish to present. Perhaps `HEAD` was only intended to be collected at the Screening visit so it's unnecessary to present other visits. To address this, you can use the `set_limit_data_by()` function.
+
+```{r data_comp2}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 
+      set_limit_data_by(PARAM, AVISIT)
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  head(12) %>% 
+  kable()
+```
+
+Here you can see that now records for `HEAD` only present the screening visit. For count and shift layers, you can additionally dig further in to use target variables:
+
+```{r data_comp3}
+tplyr_table(tplyr_adpe, TRT01A) %>%
+  add_layer(
+    group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 
+      set_limit_data_by(PARAM, AVISIT, AVALC)
+  ) %>% 
+  build() %>% 
+  select(-starts_with('ord')) %>% 
+  kable()
+```
+
+This effectively limits to the values present in the data itself.
+
+## Where to Go From Here
 
 With the table level settings under control, now you're ready to learn more about what **Tplyr** has to offer in each layer. 
 

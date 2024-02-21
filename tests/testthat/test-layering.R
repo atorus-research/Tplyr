@@ -123,4 +123,22 @@ test_that("Layers accept names when specified", {
 
 })
 
+test_that("add_layer can see calling environment objects", {
+  tfunc <- function(){
+
+    prec <- tibble::tribble(
+      ~vs, ~max_int, ~max_dec,
+      0,        1,        1,
+      1,        2,        2
+    )
+
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(wt, by = vs) %>%
+          set_precision_data(prec)
+      )
+  }
+
+  expect_silent(tfunc())
+})
 

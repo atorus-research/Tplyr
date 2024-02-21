@@ -12,6 +12,10 @@
 #' use \code{set_denoms_by()}, and the grouping of \code{add_total_row()} will
 #' be updated accordingly.
 #'
+#' Note that when using \code{add_total_row()} with \code{set_pop_data()}, you
+#' should call \code{add_total_row()} AFTER calling \code{set_pop_data()},
+#' otherwise there is potential for unexpected behaivior with treatment groups.
+#'
 #' @param e A \code{count_layer} object
 #' @param fmt An f_str object used to format the total row. If none is provided,
 #'   display is based on the layer formatting.
@@ -457,7 +461,7 @@ set_result_order_var <- function(e, result_order_var) {
 #'   build()
 set_missing_count <- function(e, fmt = NULL, sort_value = NULL, denom_ignore = FALSE, ...) {
 
-  missings <- list(...)
+  missings <- list2(...)
   assert_that(length(missings) > 0, msg = "No missing values were specified.")
 
   if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
@@ -576,6 +580,10 @@ set_outer_sort_position <- function(e, outer_sort_position) {
 set_denom_where <- function(e, denom_where) {
   denom_where <- enquo(denom_where)
 
+  if (!(inherits(e, 'tplyr_layer') | inherits(e, 'tplyr_table'))) {
+    stop('Object type should be either "tplyr_layer" or "tplyr_table"', call.=FALSE)
+  }
+
   assert_that(is_logical_or_call(denom_where),
               msg = "The `where` parameter must contain subsetting logic (enter without quotes)")
 
@@ -644,7 +652,7 @@ set_denoms_by.count_layer <- function(e, ...) {
 #'  build()
 #'
 keep_levels <- function(e, ...) {
-  dots <- list(...)
+  dots <- list2(...)
   assert_that(all(map_lgl(dots, is.character)),
               msg = "must pass character values to `keep_levels`")
 
@@ -700,6 +708,84 @@ set_numeric_threshold <- function(e, numeric_cutoff, stat, column = NULL) {
   env_bind(e, numeric_cutoff = numeric_cutoff)
   env_bind(e, numeric_cutoff_stat = stat)
   env_bind(e, numeric_cutoff_column = column)
+
+  e
+}
+
+#' Add a missing subject row into a count summary.
+#'
+#' This function calculates the number of subjects missing from a particular
+#' group of results. The calculation is done by examining the total number of
+#' subjects potentially available from the Header N values within the result
+#' column, and finding the difference with the total number of subjects present
+#' in the result group. Note that for accurate results, the subject variable
+#' needs to be defined using the `set_distinct_by()` function. As with other
+#' methods, this function instructs how distinct results should be identified.
+#'
+#' @param e A `count_layer` object
+#' @param fmt An f_str object used to format the total row. If none is provided,
+#'   display is based on the layer formatting.
+#' @param sort_value The value that will appear in the ordering column for total
+#'   rows. This must be a numeric value.
+#'
+#' @export
+#' @examples
+#'
+#' tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_missing_subjects_row(f_str("xxxx", n))
+#'    ) %>%
+#'    build()
+add_missing_subjects_row <- function(e, fmt = NULL, sort_value = NULL) {
+  if(!is.null(fmt)) assert_inherits_class(fmt, "f_str")
+  if(!is.null(sort_value)) assert_inherits_class(sort_value, "numeric")
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`add_missing_subjects_row` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
+
+  if (identical(env_get(env_parent(e), 'target'), env_get(env_parent(e), 'pop_data'))) {
+    warning(paste("\tPopulation data was not set separately from the target data.",
+                  "\tMissing subject counts may be misleading in this scenario.",
+                  "\tDid you mean to use `set_missing_count() instead?",
+                  sep="\n"))
+  }
+
+  env_bind(e, include_missing_subjects_row = TRUE)
+  env_bind(e, missing_subjects_count_format = fmt)
+  env_bind(e, missing_subjects_sort_value = sort_value)
+
+  e
+}
+
+#' Set the label for the missing subjects row
+#'
+#' @param e A \code{count_layer} object
+#' @param missing_subjects_row_label A character to label the total row
+#'
+#' @return The modified \code{count_layer} object
+#' @export
+#'
+#' @examples
+#'
+#' t <- tplyr_table(mtcars, gear) %>%
+#'   add_layer(
+#'     group_count(cyl) %>%
+#'       add_missing_subjects_row() %>%
+#'       set_missing_subjects_row_label("Missing")
+#'   )
+#' build(t)
+set_missing_subjects_row_label <- function(e, missing_subjects_row_label) {
+
+  assert_has_class(missing_subjects_row_label, "character")
+  assert_that(length(missing_subjects_row_label) == 1)
+  if("shift_layer" %in% class(e)) {
+    rlang::abort("`set_missing_subjects_row_label` for shift layers is not yet supported")
+  }
+  assert_inherits_class(e, "count_layer")
+
+  env_bind(e, missing_subjects_row_label = missing_subjects_row_label)
 
   e
 }

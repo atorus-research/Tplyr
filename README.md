@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Tplyr <img src="man/figures/logo.png" align="right" alt="" width="120" />
+# **Tplyr** <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 
@@ -42,7 +42,7 @@ install.packages("Tplyr")
 devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
 ```
 
-# What is Tplyr?
+# What is **Tplyr**?
 
 [dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of
 data manipulation. So what does that allow you to do? It gives you, as a
@@ -58,10 +58,10 @@ pharmaceutical industry, a great deal of the data presented in the
 outputs we create are very similar. For the most part, most of these
 tables can be broken down into a few categories:
 
--   Counting for event based variables or categories
--   Shifting, which is just counting a change in state with a ‘from’ and
-    a ‘to’
--   Generating descriptive statistics around some continuous variable.
+- Counting for event based variables or categories
+- Shifting, which is just counting a change in state with a ‘from’ and a
+  ‘to’
+- Generating descriptive statistics around some continuous variable.
 
 For many of the tables that go into a clinical submission, the tables
 are made up of a combination of these approaches. Consider a
@@ -81,15 +81,15 @@ into smaller, redundant, components. These components can be viewed as
 layers. The boxes in the image above represent how you can begin to
 conceptualize this.
 
--   First we have Sex, which is made up of n (%) counts.
--   Next we have Age as a continuous variable, where we have a number of
-    descriptive statistics, including n, mean, standard deviation,
-    median, quartile 1, quartile 3, min, max, and missing values.
--   After that we have age, but broken into categories - so this is once
-    again n (%) values.
--   Race - more counting,
--   Ethnicity - more counting
--   Weight - and we’re back to descriptive statistics.
+- First we have Sex, which is made up of n (%) counts.
+- Next we have Age as a continuous variable, where we have a number of
+  descriptive statistics, including n, mean, standard deviation, median,
+  quartile 1, quartile 3, min, max, and missing values.
+- After that we have age, but broken into categories - so this is once
+  again n (%) values.
+- Race - more counting,
+- Ethnicity - more counting
+- Weight - and we’re back to descriptive statistics.
 
 So we have one table, with 6 summaries (7 including the next page, not
 shown) - but only 2 different approaches to summaries being performed.
@@ -104,13 +104,14 @@ using data from the [PHUSE Test Data
 Factory](https://advance.phuse.global/display/WEL/Test+Dataset+Factory)
 based on the [original pilot project submission
 package](https://github.com/atorus-research/CDISC_pilot_replication).
-Note: You can see our replication of the CDISC pilot using the PHUSE
-Test Data Factory data
+We’ve packaged some subsets of that data into **Tplyr**, which you can
+use to replicate our examples and run our vignette code yourself. Note:
+You can see our replication of the CDISC pilot using the PHUSE Test Data
+Factory data
 [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ``` r
-
-tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
   ) %>% 
@@ -133,7 +134,7 @@ tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>%
 | Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
 | Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
 
-## Tplyr is Qualified
+## **Tplyr** is Qualified
 
 We understand how important documentation and testing is within the
 pharmaceutical world. This is why outside of unit testing **Tplyr**
@@ -153,38 +154,38 @@ this report.
 
 Here are some of the high level benefits of using **Tplyr**:
 
--   Easy construction of table data using an intuitive syntax
--   Smart string formatting for your numbers that’s easily specified by
-    the user
--   A great deal of flexibility in what is performed and how it’s
-    presented, without specifying hundreds of parameters
+- Easy construction of table data using an intuitive syntax
+- Smart string formatting for your numbers that’s easily specified by
+  the user
+- A great deal of flexibility in what is performed and how it’s
+  presented, without specifying hundreds of parameters
 
 # Where to go from here?
 
 There’s quite a bit more to learn! And we’ve prepared a number of other
 vignettes to help you get what you need out of **Tplyr**.
 
--   The best place to start is with our Getting Started vignette at
-    `vignette("Tplyr")`
--   Learn more about table level settings in `vignette("table")`
--   Learn more about descriptive statistics layers in `vignette("desc")`
--   Learn more about count layers in `vignette("count")`
--   Learn more about shift layers in `vignette("shift")`
--   Learn more about percentages in `vignette("denom")`
--   Learn more about calculating risk differences in
-    `vignette("riskdiff")`
--   Learn more about sorting **Tplyr** tables in `vignette("sort")`
--   Learn more about using **Tplyr** options in `vignette("options")`
--   And finally, learn more about producing and outputting styled tables
-    using **Tplyr** in `vignette("styled-table")`
+- The best place to start is with our Getting Started vignette at
+  `vignette("Tplyr")`
+- Learn more about table level settings in `vignette("table")`
+- Learn more about descriptive statistics layers in `vignette("desc")`
+- Learn more about count layers in `vignette("count")`
+- Learn more about shift layers in `vignette("shift")`
+- Learn more about percentages in `vignette("denom")`
+- Learn more about calculating risk differences in
+  `vignette("riskdiff")`
+- Learn more about sorting **Tplyr** tables in `vignette("sort")`
+- Learn more about using **Tplyr** options in `vignette("options")`
+- And finally, learn more about producing and outputting styled tables
+  using **Tplyr** in `vignette("styled-table")`
 
 In the **Tplyr** version 1.0.0, we’ve packed a number of new features
 in. For deeper dives on the largest new additions:
 
--   Learn about **Tplyr’s** traceability metadata in
-    `vignette("metadata")` and about how it can be extended in
-    `vignette("custom-metadata")`
--   Learn about layer templates in `vignette("layer_templates")`
+- Learn about **Tplyr**’s traceability metadata in
+  `vignette("metadata")` and about how it can be extended in
+  `vignette("custom-metadata")`
+- Learn about layer templates in `vignette("layer_templates")`
 
 # References
 

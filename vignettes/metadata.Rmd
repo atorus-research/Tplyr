@@ -22,7 +22,6 @@ library(tidyr)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adsl.Rdata")
 ```
 
 **Tplyr** has a bit of a unique design, which might feel a bit weird as you get used to the package. The process flow of building a `tplyr_table()` object first, and then using `build()` to construct the data frame is different than programming in the tidyverse, or creating a ggplot. Why create the `tplyr_table()` object first? Why is the `tplyr_table()` object different than the resulting data frame?
@@ -34,7 +33,7 @@ The purpose of the `tplyr_table()` object is to let **Tplyr** do more than just 
 Consider the following example:
 
 ```{r table_creation}
-t <- tplyr_table(adsl, TRT01P, where = SAFFL == "Y") %>% 
+t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_count(RACE)
   ) %>% 
@@ -100,7 +99,7 @@ The results are provided this was so that they can be unpacked directly into `dp
 ```{r unpack}
 m <- get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 
-adsl %>% 
+tplyr_adsl %>% 
   filter(!!!m$filters) %>% 
   select(!!!m$names) %>% 
   head(10) %>% 
@@ -112,7 +111,7 @@ _Note: Trimmed for space_
 But - who says you can't let your imagination run wild? 
 
 ```{r to string print, eval=FALSE}
-cat(c("adsl %>%\n",
+cat(c("tplyr_adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
   ") %>%\n",
@@ -120,9 +119,54 @@ cat(c("adsl %>%\n",
 ))
 ```
 
+### Anti Joins
+
+Most data presented within a table refers back to the target dataset from which data are being summarized. In some cases, data presented may refer to information _excluded_ from the summary. This is the case when you use the **Tplyr** function `add_missing_subjects_row()`. In this case, the counts presented refer to data excluded from the target which are present in the population data. The metadata thus needs to refer to that excluded data. To handle this, there's an additional field called an 'Anti Join'. Consider this example:
+
+```{r anti_join1}
+t <- tplyr_table(tplyr_adae, TRTA) %>%
+  set_pop_data(tplyr_adsl) %>%
+  set_pop_treat_var(TRT01A) %>%
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD)) %>%
+      set_distinct_by(USUBJID) %>%
+      add_missing_subjects_row(f_str("xx (XX.x%)", distinct_n, distinct_pct), sort_value = Inf)
+  )
+
+x <- build(t, metadata=TRUE)
+
+tail(x) %>% 
+  select(starts_with('row'), var1_Placebo) %>% 
+  kable()
+```
+
+The missing row in this example counts the subjects within their respective treatment groups who do *not* have any adverse events for the body system "SKIN AND SUBCUTANEOUS TISSUE DISORDERS". Here's what the metadata for the result for the Placebo treatment group looks like.
+
+```{r anti_join2}
+m <- get_meta_result(t, 'c23_1', 'var1_Placebo')
+m
+```
+
+This result has the addition field of 'Anti-join'. This element has two fields, which are the join metadata, and the "on" field, which specifies a merging variable to be used when "anti-joining" with the target data. The join metadata here refers to the data of interest from the population data. Note that while the metadata for the target data has variable names and filter conditions referring to AEBODSYS and AEDECOD, these variables are _not_ present within the join metadata, because that information is not present within the population data. 
+
+While the usual joins we work with focus on the overlap between two sets, an anti-join looks at the non-overlap. The metadata provided here will specifically give us "The subjects within the Placebo treatment group who do **not** have an adverse event within the body system 'SKIN AND SUBCUTANEOUS TISSUE DISORDERS'". 
+
+Extracting this metadata works very much the same way as extracting other results.
+
+```{r anti_join3}
+head(get_meta_subset(t, 'c23_1', 'var1_Placebo'))
+```
+
+If you're not working with the `tplyr_table` object, then there's some additional information you need to provide to the function.
+
+```{r anti_join4}
+head(get_meta_subset(t$metadata, 'c23_1', 'var1_Placebo', 
+                     target=t$target, pop_data=t$pop_data))
+```
+
 ```
 ```{r to string content, results='asis', echo=FALSE}
-cat(c("adsl %>%\n",
+cat(c("tplyr_adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
   ") %>%\n",
@@ -135,7 +179,7 @@ cat(c("adsl %>%\n",
 
 So we get get metadata around a result cell, and we can get the exact results from a result cell. You just need a row ID and a column name. But - what does that get you? You can query your tables - and that's great. But how do you _use_ that.
 
-The idea behind this is really to support [Shiny](https://shiny.rstudio.com/). Consider this minimal application. Click any of the result cells within the table and see what happens.
+The idea behind this is really to support [Shiny](https://shiny.posit.co/). Consider this minimal application. Click any of the result cells within the table and see what happens.
 
 
 ```{r, out.width=850, out.extra='style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay"', echo=FALSE}

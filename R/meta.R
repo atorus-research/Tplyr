@@ -221,8 +221,93 @@ print.tplyr_meta <- function(x, ...) {
   cat("Names:\n")
   names <- map_chr(x$names, as_label)
   filters <- map_chr(x$filters, as_label)
-  cat("   ", paste(names, collapse = ", "), "\n")
+  cat("    ", paste0(names, collapse = ", "), "\n")
   cat("Filters:\n")
-  cat("   ", paste(filters, collapse = ", "), "\n")
+  cat("    ", paste0(filters, collapse = ", "), "\n")
+  if (!is.null(x$anti_join)) {
+    cat("Anti-join:\n")
+    cat("    Join Meta:\n")
+    cat(paste0("        ", capture.output(x$anti_join$join_meta), "\n"), sep="")
+    cat("    On:\n")
+    aj_on <- map_chr(x$anti_join$on, as_label)
+    cat("       ", paste0(aj_on, collapse = ", "), "\n")
+  }
   invisible()
+}
+
+#' Create an tplyr_meta_anti_join object
+#'
+#' @return tplyr_meta_anti_join object
+#' @noRd
+new_anti_join <- function(join_meta, on) {
+  structure(
+    list(
+      join_meta = join_meta,
+      on = on
+    ),
+    class="tplyr_meta_anti_join"
+  )
+}
+
+#' Internal application of anti_join onto tplyr_meta object
+#' @noRd
+add_anti_join_ <- function(meta, aj) {
+  meta$anti_join <- aj
+  meta
+}
+
+#' Add an anti-join onto a tplyr_meta object
+#'
+#' An anti-join allows a tplyr_meta object to refer to data that should be
+#' extracted from a separate dataset, like the population data of a Tplyr table,
+#' that is unavailable in the target dataset. The primary use case for this is
+#' the presentation of missing subjects, which in a Tplyr table is presented
+#' using the function `add_missing_subjects_row()`. The missing subjects
+#' themselves are not present in the target data, and are thus only available in
+#' the population data. The `add_anti_join()` function allows you to provide the
+#' meta information relevant to the population data, and then specify the `on`
+#' variable that should be used to join with the target dataset and find the
+#' values present in the population data that are missing from the target data.
+#'
+#' @param meta A tplyr_meta object referring to the target data
+#' @param join_meta A tplyr_meta object referring to the population data
+#' @param on A list of quosures containing symbols - most likely set to USUBJID.
+#'
+#' @return A tplyr_meta object
+#' @md
+#' @export
+#'
+#' @examples
+#'
+#' tm <- tplyr_meta(
+#'   rlang::quos(TRT01A, SEX, ETHNIC, RACE),
+#'   rlang::quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")
+#' )
+#'
+#' tm %>%
+#'   add_anti_join(
+#'     tplyr_meta(
+#'       rlang::quos(TRT01A, ETHNIC),
+#'       rlang::quos(TRT01A == "Placebo", ETHNIC == "HISPANIC OR LATINO")
+#'     ),
+#'     on = rlang::quos(USUBJID)
+#'   )
+add_anti_join <- function(meta, join_meta, on){
+
+  if (!inherits(meta, 'tplyr_meta')) {
+    stop("meta must be a tplyr_meta object", call.=FALSE)
+  }
+
+  if (!inherits(join_meta, 'tplyr_meta')) {
+    stop("join_meta must be a tplyr_meta object", call.=FALSE)
+  }
+
+  if (!all(map_lgl(on, ~ is_quosure(.) && quo_is_symbol(.)))) {
+    stop("on must be provided as a list of names", call.=FALSE)
+  }
+
+
+  aj <- new_anti_join(join_meta, on)
+
+  add_anti_join_(meta, aj)
 }

@@ -36,27 +36,33 @@ build_header_n <- function(table) {
 
 #' Combine existing treatment groups for summary
 #'
-#' Summary tables often present individual treatment groups,
-#' but may additionally have a "Treatment vs. Placebo" or "Total" group added
-#' to show grouped summary statistics or counts. This set of functions offers
-#' an interface to add these groups at a table level and be consumed by
-#' subsequent layers.
+#' Summary tables often present individual treatment groups, but may
+#' additionally have a "Treatment vs. Placebo" or "Total" group added to show
+#' grouped summary statistics or counts. This set of functions offers an
+#' interface to add these groups at a table level and be consumed by subsequent
+#' layers.
 #'
 #' \code{add_treat_grps} allows you to specify specific groupings. This is done
-#' by supplying named arguments, where the name becomes the new treatment group's
-#' name, and those treatment groups are made up of the argument's values.
+#' by supplying named arguments, where the name becomes the new treatment
+#' group's name, and those treatment groups are made up of the argument's
+#' values.
 #'
-#' \code{add_total_group} is a simple wrapper around \code{add_treat_grps}. Instead of
-#' producing custom groupings, it produces a "Total" group by the supplied name, which
-#' defaults to "Total". This "Total" group is made up of all existing treatment
-#' groups within the population dataset.
+#' \code{add_total_group} is a simple wrapper around \code{add_treat_grps}.
+#' Instead of producing custom groupings, it produces a "Total" group by the
+#' supplied name, which defaults to "Total". This "Total" group is made up of
+#' all existing treatment groups within the population dataset.
 #'
-#' The function \code{treat_grps} allows you to see the custom treatment groups available
-#' in your \code{tplyr_table} object
+#' Note that when using \code{add_treat_grps} or \code{add_total_row()} with
+#' \code{set_pop_data()}, you should call \code{add_total_row()} AFTER calling
+#' \code{set_pop_data()}, otherwise there is potential for unexpected behaivior
+#' with treatment groups.
+#'
+#' The function \code{treat_grps} allows you to see the custom treatment groups
+#' available in your \code{tplyr_table} object
 #'
 #' @param table A \code{tplyr_table} object
-#' @param ... A named vector where names will become the new treatment group names,
-#' and values will be used to construct those treatment groups
+#' @param ... A named vector where names will become the new treatment group
+#'   names, and values will be used to construct those treatment groups
 #'
 #' @return The modified table object
 #' @export
@@ -81,13 +87,13 @@ build_header_n <- function(table) {
 
 add_treat_grps <- function(table, ...) {
 
-  assert_that(is_named(list(...)), msg="Treatment group arguments must have names")
+  assert_that(is_named(list2(...)), msg="Treatment group arguments must have names")
 
   assert_that(inherits(table, "tplyr_table"),
                    msg = "Treatment groups can only be added to `tplyr_table` objects")
 
   # Check parameters
-  fargs <- list(...)
+  fargs <- list2(...)
 
     # Bind the specified treatment groups to the table
   env_bind(table, treat_grps = append(treat_grps(table), fargs))

@@ -194,20 +194,28 @@ add_order_columns.count_layer <- function(x) {
         expr(!!sym(as_name(x)) == !!as_name(y))
       })
 
+
       # Get the number of unique outer values, that is the number of rows to pull out.
       # If its text, it is just 1 to pull out
-      outer_number <- ifelse(quo_is_symbol(by[[1]]),
-                             # Use built_target here to take the 'where' logic into account
-                             length(unlist(unique(built_target[, as_name(by[[1]])]))),
-                             1)
+      # outer_number <- ifelse(quo_is_symbol(by[[1]]),
+      #                        # Use built_target here to take the 'where' logic into account
+      #                        nrow(filter(numeric_data, is.na(!!by[[1]]))),
+      #                        1)
+
+      # Identify the outer layer and attach it to the filter logic
+      filter_logic <- append(filter_logic, ifelse(
+        quo_is_symbol(by[[1]]), # Is the outside variable character or a symbol?
+        exprs(is.na(!!by[[1]])), # For symbols, the outer var will be NA
+        exprs(summary_var == !!by[[1]]) # For character, it will match summary_var
+      ))
 
       all_outer <- numeric_data %>%
-        filter(!!!filter_logic) %>%
-        extract(1:min(nrow(.), outer_number), )
+        filter(!!!filter_logic)
 
       # Add the ordering of the pieces in the layer
       formatted_data <- formatted_data %>%
-        group_by(.data[[paste0("ord_layer_", formatted_col_index - 1)]]) %>%
+        # group_by(.data[[paste0("row_label", formatted_col_index - 1)]]) %>%
+        group_by(row_label1) %>%
         do(add_data_order_nested(., formatted_col_index - 1, numeric_data,
                                  indentation_length = indentation_length,
                                  ordering_cols = ordering_cols,
@@ -222,7 +230,9 @@ add_order_columns.count_layer <- function(x) {
                                  break_ties = break_ties,
                                  numeric_cutoff = numeric_cutoff,
                                  numeric_cutoff_stat = numeric_cutoff_stat,
-                                 numeric_cutoff_column = numeric_cutoff_column)) %>%
+                                 numeric_cutoff_column = numeric_cutoff_column,
+                                 missing_subjects_row_label = missing_subjects_row_label,
+                                 missing_subjects_sort_value = missing_subjects_sort_value)) %>%
         ungroup()
 
       if (!is.null(nest_count) && nest_count) {
@@ -352,7 +362,8 @@ add_order_columns.shift_layer <- function(x) {
       # The logic is the same now for a byvarn so reuse that function
       formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
         get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
-                              formatted_col_index, total_row_sort_value = total_row_sort_value)
+                              formatted_col_index, total_row_sort_value = total_row_sort_value,
+                              missing_subjects_sort_value = missing_subjects_sort_value)
 
     rm(formatted_col_index)
 
@@ -428,11 +439,16 @@ get_data_order <- function(x, formatted_col_index) {
       if(!is.null(missing_string)) missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
       if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
 
+      if(!is.null(missing_subjects_row_label)) {
+        missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
+      }
+
       # No processing is needed here just pass in the needed info
       get_data_order_bycount(numeric_data, ordering_cols,
                              treat_var, by, cols, result_order_var, target_var,
                              missing_index, missing_sort_value,
                              total_index, total_row_sort_value,
+                             missing_subjects_index, missing_subjects_sort_value,
                              break_ties = break_ties,
                              numeric_cutoff = numeric_cutoff,
                              numeric_cutoff_stat = numeric_cutoff_stat,
@@ -466,7 +482,8 @@ get_data_order <- function(x, formatted_col_index) {
       }
 
       get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                            formatted_col_index, total_row_sort_value = total_row_sort_value)
+                            formatted_col_index, total_row_sort_value = total_row_sort_value,
+                            missing_subjects_sort_value = missing_subjects_sort_value)
 
 
       # Here it is 'byfactor'
@@ -521,7 +538,8 @@ get_data_order <- function(x, formatted_col_index) {
 
       # The logic is the same now for a byvarn so reuse that function
       get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
-                            formatted_col_index, total_row_sort_value = total_row_sort_value)
+                            formatted_col_index, total_row_sort_value = total_row_sort_value,
+                            missing_subjects_sort_value = missing_subjects_sort_value)
     }
   }, envir = x)
 }
@@ -532,6 +550,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
                        missing_index = NULL, missing_sort_value = NULL,
                        total_index = NULL, total_row_sort_value = NULL,
+                       missing_subjects_index = NULL,
+                       missing_subjects_sort_value = NULL,
                        break_ties, numeric_cutoff, numeric_cutoff_stat,
                        numeric_cutoff_column, nested = FALSE) {
 
@@ -606,6 +626,10 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
     numeric_ordering_data[total_index,] <-  total_row_sort_value
   }
 
+  if(!is.null(missing_subjects_index) && !is.null(missing_subjects_sort_value)) {
+    numeric_ordering_data[missing_subjects_index,] <- missing_subjects_sort_value
+  }
+
   # This is the numeric index that the numeric data is in. radix was chosen because
   # its the only method that gives indicies as far as I can tell
   # x are the values
@@ -632,7 +656,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
-                                  indentation = "", total_row_sort_value = NULL) {
+                                  indentation = "", total_row_sort_value = NULL,
+                                  missing_subjects_sort_value = NULL) {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
@@ -650,6 +675,8 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
       # Flag to determine where total row is positioned
       if(!is.null(total_row_sort_value)) {
         total_row_sort_value
+      } else if (!is.null(missing_subjects_sort_value)){
+        missing_subjects_sort_value
       } else {
         max(by_varn_df[,2]) + 1
       }
@@ -686,7 +713,7 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
 add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   # Pull out dots
-  list2env(list(...), envir = environment())
+  list2env(list2(...), envir = environment())
 
   # Here are the names of the formatted data row labels. We usually only work with the last
   row_label_vec <- vars_select(names(group_data), starts_with("row_label"))
@@ -694,20 +721,19 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
   ##### Outer nest values #####
   # The value of the outer label
   outer_value <- group_data[1, tail(row_label_vec, 1)][[1]]
+  # Reserve for joins
+  mrg_by <- paste0("row_label", seq_along(by))[-1]
 
   if(order_count_method[1] == "byvarn") {
     varn_df <- get_varn_values(target, as_name(by[[1]]))
 
     all_outer$..index <- group_data[1,] %>%
-      get_data_order_byvarn(varn_df, by[[1]], final_col, total_row_sort_value = total_row_sort_value)
+      get_data_order_byvarn(varn_df, by[[1]], final_col, total_row_sort_value = total_row_sort_value,
+                            missing_subjects_sort_value = missing_subjects_sort_value)
 
-    group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
-      filter(summary_var == outer_value) %>%
-      ungroup() %>%
-      select(..index)
+
 
   } else if(order_count_method[1] == "bycount") {
-
     all_outer$..index <- all_outer %>%
       get_data_order_bycount(ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
                              result_order_var, vars(!!by[[1]], !!target_var),
@@ -716,64 +742,103 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
                              numeric_cutoff_stat = numeric_cutoff_stat,
                              numeric_cutoff_column = numeric_cutoff_column,
                              nested = TRUE)
-
-    group_data[, paste0("ord_layer_", final_col)] <- all_outer %>%
-      filter(summary_var == outer_value) %>%
-      ungroup() %>%
-      select(..index)
   }
 
-  present_vars <- unlist(group_data[-1, row_label_vec[length(row_label_vec)]])
+
+  # Grab the index created above and insert it into group data
+  if (order_count_method[1] %in% c("bycount", "byvarn")){
+    if (length(mrg_by) == 0) {
+      group_data[,"ord_layer_1"] <- all_outer %>%
+        filter(summary_var == outer_value) %>%
+        ungroup() %>%
+        pull(..index)
+    } else {
+      group_data[,"ord_layer_1"] <- group_data %>%
+        left_join(
+          all_outer %>%
+            filter(summary_var == outer_value) %>%
+            replace_by_string_names(c(by, quo(summary_var))) %>%
+            select(starts_with('row'), ..index, -c(row_label1, !!treat_var)),
+          by = mrg_by
+        ) %>%
+        pull(..index)
+    }
+  }
+
+  outer_nest_rows <- group_data %>%
+    filter(!!sym(tail(row_label_vec, 1)) == outer_value) %>%
+    nrow()
+
+  present_vars <- group_data[(outer_nest_rows + 1): nrow(group_data),][[row_label_vec[length(row_label_vec)]]]
+
   ##### Inner nest values #####
   filtered_numeric_data <- numeric_data %>%
     # Only include the parts of the numeric data that is in the current label
-    filter(numeric_data$summary_var %in% present_vars, !is.na(!!by[[1]])) %>%
+    filter(numeric_data$summary_var %in% present_vars, !!by[[1]] == outer_value) %>%
     # Remove nesting prefix to prepare numeric data.
-    mutate(summary_var := str_sub(summary_var, indentation_length))
-
+    mutate(summary_var := str_sub(summary_var, indentation_length+1))
 
   #Same idea here, remove prefix
-  filtered_group_data <- group_data[-1, ] %>%
+  filtered_group_data <- tail(group_data, -outer_nest_rows) %>%
     mutate(!!row_label_vec[length(row_label_vec)] := str_sub(.data[[row_label_vec[length(row_label_vec)]]],
                                                              indentation_length + 1))
 
+
+  # Identify the index of missing subjects
+  if(!is.null(missing_subjects_row_label)) {
+    missing_subjects_index <- which(filtered_group_data[[length(row_label_vec)]] %in% missing_subjects_row_label)
+  }
+
   # The first row is always the first thing in the order so make it Inf
-  group_data[1, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
+  group_data[1:outer_nest_rows, paste0("ord_layer_", final_col + 1)] <- ifelse((is.null(outer_inf) || outer_inf), Inf, -Inf)
 
   if(tail(order_count_method, 1) == "bycount") {
     if (nrow(group_data) > 1) {
-      group_data[-1 , paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
-                                                                                     ordering_cols,
-                                                                                     treat_var,
-                                                                                     head(by, -1),
-                                                                                     cols,
-                                                                                     result_order_var,
-                                                                                     target_var,
-                                                                                     break_ties = break_ties,
-                                                                                     numeric_cutoff = numeric_cutoff,
-                                                                                     numeric_cutoff_stat = numeric_cutoff_stat,
-                                                                                     numeric_cutoff_column = numeric_cutoff_column,
-                                                                                     nested = TRUE)
-    }
-  } else if(tail(order_count_method, 1) == "byvarn") {
+      group_data[
+        (outer_nest_rows + 1): nrow(group_data),
+        paste0("ord_layer_", final_col + 1)] <- get_data_order_bycount(filtered_numeric_data,
+                                                                       ordering_cols,
+                                                                       treat_var,
+                                                                       head(by, -1),
+                                                                       cols,
+                                                                       result_order_var,
+                                                                       target_var,
+                                                                       break_ties = break_ties,
+                                                                       missing_subjects_index = missing_subjects_index,
+                                                                       missing_subjects_sort_value = missing_subjects_sort_value,
+                                                                       numeric_cutoff = numeric_cutoff,
+                                                                       numeric_cutoff_stat = numeric_cutoff_stat,
+                                                                       numeric_cutoff_column = numeric_cutoff_column,
+                                                                       nested = TRUE)
+      }
 
-    varn_df <- get_varn_values(target, target_var[[1]])
+    } else if(tail(order_count_method, 1) == "byvarn") {
 
+      varn_df <- get_varn_values(target, target_var[[1]])
 
+      group_data[
+        (outer_nest_rows + 1): nrow(group_data),
+        paste0("ord_layer_", final_col + 1)
+        ] <- get_data_order_byvarn(filtered_group_data,
+                                   varn_df,
+                                   target_var[[1]],
+                                   length(by) + 1,
+                                   indentation,
+                                   total_row_sort_value = total_row_sort_value,
+                                   missing_subjects_sort_value = missing_subjects_sort_value)
+   } else {
+      group_row_count <- nrow(group_data[(outer_nest_rows + 1): nrow(group_data),])
+      # Logic for group_row_count is when numeric_where values cause unexpected results
+      group_data[
+        (outer_nest_rows + 1): nrow(group_data),
+        paste0("ord_layer_", final_col + 1)
+        ] <- 1:ifelse(group_row_count == 0, 1, group_row_count)
 
-    group_data[-1, paste0("ord_layer_", final_col + 1)] <- get_data_order_byvarn(filtered_group_data,
-                                                                                 varn_df,
-                                                                                 target_var[[1]],
-                                                                                 length(by) + 1,
-                                                                                 indentation,
-                                                                                 total_row_sort_value = total_row_sort_value)
-
-  } else {
-
-    group_row_count <- nrow(group_data[-1,])
-    # Logic for group_row_count is when numeric_where values cause unexpected results
-    group_data[-1, paste0("ord_layer_", final_col + 1)] <- 1:ifelse(group_row_count == 0, 1, group_row_count)
-
+      # missing_subjects_row_label not passing in here
+      if (!is.null(missing_subjects_sort_value)) {
+        missing_rows <- group_data[[paste0('row_label', final_col+1)]] == paste0(indentation, missing_subjects_row_label)
+        group_data[missing_rows, paste0("ord_layer_", final_col + 1)] <- missing_subjects_sort_value
+      }
   }
 
   group_data

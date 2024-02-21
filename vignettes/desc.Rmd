@@ -21,14 +21,12 @@ library(tidyverse)
 library(magrittr)
 library(Tplyr)
 library(knitr)
-load("adlb.Rdata")
-load("adsl.Rdata")
 ```
 
 Descriptive statistics in **Tplyr** are created using `group_desc()` function when creating a layer. While `group_desc()` allows you to set your target, by variables, and filter criteria, a great deal of the control of the layer comes from `set_format_strings()` where the actual summaries are declared. 
 
 ```{r intro}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
       set_format_strings(
@@ -77,7 +75,9 @@ x %>%
 
 ### Notes About Built-in's
 
-Note that the only non-default option being used in any of the function calls above is `na.rm=TRUE`. For most of the functions, this is likely fine - but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:
+Note that the only non-default option being used in any of the function calls above is `na.rm=TRUE`. It's important to note that for `min` and `max`, when `na.rm=TRUE` is used with a vector that is all `NA`, these functions return `Inf` and `-Inf` respectively. When formatting the numbers, this is unexpected and also inconsistent with how other descriptive statistic functions, which return `NA`. Therefore, just for `min` and `max`, `Inf`'s are converted to `NA` so that they'll align with the behavior of the `empty` parameter in `f_str()`. 
+
+Using default settings of most descriptive statistic functions is typically fine, but with IQR, Q1, and Q3 note that there are several different quantile algorithms available in R. The default we chose to use is the R default of Type 7:
 
 $$
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
@@ -87,7 +87,7 @@ That said, we still want to offer some flexibility here, so you can change the q
 The example below demonstrates using the default quantile algorithm in R.
 
 ```{r quantile_types_default}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
       set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
@@ -105,7 +105,7 @@ $$
 
 ```{r quantile_types_sas}
 options(tplyr.quantile_type = 3)
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
       set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
@@ -137,7 +137,7 @@ As with any other setting in **Tplyr**, the layer setting will always take prece
 Let's look at an example.
 
 ```{r multi-custom}
-tplyr_table(adsl, TRT01P) %>%
+tplyr_table(tplyr_adsl, TRT01P) %>%
   add_layer(
     group_desc(vars(AGE, HEIGHTBL), by = "Sepal Length") %>%
       set_custom_summaries(
@@ -163,7 +163,7 @@ Another note about custom summaries is that you're able to overwrite the default
 For example, here we use the **Tplyr** default mean.
 
 ```{r custom_options}
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE) %>% 
       set_format_strings("Mean" = f_str('xx.xx', mean))
@@ -181,7 +181,7 @@ options(tplyr.custom_summaries =
           )
         )
 
-tplyr_table(adsl, TRT01P) %>% 
+tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE) %>% 
       set_format_strings("Mean" = f_str('xx.xx', mean))
