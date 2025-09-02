@@ -207,7 +207,8 @@ prep_two_way <- function(comp) {
       # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
       pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
                   names_from=!!treat_var,
-                  values_from = c('n', 'total'))
+                  values_from = c('n', 'total')) %>%
+      fill(total_comp, total_ref, .direction="downup")
 
   }, envir=caller_env())
 
