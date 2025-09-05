@@ -26,13 +26,14 @@
 #'
 #' get_tplyr_regex('format_group')
 #'
-get_tplyr_regex <- function(rx=c("format_string", "format_group")) {
+get_tplyr_regex <- function(rx=c("format_string", "format_group", "number_group")) {
   rx <- match.arg(rx)
 
   switch(
     rx,
     'format_string' = get_format_string_regex(),
-    'format_group' = get_format_group_regex()
+    'format_group' = get_format_group_regex(),
+    'number_group' = get_numeric_group_regex()
   )
 }
 
@@ -109,4 +110,18 @@ get_format_group_regex <- function() {
 
   regex(paste0(nwsd, ws, num, nws))
 
+}
+
+#' Return the regex for identifying numbers within an output string
+#'
+#' This regex targets the individual numbers within the string
+#'
+#' @return A regular expression
+#' @noRd
+get_numeric_group_regex <- function() {
+	#`-?` - Matches an optional negative sign
+	# `(?:\d*\.\d+|\d+)` - A non-capturing group with two alternatives:
+	#	`\d*\.\d+` - Matches decimals like `.75`, `0.56`, or `123.45`
+	#	`\d+` - Matches integers like `1`, `523`, `56`
+  regex("-?(?:\\d*\\.\\d+|\\d+)")
 }
