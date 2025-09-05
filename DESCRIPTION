@@ -71,7 +71,7 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 RdMacros: lifecycle
 Config/testthat/edition: 3
 LazyData: true
