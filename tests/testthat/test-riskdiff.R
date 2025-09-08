@@ -278,3 +278,26 @@ test_that("Error generates when duplicating riskdiff comparison values", {
   )
 
 })
+
+test_that("Missing counts don't cause error in comparisons", {
+
+
+adae <- filter(tplyr_adae, TRTA != "Xanomeline High Dose" & AEDECOD != "ACTINIC KERATOSIS")
+
+# Create table
+t <- tplyr_table(adae, TRTA, cols=SEX) %>%
+  # Set population
+  set_pop_data(tplyr_adsl) %>%
+  set_pop_treat_var(TRT01A) %>%
+  # Layer 1: Organ System and OCMQ (Narrow) Count Layer
+  add_layer(
+    group_count(vars(AEBODSYS, AEDECOD)) %>% 
+      # Set distinct counts per subject
+      set_distinct_by(USUBJID) %>%
+      # Add risk differences 
+      add_risk_diff(c("Xanomeline High Dose", "Placebo"))
+  )
+
+  # Build the table
+  expect_snapshot(head(as.data.frame(build(t))))
+})

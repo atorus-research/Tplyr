@@ -22,7 +22,7 @@
 #'
 #' @examples
 #'
-#' string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)")
+#' string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)",  "-1 (-.56, .75) -523%, 56 | -34")
 #'
 #' str_extract_fmt_group(string, 2)
 #'
@@ -31,11 +31,11 @@
 str_extract_fmt_group <- function(string, format_group) {
 
   if (!inherits(string, "character")) {
-    stop("Paramter `string` must be a character vector", call.=FALSE)
+    stop("Parameter `string` must be a character vector", call.=FALSE)
   }
 
-  if (!inherits(format_group, "numeric") || (inherits(format_group, "numeric") && format_group %% 1 != 0)) {
-    stop("Paramter `format_group` must be an integer", call.=FALSE)
+  if (!inherits(format_group, c("integer", "numeric")) || (inherits(format_group, "numeric") && format_group %% 1 != 0)) {
+    stop("Parameter `format_group` must be an integer", call.=FALSE)
   }
 
   # Pull out regex to drive the work
@@ -57,15 +57,15 @@ str_extract_fmt_group <- function(string, format_group) {
 str_extract_num <- function(string, format_group) {
 
   if (!inherits(string, "character")) {
-    stop("Paramter `string` must be a character vector", call.=FALSE)
+    stop("Parameter `string` must be a character vector", call.=FALSE)
   }
 
-  if (!inherits(format_group, "numeric") || (inherits(format_group, "numeric") && format_group %% 1 != 0)) {
-    stop("Paramter `format_group` must be an integer", call.=FALSE)
+  if (!inherits(format_group, c("integer", "numeric")) || (inherits(format_group, "numeric") && format_group %% 1 != 0)) {
+    stop("Parameter `format_group` must be an integer", call.=FALSE)
   }
 
   # Pull out regex to drive the work
-  f_grp_rx <- get_format_group_regex()
+  f_grp_rx <- get_numeric_group_regex()
 
   # Pull out all the match groups and then get the numeric for the conditional number
   match_groups <- str_match_all(string, f_grp_rx)
@@ -73,6 +73,6 @@ str_extract_num <- function(string, format_group) {
   # Get the number upon which the condition will be evaluated
   map_dbl(
     match_groups,
-    ~ if (nrow(.) < format_group) {NA_real_} else {as.double(.[format_group, 2])}
+    ~ if (nrow(.) < format_group) {NA_real_} else {as.double(.[format_group, 1])}
   )
 }

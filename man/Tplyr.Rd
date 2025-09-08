@@ -2,8 +2,8 @@
 % Please edit documentation in R/zzz.R
 \docType{package}
 \name{Tplyr}
-\alias{Tplyr}
 \alias{Tplyr-package}
+\alias{Tplyr}
 \title{A grammar of summary data for clinical reports}
 \description{
 `r lifecycle::badge("experimental")`

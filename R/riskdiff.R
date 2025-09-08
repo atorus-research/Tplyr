@@ -176,7 +176,21 @@ prep_two_way <- function(comp) {
                 msg = paste0("There are no records for the following groups within the variable ", as_name(treat_var),
                              ": ", paste(invalid_groups, collapse=", ")))
 
-    two_way <- numeric_data
+    # create the merge columns
+    mrg <- as_label(pop_treat_var)
+    names(mrg) <- as_label(treat_var)
+    mrg_cols <- append(mrg, map_chr(cols, as_label))
+
+    two_way <- numeric_data %>%
+      left_join(
+        select(header_n, everything(), tot_fill = n), 
+        by = mrg_cols
+      ) %>%
+      mutate(
+        distinct_total = if_else(is.na(distinct_total), tot_fill, distinct_total)
+      )
+      
+    rm(mrg, mrg_cols)
 
     # Nested layers need to plug the NAs left over - needs revision in the future
     if (is_built_nest && quo_is_symbol(by[[1]])) {
@@ -187,7 +201,6 @@ prep_two_way <- function(comp) {
           !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
         )
     }
-
 
     # If distinct is set and distinct values are there, use them
     if (comp_distinct && !is.null(distinct_by)) {
