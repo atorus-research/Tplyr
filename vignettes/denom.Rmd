@@ -30,7 +30,7 @@ Make sure you have a good understand of count and shift layers before you review
 
 ## Population Data in the Denominator
 
-What do you do when your target dataset doesn't _have_ the information necessary to create your denominator? For example - when you create an adverse event table, the adverse event dataset likely only contains records for subjects who experienced an adverse event. But subjects who did _not_ have an adverse event are still part of the study population and must be considered in the denominator. 
+What do you do when your target dataset doesn't _have_ the information necessary to create your denominator? For example, when you create an adverse event table, the adverse event dataset likely only contains records for subjects who experienced an adverse event. But subjects who did _not_ have an adverse event are still part of the study population and must be considered in the denominator. 
 
 For this reason,**Tplyr** allows lets you set a separate population dataset - but there are a couple things you need to do to trigger **Tplyr** to use the population data as your denominator. 
 
@@ -74,11 +74,11 @@ Fortunately, denominators are much simpler when they're kept within a single dat
   
 ## Denominator Grouping
 
-When you're looking within a single dataset, there are a couple factors that you need to consider for a denominator. The first is which grouping variables create those denominators. Let's look at this from two perspectives - count layers and shift layers.
+When you're looking within a single dataset, there are a couple factors that you need to consider for a denominator. Firstly, which grouping variables create those denominators? Let's look at this from two perspectives: count layers and shift layers.
 
 ### Count layers
 
-Most of the complexity of denominators comes from nuanced situations. A solid 80% of the time, defaults will work. For example, in a frequency table, you will typically want data within a column to sum to 100%. For example:
+Most of the complexity of denominators comes from nuanced situations. Tplyr is designed with practical defaults that suit most clinical summaries. For example, in a frequency table, you will typically want data within a column to sum to 100%, like so:
 
 ```{r}
 tplyr_adsl <- tplyr_adsl %>% 
@@ -180,9 +180,9 @@ There are some circumstances that you'll encounter where the filter used for a d
 
 Yeah we know - there are a lot of different places that filtering can happen...
 
-So let's take the example shown below. The first layer has no layer level filtering applied, so the table level `where` is the only filter applied. The second layer has a layer level filter applied, so the denominators will be based on that layer level filter. Notice how in this case, the percentages in the second layer add up to 100%. This is because the denominator only includes values used in that layer. 
+So let's take the example shown below. The first layer has no layer-level filtering applied, so the table-level `where` is the only filter applied. The second layer has a layer-level filter applied, so the denominators will be based on that layer-level filter. Notice how in this case, the percentages in the second layer add up to 100%. This is because the denominator only includes values used in that layer. 
 
-The third layer has a layer level filter applied, but additionally uses `set_denom_where()`. The `set_denom_where()` in this example is actually *removing* the layer level filter for the denominators. This is because in R, when you filter using `TRUE`, the filter returns all records. So by using `TRUE` in `set_denom_where()`, the layer level filter is effectively removed. This causes the denominator to include all values available from the table and not just those selected for that layer - so for this layer, the percentages will *not add up to 100%*. This is important - this allows the percentages from Layer 3 to sum to the total percentage of "DISCONTINUED" from Layer 1. 
+The third layer has a layer-level filter applied, but additionally uses `set_denom_where()`. The `set_denom_where()` in this example is actually *removing* the layer-level filter for the denominators. This is because in R, when you filter using `TRUE`, the filter returns all records. So by using `TRUE` in `set_denom_where()`, the layer-level filter is effectively removed. This causes the denominator to include all values available from the table and not just those selected for that layer - so for this layer, the percentages will *not add up to 100%*. This is important - this allows the percentages from Layer 3 to sum to the total percentage of "DISCONTINUED" from Layer 1. 
 
 ```{r}
 tplyr_adsl2 <- tplyr_adsl %>% 
@@ -210,9 +210,9 @@ t %>%
 
 Missing counts are a tricky area for frequency tables, and they play directly in with denominators as well. These values raise a number of questions. For example, do you want to format the missing counts the same way as the event counts? Do you want to present missing counts with percentages? Do missing counts belong in the denominator? 
 
-The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. If not specified, the associated count layer's format will be used. Using the `...` parameter, you are able to specify the row label desired for missing values and values that you determine to be considered 'missing'. For example, you may have NA values in the target variable, and then values like "Not Collected" that you also wish to consider "missing". `set_missing_count()` allows you to group those together. Actually - you're able to establish as many different "missing" groups as you want - even though that scenario is fairly unlikely.
+The `set_missing_count()` function can take a new `f_str()` object to set the display of missing values. If not specified, the associated count layer's format will be used. Using the `...` parameter, you are able to specify the row label desired for missing values and values that you determine to be considered 'missing'. For example, you may have NA values in the target variable, and then values like "Not Collected" that you also wish to consider "missing". `set_missing_count()` allows you to group those together. Actually you're able to establish as many different "missing" groups as you want - even though that scenario is fairly unlikely.
 
-In the example below 50 random values are removed and NA is specified as the missing string. This leads us to another parameter - `denom_ignore`. By default, if you specify missing values they will still be considered within the denominator, but when you have missing counts, you may wish to exclude them from the totals being summarized. By setting `denom_ignore` to TRUE, your denominators will ignore any groups of missing values that you've specified. 
+In the example below, 50 random values are removed and NA is specified as the missing string. This leads us to another parameter: `denom_ignore`. By default, Tplyr will include missing values within the denominator, but you may wish to exclude them from the totals being summarized. By setting `denom_ignore` to TRUE, your denominators will ignore any groups of missing values that you've specified. 
 
 ```{r}
 tplyr_adae2 <- tplyr_adae
@@ -231,11 +231,11 @@ t %>%
   kable()
 ```
 
-We did one more other thing worth explaining in the example above - gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you'll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes - we decided to just let you specify your own value.
+We did one more other thing worth explaining in the example above - we gave the missing count its own sort value. If you leave this field null, it will simply be the maximum value in the order layer plus 1, to put the Missing counts at the bottom during an ascending sort. But tables can be sorted a lot of different ways, as you'll see in the sort vignette. So instead of trying to come up with novel ways for you to control where the missing row goes, we decided to just let you specify your own value.
 
 ## Missing Subjects
 
-Missing counts and counting missing subjects work two different ways within Tplyr. Missing counts, as described above, will examine the records present in the data and collect and missing values. But for these results to be counted, they need to first be provided within the input data itself. On the other hand, missing subjects are calculated by looking at the difference between the potential number of subjects within the column (i.e. the combination of the treatment variables and column variables) and the number of subjects actually present. Consider this example:
+Missing counts and counting missing subjects work two different ways within Tplyr. Missing counts, as described above, will examine the records present in the data and collect any missing values. But for these results to be counted, they need to first be provided within the input data itself. On the other hand, missing subjects are calculated by looking at the difference between the *potential* number of subjects within the column (i.e. the combination of the treatment variables and column variables) and the number of subjects *actually* present. Consider this example:
 
 ```{r missing_subs1}
   missing_subs <- tplyr_table(tplyr_adae, TRTA) %>%
@@ -255,7 +255,7 @@ Missing counts and counting missing subjects work two different ways within Tply
     kable()
 ```
 
-In the example above, we produce a nested count layer. The function `add_missing_subjects_row()` triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default to 'Missing'. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. Lastly, you can provide an `f_str()` to format the missing subjects row separately from the rest of the layer, but whatever format is applied to the layer will apply otherwise.
+In the example above, we produce a nested count layer. The function `add_missing_subjects_row()` triggers the addition of the new result row for which the missing subjects are calculated. The row label applied for this can be configured using `set_missing_subjects_row_label()`, and the row label itself will default to 'Missing'. Depending on your sorting needs, a `sort_value` can be applied to whatever numeric value you provide. You can also provide an `f_str()` to format the missing subjects row separately from the rest of the layer.
 
 Note that in nested count layers, missing subject rows will generate for each independent group within the outer layer. Outer layers cannot have missing subject rows calculated individually. This would best be done in an independent layer itself, as the result would apply to the whole input target dataset. 
 
@@ -306,7 +306,7 @@ tplyr_table(tplyr_adsl2, TRT01P) %>%
   kable()
 ```
 
-Now the table is more intuitive. We used `set_missing_count()` to update our denominators, so missing have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
+Now the table is more intuitive. We used `set_missing_count()` to update our denominators, so missings have been excluded. Now, the total row intuitively matches the denominators used within each group, and we can see how many missing records were excluded.
 
 _You may have stumbled upon this portion of the vignette while searching for how to create a total column. **Tplyr** allows you to do this as well with the function `add_total_group()` and read more in `vignette("table")`._ 
 
