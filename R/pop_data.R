@@ -119,18 +119,15 @@ add_total_group <- function(table, group_name="Total") {
 
   assert_has_class(group_name, "character")
 
-  # Temporarily bind the group_name parameter to the table environment
-  env_bind(table, .tmp_name = group_name)
-
-  evalq({
-    # Create the function arguments and gather the list of all available treatment groups
-    treat_args <- list(current_env(), as.character(unlist(unique(pop_data[, quo_name(pop_treat_var)]))))
-    # Name the arguments
-    names(treat_args) <- c("table", .tmp_name)
-    # Call add_treat_grps with the derived arguments
-    do.call(add_treat_grps, treat_args)
-    # Remove the temporary variable
-    rm(.tmp_name, treat_args)
-  }, envir = table)
-  table
+  # EXTRACT: Get what we need from table environment
+  pop_data <- table$pop_data
+  pop_treat_var <- table$pop_treat_var
+  
+  # PROCESS: Create the function arguments and gather the list of all available treatment groups
+  treat_args <- list(table, as.character(unlist(unique(pop_data[, quo_name(pop_treat_var)]))))
+  # Name the arguments
+  names(treat_args) <- c("table", group_name)
+  
+  # Call add_treat_grps with the derived arguments
+  do.call(add_treat_grps, treat_args)
 }

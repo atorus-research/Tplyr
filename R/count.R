@@ -247,8 +247,15 @@ process_single_count_target <- function(x) {
 }
 
 #' Process the n count data and put into summary_stat
+#' Process the n count data and put into summary_stat
+#'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes count calculations in function environment
+#' 3. Binds results back to layer environment
 #'
 #' @param x Count layer
+#' @return The layer invisibly
 #' @noRd
 process_count_n <- function(x) {
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
@@ -344,7 +351,15 @@ get_needed_denoms_by <- function(denoms_by, treat_var, cols) {
 
 #' Process the amounts for a total row
 #'
+#' Process the amounts for a total row
+#'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes total row calculations in function environment
+#' 3. Binds results back to layer environment
+#'
 #' @param x A Count layer
+#' @return The layer invisibly
 #' @noRd
 process_count_total_row <- function(x) {
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
@@ -463,57 +478,67 @@ process_missing_subjects_row <- function(x) {
 #' @param x count_layer object
 #' @noRd
 prepare_format_metadata.count_layer <- function(x) {
-  evalq({
+  
+  # EXTRACT: Get needed bindings from layer environment
+  format_strings <- x$format_strings
+  distinct_by <- x$distinct_by
+  numeric_data <- x$numeric_data
+  
+  # PROCESS: Calculate metadata in function environment
+  # Get formatting metadata prepared
+  if (is.null(format_strings)) {
+    format_strings <- gather_defaults(x)
+  } else if (!'n_counts' %in% names(format_strings)) {
+    format_strings[['n_counts']] <- gather_defaults(x)[['n_counts']]
+  }
 
-    # Get formatting metadata prepared
-    if (is.null(format_strings)) {
-      format_strings <- gather_defaults(environment())
-    } else if (!'n_counts' %in% names(format_strings)) {
-      format_strings[['n_counts']] <- gather_defaults(environment())[['n_counts']]
-    }
+  # If there is both n & distinct, or pct and distinct_pct there has to be a
+  # distinct_by
+  # If both distinct and n
+  if (((("distinct_n" %in% map(format_strings$n_counts$vars, as_name) &
+         "n" %in% map(format_strings$n_counts$vars, as_name)) |
+        # or both distinct_pct and pct
+        ("distinct_pct" %in% map(format_strings$n_counts$vars, as_name) &
+         "pct" %in% map(format_strings$n_counts$vars, as_name))) &
+       # AND distinct_by is null
+       is.null(distinct_by))) {
+    stop("You can't use distinct and non-distinct parameters without specifying a distinct_by")
+  }
 
+  # If distinct_by isn't there, change distinct and distinct_pct
+  if (is.null(distinct_by) & "distinct_n" %in% map(format_strings$n_counts$vars, as_name)) {
+    distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_n")
+    format_strings$n_counts$vars[[distinct_ind]] <- expr(n)
+  }
+  if (is.null(distinct_by) & "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) {
+    distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_pct")
+    format_strings$n_counts$vars[[distinct_ind]] <- expr(pct)
+  }
 
-    # If there is both n & distinct, or pct and distinct_pct there has to be a
-    # distinct_by
-    # If both distinct and n
-    if (((("distinct_n" %in% map(format_strings$n_counts$vars, as_name) &
-           "n" %in% map(format_strings$n_counts$vars, as_name)) |
-          # or both distinct_pct and pct
-          ("distinct_pct" %in% map(format_strings$n_counts$vars, as_name) &
-           "pct" %in% map(format_strings$n_counts$vars, as_name))) &
-         # AND distinct_by is null
-         is.null(distinct_by))) {
-      stop("You can't use distinct and non-distinct parameters without specifying a distinct_by")
-    }
+  # Pull max character length from counts. Should be at least 1
+  n_width <- max(c(nchar(numeric_data$n), 1L), na.rm = TRUE)
 
-    # If distinct_by isn't there, change distinct and distinct_pct
-    if (is.null(distinct_by) & "distinct_n" %in% map(format_strings$n_counts$vars, as_name)) {
-      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_n")
-      format_strings$n_counts$vars[[distinct_ind]] <- expr(n)
-    }
-    if (is.null(distinct_by) & "distinct_pct" %in% map(format_strings$n_counts$vars, as_name)) {
-      distinct_ind <- which(map(format_strings$n_counts$vars, as_name) %in% "distinct_pct")
-      format_strings$n_counts$vars[[distinct_ind]] <- expr(pct)
-    }
+  # If a layer_width flag is present, edit the formatting string to display the maximum
+  # character length
+  if (str_detect(format_strings[['n_counts']]$format_string, "a|A")) {
+    # Replace 'a' with appropriate 'x'
+    replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "a",
+                                   paste(rep("x", n_width), collapse = ""))
+    # Replace 'A' with appropriate 'X'
+    replaced_string <- str_replace(replaced_string, "A",
+                                   paste(rep("X", n_width), collapse = ""))
 
-    # Pull max character length from counts. Should be at least 1
-    n_width <- max(c(nchar(numeric_data$n), 1L), na.rm = TRUE)
-
-    # If a layer_width flag is present, edit the formatting string to display the maximum
-    # character length
-    if (str_detect(format_strings[['n_counts']]$format_string, "a|A")) {
-      # Replace 'a' with appropriate 'x'
-      replaced_string <- str_replace(format_strings[['n_counts']]$format_string, "a",
-                                     paste(rep("x", n_width), collapse = ""))
-      # Replace 'A' with appropriate 'X'
-      replaced_string <- str_replace(replaced_string, "A",
-                                     paste(rep("X", n_width), collapse = ""))
-
-      # Make a new f_str and replace the old one
-      format_strings[['n_counts']] <- f_str(replaced_string, !!!format_strings$n_counts$vars)
-    }
-    max_length <- format_strings[['n_counts']]$size
-  }, envir = x)
+    # Make a new f_str and replace the old one
+    format_strings[['n_counts']] <- f_str(replaced_string, !!!format_strings$n_counts$vars)
+  }
+  max_length <- format_strings[['n_counts']]$size
+  
+  # BIND: Write results back to layer environment
+  x$format_strings <- format_strings
+  x$n_width <- n_width
+  x$max_length <- max_length
+  
+  invisible(x)
 }
 
 #' @noRd
@@ -800,7 +825,15 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
 #' When nesting a count layer in some cases a treatment group will not apear in one of the
 #' groups so this will turn the variable into a factor to force it to complete in the
 #' complete logic
+#' Convert treatment variable to factor
 #'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes factor conversion in function environment
+#' 3. Binds results back to layer environment
+#'
+#' @param x A count_layer object
+#' @return The layer invisibly
 #' @noRd
 factor_treat_var <- function(x) {
   # EXTRACT: Get needed bindings from layer environment (parent for nested layers)
@@ -831,6 +864,15 @@ prefix_count_row <- function(row_i, count_row_prefix) {
 
 }
 
+#' Process count denominators
+#'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes denominator calculations in function environment
+#' 3. Binds results back to layer environment
+#'
+#' @param x A count_layer object
+#' @return The layer invisibly
 #' @noRd
 process_count_denoms <- function(x) {
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
@@ -960,6 +1002,16 @@ process_count_denoms <- function(x) {
   invisible(x)
 }
 
+#' Rename missing values in count layer
+#'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes missing value renaming in function environment
+#' 3. Binds results back to layer environment
+#'
+#' @param x A count_layer object
+#' @return The layer invisibly
+#' @noRd
 rename_missing_values <- function(x) {
   # EXTRACT: Get needed bindings from layer environment
   missing_count_list <- env_get(x, "missing_count_list", default = NULL)

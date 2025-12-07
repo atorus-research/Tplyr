@@ -127,9 +127,7 @@ verify_layer_compatibility <- function(layer) {
 
 #' @noRd
 verify_layer_compatibility.count_layer <- function(layer){
-
-  evalq({
-
-  }, envir = layer)
+  # Placeholder for future compatibility checks
+  # No evalq needed - function currently does nothing
   return(invisible(layer))
 }

@@ -13,15 +13,21 @@ gather_defaults <- function(x) {
 
 #' Desc layer format string option extraction
 #'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes data in function environment
+#' 3. Returns result (no bind needed - read-only operation)
+#'
 #' @param x A desc layer
 #'
 #' @return The default format strings
 #' @noRd
 gather_defaults.desc_layer <- function(x) {
-  # Get the defaults set within options
+  # EXTRACT: Get what we need from layer environment
+  table_settings <- x$desc_layer_formats
+  
+  # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.desc_layer_default_formats')
-  # Get the table defaults if they're available
-  table_settings <- evalq(desc_layer_formats, envir=x)
 
   # Return the opt settings if the table settings are null
   # Otherwise return the table settings
@@ -35,15 +41,21 @@ gather_defaults.desc_layer <- function(x) {
 
 #' Count layer format string option extraction
 #'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes data in function environment
+#' 3. Returns result (no bind needed - read-only operation)
+#'
 #' @param x A count layer
 #'
 #' @return The default format strings
 #' @noRd
 gather_defaults.count_layer <- function(x) {
-  # Get the defaults set within options
+  # EXTRACT: Get what we need from layer environment
+  table_settings <- x$count_layer_formats
+  
+  # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.count_layer_default_formats')
-  # Get the table defaults if they're available
-  table_settings <- evalq(count_layer_formats, envir=x)
 
   # Append together - table will be preferred over option when indexing
   append(table_settings, opt_settings)
@@ -51,15 +63,21 @@ gather_defaults.count_layer <- function(x) {
 
 #' Shift layer format string option extraction
 #'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from layer environment
+#' 2. Processes data in function environment
+#' 3. Returns result (no bind needed - read-only operation)
+#'
 #' @param x A shift layer
 #'
 #' @return The default format strings
 #' @noRd
 gather_defaults.shift_layer <- function(x) {
-  # Get the defaults set within options
+  # EXTRACT: Get what we need from layer environment
+  table_settings <- x$shift_layer_formats
+  
+  # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.shift_layer_default_formats')
-  # Get the table defaults if they're available
-  table_settings <- evalq(shift_layer_formats, envir=x)
 
   # Append together - table will be preferred over option when indexing
   append(table_settings, opt_settings)
