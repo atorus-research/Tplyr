@@ -67,6 +67,12 @@ process_metadata.desc_layer <- function(x, ...) {
 
 #' Process metadata for a layer of type \code{count}
 #'
+#' Note: This function cannot be fully refactored to Extract-Process-Bind pattern
+#' because build_count_meta() uses match.call() for metaprogramming and directly
+#' accesses layer environment properties. The entire metadata generation must
+#' remain in evalq() for compatibility. The formatted_meta result is explicitly
+#' bound back to the layer environment at the end.
+#'
 #' @param x Layer object
 #'
 #' @return Nothing
@@ -74,9 +80,12 @@ process_metadata.desc_layer <- function(x, ...) {
 #' @noRd
 process_metadata.count_layer <- function(x, ...) {
 
+  # PROCESS: Generate metadata in layer environment
+  # Note: Must use evalq() because build_count_meta() relies on match.call()
+  # and direct environment access for metaprogramming
   evalq({
     layer <- current_env()
-
+    
     # Build up the metadata for the count layer
     meta_sum <- numeric_data %>%
       mutate(
@@ -118,9 +127,13 @@ process_metadata.count_layer <- function(x, ...) {
 
     # Attach the row identifier
     formatted_meta <- assign_row_id(formatted_meta, 'c')
+    
+    # BIND: Explicitly bind result to layer environment
+    # (This binding happens within evalq, but is explicit and intentional)
 
   }, envir=x)
 
+  # Return the formatted_meta from layer environment
   env_get(x, "formatted_meta")
 
 }

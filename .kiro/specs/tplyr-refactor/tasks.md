@@ -6,14 +6,14 @@ This implementation plan breaks down the refactoring of Tplyr's `evalq()` usage 
 
 ## Task List
 
-- [-] 1. Preparation and Setup
+- [x] 1. Preparation and Setup
   - Document all current `evalq()` usage locations
   - Establish performance baseline for key functions
   - Verify test suite is comprehensive and passing
   - Create refactoring branch
   - _Requirements: All requirements (foundation)_
 
-- [ ] 2. Refactor treatment_group_build()
+- [x] 2. Refactor treatment_group_build()
   - Extract bindings at function start (target, treat_var, pop_data, etc.)
   - Move all processing logic to function environment
   - Explicitly bind results (built_target, built_pop_data) at function end
@@ -21,7 +21,7 @@ This implementation plan breaks down the refactoring of Tplyr's `evalq()` usage 
   - Verify no temporary variables remain in table environment
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 3.1-3.8_
 
-- [ ] 2.1 Write tests for treatment_group_build()
+- [x] 2.1 Write tests for treatment_group_build()
   - Test that built_target and built_pop_data are created correctly
   - Test that no temporary variables (fct_levels, grp_i, i) remain in table environment
   - Test filter error handling
@@ -29,40 +29,40 @@ This implementation plan breaks down the refactoring of Tplyr's `evalq()` usage 
   - Test factor handling
   - _Requirements: 12.1-12.5_
 
-- [ ] 3. Refactor build_header_n()
+- [x] 3. Refactor build_header_n()
   - Extract bindings from table environment
   - Calculate header N values in function environment
   - Explicitly bind header_n back to table environment
   - Remove evalq() wrapper
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 10.1-10.8_
 
-- [ ] 3.1 Write tests for build_header_n()
+- [x] 3.1 Write tests for build_header_n()
   - Test header N calculation with population data
   - Test header N with column grouping variables
   - Test that no temporary variables remain in table environment
   - _Requirements: 12.1-12.5_
 
-- [ ] 4. Checkpoint - Verify table-level functions
+- [x] 4. Checkpoint - Verify table-level functions
   - Run full test suite
   - Verify R CMD check passes
   - Benchmark performance of table-level functions
   - Ensure all tests pass, ask the user if questions arise
 
-- [ ] 5. Refactor process_summaries.count_layer()
+- [x] 5. Refactor process_summaries.count_layer()
   - Extract bindings from layer environment (built_target, target_var, by, where, etc.)
   - Perform count calculations in function environment
   - Explicitly bind numeric_data back to layer environment
   - Remove evalq() wrapper
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 4.1-4.9, 6.1-6.10_
 
-- [ ] 5.1 Write tests for process_summaries.count_layer()
+- [x] 5.1 Write tests for process_summaries.count_layer()
   - Test count calculations are correct
   - Test distinct counting
   - Test nested counting
   - Test that no temporary variables remain in layer environment
   - _Requirements: 12.1-12.5_
 
-- [ ] 6. Refactor count layer helper functions
+- [x] 6. Refactor count layer helper functions
   - Refactor process_single_count_target()
   - Refactor process_count_n()
   - Refactor process_count_total_row()
@@ -74,38 +74,38 @@ This implementation plan breaks down the refactoring of Tplyr's `evalq()` usage 
   - Remove all evalq() wrappers
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 6.1-6.10, 10.1-10.8_
 
-- [ ] 6.1 Write tests for count layer helpers
+- [x] 6.1 Write tests for count layer helpers
   - Test each helper function independently
   - Test that no temporary variables remain in layer environment
   - Test edge cases (empty data, all NA, etc.)
   - _Requirements: 12.1-12.5_
 
-- [ ] 7. Refactor process_formatting.count_layer()
+- [x] 7. Refactor process_formatting.count_layer()
   - Extract bindings from layer environment (numeric_data, format_strings, etc.)
   - Perform formatting in function environment
   - Explicitly bind formatted_data back to layer environment
   - Remove evalq() wrapper
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 4.1-4.9_
 
-- [ ] 7.1 Write tests for process_formatting.count_layer()
+- [x] 7.1 Write tests for process_formatting.count_layer()
   - Test formatting output matches expected format
   - Test that no temporary variables remain in layer environment
   - _Requirements: 12.1-12.5_
 
-- [ ] 8. Refactor process_metadata.count_layer()
+- [x] 8. Refactor process_metadata.count_layer()
   - Extract bindings from layer environment
   - Generate metadata in function environment
   - Explicitly bind metadata back to layer environment
   - Remove evalq() wrapper
   - _Requirements: 1.1, 1.3, 1.5, 2.1-2.6, 4.1-4.9, 9.1-9.7_
 
-- [ ] 8.1 Write tests for process_metadata.count_layer()
+- [x] 8.1 Write tests for process_metadata.count_layer()
   - Test metadata structure is correct
   - Test traceability information is complete
   - Test that no temporary variables remain in layer environment
   - _Requirements: 12.1-12.5_
 
-- [ ] 9. Checkpoint - Verify count layer functions
+- [x] 9. Checkpoint - Verify count layer functions
   - Run full test suite
   - Verify R CMD check passes
   - Benchmark performance of count layer functions

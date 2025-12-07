@@ -1108,3 +1108,160 @@ test_that("Missing counts on nested count layers function correctly", {
 
   expect_equal(filter(x, row_label2 == "   New label")$ord_layer_2, c(99999, 99999))
 })
+
+# Tests for refactored process_summaries.count_layer()
+test_that("process_summaries.count_layer() produces correct count calculations", {
+  # Basic count layer
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl)
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify numeric_data is created correctly
+  expect_true(!is.null(layer_test$numeric_data))
+  expect_true("n" %in% names(layer_test$numeric_data))
+  expect_true("total" %in% names(layer_test$numeric_data))
+  
+  # Verify counts are correct
+  expect_equal(sum(layer_test$numeric_data$n), nrow(mtcars))
+  
+  # Count layer with by variable
+  t_test2 <- tplyr_table(mtcars, gear)
+  layer_test2 <- group_count(t_test2, cyl, by = am)
+  t_test2 <- add_layers(t_test2, layer_test2)
+  
+  t_test2 <- build(t_test2)
+  
+  expect_true(!is.null(layer_test2$numeric_data))
+  expect_true("am" %in% names(layer_test2$numeric_data))
+})
+
+test_that("process_summaries.count_layer() handles distinct counting correctly", {
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl) %>%
+    set_distinct_by(am)
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify distinct_n is calculated
+  expect_true("distinct_n" %in% names(layer_test$numeric_data))
+  expect_true("distinct_total" %in% names(layer_test$numeric_data))
+  
+  # Distinct counts should be <= regular counts
+  expect_true(all(layer_test$numeric_data$distinct_n <= layer_test$numeric_data$n))
+})
+
+test_that("process_summaries.count_layer() handles nested counting correctly", {
+  mtcars_test <- mtcars
+  mtcars_test$grp <- paste0("grp.", mtcars_test$cyl)
+  
+  t_test <- tplyr_table(mtcars_test, gear)
+  layer_test <- group_count(t_test, vars(cyl, grp))
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify nested structure is created
+  expect_true(!is.null(layer_test$numeric_data))
+  expect_true(nrow(layer_test$numeric_data) > 0)
+  
+  # Verify both target variables are present
+  expect_true("cyl" %in% names(layer_test$numeric_data) || "summary_var" %in% names(layer_test$numeric_data))
+})
+
+test_that("process_summaries.count_layer() does not pollute layer environment", {
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl)
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify no temporary variables remain in layer environment from process_summaries.count_layer()
+  # Note: Some variables may exist from helper functions that still use evalq (not yet refactored)
+  expect_false(exists("keep_levels_logic", envir = layer_test))
+  expect_false(exists("kept_levels_found", envir = layer_test))
+  expect_false(exists("drop_levels_ind", envir = layer_test))
+  expect_false(exists("drop_these_levels", envir = layer_test))
+  
+  # Verify expected bindings DO exist
+  expect_true(exists("numeric_data", envir = layer_test))
+  expect_true(exists("built_target", envir = layer_test))
+})
+
+test_that("process_summaries.count_layer() handles where conditions correctly", {
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl) %>%
+    set_where(am == 1)
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify filtering was applied
+  expect_true(!is.null(layer_test$numeric_data))
+  
+  # Total count should be less than full dataset
+  expect_true(sum(layer_test$numeric_data$n) < nrow(mtcars))
+  expect_true(sum(layer_test$numeric_data$n) == sum(mtcars$am == 1))
+})
+
+test_that("process_summaries.count_layer() handles total rows correctly", {
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl) %>%
+    add_total_row()
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify total row settings are bound correctly
+  expect_true(layer_test$include_total_row)
+  expect_equal(layer_test$total_row_label, "Total")
+  
+  # Verify total row appears in numeric_data
+  expect_true("Total" %in% layer_test$numeric_data$summary_var)
+})
+
+test_that("process_summaries.count_layer() handles missing subjects row correctly", {
+  t_test <- tplyr_table(mtcars, gear) %>%
+    set_pop_data(mtcars)
+  layer_test <- group_count(t_test, cyl) %>%
+    add_missing_subjects_row()
+  t_test <- add_layers(t_test, layer_test)
+  
+  suppressWarnings(t_test <- build(t_test))
+  
+  # Verify missing subjects row settings are bound correctly
+  expect_true(layer_test$include_missing_subjects_row)
+  expect_equal(layer_test$missing_subjects_row_label, "Missing")
+})
+
+test_that("process_summaries.count_layer() handles basic functionality", {
+  # Additional basic functionality test
+  t_test <- tplyr_table(mtcars, gear)
+  layer_test <- group_count(t_test, cyl)
+  t_test <- add_layers(t_test, layer_test)
+  
+  t_test <- build(t_test)
+  
+  # Verify basic structure
+  expect_true(!is.null(layer_test$numeric_data))
+  expect_true(nrow(layer_test$numeric_data) > 0)
+  expect_true(ncol(layer_test$numeric_data) > 0)
+  
+  # Verify all cyl values are present
+  unique_cyls <- unique(layer_test$numeric_data$summary_var)
+  expect_true(length(unique_cyls) >= 3)  # Should have at least 3 cylinder values
+})
+
+test_that("process_summaries.count_layer() error handling works correctly", {
+  # Invalid where condition should produce informative error
+  expect_error({
+    t <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(cyl) %>%
+          set_where(nonexistent_var == 1)
+      )
+    build(t)
+  }, "group_count `where` condition")
+})

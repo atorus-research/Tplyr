@@ -5,32 +5,42 @@
 #' This is exactly the same as default header_n execpt it works on the built
 #' pop_data.
 #'
+#' This function follows the Extract-Process-Bind pattern:
+#' 1. Extracts needed bindings from table environment
+#' 2. Processes data in function environment
+#' 3. Binds results back to table environment
+#'
 #' @noRd
 build_header_n <- function(table) {
-  evalq({
-
-    # Error out if the cols variables around found in the pop_data
-    assert_quo_var_present(cols, names(built_pop_data))
-
-    # If there is a distinct_by, use it to make the header_n
-    if(is.null(distinct_by)) {
-      df <- built_pop_data %>%
-        group_by(!!pop_treat_var, !!!cols) %>%
-        tally() %>%
-        ungroup() %>%
-        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
-    } else {
-      df <- built_pop_data %>%
-        distinct(!!!distinct_by, !!pop_treat_var, .keep_all = TRUE) %>%
-        group_by(!!pop_treat_var, !!!cols) %>%
-        tally() %>%
-        ungroup() %>%
-        complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
-    }
-
-    header_n <- df
-    rm(df)
-  }, envir = table)
+  # EXTRACT: Get what we need from table environment
+  built_pop_data <- table$built_pop_data
+  pop_treat_var <- table$pop_treat_var
+  cols <- table$cols
+  distinct_by <- table$distinct_by
+  
+  # PROCESS: Calculate header N values in function environment
+  # Error out if the cols variables are not found in the pop_data
+  assert_quo_var_present(cols, names(built_pop_data))
+  
+  # If there is a distinct_by, use it to make the header_n
+  if(is.null(distinct_by)) {
+    header_n <- built_pop_data %>%
+      group_by(!!pop_treat_var, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
+      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+  } else {
+    header_n <- built_pop_data %>%
+      distinct(!!!distinct_by, !!pop_treat_var, .keep_all = TRUE) %>%
+      group_by(!!pop_treat_var, !!!cols) %>%
+      tally() %>%
+      ungroup() %>%
+      complete(!!pop_treat_var, !!!cols, fill = list(n = 0))
+  }
+  
+  # BIND: Write results back to table environment
+  table$header_n <- header_n
+  
   table
 }
 
