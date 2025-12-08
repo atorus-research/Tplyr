@@ -215,6 +215,7 @@ The `set_missing_count()` function can take a new `f_str()` object to set the di
 In the example below, 50 random values are removed and NA is specified as the missing string. This leads us to another parameter: `denom_ignore`. By default, Tplyr will include missing values within the denominator, but you may wish to exclude them from the totals being summarized. By setting `denom_ignore` to TRUE, your denominators will ignore any groups of missing values that you've specified. 
 
 ```{r}
+set.seed(1234)
 tplyr_adae2 <- tplyr_adae
 tplyr_adae2[sample(nrow(tplyr_adae2), 50), "AESEV"] <- NA
 
@@ -273,6 +274,7 @@ More nuance comes in two places:
 In the example below, we summarize age groups by sex. The denominators are determined by treatment group and sex, and since we are not excluding any values from the denominator, the total row ends up matching the denominator that was used. The 'Missing' row tells us the number of missing values, but because `count_missings` is set to `TRUE`, the missing counts are included in the total row. This probably isn't how you would choose to display things, but here we're trying to show the flexibility built into **Tplyr**.
 
 ```{r}
+set.seed(1234)
 tplyr_adsl2 <- tplyr_adsl
 tplyr_adsl2[sample(nrow(tplyr_adsl2), 50), "AGEGR1"] <- NA
 
