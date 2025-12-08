@@ -24,7 +24,7 @@ gather_defaults <- function(x) {
 #' @noRd
 gather_defaults.desc_layer <- function(x) {
   # EXTRACT: Get what we need from layer environment
-  table_settings <- x$desc_layer_formats
+  table_settings <- env_get(x, nm = "desc_layer_formats", inherit = TRUE)
   
   # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.desc_layer_default_formats')
@@ -52,7 +52,7 @@ gather_defaults.desc_layer <- function(x) {
 #' @noRd
 gather_defaults.count_layer <- function(x) {
   # EXTRACT: Get what we need from layer environment
-  table_settings <- x$count_layer_formats
+  table_settings <-env_get(x, nm = "count_layer_formats", inherit=TRUE)
   
   # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.count_layer_default_formats')
