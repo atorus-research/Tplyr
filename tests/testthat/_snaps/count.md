@@ -416,7 +416,7 @@
 # nested count layers error out when you try to add a total row
 
     i In index: 1.
-    Caused by error:
+    Caused by error in `process_nested_count_target()`:
     ! You can't include total rows in nested counts. Instead, add a seperate layer for total counts.
 
 # Tables with pop_data can accept a layer level where
