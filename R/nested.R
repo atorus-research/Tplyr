@@ -64,6 +64,7 @@ process_nested_count_target <- function(x) {
   # Missing subject counts should not occur in the outer layer
   fl <- group_count(x, target_var = !!target_var[[1]],
                     by = vars(!!!by), where = !!where)
+  env_bind(fl, denoms_by = denoms_by)
   fl$include_missing_subjects_row <- FALSE
   x$outer_ <- TRUE
   first_layer <- process_summaries(fl)
