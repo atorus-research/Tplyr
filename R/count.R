@@ -890,7 +890,7 @@ process_count_denoms <- function(x) {
   built_target_pre_where <- env_get(x, "built_target_pre_where")
   built_pop_data <- env_get(x, "built_pop_data", inherit = TRUE)
   pop_treat_var <- env_get(x, "pop_treat_var", inherit = TRUE)
-  distinct_by <- env_get(x, "distinct_by", default = NULL)
+  distinct_by <- env_get(x, "distinct_by", default = NULL, inherit=TRUE)
   denoms_by <- env_get(x, "denoms_by", default = NULL)
 
   # PROCESS: Execute in function environment
@@ -974,6 +974,7 @@ process_count_denoms <- function(x) {
     dist_grp[[which(is_svar)]] <- layer_params[[1]]
   }
 
+  # Issue in here somewhere. 
   denoms_df_dist <- built_pop_data %>%
     filter(!!denom_where) %>%
     group_by(!!pop_treat_var, !!!dist_grp) %>%
@@ -995,6 +996,7 @@ process_count_denoms <- function(x) {
       rename("summary_var" := !!target_var[[1]])
   }
 
+  browser()
   # BIND: Write results back to layer environment
   x$denoms_df <- denoms_df
   x$denoms_by <- denoms_by
