@@ -155,13 +155,13 @@ process_single_count_target <- function(x) {
   include_total_row <- env_get(x, "include_total_row")
   include_missing_subjects_row <- env_get(x, "include_missing_subjects_row")
   count_row_prefix <- env_get(x, "count_row_prefix", default = NULL)
-  denoms_by <- env_get(x, "denoms_by", default = NULL)
+  denoms_by <- env_get(x, "denoms_by", default = NULL, inherit=TRUE)
   target_var <- env_get(x, "target_var")
-  format_strings <- env_get(x, "format_strings", default = NULL)
-  count_missings <- env_get(x, "count_missings", default = FALSE)
-  denom_ignore <- env_get(x, "denom_ignore", default = NULL)
+  format_strings <- env_get(x, "format_strings", default = NULL, inherit=TRUE)
+  count_missings <- env_get(x, "count_missings", default = FALSE, inherit=TRUE)
+  denom_ignore <- env_get(x, "denom_ignore", default = NULL, inherit=TRUE)
   total_count_format <- env_get(x, "total_count_format", default = NULL)
-  count_fmt <- env_get(x, "count_fmt", default = NULL)
+  count_fmt <- env_get(x, "count_fmt", default = NULL, inherit=TRUE)
 
   # PROCESS: Execute in function environment
   # The current environment should be the layer itself
@@ -194,9 +194,9 @@ process_single_count_target <- function(x) {
   # Also re-extract denoms_by as it may have been modified by process_count_n
   summary_stat <- env_get(x, "summary_stat")
   total_stat <- env_get(x, "total_stat", default = NULL)
-  missing_subjects_stat <- env_get(x, "missing_subjects_stat", default = NULL)
-  denoms_df <- env_get(x, "denoms_df")
-  denoms_by <- env_get(x, "denoms_by", default = NULL)
+  missing_subjects_stat <- env_get(x, "missing_subjects_stat", default = NULL, inherit=TRUE)
+  denoms_df <- env_get(x, "denoms_df", inherit=TRUE)
+  denoms_by <- env_get(x, "denoms_by", default = NULL, inherit=TRUE)
   
   # Note: We don't return early for empty summary_stat because we still need to
   # process it through get_denom_total() to add the required columns (total, distinct_total, etc.)
@@ -259,16 +259,16 @@ process_single_count_target <- function(x) {
 #' @noRd
 process_count_n <- function(x) {
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
-  denoms_by <- env_get(x, "denoms_by", default = NULL)
+  denoms_by <- env_get(x, "denoms_by", default = NULL, inherit=TRUE)
   treat_var <- env_get(x, "treat_var", inherit = TRUE)
   cols <- env_get(x, "cols", inherit = TRUE)
   target_var <- env_get(x, "target_var")
   built_target <- env_get(x, "built_target")
   by <- env_get(x, "by")
-  distinct_by <- env_get(x, "distinct_by", default = NULL)
-  missing_count_string <- env_get(x, "missing_count_string", default = NULL)
-  missing_count_list <- env_get(x, "missing_count_list", default = NULL)
-  limit_data_by <- env_get(x, "limit_data_by", default = NULL)
+  distinct_by <- env_get(x, "distinct_by", default = NULL, inherit=TRUE)
+  missing_count_string <- env_get(x, "missing_count_string", default = NULL, inherit=TRUE)
+  missing_count_list <- env_get(x, "missing_count_list", default = NULL, inherit=TRUE)
+  limit_data_by <- env_get(x, "limit_data_by", default = NULL, inherit=TRUE)
   outer_ <- env_get(x, "outer_", default = FALSE)
 
   # PROCESS: Execute in function environment
@@ -881,12 +881,12 @@ process_count_denoms <- function(x) {
   by <- env_get(x, "by")
   cols <- env_get(x, "cols", inherit = TRUE)
   target <- env_get(x, "target", inherit = TRUE)
-  denom_ignore <- env_get(x, "denom_ignore", default = NULL)
-  missing_count_string <- env_get(x, "missing_count_string", default = NULL)
-  denom_where <- env_get(x, "denom_where", default = NULL)
+  denom_ignore <- env_get(x, "denom_ignore", default = NULL, inherit=TRUE)
+  missing_count_string <- env_get(x, "missing_count_string", default = NULL, inherit=TRUE)
+  denom_where <- env_get(x, "denom_where", default = NULL, inherit=TRUE)
   pop_data <- env_get(x, "pop_data", inherit = TRUE)
-  where <- env_get(x, "where")
-  missing_count_list <- env_get(x, "missing_count_list", default = NULL)
+  where <- env_get(x, "where", inherit=TRUE)
+  missing_count_list <- env_get(x, "missing_count_list", default = NULL, inherit=TRUE)
   built_target_pre_where <- env_get(x, "built_target_pre_where")
   built_pop_data <- env_get(x, "built_pop_data", inherit = TRUE)
   pop_treat_var <- env_get(x, "pop_treat_var", inherit = TRUE)
@@ -996,7 +996,6 @@ process_count_denoms <- function(x) {
       rename("summary_var" := !!target_var[[1]])
   }
 
-  browser()
   # BIND: Write results back to layer environment
   x$denoms_df <- denoms_df
   x$denoms_by <- denoms_by
@@ -1016,7 +1015,7 @@ process_count_denoms <- function(x) {
 #' @noRd
 rename_missing_values <- function(x) {
   # EXTRACT: Get needed bindings from layer environment
-  missing_count_list <- env_get(x, "missing_count_list", default = NULL)
+  missing_count_list <- env_get(x, "missing_count_list", default = NULL, inherit=TRUE)
   built_target <- env_get(x, "built_target")
   target_var <- env_get(x, "target_var")
 
