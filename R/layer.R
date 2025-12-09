@@ -137,12 +137,11 @@ new_tplyr_layer <- function(parent, target_var, by, where, type, ...) {
   e <- do.call('env', arg_list)
 
   # Add non-parameter specified defaults into the environment.
-  evalq({
-    layers <- structure(list(), class=append("tplyr_layer_container", "list"))
-    precision_by <- by
-    precision_on <- target_var[[1]]
-    stats <- list()
-  }, envir = e)
+  # Using direct binding instead of evalq for clarity
+  e$layers <- structure(list(), class=append("tplyr_layer_container", "list"))
+  e$precision_by <- by
+  e$precision_on <- target_var[[1]]
+  e$stats <- list()
 
   # Create the object
   structure(e,
@@ -164,18 +163,19 @@ validate_tplyr_layer <- function(parent, target_var, by, cols, where, type, ...)
   assert_that(is.environment(parent) && inherits(parent, c('tplyr_table', 'tplyr_layer', 'tplyr_subgroup_layer')),
               msg="Parent environment must be a `tplyr_table` or `tplyr_layer")
 
-  # Make sure `target_var` exists in the target data.frame
-  target <- NULL # Mask global definitions check
-  vnames <- evalq(names(target), envir=parent)
+  # EXTRACT: Get target dataset from parent environment
+  # Use get() to search up the environment chain (parent may be a layer, not a table)
+  target <- get("target", envir = parent)
+  vnames <- names(target)
 
   # Make sure that by variables not submitted as characters exist in the target dataframe
-  assert_quo_var_present(by, vnames)
+  assert_quo_var_present(by, vnames = vnames)
   # Do the same for target_var
-  assert_quo_var_present(target_var, vnames)
+  assert_quo_var_present(target_var, vnames = vnames)
 
   # For desc layers additionally make sure that the target variables all are numeric
   if (type == "desc") {
-    walk(target_var, ~ assert_that(is.numeric(evalq(target, envir=parent)[[as_name(.x)]]),
+    walk(target_var, ~ assert_that(is.numeric(target[[as_name(.x)]]),
                                    msg = paste0("Target variable `", as_name(.x), "` is not numeric. ",
                                                 "Target variables must be numeric for desc layers.")))
   }

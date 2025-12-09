@@ -90,12 +90,12 @@ assert_quo_var_present <- function(quo_list, vnames=NULL, envir=NULL, allow_char
     allow_str <- "`. Submit either a variable name or multiple variable names using `dplyr::vars`."
   }
 
-  # Global definition warning
-  target <- NULL
-  # If the vnames weren't supplied then grab
+  # If the vnames weren't supplied then grab from environment
   if (is.null(vnames)) {
     assert_that(!is.null(envir), msg='In `assert_quo_var_present` if `vnames` is not provided then envir must be specified')
-    vnames <- evalq(names(target), envir=envir)
+    # EXTRACT: Get target from environment and extract names
+    # Use env_get with inherit=TRUE to get target from parent if needed
+    vnames <- names(env_get(envir, "target", inherit = TRUE))
   }
 
   # Make sure that quo_list variables not submitted as characters exist in the target dataframe

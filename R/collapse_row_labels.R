@@ -54,7 +54,6 @@ collapse_row_labels <- function(x, ..., indent = "  ", target_col=row_label) {
   target_col = enquo(target_col)
   dots <- enquos(...)
 
-  # browser()
   dot_names <- map_chr(dots, as_label)
 
   if (!inherits(x, 'data.frame')) {

@@ -144,62 +144,61 @@ test_that("A group_desc layer can be ordered properly", {
 
 })
 
-##### Nested
-load(test_path('adsl.Rdata'))
-adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
-adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
-adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
-  add_total_group() %>%
-  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
-  add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
-      set_ordering_cols(Placebo, `65-80`) %>%
-      set_result_order_var(n) %>%
-      set_order_count_method(c("byvarn", "byvarn"))
-  )
-adsl_1 <- build(adsl1)
-byvarn_out <- c(101, 101, 102, 102,
-                 102, 102, 102, 102,
-                 102, 102, 102)
-byvarn_in <- c(Inf, 102, Inf, 101,
-                103, 104, 105, 106,
-                107, 108, 109)
-
-adsl2 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
-  add_total_group() %>%
-  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
-  add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
-      set_ordering_cols(Placebo, `65-80`) %>%
-      set_result_order_var(n) %>%
-      set_order_count_method(c("bycount", "bycount"))
-  )
-adsl_2 <- build(adsl2)
-bycount_out <- c(30, 30, 12, 12,
-                  12, 12, 12, 12,
-                  12, 12, 12)
-bycount_in <- c(Inf, 30, Inf, 2,
-                 1, 0, 0, 0,
-                 1, 1, 7)
-
-adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
-  add_total_group() %>%
-  add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
-  add_layer(
-    group_count(vars(EOSSTT, DCDECOD)) %>%
-      set_ordering_cols(Placebo, `65-80`) %>%
-      set_result_order_var(n) %>%
-      set_order_count_method(c("byfactor", "byfactor"))
-  )
-adsl_3 <- build(adsl3)
-byfactor_out <- c(101, 101, 102, 102,
+test_that("Nested count layers are ordered properly", {
+  ##### Nested
+  load(test_path('adsl.Rdata'))
+  adsl$EOSSTTN <- unclass(as.factor(adsl$EOSSTT)) + 100
+  adsl$DCDECODN <- unclass(as.factor(adsl$DCDECOD)) + 100
+  adsl1 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+    add_total_group() %>%
+    add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+    add_layer(
+      group_count(vars(EOSSTT, DCDECOD)) %>%
+        set_ordering_cols(Placebo, `65-80`) %>%
+        set_result_order_var(n) %>%
+        set_order_count_method(c("byvarn", "byvarn"))
+    )
+  adsl_1 <- build(adsl1)
+  byvarn_out <- c(101, 101, 102, 102,
                    102, 102, 102, 102,
                    102, 102, 102)
-byfactor_in <- c(Inf, 1, Inf, 1,
-                  2, 3, 4, 5,
-                  6, 7, 8)
+  byvarn_in <- c(Inf, 102, Inf, 101,
+                  103, 104, 105, 106,
+                  107, 108, 109)
 
-test_that("Nested count layers are ordered properly", {
+  adsl2 <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+    add_total_group() %>%
+    add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+    add_layer(
+      group_count(vars(EOSSTT, DCDECOD)) %>%
+        set_ordering_cols(Placebo, `65-80`) %>%
+        set_result_order_var(n) %>%
+        set_order_count_method(c("bycount", "bycount"))
+    )
+  adsl_2 <- build(adsl2)
+  bycount_out <- c(30, 30, 12, 12,
+                    12, 12, 12, 12,
+                    12, 12, 12)
+  bycount_in <- c(Inf, 30, Inf, 2,
+                   1, 0, 0, 0,
+                   1, 1, 7)
+
+  adsl3  <- tplyr_table(adsl, TRT01A, cols = AGEGR1) %>%
+    add_total_group() %>%
+    add_treat_grps("T1&T2" = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>%
+    add_layer(
+      group_count(vars(EOSSTT, DCDECOD)) %>%
+        set_ordering_cols(Placebo, `65-80`) %>%
+        set_result_order_var(n) %>%
+        set_order_count_method(c("byfactor", "byfactor"))
+    )
+  adsl_3 <- build(adsl3)
+  byfactor_out <- c(101, 101, 102, 102,
+                     102, 102, 102, 102,
+                     102, 102, 102)
+  byfactor_in <- c(Inf, 1, Inf, 1,
+                    2, 3, 4, 5,
+                    6, 7, 8)
 
   expect_equal(adsl_1$ord_layer_1, byvarn_out, ignore_attr = TRUE)
   expect_equal(adsl_1$ord_layer_2, byvarn_in, ignore_attr = TRUE)
@@ -299,4 +298,39 @@ test_that("Nested counts with by variables process properly", {
   # Same test but now working with a text outer layer and one by variable
   expect_equal(nrow(dplyr::count(t_ae_df2, row_label2, ord_layer_2)), 2)
 
+})
+
+test_that("Sorting functions work correctly after refactoring", {
+  # Test all three sorting methods to ensure functionality is preserved
+  
+  # byfactor
+  t1 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("byfactor")
+    )
+  b_t1 <- build(t1)
+  expect_equal(nrow(b_t1), 3)
+  expect_true("ord_layer_1" %in% names(b_t1))
+  
+  # bycount
+  t2 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("bycount")
+    )
+  b_t2 <- build(t2)
+  expect_equal(nrow(b_t2), 3)
+  expect_true("ord_layer_1" %in% names(b_t2))
+  
+  # byvarn
+  mtcars$cylN <- mtcars$cyl
+  t3 <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_count(cyl) %>%
+        set_order_count_method("byvarn")
+    )
+  b_t3 <- build(t3)
+  expect_equal(nrow(b_t3), 3)
+  expect_true("ord_layer_1" %in% names(b_t3))
 })
