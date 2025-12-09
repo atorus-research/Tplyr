@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^azure-pipelines\.yml$
 ^\.github$
+^\.kiro$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
 ^docs$
