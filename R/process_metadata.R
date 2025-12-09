@@ -103,7 +103,7 @@ process_metadata.desc_layer <- function(x, ...) {
 #' @export
 #' @noRd
 process_metadata.count_layer <- function(x, ...) {
-
+  
   # EXTRACT: Get needed bindings from layer environment
   numeric_data <- x$numeric_data
   table_where <- env_get(x, "table_where", inherit = TRUE)
@@ -132,6 +132,8 @@ process_metadata.count_layer <- function(x, ...) {
         !!!cols
         )
     )
+  # Need to bind to layer for use in stat calculations
+  x$meta_sum <- meta_sum 
 
   # Pivot the meta table
   formatted_meta <- meta_sum %>%
@@ -176,11 +178,11 @@ process_metadata.count_layer <- function(x, ...) {
 #' @param ... Additional arguments
 #'
 #' @return Formatted statistic metadata
+#' @export
 #' @noRd
 process_metadata.tplyr_statistic <- function(x, ...) {
   # Get the second class (the specific statistic type)
   stat_class <- class(x)[2]
-  
   # Dispatch to the specific method
   if (stat_class == "tplyr_riskdiff") {
     process_metadata.tplyr_riskdiff(x, ...)
@@ -200,12 +202,12 @@ process_metadata.tplyr_statistic <- function(x, ...) {
 #' @param ... Pass through parameters
 #'
 #' @return Formatted risk difference metadata
+#' @export
 #' @noRd
 process_metadata.tplyr_riskdiff <- function(x, ...) {
 
   # EXTRACT: Get what we need from the statistic environment
   comparisons <- x$comparisons
-  
   # Get these from the parent layer environment
   meta_sum <- env_get(x, "meta_sum", default = NULL, inherit = TRUE)
   treat_var <- env_get(x, "treat_var", default = NULL, inherit = TRUE)
