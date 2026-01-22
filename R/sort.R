@@ -213,28 +213,27 @@ add_order_columns.count_layer <- function(x) {
       all_outer <- numeric_data %>%
         filter(!!!filter_logic)
 
-      # Add the ordering of the pieces in the layer
-      formatted_data <- formatted_data %>%
-        # group_by(.data[[paste0("row_label", formatted_col_index - 1)]]) %>%
-        group_by(row_label1) %>%
-        do(add_data_order_nested(., formatted_col_index - 1, numeric_data,
-                                 indentation_length = indentation_length,
-                                 ordering_cols = ordering_cols,
-                                 treat_var = treat_var, by = by, cols = cols,
-                                 result_order_var = result_order_var,
-                                 target_var = target_var,
-                                 order_count_method = order_count_method,
-                                 target = target, all_outer = all_outer,
-                                 filter_logic = filter_logic,
-                                 indentation = indentation,
-                                 outer_inf = outer_inf,
-                                 break_ties = break_ties,
-                                 numeric_cutoff = numeric_cutoff,
-                                 numeric_cutoff_stat = numeric_cutoff_stat,
-                                 numeric_cutoff_column = numeric_cutoff_column,
-                                 missing_subjects_row_label = missing_subjects_row_label,
-                                 missing_subjects_sort_value = missing_subjects_sort_value)) %>%
-        ungroup()
+      # Add the ordering of the pieces in the layer using vectorized approach
+      formatted_data <- add_data_order_nested_vectorized(
+        formatted_data, formatted_col_index - 1, numeric_data,
+        indentation_length = indentation_length,
+        ordering_cols = ordering_cols,
+        treat_var = treat_var, by = by, cols = cols,
+        result_order_var = result_order_var,
+        target_var = target_var,
+        order_count_method = order_count_method,
+        target = target, all_outer = all_outer,
+        filter_logic = filter_logic,
+        indentation = indentation,
+        outer_inf = outer_inf,
+        break_ties = break_ties,
+        numeric_cutoff = numeric_cutoff,
+        numeric_cutoff_stat = numeric_cutoff_stat,
+        numeric_cutoff_column = numeric_cutoff_column,
+        missing_subjects_row_label = missing_subjects_row_label,
+        missing_subjects_sort_value = missing_subjects_sort_value,
+        total_row_sort_value = total_row_sort_value
+      )
 
       if (!is.null(nest_count) && nest_count) {
         # If the table nest should be collapsed into one row.
@@ -846,5 +845,306 @@ add_data_order_nested <- function(group_data, final_col, numeric_data, ...) {
 
   group_data
 
+}
+
+#' Vectorized nested sorting - replaces do(add_data_order_nested())
+#'
+#' This function computes sort orders for nested count layers without
+#' using the deprecated do() pattern. It processes all outer values
+#' and their inner values in a vectorized manner.
+#'
+#' @param formatted_data The formatted data frame to add ordering to
+#' @param final_col The index for the final column (length(by))
+#' @param numeric_data The numeric data with counts
+#' @param indentation_length Length of indentation prefix
+#' @param ordering_cols Columns to use for ordering
+#' @param treat_var Treatment variable
+#' @param by By variables (first element is outer nest variable)
+#' @param cols Column variables
+#' @param result_order_var Variable to use for ordering results
+#' @param target_var Target variables
+#' @param order_count_method Method for ordering ("bycount", "byvarn", or "byfactor")
+#' @param target Original target data
+#' @param all_outer Filtered numeric data for outer values only
+#' @param filter_logic Filter expressions for ordering columns
+#' @param indentation Indentation string
+#' @param outer_inf Whether outer values should sort to Inf
+#' @param break_ties How to break ties ("asc" or "desc")
+#' @param numeric_cutoff Numeric cutoff value
+#' @param numeric_cutoff_stat Statistic for numeric cutoff
+#' @param numeric_cutoff_column Column for numeric cutoff
+#' @param missing_subjects_row_label Label for missing subjects row
+#' @param missing_subjects_sort_value Sort value for missing subjects
+#' @param total_row_sort_value Sort value for total row
+#' @return formatted_data with ord_layer columns added
+#' @noRd
+add_data_order_nested_vectorized <- function(formatted_data, final_col, numeric_data,
+                                              indentation_length, ordering_cols,
+                                              treat_var, by, cols, result_order_var,
+                                              target_var, order_count_method, target,
+                                              all_outer, filter_logic, indentation,
+                                              outer_inf, break_ties, numeric_cutoff,
+                                              numeric_cutoff_stat, numeric_cutoff_column,
+                                              missing_subjects_row_label,
+                                              missing_subjects_sort_value,
+                                              total_row_sort_value = NULL) {
+
+  row_label_vec <- vars_select(names(formatted_data), starts_with("row_label"))
+  last_row_label <- tail(row_label_vec, 1)
+  mrg_by <- paste0("row_label", seq_along(by))[-1]
+
+  # Identify outer vs inner rows
+
+  # Outer rows: where the last row_label equals row_label1 (no indentation)
+  # Inner rows: where the last row_label starts with indentation
+  # Handle NA values: NA becomes FALSE (not an outer row), which is safe since
+  # NA rows shouldn't exist in well-formed data
+  # Handle empty indentation: when indentation is "", all rows start with it,
+  # so we need a different approach - use row_label1 == last_row_label
+  if (nchar(indentation) == 0) {
+    # No indentation - outer rows have the same value in row_label1 and last_row_label
+    is_outer_row <- formatted_data$row_label1 == formatted_data[[last_row_label]]
+    # Handle NAs
+    is_outer_row[is.na(is_outer_row)] <- FALSE
+  } else {
+    is_outer_row <- str_starts(formatted_data[[last_row_label]], fixed(indentation)) %in% FALSE
+  }
+
+  # ========== OUTER LAYER SORTING ==========
+  # Compute sort order for outer values (ord_layer_1)
+
+  if (order_count_method[1] == "byvarn") {
+    varn_df <- get_varn_values(target, as_name(by[[1]]))
+    # For byvarn, we can compute order directly from varn values
+    # Note: After replace_by_string_names(c(by, quo(summary_var))):
+    #   - by[[1]] becomes row_label1 (contains NA for outer rows)
+    #   - summary_var becomes row_label{length(by)+1} (contains actual outer values)
+    # So we need to look at column final_col + 1, not final_col
+    all_outer$..outer_order <- all_outer %>%
+      replace_by_string_names(c(by, quo(summary_var))) %>%
+      get_data_order_byvarn(varn_df, by[[1]], final_col + 1,
+                            total_row_sort_value = total_row_sort_value,
+                            missing_subjects_sort_value = missing_subjects_sort_value)
+
+  } else if (order_count_method[1] == "bycount") {
+    all_outer$..outer_order <- get_data_order_bycount(
+      all_outer, ordering_cols, treat_var, vars(!!!head(by, -1)), cols,
+      result_order_var, vars(!!by[[1]], !!target_var),
+      break_ties = break_ties,
+      numeric_cutoff = numeric_cutoff,
+      numeric_cutoff_stat = numeric_cutoff_stat,
+      numeric_cutoff_column = numeric_cutoff_column,
+      nested = TRUE
+    )
+  } else {
+    # byfactor - ord_layer_1 is already set by get_by_order() in the caller
+    # We don't need to compute or overwrite it
+    all_outer$..outer_order <- NULL
+  }
+
+  # For bycount and byvarn, we need to join the computed order back to formatted_data
+  # For byfactor, ord_layer_1 is already set by get_by_order() - skip this section
+  if (order_count_method[1] %in% c("bycount", "byvarn")) {
+    # Note: In all_outer, the outer values are in 'summary_var', not in by[[1]] (which is NA)
+    # We need to join on summary_var -> row_label1 in formatted_data
+    #
+    # For the simple case (no extra by vars), just match summary_var to row_label1.
+    # For the complex case (extra by vars), we need to:
+    # 1. Keep summary_var as is (don't rename it)
+    # 2. Rename other by vars to match formatted_data's row_label2, row_label3, etc.
+    # 3. Join on summary_var -> row_label1 plus the mrg_by columns
+
+    if (length(mrg_by) == 0) {
+      # Simple case: just match summary_var to row_label1
+      outer_order_lookup <- all_outer %>%
+        select(summary_var, ..outer_order) %>%
+        distinct()
+
+      formatted_data <- formatted_data %>%
+        left_join(outer_order_lookup, by = c("row_label1" = "summary_var"))
+    } else {
+      # Complex case: need to include other by variables in the join
+      # Use replace_by_string_names like the original code, then select row_label columns
+      # This handles both symbol and text by variables correctly
+
+      outer_order_lookup <- all_outer %>%
+        replace_by_string_names(c(by, quo(summary_var))) %>%
+        # Select row_label columns (excluding row_label1 which is NA from the outer var)
+        # and the order column
+        select(starts_with("row_label"), ..outer_order, -row_label1) %>%
+        distinct()
+
+      # The last row_label column contains the outer values (from summary_var)
+      # We need to rename it to match row_label1 in formatted_data
+      last_row_label <- paste0("row_label", length(by) + 1)
+      if (last_row_label %in% names(outer_order_lookup)) {
+        outer_order_lookup <- rename(outer_order_lookup, ..outer_val = !!sym(last_row_label))
+      }
+
+      # Join on the outer value and any additional by vars
+      formatted_data <- formatted_data %>%
+        left_join(outer_order_lookup,
+                  by = c(setNames("..outer_val", "row_label1"), setNames(mrg_by, mrg_by)))
+    }
+
+    formatted_data$ord_layer_1 <- formatted_data$..outer_order
+    formatted_data$..outer_order <- NULL
+  }
+
+  # ========== INNER LAYER SORTING ==========
+  # For inner rows, compute sort order within each outer group
+
+  # The outer value (Inf or -Inf for outer rows)
+  outer_sort_value <- ifelse(is.null(outer_inf) || outer_inf, Inf, -Inf)
+
+  # Initialize ord_layer_(final_col+1)
+  ord_col_name <- paste0("ord_layer_", final_col + 1)
+  formatted_data[[ord_col_name]] <- NA_real_
+
+  # Outer rows get Inf/-Inf
+  formatted_data[is_outer_row, ord_col_name] <- outer_sort_value
+
+  # For inner rows, we need to compute sort order
+  inner_formatted <- formatted_data[!is_outer_row, ]
+
+  if (nrow(inner_formatted) > 0) {
+    # Remove indentation prefix from inner row labels for matching
+    inner_formatted$..inner_label_clean <- str_sub(inner_formatted[[last_row_label]],
+                                                    indentation_length + 1)
+
+    # Get the outer value for each inner row (from row_label1)
+    # Also prepare numeric_data for inner sorting
+
+    if (tail(order_count_method, 1) == "bycount") {
+      # For bycount, compute order based on counts within each outer group
+      # We need to process inner values grouped by outer value (and any other by vars)
+
+      # Determine additional by variables (beyond the outer nest var)
+      # by[1] is the outer nest var, by[2:length(by)] are other by vars (if any)
+      other_by_vars <- if (length(by) > 1) by[2:length(by)] else list()
+
+      # Prepare numeric data: filter to inner values and remove prefix
+      inner_numeric <- numeric_data %>%
+        filter(str_starts(summary_var, fixed(indentation))) %>%
+        mutate(
+          ..outer_val = !!by[[1]],
+          summary_var = str_sub(summary_var, indentation_length + 1)
+        )
+
+      # Build grouping expressions: outer_val plus any additional by vars
+      group_vars <- c(quo(..outer_val), other_by_vars)
+
+      # Compute inner order for each outer group (and other by var combination)
+      # Note: group_modify removes grouping columns from .x, so we can only pass
+      # by variables that are still present in .x. Since we're grouping by outer_val
+      # and other_by_vars, only by[[1]] (the outer nest var) remains in .x
+      inner_by_for_order <- vars(!!by[[1]])
+
+      inner_orders <- inner_numeric %>%
+        group_by(!!!group_vars) %>%
+        group_modify(function(.x, .y) {
+          # Get order for this group
+          ord <- get_data_order_bycount(
+            .x, ordering_cols, treat_var, inner_by_for_order, cols,
+            result_order_var, target_var,
+            break_ties = break_ties,
+            numeric_cutoff = numeric_cutoff,
+            numeric_cutoff_stat = numeric_cutoff_stat,
+            numeric_cutoff_column = numeric_cutoff_column,
+            nested = TRUE
+          )
+          tibble(summary_var = unique(.x$summary_var), ..inner_order = ord)
+        }) %>%
+        ungroup()
+
+      # Handle missing subjects
+      if (!is.null(missing_subjects_row_label) && !is.null(missing_subjects_sort_value)) {
+        inner_orders <- inner_orders %>%
+          mutate(..inner_order = ifelse(summary_var == missing_subjects_row_label,
+                                        missing_subjects_sort_value, ..inner_order))
+      }
+
+      # Build the join specification
+      # row_label1 = ..outer_val, row_label2 = by[[2]], ..., ..inner_label_clean = summary_var
+      # other_by_vars maps to row_label2, row_label3, etc.
+      join_by <- c("row_label1" = "..outer_val", "..inner_label_clean" = "summary_var")
+      if (length(other_by_vars) > 0) {
+        for (..idx in seq_along(other_by_vars)) {
+          join_by <- c(join_by, setNames(as_name(other_by_vars[[..idx]]),
+                                          paste0("row_label", ..idx + 1)))
+        }
+      }
+
+      # Select columns for join
+      select_cols <- c("..outer_val", "summary_var", "..inner_order",
+                       map_chr(other_by_vars, as_name))
+
+      # Join back to inner_formatted
+      inner_formatted <- inner_formatted %>%
+        left_join(
+          inner_orders %>% select(all_of(select_cols)),
+          by = join_by
+        )
+
+      inner_formatted[[ord_col_name]] <- inner_formatted$..inner_order
+
+    } else if (tail(order_count_method, 1) == "byvarn") {
+      varn_df <- get_varn_values(target, target_var[[1]])
+      varn_col <- names(varn_df)[2]  # The column with numeric order values
+
+      # For byvarn, order based on varn values
+      inner_formatted <- inner_formatted %>%
+        left_join(varn_df, by = setNames(names(varn_df)[1], "..inner_label_clean"))
+
+      inner_formatted[[ord_col_name]] <- inner_formatted[[varn_col]]
+      # Remove the extra column added by the join
+      inner_formatted[[varn_col]] <- NULL
+
+      # Handle missing subjects
+      if (!is.null(missing_subjects_row_label) && !is.null(missing_subjects_sort_value)) {
+        missing_mask <- inner_formatted$..inner_label_clean == missing_subjects_row_label
+        inner_formatted[missing_mask, ord_col_name] <- missing_subjects_sort_value
+      }
+
+    } else {
+      # byfactor - use sequential order within each group
+      # Use as.numeric to ensure double type for consistency with missing_subjects_sort_value
+      inner_formatted <- inner_formatted %>%
+        group_by(row_label1) %>%
+        mutate(!!ord_col_name := as.numeric(row_number())) %>%
+        ungroup()
+
+      # Handle missing subjects
+      if (!is.null(missing_subjects_row_label) && !is.null(missing_subjects_sort_value)) {
+        missing_mask <- inner_formatted$..inner_label_clean == missing_subjects_row_label
+        inner_formatted[missing_mask, ord_col_name] <- missing_subjects_sort_value
+      }
+    }
+
+    # Clean up temp columns
+    inner_formatted$..inner_label_clean <- NULL
+    inner_formatted$..inner_order <- NULL
+
+    # Put inner rows back into formatted_data
+    formatted_data[!is_outer_row, ] <- inner_formatted
+  }
+
+  # Restore the grouped row order: outer row followed by its inner rows for each group
+  # This matches the original do() behavior which processed each group separately
+  # Recompute is_outer_row since formatted_data may have been modified
+  # Use desc() so outer rows (TRUE) come before inner rows (FALSE)
+  if (nchar(indentation) == 0) {
+    # No indentation - outer rows have the same value in row_label1 and last_row_label
+    is_outer_final <- formatted_data$row_label1 == formatted_data[[last_row_label]]
+    is_outer_final[is.na(is_outer_final)] <- FALSE
+  } else {
+    is_outer_final <- str_starts(formatted_data[[last_row_label]], fixed(indentation)) %in% FALSE
+  }
+  formatted_data$..is_outer <- is_outer_final
+  formatted_data <- formatted_data %>%
+    arrange(row_label1, desc(..is_outer)) %>%
+    select(-..is_outer)
+
+  formatted_data
 }
 

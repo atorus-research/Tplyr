@@ -77,17 +77,25 @@ process_nested_count_target <- function(x) {
 
   first_layer_final <- first_layer$numeric_data
 
-  second_layer_final <- second_layer$numeric_data %>%
+  # Apply numeric cutoff filter first
+  second_layer_filtered <- second_layer$numeric_data %>%
     filter_numeric(
       numeric_cutoff = numeric_cutoff,
       numeric_cutoff_stat = numeric_cutoff_stat,
       numeric_cutoff_column = numeric_cutoff_column,
       treat_var = treat_var,
       by = by
-    ) %>%
-    group_by(!!target_var[[1]]) %>%
-    do(filter_nested_inner_layer(., target, target_var[[1]], target_var[[2]], indentation,
-                                 missing_subjects_row_label))
+    )
+
+  # Use vectorized filtering instead of do()
+  second_layer_final <- filter_nested_inner_layer_vectorized(
+    second_layer_filtered,
+    target,
+    target_var[[1]],
+    target_var[[2]],
+    indentation,
+    missing_subjects_row_label
+  )
 
   ignored_filter_rows <- ifelse(include_total_row,
                                 ifelse(is.null(total_row_label),
@@ -127,7 +135,7 @@ process_nested_count_target <- function(x) {
 }
 
 #' This function is meant to remove the values of an inner layer that don't
-#' appear in the target data
+#' appear in the target data (LEGACY - kept for reference)
 #' @noRd
 filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation,
                                       missing_subjects_row_label) {
@@ -163,6 +171,84 @@ filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, in
   .group %>%
     filter(summary_var %in% target_inner_values)
 
+}
+
+#' Vectorized filtering of nested inner layer values
+#'
+#' This function replaces the do() + filter_nested_inner_layer() pattern
+#' with a fully vectorized approach. Instead of processing each outer group
+#' separately, it builds a lookup of valid outer-inner combinations and
+#' filters in one pass.
+#'
+#' @param .data The data frame to filter (second layer numeric data)
+#' @param target The target dataset
+#' @param outer_name Quosure for outer variable name
+#' @param inner_name Quosure for inner variable name
+#' @param indentation The indentation prefix for inner values
+#' @param missing_subjects_row_label Label for missing subjects row
+#' @return Filtered data frame
+#' @noRd
+filter_nested_inner_layer_vectorized <- function(.data, target, outer_name, inner_name,
+                                                  indentation, missing_subjects_row_label) {
+
+  # Is outer variable text? If it is, all inner values are valid
+  text_outer <- !quo_is_symbol(outer_name)
+  outer_name_chr <- as_name(outer_name)
+  inner_name_chr <- as_name(inner_name)
+
+  if (text_outer) {
+    # For text outer, all inner values in target are valid (plus factor levels)
+    lvs <- levels(target[[inner_name_chr]])
+    all_valid_inner <- target %>%
+      select(any_of(inner_name_chr)) %>%
+      unlist() %>%
+      c(lvs) %>%
+      unique() %>%
+      paste0(indentation, .)
+
+    # Add missing subjects label
+    all_valid_inner <- c(all_valid_inner, paste0(indentation, missing_subjects_row_label))
+
+    # Simple filter - all rows with valid summary_var values
+    return(.data %>% filter(summary_var %in% all_valid_inner))
+  }
+
+  # For symbol outer: build a lookup table of valid (outer, inner) combinations
+  # This is the vectorized replacement for the per-group filtering
+
+  # Get all unique outer-inner combinations from the target data
+  valid_combinations <- target %>%
+    select(all_of(c(outer_name_chr, inner_name_chr))) %>%
+    distinct() %>%
+    mutate(
+      # Add indentation to inner values to match summary_var format
+      valid_summary_var = paste0(indentation, .data[[inner_name_chr]]),
+      # Convert outer to character to match .data which may have factor/character conversion
+      !!outer_name_chr := as.character(.data[[outer_name_chr]])
+    ) %>%
+    select(all_of(outer_name_chr), valid_summary_var)
+
+  # Also allow missing subjects row for each outer value
+  outer_values <- unique(valid_combinations[[outer_name_chr]])
+  missing_rows <- tibble(
+    !!outer_name_chr := outer_values,
+    valid_summary_var = paste0(indentation, missing_subjects_row_label)
+  )
+
+  valid_combinations <- bind_rows(valid_combinations, missing_rows)
+
+  # Ensure .data's outer column is also character for joining
+  .data <- .data %>%
+    mutate(!!outer_name_chr := as.character(.data[[outer_name_chr]]))
+
+  # Now filter .data by joining with valid combinations
+  # A row is valid if its (outer_value, summary_var) pair exists in valid_combinations
+  .data %>%
+    inner_join(
+      valid_combinations,
+      by = setNames("valid_summary_var", "summary_var") %>%
+        c(setNames(outer_name_chr, outer_name_chr))
+    )
 }
 
 #' This function resets the variables for a nested layer after it was built
