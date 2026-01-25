@@ -1035,27 +1035,67 @@ add_data_order_nested_vectorized <- function(formatted_data, final_col, numeric_
       group_vars <- c(quo(..outer_val), other_by_vars)
 
       # Compute inner order for each outer group (and other by var combination)
-      # Note: group_modify removes grouping columns from .x, so we can only pass
-      # by variables that are still present in .x. Since we're grouping by outer_val
-      # and other_by_vars, only by[[1]] (the outer nest var) remains in .x
+      # VECTORIZED: Instead of group_modify, compute order values directly
       inner_by_for_order <- vars(!!by[[1]])
 
-      inner_orders <- inner_numeric %>%
-        group_by(!!!group_vars) %>%
-        group_modify(function(.x, .y) {
-          # Get order for this group
-          ord <- get_data_order_bycount(
-            .x, ordering_cols, treat_var, inner_by_for_order, cols,
-            result_order_var, target_var,
-            break_ties = break_ties,
-            numeric_cutoff = numeric_cutoff,
-            numeric_cutoff_stat = numeric_cutoff_stat,
-            numeric_cutoff_column = numeric_cutoff_column,
-            nested = TRUE
-          )
-          tibble(summary_var = unique(.x$summary_var), ..inner_order = ord)
-        }) %>%
-        ungroup()
+      # Build filter logic for ordering columns
+      filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
+        expr(!!sym(as_name(x)) == !!as_name(y))
+      })
+
+      # Get the result variable name
+      result_var_name <- as_name(result_order_var)
+
+      # Compute pct if needed (same logic as get_data_order_bycount)
+      inner_numeric_prepared <- inner_numeric
+      if (result_var_name == "pct") {
+        inner_numeric_prepared <- inner_numeric_prepared %>%
+          mutate(pct = replace_na(n / total, 0))
+      } else if (result_var_name == "distinct_pct") {
+        inner_numeric_prepared <- inner_numeric_prepared %>%
+          mutate(distinct_pct = replace_na(distinct_n / distinct_total, 0))
+      }
+
+      # Filter to the ordering column and get the sort value
+      inner_for_ordering <- inner_numeric_prepared %>%
+        filter(!!!filter_logic) %>%
+        select(..outer_val, summary_var, !!!other_by_vars, sort_val = !!result_order_var) %>%
+        distinct()
+
+      # Compute order value within each outer group (and other by vars)
+      # The order value is the actual sort_val, with optional tie-breaking decimals
+      inner_orders <- inner_for_ordering %>%
+        group_by(..outer_val, !!!other_by_vars) %>%
+        mutate(
+          ..inner_order = {
+            # Start with the actual sort values (this matches original behavior)
+            order_vals <- sort_val
+
+            # Handle break_ties if specified - add decimal for tie-breaking
+            if (!is.null(break_ties) && break_ties == "asc" && length(target_var) == 2) {
+              n_vals <- n()
+              if (n_vals > 0) {
+                dec_level <- 10^ceiling(log10(n_vals + 1))
+                # Add decimal based on row position (alphabetical by summary_var)
+                alpha_order <- order(summary_var)
+                decimal_part <- match(seq_len(n_vals), alpha_order) / dec_level
+                order_vals <- order_vals + decimal_part
+              }
+            } else if (!is.null(break_ties) && break_ties == "desc" && length(target_var) == 2) {
+              n_vals <- n()
+              if (n_vals > 0) {
+                dec_level <- 10^ceiling(log10(n_vals + 1))
+                # Add decimal based on reverse row position
+                alpha_order <- order(summary_var, decreasing = TRUE)
+                decimal_part <- match(seq_len(n_vals), alpha_order) / dec_level
+                order_vals <- order_vals + decimal_part
+              }
+            }
+            order_vals
+          }
+        ) %>%
+        ungroup() %>%
+        select(..outer_val, summary_var, !!!other_by_vars, ..inner_order)
 
       # Handle missing subjects
       if (!is.null(missing_subjects_row_label) && !is.null(missing_subjects_sort_value)) {

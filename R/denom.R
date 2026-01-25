@@ -193,3 +193,99 @@ get_denom_total <- function(.data, denoms_by, denoms_df,
   .data
 
 }
+
+#' Vectorized version of get_denom_total
+#'
+#' This function replaces the do(get_denom_total()) pattern with a single
+#' vectorized join operation. Instead of filtering denoms_df per-group,
+#' it pre-aggregates the totals and joins them in one pass.
+#'
+#' @param .data A data frame (not grouped)
+#' @param denoms_by Quosures specifying the denominator grouping variables
+#' @param denoms_df The denominator data frame with n and optionally distinct_n
+#' @param total_extract Column to use for total (default "n", kept for API compatibility)
+#' @return Data frame with total and optionally distinct_total columns added
+#' @noRd
+get_denom_total_vectorized <- function(.data, denoms_by, denoms_df,
+                                        total_extract = "n") {
+
+  if (nrow(.data) == 0) {
+    .data$total <- numeric(0)
+    if ("distinct_n" %in% names(denoms_df)) {
+      .data$distinct_total <- numeric(0)
+    }
+    return(.data)
+  }
+
+  # Find which denoms_by variables exist in denoms_df
+  vars_in_denoms <- denoms_by[map_lgl(denoms_by, ~ as_name(.) %in% names(denoms_df))]
+  join_vars <- map_chr(vars_in_denoms, as_name)
+
+  if (length(join_vars) == 0) {
+    # No join variables - use total sum for all rows
+    .data$total <- sum(denoms_df[["n"]], na.rm = TRUE)
+    if ("distinct_n" %in% names(denoms_df)) {
+      .data$distinct_total <- sum(denoms_df[["distinct_n"]], na.rm = TRUE)
+    }
+    return(.data)
+  }
+
+  # Coerce join columns to character in both data frames to avoid type mismatches
+  # This matches the behavior of the original do() approach which performed
+  # value-based filtering that was type-agnostic
+  denoms_df_coerced <- denoms_df
+  for (jv in join_vars) {
+    if (jv %in% names(.data) && jv %in% names(denoms_df_coerced)) {
+      .data[[jv]] <- as.character(.data[[jv]])
+      denoms_df_coerced[[jv]] <- as.character(denoms_df_coerced[[jv]])
+    }
+  }
+
+  # Pre-aggregate totals by the join variables
+  totals_df <- denoms_df_coerced %>%
+    group_by(across(all_of(join_vars))) %>%
+    summarize(total = sum(n, na.rm = TRUE), .groups = "drop")
+
+  # Handle distinct_n if present (count layers have it, shift layers don't)
+  if ("distinct_n" %in% names(denoms_df_coerced)) {
+    # Determine merge variables for distinct totals
+    # Exclude 'n' and 'distinct_n' from merge vars
+    merge_vars <- join_vars
+
+    # summary_var may be used for grouping denoms so only toss it if
+    # it's not in denoms_by
+    denoms_by_names <- map_chr(denoms_by, as_name)
+    if (!('summary_var' %in% denoms_by_names) & 'summary_var' %in% names(denoms_df_coerced)) {
+      merge_vars <- merge_vars[merge_vars != 'summary_var']
+    }
+
+    # Get distinct totals
+    distinct_df <- denoms_df_coerced %>%
+      select(all_of(c(merge_vars, "distinct_n"))) %>%
+      rename(distinct_total = distinct_n) %>%
+      distinct()
+
+    # Join totals first, then distinct totals
+    .data <- .data %>%
+      left_join(totals_df, by = join_vars) %>%
+      left_join(distinct_df, by = merge_vars)
+  } else {
+    # Shift layers - just join totals
+    .data <- .data %>%
+      left_join(totals_df, by = join_vars)
+  }
+
+  # Replace NA totals with 0 (matches original behavior)
+  .data$total <- ifelse(is.na(.data$total), 0, .data$total)
+
+  # Arrange by denoms_by variables to match the grouping order from original do() approach
+  # The original do() function sorted output by the grouping variables
+  denoms_by_names <- map_chr(denoms_by, as_name)
+  arrange_vars <- denoms_by_names[denoms_by_names %in% names(.data)]
+  if (length(arrange_vars) > 0) {
+    .data <- .data %>%
+      arrange(across(all_of(arrange_vars)))
+  }
+
+  .data
+}

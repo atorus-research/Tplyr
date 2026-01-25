@@ -232,13 +232,11 @@ process_single_count_target <- function(x) {
       )
   }
 
-  # rbind tables together
+  # rbind tables together and join denominator totals (vectorized)
   numeric_data <- bind_rows(summary_stat, total_stat, missing_subjects_stat) %>%
     rename("summary_var" = !!target_var[[1]]) %>%
-    group_by(!!!denoms_by) %>%
-    do(get_denom_total(., denoms_by, denoms_df_prep, "n")) %>%
-    mutate(summary_var = prefix_count_row(summary_var, count_row_prefix)) %>%
-    ungroup()
+    get_denom_total_vectorized(denoms_by, denoms_df_prep, "n") %>%
+    mutate(summary_var = prefix_count_row(summary_var, count_row_prefix))
 
   # BIND: Write results back to layer environment
   x$numeric_data <- numeric_data

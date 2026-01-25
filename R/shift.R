@@ -116,12 +116,11 @@ process_shift_total <- function(x) {
   cols <- env_get(x, "cols", inherit = TRUE)
   denoms_df <- x$denoms_df
   
-  # PROCESS: Calculate totals in function environment
+  # PROCESS: Calculate totals in function environment (vectorized)
   if(is.null(denoms_by)) denoms_by <- c(treat_var, by, cols)
 
   numeric_data <- numeric_data %>%
-    group_by(!!!denoms_by) %>%
-    do(get_denom_total(., denoms_by, denoms_df))
+    get_denom_total_vectorized(denoms_by, denoms_df)
 
   # BIND: Write results back to layer environment
   x$numeric_data <- numeric_data
