@@ -107,6 +107,7 @@ tplyr_table(mtcars, am) \%>\%
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://atorus-research.github.io/Tplyr/}
   \item \url{https://github.com/atorus-research/Tplyr}
   \item Report bugs at \url{https://github.com/atorus-research/Tplyr/issues}
 }

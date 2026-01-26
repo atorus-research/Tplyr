@@ -1,6 +1,9 @@
 # Tplyr 1.2.1
 - Resolve #178 to add metadata handling for missing subjects, and add the `add_anti_join()` function
 
+## Internal Changes
+- Refactored internal functions to eliminate `evalq()` usage and adopt the Extract-Process-Bind pattern. This improves code clarity, testability, and maintainability without affecting user-facing functionality. All internal functions now explicitly extract needed bindings from environments, process data in their own scope, and explicitly bind results back. This eliminates environment pollution from temporary variables and makes data flow more transparent for developers. See `.kiro/specs/tplyr-refactor/developer-guide-extract-process-bind.md` for details.
+
 # Tplyr 1.2.0
 - Resolve #62 Add data vignette data into the package (thanks for the suggestion @thebioengineer)
 - Resolve #74 Add an example of piping in set_pop_data

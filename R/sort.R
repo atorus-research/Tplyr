@@ -144,6 +144,7 @@ add_order_columns <- function(x) {
   UseMethod("add_order_columns")
 }
 
+#' @noRd
 add_order_columns.count_layer <- function(x) {
   # Counting has the most complex sorting methods. Here is an attempt and
   # showing the flow.
@@ -289,6 +290,7 @@ add_order_columns.count_layer <- function(x) {
   }, envir = x)
 }
 
+#' @noRd
 add_order_columns.desc_layer <- function(x) {
 
   evalq({
@@ -317,6 +319,7 @@ add_order_columns.desc_layer <- function(x) {
   }, envir = x)
 }
 
+#' @noRd
 add_order_columns.shift_layer <- function(x) {
   evalq({
 
