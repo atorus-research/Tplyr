@@ -576,11 +576,13 @@ process_formatting.count_layer <- function(x, ...) {
   # used to split the string.
   indentation_length <- ifelse(is.null(indentation), 0, nchar(encodeString(indentation)))
 
+  # For nested layers, filtering was already applied in process_nested_count_target
+  # Skip redundant filter_numeric call to avoid duplicate work
   formatted_data <- numeric_data %>%
-    filter_numeric(numeric_cutoff,
-                   numeric_cutoff_stat,
-                   numeric_cutoff_column,
-                   treat_var) %>%
+    {if (!is_built_nest) filter_numeric(., numeric_cutoff,
+                                         numeric_cutoff_stat,
+                                         numeric_cutoff_column,
+                                         treat_var) else .} %>%
     # Mutate value based on if there is a distinct_by
     mutate(n = {
       construct_count_string(.n = n, .total = total,
@@ -1122,11 +1124,16 @@ filter_numeric <- function(.data,
     return(.data)
   }
 
-  # pct and distinct_pct are now pre-calculated in numeric_data
+  # Build combined filter condition to reduce filter() calls
+  filter_cond <- if (is.null(numeric_cutoff_column)) {
+    expr(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff)
+  } else {
+    expr(!!treat_var == numeric_cutoff_column & !!sym(numeric_cutoff_stat) >= !!numeric_cutoff)
+  }
+
   vals <- .data %>%
-    {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
-    filter(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff) %>%
-    extract2("summary_var")
+    filter(!!filter_cond) %>%
+    pull(summary_var)
 
   .data %>%
     filter(summary_var %in% vals)
