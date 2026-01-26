@@ -8,7 +8,7 @@
 #' @importFrom tidyr pivot_longer pivot_wider replace_na
 #' @importFrom magrittr %>% extract extract2
 #' @importFrom assertthat assert_that
-#' @importFrom stats IQR median sd quantile var
+#' @importFrom stats IQR median sd quantile var setNames
 #' @importFrom dplyr n summarize filter vars tally ungroup group_by mutate lag select bind_rows full_join add_tally distinct rowwise
 #' @importFrom dplyr everything rename mutate_at mutate_all as_tibble bind_cols do case_when arrange left_join inner_join row_number between mutate_if
 #' @importFrom dplyr across anti_join n_distinct if_else group_keys cur_group cur_column pull matches slice_head where desc count group_modify
@@ -317,3 +317,11 @@ limit_data_by <- NULL
 n_present <- NULL
 header_tots <- NULL
 tot_fill <- NULL
+# Global variables for vectorized nested count operations
+..outer_order <- NULL
+..outer_val <- NULL
+..inner_order <- NULL
+..is_outer <- NULL
+sort_val <- NULL
+valid_summary_var <- NULL
+distinct_pct <- NULL

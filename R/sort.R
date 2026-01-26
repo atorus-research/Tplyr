@@ -578,20 +578,9 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
     expr(!!sym(as_name(x)) == !!as_name(y))
   })
 
-  # Logic for pcts
-  if (as_name(result_order_var) == "pct") {
 
-    pct_value <- numeric_data[, "n"] / numeric_data[, "total"]
-
-    # This isn't in an evalq so the modifications here won't do anything to the layer
-    numeric_data[, "pct"] <- replace_na(pct_value[[1]], 0)
-
-  } else if (as_name(result_order_var) == "distinct_pct") {
-
-    pct_value <- numeric_data[, "distinct_n"] / numeric_data[, "distinct_total"]
-
-    numeric_data[, "distinct_pct"] <-  replace_na(pct_value, 0)
-  }
+  # pct and distinct_pct are now pre-calculated in numeric_data during summarization
+  # No need to calculate them here anymore
 
   # What will become the column name of the tibble below. It nests the names of the ordering cols and
   # separates them with an underscore

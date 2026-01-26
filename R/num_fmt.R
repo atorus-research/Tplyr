@@ -82,9 +82,83 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   fmt_num
 }
 
+#' Vectorized number formatting for count layers
+#'
+#' Formats an entire numeric vector using f_str settings. This is a vectorized
+#' replacement for the map_chr(values, num_fmt, ...) pattern used in count
+#' string construction.
+#'
+#' Note: This function does not support auto-precision (a/A format specifiers)
+#' as count layers use fixed precision. For auto-precision support, use the
+#' scalar num_fmt() function.
+#'
+#' @param vals Numeric vector to format
+#' @param i Index of the format setting within the f_str object
+#' @param fmt f_str object with formatting information
+#'
+#' @return Character vector of formatted values
+#' @noRd
+num_fmt_vec <- function(vals, i, fmt) {
+
+  # Extract format settings once for the entire vector
+  int_len <- fmt$settings[[i]]$int
+  decimals <- fmt$settings[[i]]$dec
+  hug_char <- fmt$settings[[i]]$hug_char
+  nsmall <- decimals
+
+  # Calculate display width (add 1 for decimal point if decimals > 0)
+  width <- int_len + ifelse(decimals > 0, decimals + 1, decimals)
+
+  # Handle IBM rounding option
+  if (getOption("tplyr.IBMRounding", FALSE)) {
+    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
+                  " If you have feedback please get in touch with the maintainers!")),
+         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+    rounded <- ut_round(vals, nsmall)
+  } else {
+    rounded <- round(vals, nsmall)
+  }
+
+  # Use sprintf for exact width control - format() when vectorized expands
+
+  # all values to match the widest one, but we need each value formatted
+  # to exactly the specified width independently
+  fmt_string <- sprintf("%%%d.%df", width, nsmall)
+
+  # Vectorized formatting with sprintf
+  if (is.na(hug_char)) {
+    # Standard formatting
+    fmt_nums <- sprintf(fmt_string, rounded)
+  } else {
+    # Hug character formatting - paste hug char then pad to width
+    # First format without width, then add hug char and pad
+    fmt_string_no_width <- sprintf("%%.%df", nsmall)
+    fmt_nums <- str_pad(
+      paste0(hug_char, sprintf(fmt_string_no_width, rounded)),
+      width = width,
+      side = "left"
+    )
+  }
+
+  # Handle NA values vectorized
+  na_mask <- is.na(vals)
+  if (any(na_mask)) {
+    empty_str <- fmt$empty[1]
+    if (is.na(hug_char)) {
+      na_replacement <- str_pad(empty_str, width, side = "left")
+    } else {
+      na_replacement <- str_pad(paste0(hug_char, empty_str), width, side = "left")
+    }
+    fmt_nums[na_mask] <- na_replacement
+  }
+
+  fmt_nums
+}
+
 #' Pad Numeric Values
 #'
-#' This is generally used with a count layer
+#' This is generally used with a count layer. Uses vectorized str_pad
+#' for efficient padding of character vectors.
 #'
 #' @param x The current values of the numeric data
 #' @param right_pad The total string length, done after the left pad
@@ -94,21 +168,18 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #'
 #' @noRd
 pad_formatted_data <- function(x, right_pad, left_pad) {
-  # Pad the left with difference between left_pad and nchar(string_)
-  if(nchar(x)[1] < left_pad) {
-    # The double pasting looks weird but the inner one is meant to create single character
-    # that is the needed number of spaces and the outer pastes that to the value
-    x <- map_chr(x,
-                 ~ paste0(
-                   paste0(rep(" ", left_pad - nchar(.x)), collapse = ""),
-                   .x))
+  # Handle empty input
+  if (length(x) == 0) return(x)
+
+  # Vectorized left padding
+  if (!is.na(nchar(x[1])) && nchar(x[1]) < left_pad) {
+    x <- str_pad(x, left_pad, side = "left")
   }
 
-  #Padd the right with the difference of the max layer length
-  if(right_pad > max(nchar(x))) {
-    x <- map_chr(x,
-                 paste0, paste0(rep(" ", right_pad - max(nchar(x))),
-                                collapse = ""))
+  # Vectorized right padding
+  max_nchar <- max(nchar(x), na.rm = TRUE)
+  if (!is.na(max_nchar) && right_pad > max_nchar) {
+    x <- str_pad(x, right_pad, side = "right")
   }
 
   x

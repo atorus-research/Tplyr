@@ -236,7 +236,12 @@ process_single_count_target <- function(x) {
   numeric_data <- bind_rows(summary_stat, total_stat, missing_subjects_stat) %>%
     rename("summary_var" = !!target_var[[1]]) %>%
     get_denom_total_vectorized(denoms_by, denoms_df_prep, "n") %>%
-    mutate(summary_var = prefix_count_row(summary_var, count_row_prefix))
+    mutate(
+      summary_var = prefix_count_row(summary_var, count_row_prefix),
+      # Calculate percentages here rather than in formatting step
+      pct = replace(n / total, is.na(n / total), 0),
+      distinct_pct = replace(distinct_n / distinct_total, is.na(distinct_n / distinct_total), 0)
+    )
 
   # BIND: Write results back to layer environment
   x$numeric_data <- numeric_data
@@ -581,6 +586,8 @@ process_formatting.count_layer <- function(x, ...) {
       construct_count_string(.n = n, .total = total,
                              .distinct_n = distinct_n,
                              .distinct_total = distinct_total,
+                             .pct = pct,
+                             .distinct_pct = distinct_pct,
                              count_fmt = format_strings[['n_counts']],
                              max_layer_length = max_layer_length,
                              max_n_width = max_n_width,
@@ -637,7 +644,49 @@ process_formatting.count_layer <- function(x, ...) {
 
 }
 
+#' Build vectorized format arguments for count strings
+#'
+#' Creates the argument list for sprintf using vectorized num_fmt_vec() instead
+#' of row-by-row map_chr(values, num_fmt, ...) calls.
+#'
+#' @param vars_ord Character vector of variable names in order (e.g., c("n", "pct"))
+#' @param count_fmt f_str object
+#' @param n Numeric vector of counts
+#' @param pct Numeric vector of percentages (pre-calculated, 0-1 scale)
+#' @param distinct_n Numeric vector of distinct counts
+#' @param distinct_pct Numeric vector of distinct percentages (pre-calculated, 0-1 scale)
+#' @param total Numeric vector of totals
+#' @param distinct_total Numeric vector of distinct totals
+#'
+#' @return List suitable for do.call(sprintf, ...)
+#' @noRd
+build_count_format_args <- function(vars_ord, count_fmt, n, pct, distinct_n,
+                                    distinct_pct, total, distinct_total) {
+
+  args <- list(count_fmt$repl_str)
+
+  for (i in seq_along(vars_ord)) {
+    var_name <- vars_ord[i]
+
+    formatted <- switch(var_name,
+      "n" = num_fmt_vec(n, i, count_fmt),
+      "pct" = num_fmt_vec(pct * 100, i, count_fmt),
+      "distinct_n" = num_fmt_vec(distinct_n, i, count_fmt),
+      "distinct_pct" = num_fmt_vec(distinct_pct * 100, i, count_fmt),
+      "total" = num_fmt_vec(total, i, count_fmt),
+      "distinct_total" = num_fmt_vec(distinct_total, i, count_fmt)
+    )
+
+    args[[i + 1]] <- formatted
+  }
+
+  args
+}
+
 #' Format n counts for display in count_layer
+#'
+#' Vectorized implementation that formats all count strings in batch operations
+#' rather than row-by-row. Uses pre-calculated pct and distinct_pct columns.
 #'
 #' left padding = (maximum_n_width - this_n_width)
 #' right padding = (maximum_layer_width - this_layer_width[after left padding])
@@ -645,11 +694,13 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param .n Vector of counts for each cell
 #' @param .total  Vector of totals. Should be the same length as .n and be the
 #'   denominator that column is based off of.
+#' @param .distinct_n Vector of distinct counts
+#' @param .distinct_total Vector of total counts for distinct
+#' @param .pct Vector of pre-calculated percentages (0-1 scale). If NULL, calculated on the fly.
+#' @param .distinct_pct Vector of pre-calculated distinct percentages (0-1 scale). If NULL, calculated on the fly.
 #' @param count_fmt The f_str object the strings are formatted around.
 #' @param max_layer_length The maximum layer length of the whole table
 #' @param max_n_width The maximum length of the actual numeric counts
-#' @param .distinct_n Vector of distinct counts
-#' @param .distinct_total Vector of total counts for distinct
 #' @param missing_string The value of the string used to note missing. Usually NA
 #' @param missing_f_str The f_str object used to display missing values
 #' @param summary_var The summary_var values that contain the values of the
@@ -662,131 +713,129 @@ process_formatting.count_layer <- function(x, ...) {
 #' @param missing_subjects_row_label Label string for missing subjects
 #' @param has_missing_count Boolean for if missing counts are present
 #'
-#' @return A tibble replacing the original counts
+#' @return Character vector of formatted count strings
 #' @noRd
 construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_total = NULL,
+                                   .pct = NULL, .distinct_pct = NULL,
                                    count_fmt = NULL, max_layer_length, max_n_width, missing_string,
                                    missing_f_str, summary_var, indentation_length, total_count_format,
                                    missing_subjects_count_format, total_row_label, missing_subjects_row_label,
                                    has_missing_count) {
 
-  ## Added this for processing formatting in nested count layers where this won't be processed yet
+  # Handle defaults for nested count layers where these may not be processed yet
   if (is.null(max_layer_length)) max_layer_length <- 0
   if (is.null(max_n_width)) max_n_width <- 0
-  missing_rows <- FALSE
-  total_rows <- FALSE
-  missing_subject_rows <- FALSE
+
+  # Use passed percentages or calculate if not provided (backwards compatibility)
+  if (is.null(.pct)) {
+    .pct <- replace(.n / .total, is.na(.n / .total), 0)
+  }
+  if (is.null(.distinct_pct)) {
+    .distinct_pct <- replace(.distinct_n / .distinct_total, is.na(.distinct_n / .distinct_total), 0)
+  }
+
+  # Initialize row type masks
+  missing_rows <- rep(FALSE, length(.n))
+  total_rows <- rep(FALSE, length(.n))
+  missing_subject_rows <- rep(FALSE, length(.n))
 
   # Add in the missing format if its null and there are missing counts
   if (has_missing_count && is.null(missing_f_str)) {
     missing_f_str <- count_fmt
   }
 
-  if (!is.null(missing_f_str)) {
+  # For nested count layers, strip indentation when checking row types
+  # The 'outer' values will be cut off but they will never be "missing"
+  summary_var_check <- str_sub(summary_var, indentation_length + 1)
 
-    # This subsets the indentation length for nested count layers. The 'outer'
-    # values will be cut off but they will never be "missing" so that shouldn't
-    # be an issue.
-    summary_var <- str_sub(summary_var, indentation_length)
-
-    missing_rows <- summary_var %in% missing_string
-    missing_vars_ord <- map_chr(missing_f_str$vars, as_name)
+  # Identify missing rows
+  if (!is.null(missing_f_str) && !is.null(missing_string)) {
+    missing_rows <- summary_var_check %in% missing_string
   }
 
-  ## Pull out string information for total rows
-  if (!is.null(total_count_format)) {
-    total_rows <- summary_var %in% total_row_label
-    total_vars_ord <- map_chr(total_count_format$vars, as_name)
+  # Identify total rows
+  if (!is.null(total_count_format) && !is.null(total_row_label)) {
+    total_rows <- summary_var_check %in% total_row_label
   }
 
-  ## Pull out string information for missing subject rows
-  if (!is.null(missing_subjects_count_format)) {
-    missing_subject_rows <- summary_var %in% missing_subjects_row_label
-    missing_subject_vars_ord <- map_chr(missing_subjects_count_format$vars, as_name)
+  # Identify missing subject rows
+  if (!is.null(missing_subjects_count_format) && !is.null(missing_subjects_row_label)) {
+    missing_subject_rows <- summary_var_check %in% missing_subjects_row_label
   }
 
-  vars_ord <- map_chr(count_fmt$vars, as_name)
+  # Regular rows are everything else
+  regular_rows <- !missing_rows & !total_rows & !missing_subject_rows
 
-  # str_all is a list that contains character vectors for each parameter that might be calculated
-  str_all <- vector("list", 5)
-  # Append the repl_str to be passed to do.call
-  str_all[1] <- count_fmt$repl_str
-  # Iterate over every variable
-  rows_ <- !missing_rows & !total_rows & !missing_subject_rows
-  for (i in seq_along(vars_ord)) {
-    str_all[[i + 1]] <-  count_string_switch_help(vars_ord[i], count_fmt,
-                                                  .n[rows_],
-                                                  .total[rows_],
-                                                  .distinct_n[rows_],
-                                                  .distinct_total[rows_],
-                                                  vars_ord)
+  # Initialize result vector
+  result <- character(length(.n))
+
+  # Format regular rows (vectorized)
+  if (any(regular_rows)) {
+    vars_ord <- map_chr(count_fmt$vars, as_name)
+    args <- build_count_format_args(
+      vars_ord, count_fmt,
+      .n[regular_rows], .pct[regular_rows],
+      .distinct_n[regular_rows], .distinct_pct[regular_rows],
+      .total[regular_rows], .distinct_total[regular_rows]
+    )
+    result[regular_rows] <- do.call(sprintf, args)
   }
 
-  # Logic for missing
-  # Same logic as above, just add for missing
-  missing_str_all <- vector("list", 5)
-  missing_str_all[1] <- missing_f_str$repl_str
-  for (i in seq_along(missing_vars_ord)) {
-    missing_str_all[[i + 1]] <- count_string_switch_help(missing_vars_ord[i],
-                                                         missing_f_str,
-                                                         .n[missing_rows],
-                                                         .total[missing_rows],
-                                                         .distinct_n[missing_rows],
-                                                         .distinct_total[missing_rows],
-                                                         missing_vars_ord)
+  # Format missing rows (vectorized)
+  if (any(missing_rows)) {
+    vars_ord <- map_chr(missing_f_str$vars, as_name)
+    args <- build_count_format_args(
+      vars_ord, missing_f_str,
+      .n[missing_rows], .pct[missing_rows],
+      .distinct_n[missing_rows], .distinct_pct[missing_rows],
+      .total[missing_rows], .distinct_total[missing_rows]
+    )
+    result[missing_rows] <- do.call(sprintf, args)
   }
 
-  total_str_all <- vector("list", 5)
-  total_str_all[1] <- total_count_format$repl_str
-  for (i in seq_along(total_vars_ord)) {
-    total_str_all[[i + 1]] <- count_string_switch_help(total_vars_ord[i],
-                                                       total_count_format,
-                                                       .n[total_rows],
-                                                       .total[total_rows],
-                                                       .distinct_n[total_rows],
-                                                       .distinct_total[total_rows],
-                                                       total_vars_ord)
+  # Format total rows (vectorized)
+  if (any(total_rows)) {
+    vars_ord <- map_chr(total_count_format$vars, as_name)
+    args <- build_count_format_args(
+      vars_ord, total_count_format,
+      .n[total_rows], .pct[total_rows],
+      .distinct_n[total_rows], .distinct_pct[total_rows],
+      .total[total_rows], .distinct_total[total_rows]
+    )
+    result[total_rows] <- do.call(sprintf, args)
   }
 
-  missing_subs_str_all <- vector("list", 5)
-  missing_subs_str_all[1] <- missing_subjects_count_format$repl_str
-  for (i in seq_along(missing_subject_vars_ord)) {
-    missing_subs_str_all[[i + 1]] <- count_string_switch_help(missing_subject_vars_ord[i],
-                                                              missing_subjects_count_format,
-                                                              .n[missing_subject_rows],
-                                                              .total[missing_subject_rows],
-                                                              .distinct_n[missing_subject_rows],
-                                                              .distinct_total[missing_subject_rows],
-                                                              missing_subject_vars_ord)
+  # Format missing subject rows (vectorized)
+  if (any(missing_subject_rows)) {
+    vars_ord <- map_chr(missing_subjects_count_format$vars, as_name)
+    args <- build_count_format_args(
+      vars_ord, missing_subjects_count_format,
+      .n[missing_subject_rows], .pct[missing_subject_rows],
+      .distinct_n[missing_subject_rows], .distinct_pct[missing_subject_rows],
+      .total[missing_subject_rows], .distinct_total[missing_subject_rows]
+    )
+    result[missing_subject_rows] <- do.call(sprintf, args)
   }
 
-  # Put the vector strings together. Only include parts of str_all that aren't null
-  # nm is non-missing, m is missing, t is total, ms is missing subjects
-  string_nm <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
-  if (!is.null(missing_vars_ord)) string_m <-  do.call(sprintf, missing_str_all[!map_lgl(missing_str_all, is.null)])
-  if (!is.null(total_vars_ord)) string_t <- do.call(sprintf, total_str_all[!map_lgl(total_str_all, is.null)])
-  if (!is.null(missing_subject_vars_ord)) string_ms <- do.call(sprintf, missing_subs_str_all[!map_lgl(missing_subs_str_all, is.null)])
-  # string_ is the final string to return. Merge the missing, non-missing, and others together
-  string_ <- character(sum(length(string_nm), length(string_m), length(string_t), length(string_ms)))
-  string_[rows_] <- string_nm
-  string_[total_rows] <-   string_t
-  string_[missing_rows] <-  string_m
-  string_[missing_subject_rows] <-  string_ms
+  # Apply padding (vectorized)
   # Left pad set to 0 meaning it won't pad to the left at all
-  # right pad is set to the maximum n count in the table
-  string_ <- pad_formatted_data(string_, 0, max_n_width)
-
-  string_
+  # Right pad is set to the maximum n count in the table
+  pad_formatted_data(result, 0, max_n_width)
 }
 
-#' Switch statement used in processing
+#' Switch statement helper used in formatting (retained for shift layer compatibility)
+#'
+#' This function is used by construct_shift_string() and provides row-by-row
+#' formatting. For count layers, the vectorized build_count_format_args() is
+#' preferred for better performance.
 #'
 #' @param x Current parameter to format
 #' @param count_fmt f_str object used to format
 #' @param .n values used in 'n'
 #' @param .total values used in pct calculations
 #' @param .distinct_n values used in 'distinct_n'
-#' @param vars_ord values used in distinct pct
+#' @param .distinct_total values used in distinct pct
+#' @param vars_ord variable order
 #'
 #' @noRd
 count_string_switch_help <- function(x, count_fmt, .n, .total,
@@ -795,7 +844,7 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
   switch(x,
          "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
          "pct" = {
-           # Makea vector of ratios between n and total. Replace na values with 0
+           # Make a vector of ratios between n and total. Replace na values with 0
            pcts <- replace(.n/.total, is.na(.n/.total), 0)
            # Make a vector of percentages
            map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
@@ -814,8 +863,6 @@ count_string_switch_help <- function(x, count_fmt, .n, .total,
            map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
          }
   )
-
-
 }
 
 #' @param x Count Layer
@@ -1074,12 +1121,9 @@ filter_numeric <- function(.data,
     return(.data)
   }
 
+  # pct and distinct_pct are now pre-calculated in numeric_data
   vals <- .data %>%
     {if (is.null(numeric_cutoff_column)) . else filter(., !!treat_var == numeric_cutoff_column)} %>%
-    mutate(
-      pct = n/total,
-      distinct_pct = distinct_n/distinct_total
-    ) %>%
     filter(!!sym(numeric_cutoff_stat) >= !!numeric_cutoff) %>%
     extract2("summary_var")
 

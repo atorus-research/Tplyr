@@ -6,3 +6,6 @@ inst/doc
 Tplyr.Rproj
 docs/
 scratch.R
+*.out
+*.pdf
+inst/design
