@@ -183,6 +183,8 @@ process_formatting.shift_layer <- function(x, ...) {
                                       shift_fmt=format_strings,
                                       max_layer_length=max_layer_length,
                                       max_n_width=max_n_width)) %>%
+    # Select only columns needed for pivot to reduce memory footprint
+    select(match_exact(by), summary_var, !!treat_var, !!target_var$column, match_exact(cols), n) %>%
     # Pivot table
     pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                 names_from = c( !!treat_var, !!target_var$column, match_exact(cols)),

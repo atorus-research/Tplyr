@@ -197,6 +197,8 @@ process_formatting.desc_layer <- function(x, ...) {
     # then also transpose by cols.
     if (stats_as_columns) {
       form_sums[[i]] <- current_trans_sum %>%
+        # Select only columns needed for pivot to reduce memory footprint
+        select(!!treat_var, match_exact(by), row_label, match_exact(cols), display_string) %>%
         pivot_wider(id_cols=c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
@@ -205,6 +207,8 @@ process_formatting.desc_layer <- function(x, ...) {
 
     } else {
       form_sums[[i]] <- current_trans_sum %>%
+        # Select only columns needed for pivot to reduce memory footprint
+        select(row_label, match_exact(by), !!treat_var, match_exact(cols), display_string) %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable

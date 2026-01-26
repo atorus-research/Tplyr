@@ -586,7 +586,8 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
   # separates them with an underscore
   result_column <- paste(map_chr(ordering_cols, as_name), collapse = "_")
 
-  ## WARNING: This has to be the same logic as the pivot in the count ordering or else it won't work
+  # Filter and extract sort values directly without pivot_wider
+  # After filtering to specific treatment/column, we just need the result_order_var values
   numeric_ordering_data <- numeric_data %>%
     {if (nested) . else filter_numeric(.,
                                       numeric_cutoff,
@@ -594,20 +595,10 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
                                       numeric_cutoff_column,
                                       treat_var)} %>%
     filter(!!!filter_logic) %>%
-
-    # Sometimes row numbers are needed for nested counts if a value in the first
-    # target variable is the same as a variable in the second
-    mutate(row = row_number()) %>%
-
-    # I'm like 98% sure this logic works out.
-    pivot_wider(id_cols = c(match_exact(by), "summary_var", row),
-                names_from = c(!!treat_var, !!!cols), values_from = !!result_order_var) %>%
-
-    # Remove the placeholder row
-    mutate(row = NULL) %>%
-
     ungroup() %>%
-    select(as.symbol(result_column))
+    # Select only the sort value column and rename to expected output format
+    select(!!result_order_var) %>%
+    rename(!!result_column := !!result_order_var)
 
   if(!is.null(missing_index) && !is.null(missing_sort_value)) {
     numeric_ordering_data[missing_index,] <- seq_along(missing_index) - 1 + missing_sort_value

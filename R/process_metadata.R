@@ -133,10 +133,12 @@ process_metadata.count_layer <- function(x, ...) {
         )
     )
   # Need to bind to layer for use in stat calculations
-  x$meta_sum <- meta_sum 
+  x$meta_sum <- meta_sum
 
   # Pivot the meta table
+  # Select only columns needed for pivot to reduce memory footprint
   formatted_meta <- meta_sum %>%
+    select(match_exact(by), summary_var, !!treat_var, match_exact(cols), meta) %>%
     pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                 names_from = c(!!treat_var, match_exact(cols)), values_from = meta,
                 names_prefix = "var1_") %>%

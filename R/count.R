@@ -601,6 +601,8 @@ process_formatting.count_layer <- function(x, ...) {
                              missing_subjects_row_label = missing_subjects_row_label,
                              has_missing_count = has_missing_count)
     }) %>%
+    # Select only columns needed for pivot to reduce memory footprint
+    select(match_exact(by), summary_var, !!treat_var, match_exact(cols), n) %>%
     # Pivot table
     pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                 names_from = c(!!treat_var, match_exact(cols)), values_from = n,
@@ -972,11 +974,10 @@ process_count_denoms <- function(x) {
 
 
   # Subset the local built_target based on where
-  # Catch errors
+  # Catch errors - combine filter conditions to reduce vec_slice overhead
   tryCatch({
     denom_target <- built_target_pre_where %>%
-      filter(!!denom_where) %>%
-      filter(!(!!target_var[[1]] %in% unlist(local_denom_ignore)))
+      filter(!!denom_where & !(!!target_var[[1]] %in% unlist(local_denom_ignore)))
   }, error = function(e) {
     abort(paste0("group_count `where` condition `",
                  as_label(denom_where),
