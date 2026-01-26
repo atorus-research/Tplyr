@@ -160,216 +160,297 @@ add_order_columns.count_layer <- function(x) {
       # b. The final ordering column is passed to get_data_order where it is
       #    dispatched based on the counting flag.
 
-  evalq({
+  # EXTRACT: Pull necessary bindings from layer environment
 
-    if(nrow(formatted_data) == 0) return(formatted_data)
-    if(!exists("break_ties")) break_ties <- NULL
+  formatted_data <- env_get(x, "formatted_data")
+  break_ties <- env_get(x, "break_ties", default = NULL)
+  result_order_var <- env_get(x, "result_order_var", default = NULL)
+  ordering_cols <- env_get(x, "ordering_cols", default = NULL)
+  order_count_method <- env_get(x, "order_count_method", default = NULL)
+  pop_data <- env_get(x, "pop_data", inherit = TRUE)
+  pop_treat_var <- env_get(x, "pop_treat_var", inherit = TRUE)
+  is_built_nest <- env_get(x, "is_built_nest", default = FALSE)
+  by <- env_get(x, "by")
+  target <- env_get(x, "target", inherit = TRUE)
+  indentation <- env_get(x, "indentation", default = NULL)
+  treat_var <- env_get(x, "treat_var", inherit = TRUE)
+  cols <- env_get(x, "cols", inherit = TRUE)
+  numeric_data <- env_get(x, "numeric_data")
+  target_var <- env_get(x, "target_var")
+  outer_inf <- env_get(x, "outer_inf", default = NULL)
+  numeric_cutoff <- env_get(x, "numeric_cutoff", default = NULL)
+  numeric_cutoff_stat <- env_get(x, "numeric_cutoff_stat", default = NULL)
+  numeric_cutoff_column <- env_get(x, "numeric_cutoff_column", default = NULL)
+  missing_subjects_row_label <- env_get(x, "missing_subjects_row_label", default = NULL)
+  missing_subjects_sort_value <- env_get(x, "missing_subjects_sort_value", default = NULL)
+  total_row_sort_value <- env_get(x, "total_row_sort_value", default = NULL)
+  nest_count <- env_get(x, "nest_count", default = NULL)
+  include_total_row <- env_get(x, "include_total_row", default = FALSE)
+  total_row_label <- env_get(x, "total_row_label", default = NULL)
+  missing_string <- env_get(x, "missing_string", default = NULL)
+  missing_sort_value <- env_get(x, "missing_sort_value", default = NULL)
+  missing_count_list <- env_get(x, "missing_count_list", default = NULL)
 
-    # Set all defaults for ordering
-    if (is.null(result_order_var)) result_order_var <- quo(n)
-    # A lot of weird stripping of the object is done here to make sure its the
-    # right class
-    if (is.null(ordering_cols)) ordering_cols <- quos(!!unname(unlist(as.character(
-      head(unique(pop_data[, as_name(pop_treat_var)]), 1)
-      ))))
-    if (is.null(order_count_method)) order_count_method <- "byfactor"
+  # PROCESS: Conduct the data processing
+  if (nrow(formatted_data) == 0) return(formatted_data)
 
-    # If it is a nested count_layer
-    if (is_built_nest) {
+  # Set all defaults for ordering
+  if (is.null(result_order_var)) result_order_var <- quo(n)
+  # A lot of weird stripping of the object is done here to make sure its the
+  # right class
+  if (is.null(ordering_cols)) ordering_cols <- quos(!!unname(unlist(as.character(
+    head(unique(pop_data[, as_name(pop_treat_var)]), 1)
+    ))))
+  if (is.null(order_count_method)) order_count_method <- "byfactor"
 
-      # Number of sorting columns needed, number of bys plus one for the target_var
-      formatted_col_index <- length(by) + 1
+  # If it is a nested count_layer
+  if (is_built_nest) {
 
-      walk2(by, seq_along(by), function(a_by, by_i) {
-        # If a_by is a character, add the index itself
-        if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
+    # Number of sorting columns needed, number of bys plus one for the target_var
+    formatted_col_index <- length(by) + 1
+
+    for (by_i in seq_along(by)) {
+      a_by <- by[[by_i]]
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) {
+        formatted_data[, paste0("ord_layer_", by_i)] <- by_i
+      } else {
         # Otherwise determine data order
-        else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
-      })
-
-      # Used to remove the prefix. String is encoded to get controlled characters i.e. \t
-      indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 3)
-
-      # Only the outer columns
-      filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
-        expr(!!sym(as_name(x)) == !!as_name(y))
-      })
-
-
-      # Get the number of unique outer values, that is the number of rows to pull out.
-      # If its text, it is just 1 to pull out
-      # outer_number <- ifelse(quo_is_symbol(by[[1]]),
-      #                        # Use built_target here to take the 'where' logic into account
-      #                        nrow(filter(numeric_data, is.na(!!by[[1]]))),
-      #                        1)
-
-      # Identify the outer layer and attach it to the filter logic
-      filter_logic <- append(filter_logic, ifelse(
-        quo_is_symbol(by[[1]]), # Is the outside variable character or a symbol?
-        exprs(is.na(!!by[[1]])), # For symbols, the outer var will be NA
-        exprs(summary_var == !!by[[1]]) # For character, it will match summary_var
-      ))
-
-      all_outer <- numeric_data %>%
-        filter(!!!filter_logic)
-
-      # Add the ordering of the pieces in the layer using vectorized approach
-      formatted_data <- add_data_order_nested_vectorized(
-        formatted_data, formatted_col_index - 1, numeric_data,
-        indentation_length = indentation_length,
-        ordering_cols = ordering_cols,
-        treat_var = treat_var, by = by, cols = cols,
-        result_order_var = result_order_var,
-        target_var = target_var,
-        order_count_method = order_count_method,
-        target = target, all_outer = all_outer,
-        filter_logic = filter_logic,
-        indentation = indentation,
-        outer_inf = outer_inf,
-        break_ties = break_ties,
-        numeric_cutoff = numeric_cutoff,
-        numeric_cutoff_stat = numeric_cutoff_stat,
-        numeric_cutoff_column = numeric_cutoff_column,
-        missing_subjects_row_label = missing_subjects_row_label,
-        missing_subjects_sort_value = missing_subjects_sort_value,
-        total_row_sort_value = total_row_sort_value
-      )
-
-      if (!is.null(nest_count) && nest_count) {
-        # If the table nest should be collapsed into one row.
-        row_label_names <- vars_select(names(formatted_data), starts_with("row_label"))
-        # Remove first row
-        formatted_data[, 1] <- NULL
-        # Rename row labels
-        names(formatted_data)[length(by)] <- head(row_label_names, -1)
-
-      }
-
-      # If it isn't a nested count layer
-    } else {
-
-
-      # Number of sorting columns needed, number of bys plus one for the target_var
-      formatted_col_index <- length(by) + 1
-
-      # This adds a column for each by variable and the target variable.
-      walk2(by, seq_along(by), function(a_by, by_i) {
-        # If a_by is a character, add the index itself
-        if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
-        # Otherwise determine data order
-        else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
-      })
-
-      #This is used to permute any missing ordering values for total rows
-      if(include_total_row) {
-        ord_cols <- vars_select(names(formatted_data), starts_with("ord"))
-        na_ordered_row <- unique(map_int(ord_cols, function(x) {
-          isna_ <- which(is.na(formatted_data[, x]) & formatted_data[, formatted_col_index] == total_row_label)
-          if(length(isna_) == 0) return(NA)
-          else return(isna_)
-        }))
-      }
-
-      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order(current_env(), formatted_col_index)
-
-      # If there is a total row that is missing some ord values, they should fall
-      # back from the last one.
-      if(exists("na_ordered_row") && length(na_ordered_row) == 0) na_ordered_row <- NA
-      if(include_total_row && !is.na(na_ordered_row)) {
-        #This is the ord columns that are NA
-        na_ord_cols <- which(is.na(formatted_data[na_ordered_row, ord_cols]))
-        # Change those columns to the last value in the formatted table.
-        formatted_data[na_ordered_row, ord_cols[na_ord_cols]] <-
-          formatted_data[na_ordered_row, ncol(formatted_data)][[1]]
+        formatted_data[, paste0("ord_layer_", by_i)] <- get_by_order(formatted_data, target, by_i, a_by)
       }
     }
 
-    rm(formatted_col_index)
+    # Used to remove the prefix. String is encoded to get controlled characters i.e. \t
+    indentation_length <- ifelse(!is.null(indentation), nchar(encodeString(indentation)), 3)
 
-  }, envir = x)
+    # Only the outer columns
+    filter_logic <- map2(c(treat_var, cols), ordering_cols, function(x, y) {
+      expr(!!sym(as_name(x)) == !!as_name(y))
+    })
+
+    # Identify the outer layer and attach it to the filter logic
+    filter_logic <- append(filter_logic, ifelse(
+      quo_is_symbol(by[[1]]), # Is the outside variable character or a symbol?
+      exprs(is.na(!!by[[1]])), # For symbols, the outer var will be NA
+      exprs(summary_var == !!by[[1]]) # For character, it will match summary_var
+    ))
+
+    all_outer <- numeric_data %>%
+      filter(!!!filter_logic)
+
+    # Add the ordering of the pieces in the layer using vectorized approach
+    formatted_data <- add_data_order_nested_vectorized(
+      formatted_data, formatted_col_index - 1, numeric_data,
+      indentation_length = indentation_length,
+      ordering_cols = ordering_cols,
+      treat_var = treat_var, by = by, cols = cols,
+      result_order_var = result_order_var,
+      target_var = target_var,
+      order_count_method = order_count_method,
+      target = target, all_outer = all_outer,
+      filter_logic = filter_logic,
+      indentation = indentation,
+      outer_inf = outer_inf,
+      break_ties = break_ties,
+      numeric_cutoff = numeric_cutoff,
+      numeric_cutoff_stat = numeric_cutoff_stat,
+      numeric_cutoff_column = numeric_cutoff_column,
+      missing_subjects_row_label = missing_subjects_row_label,
+      missing_subjects_sort_value = missing_subjects_sort_value,
+      total_row_sort_value = total_row_sort_value
+    )
+
+    if (!is.null(nest_count) && nest_count) {
+      # If the table nest should be collapsed into one row.
+      row_label_names <- vars_select(names(formatted_data), starts_with("row_label"))
+      # Remove first row
+      formatted_data[, 1] <- NULL
+      # Rename row labels
+      names(formatted_data)[length(by)] <- head(row_label_names, -1)
+    }
+
+  # If it isn't a nested count layer
+  } else {
+
+    # Number of sorting columns needed, number of bys plus one for the target_var
+    formatted_col_index <- length(by) + 1
+
+    # This adds a column for each by variable and the target variable.
+    for (by_i in seq_along(by)) {
+      a_by <- by[[by_i]]
+      # If a_by is a character, add the index itself
+      if (!is.name(quo_get_expr(a_by))) {
+        formatted_data[, paste0("ord_layer_", by_i)] <- by_i
+      } else {
+        # Otherwise determine data order
+        formatted_data[, paste0("ord_layer_", by_i)] <- get_by_order(formatted_data, target, by_i, a_by)
+      }
+    }
+
+    # This is used to permute any missing ordering values for total rows
+    na_ordered_row <- NA
+    if (include_total_row) {
+      ord_cols <- vars_select(names(formatted_data), starts_with("ord"))
+      na_ordered_row <- unique(map_int(ord_cols, function(col) {
+        isna_ <- which(is.na(formatted_data[, col]) & formatted_data[, formatted_col_index] == total_row_label)
+        if (length(isna_) == 0) return(NA)
+        else return(isna_)
+      }))
+    }
+
+    formatted_data[, paste0("ord_layer_", formatted_col_index)] <- get_data_order_count(
+      formatted_data, formatted_col_index,
+      order_count_method = order_count_method,
+      numeric_data = numeric_data,
+      ordering_cols = ordering_cols,
+      treat_var = treat_var,
+      by = by,
+      cols = cols,
+      result_order_var = result_order_var,
+      target_var = target_var,
+      target = target,
+      missing_string = missing_string,
+      total_row_label = total_row_label,
+      missing_subjects_row_label = missing_subjects_row_label,
+      missing_sort_value = missing_sort_value,
+      total_row_sort_value = total_row_sort_value,
+      missing_subjects_sort_value = missing_subjects_sort_value,
+      break_ties = break_ties,
+      numeric_cutoff = numeric_cutoff,
+      numeric_cutoff_stat = numeric_cutoff_stat,
+      numeric_cutoff_column = numeric_cutoff_column,
+      missing_count_list = missing_count_list
+    )
+
+    # If there is a total row that is missing some ord values, they should fall
+    # back from the last one.
+    if (length(na_ordered_row) == 0) na_ordered_row <- NA
+    if (include_total_row && !is.na(na_ordered_row)) {
+      # This is the ord columns that are NA
+      na_ord_cols <- which(is.na(formatted_data[na_ordered_row, ord_cols]))
+      # Change those columns to the last value in the formatted table.
+      formatted_data[na_ordered_row, ord_cols[na_ord_cols]] <-
+        formatted_data[na_ordered_row, ncol(formatted_data)][[1]]
+    }
+  }
+
+  # BIND: Bind necessary variables back into layer
+  x$formatted_data <- formatted_data
+  x$result_order_var <- result_order_var
+  x$ordering_cols <- ordering_cols
+  x$order_count_method <- order_count_method
+  # For nested count layers, indentation_length is used by meta-builders
+  if (is_built_nest) {
+    x$indentation_length <- indentation_length
+  }
+
+  invisible(x)
 }
 
 #' @noRd
 add_order_columns.desc_layer <- function(x) {
 
-  evalq({
+  # EXTRACT: Pull necessary bindings from layer environment
+  formatted_data <- env_get(x, "formatted_data")
+  by <- env_get(x, "by")
+  target <- env_get(x, "target", inherit = TRUE)
 
-    # This adds a column for each by variable and the target variable.
-    walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, add the index itself
-      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
-      # Otherwise determine data order
-      else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
-    })
+  # PROCESS: Conduct the data processing
 
-    # Number of sorting columns needed, number of bys plus one for the target_var
-    formatted_col_index <- length(by) + 1
-
-    if (formatted_col_index > 1) {
-      formatted_data <- formatted_data %>%
-        group_by(!! sym(paste0("ord_layer_", formatted_col_index - 1))) %>%
-        mutate(!!sym(paste0("ord_layer_", formatted_col_index)) := row_number())
+  # This adds a column for each by variable and the target variable.
+  for (by_i in seq_along(by)) {
+    a_by <- by[[by_i]]
+    # If a_by is a character, add the index itself
+    if (!is.name(quo_get_expr(a_by))) {
+      formatted_data[, paste0("ord_layer_", by_i)] <- by_i
     } else {
-      formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
+      # Otherwise determine data order
+      formatted_data[, paste0("ord_layer_", by_i)] <- get_by_order(formatted_data, target, by_i, a_by)
     }
+  }
 
-    rm(formatted_col_index)
+  # Number of sorting columns needed, number of bys plus one for the target_var
+  formatted_col_index <- length(by) + 1
 
-  }, envir = x)
+  if (formatted_col_index > 1) {
+    formatted_data <- formatted_data %>%
+      group_by(!!sym(paste0("ord_layer_", formatted_col_index - 1))) %>%
+      mutate(!!sym(paste0("ord_layer_", formatted_col_index)) := row_number()) %>%
+      ungroup()
+  } else {
+    formatted_data[, paste0("ord_layer_", formatted_col_index)] <- seq(nrow(formatted_data))
+  }
+
+  # BIND: Bind necessary variables back into layer
+  x$formatted_data <- formatted_data
+
+  invisible(x)
 }
 
 #' @noRd
 add_order_columns.shift_layer <- function(x) {
-  evalq({
 
-    # This adds a column for each by variable and the target variable.
-    walk2(by, seq_along(by), function(a_by, by_i) {
-      # If a_by is a character, add the index itself
-      if (!is.name(quo_get_expr(a_by))) formatted_data[, paste0("ord_layer_", by_i)] <<- by_i
-      # Otherwise determine data order
-      else formatted_data[, paste0("ord_layer_", by_i)] <<- get_by_order(formatted_data, target, by_i, a_by)
-    })
+  # EXTRACT: Pull necessary bindings from layer environment
+  formatted_data <- env_get(x, "formatted_data")
+  by <- env_get(x, "by")
+  target <- env_get(x, "target", inherit = TRUE)
+  target_var <- env_get(x, "target_var")
+  total_row_sort_value <- env_get(x, "total_row_sort_value", default = NULL)
+  missing_subjects_sort_value <- env_get(x, "missing_subjects_sort_value", default = NULL)
 
-    # Number of sorting columns needed, number of bys plus one for the target_var
-    formatted_col_index <- length(by) + 1
+  # PROCESS: Conduct the data processing
 
-    #### The Factor data order method.
-    target_data <- target[, as_name(target_var$row)]
-
-    #Pull levels from target variable
-    target_fact <- levels(target_data[[1]])
-
-    # If the levels are null, the target was not a factor. So turn it into a factor
-    if (is.null(target_fact)) {
-
-      # Change target variable into a factor
-      target_fact <- as.factor(unlist(target_data))
-
-      # Create data.frame with levels and index
-      fact_df <- tibble(
-        !!target_var$row := unique(target_fact),
-        factor_index := unclass(unique(target_fact))
-      )
-
+  # This adds a column for each by variable and the target variable.
+  for (by_i in seq_along(by)) {
+    a_by <- by[[by_i]]
+    # If a_by is a character, add the index itself
+    if (!is.name(quo_get_expr(a_by))) {
+      formatted_data[, paste0("ord_layer_", by_i)] <- by_i
     } else {
-      # Create data.frame with levels and index
-      fact_df <- tibble(
-        !!target_var$row := target_fact,
-        factor_index := seq_along(target_fact)
-      )
-
+      # Otherwise determine data order
+      formatted_data[, paste0("ord_layer_", by_i)] <- get_by_order(formatted_data, target, by_i, a_by)
     }
+  }
 
+  # Number of sorting columns needed, number of bys plus one for the target_var
+  formatted_col_index <- length(by) + 1
 
-      # The logic is the same now for a byvarn so reuse that function
-      formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
-        get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
-                              formatted_col_index, total_row_sort_value = total_row_sort_value,
-                              missing_subjects_sort_value = missing_subjects_sort_value)
+  #### The Factor data order method.
+  target_data <- target[, as_name(target_var$row)]
 
-    rm(formatted_col_index)
+  # Pull levels from target variable
+  target_fact <- levels(target_data[[1]])
 
-  }, envir = x)
+  # If the levels are null, the target was not a factor. So turn it into a factor
+  if (is.null(target_fact)) {
+
+    # Change target variable into a factor
+    target_fact <- as.factor(unlist(target_data))
+
+    # Create data.frame with levels and index
+    fact_df <- tibble(
+      !!target_var$row := unique(target_fact),
+      factor_index := unclass(unique(target_fact))
+    )
+
+  } else {
+    # Create data.frame with levels and index
+    fact_df <- tibble(
+      !!target_var$row := target_fact,
+      factor_index := seq_along(target_fact)
+    )
+  }
+
+  # The logic is the same now for a byvarn so reuse that function
+  formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
+    get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
+                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          missing_subjects_sort_value = missing_subjects_sort_value)
+
+  # BIND: Bind necessary variables back into layer
+  x$formatted_data <- formatted_data
+
+  invisible(x)
 }
 
 #' Return the indicies of the rows based on the by variables
@@ -413,140 +494,169 @@ get_by_order <- function(formatted_data, target, i, var) {
   }
 }
 
-#' Add the order for the target variable
+#' Add the order for the target variable (count layer version)
 #'
-#' I'm condisering refactoring this and breaking out the logic for 'byrow', 'byvarn',
-#' and 'byfactor' into their own function
+#' Refactored version that takes explicit parameters instead of using evalq.
+#' Handles 'bycount', 'byvarn', and 'byfactor' sorting methods.
 #'
-#' @param x The tplyr layer environment
-#' @param formatted_col_index the column index of the target variable data.
+#' @param formatted_data The formatted_data data frame
+#' @param formatted_col_index The column index of the target variable data
+#' @param order_count_method The sorting method ("bycount", "byvarn", or "byfactor")
+#' @param numeric_data The numeric_data data frame
+#' @param ordering_cols Columns used for ordering
+#' @param treat_var Treatment variable
+#' @param by By variables
+#' @param cols Column variables
+#' @param result_order_var Variable used for result ordering
+#' @param target_var Target variable(s)
+#' @param target Target dataset
+#' @param missing_string String identifying missing values
+#' @param total_row_label Label for total row
+#' @param missing_subjects_row_label Label for missing subjects row
+#' @param missing_sort_value Sort value for missing
+#' @param total_row_sort_value Sort value for total row
+#' @param missing_subjects_sort_value Sort value for missing subjects
+#' @param break_ties How to break ties
+#' @param numeric_cutoff Numeric cutoff value
+#' @param numeric_cutoff_stat Statistic for numeric cutoff
+#' @param numeric_cutoff_column Column for numeric cutoff
+#' @param missing_count_list List of missing count values
 #'
-#' @return Returns the index the variables should be ordered in, in the cases of
-#'   ordering by a <VAR>N variable and ordering by factors. Returns the numeric
-#'   value in the case of ordering by column values.
-#'
+#' @return Returns the index the variables should be ordered in
 #' @noRd
-get_data_order <- function(x, formatted_col_index) {
+get_data_order_count <- function(formatted_data, formatted_col_index,
+                                  order_count_method, numeric_data,
+                                  ordering_cols, treat_var, by, cols,
+                                  result_order_var, target_var, target,
+                                  missing_string = NULL, total_row_label = NULL,
+                                  missing_subjects_row_label = NULL,
+                                  missing_sort_value = NULL,
+                                  total_row_sort_value = NULL,
+                                  missing_subjects_sort_value = NULL,
+                                  break_ties = NULL, numeric_cutoff = NULL,
+                                  numeric_cutoff_stat = NULL,
+                                  numeric_cutoff_column = NULL,
+                                  missing_count_list = NULL) {
 
-  evalq({
+  # Switch for the sorting method
+  if (order_count_method == "bycount") {
 
-    # Switch for the sorting method
-    if (order_count_method == "bycount") {
+    # Get the index of the row with the missing and total names
+    label_row_ind <- which(names(formatted_data) %in%
+                             tail(vars_select(names(formatted_data),
+                                              starts_with("row_label")), 1))
 
-      # Get the index of the row with the missing and total names
-      label_row_ind <- which(names(formatted_data) %in%
-                               tail(vars_select(names(formatted_data),
-                                                starts_with("row_label")), 1))
+    missing_index <- NULL
+    total_index <- NULL
+    missing_subjects_index <- NULL
 
-      if(!is.null(missing_string)) missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
-      if(!is.null(total_row_label)) total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
+    if (!is.null(missing_string)) {
+      missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
+    }
+    if (!is.null(total_row_label)) {
+      total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
+    }
+    if (!is.null(missing_subjects_row_label)) {
+      missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
+    }
 
-      if(!is.null(missing_subjects_row_label)) {
-        missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
+    # No processing is needed here just pass in the needed info
+    get_data_order_bycount(numeric_data, ordering_cols,
+                           treat_var, by, cols, result_order_var, target_var,
+                           missing_index, missing_sort_value,
+                           total_index, total_row_sort_value,
+                           missing_subjects_index, missing_subjects_sort_value,
+                           break_ties = break_ties,
+                           numeric_cutoff = numeric_cutoff,
+                           numeric_cutoff_stat = numeric_cutoff_stat,
+                           numeric_cutoff_column = numeric_cutoff_column)
+
+  } else if (order_count_method == "byvarn") {
+
+    assert_that(has_varn(target, as_name(target_var[[1]])), msg = "No VAR<N> variables present")
+
+    varn_df <- get_varn_values(target, as_name(target_var[[1]]))
+
+    if (!is.null(missing_count_list)) {
+      varN_name <- names(varn_df)[2]
+      varn_df[, 1] <- as.character(varn_df[, 1])
+      if (is.null(missing_sort_value)) {
+        varn_df <- varn_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            !!varN_name := seq_along(missing_count_list) + max(varn_df[, 2])
+          ))
+      } else {
+        varn_df <- varn_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            !!varN_name := seq_along(missing_count_list) + missing_sort_value - 1
+          ))
       }
+    }
 
-      # No processing is needed here just pass in the needed info
-      get_data_order_bycount(numeric_data, ordering_cols,
-                             treat_var, by, cols, result_order_var, target_var,
-                             missing_index, missing_sort_value,
-                             total_index, total_row_sort_value,
-                             missing_subjects_index, missing_subjects_sort_value,
-                             break_ties = break_ties,
-                             numeric_cutoff = numeric_cutoff,
-                             numeric_cutoff_stat = numeric_cutoff_stat,
-                             numeric_cutoff_column = numeric_cutoff_column)
+    get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
+                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          missing_subjects_sort_value = missing_subjects_sort_value)
 
-    } else if (order_count_method == "byvarn") {
+  # Here it is 'byfactor'
+  } else {
 
-      assert_that(has_varn(target, as_name(target_var[[1]])), msg = "No VAR<N> variables present")
+    # If the target_var is a character, no order is needed
+    if (is.character(quo_get_expr(target_var[[1]]))) return(NA)
 
-      varn_df <- get_varn_values(target, as_name(target_var[[1]]))
+    target_data <- target[, as_name(target_var[[1]])]
 
-      if(!is.null(missing_count_list)) {
-        if(is.null(missing_sort_value)) {
-          varN_name <- names(varn_df)[2]
-          varn_df[,1] <- as.character(varn_df[,1])
-          varn_df <- varn_df %>%
-            bind_rows(tibble(
-              !!target_var[[1]] := names(missing_count_list),
-              !!varN_name := seq_along(missing_count_list) + max(varn_df[,2])
-            ))
-        } else {
-          varN_name <- names(varn_df)[2]
-          varn_df[,1] <- as.character(varn_df[,1])
-          varn_df <- varn_df %>%
-            bind_rows(tibble(
-              !!target_var[[1]] := names(missing_count_list),
-              !!varN_name := seq_along(missing_count_list) + missing_sort_value - 1
-            ))
-        }
+    # Pull levels from target variable
+    target_levels <- levels(target_data[[1]])
 
-      }
+    # If the levels are null, the target was not a factor. So turn it into a factor
+    if (is.null(target_levels)) {
 
-      get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                            formatted_col_index, total_row_sort_value = total_row_sort_value,
-                            missing_subjects_sort_value = missing_subjects_sort_value)
+      # Change target variable into a factor
+      target_fact <- as.factor(unlist(target_data))
 
+      # Create data.frame with levels and index
+      fact_df <- tibble(
+        !!target_var[[1]] := unique(sort(target_fact)),
+        factor_index := unclass(unique(sort(target_fact)))
+      )
 
-      # Here it is 'byfactor'
     } else {
 
-      # If the target_var is a character, no order is needed
-      if(is.character(quo_get_expr(target_var[[1]]))) return(NA)
+      fact_df <- tibble(
+        !!target_var[[1]] := target_levels,
+        factor_index := seq_along(target_levels)
+      )
 
-      target_data <- target[, as_name(target_var[[1]])]
-
-      #Pull levels from target variable
-      target_levels <- levels(target_data[[1]])
-
-      # If the levels are null, the target was not a factor. So turn it into a factor
-      if (is.null(target_levels)) {
-
-        # Change target variable into a factor
-        target_fact <- as.factor(unlist(target_data))
-
-        # Create data.frame with levels and index
-        fact_df <- tibble(
-          !!target_var[[1]] := unique(sort(target_fact)),
-          factor_index := unclass(unique(sort(target_fact)))
-        )
-
-      } else {
-
-        fact_df <- tibble(
-          !!target_var[[1]] := target_levels,
-          factor_index := seq_along(target_levels)
-        )
-
-      }
-
-      if(!is.null(missing_count_list)) {
-        if(is.null(missing_sort_value)) {
-          fact_df <- fact_df %>%
-            bind_rows(tibble(
-              !!target_var[[1]] := names(missing_count_list),
-              factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
-            )) %>%
-            distinct(!!target_var[[1]], .keep_all = TRUE)
-        } else {
-          fact_df <- fact_df %>%
-            bind_rows(tibble(
-              !!target_var[[1]] := names(missing_count_list),
-              factor_index = seq_along(missing_count_list) + missing_sort_value
-            )) %>%
-            distinct(!!target_var[[1]], .keep_all = TRUE)
-        }
-      }
-
-      # The logic is the same now for a byvarn so reuse that function
-      get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
-                            formatted_col_index, total_row_sort_value = total_row_sort_value,
-                            missing_subjects_sort_value = missing_subjects_sort_value)
     }
-  }, envir = x)
+
+    if (!is.null(missing_count_list)) {
+      if (is.null(missing_sort_value)) {
+        fact_df <- fact_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
+          )) %>%
+          distinct(!!target_var[[1]], .keep_all = TRUE)
+      } else {
+        fact_df <- fact_df %>%
+          bind_rows(tibble(
+            !!target_var[[1]] := names(missing_count_list),
+            factor_index = seq_along(missing_count_list) + missing_sort_value
+          )) %>%
+          distinct(!!target_var[[1]], .keep_all = TRUE)
+      }
+    }
+
+    # The logic is the same now for a byvarn so reuse that function
+    get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
+                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          missing_subjects_sort_value = missing_subjects_sort_value)
+  }
 }
 
-#' Helper method for get_data_order
+#' Helper method for get_data_order_count
 #' @noRd
 get_data_order_bycount <- function(numeric_data, ordering_cols,
                        treat_var, by, cols, result_order_var, target_var,
