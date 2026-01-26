@@ -52,7 +52,8 @@ jobs:
           with:
             extra-packages: any::rcmdcheck
             needs: check
-            cache-version: 2
+            cache-version: 3
+            pak-version: devel
   
         - uses: r-lib/actions/check-r-package@v2
           with:
