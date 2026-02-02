@@ -519,7 +519,8 @@ prepare_format_metadata.count_layer <- function(x) {
   }
 
   # Pull max character length from counts. Should be at least 1
-  n_width <- max(c(nchar(numeric_data$n), 1L), na.rm = TRUE)
+  # Optimization: Only calculate nchar for unique values to reduce computation
+  n_width <- max(c(nchar(unique(numeric_data$n)), 1L), na.rm = TRUE)
 
   # If a layer_width flag is present, edit the formatting string to display the maximum
   # character length
