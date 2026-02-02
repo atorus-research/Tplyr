@@ -200,14 +200,34 @@ benchmark_nested_count()
 
 ## Progress Tracking
 
-| Recommendation | Status | Before (sec) | After (sec) | Improvement |
-|----------------|--------|--------------|-------------|-------------|
-| 1. Optimize nchar() | Not started | 8.8 | - | - |
-| 2. Reduce joins | Not started | - | - | - |
-| 3. String operations | Not started | - | - | - |
-| 4. data.table joins | Not started | - | - | - |
+| Recommendation | Status | Before (sec) | After (sec) | Improvement | Commit |
+|----------------|--------|--------------|-------------|-------------|--------|
+| 1. Optimize nchar() | ✅ Completed | 8.8 | 6.8 | 23% | 2122ff2 |
+| 2. Reduce joins | ❌ Reverted | 6.8 | 9.1 | -34% | (reverted) |
+| 3. String operations | ✅ Completed | 6.8 | 6.8 | 0% | 6407055 |
+| 4. data.table joins | ⏸️ Not attempted | - | - | - | - |
 
 **Baseline (2026-02-02):** 8.8 seconds average for nested count benchmark
+**Final result (2026-02-02):** 6.8 seconds average (**23% improvement**)
+
+### Summary of Optimization Attempts
+
+**Recommendation 1 (✅ SUCCESS):** Changed `nchar(numeric_data$n)` to `nchar(unique(numeric_data$n))` in R/count.R:522. This eliminated redundant character width calculations on 11,000 rows by only checking unique values. All 915 tests pass.
+
+**Recommendation 2 (❌ FAILED):** Attempted to replace `inner_join` with hash lookup using concatenated keys via `paste()`. The string concatenation overhead (762,762 time units) exceeded the join cost, making it 34% slower. Reverted. Lesson learned: dplyr joins are highly optimized in C - difficult to beat with pure R alternatives.
+
+**Recommendation 3 (✅ COMPLETED):** Removed `prefix_count_row()` wrapper function and inlined `paste0()` calls. Performance neutral but simplified code. Conditional optimization attempts made things worse due to branching overhead.
+
+**Recommendation 4:** Not attempted. Previous attempts showed that micro-optimizations fighting against library functions are counterproductive.
+
+### Current Bottlenecks (from profiling)
+
+Out of 3,958,654 total time units:
+- Join operations (join_mutate, inner_join, left_join): ~815,000 (21%)
+- vec_locate_matches / dplyr_locate_matches: ~329,000 (8%)
+- vec_slice: ~155,000 (4%)
+- paste0: ~151,000 (4%)
+- Pivot operations (complete.data.frame, expand_grid): ~72,000 (1.8%)
 
 ---
 
@@ -216,3 +236,4 @@ benchmark_nested_count()
 - Previous optimization plan (OPTIMIZATION_PLAN.md) was based on older profiling data and is now outdated
 - The high call frequency issues (335+ calls) mentioned in the old plan have been resolved by commit `47fd333`
 - Current bottlenecks are in the COST per operation, not the NUMBER of operations
+- Further optimization opportunities are limited - most remaining bottlenecks are in highly-optimized C code (dplyr joins, vctrs operations)
