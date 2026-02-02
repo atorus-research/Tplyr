@@ -237,7 +237,8 @@ process_single_count_target <- function(x) {
     rename("summary_var" = !!target_var[[1]]) %>%
     get_denom_total_vectorized(denoms_by, denoms_df_prep, "n") %>%
     mutate(
-      summary_var = prefix_count_row(summary_var, count_row_prefix),
+      # Inline paste0 call (paste0 also handles NA to "NA" conversion)
+      summary_var = paste0(count_row_prefix, summary_var),
       # Calculate percentages here rather than in formatting step
       pct = replace(n / total, is.na(n / total), 0),
       distinct_pct = replace(distinct_n / distinct_total, is.na(distinct_n / distinct_total), 0)
@@ -901,18 +902,6 @@ factor_treat_var <- function(x) {
 }
 
 
-#' Prefix a row with a specifed character
-#'
-#' @param row_i The row to prefix
-#' @param count_row_prefix The prefix
-#'
-#' @return The modified row
-#' @noRd
-prefix_count_row <- function(row_i, count_row_prefix) {
-
-  paste0(count_row_prefix, row_i)
-
-}
 
 #' Process count denominators
 #'
