@@ -14,3 +14,22 @@ test_that("build.tplyr_table preprocesses data appropriately", {
   expect_equal(nrow(tab$built_target[tab$built_target$Species == "Total", ]), 150)
   expect_equal(nrow(tab$built_target[tab$built_target$Species == "V Species", ]), 100)
 })
+
+test_that("build works with default options", {
+  # Simple count layer
+  result <- tplyr_table(mtcars, gear) %>%
+    add_layer(group_count(cyl)) %>%
+    build()
+
+  expect_s3_class(result, "data.frame")
+  expect_true(nrow(result) > 0)
+})
+
+test_that("build works with metadata=TRUE", {
+  result <- tplyr_table(mtcars, gear) %>%
+    add_layer(group_count(cyl)) %>%
+    build(metadata = TRUE)
+
+  expect_s3_class(result, "data.frame")
+  expect_true("row_id" %in% names(result))
+})

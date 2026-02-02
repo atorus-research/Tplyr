@@ -155,6 +155,89 @@ num_fmt_vec <- function(vals, i, fmt) {
   fmt_nums
 }
 
+#' Vectorized number formatting with auto-precision support for desc layers
+#'
+#' Formats an entire numeric vector using f_str settings, with support for
+#' auto-precision (a/A format specifiers). This extends num_fmt_vec for use
+#' in desc layers where precision can be determined from the data.
+#'
+#' @param vals Numeric vector to format
+#' @param i Index of the format setting within the f_str object
+#' @param fmt f_str object with formatting information
+#' @param max_int Numeric vector or scalar for auto integer precision (from data)
+#' @param max_dec Numeric vector or scalar for auto decimal precision (from data)
+#'
+#' @return Character vector of formatted values
+#' @noRd
+num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
+
+  settings <- fmt$settings[[i]]
+
+  # Use first element if vectors were passed (precision should be consistent within a group)
+  max_int <- if (length(max_int) > 1) max_int[1] else max_int
+  max_dec <- if (length(max_dec) > 1) max_dec[1] else max_dec
+
+  # Calculate integer length - use auto if specified
+  if (settings$auto_int) {
+    int_len <- settings$int + max_int
+  } else {
+    int_len <- settings$int
+  }
+
+  # Calculate decimal places - use auto if specified
+  if (settings$auto_dec) {
+    decimals <- settings$dec + max_dec
+  } else {
+    decimals <- settings$dec
+  }
+
+  hug_char <- settings$hug_char
+  nsmall <- decimals
+
+  # Calculate display width (add 1 for decimal point if decimals > 0)
+  width <- int_len + ifelse(decimals > 0, decimals + 1, decimals)
+
+  # Handle IBM rounding option
+  if (getOption("tplyr.IBMRounding", FALSE)) {
+    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
+                  " If you have feedback please get in touch with the maintainers!")),
+         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+    rounded <- ut_round(vals, nsmall)
+  } else {
+    rounded <- round(vals, nsmall)
+  }
+
+  # Build format string
+  fmt_string <- sprintf("%%%d.%df", width, nsmall)
+
+  # Vectorized formatting with sprintf
+  if (is.na(hug_char)) {
+    fmt_nums <- sprintf(fmt_string, rounded)
+  } else {
+    # Hug character formatting
+    fmt_string_no_width <- sprintf("%%.%df", nsmall)
+    fmt_nums <- str_pad(
+      paste0(hug_char, sprintf(fmt_string_no_width, rounded)),
+      width = width,
+      side = "left"
+    )
+  }
+
+  # Handle NA values vectorized
+  na_mask <- is.na(vals)
+  if (any(na_mask)) {
+    empty_str <- fmt$empty[1]
+    if (is.na(hug_char)) {
+      na_replacement <- str_pad(empty_str, width, side = "left")
+    } else {
+      na_replacement <- str_pad(paste0(hug_char, empty_str), width, side = "left")
+    }
+    fmt_nums[na_mask] <- na_replacement
+  }
+
+  fmt_nums
+}
+
 #' Pad Numeric Values
 #'
 #' This is generally used with a count layer. Uses vectorized str_pad

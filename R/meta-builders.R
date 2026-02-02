@@ -226,15 +226,20 @@ build_rdiff_meta <- function(meta, treat_var, comp){
   meta
 }
 
-#' Build metadata for shift_layers
+#' Build metadata for shift_layers (vectorized)
 #'
-#' @param target Target variable currently being summarized
+#' Builds metadata for shift layers using vectorized string operations
+#' instead of row-by-row loops. Pre-computes common elements and builds
+#' all filter strings at once.
+#'
+#' @param layer The shift layer object
 #' @param table_where Table level where filter
 #' @param layer_where Layer level where filter
 #' @param treat_grps Treatment groups from the tplyr_table parent environment
+#' @param summary_var Vector of summary variable values
 #' @param ... All grouping variables
 #'
-#' @return tplyr_meta object
+#' @return List of tplyr_meta objects
 #' @noRd
 build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summary_var, ...) {
 
@@ -249,18 +254,79 @@ build_shift_meta <- function(layer, table_where, layer_where, treat_grps, summar
   variables <- variables[inds]
   values <- values[inds]
 
-  meta <- vector('list', length(values[[1]]))
+  n_rows <- length(values[[1]])
 
-  # Vectorize across the input data
-  for (i in seq_along(values[[1]])) {
+  # Pre-compute common elements (same for all rows)
+  common_names <- append(variables, layer$target_var$row)
+  layer_where_vars <- get_vars_from_filter(layer_where)
+  table_where_vars <- get_vars_from_filter(table_where)
 
-    # Pull out the current row's values
-    cur_values <- map(values, ~ .x[i])
+  # Pre-compute variable labels for filter string building
+  var_labels <- map_chr(variables, as_label)
+  row_var_label <- as_label(layer$target_var$row)
 
-    # Make the meta object
-    meta[[i]] <- build_meta(table_where, layer_where, treat_grps, variables, cur_values) %>%
-      add_variables_(layer$target_var$row) %>%
-      add_filters_(make_parsed_strings(layer$target_var['row'], list(summary_var[i])))
+  # Translate treatment groups once per unique value (first column is treat var)
+  unique_treat <- unique(values[[1]])
+  treat_translation <- setNames(
+    map_chr(unique_treat, ~ translate_treat_grps(.x, treat_grps)),
+    unique_treat
+  )
+  translated_treat <- treat_translation[as.character(values[[1]])]
+
+  # Build all filter strings at once using vectorized operations
+  # For each variable, create filter strings for all rows
+  filter_strings <- vector("list", length(variables) + 1)
+
+  for (j in seq_along(variables)) {
+    vals <- if (j == 1) translated_treat else values[[j]]
+    vname <- var_labels[j]
+
+    # Vectorized filter string construction
+    filter_strings[[j]] <- ifelse(
+      is.na(vals),
+      paste0("is.na(", vname, ")"),
+      ifelse(
+        sapply(vals, function(v) class(v) %in% c('character', 'factor')),
+        paste0(vname, ' == "', vals, '"'),
+        paste0(vname, " == ", vals)
+      )
+    )
+  }
+
+  # Summary var filter (row variable)
+  filter_strings[[length(variables) + 1]] <- ifelse(
+    is.na(summary_var),
+    paste0("is.na(", row_var_label, ")"),
+    ifelse(
+      sapply(summary_var, function(v) class(v) %in% c('character', 'factor')),
+      paste0(row_var_label, ' == "', summary_var, '"'),
+      paste0(row_var_label, " == ", summary_var)
+    )
+  )
+
+  # Parse all filter strings at once
+  parsed_filters <- lapply(filter_strings, function(fs) {
+    lapply(fs, str2lang)
+  })
+
+  # Build list of tplyr_meta objects
+  meta <- vector('list', n_rows)
+
+  for (i in seq_len(n_rows)) {
+    # Collect filters for this row
+    row_filters <- lapply(seq_along(parsed_filters), function(j) parsed_filters[[j]][[i]])
+
+    meta[[i]] <- new_tplyr_meta(
+      names = common_names,
+      filters = row_filters
+    )
+
+    # Add layer and table where filters/vars (same for all)
+    meta[[i]] <- meta[[i]] %>%
+      add_filters_(layer_where) %>%
+      add_variables_(layer_where_vars) %>%
+      add_filters_(table_where) %>%
+      add_variables_(table_where_vars)
   }
 
   meta
