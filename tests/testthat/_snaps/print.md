@@ -14,7 +14,7 @@
     	vs
     where: TRUE
     Number of layer(s): 1
-    layer_output: 0
+    layer_output: <Table Not Built Yet>
 
 ---
 
@@ -69,7 +69,7 @@
     	vs
     where: TRUE
     Number of layer(s): 1
-    layer_output: 0
+    layer_output: <Table Not Built Yet>
 
 ---
 
