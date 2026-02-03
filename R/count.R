@@ -832,45 +832,6 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 #' Switch statement helper used in formatting (retained for shift layer compatibility)
 #'
 #' This function is used by construct_shift_string() and provides row-by-row
-#' formatting. For count layers, the vectorized build_count_format_args() is
-#' preferred for better performance.
-#'
-#' @param x Current parameter to format
-#' @param count_fmt f_str object used to format
-#' @param .n values used in 'n'
-#' @param .total values used in pct calculations
-#' @param .distinct_n values used in 'distinct_n'
-#' @param .distinct_total values used in distinct pct
-#' @param vars_ord variable order
-#'
-#' @noRd
-count_string_switch_help <- function(x, count_fmt, .n, .total,
-                                     .distinct_n, .distinct_total, vars_ord){
-
-  switch(x,
-         "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
-         "pct" = {
-           # Make a vector of ratios between n and total. Replace na values with 0
-           pcts <- replace(.n/.total, is.na(.n/.total), 0)
-           # Make a vector of percentages
-           map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
-         },
-         "distinct_n" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct_n"), fmt = count_fmt),
-         "distinct_pct" = {
-           # Same as pct
-           pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)
-
-           map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
-         },
-         "total" = {
-           map_chr(.total, num_fmt, which(vars_ord == "total"), fmt = count_fmt)
-         },
-         "distinct_total" = {
-           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
-         }
-  )
-}
-
 #' @param x Count Layer
 #'
 #' When nesting a count layer in some cases a treatment group will not apear in one of the

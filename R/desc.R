@@ -268,53 +268,6 @@ get_summaries <- function(e = caller_env()) {
   append(summaries, get_custom_summaries(e), after=0)
 }
 
-#' Format a descriptive statistics display string
-#'
-#' Intended to be applied through a map_chr call
-#'
-#' @param ... A row of a data frame - captured through the ellipsis argument
-#' @param .fmt_str The format strings container with all f_str objects and row labels
-#'
-#' @return A character vector of display formatted strings
-#' @noRd
-construct_desc_string <- function(..., .fmt_str=NULL) {
-  # Unpack names into current namespace for ease
-  list2env(list2(...), envir=environment())
-
-  # Get the current format to be applied
-  fmt <- .fmt_str[[row_label]]
-
-  # If all the values summarized are NA then return the empty string
-  if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
-    if ('.overall' %in% names(fmt$empty)) {
-      return(fmt$empty['.overall'])
-    }
-  }
-
-  # Make the autos argument
-  if (fmt$auto_precision) {
-    autos <- c('int'=max_int, 'dec'=max_dec)
-  } else {
-    autos <- c('int'=0, 'dec'=0)
-  }
-  # Format the transposed value
-  fmt_args <- list(fmt = fmt$repl_str, num_fmt(value, 1, fmt, autos))
-
-
-  # Now evaluate any additional numbers that must be formatted
-  # Exclude the initial variable because it's already been evaluated
-  # i is intended to start on the second argument so +1 in the num_fmt call
-  fmt_args <- append(fmt_args,
-                     imap(fmt$vars[-1],
-                          function(val, i, fmt, autos) num_fmt(eval(val), i+1, fmt, autos),
-                          fmt=fmt,
-                          autos=autos)
-  )
-
-  # Apply the call to sprintf
-  do.call(sprintf, fmt_args)
-}
-
 #' Vectorized formatting for descriptive statistics display strings
 #'
 #' This function replaces the pmap_chr(data, construct_desc_string, ...) pattern
