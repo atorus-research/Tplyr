@@ -115,19 +115,3 @@ treatment_group_build <- function(table) {
 
   invisible(table)
 }
-
-#' Verify layer is compatible with the layer it is contained in
-#'
-#' Currently a place holder. Will add more checks in further in development
-#'
-#' @noRd
-verify_layer_compatibility <- function(layer) {
-  NextMethod("verify_layer_compatibility")
-}
-
-#' @noRd
-verify_layer_compatibility.count_layer <- function(layer){
-  # Placeholder for future compatibility checks
-  # No evalq needed - function currently does nothing
-  return(invisible(layer))
-}

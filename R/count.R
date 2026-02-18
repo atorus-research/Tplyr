@@ -237,7 +237,8 @@ process_single_count_target <- function(x) {
     rename("summary_var" = !!target_var[[1]]) %>%
     get_denom_total_vectorized(denoms_by, denoms_df_prep, "n") %>%
     mutate(
-      summary_var = prefix_count_row(summary_var, count_row_prefix),
+      # Inline paste0 call (paste0 also handles NA to "NA" conversion)
+      summary_var = paste0(count_row_prefix, summary_var),
       # Calculate percentages here rather than in formatting step
       pct = replace(n / total, is.na(n / total), 0),
       distinct_pct = replace(distinct_n / distinct_total, is.na(distinct_n / distinct_total), 0)
@@ -519,7 +520,8 @@ prepare_format_metadata.count_layer <- function(x) {
   }
 
   # Pull max character length from counts. Should be at least 1
-  n_width <- max(c(nchar(numeric_data$n), 1L), na.rm = TRUE)
+  # Optimization: Only calculate nchar for unique values to reduce computation
+  n_width <- max(c(nchar(unique(numeric_data$n)), 1L), na.rm = TRUE)
 
   # If a layer_width flag is present, edit the formatting string to display the maximum
   # character length
@@ -830,45 +832,6 @@ construct_count_string <- function(.n, .total, .distinct_n = NULL, .distinct_tot
 #' Switch statement helper used in formatting (retained for shift layer compatibility)
 #'
 #' This function is used by construct_shift_string() and provides row-by-row
-#' formatting. For count layers, the vectorized build_count_format_args() is
-#' preferred for better performance.
-#'
-#' @param x Current parameter to format
-#' @param count_fmt f_str object used to format
-#' @param .n values used in 'n'
-#' @param .total values used in pct calculations
-#' @param .distinct_n values used in 'distinct_n'
-#' @param .distinct_total values used in distinct pct
-#' @param vars_ord variable order
-#'
-#' @noRd
-count_string_switch_help <- function(x, count_fmt, .n, .total,
-                                     .distinct_n, .distinct_total, vars_ord){
-
-  switch(x,
-         "n" = map_chr(.n, num_fmt, which(vars_ord == "n"), fmt = count_fmt),
-         "pct" = {
-           # Make a vector of ratios between n and total. Replace na values with 0
-           pcts <- replace(.n/.total, is.na(.n/.total), 0)
-           # Make a vector of percentages
-           map_chr(pcts*100, num_fmt, which(vars_ord == "pct"), fmt = count_fmt)
-         },
-         "distinct_n" =  map_chr(.distinct_n, num_fmt, which(vars_ord == "distinct_n"), fmt = count_fmt),
-         "distinct_pct" = {
-           # Same as pct
-           pcts <- replace(.distinct_n/.distinct_total, is.na(.distinct_n/.distinct_total), 0)
-
-           map_chr(pcts*100, num_fmt, which(vars_ord == "distinct_pct"), fmt = count_fmt)
-         },
-         "total" = {
-           map_chr(.total, num_fmt, which(vars_ord == "total"), fmt = count_fmt)
-         },
-         "distinct_total" = {
-           map_chr(.distinct_total, num_fmt, which(vars_ord == "distinct_total"), fmt = count_fmt)
-         }
-  )
-}
-
 #' @param x Count Layer
 #'
 #' When nesting a count layer in some cases a treatment group will not apear in one of the
@@ -900,18 +863,6 @@ factor_treat_var <- function(x) {
 }
 
 
-#' Prefix a row with a specifed character
-#'
-#' @param row_i The row to prefix
-#' @param count_row_prefix The prefix
-#'
-#' @return The modified row
-#' @noRd
-prefix_count_row <- function(row_i, count_row_prefix) {
-
-  paste0(count_row_prefix, row_i)
-
-}
 
 #' Process count denominators
 #'

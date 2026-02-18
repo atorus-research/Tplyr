@@ -177,151 +177,43 @@ tplyr_default_options <- list(
   invisible()
 }
 
-i <- NULL
-target_var <- NULL
-target <- NULL
-where <- NULL
-pop_where <- NULL
-layers <- NULL
-layer_output <- NULL
-mask <- NULL
-row_label <- NULL
-value <- NULL
-cols <- NULL
-empty <- NULL
-pct <- NULL
-numeric_data <- NULL
-format_strings <- NULL
-max_layer_length <- NULL
-max_n_width <- NULL
-total <- NULL
-display_string <- NULL
-built_target <- NULL
-table_where <- NULL
-distinct_by <- NULL
-summary_vars <- NULL
-trans_vars <- NULL
-stat <- NULL
-summary_var <- NULL
-spanner_locs <- NULL
-spanned_sects <- NULL
-op <- NULL
-cl <- NULL
-q1 <- NULL
-q3 <- NULL
-.var <- NULL
-total_stat <- NULL
-distinct_n <- NULL
-summary_stat <- NULL
-total_row_label <- NULL
-distinct_total <- NULL
-.distinct_total <- NULL
-count_row_prefix <- NULL
-inner_count_layer_prefix <- NULL
-ordering_cols <- NULL
-order_count_method <- NULL
-result_order_var <- NULL
-nest_sort_index <- NULL
-.data <- NULL
-. <- NULL
-built_pop_data <- NULL
-factor_index <- NULL
-formatted_data <- NULL
-dots <- NULL
-stats <- NULL
-nest_count <- NULL
-dif <- NULL
-comparisons <- NULL
-n <- NULL
-low <- NULL
-high <- NULL
-row_label1 <- NULL
-comp_numeric_data <- NULL
-indentation <- NULL
-max_int <- NULL
-max_dec <- NULL
-need_prec_table <- NULL
-precision_by <- NULL
-precision_on <- NULL
-cap <- NULL
-..index <- NULL
-denoms_by <- NULL
-.distinct_n <- NULL
-count_layer_formats <- NULL
-desc_layer_formats <- NULL
-denoms_df <- NULL
+# Declare global variables to avoid R CMD check notes
+# These are variables used in non-standard evaluation contexts (e.g., dplyr, tidyr)
+utils::globalVariables(c(
+  "i", "target_var", "target", "where", "pop_where", "layers", "layer_output",
+  "mask", "row_label", "value", "cols", "empty", "pct", "numeric_data",
+  "format_strings", "max_layer_length", "max_n_width", "total", "display_string",
+  "built_target", "table_where", "distinct_by", "summary_vars", "trans_vars",
+  "stat", "summary_var", "spanner_locs", "spanned_sects", "op", "cl", "q1", "q3",
+  ".var", "total_stat", "distinct_n", "summary_stat", "total_row_label",
+  "distinct_total", ".distinct_total", "count_row_prefix", "inner_count_layer_prefix",
+  "ordering_cols", "order_count_method", "result_order_var", "nest_sort_index",
+  ".data", ".", "built_pop_data", "factor_index", "formatted_data", "dots",
+  "stats", "nest_count", "dif", "comparisons", "n", "low", "high", "row_label1",
+  "comp_numeric_data", "indentation", "max_int", "max_dec", "need_prec_table",
+  "precision_by", "precision_on", "cap", "..index", "denoms_by", ".distinct_n",
+  "count_layer_formats", "desc_layer_formats", "denoms_df", "by_saved",
+  "target_var_saved", "indentation_length", "missing_count_string", "missing_string",
+  "denom_ignore", "denoms_distinct_df", "outer_inf", "shift_layer_formats",
+  ".tmp_name", "include_total_row", "ord_layer_index", "ord_break",
+  "missing_vars_ord", "total_vars_ord", "string_m", "string_t", "total_count_format",
+  "missing_count_list", "total_denom_ignore", "total_row_sort_value",
+  "missing_sort_value", "missing_index", "total_index", "denom_where",
+  "built_target_pre_where", "count_fmt", "count_missings", "levels_to_keep",
+  "break_ties", "prec_error", "comp_distinct", "numeric_cutoff",
+  "numeric_cutoff_stat", "numeric_cutoff_column", "meta", "meta_sum",
+  "num_sums_raw", "row_labels", "row_id", "USUBJID", "trans_sums", "l", "w", "s",
+  "out", "og_row", "desc", "id", "stub_sort", "include_missing_subjects_row",
+  "missing_subjects_row_label", "missing_subjects_stat", "missing_subjects_count_format",
+  "missing_subject_rows", "missing_subject_vars_ord", "string_ms",
+  "missing_subjects_sort_value", "limit_data_by", "n_present", "header_tots",
+  "tot_fill", "..outer_order", "..outer_val", "..inner_order", "..is_outer",
+  "sort_val", "valid_summary_var", "distinct_pct"
+))
+
+# Default values for specific variables
 is_built_nest <- FALSE
-by_saved <- NULL
-target_var_saved <- NULL
-indentation_length <- NULL
-missing_count_string <- NULL
-missing_string <- NULL
-denom_ignore <- NULL
-denoms_distinct_df <- NULL
-outer_inf <- NULL
-shift_layer_formats <- NULL
-.tmp_name <- NULL
-include_total_row <- NULL
-ord_layer_index <- NULL
-ord_break <- NULL
-missing_vars_ord <- NULL
-total_vars_ord <- NULL
-string_m <- NULL
-string_t <- NULL
-total_count_format <- NULL
-missing_count_list <- NULL
-total_denom_ignore <- NULL
-total_row_sort_value <- NULL
-missing_sort_value <- NULL
-missing_index <- NULL
-total_index <- NULL
-process_distinct_total <- FALSE
-denom_where <- NULL
-built_target_pre_where <- NULL
-count_fmt <- NULL
-count_missings <- NULL
 has_missing_count <- FALSE
-kept_levels <- expr(TRUE)
-levels_to_keep <- NULL
-break_ties <- NULL
-prec_error <- NULL
+process_distinct_total <- FALSE
 stats_as_columns <- FALSE
-comp_distinct <- NULL
-numeric_cutoff <- NULL
-numeric_cutoff_stat <- NULL
-numeric_cutoff_column <- NULL
-meta <- NULL
-meta_sum <- NULL
-num_sums_raw <- NULL
-row_labels <- NULL
-row_id <- NULL
-USUBJID <- NULL
-trans_sums <- NULL
-l <- NULL
-w <- NULL
-s <- NULL
-out <- NULL
-og_row <- NULL
-desc <- NULL
-id <- NULL
-stub_sort <- NULL
-include_missing_subjects_row <- NULL
-missing_subjects_row_label <- NULL
-missing_subjects_stat <- NULL
-missing_subjects_count_format <- NULL
-missing_subject_rows <- NULL
-missing_subject_vars_ord <- NULL
-string_ms <- NULL
-missing_subjects_sort_value <- NULL
-limit_data_by <- NULL
-n_present <- NULL
-header_tots <- NULL
-tot_fill <- NULL
-# Global variables for vectorized nested count operations
-..outer_order <- NULL
-..outer_val <- NULL
-..inner_order <- NULL
-..is_outer <- NULL
-sort_val <- NULL
-valid_summary_var <- NULL
-distinct_pct <- NULL
+kept_levels <- expr(TRUE)

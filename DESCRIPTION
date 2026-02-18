@@ -59,10 +59,12 @@ Imports:
     tibble (>= 3.0.1),
     lifecycle,
     forcats (>= 1.0.0)
-Suggests: 
+Suggests:
     testthat (>= 2.1.0),
+    carrier (>= 0.2.0),
     haven (>= 2.2.0),
     knitr,
+    mirai,
     rmarkdown,
     huxtable,
     tidyverse,
