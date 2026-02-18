@@ -26,3 +26,7 @@
 ^data-raw$
 ^scratch.R$
 ^CRAN-SUBMISSION$
+^.claude$
+^CLAUDE.md$
+^Rplots.pdf$
+.*\.out

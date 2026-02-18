@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Traceability Focused Grammar of Clinical Data Summary
-Version: 1.2.1.9000
+Version: 1.2.1.9001
 Authors@R: 
     c(
     person(given = "Eli",
@@ -59,10 +59,12 @@ Imports:
     tibble (>= 3.0.1),
     lifecycle,
     forcats (>= 1.0.0)
-Suggests: 
+Suggests:
     testthat (>= 2.1.0),
+    carrier (>= 0.2.0),
     haven (>= 2.2.0),
     knitr,
+    mirai,
     rmarkdown,
     huxtable,
     tidyverse,

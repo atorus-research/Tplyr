@@ -116,12 +116,11 @@ process_shift_total <- function(x) {
   cols <- env_get(x, "cols", inherit = TRUE)
   denoms_df <- x$denoms_df
   
-  # PROCESS: Calculate totals in function environment
+  # PROCESS: Calculate totals in function environment (vectorized)
   if(is.null(denoms_by)) denoms_by <- c(treat_var, by, cols)
 
   numeric_data <- numeric_data %>%
-    group_by(!!!denoms_by) %>%
-    do(get_denom_total(., denoms_by, denoms_df))
+    get_denom_total_vectorized(denoms_by, denoms_df)
 
   # BIND: Write results back to layer environment
   x$numeric_data <- numeric_data
@@ -184,6 +183,8 @@ process_formatting.shift_layer <- function(x, ...) {
                                       shift_fmt=format_strings,
                                       max_layer_length=max_layer_length,
                                       max_n_width=max_n_width)) %>%
+    # Select only columns needed for pivot to reduce memory footprint
+    select(match_exact(by), summary_var, !!treat_var, !!target_var$column, match_exact(cols), n) %>%
     # Pivot table
     pivot_wider(id_cols = c(match_exact(by), "summary_var"),
                 names_from = c( !!treat_var, !!target_var$column, match_exact(cols)),
@@ -202,30 +203,46 @@ process_formatting.shift_layer <- function(x, ...) {
 
 }
 
-#' @noRd
+#' Vectorized shift string formatting
 #'
-#' @param .n counts
-#' @param .total The value used in the denominator of the pct
+#' Formats shift layer count strings using vectorized operations instead of
+#' row-by-row map_chr calls. Uses num_fmt_vec for efficient bulk formatting.
+#'
+#' @param .n Vector of counts
+#' @param .total Vector of totals (for percentage calculation)
 #' @param shift_fmt The f_str object used to display the string
 #' @param max_layer_length The maximum character length in the table
-#' @param max_n_width The maximum count length in the table.
+#' @param max_n_width The maximum count length in the table
+#'
+#' @return Character vector of formatted shift strings
+#' @noRd
 construct_shift_string <- function(.n, .total, shift_fmt, max_layer_length, max_n_width) {
 
   vars_ord <- map_chr(shift_fmt$vars, as_name)
 
-  # str_all is a list that contains character vectors for each parameter that might be calculated
-  str_all <- vector("list", 5)
-  # Append the repl_str to be passed to do.call
-  str_all[1] <- shift_fmt$repl_str
-  # Iterate over every variable
-  for(i in seq_along(vars_ord)) {
-    str_all[[i+1]] <-  count_string_switch_help(vars_ord[i], shift_fmt, .n, .total,
-                                                .distinct_n, .distinct_total, vars_ord)
+  # Build argument list for sprintf using vectorized formatting
+  args <- list(shift_fmt$repl_str)
+
+  for (i in seq_along(vars_ord)) {
+    var_name <- vars_ord[i]
+
+    formatted <- switch(var_name,
+      "n" = num_fmt_vec(.n, i, shift_fmt),
+      "pct" = {
+        # Calculate percentages, replacing NA with 0
+        pcts <- replace(.n / .total, is.na(.n / .total), 0)
+        num_fmt_vec(pcts * 100, i, shift_fmt)
+      },
+      "total" = num_fmt_vec(.total, i, shift_fmt)
+    )
+
+    args[[i + 1]] <- formatted
   }
 
-  # Put the vector strings together. Only include parts of str_all that aren't null
-  string_ <- do.call(sprintf, str_all[!map_lgl(str_all, is.null)])
+  # Vectorized sprintf
+  string_ <- do.call(sprintf, args[!map_lgl(args, is.null)])
 
+  # Apply padding
   string_ <- pad_formatted_data(string_, 0, max_n_width)
 
   string_

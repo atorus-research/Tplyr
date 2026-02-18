@@ -144,7 +144,7 @@ process_formatting.desc_layer <- function(x, ...) {
   } else {
     FALSE
   }
-  
+
   # Extract precision-related bindings if needed
   if (need_prec_table) {
     built_target <- env_get(x, "built_target", inherit = TRUE)
@@ -177,7 +177,7 @@ process_formatting.desc_layer <- function(x, ...) {
   for (i in seq_along(trans_sums)) {
     # Format the display strings - this is just applying construct_desc_string to each row of
     # the data.frame
-    
+
     # Make a local copy to avoid modifying the original
     current_trans_sum <- trans_sums[[i]]
 
@@ -186,17 +186,16 @@ process_formatting.desc_layer <- function(x, ...) {
       current_trans_sum <- left_join(current_trans_sum, prec, by=c(match_exact(precision_by), 'precision_on'))
     }
 
-    # Reset the scientific notation presentation settings temporarily
-    current_trans_sum['display_string'] <- pmap_chr(current_trans_sum,
-                                          function(...) construct_desc_string(...,
-                                                                              .fmt_str = format_strings),
-                                          format_strings=format_strings)
+    # Format display strings using vectorized function
+    current_trans_sum['display_string'] <- construct_desc_string_vec(current_trans_sum, format_strings)
 
     # Now do one more transpose to split the columns out
     # Default is to use the treatment variable, but if `cols` was provided
     # then also transpose by cols.
     if (stats_as_columns) {
       form_sums[[i]] <- current_trans_sum %>%
+        # Select only columns needed for pivot to reduce memory footprint
+        select(!!treat_var, match_exact(by), row_label, match_exact(cols), display_string) %>%
         pivot_wider(id_cols=c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
@@ -205,6 +204,8 @@ process_formatting.desc_layer <- function(x, ...) {
 
     } else {
       form_sums[[i]] <- current_trans_sum %>%
+        # Select only columns needed for pivot to reduce memory footprint
+        select(row_label, match_exact(by), !!treat_var, match_exact(cols), display_string) %>%
         pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
                     names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
                     names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
@@ -267,49 +268,130 @@ get_summaries <- function(e = caller_env()) {
   append(summaries, get_custom_summaries(e), after=0)
 }
 
-#' Format a descriptive statistics display string
+#' Vectorized formatting for descriptive statistics display strings
 #'
-#' Intended to be applied through a map_chr call
+#' This function replaces the pmap_chr(data, construct_desc_string, ...) pattern
+#' with a vectorized approach. It processes rows grouped by row_label since
+#' each row_label has a potentially different format string.
 #'
-#' @param ... A row of a data frame - captured through the ellipsis argument
-#' @param .fmt_str The format strings container with all f_str objects and row labels
+#' @param data Data frame containing the transposed summary data with columns:
+#'   - value: the pivoted statistic value
+#'   - row_label: the display label for the statistic
+#'   - max_int, max_dec: (optional) auto-precision columns
+#'   - Additional columns for keep_vars (e.g., sd when formatting "Mean (SD)")
+#' @param format_strings Named list of f_str objects keyed by row_label
 #'
-#' @return A character vector of display formatted strings
+#' @return Character vector of formatted display strings
 #' @noRd
-construct_desc_string <- function(..., .fmt_str=NULL) {
-  # Unpack names into current namespace for ease
-  list2env(list2(...), envir=environment())
+construct_desc_string_vec <- function(data, format_strings) {
 
-  # Get the current format to be applied
-  fmt <- .fmt_str[[row_label]]
+  # Initialize result vector
+  result <- character(nrow(data))
 
-  # If all the values summarized are NA then return the empty string
-  if (all(is.na(append(map(fmt$vars[-1], eval, envir=environment()), value)))) {
-    if ('.overall' %in% names(fmt$empty)) {
-      return(fmt$empty['.overall'])
+  # Get unique row labels to process
+  unique_labels <- unique(data$row_label)
+
+  for (label in unique_labels) {
+    # Get the format for this row_label
+    fmt <- format_strings[[label]]
+
+    if (is.null(fmt)) {
+      # Skip if no format found (shouldn't happen in normal use)
+      next
     }
+
+    # Get indices for rows with this label
+    idx <- which(data$row_label == label)
+
+    if (length(idx) == 0) next
+
+    # Extract the subset of data for this label
+    subset_data <- data[idx, , drop = FALSE]
+
+    # Check if all values are NA - return empty string if so
+    # Get the first variable value (in 'value' column) and any additional vars
+    all_na_mask <- is.na(subset_data$value)
+
+    # Check additional variables too
+    for (var_expr in fmt$vars[-1]) {
+      var_name <- as_name(var_expr)
+      if (var_name %in% names(subset_data)) {
+        all_na_mask <- all_na_mask & is.na(subset_data[[var_name]])
+      }
+    }
+
+    # Handle rows where all values are NA
+    if (any(all_na_mask) && '.overall' %in% names(fmt$empty)) {
+      result[idx[all_na_mask]] <- fmt$empty['.overall']
+    }
+
+    # Process non-all-NA rows
+    non_na_idx <- idx[!all_na_mask]
+
+    if (length(non_na_idx) == 0) next
+
+    non_na_data <- data[non_na_idx, , drop = FALSE]
+
+    # Handle auto precision: when precision varies by row, sub-group by precision
+    if (fmt$auto_precision && "max_int" %in% names(non_na_data) && "max_dec" %in% names(non_na_data)) {
+      # Check if precision varies within this group
+      unique_prec <- unique(non_na_data[, c("max_int", "max_dec"), drop = FALSE])
+
+      if (nrow(unique_prec) > 1) {
+        # Multiple precision levels - process each sub-group separately
+        for (p_row in seq_len(nrow(unique_prec))) {
+          p_int <- unique_prec$max_int[p_row]
+          p_dec <- unique_prec$max_dec[p_row]
+
+          # Find rows matching this precision
+          prec_mask <- non_na_data$max_int == p_int & non_na_data$max_dec == p_dec
+          prec_rows <- which(prec_mask)
+          prec_idx <- non_na_idx[prec_rows]
+          prec_data <- non_na_data[prec_rows, , drop = FALSE]
+
+          # Format this sub-group
+          fmt_args <- list(fmt$repl_str)
+          fmt_args[[2]] <- num_fmt_vec_auto(prec_data$value, 1, fmt, p_int, p_dec)
+
+          if (length(fmt$vars) > 1) {
+            for (j in seq_along(fmt$vars[-1])) {
+              var_name <- as_name(fmt$vars[[j + 1]])
+              var_vals <- if (var_name %in% names(prec_data)) prec_data[[var_name]] else rep(NA_real_, nrow(prec_data))
+              fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, p_int, p_dec)
+            }
+          }
+
+          result[prec_idx] <- do.call(sprintf, fmt_args)
+        }
+        next  # Skip the default processing below
+      } else {
+        # Single precision level - use it
+        max_int <- unique_prec$max_int[1]
+        max_dec <- unique_prec$max_dec[1]
+      }
+    } else if (fmt$auto_precision) {
+      # Auto precision but no precision columns - default to 0
+      max_int <- 0
+      max_dec <- 0
+    } else {
+      max_int <- 0
+      max_dec <- 0
+    }
+
+    # Build format arguments list (single precision case)
+    fmt_args <- list(fmt$repl_str)
+    fmt_args[[2]] <- num_fmt_vec_auto(non_na_data$value, 1, fmt, max_int, max_dec)
+
+    if (length(fmt$vars) > 1) {
+      for (j in seq_along(fmt$vars[-1])) {
+        var_name <- as_name(fmt$vars[[j + 1]])
+        var_vals <- if (var_name %in% names(non_na_data)) non_na_data[[var_name]] else rep(NA_real_, nrow(non_na_data))
+        fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, max_int, max_dec)
+      }
+    }
+
+    result[non_na_idx] <- do.call(sprintf, fmt_args)
   }
 
-  # Make the autos argument
-  if (fmt$auto_precision) {
-    autos <- c('int'=max_int, 'dec'=max_dec)
-  } else {
-    autos <- c('int'=0, 'dec'=0)
-  }
-  # Format the transposed value
-  fmt_args <- list(fmt = fmt$repl_str, num_fmt(value, 1, fmt, autos))
-
-
-  # Now evaluate any additional numbers that must be formatted
-  # Exclude the initial variable because it's already been evaluated
-  # i is intended to start on the second argument so +1 in the num_fmt call
-  fmt_args <- append(fmt_args,
-                     imap(fmt$vars[-1],
-                          function(val, i, fmt, autos) num_fmt(eval(val), i+1, fmt, autos),
-                          fmt=fmt,
-                          autos=autos)
-  )
-
-  # Apply the call to sprintf
-  do.call(sprintf, fmt_args)
+  result
 }
