@@ -272,8 +272,8 @@ process_count_n <- function(x) {
   distinct_by <- env_get(x, "distinct_by", default = NULL, inherit=TRUE)
   missing_count_string <- env_get(x, "missing_count_string", default = NULL, inherit=TRUE)
   missing_count_list <- env_get(x, "missing_count_list", default = NULL, inherit=TRUE)
-  limit_data_by <- env_get(x, "limit_data_by", default = NULL)
-  outer_ <- env_get(x, "outer_", default = FALSE)
+  limit_data_by <- env_get(x, "limit_data_by", default = NULL, inherit = TRUE)
+  outer_ <- env_get(x, "outer_", default = FALSE, inherit = TRUE)
 
   # PROCESS: Execute in function environment
   if (is.null(denoms_by)) denoms_by <- c(treat_var, cols)
