@@ -199,7 +199,7 @@ process_single_count_target <- function(x) {
   denoms_by <- env_get(x, "denoms_by", default = NULL, inherit=TRUE)
   
   # Note: We don't return early for empty summary_stat because we still need to
-  # process it through get_denom_total() to add the required columns (total, distinct_total, etc.)
+  # process it through get_denom_total_vectorized() to add the required columns (total, distinct_total, etc.)
 
   # If a denoms variable is factor then it should be character for the denoms calculations
   denoms_df_prep <- denoms_df %>%

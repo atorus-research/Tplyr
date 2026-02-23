@@ -134,45 +134,6 @@ process_nested_count_target <- function(x) {
   invisible(x)
 }
 
-#' This function is meant to remove the values of an inner layer that don't
-#' appear in the target data (LEGACY - kept for reference)
-#' @noRd
-filter_nested_inner_layer <- function(.group, target, outer_name, inner_name, indentation,
-                                      missing_subjects_row_label) {
-
-  # Is outer variable text? If it is don't filter on it
-  text_outer <- !quo_is_symbol(outer_name)
-  outer_name <- as_name(outer_name)
-  inner_name <- as_name(inner_name)
-
-  if(text_outer) {
-    lvs <- levels(target[[inner_name]])
-    target_inner_values <- target %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      c(lvs) %>%
-      unique() %>%
-      paste0(indentation, .)
-
-  } else {
-    current_outer_value <- unique(.group[, outer_name])[[1]]
-
-    target_inner_values <- target %>%
-      filter(!!sym(outer_name) == current_outer_value) %>%
-      select(any_of(inner_name)) %>%
-      unlist() %>%
-      paste0(indentation, .) %>%
-      unique()
-  }
-
-  target_inner_values <- c(target_inner_values %>% unique(),
-                           paste0(indentation, missing_subjects_row_label))
-
-  .group %>%
-    filter(summary_var %in% target_inner_values)
-
-}
-
 #' Vectorized filtering of nested inner layer values
 #'
 #' This function replaces the do() + filter_nested_inner_layer() pattern
