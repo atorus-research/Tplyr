@@ -80,3 +80,74 @@ test_that("treat_grps binding attaches properly", {
                                      Treated = c("Low", "High")))
 
 })
+
+##### header_n tests #####
+test_that("set_header_n binds header_n data properly", {
+  tab <- tplyr_table(mtcars, gear)
+  hn <- data.frame(gear = c(3, 4, 5), n = c(15L, 12L, 5L))
+
+  tab <- set_header_n(tab, hn)
+  expect_equal(header_n(tab), hn)
+
+  # Assignment operator
+  hn2 <- data.frame(gear = c(3, 4, 5), n = c(10L, 8L, 3L))
+  header_n(tab) <- hn2
+  expect_equal(header_n(tab), hn2)
+})
+
+test_that("set_header_n validates inputs", {
+  tab <- tplyr_table(mtcars, gear)
+
+  expect_error(set_header_n(tab, "not a data frame"))
+  expect_error(set_header_n(tab, data.frame(a = 1)))
+  expect_error(set_header_n(tab, data.frame(n = "a")))
+})
+
+##### where binding tests #####
+test_that("get_where and set_where work on tplyr_table", {
+  tab <- tplyr_table(mtcars, gear)
+
+  tab <- set_where(tab, cyl == 4)
+  w <- get_where(tab)
+  expect_true(is_quosure(w))
+})
+
+test_that("set_pop_where and get_pop_where work", {
+  tab <- tplyr_table(mtcars, gear)
+
+  tab <- set_pop_where(tab, cyl > 4)
+  w <- get_pop_where(tab)
+  expect_true(is_quosure(w))
+})
+
+##### table format default tests #####
+test_that("desc layer format defaults can be set and retrieved", {
+  tab <- tplyr_table(mtcars, gear)
+
+  tab <- set_desc_layer_formats(tab,
+    TEST = f_str("xx.x", mean)
+  )
+  fmts <- get_desc_layer_formats(tab)
+  expect_true(is.list(fmts))
+  expect_true("TEST" %in% names(fmts))
+})
+
+test_that("count layer format defaults can be set and retrieved", {
+  tab <- tplyr_table(mtcars, gear)
+
+  tab <- set_count_layer_formats(tab,
+    n_counts = f_str("xx (xx.x%)", n, pct)
+  )
+  fmts <- get_count_layer_formats(tab)
+  expect_true(is.list(fmts))
+})
+
+test_that("shift layer format defaults can be set and retrieved", {
+  tab <- tplyr_table(mtcars, gear)
+
+  tab <- set_shift_layer_formats(tab,
+    f_str("xx", n)
+  )
+  fmts <- get_shift_layer_formats(tab)
+  expect_true(is.list(fmts))
+})

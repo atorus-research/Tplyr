@@ -70,6 +70,21 @@ test_that("group_shift outputs the expected formatted data", {
   expect_equal(t4$layers[[1]]$formatted_data$row_label1, c("6", "8", "4"))
 })
 
+test_that("Shift layer ordering columns are generated with by variables", {
+  load(test_path('adlb.Rdata'))
+
+  x <- tplyr_table(adlb, TRTA, where=VISIT %in% c("SCREENING 1", "UNSCHEDULED 1.1")) %>%
+    add_layer(
+      group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, VISIT)) %>%
+        set_format_strings(f_str("a (xxx.x%)", n, pct))
+    ) %>%
+    build()
+
+  expect_true("ord_layer_1" %in% names(x))
+  expect_true("ord_layer_2" %in% names(x))
+  expect_true(all(!is.na(x$ord_layer_1)))
+})
+
 test_that("Shift layer clauses with invalid syntax give informative error", {
   t <- tplyr_table(mtcars, gear) %>%
     add_layer(

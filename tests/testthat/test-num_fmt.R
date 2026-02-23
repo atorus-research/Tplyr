@@ -145,3 +145,47 @@ test_that("Hug character formatting applies properly for shift layers", {
 
   expect_equal(x, c(" ((8)) {(100.0%)}", " ((0))   {(0.0%)}"))
 })
+
+test_that("IBM rounding option works for count layers", {
+  withr::with_options(list(tplyr.IBMRounding = TRUE), {
+    x <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_count(cyl) %>%
+          set_format_strings(f_str("a (xx.x%)", n, pct))
+      ) %>%
+      build()
+    expect_true(is.data.frame(x))
+    expect_true(nrow(x) > 0)
+  })
+})
+
+test_that("IBM rounding option works for desc layers", {
+  withr::with_options(list(tplyr.IBMRounding = TRUE), {
+    x <- tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(mpg) %>%
+          set_format_strings("Mean" = f_str("xx.x", mean))
+      ) %>%
+      build()
+    expect_true(is.data.frame(x))
+    expect_true(nrow(x) > 0)
+  })
+})
+
+test_that("Count layer with missing values and hug character formats correctly", {
+  dat <- data.frame(
+    trt = c("A", "A", "A", "B", "B"),
+    val = c("x", "x", NA, "x", NA)
+  )
+
+  x <- tplyr_table(dat, trt) %>%
+    add_layer(
+      group_count(val) %>%
+        set_format_strings(f_str("(A) (xxx.x%)", n, pct)) %>%
+        set_missing_count(f_str("(A)", n), Missing = NA)
+    ) %>%
+    build()
+
+  expect_true(is.data.frame(x))
+  expect_true(nrow(x) > 0)
+})

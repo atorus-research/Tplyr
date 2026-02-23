@@ -207,9 +207,25 @@ test_that("process_nested_count_target() handles factor warnings", {
   )
 })
 
+test_that("process_nested_count_target() warns when inner variable is a factor", {
+  mtcars_test <- mtcars
+  mtcars_test$grp <- factor(paste0("grp.", mtcars_test$cyl))
+
+  t_test <- tplyr_table(mtcars_test, gear)
+  layer_test <- group_count(t_test, vars(cyl, grp))
+  t_test <- add_layers(t_test, layer_test)
+
+  treatment_group_build(t_test)
+
+  expect_warning(
+    process_summaries(layer_test),
+    "Factors are not currently supported in nested count layers"
+  )
+})
+
 test_that("process_nested_count_target() validates inner variable", {
   mtcars_test <- mtcars
-  
+
   # Should error when inner variable is not a symbol
   expect_error(
     tplyr_table(mtcars_test, gear) %>%
@@ -217,4 +233,21 @@ test_that("process_nested_count_target() validates inner variable", {
       build(),
     "Inner layers must be data driven variables"
   )
+})
+
+test_that("Nested count with numeric_threshold and column parameter works", {
+  load(test_path("adae.Rdata"))
+
+  x <- adae %>%
+    tplyr_table(TRTA) %>%
+    add_layer(
+      group_count(vars(AEBODSYS, AEDECOD)) %>%
+        set_numeric_threshold(3, "n", "Placebo") %>%
+        set_order_count_method("bycount")
+    ) %>%
+    build()
+
+  expect_true(is.data.frame(x))
+  expect_true(nrow(x) > 0)
+  expect_true("ord_layer_1" %in% names(x))
 })
