@@ -266,7 +266,7 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
     group_desc(AGE) %>% 
       set_format_strings("Mean" = f_str('xx.xx', mean))
   ) %>% 
-  build() %>% 
+  build() %>%
   kable()
 ```
 
