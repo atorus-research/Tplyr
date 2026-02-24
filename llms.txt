@@ -1,0 +1,505 @@
+# **Tplyr**
+
+Welcome to **Tplyr**! **Tplyr** is a traceability minded grammar of data
+format and summary. It’s designed to simplify the creation of common
+clinical summaries and help you focus on how you present your data
+rather than redundant summaries being performed. Furthermore, for every
+result **Tplyr** produces, it also produces the metadata necessary to
+give your traceability from source to summary.
+
+As always, we welcome your feedback. If you spot a bug, would like to
+see a new feature, or if any documentation is unclear - submit an issue
+through GitHub right
+[here](https://github.com/atorus-research/Tplyr/issues).
+
+Take a look at the
+[cheatsheet!](https://atorus-research.github.io/Tplyr_cheatsheet.pdf)
+
+# Installation
+
+You can install **Tplyr** with:
+
+``` r
+# Install from CRAN:
+install.packages("Tplyr")
+
+# Or install the development version:
+devtools::install_github("https://github.com/atorus-research/Tplyr.git", ref="devel")
+```
+
+# What is **Tplyr**?
+
+[dplyr](https://dplyr.tidyverse.org/) from tidyverse is a grammar of
+data manipulation. So what does that allow you to do? It gives you, as a
+data analyst, the capability to easily and intuitively approach the
+problem of manipulating your data into an analysis ready form.
+[dplyr](https://dplyr.tidyverse.org/) conceptually breaks things down
+into verbs that allow you to focus on *what* you want to do more than
+*how* you have to do it.
+
+**Tplyr** is designed around a similar concept, but its focus is on
+building summary tables common within the clinical world. In the
+pharmaceutical industry, a great deal of the data presented in the
+outputs we create are very similar. For the most part, most of these
+tables can be broken down into a few categories:
+
+- Counting for event based variables or categories
+- Shifting, which is just counting a change in state with a ‘from’ and a
+  ‘to’
+- Generating descriptive statistics around some continuous variable.
+
+For many of the tables that go into a clinical submission, the tables
+are made up of a combination of these approaches. Consider a
+demographics table - and let’s use an example from the PHUSE project
+Standard Analyses & Code Sharing - [Analyses & Displays Associated with
+Demographics, Disposition, and Medications in Phase 2-4 Clinical Trials
+and Integrated Summary
+Documents](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf).
+
+![](articles/demo_table.png)
+
+When you look at this table, you can begin breaking this output down
+into smaller, redundant, components. These components can be viewed as
+‘layers’, and the table as a whole is constructed by stacking the
+layers. The boxes in the image above represent how you can begin to
+conceptualize this.
+
+- First we have Sex, which is made up of n (%) counts.
+- Next we have Age as a continuous variable, where we have a number of
+  descriptive statistics, including n, mean, standard deviation, median,
+  quartile 1, quartile 3, min, max, and missing values.
+- After that we have age, but broken into categories - so this is once
+  again n (%) values.
+- Race - more counting,
+- Ethnicity - more counting
+- Weight - and we’re back to descriptive statistics.
+
+So we have one table, with 6 summaries (7 including the next page, not
+shown) - but only 2 different approaches to summaries being performed.
+In the same way that [dplyr](https://dplyr.tidyverse.org/) is a grammar
+of data manipulation, **Tplyr** aims to be a grammar of data summary.
+The goal of **Tplyr** is to allow you to program a summary table like
+you see it on the page, by breaking a larger problem into smaller
+‘layers’, and combining them together like you see on the page.
+
+Enough talking - let’s see some code. In these examples, we will be
+using data from the [PHUSE Test Data
+Factory](https://advance.phuse.global/display/WEL/Test+Dataset+Factory)
+based on the [original pilot project submission
+package](https://github.com/atorus-research/CDISC_pilot_replication).
+We’ve packaged some subsets of that data into **Tplyr**, which you can
+use to replicate our examples and run our vignette code yourself. Note:
+You can see our replication of the CDISC pilot using the PHUSE Test Data
+Factory data
+[here](https://github.com/atorus-research/CDISC_pilot_replication).
+
+``` r
+tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (years)")
+  ) %>% 
+  add_layer(
+    group_count(AGEGR1, by = "Age Categories n (%)")
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+| row_label1           | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
+| Age (years)          | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
+| Age (years)          | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
+| Age (years)          | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
+| Age (years)          | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
+| Age (years)          | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
+| Age (years)          | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
+| Age Categories n (%) | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               2 |           1 |           1 |
+| Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
+| Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
+
+## **Tplyr** is Qualified
+
+We understand how important documentation and testing is within the
+pharmaceutical world. This is why outside of unit testing **Tplyr**
+includes an entire user-acceptance testing document, where requirements
+were established, test-cases were written, and tests were independently
+programmed and executed. We do this in the hope that you can leverage
+our work within a qualified programming environment, and that we save
+you a substantial amount of trouble in getting it there.
+
+You can find the qualification document within this repository right
+[here](https://github.com/atorus-research/Tplyr/blob/master/uat/references/output/uat.pdf).
+The ‘uat’ folder additionally contains all of the raw files,
+programmatic tests, specifications, and test cases necessary to create
+this report.
+
+## The TL;DR
+
+Here are some of the high level benefits of using **Tplyr**:
+
+- Easy construction of table data using an intuitive syntax
+- Smart string formatting for your numbers that’s easily specified by
+  the user
+- A great deal of flexibility in what is performed and how it’s
+  presented, without specifying hundreds of parameters
+
+# Where to go from here?
+
+There’s quite a bit more to learn! And we’ve prepared a number of other
+vignettes to help you get what you need out of **Tplyr**.
+
+- The best place to start is with our Getting Started vignette at
+  [`vignette("Tplyr")`](https://atorus-research.github.io/Tplyr/articles/Tplyr.md)
+- Learn more about table level settings in
+  [`vignette("table")`](https://atorus-research.github.io/Tplyr/articles/table.md)
+- Learn more about descriptive statistics layers in
+  [`vignette("desc")`](https://atorus-research.github.io/Tplyr/articles/desc.md)
+- Learn more about count layers in
+  [`vignette("count")`](https://atorus-research.github.io/Tplyr/articles/count.md)
+- Learn more about shift layers in
+  [`vignette("shift")`](https://atorus-research.github.io/Tplyr/articles/shift.md)
+- Learn more about percentages in
+  [`vignette("denom")`](https://atorus-research.github.io/Tplyr/articles/denom.md)
+- Learn more about calculating risk differences in
+  [`vignette("riskdiff")`](https://atorus-research.github.io/Tplyr/articles/riskdiff.md)
+- Learn more about sorting **Tplyr** tables in
+  [`vignette("sort")`](https://atorus-research.github.io/Tplyr/articles/sort.md)
+- Learn more about using **Tplyr** options in
+  [`vignette("options")`](https://atorus-research.github.io/Tplyr/articles/options.md)
+- And finally, learn more about producing and outputting styled tables
+  using **Tplyr** in
+  [`vignette("styled-table")`](https://atorus-research.github.io/Tplyr/articles/styled-table.md)
+
+In the **Tplyr** version 1.0.0, we’ve packed a number of new features
+in. For deeper dives on the largest new additions:
+
+- Learn about **Tplyr**’s traceability metadata in
+  [`vignette("metadata")`](https://atorus-research.github.io/Tplyr/articles/metadata.md)
+  and about how it can be extended in
+  [`vignette("custom-metadata")`](https://atorus-research.github.io/Tplyr/articles/custom-metadata.md)
+- Learn about layer templates in
+  [`vignette("layer_templates")`](https://atorus-research.github.io/Tplyr/articles/layer_templates.md)
+
+# References
+
+In building **Tplyr**, we needed some additional resources in addition
+to our personal experience to help guide design. PHUSE has done some
+great work to create guidance for standard outputs with collaboration
+between multiple pharmaceutical companies and the FDA. You can find some
+of the resource that we referenced below.
+
+[Analysis and Displays Associated with Adverse
+Events](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+and+Displays+Associated+with+Adverse+Events+Focus+on+Adverse+Events+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary.pdf)
+
+[Analyses and Displays Associated with Demographics, Disposition, and
+Medications](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf)
+
+[Analyses and Displays Associated with Measures of Central
+Tendency](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Measures+of+Central+Tendency-+Focus+on+Vital+Sign,+Electrocardiogram+%26+Laboratory+Analyte+Measurements+in+Phase+2-4+Clinical+Trials+and+Integrated+Submissions.pdf)
+
+# Package index
+
+## Build
+
+High-level functions to create and build a table
+
+- [`build()`](https://atorus-research.github.io/Tplyr/reference/build.md)
+  :
+
+  Trigger the execution of the `tplyr_table`
+
+- [`tplyr_table()`](https://atorus-research.github.io/Tplyr/reference/tplyr_table.md)
+  : Create a Tplyr table object
+
+- [`pop_data()`](https://atorus-research.github.io/Tplyr/reference/pop_data.md)
+  [`` `pop_data<-`() ``](https://atorus-research.github.io/Tplyr/reference/pop_data.md)
+  [`set_pop_data()`](https://atorus-research.github.io/Tplyr/reference/pop_data.md)
+  : Return or set population data bindings
+
+- [`pop_treat_var()`](https://atorus-research.github.io/Tplyr/reference/pop_treat_var.md)
+  [`set_pop_treat_var()`](https://atorus-research.github.io/Tplyr/reference/pop_treat_var.md)
+  : Return or set pop_treat_var binding
+
+## Layers and layering
+
+Creating layers and adding them to the table
+
+- [`add_layer()`](https://atorus-research.github.io/Tplyr/reference/layer_attachment.md)
+  [`add_layers()`](https://atorus-research.github.io/Tplyr/reference/layer_attachment.md)
+  :
+
+  Attach a layer to a `tplyr_table` object
+
+- [`tplyr_layer()`](https://atorus-research.github.io/Tplyr/reference/tplyr_layer.md)
+  :
+
+  Create a `tplyr_layer` object
+
+- [`group_count()`](https://atorus-research.github.io/Tplyr/reference/layer_constructors.md)
+  [`group_desc()`](https://atorus-research.github.io/Tplyr/reference/layer_constructors.md)
+  [`group_shift()`](https://atorus-research.github.io/Tplyr/reference/layer_constructors.md)
+  :
+
+  Create a `count`, `desc`, or `shift` layer for discrete count based
+  summaries, descriptive statistics summaries, or shift count summaries
+
+## Formatting
+
+Customizing the display as a table
+
+- [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+  :
+
+  Create a `f_str` object
+
+- [`get_desc_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  [`set_desc_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  [`get_count_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  [`set_count_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  [`get_shift_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  [`set_shift_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  : Get or set the default format strings for descriptive statistics
+  layers
+
+- [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+  : Set the format strings and associated summaries to be performed in a
+  layer
+
+- [`set_missing_count()`](https://atorus-research.github.io/Tplyr/reference/set_missing_count.md)
+  : Set the display for missing strings
+
+## Sorting
+
+Sorting and customizing table order
+
+- [`set_order_count_method()`](https://atorus-research.github.io/Tplyr/reference/ordering.md)
+  [`set_ordering_cols()`](https://atorus-research.github.io/Tplyr/reference/ordering.md)
+  [`set_result_order_var()`](https://atorus-research.github.io/Tplyr/reference/ordering.md)
+  : Set the ordering logic for the count layer
+- [`set_outer_sort_position()`](https://atorus-research.github.io/Tplyr/reference/set_outer_sort_position.md)
+  : Set the value of a outer nested count layer to Inf or -Inf
+
+## Adding Groups and Stats
+
+Adding treatment groups, total rows, and risk difference
+
+- [`add_total_row()`](https://atorus-research.github.io/Tplyr/reference/add_total_row.md)
+  : Add a Total row into a count summary.
+- [`add_treat_grps()`](https://atorus-research.github.io/Tplyr/reference/treat_grps.md)
+  [`add_total_group()`](https://atorus-research.github.io/Tplyr/reference/treat_grps.md)
+  [`treat_grps()`](https://atorus-research.github.io/Tplyr/reference/treat_grps.md)
+  : Combine existing treatment groups for summary
+- [`add_risk_diff()`](https://atorus-research.github.io/Tplyr/reference/add_risk_diff.md)
+  : Add risk difference to a count layer
+- [`add_missing_subjects_row()`](https://atorus-research.github.io/Tplyr/reference/add_missing_subjects_row.md)
+  : Add a missing subject row into a count summary.
+- [`set_total_row_label()`](https://atorus-research.github.io/Tplyr/reference/set_total_row_label.md)
+  : Set the label for the total row
+- [`set_missing_subjects_row_label()`](https://atorus-research.github.io/Tplyr/reference/set_missing_subjects_row_label.md)
+  : Set the label for the missing subjects row
+
+## Descriptive Statistics Layer Functions
+
+Descriptive statistics layer helper functions
+
+- [`set_custom_summaries()`](https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.md)
+  : Set custom summaries to be performed within a descriptive statistics
+  layer
+- [`set_precision_data()`](https://atorus-research.github.io/Tplyr/reference/set_precision_data.md)
+  : Set precision data
+- [`get_precision_by()`](https://atorus-research.github.io/Tplyr/reference/precision_by.md)
+  [`set_precision_by()`](https://atorus-research.github.io/Tplyr/reference/precision_by.md)
+  : Set or return precision_by layer binding
+- [`get_precision_on()`](https://atorus-research.github.io/Tplyr/reference/precision_on.md)
+  [`set_precision_on()`](https://atorus-research.github.io/Tplyr/reference/precision_on.md)
+  : Set or return precision_on layer binding
+- [`set_stats_as_columns()`](https://atorus-research.github.io/Tplyr/reference/set_stats_as_columns.md)
+  : Set descriptive statistics as columns
+
+## Counting functions
+
+Count layer helper functions
+
+- [`set_denoms_by()`](https://atorus-research.github.io/Tplyr/reference/set_denoms_by.md)
+  : Set variables used in pct denominator calculation
+- [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)
+  : Set counts to be distinct by some grouping variable.
+- [`set_denom_where()`](https://atorus-research.github.io/Tplyr/reference/set_denom_where.md)
+  : Set Logic for denominator subsetting
+- [`set_nest_count()`](https://atorus-research.github.io/Tplyr/reference/set_nest_count.md)
+  : Set the option to nest count layers
+- [`set_outer_sort_position()`](https://atorus-research.github.io/Tplyr/reference/set_outer_sort_position.md)
+  : Set the value of a outer nested count layer to Inf or -Inf
+- [`set_missing_count()`](https://atorus-research.github.io/Tplyr/reference/set_missing_count.md)
+  : Set the display for missing strings
+- [`keep_levels()`](https://atorus-research.github.io/Tplyr/reference/keep_levels.md)
+  : Select levels to keep in a count layer
+- [`set_denom_ignore()`](https://atorus-research.github.io/Tplyr/reference/set_denom_ignore.md)
+  : Set values the denominator calculation will ignore
+- [`set_indentation()`](https://atorus-research.github.io/Tplyr/reference/set_indentation.md)
+  : Set the option to prefix the row_labels in the inner count_layer
+- [`set_numeric_threshold()`](https://atorus-research.github.io/Tplyr/reference/set_numeric_threshold.md)
+  **\[experimental\]** : Set a numeric cutoff
+- [`set_limit_data_by()`](https://atorus-research.github.io/Tplyr/reference/set_limit_data_by.md)
+  : Set variables to limit reported data values only to those that exist
+  rather than fully completing all possible levels
+
+## Column Headers
+
+Column header helpers
+
+- [`add_column_headers()`](https://atorus-research.github.io/Tplyr/reference/add_column_headers.md)
+  : Attach column headers to a Tplyr output
+- [`header_n()`](https://atorus-research.github.io/Tplyr/reference/header_n.md)
+  [`` `header_n<-`() ``](https://atorus-research.github.io/Tplyr/reference/header_n.md)
+  [`set_header_n()`](https://atorus-research.github.io/Tplyr/reference/header_n.md)
+  : Return or set header_n binding
+
+## Metadata Functions
+
+Tplyr metadata functions
+
+- [`tplyr_meta()`](https://atorus-research.github.io/Tplyr/reference/tplyr_meta.md)
+  : Tplyr Metadata Object
+- [`add_variables()`](https://atorus-research.github.io/Tplyr/reference/metadata_additions.md)
+  [`add_filters()`](https://atorus-research.github.io/Tplyr/reference/metadata_additions.md)
+  : Add variables to a tplyr_meta object
+- [`add_anti_join()`](https://atorus-research.github.io/Tplyr/reference/add_anti_join.md)
+  : Add an anti-join onto a tplyr_meta object
+- [`get_metadata()`](https://atorus-research.github.io/Tplyr/reference/get_metadata.md)
+  : Get the metadata dataframe from a tplyr_table
+- [`append_metadata()`](https://atorus-research.github.io/Tplyr/reference/append_metadata.md)
+  : Append the Tplyr table metadata dataframe
+- [`get_meta_result()`](https://atorus-research.github.io/Tplyr/reference/get_meta_result.md)
+  : Extract the result metadata of a Tplyr table
+- [`get_meta_subset()`](https://atorus-research.github.io/Tplyr/reference/get_meta_subset.md)
+  : Extract the subset of data based on result metadata
+
+## Templates
+
+Layer Templates
+
+- [`new_layer_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
+  [`remove_layer_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
+  [`get_layer_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
+  [`get_layer_templates()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
+  [`use_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
+  : Create, view, extract, remove, and use Tplyr layer templates
+
+## Post-pocessing
+
+Post-pocessing functions
+
+- [`apply_conditional_format()`](https://atorus-research.github.io/Tplyr/reference/apply_conditional_format.md)
+  : Conditional reformatting of a pre-populated string of numbers
+- [`apply_formats()`](https://atorus-research.github.io/Tplyr/reference/apply_formats.md)
+  : Apply Format Strings outside of a Tplyr table
+- [`apply_row_masks()`](https://atorus-research.github.io/Tplyr/reference/apply_row_masks.md)
+  : Replace repeating row label variables with blanks in preparation for
+  display.
+- [`collapse_row_labels()`](https://atorus-research.github.io/Tplyr/reference/collapse_row_labels.md)
+  : Collapse row labels into a single column
+- [`replace_leading_whitespace()`](https://atorus-research.github.io/Tplyr/reference/replace_leading_whitespace.md)
+  : Reformat strings with leading whitespace for HTML
+- [`str_extract_fmt_group()`](https://atorus-research.github.io/Tplyr/reference/str_extractors.md)
+  [`str_extract_num()`](https://atorus-research.github.io/Tplyr/reference/str_extractors.md)
+  : Extract format group strings or numbers
+- [`str_indent_wrap()`](https://atorus-research.github.io/Tplyr/reference/str_indent_wrap.md)
+  : Wrap strings to a specific width with hyphenation while preserving
+  indentation
+
+## Helper functions
+
+General helper functions
+
+- [`get_numeric_data()`](https://atorus-research.github.io/Tplyr/reference/get_numeric_data.md)
+  : Retrieve the numeric data from a tplyr objects
+- [`get_stats_data()`](https://atorus-research.github.io/Tplyr/reference/get_stats_data.md)
+  : Get statistics data
+- [`get_by()`](https://atorus-research.github.io/Tplyr/reference/by.md)
+  [`set_by()`](https://atorus-research.github.io/Tplyr/reference/by.md)
+  : Set or return by layer binding
+- [`get_target_var()`](https://atorus-research.github.io/Tplyr/reference/target_var.md)
+  [`set_target_var()`](https://atorus-research.github.io/Tplyr/reference/target_var.md)
+  : Set or return treat_var binding
+- [`treat_var()`](https://atorus-research.github.io/Tplyr/reference/treat_var.md)
+  [`set_treat_var()`](https://atorus-research.github.io/Tplyr/reference/treat_var.md)
+  : Return or set the treatment variable binding
+- [`get_where()`](https://atorus-research.github.io/Tplyr/reference/where.md)
+  [`set_where()`](https://atorus-research.github.io/Tplyr/reference/where.md)
+  [`set_pop_where()`](https://atorus-research.github.io/Tplyr/reference/where.md)
+  [`get_pop_where()`](https://atorus-research.github.io/Tplyr/reference/where.md)
+  : Set or return where binding for layer or table
+- [`Tplyr-package`](https://atorus-research.github.io/Tplyr/reference/Tplyr.md)
+  [`Tplyr`](https://atorus-research.github.io/Tplyr/reference/Tplyr.md)
+  : A grammar of summary data for clinical reports
+- [`get_tplyr_regex()`](https://atorus-research.github.io/Tplyr/reference/get_tplyr_regex.md)
+  : Retrieve one of Tplyr's regular expressions
+
+## Data
+
+Tplyr Built-in Datasets
+
+- [`tplyr_adae`](https://atorus-research.github.io/Tplyr/reference/tplyr_adae.md)
+  : ADAE Data
+- [`tplyr_adas`](https://atorus-research.github.io/Tplyr/reference/tplyr_adas.md)
+  : ADAS Data
+- [`tplyr_adlb`](https://atorus-research.github.io/Tplyr/reference/tplyr_adlb.md)
+  : ADLB Data
+- [`tplyr_adsl`](https://atorus-research.github.io/Tplyr/reference/tplyr_adsl.md)
+  : ADSL Data
+- [`tplyr_adpe`](https://atorus-research.github.io/Tplyr/reference/tplyr_adpe.md)
+  : ADPE Data
+- [`get_data_labels()`](https://atorus-research.github.io/Tplyr/reference/get_data_labels.md)
+  : Get Data Labels
+
+# Articles
+
+### Table Basics
+
+- [Tplyr Table
+  Properties](https://atorus-research.github.io/Tplyr/articles/table.md):
+
+### Layer Basics
+
+- [Descriptive Statistic
+  Layers](https://atorus-research.github.io/Tplyr/articles/desc.md):
+- [Count
+  Layers](https://atorus-research.github.io/Tplyr/articles/count.md):
+- [Shift
+  Layers](https://atorus-research.github.io/Tplyr/articles/shift.md):
+
+### Table Customization
+
+- [General String
+  Formatting](https://atorus-research.github.io/Tplyr/articles/general_string_formatting.md):
+- [Advanced Descriptive Statistic Layer
+  Formatting](https://atorus-research.github.io/Tplyr/articles/desc_layer_formatting.md):
+- [Sorting a Tplyr
+  Table](https://atorus-research.github.io/Tplyr/articles/sort.md):
+- [Totals, Missings, and
+  Denominators](https://atorus-research.github.io/Tplyr/articles/denom.md):
+- [Getting
+  Started](https://atorus-research.github.io/Tplyr/articles/Tplyr.md):
+
+### Using Metadata
+
+- [Tplyr
+  Metadata](https://atorus-research.github.io/Tplyr/articles/metadata.md):
+- [Creating Custom Tplyr
+  Metadata](https://atorus-research.github.io/Tplyr/articles/custom-metadata.md):
+
+### Advanced
+
+- [Risk
+  Difference](https://atorus-research.github.io/Tplyr/articles/riskdiff.md):
+- [Tplyr
+  Options](https://atorus-research.github.io/Tplyr/articles/options.md):
+- [Layer
+  Templates](https://atorus-research.github.io/Tplyr/articles/layer_templates.md):
+
+### Post-processing
+
+- [Post-Processing](https://atorus-research.github.io/Tplyr/articles/post_processing.md):
+- [Producing a Styled
+  Table](https://atorus-research.github.io/Tplyr/articles/styled-table.md):

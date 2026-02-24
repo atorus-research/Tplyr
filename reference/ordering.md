@@ -1,0 +1,215 @@
+# Set the ordering logic for the count layer
+
+The sorting of a table can greatly vary depending on the situation at
+hand. For count layers, when creating tables like adverse event
+summaries, you may wish to order the table by descending occurrence
+within a particular treatment group. But in other situations, such as
+AEs of special interest, or subject disposition, there may be a specific
+order you wish to display values. Tplyr offers solutions to each of
+these situations.
+
+Instead of allowing you to specify a custom sort order, Tplyr instead
+provides you with order variables that can be used to sort your table
+after the data are summarized. Tplyr has a default order in which the
+table will be returned, but the order variables will always persist.
+This allows you to use powerful sorting functions like
+[`arrange`](https://dplyr.tidyverse.org/reference/arrange.html) to get
+your desired order, and in double programming situations, helps your
+validator understand the how you achieved a particular sort order and
+where discrepancies may be coming from.
+
+When creating order variables for a layer, for each 'by' variable Tplyr
+will search for a \<VAR\>N version of that variable (i.e. VISIT \<-\>
+VISITN, PARAM \<-\> PARAMN). If available, this variable will be used
+for sorting. If not available, Tplyr will created a new ordered factor
+version of that variable to use in alphanumeric sorting. This allows the
+user to control a custom sorting order by leaving an existing \<VAR\>N
+variable in your dataset if it exists, or create one based on the order
+in which you wish to sort - no custom functions in Tplyr required.
+
+Ordering of results is where things start to differ. Different
+situations call for different methods. Descriptive statistics layers
+keep it simple - the order in which you input your formats using
+[`set_format_strings`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+is the order in which the results will appear (with an order variable
+added). For count layers, Tplyr offers three solutions: If there is a
+\<VAR\>N version of your target variable, use that. If not, if the
+target variable is a factor, use the factor orders. Finally, you can use
+a specific data point from your results columns. The result column can
+often have multiple data points, between the n counts, percent, distinct
+n, and distinct percent. Tplyr allows you to choose which of these
+values will be used when creating the order columns for a specified
+result column (i.e. based on the `treat_var` and `cols` arguments). See
+the 'Sorting a Table' section for more information.
+
+Shift layers sort very similarly to count layers, but to order your row
+shift variable, use an ordered factor.
+
+## Usage
+
+``` r
+set_order_count_method(e, order_count_method, break_ties = NULL)
+
+set_ordering_cols(e, ...)
+
+set_result_order_var(e, result_order_var)
+```
+
+## Arguments
+
+- e:
+
+  A `count_layer` object
+
+- order_count_method:
+
+  The logic determining how the rows in the final layer output will be
+  indexed. Options are 'bycount', 'byfactor', and 'byvarn'.
+
+- break_ties:
+
+  In certain cases, a 'bycount' sort will result in conflicts if the
+  counts aren't unique. break_ties will add a decimal to the sorting
+  column so resolve conflicts. A character value of 'asc' will add a
+  decimal based on the alphabetical sorting. 'desc' will do the same but
+  sort descending in case that is the intention.
+
+- ...:
+
+  Unquoted variables used to select the columns whose values will be
+  extracted for ordering.
+
+- result_order_var:
+
+  The numeric value the ordering will be done on. This can be either n,
+  distinct_n, pct, or distinct_pct. Due to the evaluation of the layer
+  you can add a value that isn't actually being evaluated, if this
+  happens this will only error out in the ordering.
+
+## Value
+
+Returns the modified layer object. The 'ord\_' columns are added during
+the build process.
+
+## Sorting a Table
+
+When a table is built, the output has several ordering(ord\_) columns
+that are appended. The first represents the layer index. The index is
+determined by the order the layer was added to the table. Following are
+the indices for the by variables and the target variable. The by
+variables are ordered based on:
+
+1.  The \`by\` variable is a factor in the target dataset
+
+2.  If the variable isn't a factor, but has a \<VAR\>N variable (i.e.
+    VISIT -\> VISITN, TRT -\> TRTN)
+
+3.  If the variable is not a factor in the target dataset, it is coerced
+    to one and ordered alphabetically.
+
+The target variable is ordered depending on the type of layer. See more
+below.
+
+## Ordering a Count Layer
+
+There are many ways to order a count layer depending on the preferences
+of the table programmer. `Tplyr` supports sorting by a descending amount
+in a column in the table, sorting by a \<VAR\>N variable, and sorting by
+a custom order. These can be set using the \`set_order_count_method\`
+function.
+
+- Sorting by a numeric count:
+
+  A selected numeric value from a selected column will be indexed based
+  on the descending numeric value. The numeric value extracted defaults
+  to 'n' but can be changed with \`set_result_order_var\`. The column
+  selected for sorting defaults to the first value in the treatment
+  group variable. If there were arguments passed to the 'cols' argument
+  in the table those must be specified with \`set_ordering_columns\`.
+
+- Sorting by a 'varn' variable:
+
+  If the treatment variable has a \<VAR\>N variable. It can be indexed
+  to that variable.
+
+- Sorting by a factor(Default):
+
+  If a factor is found for the target variable in the target dataset
+  that is used to order, if no factor is found it is coerced to a factor
+  and sorted alphabetically.
+
+- Sorting a nested count layer:
+
+  If two variables are targeted by a count layer, two methods can be
+  passed to \`set_order_count\`. If two are passed, the first is used to
+  sort the blocks, the second is used to sort the "inside" of the
+  blocks. If one method is passed, that will be used to sort both.
+
+## Ordering a Desc Layer
+
+The order of a desc layer is mostly set during the object construction.
+The by variables are resolved and index with the same logic as the count
+layers. The target variable is ordered based on the format strings that
+were used when the layer was created.
+
+## Examples
+
+``` r
+library(dplyr)
+
+# Default sorting by factor
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl)
+  )
+build(t)
+#> # A tibble: 3 × 6
+#>   row_label1 var1_3        var1_4        var1_5      ord_layer_index ord_layer_1
+#>   <chr>      <chr>         <chr>         <chr>                 <int>       <dbl>
+#> 1 4          " 1 (  6.7%)" " 8 ( 66.7%)" " 2 ( 40.0…               1           1
+#> 2 6          " 2 ( 13.3%)" " 4 ( 33.3%)" " 1 ( 20.0…               1           2
+#> 3 8          "12 ( 80.0%)" " 0 (  0.0%)" " 2 ( 40.0…               1           3
+
+# Sorting by <VAR>N
+mtcars$cylN <- mtcars$cyl
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_order_count_method("byvarn")
+  )
+
+# Sorting by row count
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_order_count_method("bycount") %>%
+      # Orders based on the 6 gear group
+      set_ordering_cols(6)
+  )
+
+# Sorting by row count by percentages
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      set_order_count_method("bycount") %>%
+      set_result_order_var(pct)
+  )
+
+# Sorting when you have column arguments in the table
+t <- tplyr_table(mtcars, gear, cols = vs) %>%
+  add_layer(
+    group_count(cyl) %>%
+      # Uses the fourth gear group and the 0 vs group in ordering
+      set_ordering_cols(4, 0)
+  )
+
+# Using a custom factor to order
+mtcars$cyl <- factor(mtcars$cyl, c(6, 4, 8))
+t <- tplyr_table(mtcars, gear) %>%
+  add_layer(
+    group_count(cyl) %>%
+      # This is the default but can be used to change the setting if it is
+      #set at the table level.
+      set_order_count_method("byfactor")
+  )
+```

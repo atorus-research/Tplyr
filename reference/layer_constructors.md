@@ -1,0 +1,134 @@
+# Create a `count`, `desc`, or `shift` layer for discrete count based summaries, descriptive statistics summaries, or shift count summaries
+
+This family of functions specifies the type of summary that is to be
+performed within a layer. `count` layers are used to create summary
+counts of some discrete variable. `desc` layers create summary
+statistics, and `shift` layers summaries the counts of different changes
+in states. See the "details" section below for more information.
+
+## Usage
+
+``` r
+group_count(parent, target_var, by = vars(), where = TRUE, ...)
+
+group_desc(parent, target_var, by = vars(), where = TRUE, ...)
+
+group_shift(parent, target_var, by = vars(), where = TRUE, ...)
+```
+
+## Arguments
+
+- parent:
+
+  Required. The parent environment of the layer. This must be the
+  `tplyr_table` object that the layer is contained within.
+
+- target_var:
+
+  Symbol. Required, The variable name(s) on which the summary is to be
+  performed. Must be a variable within the target dataset. Enter
+  unquoted - i.e. target_var = AEBODSYS. You may also provide multiple
+  variables with
+  [`vars`](https://dplyr.tidyverse.org/reference/vars.html).
+
+- by:
+
+  A string, a variable name, or a list of variable names supplied using
+  [`vars`](https://dplyr.tidyverse.org/reference/vars.html)
+
+- where:
+
+  Call. Filter logic used to subset the target data when performing a
+  summary.
+
+- ...:
+
+  Additional arguments to pass forward
+
+## Value
+
+An `tplyr_layer` environment that is a child of the specified parent.
+The environment contains the object as listed below.
+
+A `tplyr_layer` object
+
+## Details
+
+- Count Layers:
+
+  Count layers allow you to create summaries based on counting values
+  with a variable. Additionally, this layer allows you to create n (%)
+  summaries where you're also summarizing the proportion of instances a
+  value occurs compared to some denominator. Count layers are also
+  capable of producing counts of nested relationships. For example, if
+  you want to produce counts of an overall outside group, and then the
+  subgroup counts within that group, you can specify the target variable
+  as vars(OutsideVariable, InsideVariable). This allows you to do tables
+  like Adverse Events where you want to see the Preferred Terms within
+  Body Systems, all in one layer. Further control over denominators is
+  available using the function
+  [`set_denoms_by`](https://atorus-research.github.io/Tplyr/reference/set_denoms_by.md)
+  and distinct counts can be set using
+  [`set_distinct_by`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)
+
+- Descriptive Statistics Layers:
+
+  Descriptive statistics layers perform summaries on continuous
+  variables. There are a number of summaries built into Tplyr already
+  that you can perform, including n, mean, median, standard deviation,
+  variance, min, max, inter-quartile range, Q1, Q3, and missing value
+  counts. From these available summaries, the default presentation of a
+  descriptive statistic layer will output 'n', 'Mean (SD)', 'Median',
+  'Q1, Q3', 'Min, Max', and 'Missing'. You can change these summaries
+  using
+  [`set_format_strings`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md),
+  and you can also add your own summaries using
+  [`set_custom_summaries`](https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.md).
+  This allows you to implement any additional summary statistics you
+  want presented.
+
+- Shift Layers:
+
+  A shift layer displays an endpoint's 'shift' throughout the duration
+  of the study. It is an abstraction over the count layer, however we
+  have provided an interface that is more efficient and intuitive.
+  Targets are passed as named symbols using
+  [`dplyr::vars`](https://dplyr.tidyverse.org/reference/vars.html).
+  Generally the baseline is passed with the name 'row' and the shift is
+  passed with the name 'column'. Both counts (n) and percentages (pct)
+  are supported and can be specified with the
+  [`set_format_strings`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+  function. To allow for flexibility when defining percentages, you can
+  define the denominator using the
+  [`set_denoms_by`](https://atorus-research.github.io/Tplyr/reference/set_denoms_by.md)
+  function. This function takes variable names and uses those to
+  determine the denominator for the counts.
+
+## See also
+
+\[[add_layer](https://atorus-research.github.io/Tplyr/reference/layer_attachment.md),
+[add_layers](https://atorus-research.github.io/Tplyr/reference/layer_attachment.md),
+[tplyr_table](https://atorus-research.github.io/Tplyr/reference/tplyr_table.md),
+[tplyr_layer](https://atorus-research.github.io/Tplyr/reference/tplyr_layer.md)\]
+
+## Examples
+
+``` r
+# Load in pipe
+library(magrittr)
+
+t <- tplyr_table(iris, Species) %>%
+  add_layer(
+    group_desc(target_var=Sepal.Width)
+  )
+
+t <- tplyr_table(iris, Species) %>%
+  add_layer(
+    group_desc(target_var=Sepal.Width)
+  )
+
+t <- tplyr_table(mtcars, am) %>%
+  add_layer(
+    group_shift(vars(row=gear, column=carb), by=cyl)
+  )
+```

@@ -1,0 +1,287 @@
+# Descriptive Statistic Layers
+
+Descriptive statistics in **Tplyr** are created using
+[`group_desc()`](https://atorus-research.github.io/Tplyr/reference/layer_constructors.md)
+function when creating a layer. While
+[`group_desc()`](https://atorus-research.github.io/Tplyr/reference/layer_constructors.md)
+allows you to set your target, by variables, and filter criteria, a
+great deal of the control of the layer comes from
+[`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+where the actual summaries are declared.
+
+``` r
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
+      set_format_strings(
+        "n"        = f_str("xx", n),
+        "Mean (SD)"= f_str("xx.x (xx.xx)", mean, sd),
+        "Median"   = f_str("xx.x", median),
+        "Q1, Q3"   = f_str("xx, xx", q1, q3),
+        "Min, Max" = f_str("xx, xx", min, max),
+        "Missing"  = f_str("xx", missing)
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+| row_label1  | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
+| Age (years) | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
+| Age (years) | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
+| Age (years) | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
+| Age (years) | Q1, Q3     | 69, 82       | 71, 80                    | 71, 82                   |               1 |           1 |           4 |
+| Age (years) | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
+| Age (years) | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
+
+Let’s walk through this call to `set_format_strings` to understand in
+detail what’s going on:
+
+1.  The quoted strings on the left of the ‘=’ within
+    [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+    become the row label in the output. This allows you to define some
+    custom text in
+    [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+    to explain the summary that is presented on the associated row. This
+    text is fully in your control.
+2.  On the right side of each equals is a call to
+    [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md).
+    As explained in the
+    [`vignette("Tplyr")`](https://atorus-research.github.io/Tplyr/articles/Tplyr.md),
+    this is an object that captures a lot of metadata to understand how
+    the strings should be presented.
+3.  Within the
+    [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+    call, you see x’s in quotes. This defines how you’d like the numbers
+    formatted from the resulting summaries. The number of x’s you use on
+    the left side of a decimal control the space allotted for an
+    integer, and the right side controls the decimal precision. Decimals
+    are rounded prior to string formatting - so no need to worry about
+    that. Note that this forcefully sets the decimal and integer
+    precision - **Tplyr** can automatically determine this for you as
+    well, but more on that later.
+4.  After the x’s there are unquoted variable names. This is where you
+    specify the actual summaries that will be performed. Notice that
+    some
+    [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+    calls have two summaries specified. This allows you to put two
+    summaries in the same string and present them on the same line.
+
+But where do these summary names come from? And which ones does
+**Tplyr** have?
+
+## Built-in Summaries
+
+We’ve built a number of default summaries into **Tplyr**, which allows
+you to perform these summaries without having to specify the functions
+to calculate them yourself. The summaries built in to **Tplyr** are
+listed below. In the second column are the names that you would use
+within an
+[`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+call to use them. In the third column, we have the syntax used to make
+the function call.
+
+|      Statistic      | Variable Names | Function Call                                                              |
+|:-------------------:|:--------------:|:---------------------------------------------------------------------------|
+|          N          |       n        | n()                                                                        |
+|        Mean         |      mean      | mean(.var, na.rm=TRUE)                                                     |
+| Standard Deviation  |       sd       | sd(.var, na.rm=TRUE)                                                       |
+|       Median        |     median     | median(.var, na.rm=TRUE)                                                   |
+|      Variance       |      var       | var(.var, na.rm=TRUE)                                                      |
+|       Minimum       |      min       | min(.var, na.rm=TRUE)                                                      |
+|       Maximum       |      max       | max(.var, na.rm=TRUE)                                                      |
+| Interquartile Range |      iqr       | IQR(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’)                |
+|         Q1          |       q1       | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[2\]\] |
+|         Q3          |       q3       | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[4\]\] |
+|       Missing       |    missing     | sum(is.na(.var))                                                           |
+
+### Notes About Built-in’s
+
+Note that the only non-default option being used in any of the function
+calls above is `na.rm=TRUE`. It’s important to note that for `min` and
+`max`, when `na.rm=TRUE` is used with a vector that is all `NA`, these
+functions return `Inf` and `-Inf` respectively. When formatting the
+numbers, this is unexpected and also inconsistent with how other
+descriptive statistic functions, which return `NA`. Therefore, just for
+`min` and `max`, `Inf`’s are converted to `NA` so that they’ll align
+with the behavior of the `empty` parameter in
+[`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md).
+
+Using default settings of most descriptive statistic functions is
+typically fine, but with IQR, Q1, and Q3 note that there are several
+different quantile algorithms available in R. The default we chose to
+use is the R default of Type 7:
+
+$$m = 1 - p.p\lbrack k\rbrack = (k - 1)/(n - 1).{\text{In this case,}\mspace{6mu}}p\lbrack k\rbrack = mode\left\lbrack F\left( x\lbrack k\rbrack \right) \right\rbrack.\text{This is used by S.}$$
+That said, we still want to offer some flexibility here, so you can
+change the quantile algorithm by switching the `tplyr.quantile_type`
+option. If you’re intending to match the SAS definition, you can use
+Type 3. For more information, see the
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html)
+documentation.
+
+The example below demonstrates using the default quantile algorithm in
+R.
+
+``` r
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(CUMDOSE) %>% 
+      set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
+  ) %>% 
+  build() %>%
+  select(-starts_with("ord")) %>% 
+  kable()
+```
+
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:-----------|:-------------|:--------------------------|:-------------------------|
+| Q1, Q3     | 0, 0         | 2646, 13959               | 1984, 9801               |
+
+This next example demonstrates using quantile algorithm Type 3, which
+matches the SAS definition of:
+
+$$\text{Nearest even order statistic. γ = 0 if g = 0 and j is even, and 1 otherwise.}$$
+
+``` r
+options(tplyr.quantile_type = 3)
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(CUMDOSE) %>% 
+      set_format_strings("Q1, Q3" = f_str('xxxxx, xxxxx', q1, q3))
+  ) %>% 
+  build() %>% 
+    select(-starts_with("ord")) %>% 
+  kable()
+```
+
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:-----------|:-------------|:--------------------------|:-------------------------|
+| Q1, Q3     | 0, 0         | 2565, 13959               | 1944, 9774               |
+
+It’s up to you to determine which algorithm you should use - but we
+found it necessary to provide you with the flexibility to change this
+within the default summaries.
+
+But what if **Tplyr** doesn’t offer you the summaries that you need?
+
+## Custom Summaries
+
+We understand that our defaults may not cover every descriptive
+statistic that you’d like to see. That’s why we’ve opened to door to
+creating custom summaries. Custom summaries allow you to provide any
+function you’d like into a desc layer. You can focus on the derivation
+and how to calculate the number you want to see. **Tplyr** can consume
+this function, and use all the existing tools within **Tplyr** to
+produce the string formatted result alongside any of the default
+summaries we provide as well.
+
+Custom summaries may be provided in two ways:
+
+- Through the `tplyr.custom_summaries` option set at your session level
+- Through the function
+  [`set_custom_summaries()`](https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.md)
+  at the layer level
+
+As with any other setting in **Tplyr**, the layer setting will always
+take precedence over any other setting.
+
+Let’s look at an example.
+
+``` r
+tplyr_table(tplyr_adsl, TRT01P) %>%
+  add_layer(
+    group_desc(vars(AGE, HEIGHTBL), by = "Sepal Length") %>%
+      set_custom_summaries(
+        geometric_mean = exp(sum(log(.var[.var > 0]), na.rm=TRUE) / length(.var))
+      ) %>%
+      set_format_strings(
+        'Geometric Mean (SD)' = f_str('xx.xx (xx.xxx)', geometric_mean, sd)
+      )
+  ) %>% 
+  build() %>% 
+  select(-starts_with("ord")) %>% 
+  kable()
+```
+
+| row_label1   | row_label2          | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo    | var2_Xanomeline High Dose | var2_Xanomeline Low Dose |
+|:-------------|:--------------------|:---------------|:--------------------------|:-------------------------|:----------------|:--------------------------|:-------------------------|
+| Sepal Length | Geometric Mean (SD) | 74.70 ( 8.590) | 73.94 ( 7.886)            | 75.18 ( 8.286)           | 162.17 (11.522) | 165.51 (10.131)           | 163.11 (10.419)          |
+
+Here, a few important things are demonstrated:
+
+- This is a multi-variable descriptive statistics layer. Both `AGE` and
+  `HEIGHTBL` are being summarized in the same layer. `AGE` results go to
+  the `var1_` variables and `HEIGHTBL` results go to the `var2_`
+  variables.
+- The parameter names in
+  [`set_custom_summaries()`](https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.md),
+  or names on the left side of the equals, flow into
+  [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md)
+  in the
+  [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+  calls. Just like the default summaries, `geometric_mean` becomes the
+  name that you refer to in order to use the geometric mean derivation
+  in a summary.
+- In geometric mean, the target variable that you’re summarizing is
+  referred to as `.var`. This may not seem intuitive. The reason we have
+  to use `.var` is so that, like in this example, the custom function
+  can be applied to each of the separate target variables.
+
+Another note about custom summaries is that you’re able to overwrite the
+default summaries built into **Tplyr** as well. Don’t like the default
+summary functions that we provide? Use the `tplyr.custom_summaries`
+option to overwrite them in your session, and add any new ones that you
+would like to include.
+
+For example, here we use the **Tplyr** default mean.
+
+``` r
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE) %>% 
+      set_format_strings("Mean" = f_str('xx.xx', mean))
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
+| Mean       | 75.21        | 74.38                     | 75.67                    |               1 |           1 |
+
+But now, let’s overwrite `mean` using a custom summary. Let’s use a
+trimmed mean instead, taking 20% of observations off of both ends.
+
+``` r
+options(tplyr.custom_summaries = 
+          rlang::quos(
+            mean = mean(.var, na.rm=TRUE, trim=0.4)
+          )
+        )
+
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(AGE) %>% 
+      set_format_strings("Mean" = f_str('xx.xx', mean))
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
+| Mean       | 76.28        | 75.94                     | 77.44                    |               1 |           1 |
+
+Note that the table code used to produce the output is the same. Now
+**Tplyr** used the custom summary function for `mean` as specified in
+the `tplyr.custom_summaries` option. Also note the use of
+[`rlang::quos()`](https://rlang.r-lib.org/reference/defusing-advanced.html).
+We’ve done our best to mask this from the user everywhere possible and
+make the interfaces clean and intuitive, but a great deal of **Tplyr**
+is built using ‘rlang’ and non-standard evaluation. Within this option
+is one of the very few instances where a user needs to concern
+themselves with the use of quosures. If you’d like to learn more about
+non-standard evaluation and quosures, we recommend [Section
+IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R.
