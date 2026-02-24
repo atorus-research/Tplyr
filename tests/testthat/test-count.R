@@ -166,16 +166,17 @@ test_that("Count layers are summarized without errors and warnings", {
 
 test_that("Count layers are processed as expected", {
 
-  expect_equal(dim(c1$numeric_data), c(9, 6))
-  expect_equal(dim(c2$numeric_data), c(18, 7))
-  expect_equal(dim(c3$numeric_data), c(36, 8))
-  expect_equal(dim(c4$numeric_data), c(36, 8))
-  expect_equal(dim(c5$numeric_data), c(39, 8))
-  expect_equal(dim(c6$numeric_data), c(9, 6))
-  expect_equal(dim(c7$numeric_data), c(27, 7))
-  expect_equal(dim(c8$numeric_data), c(9, 6))
-  expect_equal(dim(c9$numeric_data), c(27, 7))
-  expect_equal(dim(c10$numeric_data), c(9, 6))
+  # Note: numeric_data now includes pct and distinct_pct columns (+2 cols)
+  expect_equal(dim(c1$numeric_data), c(9, 8))
+  expect_equal(dim(c2$numeric_data), c(18, 9))
+  expect_equal(dim(c3$numeric_data), c(36, 10))
+  expect_equal(dim(c4$numeric_data), c(36, 10))
+  expect_equal(dim(c5$numeric_data), c(39, 10))
+  expect_equal(dim(c6$numeric_data), c(9, 8))
+  expect_equal(dim(c7$numeric_data), c(27, 9))
+  expect_equal(dim(c8$numeric_data), c(9, 8))
+  expect_equal(dim(c9$numeric_data), c(27, 9))
+  expect_equal(dim(c10$numeric_data), c(9, 8))
 
   expect_type(c1$numeric_data$n, "double")
   expect_type(c2$numeric_data$n, "double")

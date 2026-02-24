@@ -4,7 +4,7 @@
 \alias{get_tplyr_regex}
 \title{Retrieve one of Tplyr's regular expressions}
 \usage{
-get_tplyr_regex(rx = c("format_string", "format_group"))
+get_tplyr_regex(rx = c("format_string", "format_group", "number_group"))
 }
 \arguments{
 \item{rx}{A character string with either the value 'format_string' or
@@ -18,7 +18,7 @@ This function allows you to extract important regular expressions used inside
 Tplyr.
 }
 \details{
-There are two important regular expressions used within Tplyr. The
+There are three important regular expressions used within Tplyr. The
 format_string expression is the expression to parse format strings. This is
 what is used to make sense out of strings like 'xx (XX.x\%)' or 'a+1 (A.a+2)'
 by inferring what the user is specifying about number formatting.
@@ -26,12 +26,15 @@ by inferring what the user is specifying about number formatting.
 The 'format_group' regex is the opposite of this, and when given a string of
 numbers, such as ' 5 (34\%) [9]' will return the separate segments of numbers
 broken into their format groups, which in this example would be ' 5',
-'(34\%)', and '[9]'.
+'(34\%)', and '[9]'. Lastly, the 'number_group' regex has a similar application
+to the 'format_group' regex, but targets only numbers
 }
 \examples{
 
 get_tplyr_regex('format_string')
 
 get_tplyr_regex('format_group')
+
+get_tplyr_regex('number_group')
 
 }

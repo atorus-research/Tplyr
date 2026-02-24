@@ -6,3 +6,10 @@ inst/doc
 Tplyr.Rproj
 docs/
 scratch.R
+*.out
+*.pdf
+inst/design
+scratch/
+PR.md
+.DS_Store
+TPLYR2_REQUIREMENTS.MD

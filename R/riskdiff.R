@@ -153,64 +153,81 @@ add_risk_diff <- function(layer, ..., args=list(), distinct=TRUE) {
   layer
 }
 
-#' Prepare a two-way table
+#' Prepare a two-way table for risk difference calculations
 #'
-#' @param e Environment two way table is being prepped from
-#' @param ref_comp The reference and comparison group
+#' This function is called from process_statistic_data.tplyr_riskdiff() with
+#' all necessary parameters passed explicitly.
+#'
+#' @param comp The reference and comparison group (two-element character vector)
+#' @param numeric_data The numeric data from the layer
+#' @param treat_var Treatment variable quosure
+#' @param pop_treat_var Population treatment variable quosure
+#' @param cols Column grouping variables
+#' @param header_n Header N values
+#' @param by Grouping variables
+#' @param is_built_nest Whether this is a nested layer
+#' @param comp_distinct Whether to use distinct counts
+#' @param distinct_by Distinct by variable
+#' @param target_var Target variable quosures
 #'
 #' @return A dataframe containing the necessary two-way table data on the same row
 #'
 #' @noRd
-prep_two_way <- function(comp) {
+prep_two_way_riskdiff <- function(comp, numeric_data, treat_var, pop_treat_var, 
+                                   cols, header_n, by, is_built_nest, 
+                                   comp_distinct, distinct_by, target_var) {
 
-  # Make sure the function is executing in a Tplyr statistic environment
-  # assert_that(inherits(env_parent(), "tplyr_statistic"),
-  #             msg = paste("This function is only intended to run on `tplyr_statistic` environments.",
-  #                         "Do not use in other contexts."))
+  # Make sure that the comparisons issued actually exist within the data
+  invalid_groups <- comp[!comp %in% unique(numeric_data[as_name(treat_var)])[[1]]]
+  assert_that(length(invalid_groups) == 0,
+              msg = paste0("There are no records for the following groups within the variable ", as_name(treat_var),
+                           ": ", paste(invalid_groups, collapse=", ")))
 
-  evalq({
+  # create the merge columns
+  mrg <- as_label(pop_treat_var)
+  names(mrg) <- as_label(treat_var)
+  mrg_cols <- append(mrg, map_chr(cols, as_label))
 
-    # Make sure that the comparisons issued actually exist within the data
-    invalid_groups <- comp[!comp %in% unique(numeric_data[as_name(treat_var)])[[1]]]
-    assert_that(length(invalid_groups) == 0,
-                msg = paste0("There are no records for the following groups within the variable ", as_name(treat_var),
-                             ": ", paste(invalid_groups, collapse=", ")))
+  two_way <- numeric_data %>%
+    left_join(
+      select(header_n, everything(), tot_fill = n), 
+      by = mrg_cols
+    ) %>%
+    mutate(
+      distinct_total = if_else(is.na(distinct_total), tot_fill, distinct_total)
+    )
 
-    two_way <- numeric_data
-
-    # Nested layers need to plug the NAs left over - needs revision in the future
-    if (is_built_nest && quo_is_symbol(by[[1]])) {
-      two_way <- two_way %>%
-        # Need to fill in NAs in the numeric data that
-        # are patched later in formatting
-        mutate(
-          !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
-        )
-    }
-
-
-    # If distinct is set and distinct values are there, use them
-    if (comp_distinct && !is.null(distinct_by)) {
-      two_way <- two_way %>%
-        select(-n, -total) %>%
-        rename(n = distinct_n, total = distinct_total)
-    }
-    # Process on the numeric data
+  # Nested layers need to plug the NAs left over - needs revision in the future
+  if (is_built_nest && quo_is_symbol(by[[1]])) {
     two_way <- two_way %>%
-      # Subset down to only treatments with the ref and comp groups
-      filter(!!treat_var %in% comp) %>%
-      # Rename the treatment groups to ref and comp
-      mutate(!!treat_var := case_when(
-        !!treat_var == comp[1] ~ 'comp',
-        !!treat_var == comp[2] ~ 'ref'
-      )) %>%
-      # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
-      pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
-                  names_from=!!treat_var,
-                  values_from = c('n', 'total'))
+      # Need to fill in NAs in the numeric data that
+      # are patched later in formatting
+      mutate(
+        !!by[[1]] := if_else(is.na(!!by[[1]]), summary_var, as.character(!!by[[1]]))
+      )
+  }
 
-  }, envir=caller_env())
+  # If distinct is set and distinct values are there, use them
+  if (comp_distinct && !is.null(distinct_by)) {
+    two_way <- two_way %>%
+      select(-n, -total) %>%
+      rename(n = distinct_n, total = distinct_total)
+  }
+  # Process on the numeric data
+  two_way <- two_way %>%
+    # Subset down to only treatments with the ref and comp groups
+    filter(!!treat_var %in% comp) %>%
+    # Rename the treatment groups to ref and comp
+    mutate(!!treat_var := case_when(
+      !!treat_var == comp[1] ~ 'comp',
+      !!treat_var == comp[2] ~ 'ref'
+    )) %>%
+    # Pivot out to give the var names n_ref, n_comp, total_ref, total_comp for two way
+    pivot_wider(id_cols = c(match_exact(c(by, cols, head(target_var, -1))),  'summary_var'),
+                names_from=!!treat_var,
+                values_from = c('n', 'total'))
 
+  two_way
 }
 
 #' Calculate risk difference

@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^azure-pipelines\.yml$
 ^\.github$
+^\.kiro$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
 ^docs$
@@ -25,3 +26,7 @@
 ^data-raw$
 ^scratch.R$
 ^CRAN-SUBMISSION$
+^.claude$
+^CLAUDE.md$
+^Rplots.pdf$
+.*\.out

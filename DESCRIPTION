@@ -1,6 +1,6 @@
 Package: Tplyr
 Title: A Traceability Focused Grammar of Clinical Data Summary
-Version: 1.2.1
+Version: 1.3.0
 Authors@R: 
     c(
     person(given = "Eli",
@@ -43,7 +43,7 @@ Authors@R:
     )
 Description: A traceability focused tool created to simplify the data manipulation necessary to create clinical summaries.
 License: MIT + file LICENSE
-URL: https://github.com/atorus-research/Tplyr
+URL: https://atorus-research.github.io/Tplyr/, https://github.com/atorus-research/Tplyr
 BugReports: https://github.com/atorus-research/Tplyr/issues
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
@@ -59,10 +59,12 @@ Imports:
     tibble (>= 3.0.1),
     lifecycle,
     forcats (>= 1.0.0)
-Suggests: 
+Suggests:
     testthat (>= 2.1.0),
+    carrier (>= 0.2.0),
     haven (>= 2.2.0),
     knitr,
+    mirai,
     rmarkdown,
     huxtable,
     tidyverse,
@@ -71,7 +73,7 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 RdMacros: lifecycle
 Config/testthat/edition: 3
 LazyData: true

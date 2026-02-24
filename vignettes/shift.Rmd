@@ -24,14 +24,14 @@ library(knitr)
 
 Shift tables are a special kind of frequency table - but what they count are changes in state. This is most common when looking at laboratory ranges, where you may be interested in seeing how a subject's results related to normal ranges. The 'change in state' would refer to how that subject's results were at baseline versus different points of measure. Shift tables allow you to see the distribution of how subjects move between normal ranges, and if the population is improving or worsening as the study progresses.
 
-While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs. Given that shift tables are built on count layers, many of functions that work with count layers behave in the same way when using shift layers. However, the following cannot be used in shift layers:
+While shift tables are very similar to a normal frequency table, there's more nuance here, and thus we decided to create `group_shift()`. This function is largely an abstraction of a count layer, and in fact re-uses a good deal of the same underlying code. But we handle some of the complexity for you to make the interface easy to use and the behavior similar to that of the `group_count()` and `group_desc()` APIs. Given that shift tables are built on count layers, many functions that work with count layers behave in the same way when used on shift layers. However, the following cannot be used in shift layers:
 
 - Functions related to nested counts, including `set_nest_count()`, `set_outer_sort_position()`
 - Functions related to total rows and missing rows, including `set_missing_count()`, `add_total_row()`, `set_total_row_label()`
 - Risk difference, including `add_risk_diff()`
-- and finally, result based sorting methods, including `set_order_count_method()`, `set_ordering_cols()`, `set_result_order_var()`
+- and finally, result-based sorting methods, including `set_order_count_method()`, `set_ordering_cols()`, `set_result_order_var()`
 
-One thing to note - the `group_shift()` API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row based approach that shows "Low to High", "Normal to High", etc. For those situations, `group_count()` will do just fine.
+One thing to note - the `group_shift()` API is intended to be used on shift tables where one group is presented in rows and the other group in columns. Occasionally, shift tables will have a row-based approach that shows "Low to High", "Normal to High", etc. For those situations, `group_count()` will do just fine.
 
 ## A Basic Example
 
@@ -49,7 +49,7 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
 
 First, let's look at the differences in the shift API. Shift layers *must* take a row and a column variable, as the layer is designed to create a box for you that explains the changes in state. The row variable will typically be your "from" variable, and the column variable will typically be your "to" variable. Behind the scenes, **Tplyr** breaks this down for you to properly count and present the data.
 
-For the most part, the last example gets us where we want to go - but there's still some that's left to be desired. It doesn’t look like there are any 'L' values for BNRIND in the dataset so we are not getting and rows containing 'L'. Let’s see if we can fix that by dummying in the possible values.
+For the most part, the last example gets us where we want to go - but there's still some that's left to be desired. It doesn’t look like there are any 'L' values for BNRIND in the dataset so we are not getting any rows containing 'L'. Let’s see if we can fix that by dummying in the possible values.
 
 ## Filling Missing Groups Using Factors
 
@@ -65,7 +65,7 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-There we go. This is another situation where using factors in R let's us dummy values within the dataset. Furthermore, since factors are ordered, it automatically corrected the sort order of the row labels too. 
+There we go. This is another situation where using factors in R enables us to dummy values within the dataset. Furthermore, since factors are ordered, Tplyr automatically corrected the sort order of the row labels too. Now, instead of alphabetically (H then L then N), our rows are sorted by factor levels (L then N then H). 
 
 ## Where to go from here
 

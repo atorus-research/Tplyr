@@ -2,8 +2,8 @@
 % Please edit documentation in R/zzz.R
 \docType{package}
 \name{Tplyr}
-\alias{Tplyr}
 \alias{Tplyr-package}
+\alias{Tplyr}
 \title{A grammar of summary data for clinical reports}
 \description{
 `r lifecycle::badge("experimental")`
@@ -107,6 +107,7 @@ tplyr_table(mtcars, am) \%>\%
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://atorus-research.github.io/Tplyr/}
   \item \url{https://github.com/atorus-research/Tplyr}
   \item Report bugs at \url{https://github.com/atorus-research/Tplyr/issues}
 }
