@@ -13,3 +13,6 @@ scratch/
 PR.md
 .DS_Store
 TPLYR2_REQUIREMENTS.MD
+
+/.quarto/
+**/*.quarto_ipynb

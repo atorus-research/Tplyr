@@ -1,4 +1,4 @@
-# Tplyr 1.3.0
+# Tplyr 1.3.1
 
 ## Internal Changes
 - Refactored internal functions to eliminate `evalq()` usage and adopt the Extract-Process-Bind pattern, improving code clarity and maintainability without affecting user-facing functionality
@@ -6,6 +6,13 @@
 - Optimized count formatting and `prepare_format_metadata()` internals
 - Removed unused un-exported functions to reduce code base size
 - Updated GitHub Actions workflows
+
+## Bug fixes
+- Resolve #202 Fix VARN sorting for nested count layers
+- Resolve #193 Fix `str_extract_num()` to properly identify negative numbers
+- Resolve #186 Update vignettes to reset options back to defaults to avoid CRAN inconsistencies
+- Resolve #184 Don't remove units attribute of difftime when cleaning data on pre-process
+- Resolve #182 Fix error when adding multiple risk difference comparisons at once with NAs in two-way matrix
 
 # Tplyr 1.2.1
 - Resolve #178 to add metadata handling for missing subjects, and add the `add_anti_join()` function

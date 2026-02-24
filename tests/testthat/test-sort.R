@@ -300,6 +300,47 @@ test_that("Nested counts with by variables process properly", {
 
 })
 
+# Added to address #202
+test_that("byvarn sorting with a total row only applies sort_value to the total row", {
+  t <- tplyr_table(tplyr_adsl, TRT01A) %>%
+    add_layer(
+      group_count(AGEGR1) %>%
+        set_order_count_method("byvarn") %>%
+        add_total_row(fmt = f_str("xx", n), count_missings = FALSE, sort_value = -Inf) %>%
+        set_total_row_label("n")
+    )
+  b_t <- build(t)
+
+  # The total row should have -Inf, other rows should have their AGEGR1N values
+  total_mask <- b_t$row_label1 == "n"
+  expect_true(all(b_t$ord_layer_1[total_mask] == -Inf))
+  expect_true(all(b_t$ord_layer_1[!total_mask] != -Inf))
+
+  # Non-total rows should have distinct sort values matching AGEGR1N
+  non_total_sorts <- b_t$ord_layer_1[!total_mask]
+  agegr1n_values <- sort(unique(tplyr_adsl$AGEGR1N))
+  expect_equal(sort(non_total_sorts), agegr1n_values)
+
+  # Same test with a by variable and set_missing_count, which exercises
+  # the as.character() coercion path for varn_df
+  t2 <- tplyr_table(tplyr_adsl, TRT01A) %>%
+    add_layer(
+      group_count(AGEGR1, by = "Age Categories n (%)") %>%
+        set_order_count_method("byvarn") %>%
+        add_total_row(fmt = f_str("xx", n), count_missings = FALSE, sort_value = -Inf) %>%
+        set_total_row_label("n") %>%
+        set_missing_count(fmt = f_str("xx", n), denom_ignore = TRUE, "Missing" = NA)
+    )
+  b_t2 <- build(t2)
+
+  total_mask2 <- b_t2$row_label2 == "n"
+  missing_mask2 <- b_t2$row_label2 == "Missing"
+  data_mask2 <- !total_mask2 & !missing_mask2
+
+  expect_true(all(b_t2$ord_layer_2[total_mask2] == -Inf))
+  expect_equal(sort(b_t2$ord_layer_2[data_mask2]), sort(unique(tplyr_adsl$AGEGR1N)))
+})
+
 test_that("Sorting functions work correctly after refactoring", {
   # Test all three sorting methods to ensure functionality is preserved
   
