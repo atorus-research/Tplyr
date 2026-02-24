@@ -256,11 +256,13 @@ extract_character_from_quo <- function(var_list) {
 #' @param dat Dataframe to strip of variable attributes
 #'
 #' @return Dataframe with variable attributes removed, except for factor levels
+#'   and other structurally necessary attributes (e.g. units for difftime,
+#'   tzone for POSIXct)
 #' @noRd
 clean_attr <- function(dat) {
   for (n in names(dat)) {
     for (a in names(attributes(dat[[n]]))) {
-      if (!a  %in% c('levels', 'class', 'names', 'row.names', 'groups')) {
+      if (!a  %in% c('levels', 'class', 'names', 'row.names', 'groups', 'units', 'tzone')) {
         attr(dat[[n]], a) <- NULL
       }
     }

@@ -2,6 +2,36 @@
 
 #### Helpers ####
 
+#' Find row indices for special rows (total, missing, missing subjects)
+#'
+#' Locates the positions of total, missing, and missing subjects rows within
+#' formatted data by matching labels in the last row_label column.
+#'
+#' @param formatted_data The formatted data frame
+#' @param missing_string String identifying missing rows
+#' @param total_row_label Label for the total row
+#' @param missing_subjects_row_label Label for missing subjects row
+#'
+#' @return A named list with elements `missing`, `total`, and
+#'   `missing_subjects`, each NULL or an integer vector of row indices
+#' @noRd
+find_special_row_indices <- function(formatted_data,
+                                     missing_string = NULL,
+                                     total_row_label = NULL,
+                                     missing_subjects_row_label = NULL) {
+  label_row_ind <- which(names(formatted_data) %in%
+                           tail(vars_select(names(formatted_data),
+                                            starts_with("row_label")), 1))
+  label_values <- unlist(formatted_data[, label_row_ind])
+
+  list(
+    missing = if (!is.null(missing_string)) which(label_values %in% missing_string),
+    total = if (!is.null(total_row_label)) which(label_values %in% total_row_label),
+    missing_subjects = if (!is.null(missing_subjects_row_label))
+      which(label_values %in% missing_subjects_row_label)
+  )
+}
+
 #' Check for VARN variable
 #'
 #' For needed by variables, looks for a <by>N. e.g. VISITN
@@ -360,10 +390,20 @@ add_order_columns.shift_layer <- function(x) {
     )
   }
 
+  # Find explicit indices of special rows
+  total_row_label <- env_get(x, "total_row_label", default = NULL)
+  missing_subjects_row_label <- env_get(x, "missing_subjects_row_label", default = NULL)
+  row_inds <- find_special_row_indices(formatted_data,
+                                       total_row_label = total_row_label,
+                                       missing_subjects_row_label = missing_subjects_row_label)
+
   # The logic is the same now for a byvarn so reuse that function
   formatted_data[, paste0("ord_layer_", formatted_col_index)] <-
     get_data_order_byvarn(formatted_data, fact_df, as_name(target_var$row),
-                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          formatted_col_index,
+                          total_index = row_inds$total,
+                          total_row_sort_value = total_row_sort_value,
+                          missing_subjects_index = row_inds$missing_subjects,
                           missing_subjects_sort_value = missing_subjects_sort_value)
 
   # BIND: Bind necessary variables back into layer
@@ -460,31 +500,18 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
   # Switch for the sorting method
   if (order_count_method == "bycount") {
 
-    # Get the index of the row with the missing and total names
-    label_row_ind <- which(names(formatted_data) %in%
-                             tail(vars_select(names(formatted_data),
-                                              starts_with("row_label")), 1))
-
-    missing_index <- NULL
-    total_index <- NULL
-    missing_subjects_index <- NULL
-
-    if (!is.null(missing_string)) {
-      missing_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_string)
-    }
-    if (!is.null(total_row_label)) {
-      total_index <- which(unlist(formatted_data[, label_row_ind]) %in% total_row_label)
-    }
-    if (!is.null(missing_subjects_row_label)) {
-      missing_subjects_index <- which(unlist(formatted_data[, label_row_ind]) %in% missing_subjects_row_label)
-    }
+    # Get the indices of special rows (missing, total, missing subjects)
+    row_inds <- find_special_row_indices(formatted_data,
+                                         missing_string = missing_string,
+                                         total_row_label = total_row_label,
+                                         missing_subjects_row_label = missing_subjects_row_label)
 
     # No processing is needed here just pass in the needed info
     get_data_order_bycount(numeric_data, ordering_cols,
                            treat_var, by, cols, result_order_var, target_var,
-                           missing_index, missing_sort_value,
-                           total_index, total_row_sort_value,
-                           missing_subjects_index, missing_subjects_sort_value,
+                           row_inds$missing, missing_sort_value,
+                           row_inds$total, total_row_sort_value,
+                           row_inds$missing_subjects, missing_subjects_sort_value,
                            break_ties = break_ties,
                            numeric_cutoff = numeric_cutoff,
                            numeric_cutoff_stat = numeric_cutoff_stat,
@@ -498,7 +525,7 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
 
     if (!is.null(missing_count_list)) {
       varN_name <- names(varn_df)[2]
-      varn_df[, 1] <- as.character(varn_df[, 1])
+      varn_df[[1]] <- as.character(varn_df[[1]])
       if (is.null(missing_sort_value)) {
         varn_df <- varn_df %>%
           bind_rows(tibble(
@@ -514,8 +541,16 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
       }
     }
 
+    # Find the explicit indices of special rows
+    row_inds <- find_special_row_indices(formatted_data,
+                                         total_row_label = total_row_label,
+                                         missing_subjects_row_label = missing_subjects_row_label)
+
     get_data_order_byvarn(formatted_data, varn_df, as_name(target_var[[1]]),
-                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          formatted_col_index,
+                          total_index = row_inds$total,
+                          total_row_sort_value = total_row_sort_value,
+                          missing_subjects_index = row_inds$missing_subjects,
                           missing_subjects_sort_value = missing_subjects_sort_value)
 
   # Here it is 'byfactor'
@@ -568,9 +603,17 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
       }
     }
 
+    # Find the explicit indices of special rows
+    row_inds <- find_special_row_indices(formatted_data,
+                                         total_row_label = total_row_label,
+                                         missing_subjects_row_label = missing_subjects_row_label)
+
     # The logic is the same now for a byvarn so reuse that function
     get_data_order_byvarn(formatted_data, fact_df, as_name(target_var[[1]]),
-                          formatted_col_index, total_row_sort_value = total_row_sort_value,
+                          formatted_col_index,
+                          total_index = row_inds$total,
+                          total_row_sort_value = total_row_sort_value,
+                          missing_subjects_index = row_inds$missing_subjects,
                           missing_subjects_sort_value = missing_subjects_sort_value)
   }
 }
@@ -667,37 +710,40 @@ get_data_order_bycount <- function(numeric_data, ordering_cols,
 }
 
 get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_index,
-                                  indentation = "", total_row_sort_value = NULL,
+                                  indentation = "",
+                                  total_index = NULL, total_row_sort_value = NULL,
+                                  missing_subjects_index = NULL,
                                   missing_subjects_sort_value = NULL) {
 
   # Pull out the by values in the formatted data.
   by_values <- unlist(formatted_data[, by_column_index])
 
+  # Look up the VARN value for each row. Unmatched rows get a default
+  # value that places them at the end.
+  default_sort <- max(unlist(by_varn_df[, 2])) + 1
   varns <- map_dbl(by_values, function(a_by) {
 
     # Row containing the index and the value
     ind_row <- by_varn_df %>%
-      # Converting by_var to a symbol didn't work here for some reason but this
-      # works just as well.
       filter(.data[[as_name(by_var)]] == a_by)
 
-    # If the row is length zero it is a total row. Just add one so it appears on the bottom or use the sort_value
     if (nrow(ind_row) == 0) {
-      # Flag to determine where total row is positioned
-      if(!is.null(total_row_sort_value)) {
-        total_row_sort_value
-      } else if (!is.null(missing_subjects_sort_value)){
-        missing_subjects_sort_value
-      } else {
-        max(by_varn_df[,2]) + 1
-      }
+      default_sort
     } else {
-      # Index is always in the second row
       as.double(unlist(ind_row[, 2]))
     }
   })
 
-  # Remove the names so its just an unnamed numeric vecetor
+  # Apply sort values to specific total and missing subjects rows by index
+  if (!is.null(total_index) && !is.null(total_row_sort_value)) {
+    varns[total_index] <- total_row_sort_value
+  }
+
+  if (!is.null(missing_subjects_index) && !is.null(missing_subjects_sort_value)) {
+    varns[missing_subjects_index] <- missing_subjects_sort_value
+  }
+
+  # Remove the names so its just an unnamed numeric vector
   unname(varns)
 
 }
@@ -775,11 +821,12 @@ add_data_order_nested_vectorized <- function(formatted_data, final_col, numeric_
     #   - by[[1]] becomes row_label1 (contains NA for outer rows)
     #   - summary_var becomes row_label{length(by)+1} (contains actual outer values)
     # So we need to look at column final_col + 1, not final_col
-    all_outer$..outer_order <- all_outer %>%
-      replace_by_string_names(c(by, quo(summary_var))) %>%
-      get_data_order_byvarn(varn_df, by[[1]], final_col + 1,
-                            total_row_sort_value = total_row_sort_value,
-                            missing_subjects_sort_value = missing_subjects_sort_value)
+    renamed_outer <- all_outer %>%
+      replace_by_string_names(c(by, quo(summary_var)))
+    # No total/missing subjects rows expected at the outer nesting level,
+    # so no indices are passed
+    all_outer$..outer_order <-
+      get_data_order_byvarn(renamed_outer, varn_df, by[[1]], final_col + 1)
 
   } else if (order_count_method[1] == "bycount") {
     all_outer$..outer_order <- get_data_order_bycount(

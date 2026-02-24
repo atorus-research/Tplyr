@@ -258,7 +258,11 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-## IBM Rounding 
+```{r include=FALSE}
+options(op)
+```
+
+## IBM Rounding
 
 In certain cases users may want to match tables produced by other languages that IBM rounding.**Tplyr** offers the option 'tplyr.IBMRounding' to change the default rounding behavior of **Tplyr** tables. Review var1_4 in the tables below.
 

@@ -186,8 +186,12 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
     group_desc(AGE) %>% 
       set_format_strings("Mean" = f_str('xx.xx', mean))
   ) %>% 
-  build() %>% 
+  build() %>%
   kable()
+```
+
+```{r echo=FALSE}
+options(tplyr.custom_summaries = NULL)
 ```
 
 Note that the table code used to produce the output is the same. Now **Tplyr** used the custom summary function for `mean` as specified in the `tplyr.custom_summaries` option. Also note the use of `rlang::quos()`. We've done our best to mask this from the user everywhere possible and make the interfaces clean and intuitive, but a great deal of **Tplyr** is built using 'rlang' and non-standard evaluation. Within this option is one of the very few instances where a user needs to concern themselves with the use of quosures. If you'd like to learn more about non-standard evaluation and quosures, we recommend [Section IV](https://adv-r.hadley.nz/metaprogramming.html) in Advanced R. 
