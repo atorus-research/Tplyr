@@ -72,6 +72,7 @@ and Integrated Summary
 Documents](https://phuse.s3.eu-central-1.amazonaws.com/Deliverables/Standard+Analyses+and+Code+Sharing/Analyses+%26+Displays+Associated+with+Demographics,+Disposition+and+Medication+in+Phase+2-4+Clinical+Trials+and+Integrated+Summary+Documents.pdf).
 
 <p align="center">
+
 <img src="vignettes/demo_table.png" width="800px">
 </p>
 
@@ -101,8 +102,8 @@ you see it on the page, by breaking a larger problem into smaller
 
 Enough talking - let’s see some code. In these examples, we will be
 using data from the [PHUSE Test Data
-Factory](https://advance.phuse.global/display/WEL/Test+Dataset+Factory)
-based on the [original pilot project submission
+Factory](https://github.com/phuse-org/TestDataFactory) based on the
+[original pilot project submission
 package](https://github.com/atorus-research/CDISC_pilot_replication).
 We’ve packaged some subsets of that data into **Tplyr**, which you can
 use to replicate our examples and run our vignette code yourself. Note:
@@ -122,17 +123,17 @@ tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
   kable()
 ```
 
-| row_label1           | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years)          | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years)          | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
-| Age (years)          | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
-| Age (years)          | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
-| Age (years)          | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
-| Age (years)          | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
-| Age Categories n (%) | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               2 |           1 |           1 |
-| Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
-| Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 2 |
+| Age (years) | Median | 76.0 | 76.0 | 77.5 | 1 | 1 | 3 |
+| Age (years) | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 1 | 1 | 4 |
+| Age (years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 1 | 1 | 5 |
+| Age (years) | Missing | 0 | 0 | 0 | 1 | 1 | 6 |
+| Age Categories n (%) | \<65 | 14 ( 16.3%) | 11 ( 13.1%) | 8 ( 9.5%) | 2 | 1 | 1 |
+| Age Categories n (%) | \>80 | 30 ( 34.9%) | 18 ( 21.4%) | 29 ( 34.5%) | 2 | 1 | 2 |
+| Age Categories n (%) | 65-80 | 42 ( 48.8%) | 55 ( 65.5%) | 47 ( 56.0%) | 2 | 1 | 3 |
 
 ## **Tplyr** is Qualified
 

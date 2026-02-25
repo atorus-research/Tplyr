@@ -1,6 +1,6 @@
 ## Submission 1.3.1
 * Internal refactoring and performance optimizations for nested count layers
-* Bug fixes for nested count sorting, negative number extraction, vignette options handling, difftime attributes, and risk difference with NAs
+* Bug fixes for nested count sorting, negative number extraction, vignette options handling, difftime attributes, apply_row_masks, and risk difference with NAs
 
 ## Test Environments
 
