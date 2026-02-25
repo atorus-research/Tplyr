@@ -84,8 +84,8 @@ you see it on the page, by breaking a larger problem into smaller
 
 Enough talking - let’s see some code. In these examples, we will be
 using data from the [PHUSE Test Data
-Factory](https://advance.phuse.global/display/WEL/Test+Dataset+Factory)
-based on the [original pilot project submission
+Factory](https://github.com/phuse-org/TestDataFactory) based on the
+[original pilot project submission
 package](https://github.com/atorus-research/CDISC_pilot_replication).
 We’ve packaged some subsets of that data into **Tplyr**, which you can
 use to replicate our examples and run our vignette code yourself. Note:

@@ -40,7 +40,7 @@
 
     <a class="navbar-brand me-2" href="index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +143,7 @@
 <li>Weight - and we’re back to descriptive statistics.</li>
 </ul>
 <p>So we have one table, with 6 summaries (7 including the next page, not shown) - but only 2 different approaches to summaries being performed. In the same way that <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> is a grammar of data manipulation, <strong>Tplyr</strong> aims to be a grammar of data summary. The goal of <strong>Tplyr</strong> is to allow you to program a summary table like you see it on the page, by breaking a larger problem into smaller ‘layers’, and combining them together like you see on the page.</p>
-<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://advance.phuse.global/display/WEL/Test+Dataset+Factory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. We’ve packaged some subsets of that data into <strong>Tplyr</strong>, which you can use to replicate our examples and run our vignette code yourself. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
+<p>Enough talking - let’s see some code. In these examples, we will be using data from the <a href="https://github.com/phuse-org/TestDataFactory" class="external-link">PHUSE Test Data Factory</a> based on the <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">original pilot project submission package</a>. We’ve packaged some subsets of that data into <strong>Tplyr</strong>, which you can use to replicate our examples and run our vignette code yourself. Note: You can see our replication of the CDISC pilot using the PHUSE Test Data Factory data <a href="https://github.com/atorus-research/CDISC_pilot_replication" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span>, where <span class="op">=</span> <span class="va">SAFFL</span> <span class="op">==</span> <span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -156,14 +156,14 @@
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="15%">
-<col width="8%">
-<col width="9%">
-<col width="18%">
-<col width="18%">
-<col width="11%">
-<col width="9%">
-<col width="9%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">row_label1</th>

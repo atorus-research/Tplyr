@@ -1,6 +1,6 @@
 # Changelog
 
-## Tplyr 1.3.1
+## Tplyr 1.3.2
 
 ### Internal Changes
 

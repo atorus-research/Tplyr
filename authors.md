@@ -28,13 +28,13 @@ Source:
 [`DESCRIPTION`](https://github.com/atorus-research/Tplyr/blob/main/DESCRIPTION)
 
 Miller E, Stackhouse M, Tarasiewicz A (2026). *Tplyr: A Traceability
-Focused Grammar of Clinical Data Summary*. R package version 1.3.1,
+Focused Grammar of Clinical Data Summary*. R package version 1.3.2,
 <https://atorus-research.github.io/Tplyr/>.
 
     @Manual{,
       title = {Tplyr: A Traceability Focused Grammar of Clinical Data Summary},
       author = {Eli Miller and Mike Stackhouse and Ashley Tarasiewicz},
       year = {2026},
-      note = {R package version 1.3.1},
+      note = {R package version 1.3.2},
       url = {https://atorus-research.github.io/Tplyr/},
     }
