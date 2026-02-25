@@ -186,22 +186,8 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
   # Capture the break_by variables
   break_by <- enquos(...)
 
-  # Get the row labels that need to be masked
-  nlist <- names(dat)[str_detect(names(dat), "row_label")]
-
-  # Iterate each variable
-  for (name in nlist){
-    dat <- dat %>%
-      # Identify if the value was repeating (ugly compensation for first row)
-      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
-             # If repeating then blank out
-             !!name := ifelse(mask == TRUE, '', !!sym(name))
-      )
-  }
-  # Drop the dummied mask variable
-  dat <- dat %>% select(-mask)
-
-  # Break rows if specified
+  # Insert break rows before masking so the blank rows reset the lag()
+  # comparison and prevent masking across layer boundaries
   if (row_breaks) {
 
     # Default to ord_layer_index
@@ -234,6 +220,21 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
       arrange(!!!break_by, ord_break) %>%
       mutate_if(is.character, ~replace_na(., ""))
   }
+
+  # Get the row labels that need to be masked
+  nlist <- names(dat)[str_detect(names(dat), "row_label")]
+
+  # Iterate each variable
+  for (name in nlist){
+    dat <- dat %>%
+      # Identify if the value was repeating (ugly compensation for first row)
+      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
+             # If repeating then blank out
+             !!name := ifelse(mask == TRUE, '', !!sym(name))
+      )
+  }
+  # Drop the dummied mask variable
+  dat <- dat %>% select(-mask)
 
   dat
 }

@@ -24,7 +24,10 @@
 ^Jenkinsfile$
 ^rsconnect$
 ^data-raw$
-^scratch.R$
+^scratch\.R$
+^scratch$
+^PR\.md$
+^TPLYR2_REQUIREMENTS\.MD$
 ^CRAN-SUBMISSION$
 ^.claude$
 ^CLAUDE.md$
