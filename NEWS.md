@@ -1,4 +1,4 @@
-# Tplyr 1.3.1
+# Tplyr 1.3.2
 
 ## Internal Changes
 - Refactored internal functions to eliminate `evalq()` usage and adopt the Extract-Process-Bind pattern, improving code clarity and maintainability without affecting user-facing functionality
