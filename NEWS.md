@@ -13,6 +13,7 @@
 - Resolve #186 Update vignettes to reset options back to defaults to avoid CRAN inconsistencies
 - Resolve #184 Don't remove units attribute of difftime when cleaning data on pre-process
 - Resolve #182 Fix error when adding multiple risk difference comparisons at once with NAs in two-way matrix
+- Resolve #183 Insert row breaks between layers without removing duplicated
 
 # Tplyr 1.2.1
 - Resolve #178 to add metadata handling for missing subjects, and add the `add_anti_join()` function
