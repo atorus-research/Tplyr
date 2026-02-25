@@ -31,6 +31,8 @@
 - Resolve [\#182](https://github.com/atorus-research/Tplyr/issues/182)
   Fix error when adding multiple risk difference comparisons at once
   with NAs in two-way matrix
+- Resolve [\#183](https://github.com/atorus-research/Tplyr/issues/183)
+  Insert row breaks between layers without removing duplicated
 
 ## Tplyr 1.2.1
 
