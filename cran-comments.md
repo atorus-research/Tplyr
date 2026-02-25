@@ -1,12 +1,16 @@
-## Submission 1.2.1
-* Added metadata handling for features introduced in 1.2.0, added function `add_anti_join()`
+## Submission 1.3.1
+* Internal refactoring and performance optimizations for nested count layers
+* Bug fixes for nested count sorting, negative number extraction, vignette options handling, difftime attributes, and risk difference with NAs
 
 ## Test Environments
 
-* Local Ubuntu 22.04.3 devtools::check
-* Latest Ubuntu CI with latest tidyverse
-* Github release action with windows, linux, and osx check
-* RHub Check
+* Local macOS (aarch64-apple-darwin20), R 4.5.1
+* GitHub Actions: windows-latest (release), macOS-latest (release), ubuntu-latest (release, devel, oldrel-1)
 
 ## R CMD CHECK Results
-No Errors, warnings, or notes
+0 errors | 0 warnings | 1 note
+
+* checking for future file timestamps ... NOTE
+  unable to verify current time
+
+This NOTE is a transient network issue and not related to the package.
