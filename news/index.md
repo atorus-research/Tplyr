@@ -2,6 +2,8 @@
 
 ## Tplyr 1.3.2
 
+CRAN release: 2026-02-26
+
 ### Internal Changes
 
 - Refactored internal functions to eliminate
