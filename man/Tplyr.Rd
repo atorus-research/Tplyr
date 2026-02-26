@@ -59,38 +59,38 @@ library(magrittr)
 # Use just the defaults
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
-    group_desc(mpg, by=cyl)
+    group_desc(mpg, by = cyl)
   ) \%>\%
   add_layer(
-    group_count(carb, by=cyl)
+    group_count(carb, by = cyl)
   ) \%>\%
   build()
 
 # Customize and modify
 tplyr_table(mtcars, gear) \%>\%
   add_layer(
-    group_desc(mpg, by=cyl) \%>\%
+    group_desc(mpg, by = cyl) \%>\%
       set_format_strings(
         "n"         = f_str("xx", n),
-        "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd, empty='NA'),
+        "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd, empty = "NA"),
         "Median"    = f_str("a.a+1", median),
-        "Q1, Q3"    = f_str("a, a", q1, q3, empty=c(.overall='NA')),
+        "Q1, Q3"    = f_str("a, a", q1, q3, empty = c(.overall = "NA")),
         "Min, Max"  = f_str("a, a", min, max),
         "Missing"   = f_str("xx", missing)
       )
   ) \%>\%
   add_layer(
-    group_count(carb, by=cyl) \%>\%
+    group_count(carb, by = cyl) \%>\%
       add_risk_diff(
-        c('5', '3'),
-        c('4', '3')
+        c("5", "3"),
+        c("4", "3")
       ) \%>\%
       set_format_strings(
-        n_counts = f_str('xx (xx\%)', n, pct),
-        riskdiff = f_str('xx.xxx (xx.xxx, xx.xxx)', dif, low, high)
+        n_counts = f_str("xx (xx\%)", n, pct),
+        riskdiff = f_str("xx.xxx (xx.xxx, xx.xxx)", dif, low, high)
       ) \%>\%
       set_order_count_method("bycount") \%>\%
-      set_ordering_cols('4') \%>\%
+      set_ordering_cols("4") \%>\%
       set_result_order_var(pct)
   ) \%>\%
   build()
@@ -98,8 +98,8 @@ tplyr_table(mtcars, gear) \%>\%
 # A Shift Table
 tplyr_table(mtcars, am) \%>\%
   add_layer(
-    group_shift(vars(row=gear, column=carb), by=cyl) \%>\%
-    set_format_strings(f_str("xxx (xx.xx\%)", n, pct))
+    group_shift(vars(row = gear, column = carb), by = cyl) \%>\%
+      set_format_strings(f_str("xxx (xx.xx\%)", n, pct))
   ) \%>\%
   build()
 

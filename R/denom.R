@@ -1,5 +1,3 @@
-
-
 #' Get the value of the header_n value in a grouped df
 #'
 #' This is intended to be called in a dplyr context using `do`. This function
@@ -76,7 +74,7 @@ get_header_n_value <- function(x, ...) {
 #' @noRd
 get_header_n_value.data.frame <- function(x, ...) {
   # Arguments passed
-  #dots <- enquos(...)
+  # dots <- enquos(...)
 
   header_names <- names(x)
 
@@ -98,7 +96,6 @@ get_header_n_value.data.frame <- function(x, ...) {
     filter(!!!filter_logic) %>%
     select(n) %>%
     sum()
-
 }
 
 #' Vectorized denominator total calculation
@@ -114,8 +111,7 @@ get_header_n_value.data.frame <- function(x, ...) {
 #' @return Data frame with total and optionally distinct_total columns added
 #' @noRd
 get_denom_total_vectorized <- function(.data, denoms_by, denoms_df,
-                                        total_extract = "n") {
-
+                                       total_extract = "n") {
   if (nrow(.data) == 0) {
     .data$total <- numeric(0)
     if ("distinct_n" %in% names(denoms_df)) {
@@ -148,10 +144,14 @@ get_denom_total_vectorized <- function(.data, denoms_by, denoms_df,
     }
   }
 
-  # Pre-aggregate totals by the join variables
-  totals_df <- denoms_df_coerced %>%
-    group_by(across(all_of(join_vars))) %>%
-    summarize(total = sum(n, na.rm = TRUE), .groups = "drop")
+  # Pre-aggregate totals by the join variables using collapse for speed
+  # Use base aggregate approach with collapse::fsum for vector sum
+  totals_agg <- collapse::collap(denoms_df_coerced[, c(join_vars, "n"), drop = FALSE],
+    by = as.formula(paste("~", paste(join_vars, collapse = " + "))),
+    FUN = fsum
+  )
+  names(totals_agg)[names(totals_agg) == "n"] <- "total"
+  totals_df <- totals_agg
 
   # Handle distinct_n if present (count layers have it, shift layers don't)
   if ("distinct_n" %in% names(denoms_df_coerced)) {
@@ -162,8 +162,8 @@ get_denom_total_vectorized <- function(.data, denoms_by, denoms_df,
     # summary_var may be used for grouping denoms so only toss it if
     # it's not in denoms_by
     denoms_by_names <- map_chr(denoms_by, as_name)
-    if (!('summary_var' %in% denoms_by_names) & 'summary_var' %in% names(denoms_df_coerced)) {
-      merge_vars <- merge_vars[merge_vars != 'summary_var']
+    if (!("summary_var" %in% denoms_by_names) & "summary_var" %in% names(denoms_df_coerced)) {
+      merge_vars <- merge_vars[merge_vars != "summary_var"]
     }
 
     # Get distinct totals

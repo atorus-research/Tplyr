@@ -54,11 +54,13 @@ Imports:
     dplyr (>= 1.0.0),
     purrr (>= 0.3.3),
     stringr (>= 1.4.0),
+    stringi (>= 1.7.0),
     tidyr (>= 1.0.2),
     tidyselect (>= 1.1.0),
     tibble (>= 3.0.1),
     lifecycle,
-    forcats (>= 1.0.0)
+    forcats (>= 1.0.0),
+    collapse (>= 2.0.0)
 Suggests:
     testthat (>= 2.1.0),
     carrier (>= 0.2.0),
@@ -73,7 +75,7 @@ Suggests:
     pharmaRTF,
     withr
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 RdMacros: lifecycle
 Config/testthat/edition: 3
 LazyData: true

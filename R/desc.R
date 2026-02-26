@@ -11,13 +11,12 @@
 #' @export
 #' @noRd
 process_summaries.desc_layer <- function(x, ...) {
-
   # If format strings weren't provided, then grab the defaults
   if (!has_format_strings(x)) {
     # Grab the defaults available at the table or option level
     params <- gather_defaults(x)
     # Place the formats
-    x <- do.call('set_format_strings', append(x, params))
+    x <- do.call("set_format_strings", append(x, params))
   }
 
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
@@ -48,18 +47,22 @@ process_summaries.desc_layer <- function(x, ...) {
 
   # Subset the local built_target based on where
   # Catch errors
-  tryCatch({
-    built_target <- built_target %>%
-      filter(!!where)
-  }, error = function(e) {
-    abort(paste0("group_desc `where` condition `",
-                 as_label(where),
-                 "` is invalid. Filter error:\n", e))
-  })
+  tryCatch(
+    {
+      built_target <- built_target %>%
+        filter(!!where)
+    },
+    error = function(e) {
+      abort(paste0(
+        "group_desc `where` condition `",
+        as_label(where),
+        "` is invalid. Filter error:\n", e
+      ))
+    }
+  )
 
   # Extract the list of summaries that need to be performed
   for (i in seq_along(target_var)) {
-
     # Pull out the target variable being iterated
     cur_var <- target_var[[i]]
 
@@ -77,17 +80,16 @@ process_summaries.desc_layer <- function(x, ...) {
       summarize(!!!summaries) %>%
       ungroup()
 
-    num_sums_raw[[i]] <- complete_and_limit(cmplt1, treat_var, by, cols, limit_data_by=limit_data_by)
+    num_sums_raw[[i]] <- complete_and_limit(cmplt1, treat_var, by, cols, limit_data_by = limit_data_by)
 
     # Create the transposed summary data to prepare for formatting
     trans_sums[[i]] <- num_sums_raw[[i]] %>%
       # Transpose the summaries that make up the first number in a display string
       # into the the `value` column with labels by `stat`
       pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
-      rowwise() %>%
-      # Add in the row labels
+      # Vectorized row_label lookup instead of rowwise() %>% mutate()
       mutate(
-         row_label = row_labels[[stat]]
+        row_label = unname(row_labels[stat])
       )
 
     # If precision is required, then create the variable identifier
@@ -129,7 +131,6 @@ process_summaries.desc_layer <- function(x, ...) {
 #' @noRd
 #' @export
 process_formatting.desc_layer <- function(x, ...) {
-
   # EXTRACT: Get needed bindings from layer environment (with inheritance from parent)
   trans_sums <- x$trans_sums
   target_var <- x$target_var
@@ -183,11 +184,11 @@ process_formatting.desc_layer <- function(x, ...) {
 
     if (need_prec_table) {
       # Merge the precision data on
-      current_trans_sum <- left_join(current_trans_sum, prec, by=c(match_exact(precision_by), 'precision_on'))
+      current_trans_sum <- left_join(current_trans_sum, prec, by = c(match_exact(precision_by), "precision_on"))
     }
 
     # Format display strings using vectorized function
-    current_trans_sum['display_string'] <- construct_desc_string_vec(current_trans_sum, format_strings)
+    current_trans_sum["display_string"] <- construct_desc_string_vec(current_trans_sum, format_strings)
 
     # Now do one more transpose to split the columns out
     # Default is to use the treatment variable, but if `cols` was provided
@@ -196,40 +197,40 @@ process_formatting.desc_layer <- function(x, ...) {
       form_sums[[i]] <- current_trans_sum %>%
         # Select only columns needed for pivot to reduce memory footprint
         select(!!treat_var, match_exact(by), row_label, match_exact(cols), display_string) %>%
-        pivot_wider(id_cols=c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
-                    names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
-                    names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
-                    values_from = display_string # Use the created display_string variable for values
+        pivot_wider(
+          id_cols = c(!!treat_var, match_exact(by)), # Keep row_label and the by variables
+          names_from = match_exact(vars(row_label, !!!cols)), # Pull the names from treatment and cols argument
+          names_prefix = paste0("var", i, "_"), # Prefix with the name of the target variable
+          values_from = display_string # Use the created display_string variable for values
         )
-
     } else {
       form_sums[[i]] <- current_trans_sum %>%
         # Select only columns needed for pivot to reduce memory footprint
         select(row_label, match_exact(by), !!treat_var, match_exact(cols), display_string) %>%
-        pivot_wider(id_cols=c('row_label', match_exact(by)), # Keep row_label and the by variables
-                    names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
-                    names_prefix = paste0('var', i, "_"), # Prefix with the name of the target variable
-                    values_from = display_string # Use the created display_string variable for values
-      )
-
+        pivot_wider(
+          id_cols = c("row_label", match_exact(by)), # Keep row_label and the by variables
+          names_from = match_exact(vars(!!treat_var, !!!cols)), # Pull the names from treatment and cols argument
+          names_prefix = paste0("var", i, "_"), # Prefix with the name of the target variable
+          values_from = display_string # Use the created display_string variable for values
+        )
     }
   }
   # Note: form_sums, i, current_trans_sum, prec (if created) are local variables - no cleanup needed
 
   # Join the final outputs
   if (stats_as_columns) {
-    formatted_data <- reduce(form_sums, full_join, by=c(as_label(treat_var), match_exact(by)))
+    formatted_data <- reduce(form_sums, full_join, by = c(as_label(treat_var), match_exact(by)))
 
     # Replace row label names
     formatted_data <- replace_by_string_names(formatted_data, by, treat_var)
   } else {
-    formatted_data <- reduce(form_sums, full_join, by=c('row_label', match_exact(by)))
+    formatted_data <- reduce(form_sums, full_join, by = c("row_label", match_exact(by)))
 
     # Replace row label names
     formatted_data <- replace_by_string_names(formatted_data, by)
   }
 
-  formatted_data <- assign_row_id(formatted_data, 'd')
+  formatted_data <- assign_row_id(formatted_data, "d")
 
   # BIND: Write results back to layer environment
   x$formatted_data <- formatted_data
@@ -249,23 +250,22 @@ inf_to_na <- function(x) if_else(is.infinite(x), NA, x)
 #' @return A list of expressions to be unpacked in \code{dplyr::summarize}
 #' @noRd
 get_summaries <- function(e = caller_env()) {
-
   # Define the default list of summaries
   summaries <- exprs(
     n       = n(),
-    mean    = mean(.var, na.rm=TRUE),
-    sd      = sd(.var, na.rm=TRUE),
-    median  = median(.var, na.rm=TRUE),
-    var     = var(.var, na.rm=TRUE),
-    min     = inf_to_na(min(.var, na.rm=TRUE)),
-    max     = inf_to_na(max(.var, na.rm=TRUE)),
-    iqr     = IQR(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type')),
-    q1      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[2]],
-    q3      = quantile(.var, na.rm=TRUE, type=getOption('tplyr.quantile_type'))[[4]],
+    mean    = mean(.var, na.rm = TRUE),
+    sd      = sd(.var, na.rm = TRUE),
+    median  = median(.var, na.rm = TRUE),
+    var     = var(.var, na.rm = TRUE),
+    min     = inf_to_na(min(.var, na.rm = TRUE)),
+    max     = inf_to_na(max(.var, na.rm = TRUE)),
+    iqr     = IQR(.var, na.rm = TRUE, type = getOption("tplyr.quantile_type")),
+    q1      = quantile(.var, na.rm = TRUE, type = getOption("tplyr.quantile_type"))[[2]],
+    q3      = quantile(.var, na.rm = TRUE, type = getOption("tplyr.quantile_type"))[[4]],
     missing = sum(is.na(.var))
   )
 
-  append(summaries, get_custom_summaries(e), after=0)
+  append(summaries, get_custom_summaries(e), after = 0)
 }
 
 #' Vectorized formatting for descriptive statistics display strings
@@ -284,7 +284,6 @@ get_summaries <- function(e = caller_env()) {
 #' @return Character vector of formatted display strings
 #' @noRd
 construct_desc_string_vec <- function(data, format_strings) {
-
   # Initialize result vector
   result <- character(nrow(data))
 
@@ -321,8 +320,8 @@ construct_desc_string_vec <- function(data, format_strings) {
     }
 
     # Handle rows where all values are NA
-    if (any(all_na_mask) && '.overall' %in% names(fmt$empty)) {
-      result[idx[all_na_mask]] <- fmt$empty['.overall']
+    if (any(all_na_mask) && ".overall" %in% names(fmt$empty)) {
+      result[idx[all_na_mask]] <- fmt$empty[".overall"]
     }
 
     # Process non-all-NA rows
@@ -363,7 +362,7 @@ construct_desc_string_vec <- function(data, format_strings) {
 
           result[prec_idx] <- do.call(sprintf, fmt_args)
         }
-        next  # Skip the default processing below
+        next # Skip the default processing below
       } else {
         # Single precision level - use it
         max_int <- unique_prec$max_int[1]

@@ -12,18 +12,19 @@
 #'
 #' @return String formatted numeric value
 #' @noRd
-num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
-
+num_fmt <- function(val, i, fmt = NULL, autos = NULL) {
   # Auto precision requires that integer and decimal are pulled from the row. If
   # auto, settings will be the amount to add to max prec, so add those together.
   # Otherwise pull the manually specified value
   int_len <- ifelse(fmt$setting[[i]]$auto_int,
-                    fmt$setting[[i]]$int + autos['int'],
-                    fmt$setting[[i]]$int)
+    fmt$setting[[i]]$int + autos["int"],
+    fmt$setting[[i]]$int
+  )
 
-  decimals  <- ifelse(fmt$setting[[i]]$auto_dec,
-                      fmt$setting[[i]]$dec + autos['dec'],
-                      fmt$setting[[i]]$dec)
+  decimals <- ifelse(fmt$setting[[i]]$auto_dec,
+    fmt$setting[[i]]$dec + autos["dec"],
+    fmt$setting[[i]]$dec
+  )
 
   # Set nsmall to input decimals
   nsmall <- decimals
@@ -32,24 +33,28 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
   if (decimals > 0) decimals <- decimals + 1
 
   # Empty return string
-  if (is.na(val)) {if (is.na(fmt$settings[[i]]$hug_char)) {
-    return(str_pad(fmt$empty[1], int_len+decimals, side="left"))
-  } else{
-    return(
-      str_pad(
-        paste0(fmt$settings[[i]]$hug_char, fmt$empty[1]),
-        int_len+decimals,
-        side="left")
-    )
-  }
-
+  if (is.na(val)) {
+    if (is.na(fmt$settings[[i]]$hug_char)) {
+      return(stri_pad_left(fmt$empty[1], int_len + decimals))
+    } else {
+      return(
+        stri_pad_left(
+          paste0(fmt$settings[[i]]$hug_char, fmt$empty[1]),
+          int_len + decimals
+        )
+      )
+    }
   }
 
   # Use two different rounding methods based on if someone is matching with IBM rounding
-  if(getOption("tplyr.IBMRounding", FALSE)) {
-    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
-                  " If you have feedback please get in touch with the maintainers!")),
-         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+  if (getOption("tplyr.IBMRounding", FALSE)) {
+    warn(
+      paste0(c(
+        "You have enabled IBM Rounding. This is an experimental feature.",
+        " If you have feedback please get in touch with the maintainers!"
+      )),
+      .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE
+    )
     rounded <- ut_round(val, nsmall)
   } else {
     rounded <- round(val, nsmall)
@@ -61,21 +66,21 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
       # Round
       rounded,
       # Set width of format string
-      width=(int_len+decimals),
+      width = (int_len + decimals),
       # Decimals to display
-      nsmall=nsmall
+      nsmall = nsmall
     )
   } else {
-    fmt_num <- str_pad(
+    fmt_num <- stri_pad_left(
       paste0(
-        #Paste the hug character
+        # Paste the hug character
         fmt$settings[[i]]$hug_char,
         format(
           rounded,
-          nsmall=nsmall
+          nsmall = nsmall
         )
       ),
-      width=(int_len+decimals)
+      width = (int_len + decimals)
     )
   }
 
@@ -99,7 +104,6 @@ num_fmt <- function(val, i, fmt=NULL, autos=NULL) {
 #' @return Character vector of formatted values
 #' @noRd
 num_fmt_vec <- function(vals, i, fmt) {
-
   # Extract format settings once for the entire vector
   int_len <- fmt$settings[[i]]$int
   decimals <- fmt$settings[[i]]$dec
@@ -111,9 +115,13 @@ num_fmt_vec <- function(vals, i, fmt) {
 
   # Handle IBM rounding option
   if (getOption("tplyr.IBMRounding", FALSE)) {
-    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
-                  " If you have feedback please get in touch with the maintainers!")),
-         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+    warn(
+      paste0(c(
+        "You have enabled IBM Rounding. This is an experimental feature.",
+        " If you have feedback please get in touch with the maintainers!"
+      )),
+      .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE
+    )
     rounded <- ut_round(vals, nsmall)
   } else {
     rounded <- round(vals, nsmall)
@@ -133,10 +141,9 @@ num_fmt_vec <- function(vals, i, fmt) {
     # Hug character formatting - paste hug char then pad to width
     # First format without width, then add hug char and pad
     fmt_string_no_width <- sprintf("%%.%df", nsmall)
-    fmt_nums <- str_pad(
+    fmt_nums <- stri_pad_left(
       paste0(hug_char, sprintf(fmt_string_no_width, rounded)),
-      width = width,
-      side = "left"
+      width = width
     )
   }
 
@@ -145,9 +152,9 @@ num_fmt_vec <- function(vals, i, fmt) {
   if (any(na_mask)) {
     empty_str <- fmt$empty[1]
     if (is.na(hug_char)) {
-      na_replacement <- str_pad(empty_str, width, side = "left")
+      na_replacement <- stri_pad_left(empty_str, width)
     } else {
-      na_replacement <- str_pad(paste0(hug_char, empty_str), width, side = "left")
+      na_replacement <- stri_pad_left(paste0(hug_char, empty_str), width)
     }
     fmt_nums[na_mask] <- na_replacement
   }
@@ -170,7 +177,6 @@ num_fmt_vec <- function(vals, i, fmt) {
 #' @return Character vector of formatted values
 #' @noRd
 num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
-
   settings <- fmt$settings[[i]]
 
   # Use first element if vectors were passed (precision should be consistent within a group)
@@ -199,9 +205,13 @@ num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
 
   # Handle IBM rounding option
   if (getOption("tplyr.IBMRounding", FALSE)) {
-    warn(paste0(c("You have enabled IBM Rounding. This is an experimental feature.",
-                  " If you have feedback please get in touch with the maintainers!")),
-         .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE)
+    warn(
+      paste0(c(
+        "You have enabled IBM Rounding. This is an experimental feature.",
+        " If you have feedback please get in touch with the maintainers!"
+      )),
+      .frequency = "regularly", .frequency_id = "tplyr.ibm", immediate. = TRUE
+    )
     rounded <- ut_round(vals, nsmall)
   } else {
     rounded <- round(vals, nsmall)
@@ -216,10 +226,9 @@ num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
   } else {
     # Hug character formatting
     fmt_string_no_width <- sprintf("%%.%df", nsmall)
-    fmt_nums <- str_pad(
+    fmt_nums <- stri_pad_left(
       paste0(hug_char, sprintf(fmt_string_no_width, rounded)),
-      width = width,
-      side = "left"
+      width = width
     )
   }
 
@@ -228,9 +237,9 @@ num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
   if (any(na_mask)) {
     empty_str <- fmt$empty[1]
     if (is.na(hug_char)) {
-      na_replacement <- str_pad(empty_str, width, side = "left")
+      na_replacement <- stri_pad_left(empty_str, width)
     } else {
-      na_replacement <- str_pad(paste0(hug_char, empty_str), width, side = "left")
+      na_replacement <- stri_pad_left(paste0(hug_char, empty_str), width)
     }
     fmt_nums[na_mask] <- na_replacement
   }
@@ -252,17 +261,19 @@ num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
 #' @noRd
 pad_formatted_data <- function(x, right_pad, left_pad) {
   # Handle empty input
-  if (length(x) == 0) return(x)
+  if (length(x) == 0) {
+    return(x)
+  }
 
   # Vectorized left padding
   if (!is.na(nchar(x[1])) && nchar(x[1]) < left_pad) {
-    x <- str_pad(x, left_pad, side = "left")
+    x <- stri_pad_left(x, left_pad)
   }
 
   # Vectorized right padding
   max_nchar <- max(nchar(x), na.rm = TRUE)
   if (!is.na(max_nchar) && right_pad > max_nchar) {
-    x <- str_pad(x, right_pad, side = "right")
+    x <- stringi::stri_pad_right(x, right_pad)
   }
 
   x

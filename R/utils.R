@@ -9,8 +9,7 @@
 #' @return The original call object with
 #'
 #' @noRd
-modify_nested_call <- function(c, examine_only=FALSE, ...) {
-
+modify_nested_call <- function(c, examine_only = FALSE, ...) {
   # Get exports from Tplyr
   allowable_calls <- getNamespaceExports("Tplyr")
 
@@ -18,26 +17,26 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
   assert_that(
     call_name(c) %in% allowable_calls,
     msg = "Functions called within `add_layer` must be part of `Tplyr`"
-    )
+  )
 
   # Process the magrittr pipe
   if (call_name(c) == "%>%") {
     # Only allow the user to use `Tplyr` functions on both sides of the pipe
     assert_that(all(map_chr(call_args(c), call_name) %in% allowable_calls),
-                msg="Functions called within `add_layer` must be part of `Tplyr`")
+      msg = "Functions called within `add_layer` must be part of `Tplyr`"
+    )
 
     # Recursively extract the left side of the magrittr call to work your way up
     e <- tplyr_call_standardise(c)
     c <- modify_nested_call(call_args(e)$lhs, examine_only, ...)
     if (!examine_only) {
       # Modify the magittr call by inserting the call retrieved from recursive command back in
-      c <- call_modify(e, lhs=c)
+      c <- call_modify(e, lhs = c)
       c
     }
   }
   # Process the 'native' pipe (arguments logically insert as first parameter)
   else if (!str_starts(call_name(c), "group_[cds]|use_template")) {
-
     # Standardize the call to get argument names and pull out the literal first argument
     # Save the call to a new variable in the process
     e <- tplyr_call_standardise(c)
@@ -57,9 +56,8 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
   }
   # If the call is not from magrittr or the pipe, then modify the contents and return the call
   else if (!examine_only) {
-    c <- call_modify(.call=c, ...)
+    c <- call_modify(.call = c, ...)
   }
-
 }
 
 #' Find depth of a layer object
@@ -73,10 +71,11 @@ modify_nested_call <- function(c, examine_only=FALSE, ...) {
 #'
 #' @return the number of containers a layer is in
 #' @noRd
-depth_from_table <- function(layer, i){
-  if(class(env_parent(layer))[1] == "tplyr_table") return(i + 1)
-  else {
-    return(depth_from_table(env_parent(layer), i+1))
+depth_from_table <- function(layer, i) {
+  if (class(env_parent(layer))[1] == "tplyr_table") {
+    return(i + 1)
+  } else {
+    return(depth_from_table(env_parent(layer), i + 1))
   }
 }
 
@@ -99,7 +98,7 @@ depth_from_table <- function(layer, i){
 #'
 #' iris %>%
 #'   group_by(Species) %>%
-#'   summarize(mean=mean(Sepal.Length), median = median(Sepal.Length)) %>%
+#'   summarize(mean = mean(Sepal.Length), median = median(Sepal.Length)) %>%
 #'   pivot_longer(cols = match_exact(vars(mean, median)))
 #'
 match_exact <- function(var_list) {
@@ -107,7 +106,7 @@ match_exact <- function(var_list) {
   assert_inherits_class(var_list, "quosures")
   # Return the variable names as a character string in appropriate tidyselect format
   out <- map_chr(var_list, as_label) # as_label is needed here vs as_name
-  unname(out[out != 'NULL']) # Exclude NULL quosures and remove names
+  unname(out[out != "NULL"]) # Exclude NULL quosures and remove names
 }
 
 #' Organize row labels within a layer output
@@ -129,24 +128,23 @@ replace_by_string_names <- function(dat, by, treat_var = NULL) {
   for (i in seq_along(by)) {
     # If stats are present in a table and there are character values in the by variables
     # The name may be `value` or `"value"` this check catches those scenerios
-    if(as_label(by[[i]]) %in% names(dat)) {
-      dat <- rename(dat, !!paste0('row_label', i) := as_label(by[[i]]))
-    } else if(as_name(by[[i]]) %in% names(dat)) {
-      dat <- rename(dat, !!paste0('row_label', i) := as_name(by[[i]]))
+    if (as_label(by[[i]]) %in% names(dat)) {
+      dat <- rename(dat, !!paste0("row_label", i) := as_label(by[[i]]))
+    } else if (as_name(by[[i]]) %in% names(dat)) {
+      dat <- rename(dat, !!paste0("row_label", i) := as_name(by[[i]]))
     }
-
   }
 
   # If i iterated above, it will be have a value. Otherwise it's null, so set it to 0
   i <- ifelse(is.null(i), 0, i)
 
   # If there was a column named `row_label` the index it
-  if ('row_label' %in% names(dat)) {
-    dat <- rename(dat, !!paste0('row_label', i + 1) := row_label)
+  if ("row_label" %in% names(dat)) {
+    dat <- rename(dat, !!paste0("row_label", i + 1) := row_label)
   }
 
   # Sort the row labels by index
-  row_labels <- names(dat)[str_detect(names(dat), 'row_label')]
+  row_labels <- names(dat)[str_detect(names(dat), "row_label")]
 
   # Insert row labels to the front of the tibble
   select(dat, all_of(sort(row_labels)), everything()) %>%
@@ -181,30 +179,35 @@ replace_by_string_names <- function(dat, by, treat_var = NULL) {
 #'
 #' @return tibble with blanked out rows where values are repeating
 #' @export
-apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
-
+apply_row_masks <- function(dat, row_breaks = FALSE, ...) {
   # Capture the break_by variables
   break_by <- enquos(...)
 
   # Insert break rows before masking so the blank rows reset the lag()
   # comparison and prevent masking across layer boundaries
   if (row_breaks) {
-
     # Default to ord_layer_index
     if (is_empty(break_by)) break_by <- quos(ord_layer_index)
 
     # All the break by variables must be variable names
     assert_that(all(map_chr(map(break_by, quo_get_expr), class) == "name"),
-                msg = "All parameters submitted through `...` must be variable names")
+      msg = "All parameters submitted through `...` must be variable names"
+    )
 
     assert_that(all(map_chr(break_by, as_name) %in% names(dat)),
-                msg = paste0("If `row_breaks` is specified, variables submitted via `...` ",
-                             "must be `ord` variables included in the input data frame.\n",
-                             "Remember to sort prior to using `apply_row_masks`."))
+      msg = paste0(
+        "If `row_breaks` is specified, variables submitted via `...` ",
+        "must be `ord` variables included in the input data frame.\n",
+        "Remember to sort prior to using `apply_row_masks`."
+      )
+    )
 
     assert_that(all(str_starts(map_chr(break_by, as_name), "ord")),
-                msg = paste0("Break-by variables submitted via `...` must be 'Tplyr' order variables ",
-                             "that start with `ord`"))
+      msg = paste0(
+        "Break-by variables submitted via `...` must be 'Tplyr' order variables ",
+        "that start with `ord`"
+      )
+    )
 
     # Create the breaks dataframe
     breaks <- dat %>%
@@ -218,23 +221,19 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
     # bind and fill the NAs
     dat <- bind_rows(dat, breaks) %>%
       arrange(!!!break_by, ord_break) %>%
-      mutate_if(is.character, ~replace_na(., ""))
+      mutate_if(is.character, ~ replace_na(., ""))
   }
 
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
 
-  # Iterate each variable
-  for (name in nlist){
-    dat <- dat %>%
-      # Identify if the value was repeating (ugly compensation for first row)
-      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
-             # If repeating then blank out
-             !!name := ifelse(mask == TRUE, '', !!sym(name))
-      )
+  # Vectorized row masking - replace repeating values with blanks
+  for (name in nlist) {
+    vals <- dat[[name]]
+    lagged <- c(NA, vals[-length(vals)])
+    is_repeat <- !is.na(lagged) & vals == lagged
+    dat[[name]] <- ifelse(is_repeat, "", vals)
   }
-  # Drop the dummied mask variable
-  dat <- dat %>% select(-mask)
 
   dat
 }
@@ -246,7 +245,6 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
 #' @return Quosures that aren't symbols
 #' @noRd
 extract_character_from_quo <- function(var_list) {
-
   is_symbol_ <- map_lgl(var_list, quo_is_symbol)
 
   var_list[!is_symbol_]
@@ -263,7 +261,7 @@ extract_character_from_quo <- function(var_list) {
 clean_attr <- function(dat) {
   for (n in names(dat)) {
     for (a in names(attributes(dat[[n]]))) {
-      if (!a  %in% c('levels', 'class', 'names', 'row.names', 'groups', 'units', 'tzone')) {
+      if (!a %in% c("levels", "class", "names", "row.names", "groups", "units", "tzone")) {
         attr(dat[[n]], a) <- NULL
       }
     }
@@ -281,8 +279,7 @@ clean_attr <- function(dat) {
 #'
 #' @return The rounded value
 #' @noRd
-ut_round <- function(x, n=0)
-{
+ut_round <- function(x, n = 0) {
   # x is the value to be rounded
   # n is the precision of the rounding
   posneg <- sign(x)

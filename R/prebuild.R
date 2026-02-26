@@ -1,5 +1,3 @@
-
-
 #' Build treatment groups into tables
 #'
 #' This function follows the Extract-Process-Bind pattern:
@@ -23,7 +21,7 @@ treatment_group_build <- function(table) {
   cols <- table$cols
 
   # PROCESS: Work in function environment (no side effects)
-  
+
   # Make built_target a copy of target
   built_target <- clean_attr(target)
 
@@ -52,52 +50,82 @@ treatment_group_build <- function(table) {
 
   # Apply the filter and catch any filter errors, report
   # the issue to the user explicitly
-  tryCatch({
-    built_target <- built_target %>%
-      filter(!!table_where)
-  }, error = function(e) {
-    abort(paste0("tplyr_table `where` condition `",
-                 as_label(table_where),
-                 "` is invalid. Filter error:\n", e))
-  })
+  tryCatch(
+    {
+      built_target <- built_target %>%
+        filter(!!table_where)
+    },
+    error = function(e) {
+      abort(paste0(
+        "tplyr_table `where` condition `",
+        as_label(table_where),
+        "` is invalid. Filter error:\n", e
+      ))
+    }
+  )
 
   # Same filter test on population data
-  tryCatch({
-    built_pop_data <- built_pop_data %>%
-      filter(!!pop_where)
-  }, error = function(e) {
-    abort(paste0("Population data `pop_where` condition `",
-                 as_label(pop_where),
-                 "` is invalid. Filter error:\n", e,
-                 "If the population data and target data subsets should be different, use `set_pop_where`."))
-  })
+  tryCatch(
+    {
+      built_pop_data <- built_pop_data %>%
+        filter(!!pop_where)
+    },
+    error = function(e) {
+      abort(paste0(
+        "Population data `pop_where` condition `",
+        as_label(pop_where),
+        "` is invalid. Filter error:\n", e,
+        "If the population data and target data subsets should be different, use `set_pop_where`."
+      ))
+    }
+  )
 
   # Make sure all factors are preserved and where logic didn't take out any factors
-  for(i in seq_along(cols)) {
+  for (i in seq_along(cols)) {
     built_target <- built_target %>%
-      mutate(!!cols[[i]] := fct_expand(as.character(!!cols[[i]]),
-                                       as.character(unique(target[[as_name(cols[[i]])]])),
-                                       levels(target[, as_name(cols[[i]])])))
+      mutate(!!cols[[i]] := fct_expand(
+        as.character(!!cols[[i]]),
+        as.character(unique(target[[as_name(cols[[i]])]])),
+        levels(target[, as_name(cols[[i]])])
+      ))
     built_pop_data <- built_pop_data %>%
-      mutate(!!cols[[i]] := fct_expand(as.character(!!cols[[i]]),
-                                       as.character(unique(pop_data[[as_name(cols[[i]])]])),
-                                       levels(pop_data[, as_name(cols[[i]])])))
+      mutate(!!cols[[i]] := fct_expand(
+        as.character(!!cols[[i]]),
+        as.character(unique(pop_data[[as_name(cols[[i]])]])),
+        levels(pop_data[, as_name(cols[[i]])])
+      ))
   }
 
   # Levels are lost here
-  for (grp_i in seq_along(treat_grps)) {
-    built_target <- built_target %>%
-      filter(!!treat_var %in% treat_grps[[grp_i]]) %>%
-      mutate(!!treat_var := names(treat_grps)[grp_i]) %>%
-      bind_rows(built_target)
-  }
+  # Vectorized: collect all treatment group expansions, then rowbind once
+  if (length(treat_grps) > 0) {
+    treat_var_name <- as_name(treat_var)
+    grp_dfs <- lapply(seq_along(treat_grps), function(grp_i) {
+      subset_df <- built_target[built_target[[treat_var_name]] %in% treat_grps[[grp_i]], , drop = FALSE]
+      if (nrow(subset_df) > 0) {
+        subset_df[[treat_var_name]] <- names(treat_grps)[grp_i]
+      }
+      subset_df
+    })
+    # Remove empty subsets before binding
+    grp_dfs <- grp_dfs[vapply(grp_dfs, nrow, integer(1)) > 0L]
+    if (length(grp_dfs) > 0) {
+      built_target <- collapse::rowbind(c(list(built_target), grp_dfs), fill = TRUE)
+    }
 
-  # Dummies for treatment groups added to population dataset
-  for (grp_i in seq_along(treat_grps)) {
-    built_pop_data <- built_pop_data %>%
-      filter(!!pop_treat_var %in% treat_grps[[grp_i]]) %>%
-      mutate(!!pop_treat_var := names(treat_grps)[grp_i]) %>%
-      bind_rows(built_pop_data)
+    # Dummies for treatment groups added to population dataset
+    pop_treat_var_name <- as_name(pop_treat_var)
+    pop_grp_dfs <- lapply(seq_along(treat_grps), function(grp_i) {
+      subset_df <- built_pop_data[built_pop_data[[pop_treat_var_name]] %in% treat_grps[[grp_i]], , drop = FALSE]
+      if (nrow(subset_df) > 0) {
+        subset_df[[pop_treat_var_name]] <- names(treat_grps)[grp_i]
+      }
+      subset_df
+    })
+    pop_grp_dfs <- pop_grp_dfs[vapply(pop_grp_dfs, nrow, integer(1)) > 0L]
+    if (length(pop_grp_dfs) > 0) {
+      built_pop_data <- collapse::rowbind(c(list(built_pop_data), pop_grp_dfs), fill = TRUE)
+    }
   }
 
   # Make sure factors are preserved
