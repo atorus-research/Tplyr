@@ -84,10 +84,9 @@ process_summaries.desc_layer <- function(x, ...) {
       # Transpose the summaries that make up the first number in a display string
       # into the the `value` column with labels by `stat`
       pivot_longer(cols = match_exact(trans_vars), names_to = "stat") %>%
-      rowwise() %>%
-      # Add in the row labels
+      # Add in the row labels (vectorized lookup instead of rowwise)
       mutate(
-         row_label = row_labels[[stat]]
+         row_label = unname(row_labels[stat])
       )
 
     # If precision is required, then create the variable identifier

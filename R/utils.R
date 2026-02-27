@@ -224,17 +224,13 @@ apply_row_masks <- function(dat, row_breaks=FALSE, ...) {
   # Get the row labels that need to be masked
   nlist <- names(dat)[str_detect(names(dat), "row_label")]
 
-  # Iterate each variable
+  # Iterate each variable and blank out consecutive repeats
   for (name in nlist){
-    dat <- dat %>%
-      # Identify if the value was repeating (ugly compensation for first row)
-      mutate(mask = ifelse(!(is.na(lag(!!sym(name)))) & !!sym(name) == lag(!!sym(name)), TRUE, FALSE),
-             # If repeating then blank out
-             !!name := ifelse(mask == TRUE, '', !!sym(name))
-      )
+    vals <- dat[[name]]
+    lagged <- c(NA, vals[-length(vals)])
+    is_repeat <- !is.na(lagged) & vals == lagged
+    dat[[name]] <- ifelse(is_repeat, '', vals)
   }
-  # Drop the dummied mask variable
-  dat <- dat %>% select(-mask)
 
   dat
 }
