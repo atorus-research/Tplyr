@@ -375,3 +375,44 @@ test_that("Sorting functions work correctly after refactoring", {
   expect_equal(nrow(b_t3), 3)
   expect_true("ord_layer_1" %in% names(b_t3))
 })
+
+test_that("Count layer with an all-missing (NA) target sorts without warning (#213)", {
+  # Regression test for #213: a group_count() target whose values are entirely
+  # NA previously triggered `no non-missing arguments to max; returning -Inf`
+  # and produced a non-finite (-Inf) ord_layer sort value. The bug lived in the
+  # default `byfactor` path -- sort() drops the all-NA level, leaving an empty
+  # lookup table, so max() was called on an empty set in R/sort.R.
+  adsl <- data.frame(
+    USUBJID = sprintf("S%02d", 1:4),
+    TRT01PN = c(1, 1, 2, 2),
+    DCSREAS = NA_character_,
+    stringsAsFactors = FALSE
+  )
+
+  # Every ord_layer_* sort value (whatever the by-structure) must be finite.
+  all_ord_finite <- function(b) all(is.finite(unlist(b[, grepl("^ord_layer_", names(b)), drop = FALSE])))
+
+  # Default (byfactor) sort -- the affected path. Must build without a warning,
+  # carry finite ordering values, and leave the counts intact (2 per group).
+  t1 <- tplyr_table(adsl, TRT01PN) %>%
+    add_layer(
+      group_count(DCSREAS) %>%
+        set_format_strings(f_str("xx", n))
+    )
+  expect_no_warning(b1 <- build(t1))
+  expect_equal(nrow(b1), 1L)
+  expect_true(all_ord_finite(b1))
+  expect_equal(trimws(b1$var1_1), "2")
+  expect_equal(trimws(b1$var1_2), "2")
+
+  # set_missing_count() relabeling of the NA row must also build cleanly.
+  t2 <- tplyr_table(adsl, TRT01PN) %>%
+    add_layer(
+      group_count(DCSREAS) %>%
+        set_format_strings(f_str("xx", n)) %>%
+        set_missing_count(f_str("xx", n), Missing = NA)
+    )
+  expect_no_warning(b2 <- build(t2))
+  expect_true(all_ord_finite(b2))
+  expect_equal(b2$row_label1, "Missing")
+})
