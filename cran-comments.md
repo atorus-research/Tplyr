@@ -1,6 +1,10 @@
-## Submission 1.3.1
-* Internal refactoring and performance optimizations for nested count layers
-* Bug fixes for nested count sorting, negative number extraction, vignette options handling, difftime attributes, apply_row_masks, and risk difference with NAs
+## Submission 1.3.3
+
+This is a patch release fixing a single bug:
+
+* Resolve a spurious "no non-missing arguments to max" warning and an invalid
+  `-Inf` sort value produced when a count layer targets an all-missing (`NA`)
+  variable (#213).
 
 ## Test Environments
 
