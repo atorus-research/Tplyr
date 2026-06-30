@@ -530,7 +530,8 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
         varn_df <- varn_df %>%
           bind_rows(tibble(
             !!target_var[[1]] := names(missing_count_list),
-            !!varN_name := seq_along(missing_count_list) + max(varn_df[, 2])
+            !!varN_name := seq_along(missing_count_list) +
+              if (nrow(varn_df) == 0) 0 else max(varn_df[, 2])
           ))
       } else {
         varn_df <- varn_df %>%
@@ -590,7 +591,8 @@ get_data_order_count <- function(formatted_data, formatted_col_index,
         fact_df <- fact_df %>%
           bind_rows(tibble(
             !!target_var[[1]] := names(missing_count_list),
-            factor_index = seq_along(missing_count_list) + max(fact_df$factor_index)
+            factor_index = seq_along(missing_count_list) +
+              if (nrow(fact_df) == 0) 0 else max(fact_df$factor_index)
           )) %>%
           distinct(!!target_var[[1]], .keep_all = TRUE)
       } else {
@@ -719,8 +721,11 @@ get_data_order_byvarn <- function(formatted_data, by_varn_df, by_var, by_column_
   by_values <- unlist(formatted_data[, by_column_index])
 
   # Look up the VARN value for each row. Unmatched rows get a default
-  # value that places them at the end.
-  default_sort <- max(unlist(by_varn_df[, 2])) + 1
+  # value that places them at the end. When the target has no non-missing
+  # levels (e.g. an all-NA target variable) by_varn_df is empty, so guard
+  # against max() warning and returning -Inf on an empty set.
+  varn_values <- unlist(by_varn_df[, 2])
+  default_sort <- if (length(varn_values) == 0) 1 else max(varn_values) + 1
   varns <- map_dbl(by_values, function(a_by) {
 
     # Row containing the index and the value
