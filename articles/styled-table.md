@@ -27,6 +27,7 @@ Let’s build a demographics table to see how this all works.
 ### Preparing the data
 
 ``` r
+
 tplyr_adsl <- tplyr_adsl %>% 
   mutate(
     SEX = recode(SEX, M = "Male", F = "Female"), 
@@ -63,31 +64,31 @@ dat %>%
   kable()
 ```
 
-| row_label1           | row_label2                               | var1_Placebo | var1_Total   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------|:-----------------------------------------|:-------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Sex n (%)            | Female                                   | 53 ( 61.6%)  | 143 ( 56.3%) | 40 ( 47.6%)               | 50 ( 59.5%)              |               1 |           1 |           1 |
-| Sex n (%)            | Male                                     | 33 ( 38.4%)  | 111 ( 43.7%) | 44 ( 52.4%)               | 34 ( 40.5%)              |               1 |           1 |           2 |
-| Sex n (%)            | Missing                                  | 0            | 0            | 0                         | 0                        |               1 |           1 |           3 |
-| Age (Years)          | n                                        | 86           | 254          | 84                        | 84                       |               2 |           1 |           1 |
-| Age (Years)          | Mean (SD)                                | 75.2 ( 8.59) | 75.1 ( 8.25) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               2 |           1 |           2 |
-| Age (Years)          | Median                                   | 76.0         | 77.0         | 76.0                      | 77.5                     |               2 |           1 |           3 |
-| Age (Years)          | Q1, Q3                                   | 69.2, 81.8   | 70.0, 81.0   | 70.8, 80.0                | 71.0, 82.0               |               2 |           1 |           4 |
-| Age (Years)          | Min, Max                                 | 52, 89       | 51, 89       | 56, 88                    | 51, 88                   |               2 |           1 |           5 |
-| Age (Years)          | Missing                                  | 0            | 0            | 0                         | 0                        |               2 |           1 |           6 |
-| Age Categories n (%) | \<65                                     | 14 ( 16.3%)  | 33 ( 13.0%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               3 |           1 |           1 |
-| Age Categories n (%) | \>80                                     | 30 ( 34.9%)  | 77 ( 30.3%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               3 |           1 |           2 |
-| Age Categories n (%) | 65-80                                    | 42 ( 48.8%)  | 144 ( 56.7%) | 55 ( 65.5%)               | 47 ( 56.0%)              |               3 |           1 |           3 |
-| Age Categories n (%) | Missing                                  | 0            | 0            | 0                         | 0                        |               3 |           1 |           4 |
-| Race n (%)           | AMERICAN INDIAN OR ALASKA NATIVE         | 0 ( 0.0%)    | 1 ( 0.4%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               4 |           1 |           1 |
-| Race n (%)           | ASIAN                                    | 0 ( 0.0%)    | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               4 |           1 |           2 |
-| Race n (%)           | BLACK OR AFRICAN AMERICAN                | 8 ( 9.3%)    | 23 ( 9.1%)   | 9 ( 10.7%)                | 6 ( 7.1%)                |               4 |           1 |           3 |
-| Race n (%)           | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER | 0 ( 0.0%)    | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               4 |           1 |           4 |
-| Race n (%)           | WHITE                                    | 78 ( 90.7%)  | 230 ( 90.6%) | 74 ( 88.1%)               | 78 ( 92.9%)              |               4 |           1 |           5 |
-| Race n (%)           | MULTIPLE                                 | 0 ( 0.0%)    | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               4 |           1 |           6 |
-| Race n (%)           | Missing                                  | 0            | 0            | 0                         | 0                        |               4 |           1 |           7 |
-| Ethnicity n (%)      | HISPANIC OR LATINO                       | 3 ( 3.5%)    | 12 ( 4.7%)   | 3 ( 3.6%)                 | 6 ( 7.1%)                |               5 |           1 |           1 |
-| Ethnicity n (%)      | NOT HISPANIC OR LATINO                   | 83 ( 96.5%)  | 242 ( 95.3%) | 81 ( 96.4%)               | 78 ( 92.9%)              |               5 |           1 |           2 |
-| Ethnicity n (%)      | Missing                                  | 0            | 0            | 0                         | 0                        |               5 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Total | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Sex n (%) | Female | 53 ( 61.6%) | 143 ( 56.3%) | 40 ( 47.6%) | 50 ( 59.5%) | 1 | 1 | 1 |
+| Sex n (%) | Male | 33 ( 38.4%) | 111 ( 43.7%) | 44 ( 52.4%) | 34 ( 40.5%) | 1 | 1 | 2 |
+| Sex n (%) | Missing | 0 | 0 | 0 | 0 | 1 | 1 | 3 |
+| Age (Years) | n | 86 | 254 | 84 | 84 | 2 | 1 | 1 |
+| Age (Years) | Mean (SD) | 75.2 ( 8.59) | 75.1 ( 8.25) | 74.4 ( 7.89) | 75.7 ( 8.29) | 2 | 1 | 2 |
+| Age (Years) | Median | 76.0 | 77.0 | 76.0 | 77.5 | 2 | 1 | 3 |
+| Age (Years) | Q1, Q3 | 69.2, 81.8 | 70.0, 81.0 | 70.8, 80.0 | 71.0, 82.0 | 2 | 1 | 4 |
+| Age (Years) | Min, Max | 52, 89 | 51, 89 | 56, 88 | 51, 88 | 2 | 1 | 5 |
+| Age (Years) | Missing | 0 | 0 | 0 | 0 | 2 | 1 | 6 |
+| Age Categories n (%) | \<65 | 14 ( 16.3%) | 33 ( 13.0%) | 11 ( 13.1%) | 8 ( 9.5%) | 3 | 1 | 1 |
+| Age Categories n (%) | \>80 | 30 ( 34.9%) | 77 ( 30.3%) | 18 ( 21.4%) | 29 ( 34.5%) | 3 | 1 | 2 |
+| Age Categories n (%) | 65-80 | 42 ( 48.8%) | 144 ( 56.7%) | 55 ( 65.5%) | 47 ( 56.0%) | 3 | 1 | 3 |
+| Age Categories n (%) | Missing | 0 | 0 | 0 | 0 | 3 | 1 | 4 |
+| Race n (%) | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 1 ( 0.4%) | 1 ( 1.2%) | 0 ( 0.0%) | 4 | 1 | 1 |
+| Race n (%) | ASIAN | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 4 | 1 | 2 |
+| Race n (%) | BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 23 ( 9.1%) | 9 ( 10.7%) | 6 ( 7.1%) | 4 | 1 | 3 |
+| Race n (%) | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 4 | 1 | 4 |
+| Race n (%) | WHITE | 78 ( 90.7%) | 230 ( 90.6%) | 74 ( 88.1%) | 78 ( 92.9%) | 4 | 1 | 5 |
+| Race n (%) | MULTIPLE | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 4 | 1 | 6 |
+| Race n (%) | Missing | 0 | 0 | 0 | 0 | 4 | 1 | 7 |
+| Ethnicity n (%) | HISPANIC OR LATINO | 3 ( 3.5%) | 12 ( 4.7%) | 3 ( 3.6%) | 6 ( 7.1%) | 5 | 1 | 1 |
+| Ethnicity n (%) | NOT HISPANIC OR LATINO | 83 ( 96.5%) | 242 ( 95.3%) | 81 ( 96.4%) | 78 ( 92.9%) | 5 | 1 | 2 |
+| Ethnicity n (%) | Missing | 0 | 0 | 0 | 0 | 5 | 1 | 3 |
 
 In the block above, we assembled the count and descriptive statistic
 summaries one by one. But notice that I did some pre-processing on the
@@ -120,6 +121,7 @@ not show a percent when a count is 0. For this the function
 strings based on the numbers present within the string.
 
 ``` r
+
 dat %>% 
   mutate(
     across(starts_with('var'),
@@ -172,6 +174,7 @@ Now that we have our data, let’s make sure it’s in the right order.
 Additionally, let’s clean the data up so it’s ready to present.
 
 ``` r
+
 dat <- dat %>% 
   arrange(ord_layer_index, ord_layer_1, ord_layer_2) %>% 
   apply_row_masks(row_breaks = TRUE) %>% 
@@ -185,37 +188,37 @@ dat %>%
   kable()
 ```
 
-| row_label1           | row_label2                               | var1_Placebo  | var1_Xanomeline Low Dose  | var1_Xanomeline High Dose  | var1_Total   |
-|:---------------------|:-----------------------------------------|:--------------|:--------------------------|:---------------------------|:-------------|
-|                      |                                          | Placebo(N=86) | Xanomeline Low Dose(N=84) | Xanomeline High Dose(N=84) | Total(N=254) |
-| Sex n (%)            | Female                                   | 53 ( 61.6%)   | 50 ( 59.5%)               | 40 ( 47.6%)                | 143 ( 56.3%) |
-|                      | Male                                     | 33 ( 38.4%)   | 34 ( 40.5%)               | 44 ( 52.4%)                | 111 ( 43.7%) |
-|                      | Missing                                  | 0             | 0                         | 0                          | 0            |
-|                      |                                          |               |                           |                            |              |
-| Age (Years)          | n                                        | 86            | 84                        | 84                         | 254          |
-|                      | Mean (SD)                                | 75.2 ( 8.59)  | 75.7 ( 8.29)              | 74.4 ( 7.89)               | 75.1 ( 8.25) |
-|                      | Median                                   | 76.0          | 77.5                      | 76.0                       | 77.0         |
-|                      | Q1, Q3                                   | 69.2, 81.8    | 71.0, 82.0                | 70.8, 80.0                 | 70.0, 81.0   |
-|                      | Min, Max                                 | 52, 89        | 51, 88                    | 56, 88                     | 51, 89       |
-|                      | Missing                                  | 0             | 0                         | 0                          | 0            |
-|                      |                                          |               |                           |                            |              |
-| Age Categories n (%) | \<65                                     | 14 ( 16.3%)   | 8 ( 9.5%)                 | 11 ( 13.1%)                | 33 ( 13.0%)  |
-|                      | \>80                                     | 30 ( 34.9%)   | 29 ( 34.5%)               | 18 ( 21.4%)                | 77 ( 30.3%)  |
-|                      | 65-80                                    | 42 ( 48.8%)   | 47 ( 56.0%)               | 55 ( 65.5%)                | 144 ( 56.7%) |
-|                      | Missing                                  | 0             | 0                         | 0                          | 0            |
-|                      |                                          |               |                           |                            |              |
-| Race n (%)           | AMERICAN INDIAN OR ALASKA NATIVE         | 0 ( 0.0%)     | 0 ( 0.0%)                 | 1 ( 1.2%)                  | 1 ( 0.4%)    |
-|                      | ASIAN                                    | 0 ( 0.0%)     | 0 ( 0.0%)                 | 0 ( 0.0%)                  | 0 ( 0.0%)    |
-|                      | BLACK OR AFRICAN AMERICAN                | 8 ( 9.3%)     | 6 ( 7.1%)                 | 9 ( 10.7%)                 | 23 ( 9.1%)   |
-|                      | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER | 0 ( 0.0%)     | 0 ( 0.0%)                 | 0 ( 0.0%)                  | 0 ( 0.0%)    |
-|                      | WHITE                                    | 78 ( 90.7%)   | 78 ( 92.9%)               | 74 ( 88.1%)                | 230 ( 90.6%) |
-|                      | MULTIPLE                                 | 0 ( 0.0%)     | 0 ( 0.0%)                 | 0 ( 0.0%)                  | 0 ( 0.0%)    |
-|                      | Missing                                  | 0             | 0                         | 0                          | 0            |
-|                      |                                          |               |                           |                            |              |
-| Ethnicity n (%)      | HISPANIC OR LATINO                       | 3 ( 3.5%)     | 6 ( 7.1%)                 | 3 ( 3.6%)                  | 12 ( 4.7%)   |
-|                      | NOT HISPANIC OR LATINO                   | 83 ( 96.5%)   | 78 ( 92.9%)               | 81 ( 96.4%)                | 242 ( 95.3%) |
-|                      | Missing                                  | 0             | 0                         | 0                          | 0            |
-|                      |                                          |               |                           |                            |              |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline Low Dose | var1_Xanomeline High Dose | var1_Total |
+|:---|:---|:---|:---|:---|:---|
+|  |  | Placebo(N=86) | Xanomeline Low Dose(N=84) | Xanomeline High Dose(N=84) | Total(N=254) |
+| Sex n (%) | Female | 53 ( 61.6%) | 50 ( 59.5%) | 40 ( 47.6%) | 143 ( 56.3%) |
+|  | Male | 33 ( 38.4%) | 34 ( 40.5%) | 44 ( 52.4%) | 111 ( 43.7%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Age (Years) | n | 86 | 84 | 84 | 254 |
+|  | Mean (SD) | 75.2 ( 8.59) | 75.7 ( 8.29) | 74.4 ( 7.89) | 75.1 ( 8.25) |
+|  | Median | 76.0 | 77.5 | 76.0 | 77.0 |
+|  | Q1, Q3 | 69.2, 81.8 | 71.0, 82.0 | 70.8, 80.0 | 70.0, 81.0 |
+|  | Min, Max | 52, 89 | 51, 88 | 56, 88 | 51, 89 |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Age Categories n (%) | \<65 | 14 ( 16.3%) | 8 ( 9.5%) | 11 ( 13.1%) | 33 ( 13.0%) |
+|  | \>80 | 30 ( 34.9%) | 29 ( 34.5%) | 18 ( 21.4%) | 77 ( 30.3%) |
+|  | 65-80 | 42 ( 48.8%) | 47 ( 56.0%) | 55 ( 65.5%) | 144 ( 56.7%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Race n (%) | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 0.4%) |
+|  | ASIAN | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 6 ( 7.1%) | 9 ( 10.7%) | 23 ( 9.1%) |
+|  | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | WHITE | 78 ( 90.7%) | 78 ( 92.9%) | 74 ( 88.1%) | 230 ( 90.6%) |
+|  | MULTIPLE | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Ethnicity n (%) | HISPANIC OR LATINO | 3 ( 3.5%) | 6 ( 7.1%) | 3 ( 3.6%) | 12 ( 4.7%) |
+|  | NOT HISPANIC OR LATINO | 83 ( 96.5%) | 78 ( 92.9%) | 81 ( 96.4%) | 242 ( 95.3%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
 
 Now you can see things coming together. In this block, we:
 
@@ -275,6 +278,7 @@ better RTF support)*
 Alright - so the table is ready. Let’s prepare the `huxtable` table.
 
 ``` r
+
 # Make the table
 ht <- huxtable::as_hux(dat, add_colnames=FALSE) %>%
   huxtable::set_bold(1, 1:ncol(dat), TRUE) %>% # bold the first row
@@ -288,37 +292,37 @@ ht <- huxtable::as_hux(dat, add_colnames=FALSE) %>%
 ht
 ```
 
-|                      |                                          |                    |                                |                                 |                   |
-|:--------------------:|:----------------------------------------:|:------------------:|:------------------------------:|:-------------------------------:|:-----------------:|
-|                      |                                          | Placebo\line(N=86) | Xanomeline Low Dose\line(N=84) | Xanomeline High Dose\line(N=84) | Total\line(N=254) |
-|      Sex n (%)       |                  Female                  |    53 ( 61.6%)     |          50 ( 59.5%)           |           40 ( 47.6%)           |   143 ( 56.3%)    |
-|                      |                   Male                   |    33 ( 38.4%)     |          34 ( 40.5%)           |           44 ( 52.4%)           |   111 ( 43.7%)    |
-|                      |                 Missing                  |         0          |               0                |                0                |         0         |
-|                      |                                          |                    |                                |                                 |                   |
-|     Age (Years)      |                    n                     |         86         |               84               |               84                |        254        |
-|                      |                Mean (SD)                 |    75.2 ( 8.59)    |          75.7 ( 8.29)          |          74.4 ( 7.89)           |   75.1 ( 8.25)    |
-|                      |                  Median                  |        76.0        |              77.5              |              76.0               |       77.0        |
-|                      |                  Q1, Q3                  |     69.2, 81.8     |           71.0, 82.0           |           70.8, 80.0            |    70.0, 81.0     |
-|                      |                 Min, Max                 |       52, 89       |             51, 88             |             56, 88              |      51, 89       |
-|                      |                 Missing                  |         0          |               0                |                0                |         0         |
-|                      |                                          |                    |                                |                                 |                   |
-| Age Categories n (%) |                   \<65                   |    14 ( 16.3%)     |           8 ( 9.5%)            |           11 ( 13.1%)           |    33 ( 13.0%)    |
-|                      |                   \>80                   |    30 ( 34.9%)     |          29 ( 34.5%)           |           18 ( 21.4%)           |    77 ( 30.3%)    |
-|                      |                  65-80                   |    42 ( 48.8%)     |          47 ( 56.0%)           |           55 ( 65.5%)           |   144 ( 56.7%)    |
-|                      |                 Missing                  |         0          |               0                |                0                |         0         |
-|                      |                                          |                    |                                |                                 |                   |
-|      Race n (%)      |     AMERICAN INDIAN OR ALASKA NATIVE     |     0 ( 0.0%)      |           0 ( 0.0%)            |            1 ( 1.2%)            |     1 ( 0.4%)     |
-|                      |                  ASIAN                   |     0 ( 0.0%)      |           0 ( 0.0%)            |            0 ( 0.0%)            |     0 ( 0.0%)     |
-|                      |        BLACK OR AFRICAN AMERICAN         |     8 ( 9.3%)      |           6 ( 7.1%)            |           9 ( 10.7%)            |    23 ( 9.1%)     |
-|                      | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER |     0 ( 0.0%)      |           0 ( 0.0%)            |            0 ( 0.0%)            |     0 ( 0.0%)     |
-|                      |                  WHITE                   |    78 ( 90.7%)     |          78 ( 92.9%)           |           74 ( 88.1%)           |   230 ( 90.6%)    |
-|                      |                 MULTIPLE                 |     0 ( 0.0%)      |           0 ( 0.0%)            |            0 ( 0.0%)            |     0 ( 0.0%)     |
-|                      |                 Missing                  |         0          |               0                |                0                |         0         |
-|                      |                                          |                    |                                |                                 |                   |
-|   Ethnicity n (%)    |            HISPANIC OR LATINO            |     3 ( 3.5%)      |           6 ( 7.1%)            |            3 ( 3.6%)            |    12 ( 4.7%)     |
-|                      |          NOT HISPANIC OR LATINO          |    83 ( 96.5%)     |          78 ( 92.9%)           |           81 ( 96.4%)           |   242 ( 95.3%)    |
-|                      |                 Missing                  |         0          |               0                |                0                |         0         |
-|                      |                                          |                    |                                |                                 |                   |
+|  |  |  |  |  |  |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+|  |  | Placebo\line(N=86) | Xanomeline Low Dose\line(N=84) | Xanomeline High Dose\line(N=84) | Total\line(N=254) |
+| Sex n (%) | Female | 53 ( 61.6%) | 50 ( 59.5%) | 40 ( 47.6%) | 143 ( 56.3%) |
+|  | Male | 33 ( 38.4%) | 34 ( 40.5%) | 44 ( 52.4%) | 111 ( 43.7%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Age (Years) | n | 86 | 84 | 84 | 254 |
+|  | Mean (SD) | 75.2 ( 8.59) | 75.7 ( 8.29) | 74.4 ( 7.89) | 75.1 ( 8.25) |
+|  | Median | 76.0 | 77.5 | 76.0 | 77.0 |
+|  | Q1, Q3 | 69.2, 81.8 | 71.0, 82.0 | 70.8, 80.0 | 70.0, 81.0 |
+|  | Min, Max | 52, 89 | 51, 88 | 56, 88 | 51, 89 |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Age Categories n (%) | \<65 | 14 ( 16.3%) | 8 ( 9.5%) | 11 ( 13.1%) | 33 ( 13.0%) |
+|  | \>80 | 30 ( 34.9%) | 29 ( 34.5%) | 18 ( 21.4%) | 77 ( 30.3%) |
+|  | 65-80 | 42 ( 48.8%) | 47 ( 56.0%) | 55 ( 65.5%) | 144 ( 56.7%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Race n (%) | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 0.4%) |
+|  | ASIAN | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 6 ( 7.1%) | 9 ( 10.7%) | 23 ( 9.1%) |
+|  | NATIVE HAWAIIN OR OTHER PACIFIC ISLANDER | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | WHITE | 78 ( 90.7%) | 78 ( 92.9%) | 74 ( 88.1%) | 230 ( 90.6%) |
+|  | MULTIPLE | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
+| Ethnicity n (%) | HISPANIC OR LATINO | 3 ( 3.5%) | 6 ( 7.1%) | 3 ( 3.6%) | 12 ( 4.7%) |
+|  | NOT HISPANIC OR LATINO | 83 ( 96.5%) | 78 ( 92.9%) | 81 ( 96.4%) | 242 ( 95.3%) |
+|  | Missing | 0 | 0 | 0 | 0 |
+|  |  |  |  |  |  |
 
 ## Output to File
 
@@ -327,6 +331,7 @@ The table styling is coming together. The last step is to get it into a
 final output document. So here we’ll jump into **pharmaRTF**
 
 ``` r
+
 doc <- pharmaRTF::rtf_doc(ht) %>% 
   pharmaRTF::add_titles(
     pharmaRTF::hf_line("Protocol: CDISCPILOT01", "PAGE_FORMAT: Page %s of %s", align='split', bold=TRUE, italic=TRUE),
@@ -351,6 +356,7 @@ Our document is now created, all the titles and footnotes are added, and
 settings are good to go. Last step is to write it out.
 
 ``` r
+
 pharmaRTF::write_rtf(doc, file='styled_example.rtf')
 ```
 

@@ -34,6 +34,7 @@ add_missing_subjects_row(e, fmt = NULL, sort_value = NULL)
 ## Examples
 
 ``` r
+
 tplyr_table(mtcars, gear) %>%
   add_layer(
     group_count(cyl) %>%

@@ -9,15 +9,15 @@ individual table, or even each individual layer.
 The following are the options available in **Tplyr** and their
 descriptions:
 
-|              Option               | Description                                                                                                                                                                                                                                                                                      |
-|:---------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| tplyr.count_layer_default_formats | The default format strings for a count layer. Defaults to an auto-calculated n width, and (xxx.x%) for distinct counts (if available - non-distinct counts are used otherwise). Risk difference formats default to dif (low CI, high CI), all with 2 integer spaces and 3 decimal places.        |
-| tplyr.shift_layer_default_formats | The default shift layer format. Defaults to an auto-calculated n width.                                                                                                                                                                                                                          |
-| tplyr.desc_layer_default_formats  | The default descriptive statistics layer format. Defaults to “n”, “Mean (SD)”, “Median”, “Q1, Q3”, “Min, Max”, and “Missing”. Everything except “n” and “Missing” use auto-precision. Mean, Q1, Q3, and median defaults to +1 decimal places and Standard Deviation defaults to +2.              |
-|        tplyr.precision_cap        | The default precision cap for auto-precision. Both integer and decimal places default to 99, essentially ensuring that precision is not capped by default.                                                                                                                                       |
-|      tplyr.custom_summaries       | Default custom summaries available to Tplyr. Defaults to NULL, as Tplyr’s defaults are seen as built-ins and not custom summaries.                                                                                                                                                               |
-|           tplyr.scipen            | The default ‘scipen’ setting used while Tplyr is executing. Defaults to 1000. See the R documentation on the ‘scipen’ option to understand more, but this allows you to control how small a number must be before scientific notation is used when a number is string formatted in presentation. |
-|        tplyr.quantile_type        | The default quantile algorithm used by Tpylr when using the built-in summaries for Q1, Q3, and IQR. Defaults to Type 7, which is the R default                                                                                                                                                   |
+| Option | Description |
+|:--:|:---|
+| tplyr.count_layer_default_formats | The default format strings for a count layer. Defaults to an auto-calculated n width, and (xxx.x%) for distinct counts (if available - non-distinct counts are used otherwise). Risk difference formats default to dif (low CI, high CI), all with 2 integer spaces and 3 decimal places. |
+| tplyr.shift_layer_default_formats | The default shift layer format. Defaults to an auto-calculated n width. |
+| tplyr.desc_layer_default_formats | The default descriptive statistics layer format. Defaults to “n”, “Mean (SD)”, “Median”, “Q1, Q3”, “Min, Max”, and “Missing”. Everything except “n” and “Missing” use auto-precision. Mean, Q1, Q3, and median defaults to +1 decimal places and Standard Deviation defaults to +2. |
+| tplyr.precision_cap | The default precision cap for auto-precision. Both integer and decimal places default to 99, essentially ensuring that precision is not capped by default. |
+| tplyr.custom_summaries | Default custom summaries available to Tplyr. Defaults to NULL, as Tplyr’s defaults are seen as built-ins and not custom summaries. |
+| tplyr.scipen | The default ‘scipen’ setting used while Tplyr is executing. Defaults to 1000. See the R documentation on the ‘scipen’ option to understand more, but this allows you to control how small a number must be before scientific notation is used when a number is string formatted in presentation. |
+| tplyr.quantile_type | The default quantile algorithm used by Tpylr when using the built-in summaries for Q1, Q3, and IQR. Defaults to Type 7, which is the R default |
 
 Each of these options allows you to set these settings in one place, and
 every **Tplyr** table you create will inherit your option settings as
@@ -40,6 +40,7 @@ only difference is that you need to enter the string formats as a named
 list instead of as separate parameters to a function call.
 
 ``` r
+
 options(
     # Count layer defaults
   tplyr.count_layer_default_formats =
@@ -67,6 +68,7 @@ anywhere - instead we let **Tplyr** pick up the default formats from the
 options.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
@@ -78,17 +80,17 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1             | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years)            | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years)            | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
-| Age (years)            | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
-| Age (years)            | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
-| Age (years)            | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
-| Age (years)            | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
-| Categorical Age Groups | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               2 |           1 |           1 |
-| Categorical Age Groups | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
-| Categorical Age Groups | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 2 |
+| Age (years) | Median | 76.0 | 76.0 | 77.5 | 1 | 1 | 3 |
+| Age (years) | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 1 | 1 | 4 |
+| Age (years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 1 | 1 | 5 |
+| Age (years) | Missing | 0 | 0 | 0 | 1 | 1 | 6 |
+| Categorical Age Groups | \<65 | 14 ( 16.3%) | 11 ( 13.1%) | 8 ( 9.5%) | 2 | 1 | 1 |
+| Categorical Age Groups | \>80 | 30 ( 34.9%) | 18 ( 21.4%) | 29 ( 34.5%) | 2 | 1 | 2 |
+| Categorical Age Groups | 65-80 | 42 ( 48.8%) | 55 ( 65.5%) | 47 ( 56.0%) | 2 | 1 | 3 |
 
 One important thing to understand about how these options work in
 particular is the scoping.
@@ -110,6 +112,7 @@ To demonstrate, consider the following. The **Tplyr** options remain set
 from the block above.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   set_count_layer_formats(n_counts = f_str("xx (xxx%)", n, pct)) %>% 
   set_desc_layer_formats("Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd)) %>% 
@@ -127,14 +130,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1             | row_label2             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------------------|:-----------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (Years)            | Mean (SD)              | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           1 |
-| Categorical Age Groups | \<65                   | 14 ( 16%)    | 11 ( 13%)                 | 8 ( 10%)                 |               2 |           1 |           1 |
-| Categorical Age Groups | \>80                   | 30 ( 35%)    | 18 ( 21%)                 | 29 ( 35%)                |               2 |           1 |           2 |
-| Categorical Age Groups | 65-80                  | 42 ( 49%)    | 55 ( 65%)                 | 47 ( 56%)                |               2 |           1 |           3 |
-| Ethnicity              | HISPANIC OR LATINO     | 3 ( 3.488%)  | 3 ( 3.571%)               | 6 ( 7.143%)              |               3 |           1 |           1 |
-| Ethnicity              | NOT HISPANIC OR LATINO | 83 (96.512%) | 81 (96.429%)              | 78 (92.857%)             |               3 |           1 |           2 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (Years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 1 |
+| Categorical Age Groups | \<65 | 14 ( 16%) | 11 ( 13%) | 8 ( 10%) | 2 | 1 | 1 |
+| Categorical Age Groups | \>80 | 30 ( 35%) | 18 ( 21%) | 29 ( 35%) | 2 | 1 | 2 |
+| Categorical Age Groups | 65-80 | 42 ( 49%) | 55 ( 65%) | 47 ( 56%) | 2 | 1 | 3 |
+| Ethnicity | HISPANIC OR LATINO | 3 ( 3.488%) | 3 ( 3.571%) | 6 ( 7.143%) | 3 | 1 | 1 |
+| Ethnicity | NOT HISPANIC OR LATINO | 83 (96.512%) | 81 (96.429%) | 78 (92.857%) | 3 | 1 | 2 |
 
 In the above output:
 
@@ -163,6 +166,7 @@ output. Here, we offer the `tplyr.precision_cap` option to set whatever
 cap you wish.
 
 ``` r
+
 options(tplyr.precision_cap = c('int'=2, 'dec'=2))
 ```
 
@@ -170,6 +174,7 @@ Similar to the layer defaults, setting a precision cap at the layer
 level will override the `tplyr.precision_cap` option.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(HEIGHTBL, by = "Height at Baseline") %>% 
@@ -188,10 +193,10 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1                   | row_label2 | var1_Placebo  | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------------------------|:-----------|:--------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Height at Baseline           | Mean (SD)  | 162.6 (11.52) | 165.8 (10.13)             | 163.4 (10.42)            |               1 |           1 |           1 |
-| Height at Baseline (Limited) | Mean (SD)  | 163 (11.5)    | 166 (10.1)                | 163 (10.4)               |               2 |           1 |           1 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Height at Baseline | Mean (SD) | 162.6 (11.52) | 165.8 (10.13) | 163.4 (10.42) | 1 | 1 | 1 |
+| Height at Baseline (Limited) | Mean (SD) | 163 (11.5) | 166 (10.1) | 163 (10.4) | 2 | 1 | 1 |
 
 Both layers in the above example are summarizing the same data. The top
 layer is using the `tplyr.precision_cap` option set above, which limits
@@ -218,6 +223,7 @@ summaries you wish to use in every table would prove quite tedious -
 therefore, the `tplyr.custom_summaries` option is a better choice.
 
 ``` r
+
 options(tplyr.custom_summaries = rlang::quos(
   geometric_mean = exp(sum(log(.var[.var > 0]),na.rm=TRUE) / length(.var))
 ))
@@ -240,6 +246,7 @@ it within your descriptive statistics layers, just like it was one of
 the built-in summaries.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE) %>% 
@@ -249,9 +256,9 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1     | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:---------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| Geometric Mean | 74.70        | 73.94                     | 75.18                    |               1 |           1 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| Geometric Mean | 74.70 | 73.94 | 75.18 | 1 | 1 |
 
 ## Scientific Notation
 
@@ -267,6 +274,7 @@ location for larger numbers.
 This is easier to understand with an example.
 
 ``` r
+
 options(scipen = 0) # This is the default
 .0001
 #> [1] 1e-04
@@ -292,6 +300,7 @@ scientific notation. We want this to be a conscious decision that you
 make in order to prevent any unexpected outputs.
 
 ``` r
+
 options(tplyr.scipen = -3)
 t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
@@ -304,14 +313,14 @@ suppressWarnings(build(t)) %>% # Chi-squared warnings occur with small samples
   kable()
 ```
 
-| row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | rdiff_Xanomeline Low Dose_Placebo | ord_layer_1 |
-|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|:----------------------------------|------------:|
-| ACTINIC KERATOSIS  | 0 ( 0.0%)    | 1 ( 0.9%)                 | 0 ( 0.0%)                |               1 | 0.000 ( 0.000, 0.000)             |           1 |
-| ALOPECIA           | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 | -2.1e-02 (-7.7e-02, 3.5e-02)      |           2 |
-| BLISTER            | 0 ( 0.0%)    | 2 ( 1.8%)                 | 8 ( 6.8%)                |               1 | 6.8e-02 ( 8e-03, 0.128)           |           3 |
-| COLD SWEAT         | 3 ( 6.4%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 | -6.4e-02 (-0.149, 2.1e-02)        |           4 |
-| DERMATITIS ATOPIC  | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 | -2.1e-02 (-7.7e-02, 3.5e-02)      |           5 |
-| DERMATITIS CONTACT | 0 ( 0.0%)    | 0 ( 0.0%)                 | 2 ( 1.7%)                |               1 | 1.7e-02 (-2.1e-02, 5.5e-02)       |           6 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | rdiff_Xanomeline Low Dose_Placebo | ord_layer_1 |
+|:---|:---|:---|:---|---:|:---|---:|
+| ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 0.9%) | 0 ( 0.0%) | 1 | 0.000 ( 0.000, 0.000) | 1 |
+| ALOPECIA | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | -2.1e-02 (-7.7e-02, 3.5e-02) | 2 |
+| BLISTER | 0 ( 0.0%) | 2 ( 1.8%) | 8 ( 6.8%) | 1 | 6.8e-02 ( 8e-03, 0.128) | 3 |
+| COLD SWEAT | 3 ( 6.4%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | -6.4e-02 (-0.149, 2.1e-02) | 4 |
+| DERMATITIS ATOPIC | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | -2.1e-02 (-7.7e-02, 3.5e-02) | 5 |
+| DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 2 ( 1.7%) | 1 | 1.7e-02 (-2.1e-02, 5.5e-02) | 6 |
 
 Note that the risk-difference variables above have mostly shifted to
 scientific notation. This is because the limit has been shifted to .1
@@ -331,10 +340,13 @@ do this with `tplyr.quantile_type`.
 
 The default we chose to use is the R default of Type 7:
 
-$$m = 1 - p.p\lbrack k\rbrack = (k - 1)/(n - 1).{\text{In this case,}\mspace{6mu}}p\lbrack k\rbrack = mode\left\lbrack F\left( x\lbrack k\rbrack \right) \right\rbrack.\text{This is used by S.}$$
+``` math
+m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
+```
 The example below demonstrates using the default quantile algorithm in R
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
@@ -345,15 +357,18 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
 ```
 
 | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| Q1, Q3     | 0, 0         | 2646, 13959               | 1984, 9801               |               1 |           1 |
+|:---|:---|:---|:---|---:|---:|
+| Q1, Q3 | 0, 0 | 2646, 13959 | 1984, 9801 | 1 | 1 |
 
 Within the clinical world, you may wish to match the way that SAS
 calculates quantiles. To match SAS’s definition, use Type 3:
 
-$$\text{Nearest even order statistic. γ = 0 if g = 0 and j is even, and 1 otherwise.}$$
+``` math
+\textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
+```
 
 ``` r
+
 options(tplyr.quantile_type = 3)
 
 tplyr_table(tplyr_adsl, TRT01P) %>% 
@@ -380,6 +395,7 @@ tables. Review var1_4 in the tables below.
 Using the default R behavior
 
 ``` r
+
 tplyr_table(mtcars, gear) %>%
   add_layer(
     group_desc(qsec) %>%
@@ -395,6 +411,7 @@ tplyr_table(mtcars, gear) %>%
 Using IBM rounding
 
 ``` r
+
 withr::with_options(
   list(tplyr.IBMRounding = TRUE),
   {

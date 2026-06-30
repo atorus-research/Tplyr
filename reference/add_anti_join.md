@@ -40,6 +40,7 @@ A tplyr_meta object
 ## Examples
 
 ``` r
+
 tm <- tplyr_meta(
   rlang::quos(TRT01A, SEX, ETHNIC, RACE),
   rlang::quos(TRT01A == "Placebo", TRT01A == "SEX", ETHNIC == "HISPANIC OR LATINO")

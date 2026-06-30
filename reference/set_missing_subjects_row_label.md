@@ -25,6 +25,7 @@ The modified `count_layer` object
 ## Examples
 
 ``` r
+
 t <- tplyr_table(mtcars, gear) %>%
   add_layer(
     group_count(cyl) %>%

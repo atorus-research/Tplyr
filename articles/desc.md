@@ -10,6 +10,7 @@ great deal of the control of the layer comes from
 where the actual summaries are declared.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
@@ -26,14 +27,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1  | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years) | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years) | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
-| Age (years) | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
-| Age (years) | Q1, Q3     | 69, 82       | 71, 80                    | 71, 82                   |               1 |           1 |           4 |
-| Age (years) | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
-| Age (years) | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 2 |
+| Age (years) | Median | 76.0 | 76.0 | 77.5 | 1 | 1 | 3 |
+| Age (years) | Q1, Q3 | 69, 82 | 71, 80 | 71, 82 | 1 | 1 | 4 |
+| Age (years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 1 | 1 | 5 |
+| Age (years) | Missing | 0 | 0 | 0 | 1 | 1 | 6 |
 
 Let’s walk through this call to `set_format_strings` to understand in
 detail what’s going on:
@@ -82,19 +83,19 @@ within an
 call to use them. In the third column, we have the syntax used to make
 the function call.
 
-|      Statistic      | Variable Names | Function Call                                                              |
-|:-------------------:|:--------------:|:---------------------------------------------------------------------------|
-|          N          |       n        | n()                                                                        |
-|        Mean         |      mean      | mean(.var, na.rm=TRUE)                                                     |
-| Standard Deviation  |       sd       | sd(.var, na.rm=TRUE)                                                       |
-|       Median        |     median     | median(.var, na.rm=TRUE)                                                   |
-|      Variance       |      var       | var(.var, na.rm=TRUE)                                                      |
-|       Minimum       |      min       | min(.var, na.rm=TRUE)                                                      |
-|       Maximum       |      max       | max(.var, na.rm=TRUE)                                                      |
-| Interquartile Range |      iqr       | IQR(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’)                |
-|         Q1          |       q1       | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[2\]\] |
-|         Q3          |       q3       | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[4\]\] |
-|       Missing       |    missing     | sum(is.na(.var))                                                           |
+| Statistic | Variable Names | Function Call |
+|:--:|:--:|:---|
+| N | n | n() |
+| Mean | mean | mean(.var, na.rm=TRUE) |
+| Standard Deviation | sd | sd(.var, na.rm=TRUE) |
+| Median | median | median(.var, na.rm=TRUE) |
+| Variance | var | var(.var, na.rm=TRUE) |
+| Minimum | min | min(.var, na.rm=TRUE) |
+| Maximum | max | max(.var, na.rm=TRUE) |
+| Interquartile Range | iqr | IQR(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’) |
+| Q1 | q1 | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[2\]\] |
+| Q3 | q3 | quantile(.var, na.rm=TRUE, type=getOption(‘tplyr.quantile_type’))\[\[4\]\] |
+| Missing | missing | sum(is.na(.var)) |
 
 ### Notes About Built-in’s
 
@@ -113,7 +114,9 @@ typically fine, but with IQR, Q1, and Q3 note that there are several
 different quantile algorithms available in R. The default we chose to
 use is the R default of Type 7:
 
-$$m = 1 - p.p\lbrack k\rbrack = (k - 1)/(n - 1).{\text{In this case,}\mspace{6mu}}p\lbrack k\rbrack = mode\left\lbrack F\left( x\lbrack k\rbrack \right) \right\rbrack.\text{This is used by S.}$$
+``` math
+m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
+```
 That said, we still want to offer some flexibility here, so you can
 change the quantile algorithm by switching the `tplyr.quantile_type`
 option. If you’re intending to match the SAS definition, you can use
@@ -125,6 +128,7 @@ The example below demonstrates using the default quantile algorithm in
 R.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(CUMDOSE) %>% 
@@ -142,9 +146,12 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
 This next example demonstrates using quantile algorithm Type 3, which
 matches the SAS definition of:
 
-$$\text{Nearest even order statistic. γ = 0 if g = 0 and j is even, and 1 otherwise.}$$
+``` math
+\textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
+```
 
 ``` r
+
 options(tplyr.quantile_type = 3)
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
@@ -190,6 +197,7 @@ take precedence over any other setting.
 Let’s look at an example.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>%
   add_layer(
     group_desc(vars(AGE, HEIGHTBL), by = "Sepal Length") %>%
@@ -205,9 +213,9 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1   | row_label2          | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo    | var2_Xanomeline High Dose | var2_Xanomeline Low Dose |
-|:-------------|:--------------------|:---------------|:--------------------------|:-------------------------|:----------------|:--------------------------|:-------------------------|
-| Sepal Length | Geometric Mean (SD) | 74.70 ( 8.590) | 73.94 ( 7.886)            | 75.18 ( 8.286)           | 162.17 (11.522) | 165.51 (10.131)           | 163.11 (10.419)          |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo | var2_Xanomeline High Dose | var2_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|:---|:---|:---|
+| Sepal Length | Geometric Mean (SD) | 74.70 ( 8.590) | 73.94 ( 7.886) | 75.18 ( 8.286) | 162.17 (11.522) | 165.51 (10.131) | 163.11 (10.419) |
 
 Here, a few important things are demonstrated:
 
@@ -238,6 +246,7 @@ would like to include.
 For example, here we use the **Tplyr** default mean.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE) %>% 
@@ -248,13 +257,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
 ```
 
 | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| Mean       | 75.21        | 74.38                     | 75.67                    |               1 |           1 |
+|:---|:---|:---|:---|---:|---:|
+| Mean | 75.21 | 74.38 | 75.67 | 1 | 1 |
 
 But now, let’s overwrite `mean` using a custom summary. Let’s use a
 trimmed mean instead, taking 20% of observations off of both ends.
 
 ``` r
+
 options(tplyr.custom_summaries = 
           rlang::quos(
             mean = mean(.var, na.rm=TRUE, trim=0.4)
@@ -271,8 +281,8 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
 ```
 
 | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| Mean       | 76.28        | 75.94                     | 77.44                    |               1 |           1 |
+|:---|:---|:---|:---|---:|---:|
+| Mean | 76.28 | 75.94 | 77.44 | 1 | 1 |
 
 Note that the table code used to produce the output is the same. Now
 **Tplyr** used the custom summary function for `mean` as specified in

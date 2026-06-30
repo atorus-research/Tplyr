@@ -42,6 +42,7 @@ and then further extended with additional layer-modifying functions.
 Consider the following example:
 
 ``` r
+
 new_layer_template(
   "example_template", 
   group_count(...) %>% 
@@ -64,6 +65,7 @@ The ellipsis is necessary because when the template is used, we are able
 to pass arguments directly into the layer constructor. For example:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template("example_template", RACE, by=ETHNIC)
@@ -72,14 +74,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1             | row_label2                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------------------|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| HISPANIC OR LATINO     | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%)      | 0 ( 0%)                   | 0 ( 0%)                  |               1 |           1 |           1 |
-| HISPANIC OR LATINO     | BLACK OR AFRICAN AMERICAN        | 0 ( 0%)      | 0 ( 0%)                   | 0 ( 0%)                  |               1 |           1 |           2 |
-| HISPANIC OR LATINO     | WHITE                            | 3 ( 3%)      | 3 ( 4%)                   | 6 ( 7%)                  |               1 |           1 |           3 |
-| NOT HISPANIC OR LATINO | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%)      | 1 ( 1%)                   | 0 ( 0%)                  |               1 |           2 |           1 |
-| NOT HISPANIC OR LATINO | BLACK OR AFRICAN AMERICAN        | 8 ( 9%)      | 9 (11%)                   | 6 ( 7%)                  |               1 |           2 |           2 |
-| NOT HISPANIC OR LATINO | WHITE                            | 75 (87%)     | 71 (85%)                  | 72 (86%)                 |               1 |           2 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| HISPANIC OR LATINO | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 1 | 1 | 1 |
+| HISPANIC OR LATINO | BLACK OR AFRICAN AMERICAN | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 1 | 1 | 2 |
+| HISPANIC OR LATINO | WHITE | 3 ( 3%) | 3 ( 4%) | 6 ( 7%) | 1 | 1 | 3 |
+| NOT HISPANIC OR LATINO | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%) | 1 ( 1%) | 0 ( 0%) | 1 | 2 | 1 |
+| NOT HISPANIC OR LATINO | BLACK OR AFRICAN AMERICAN | 8 ( 9%) | 9 (11%) | 6 ( 7%) | 1 | 2 | 2 |
+| NOT HISPANIC OR LATINO | WHITE | 75 (87%) | 71 (85%) | 72 (86%) | 1 | 2 | 3 |
 
 Within
 [`use_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md),
@@ -101,6 +103,7 @@ extensible and can be expanded on directly within a **Tplyr** table. For
 example:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template("example_template", RACE) %>% 
@@ -110,12 +113,12 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%)      | 1 ( 1%)                   | 0 ( 0%)                  |               1 |           1 |
-| BLACK OR AFRICAN AMERICAN        | 8 ( 9%)      | 9 (11%)                   | 6 ( 7%)                  |               1 |           2 |
-| WHITE                            | 78 (91%)     | 74 (88%)                  | 78 (93%)                 |               1 |           3 |
-| Total                            | 86 (100%)    | 84 (100%)                 | 84 (100%)                |               1 |           4 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0%) | 1 ( 1%) | 0 ( 0%) | 1 | 1 |
+| BLACK OR AFRICAN AMERICAN | 8 ( 9%) | 9 (11%) | 6 ( 7%) | 1 | 2 |
+| WHITE | 78 (91%) | 74 (88%) | 78 (93%) | 1 | 3 |
+| Total | 86 (100%) | 84 (100%) | 84 (100%) | 1 | 4 |
 
 Here we show two things - first, that we called the template without the
 *by* variable argument from the previous example. This allows a template
@@ -134,6 +137,7 @@ template beyond the group constructor arguments. But this requires some
 special syntax. Consider the following template:
 
 ``` r
+
 new_layer_template("example_params",
   group_count(...) %>% 
     set_format_strings(f_str("xx (xx.x%)", n, pct)) %>% 
@@ -157,6 +161,7 @@ To specify these arguments when using the templater, we use the
 argument `add_params`. For example:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     use_template('example_params', RACE, add_params = 
@@ -169,11 +174,11 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           0 |
-| BLACK OR AFRICAN AMERICAN        | 8 ( 9.3%)    | 9 (10.7%)                 | 6 ( 7.1%)                |               1 |           8 |
-| WHITE                            | 78 (90.7%)   | 74 (88.1%)                | 78 (92.9%)               |               1 |          78 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 0 |
+| BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 9 (10.7%) | 6 ( 7.1%) | 1 | 8 |
+| WHITE | 78 (90.7%) | 74 (88.1%) | 78 (92.9%) | 1 | 78 |
 
 In the `add_params` parameter, you must supply a list. That list must
 also be named, where the element names (in this example, `sort_meth` and
@@ -192,6 +197,7 @@ function
 [`get_layer_templates()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md).
 
 ``` r
+
 get_layer_templates()
 #> $example_template
 #> Template name: example_template
@@ -218,6 +224,7 @@ You can view a specific template using
 [`get_layer_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md).
 
 ``` r
+
 get_layer_template("example_params")
 #> Template name: example_params
 #> Template parameters: sort_meth, sort_col
@@ -241,6 +248,7 @@ function
 [`remove_layer_template()`](https://atorus-research.github.io/Tplyr/reference/layer_templates.md)
 
 ``` r
+
 remove_layer_template("example_params")
 get_layer_templates()
 #> $example_template

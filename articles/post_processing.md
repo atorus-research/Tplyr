@@ -35,6 +35,7 @@ As a post-processing function, note that this function works on a
 Let’s look at an example.
 
 ``` r
+
 dat <- tibble(
   row_label1 = c("RENAL AND URINARY DISORDERS", "   NEPHROLITHIASIS"),
   var1_Placebo = c(" 5 (50.0%)", " 3 (30.0%)")
@@ -67,6 +68,7 @@ Furthermore, this is a common approach in clinical tables when data
 validation is done on an output dataframe.
 
 ``` r
+
 dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
@@ -87,6 +89,7 @@ In this example, note that “Race n (%)” is duplicated for each row. We
 can blank this out using \`apply_row_masks()
 
 ``` r
+
 dat %>% 
   apply_row_masks() %>% 
   kable()
@@ -104,6 +107,7 @@ is the ability to apply row breaks between different groups of data, for
 example, different layers of a table.
 
 ``` r
+
 dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = "Race n (%)")
@@ -118,19 +122,19 @@ dat %>%
   kable()
 ```
 
-| row_label1  | row_label2                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_break |
-|:------------|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|----------:|
-| Race n (%)  | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |         1 |
-|             | BLACK OR AFRICAN AMERICAN        | 8 ( 9.3%)    | 9 ( 10.7%)                | 6 ( 7.1%)                |               1 |           1 |           2 |         1 |
-|             | WHITE                            | 78 ( 90.7%)  | 74 ( 88.1%)               | 78 ( 92.9%)              |               1 |           1 |           3 |         1 |
-|             |                                  |              |                           |                          |               1 |          NA |          NA |         2 |
-| Age (years) | n                                | 86           | 84                        | 84                       |               2 |           1 |           1 |         1 |
-|             | Mean (SD)                        | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               2 |           1 |           2 |         1 |
-|             | Median                           | 76.0         | 76.0                      | 77.5                     |               2 |           1 |           3 |         1 |
-|             | Q1, Q3                           | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               2 |           1 |           4 |         1 |
-|             | Min, Max                         | 52, 89       | 56, 88                    | 51, 88                   |               2 |           1 |           5 |         1 |
-|             | Missing                          | 0            | 0                         | 0                        |               2 |           1 |           6 |         1 |
-|             |                                  |              |                           |                          |               2 |          NA |          NA |         2 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_break |
+|:---|:---|:---|:---|:---|---:|---:|---:|---:|
+| Race n (%) | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 | 1 | 1 |
+|  | BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 9 ( 10.7%) | 6 ( 7.1%) | 1 | 1 | 2 | 1 |
+|  | WHITE | 78 ( 90.7%) | 74 ( 88.1%) | 78 ( 92.9%) | 1 | 1 | 3 | 1 |
+|  |  |  |  |  | 1 | NA | NA | 2 |
+| Age (years) | n | 86 | 84 | 84 | 2 | 1 | 1 | 1 |
+|  | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 2 | 1 | 2 | 1 |
+|  | Median | 76.0 | 76.0 | 77.5 | 2 | 1 | 3 | 1 |
+|  | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 2 | 1 | 4 | 1 |
+|  | Min, Max | 52, 89 | 56, 88 | 51, 88 | 2 | 1 | 5 | 1 |
+|  | Missing | 0 | 0 | 0 | 2 | 1 | 6 | 1 |
+|  |  |  |  |  | 2 | NA | NA | 2 |
 
 The row breaks are inserted as blank rows. Additionally, when row breaks
 are inserted you’ll have the additional variable `ord_break` added to
@@ -160,6 +164,7 @@ inner and the outer layer, we also offer the
 function to pull multiple row labels into a single column.
 
 ``` r
+
 dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE, by = vars("Race n (%)", SEX))
@@ -191,6 +196,7 @@ By default, indentation is set to 2 spaces, but by using the `indent`
 parameter you can change this to any string you desire.
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2, row_label3, indent = "&nbsp;&nbsp;") %>% 
   select(row_label, var1_Placebo) %>% 
   kable(escape=FALSE)
@@ -229,6 +235,7 @@ You also have control over which columns you collapse, allowing you to
 keep separate row labels if you don’t want all collapsed together
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2, indent = "&nbsp;&nbsp;") %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
   head() %>% 
@@ -258,6 +265,7 @@ spaces? Yeah - that’s why!
 Let’s take the example from above and not change the `indent` parameter.
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2) %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
   kable()
@@ -290,6 +298,7 @@ In indented rows, the spaces still exist, and we can see that in the
 dataframe output itself.
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2) %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
   head()
@@ -311,6 +320,7 @@ will take care of this for us by converting the spaces. Note that you’ll
 see the `&nbsp;` in the raw data itself.
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2) %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
   mutate(
@@ -334,6 +344,7 @@ need to prevent escaping special characters for this to work, or the raw
 text will display. In `kable()` you can use `escape=FALSE` do this.
 
 ``` r
+
 collapse_row_labels(dat, row_label1, row_label2) %>% 
   select(row_label, row_label3, var1_Placebo) %>% 
   mutate(
@@ -373,6 +384,7 @@ replacement of values, so it will return a character vector of equal
 length. Let’s look at two examples.
 
 ``` r
+
 string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)")
 
 apply_conditional_format(string, 2, x == 0, " 0        ", full_string=TRUE)
@@ -408,6 +420,7 @@ to false, the **only the format group specified is replaced**. For more
 context, let’s look at a third example.
 
 ``` r
+
 apply_conditional_format(string, 2, x < 1, "(<1%)")
 #> [1] " 0   (<1%)" " 8  (9.3%)" "78 (90.7%)"
 ```
@@ -428,6 +441,7 @@ within the first count layer to conditional format. Using some fancy
 we can make it happen.
 
 ``` r
+
 dat_new <- dat %>% 
   mutate(
     across(starts_with('var'),  # Apply to variables that start with `var`
@@ -447,26 +461,26 @@ dat_new <- dat %>%
 kable(dat_new)
 ```
 
-| row_label1  | row_label2 | row_label3                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:------------|:-----------|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|------------:|
-| Race n (%)  | F          | AMERICAN INDIAN OR ALASKA NATIVE | 0            | 0                         | 0                        |               1 |           1 |           1 |           1 |
-| Race n (%)  | F          | BLACK OR AFRICAN AMERICAN        | 5 ( 5.8%)    | 6 ( 7.1%)                 | 6 ( 7.1%)                |               1 |           1 |           1 |           2 |
-| Race n (%)  | F          | WHITE                            | 48 ( 55.8%)  | 34 ( 40.5%)               | 44 ( 52.4%)              |               1 |           1 |           1 |           3 |
-| Race n (%)  | M          | AMERICAN INDIAN OR ALASKA NATIVE | 0            | 1 ( 1.2%)                 | 0                        |               1 |           1 |           2 |           1 |
-| Race n (%)  | M          | BLACK OR AFRICAN AMERICAN        | 3 ( 3.5%)    | 3 ( 3.6%)                 | 0                        |               1 |           1 |           2 |           2 |
-| Race n (%)  | M          | WHITE                            | 30 ( 34.9%)  | 40 ( 47.6%)               | 34 ( 40.5%)              |               1 |           1 |           2 |           3 |
-| Age (years) | F          | n                                | 53           | 40                        | 50                       |               2 |           1 |           1 |           1 |
-| Age (years) | F          | Mean (SD)                        | 76.4 ( 8.73) | 74.7 ( 7.67)              | 75.7 ( 8.09)             |               2 |           1 |           1 |           2 |
-| Age (years) | F          | Median                           | 78.0         | 76.0                      | 77.5                     |               2 |           1 |           1 |           3 |
-| Age (years) | F          | Q1, Q3                           | 70.0, 84.0   | 72.0, 79.0                | 72.0, 81.0               |               2 |           1 |           1 |           4 |
-| Age (years) | F          | Min, Max                         | 59, 89       | 56, 88                    | 54, 87                   |               2 |           1 |           1 |           5 |
-| Age (years) | F          | Missing                          | 0            | 0                         | 0                        |               2 |           1 |           1 |           6 |
-| Age (years) | M          | n                                | 33           | 44                        | 34                       |               2 |           1 |           2 |           1 |
-| Age (years) | M          | Mean (SD)                        | 73.4 ( 8.15) | 74.1 ( 8.16)              | 75.6 ( 8.69)             |               2 |           1 |           2 |           2 |
-| Age (years) | M          | Median                           | 74.0         | 77.0                      | 77.5                     |               2 |           1 |           2 |           3 |
-| Age (years) | M          | Q1, Q3                           | 69.0, 80.0   | 69.0, 80.2                | 68.2, 82.0               |               2 |           1 |           2 |           4 |
-| Age (years) | M          | Min, Max                         | 52, 85       | 56, 86                    | 51, 88                   |               2 |           1 |           2 |           5 |
-| Age (years) | M          | Missing                          | 0            | 0                         | 0                        |               2 |           1 |           2 |           6 |
+| row_label1 | row_label2 | row_label3 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|
+| Race n (%) | F | AMERICAN INDIAN OR ALASKA NATIVE | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
+| Race n (%) | F | BLACK OR AFRICAN AMERICAN | 5 ( 5.8%) | 6 ( 7.1%) | 6 ( 7.1%) | 1 | 1 | 1 | 2 |
+| Race n (%) | F | WHITE | 48 ( 55.8%) | 34 ( 40.5%) | 44 ( 52.4%) | 1 | 1 | 1 | 3 |
+| Race n (%) | M | AMERICAN INDIAN OR ALASKA NATIVE | 0 | 1 ( 1.2%) | 0 | 1 | 1 | 2 | 1 |
+| Race n (%) | M | BLACK OR AFRICAN AMERICAN | 3 ( 3.5%) | 3 ( 3.6%) | 0 | 1 | 1 | 2 | 2 |
+| Race n (%) | M | WHITE | 30 ( 34.9%) | 40 ( 47.6%) | 34 ( 40.5%) | 1 | 1 | 2 | 3 |
+| Age (years) | F | n | 53 | 40 | 50 | 2 | 1 | 1 | 1 |
+| Age (years) | F | Mean (SD) | 76.4 ( 8.73) | 74.7 ( 7.67) | 75.7 ( 8.09) | 2 | 1 | 1 | 2 |
+| Age (years) | F | Median | 78.0 | 76.0 | 77.5 | 2 | 1 | 1 | 3 |
+| Age (years) | F | Q1, Q3 | 70.0, 84.0 | 72.0, 79.0 | 72.0, 81.0 | 2 | 1 | 1 | 4 |
+| Age (years) | F | Min, Max | 59, 89 | 56, 88 | 54, 87 | 2 | 1 | 1 | 5 |
+| Age (years) | F | Missing | 0 | 0 | 0 | 2 | 1 | 1 | 6 |
+| Age (years) | M | n | 33 | 44 | 34 | 2 | 1 | 2 | 1 |
+| Age (years) | M | Mean (SD) | 73.4 ( 8.15) | 74.1 ( 8.16) | 75.6 ( 8.69) | 2 | 1 | 2 | 2 |
+| Age (years) | M | Median | 74.0 | 77.0 | 77.5 | 2 | 1 | 2 | 3 |
+| Age (years) | M | Q1, Q3 | 69.0, 80.0 | 69.0, 80.2 | 68.2, 82.0 | 2 | 1 | 2 | 4 |
+| Age (years) | M | Min, Max | 52, 85 | 56, 86 | 51, 88 | 2 | 1 | 2 | 5 |
+| Age (years) | M | Missing | 0 | 0 | 0 | 2 | 1 | 2 | 6 |
 
 The syntax here gets a bit complicated, by using
 [`dplyr::across()`](https://dplyr.tidyverse.org/reference/across.html)
@@ -507,6 +521,7 @@ allows you to reach within a result string and extract an individual
 format group. Consider this example:
 
 ``` r
+
 string <- c(" 5  (5.8%)", " 8  (9.3%)", "78 (90.7%)")
 
 # Get the n counts
@@ -530,6 +545,7 @@ In practice,
 can then be used to separate format groups into their own columns.
 
 ``` r
+
 dat <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE)
@@ -589,6 +605,7 @@ getting these numbers is quite simple with
 Let’s consider a simplified scenario
 
 ``` r
+
 dat <- tplyr_table(tplyr_adae, TRTA) %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
@@ -604,14 +621,14 @@ dat %>%
   kable()
 ```
 
-| row_label1         | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|
-| ACTINIC KERATOSIS  | 0 (0.0%) \[0\] | 1 (1.2%) \[1\]            | 0 (0.0%) \[0\]           |               1 |           1 |
-| ALOPECIA           | 1 (1.2%) \[1\] | 0 (0.0%) \[0\]            | 0 (0.0%) \[0\]           |               1 |           2 |
-| BLISTER            | 0 (0.0%) \[0\] | 1 (1.2%) \[2\]            | 5 (6.0%) \[8\]           |               1 |           3 |
-| COLD SWEAT         | 1 (1.2%) \[3\] | 0 (0.0%) \[0\]            | 0 (0.0%) \[0\]           |               1 |           4 |
-| DERMATITIS ATOPIC  | 1 (1.2%) \[1\] | 0 (0.0%) \[0\]            | 0 (0.0%) \[0\]           |               1 |           5 |
-| DERMATITIS CONTACT | 0 (0.0%) \[0\] | 0 (0.0%) \[0\]            | 1 (1.2%) \[2\]           |               1 |           6 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| ACTINIC KERATOSIS | 0 (0.0%) \[0\] | 1 (1.2%) \[1\] | 0 (0.0%) \[0\] | 1 | 1 |
+| ALOPECIA | 1 (1.2%) \[1\] | 0 (0.0%) \[0\] | 0 (0.0%) \[0\] | 1 | 2 |
+| BLISTER | 0 (0.0%) \[0\] | 1 (1.2%) \[2\] | 5 (6.0%) \[8\] | 1 | 3 |
+| COLD SWEAT | 1 (1.2%) \[3\] | 0 (0.0%) \[0\] | 0 (0.0%) \[0\] | 1 | 4 |
+| DERMATITIS ATOPIC | 1 (1.2%) \[1\] | 0 (0.0%) \[0\] | 0 (0.0%) \[0\] | 1 | 5 |
+| DERMATITIS CONTACT | 0 (0.0%) \[0\] | 0 (0.0%) \[0\] | 1 (1.2%) \[2\] | 1 | 6 |
 
 Given this data, let’s say we want to sort by descending occurrence of
 the event, using the number of subjects. That would be the first format
@@ -619,6 +636,7 @@ group. And then we want to sort using high dose, then low dose, then
 placebo. Let’s create the order variables.
 
 ``` r
+
 dat_ord <- dat  %>% 
   mutate(
     across(starts_with('var1'),
@@ -659,6 +677,7 @@ externalized this capability using the function
 As a basic example, let’s look at the `mtcars` data.
 
 ``` r
+
 mtcars %>% 
   mutate(
     new_column = apply_formats("xx (xx.x)", gear, mpg)

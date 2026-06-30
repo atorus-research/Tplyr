@@ -2,9 +2,9 @@
 
 Counting is pretty easy, right? There’s not all that much to it. With a
 few considerations we can cover most of the scenarios that users will
-encounter while using Tplyr. Denominators, on the other hand, get **a
-lot** more complicated. Why? Because there are a lot of ways to do it.
-What values do we exclude from the denominator? What variables establish
+encounter while using Tplyr. Denominators, on the other hand, get a lot
+more complicated. Why? Because there are a lot of ways to do it. What
+values do we exclude from the denominator? What variables establish
 denominator grouping? Does the denominator use a different filter than
 the values being counted? If you’ve programmed enough of these tables,
 you know that it’s all very situational.
@@ -34,6 +34,7 @@ dataset - but there are a couple things you need to do to trigger
 Consider these two examples.
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -45,16 +46,17 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| ACTINIC KERATOSIS  | 0 ( 0.0%)    | 1 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           1 |
-| ALOPECIA           | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |
-| BLISTER            | 0 ( 0.0%)    | 1 ( 2.4%)                 | 5 (11.9%)                |               1 |           3 |
-| COLD SWEAT         | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           4 |
-| DERMATITIS ATOPIC  | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           5 |
-| DERMATITIS CONTACT | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 2.4%)                |               1 |           6 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 2.4%) | 0 ( 0.0%) | 1 | 1 |
+| ALOPECIA | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 |
+| BLISTER | 0 ( 0.0%) | 1 ( 2.4%) | 5 (11.9%) | 1 | 3 |
+| COLD SWEAT | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 4 |
+| DERMATITIS ATOPIC | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 5 |
+| DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 2.4%) | 1 | 6 |
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   set_pop_data(tplyr_adsl) %>%
   set_pop_treat_var(TRT01A) %>%
@@ -68,14 +70,14 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| ACTINIC KERATOSIS  | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |
-| ALOPECIA           | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |
-| BLISTER            | 0 ( 0.0%)    | 1 ( 1.2%)                 | 5 ( 6.0%)                |               1 |           3 |
-| COLD SWEAT         | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           4 |
-| DERMATITIS ATOPIC  | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           5 |
-| DERMATITIS CONTACT | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           6 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 |
+| ALOPECIA | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 |
+| BLISTER | 0 ( 0.0%) | 1 ( 1.2%) | 5 ( 6.0%) | 1 | 3 |
+| COLD SWEAT | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 4 |
+| DERMATITIS ATOPIC | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 5 |
+| DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 6 |
 
 There are three things done above that use the population data:
 
@@ -118,6 +120,7 @@ summaries. For example, in a frequency table, you will typically want
 data within a column to sum to 100%, like so:
 
 ``` r
+
 tplyr_adsl <- tplyr_adsl %>% 
   mutate(DCSREAS = ifelse(DCSREAS == '', 'Completed', DCSREAS))
          
@@ -129,18 +132,18 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| Adverse Event      | 8 ( 9.3%)    | 40 ( 47.6%)               | 44 ( 52.4%)              |               1 |           1 |
-| Completed          | 58 ( 67.4%)  | 27 ( 32.1%)               | 25 ( 29.8%)              |               1 |           2 |
-| Death              | 2 ( 2.3%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           3 |
-| I/E Not Met        | 1 ( 1.2%)    | 2 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           4 |
-| Lack of Efficacy   | 3 ( 3.5%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           5 |
-| Lost to Follow-up  | 1 ( 1.2%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           6 |
-| Physician Decision | 1 ( 1.2%)    | 2 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           7 |
-| Protocol Violation | 1 ( 1.2%)    | 1 ( 1.2%)                 | 1 ( 1.2%)                |               1 |           8 |
-| Sponsor Decision   | 2 ( 2.3%)    | 3 ( 3.6%)                 | 2 ( 2.4%)                |               1 |           9 |
-| Withdrew Consent   | 9 ( 10.5%)   | 8 ( 9.5%)                 | 10 ( 11.9%)              |               1 |          10 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| Adverse Event | 8 ( 9.3%) | 40 ( 47.6%) | 44 ( 52.4%) | 1 | 1 |
+| Completed | 58 ( 67.4%) | 27 ( 32.1%) | 25 ( 29.8%) | 1 | 2 |
+| Death | 2 ( 2.3%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 3 |
+| I/E Not Met | 1 ( 1.2%) | 2 ( 2.4%) | 0 ( 0.0%) | 1 | 4 |
+| Lack of Efficacy | 3 ( 3.5%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 5 |
+| Lost to Follow-up | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 6 |
+| Physician Decision | 1 ( 1.2%) | 2 ( 2.4%) | 0 ( 0.0%) | 1 | 7 |
+| Protocol Violation | 1 ( 1.2%) | 1 ( 1.2%) | 1 ( 1.2%) | 1 | 8 |
+| Sponsor Decision | 2 ( 2.3%) | 3 ( 3.6%) | 2 ( 2.4%) | 1 | 9 |
+| Withdrew Consent | 9 ( 10.5%) | 8 ( 9.5%) | 10 ( 11.9%) | 1 | 10 |
 
 By default, when not using the population data strategy shown above, a
 count layer assumes that you want columns to sum to 100%. But that’s not
@@ -148,6 +151,7 @@ always the case. Perhaps you’d like to break this summary down by sex
 presented row-wise.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(DCSREAS, by=SEX)
@@ -156,28 +160,28 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1 | row_label2         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| F          | Adverse Event      | 6 ( 7.0%)    | 20 ( 23.8%)               | 26 ( 31.0%)              |               1 |           1 |           1 |
-| F          | Completed          | 34 ( 39.5%)  | 13 ( 15.5%)               | 17 ( 20.2%)              |               1 |           1 |           2 |
-| F          | Death              | 1 ( 1.2%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           1 |           3 |
-| F          | I/E Not Met        | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| F          | Lack of Efficacy   | 2 ( 2.3%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
-| F          | Lost to Follow-up  | 1 ( 1.2%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           1 |           6 |
-| F          | Physician Decision | 1 ( 1.2%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |           7 |
-| F          | Protocol Violation | 1 ( 1.2%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |           8 |
-| F          | Sponsor Decision   | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           9 |
-| F          | Withdrew Consent   | 6 ( 7.0%)    | 4 ( 4.8%)                 | 5 ( 6.0%)                |               1 |           1 |          10 |
-| M          | Adverse Event      | 2 ( 2.3%)    | 20 ( 23.8%)               | 18 ( 21.4%)              |               1 |           2 |           1 |
-| M          | Completed          | 24 ( 27.9%)  | 14 ( 16.7%)               | 8 ( 9.5%)                |               1 |           2 |           2 |
-| M          | Death              | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           3 |
-| M          | I/E Not Met        | 1 ( 1.2%)    | 2 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           2 |           4 |
-| M          | Lack of Efficacy   | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           5 |
-| M          | Lost to Follow-up  | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           6 |
-| M          | Physician Decision | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           2 |           7 |
-| M          | Protocol Violation | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           2 |           8 |
-| M          | Sponsor Decision   | 1 ( 1.2%)    | 3 ( 3.6%)                 | 2 ( 2.4%)                |               1 |           2 |           9 |
-| M          | Withdrew Consent   | 3 ( 3.5%)    | 4 ( 4.8%)                 | 5 ( 6.0%)                |               1 |           2 |          10 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| F | Adverse Event | 6 ( 7.0%) | 20 ( 23.8%) | 26 ( 31.0%) | 1 | 1 | 1 |
+| F | Completed | 34 ( 39.5%) | 13 ( 15.5%) | 17 ( 20.2%) | 1 | 1 | 2 |
+| F | Death | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 1 | 3 |
+| F | I/E Not Met | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| F | Lack of Efficacy | 2 ( 2.3%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 | 5 |
+| F | Lost to Follow-up | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 1 | 6 |
+| F | Physician Decision | 1 ( 1.2%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 | 7 |
+| F | Protocol Violation | 1 ( 1.2%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 | 8 |
+| F | Sponsor Decision | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 9 |
+| F | Withdrew Consent | 6 ( 7.0%) | 4 ( 4.8%) | 5 ( 6.0%) | 1 | 1 | 10 |
+| M | Adverse Event | 2 ( 2.3%) | 20 ( 23.8%) | 18 ( 21.4%) | 1 | 2 | 1 |
+| M | Completed | 24 ( 27.9%) | 14 ( 16.7%) | 8 ( 9.5%) | 1 | 2 | 2 |
+| M | Death | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 3 |
+| M | I/E Not Met | 1 ( 1.2%) | 2 ( 2.4%) | 0 ( 0.0%) | 1 | 2 | 4 |
+| M | Lack of Efficacy | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 5 |
+| M | Lost to Follow-up | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 6 |
+| M | Physician Decision | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 2 | 7 |
+| M | Protocol Violation | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 2 | 8 |
+| M | Sponsor Decision | 1 ( 1.2%) | 3 ( 3.6%) | 2 ( 2.4%) | 1 | 2 | 9 |
+| M | Withdrew Consent | 3 ( 3.5%) | 4 ( 4.8%) | 5 ( 6.0%) | 1 | 2 | 10 |
 
 Ok - so, now this is a little bit off. By breaking sex down as a row
 group, the denominators are still the total treatment group. Does that
@@ -187,6 +191,7 @@ fix this using
 [`set_denoms_by()`](https://atorus-research.github.io/Tplyr/reference/set_denoms_by.md).
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(DCSREAS, by=SEX) %>% 
@@ -196,28 +201,28 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1 | row_label2         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| F          | Adverse Event      | 6 ( 11.3%)   | 20 ( 50.0%)               | 26 ( 52.0%)              |               1 |           1 |           1 |
-| F          | Completed          | 34 ( 64.2%)  | 13 ( 32.5%)               | 17 ( 34.0%)              |               1 |           1 |           2 |
-| F          | Death              | 1 ( 1.9%)    | 0 ( 0.0%)                 | 1 ( 2.0%)                |               1 |           1 |           3 |
-| F          | I/E Not Met        | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| F          | Lack of Efficacy   | 2 ( 3.8%)    | 1 ( 2.5%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
-| F          | Lost to Follow-up  | 1 ( 1.9%)    | 0 ( 0.0%)                 | 1 ( 2.0%)                |               1 |           1 |           6 |
-| F          | Physician Decision | 1 ( 1.9%)    | 1 ( 2.5%)                 | 0 ( 0.0%)                |               1 |           1 |           7 |
-| F          | Protocol Violation | 1 ( 1.9%)    | 1 ( 2.5%)                 | 0 ( 0.0%)                |               1 |           1 |           8 |
-| F          | Sponsor Decision   | 1 ( 1.9%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           9 |
-| F          | Withdrew Consent   | 6 ( 11.3%)   | 4 ( 10.0%)                | 5 ( 10.0%)               |               1 |           1 |          10 |
-| M          | Adverse Event      | 2 ( 6.1%)    | 20 ( 45.5%)               | 18 ( 52.9%)              |               1 |           2 |           1 |
-| M          | Completed          | 24 ( 72.7%)  | 14 ( 31.8%)               | 8 ( 23.5%)               |               1 |           2 |           2 |
-| M          | Death              | 1 ( 3.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           3 |
-| M          | I/E Not Met        | 1 ( 3.0%)    | 2 ( 4.5%)                 | 0 ( 0.0%)                |               1 |           2 |           4 |
-| M          | Lack of Efficacy   | 1 ( 3.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           5 |
-| M          | Lost to Follow-up  | 0 ( 0.0%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |           6 |
-| M          | Physician Decision | 0 ( 0.0%)    | 1 ( 2.3%)                 | 0 ( 0.0%)                |               1 |           2 |           7 |
-| M          | Protocol Violation | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 2.9%)                |               1 |           2 |           8 |
-| M          | Sponsor Decision   | 1 ( 3.0%)    | 3 ( 6.8%)                 | 2 ( 5.9%)                |               1 |           2 |           9 |
-| M          | Withdrew Consent   | 3 ( 9.1%)    | 4 ( 9.1%)                 | 5 ( 14.7%)               |               1 |           2 |          10 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| F | Adverse Event | 6 ( 11.3%) | 20 ( 50.0%) | 26 ( 52.0%) | 1 | 1 | 1 |
+| F | Completed | 34 ( 64.2%) | 13 ( 32.5%) | 17 ( 34.0%) | 1 | 1 | 2 |
+| F | Death | 1 ( 1.9%) | 0 ( 0.0%) | 1 ( 2.0%) | 1 | 1 | 3 |
+| F | I/E Not Met | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| F | Lack of Efficacy | 2 ( 3.8%) | 1 ( 2.5%) | 0 ( 0.0%) | 1 | 1 | 5 |
+| F | Lost to Follow-up | 1 ( 1.9%) | 0 ( 0.0%) | 1 ( 2.0%) | 1 | 1 | 6 |
+| F | Physician Decision | 1 ( 1.9%) | 1 ( 2.5%) | 0 ( 0.0%) | 1 | 1 | 7 |
+| F | Protocol Violation | 1 ( 1.9%) | 1 ( 2.5%) | 0 ( 0.0%) | 1 | 1 | 8 |
+| F | Sponsor Decision | 1 ( 1.9%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 9 |
+| F | Withdrew Consent | 6 ( 11.3%) | 4 ( 10.0%) | 5 ( 10.0%) | 1 | 1 | 10 |
+| M | Adverse Event | 2 ( 6.1%) | 20 ( 45.5%) | 18 ( 52.9%) | 1 | 2 | 1 |
+| M | Completed | 24 ( 72.7%) | 14 ( 31.8%) | 8 ( 23.5%) | 1 | 2 | 2 |
+| M | Death | 1 ( 3.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 3 |
+| M | I/E Not Met | 1 ( 3.0%) | 2 ( 4.5%) | 0 ( 0.0%) | 1 | 2 | 4 |
+| M | Lack of Efficacy | 1 ( 3.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 5 |
+| M | Lost to Follow-up | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 | 6 |
+| M | Physician Decision | 0 ( 0.0%) | 1 ( 2.3%) | 0 ( 0.0%) | 1 | 2 | 7 |
+| M | Protocol Violation | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 2.9%) | 1 | 2 | 8 |
+| M | Sponsor Decision | 1 ( 3.0%) | 3 ( 6.8%) | 2 ( 5.9%) | 1 | 2 | 9 |
+| M | Withdrew Consent | 3 ( 9.1%) | 4 ( 9.1%) | 5 ( 14.7%) | 1 | 2 | 10 |
 
 Ok - much better.
 [`set_denoms_by()`](https://atorus-research.github.io/Tplyr/reference/set_denoms_by.md)
@@ -246,6 +251,7 @@ argument, `by` variables. The difference with shift layers is that now
 you can also include your target variables used for the row or column.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
@@ -257,14 +263,14 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:----------------------|:-----------|:-----------|:---------------|:---------------|:----------------------------|:----------------------------|:---------------------------|:---------------------------|----------------:|------------:|------------:|------------:|
-| Creatine Kinase (U/L) | Week 12    | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 1 ( 12.5%)                  | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |          12 |           1 |
-| Creatine Kinase (U/L) | Week 12    | N          | 1 ( 8.3%)      | 11 ( 91.7%)    | 1 ( 12.5%)                  | 6 ( 75.0%)                  | 1 ( 14.3%)                 | 6 ( 85.7%)                 |               1 |          35 |          12 |           3 |
-| Creatine Kinase (U/L) | Week 24    | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 0 ( 0.0%)                   | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |          24 |           1 |
-| Creatine Kinase (U/L) | Week 24    | N          | 2 ( 16.7%)     | 10 ( 83.3%)    | 0 ( 0.0%)                   | 2 (100.0%)                  | 0 ( 0.0%)                  | 2 (100.0%)                 |               1 |          35 |          24 |           3 |
-| Creatine Kinase (U/L) | Week 8     | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 0 ( 0.0%)                   | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |           8 |           1 |
-| Creatine Kinase (U/L) | Week 8     | N          | 1 ( 14.3%)     | 6 ( 85.7%)     | 1 ( 10.0%)                  | 9 ( 90.0%)                  | 0 ( 0.0%)                  | 6 (100.0%)                 |               1 |          35 |           8 |           3 |
+| row_label1 | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|
+| Creatine Kinase (U/L) | Week 12 | H | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 12.5%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 12 | 1 |
+| Creatine Kinase (U/L) | Week 12 | N | 1 ( 8.3%) | 11 ( 91.7%) | 1 ( 12.5%) | 6 ( 75.0%) | 1 ( 14.3%) | 6 ( 85.7%) | 1 | 35 | 12 | 3 |
+| Creatine Kinase (U/L) | Week 24 | H | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 24 | 1 |
+| Creatine Kinase (U/L) | Week 24 | N | 2 ( 16.7%) | 10 ( 83.3%) | 0 ( 0.0%) | 2 (100.0%) | 0 ( 0.0%) | 2 (100.0%) | 1 | 35 | 24 | 3 |
+| Creatine Kinase (U/L) | Week 8 | H | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 8 | 1 |
+| Creatine Kinase (U/L) | Week 8 | N | 1 ( 14.3%) | 6 ( 85.7%) | 1 ( 10.0%) | 9 ( 90.0%) | 0 ( 0.0%) | 6 (100.0%) | 1 | 35 | 8 | 3 |
 
 In the example above, the denominators were based on the by and
 treatment variables, `TRTA`, `PARAM` and `VISIT`. This creates a 3 X 3
@@ -279,6 +285,7 @@ In the next example, the percentage denominators are calculated
 row-wise, each row percentage sums to 100%.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
@@ -291,14 +298,14 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:----------------------|:-----------|:-----------|:---------------|:---------------|:----------------------------|:----------------------------|:---------------------------|:---------------------------|----------------:|------------:|------------:|------------:|
-| Creatine Kinase (U/L) | Week 8     | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 0 ( 0.0%)                   | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |           8 |           1 |
-| Creatine Kinase (U/L) | Week 8     | N          | 1 ( 14.3%)     | 6 ( 85.7%)     | 1 ( 10.0%)                  | 9 ( 90.0%)                  | 0 ( 0.0%)                  | 6 (100.0%)                 |               1 |          35 |           8 |           3 |
-| Creatine Kinase (U/L) | Week 12    | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 1 (100.0%)                  | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |          12 |           1 |
-| Creatine Kinase (U/L) | Week 12    | N          | 1 ( 8.3%)      | 11 ( 91.7%)    | 1 ( 14.3%)                  | 6 ( 85.7%)                  | 1 ( 14.3%)                 | 6 ( 85.7%)                 |               1 |          35 |          12 |           3 |
-| Creatine Kinase (U/L) | Week 24    | H          | 0 ( 0.0%)      | 0 ( 0.0%)      | 0 ( 0.0%)                   | 0 ( 0.0%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |          35 |          24 |           1 |
-| Creatine Kinase (U/L) | Week 24    | N          | 2 ( 16.7%)     | 10 ( 83.3%)    | 0 ( 0.0%)                   | 2 (100.0%)                  | 0 ( 0.0%)                  | 2 (100.0%)                 |               1 |          35 |          24 |           3 |
+| row_label1 | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|
+| Creatine Kinase (U/L) | Week 8 | H | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 8 | 1 |
+| Creatine Kinase (U/L) | Week 8 | N | 1 ( 14.3%) | 6 ( 85.7%) | 1 ( 10.0%) | 9 ( 90.0%) | 0 ( 0.0%) | 6 (100.0%) | 1 | 35 | 8 | 3 |
+| Creatine Kinase (U/L) | Week 12 | H | 0 ( 0.0%) | 0 ( 0.0%) | 1 (100.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 12 | 1 |
+| Creatine Kinase (U/L) | Week 12 | N | 1 ( 8.3%) | 11 ( 91.7%) | 1 ( 14.3%) | 6 ( 85.7%) | 1 ( 14.3%) | 6 ( 85.7%) | 1 | 35 | 12 | 3 |
+| Creatine Kinase (U/L) | Week 24 | H | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 35 | 24 | 1 |
+| Creatine Kinase (U/L) | Week 24 | N | 2 ( 16.7%) | 10 ( 83.3%) | 0 ( 0.0%) | 2 (100.0%) | 0 ( 0.0%) | 2 (100.0%) | 1 | 35 | 24 | 3 |
 
 While not practical, in this last example the denominators are changed
 to be based on the entire column instead of the 3 x 3 box. By passing
@@ -306,6 +313,7 @@ the column variables, `TRTA` and `ANRIND` the layer will use those
 denominators when determining the percentages.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, where = PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT)) %>%
@@ -318,14 +326,14 @@ tplyr_table(tplyr_adlb, TRTA, where = PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:----------------------|:-----------|:-----------|:---------------|:---------------|:----------------------------|:----------------------------|:---------------------------|:---------------------------|----------------:|------------:|------------:|------------:|
-| Creatine Kinase (U/L) | Week 8     | H          | 0 ( 0.00%)     | 0 ( 0.00%)     | 0 ( 0.00%)                  | 0 ( 0.00%)                  | 0 ( 0.00%)                 | 0 ( 0.00%)                 |               1 |          35 |           8 |           1 |
-| Creatine Kinase (U/L) | Week 8     | N          | 1 (25.00%)     | 6 (22.22%)     | 1 (33.33%)                  | 9 (52.94%)                  | 0 ( 0.00%)                 | 6 (42.86%)                 |               1 |          35 |           8 |           3 |
-| Creatine Kinase (U/L) | Week 12    | H          | 0 ( 0.00%)     | 0 ( 0.00%)     | 1 (33.33%)                  | 0 ( 0.00%)                  | 0 ( 0.00%)                 | 0 ( 0.00%)                 |               1 |          35 |          12 |           1 |
-| Creatine Kinase (U/L) | Week 12    | N          | 1 (25.00%)     | 11 (40.74%)    | 1 (33.33%)                  | 6 (35.29%)                  | 1 (100.00%)                | 6 (42.86%)                 |               1 |          35 |          12 |           3 |
-| Creatine Kinase (U/L) | Week 24    | H          | 0 ( 0.00%)     | 0 ( 0.00%)     | 0 ( 0.00%)                  | 0 ( 0.00%)                  | 0 ( 0.00%)                 | 0 ( 0.00%)                 |               1 |          35 |          24 |           1 |
-| Creatine Kinase (U/L) | Week 24    | N          | 2 (50.00%)     | 10 (37.04%)    | 0 ( 0.00%)                  | 2 (11.76%)                  | 0 ( 0.00%)                 | 2 (14.29%)                 |               1 |          35 |          24 |           3 |
+| row_label1 | row_label2 | row_label3 | var1_Placebo_H | var1_Placebo_N | var1_Xanomeline High Dose_H | var1_Xanomeline High Dose_N | var1_Xanomeline Low Dose_H | var1_Xanomeline Low Dose_N | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|
+| Creatine Kinase (U/L) | Week 8 | H | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 1 | 35 | 8 | 1 |
+| Creatine Kinase (U/L) | Week 8 | N | 1 (25.00%) | 6 (22.22%) | 1 (33.33%) | 9 (52.94%) | 0 ( 0.00%) | 6 (42.86%) | 1 | 35 | 8 | 3 |
+| Creatine Kinase (U/L) | Week 12 | H | 0 ( 0.00%) | 0 ( 0.00%) | 1 (33.33%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 1 | 35 | 12 | 1 |
+| Creatine Kinase (U/L) | Week 12 | N | 1 (25.00%) | 11 (40.74%) | 1 (33.33%) | 6 (35.29%) | 1 (100.00%) | 6 (42.86%) | 1 | 35 | 12 | 3 |
+| Creatine Kinase (U/L) | Week 24 | H | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 0 ( 0.00%) | 1 | 35 | 24 | 1 |
+| Creatine Kinase (U/L) | Week 24 | N | 2 (50.00%) | 10 (37.04%) | 0 ( 0.00%) | 2 (11.76%) | 0 ( 0.00%) | 2 (14.29%) | 1 | 35 | 24 | 3 |
 
 Our hope is that this gives you the flexibility you need to structure
 your denominator however required.
@@ -377,6 +385,7 @@ from Layer 3 to sum to the total percentage of “DISCONTINUED” from Layer
 1.
 
 ``` r
+
 tplyr_adsl2 <- tplyr_adsl %>% 
   mutate(DISCONTEXT = if_else(DISCONFL == 'Y', 'DISCONTINUED', 'COMPLETED'))
 
@@ -398,28 +407,28 @@ t %>%
   kable()
 ```
 
-| row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| COMPLETED          | 58 ( 67.4%)  | 27 ( 32.1%)               | 25 ( 29.8%)              |               1 |           1 |
-| DISCONTINUED       | 28 ( 32.6%)  | 57 ( 67.9%)               | 59 ( 70.2%)              |               1 |           2 |
-| Adverse Event      | 8 ( 28.6%)   | 40 ( 70.2%)               | 44 ( 74.6%)              |               2 |           1 |
-| Death              | 2 ( 7.1%)    | 0 ( 0.0%)                 | 1 ( 1.7%)                |               2 |           3 |
-| I/E Not Met        | 1 ( 3.6%)    | 2 ( 3.5%)                 | 0 ( 0.0%)                |               2 |           4 |
-| Lack of Efficacy   | 3 ( 10.7%)   | 1 ( 1.8%)                 | 0 ( 0.0%)                |               2 |           5 |
-| Lost to Follow-up  | 1 ( 3.6%)    | 0 ( 0.0%)                 | 1 ( 1.7%)                |               2 |           6 |
-| Physician Decision | 1 ( 3.6%)    | 2 ( 3.5%)                 | 0 ( 0.0%)                |               2 |           7 |
-| Protocol Violation | 1 ( 3.6%)    | 1 ( 1.8%)                 | 1 ( 1.7%)                |               2 |           8 |
-| Sponsor Decision   | 2 ( 7.1%)    | 3 ( 5.3%)                 | 2 ( 3.4%)                |               2 |           9 |
-| Withdrew Consent   | 9 ( 32.1%)   | 8 ( 14.0%)                | 10 ( 16.9%)              |               2 |          10 |
-| Adverse Event      | 8 ( 9.3%)    | 40 ( 47.6%)               | 44 ( 52.4%)              |               3 |           1 |
-| Death              | 2 ( 2.3%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               3 |           3 |
-| I/E Not Met        | 1 ( 1.2%)    | 2 ( 2.4%)                 | 0 ( 0.0%)                |               3 |           4 |
-| Lack of Efficacy   | 3 ( 3.5%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               3 |           5 |
-| Lost to Follow-up  | 1 ( 1.2%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               3 |           6 |
-| Physician Decision | 1 ( 1.2%)    | 2 ( 2.4%)                 | 0 ( 0.0%)                |               3 |           7 |
-| Protocol Violation | 1 ( 1.2%)    | 1 ( 1.2%)                 | 1 ( 1.2%)                |               3 |           8 |
-| Sponsor Decision   | 2 ( 2.3%)    | 3 ( 3.6%)                 | 2 ( 2.4%)                |               3 |           9 |
-| Withdrew Consent   | 9 ( 10.5%)   | 8 ( 9.5%)                 | 10 ( 11.9%)              |               3 |          10 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| COMPLETED | 58 ( 67.4%) | 27 ( 32.1%) | 25 ( 29.8%) | 1 | 1 |
+| DISCONTINUED | 28 ( 32.6%) | 57 ( 67.9%) | 59 ( 70.2%) | 1 | 2 |
+| Adverse Event | 8 ( 28.6%) | 40 ( 70.2%) | 44 ( 74.6%) | 2 | 1 |
+| Death | 2 ( 7.1%) | 0 ( 0.0%) | 1 ( 1.7%) | 2 | 3 |
+| I/E Not Met | 1 ( 3.6%) | 2 ( 3.5%) | 0 ( 0.0%) | 2 | 4 |
+| Lack of Efficacy | 3 ( 10.7%) | 1 ( 1.8%) | 0 ( 0.0%) | 2 | 5 |
+| Lost to Follow-up | 1 ( 3.6%) | 0 ( 0.0%) | 1 ( 1.7%) | 2 | 6 |
+| Physician Decision | 1 ( 3.6%) | 2 ( 3.5%) | 0 ( 0.0%) | 2 | 7 |
+| Protocol Violation | 1 ( 3.6%) | 1 ( 1.8%) | 1 ( 1.7%) | 2 | 8 |
+| Sponsor Decision | 2 ( 7.1%) | 3 ( 5.3%) | 2 ( 3.4%) | 2 | 9 |
+| Withdrew Consent | 9 ( 32.1%) | 8 ( 14.0%) | 10 ( 16.9%) | 2 | 10 |
+| Adverse Event | 8 ( 9.3%) | 40 ( 47.6%) | 44 ( 52.4%) | 3 | 1 |
+| Death | 2 ( 2.3%) | 0 ( 0.0%) | 1 ( 1.2%) | 3 | 3 |
+| I/E Not Met | 1 ( 1.2%) | 2 ( 2.4%) | 0 ( 0.0%) | 3 | 4 |
+| Lack of Efficacy | 3 ( 3.5%) | 1 ( 1.2%) | 0 ( 0.0%) | 3 | 5 |
+| Lost to Follow-up | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 1.2%) | 3 | 6 |
+| Physician Decision | 1 ( 1.2%) | 2 ( 2.4%) | 0 ( 0.0%) | 3 | 7 |
+| Protocol Violation | 1 ( 1.2%) | 1 ( 1.2%) | 1 ( 1.2%) | 3 | 8 |
+| Sponsor Decision | 2 ( 2.3%) | 3 ( 3.6%) | 2 ( 2.4%) | 3 | 9 |
+| Withdrew Consent | 9 ( 10.5%) | 8 ( 9.5%) | 10 ( 11.9%) | 3 | 10 |
 
 ## Missing Counts
 
@@ -452,6 +461,7 @@ summarized. By setting `denom_ignore` to TRUE, your denominators will
 ignore any groups of missing values that you’ve specified.
 
 ``` r
+
 set.seed(1234)
 tplyr_adae2 <- tplyr_adae
 tplyr_adae2[sample(nrow(tplyr_adae2), 50), "AESEV"] <- NA
@@ -470,11 +480,11 @@ t %>%
 ```
 
 | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| MILD       | 21 (55.26%)  | 69 (76.67%)               | 47 (47.96%)              |               1 |           1 |
-| MODERATE   | 17 (44.74%)  | 20 (22.22%)               | 47 (47.96%)              |               1 |           2 |
-| SEVERE     | 0 ( 0.00%)   | 1 ( 1.11%)                | 4 ( 4.08%)               |               1 |           3 |
-| Missing    | 9            | 21                        | 20                       |               1 |         Inf |
+|:---|:---|:---|:---|---:|---:|
+| MILD | 21 (55.26%) | 69 (76.67%) | 47 (47.96%) | 1 | 1 |
+| MODERATE | 17 (44.74%) | 20 (22.22%) | 47 (47.96%) | 1 | 2 |
+| SEVERE | 0 ( 0.00%) | 1 ( 1.11%) | 4 ( 4.08%) | 1 | 3 |
+| Missing | 9 | 21 | 20 | 1 | Inf |
 
 We did one more other thing worth explaining in the example above - we
 gave the missing count its own sort value. If you leave this field null,
@@ -498,6 +508,7 @@ column variables) and the number of subjects *actually* present.
 Consider this example:
 
 ``` r
+
   missing_subs <- tplyr_table(tplyr_adae, TRTA) %>%
     set_pop_data(tplyr_adsl) %>%
     set_pop_treat_var(TRT01A) %>%
@@ -515,14 +526,14 @@ Consider this example:
     kable()
 ```
 
-| row_label1          | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:--------------------|:-------------|:--------------------------|:-------------------------|
-| SKIN EXFOLIATION    | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |
-| SKIN IRRITATION     | 3 ( 3.5%)    | 5 ( 6.0%)                 | 6 ( 7.1%)                |
-| SKIN ODOUR ABNORMAL | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |
-| SKIN ULCER          | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |
-| URTICARIA           | 0 ( 0.0%)    | 1 ( 1.2%)                 | 1 ( 1.2%)                |
-| Missing Subjects    | 85 (98.8%)   | 83 (98.8%)                | 83 (98.8%)               |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|
+| SKIN EXFOLIATION | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) |
+| SKIN IRRITATION | 3 ( 3.5%) | 5 ( 6.0%) | 6 ( 7.1%) |
+| SKIN ODOUR ABNORMAL | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) |
+| SKIN ULCER | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) |
+| URTICARIA | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 1.2%) |
+| Missing Subjects | 85 (98.8%) | 83 (98.8%) | 83 (98.8%) |
 
 In the example above, we produce a nested count layer. The function
 [`add_missing_subjects_row()`](https://atorus-research.github.io/Tplyr/reference/add_missing_subjects_row.md)
@@ -593,6 +604,7 @@ how you would choose to display things, but here we’re trying to show
 the flexibility built into **Tplyr**.
 
 ``` r
+
 set.seed(1234)
 tplyr_adsl2 <- tplyr_adsl
 tplyr_adsl2[sample(nrow(tplyr_adsl2), 50), "AGEGR1"] <- NA
@@ -610,18 +622,18 @@ tplyr_table(tplyr_adsl2, TRT01P) %>%
   kable()
 ```
 
-| row_label1 | row_label2     | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------|:---------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| F          | All Age Groups | 53           | 40                        | 50                       |               1 |           1 |        -Inf |
-| F          | \<65           | 9 ( 17.0%)   | 3 ( 7.5%)                 | 2 ( 4.0%)                |               1 |           1 |           1 |
-| F          | \>80           | 21 ( 39.6%)  | 5 ( 12.5%)                | 14 ( 28.0%)              |               1 |           1 |           2 |
-| F          | 65-80          | 15 ( 28.3%)  | 25 ( 62.5%)               | 21 ( 42.0%)              |               1 |           1 |           3 |
-| F          | Missing        | 8 (15.1%)    | 7 (17.5%)                 | 13 (26.0%)               |               1 |           1 |         Inf |
-| M          | All Age Groups | 33           | 44                        | 34                       |               1 |           2 |        -Inf |
-| M          | \<65           | 4 ( 12.1%)   | 4 ( 9.1%)                 | 2 ( 5.9%)                |               1 |           2 |           1 |
-| M          | \>80           | 8 ( 24.2%)   | 9 ( 20.5%)                | 7 ( 20.6%)               |               1 |           2 |           2 |
-| M          | 65-80          | 17 ( 51.5%)  | 23 ( 52.3%)               | 15 ( 44.1%)              |               1 |           2 |           3 |
-| M          | Missing        | 4 (12.1%)    | 8 (18.2%)                 | 10 (29.4%)               |               1 |           2 |         Inf |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| F | All Age Groups | 53 | 40 | 50 | 1 | 1 | -Inf |
+| F | \<65 | 9 ( 17.0%) | 3 ( 7.5%) | 2 ( 4.0%) | 1 | 1 | 1 |
+| F | \>80 | 21 ( 39.6%) | 5 ( 12.5%) | 14 ( 28.0%) | 1 | 1 | 2 |
+| F | 65-80 | 15 ( 28.3%) | 25 ( 62.5%) | 21 ( 42.0%) | 1 | 1 | 3 |
+| F | Missing | 8 (15.1%) | 7 (17.5%) | 13 (26.0%) | 1 | 1 | Inf |
+| M | All Age Groups | 33 | 44 | 34 | 1 | 2 | -Inf |
+| M | \<65 | 4 ( 12.1%) | 4 ( 9.1%) | 2 ( 5.9%) | 1 | 2 | 1 |
+| M | \>80 | 8 ( 24.2%) | 9 ( 20.5%) | 7 ( 20.6%) | 1 | 2 | 2 |
+| M | 65-80 | 17 ( 51.5%) | 23 ( 52.3%) | 15 ( 44.1%) | 1 | 2 | 3 |
+| M | Missing | 4 (12.1%) | 8 (18.2%) | 10 (29.4%) | 1 | 2 | Inf |
 
 The default text for the Total row is “Total”, but we provide
 [`set_total_row_label()`](https://atorus-research.github.io/Tplyr/reference/set_total_row_label.md)
@@ -634,6 +646,7 @@ we do that using
 So more commonly, you’ll see this:
 
 ``` r
+
 tplyr_table(tplyr_adsl2, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by=SEX) %>% 
@@ -647,18 +660,18 @@ tplyr_table(tplyr_adsl2, TRT01P) %>%
   kable()
 ```
 
-| row_label1 | row_label2     | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------|:---------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| F          | All Age Groups | 45           | 33                        | 37                       |               1 |           1 |        -Inf |
-| F          | \<65           | 9 ( 20.0%)   | 3 ( 9.1%)                 | 2 ( 5.4%)                |               1 |           1 |           1 |
-| F          | \>80           | 21 ( 46.7%)  | 5 ( 15.2%)                | 14 ( 37.8%)              |               1 |           1 |           2 |
-| F          | 65-80          | 15 ( 33.3%)  | 25 ( 75.8%)               | 21 ( 56.8%)              |               1 |           1 |           3 |
-| F          | Missing        | 8            | 7                         | 13                       |               1 |           1 |         Inf |
-| M          | All Age Groups | 29           | 36                        | 24                       |               1 |           2 |        -Inf |
-| M          | \<65           | 4 ( 13.8%)   | 4 ( 11.1%)                | 2 ( 8.3%)                |               1 |           2 |           1 |
-| M          | \>80           | 8 ( 27.6%)   | 9 ( 25.0%)                | 7 ( 29.2%)               |               1 |           2 |           2 |
-| M          | 65-80          | 17 ( 58.6%)  | 23 ( 63.9%)               | 15 ( 62.5%)              |               1 |           2 |           3 |
-| M          | Missing        | 4            | 8                         | 10                       |               1 |           2 |         Inf |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| F | All Age Groups | 45 | 33 | 37 | 1 | 1 | -Inf |
+| F | \<65 | 9 ( 20.0%) | 3 ( 9.1%) | 2 ( 5.4%) | 1 | 1 | 1 |
+| F | \>80 | 21 ( 46.7%) | 5 ( 15.2%) | 14 ( 37.8%) | 1 | 1 | 2 |
+| F | 65-80 | 15 ( 33.3%) | 25 ( 75.8%) | 21 ( 56.8%) | 1 | 1 | 3 |
+| F | Missing | 8 | 7 | 13 | 1 | 1 | Inf |
+| M | All Age Groups | 29 | 36 | 24 | 1 | 2 | -Inf |
+| M | \<65 | 4 ( 13.8%) | 4 ( 11.1%) | 2 ( 8.3%) | 1 | 2 | 1 |
+| M | \>80 | 8 ( 27.6%) | 9 ( 25.0%) | 7 ( 29.2%) | 1 | 2 | 2 |
+| M | 65-80 | 17 ( 58.6%) | 23 ( 63.9%) | 15 ( 62.5%) | 1 | 2 | 3 |
+| M | Missing | 4 | 8 | 10 | 1 | 2 | Inf |
 
 Now the table is more intuitive. We used
 [`set_missing_count()`](https://atorus-research.github.io/Tplyr/reference/set_missing_count.md)

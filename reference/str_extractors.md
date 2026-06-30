@@ -37,6 +37,7 @@ groups, which are ' 5', '(34.4%)', and '\[9\]'.
 ## Examples
 
 ``` r
+
 string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)",  "-1 (-.56, .75) -523%, 56 | -34")
 
 str_extract_fmt_group(string, 2)

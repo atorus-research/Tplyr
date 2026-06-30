@@ -172,6 +172,7 @@ by layer type.
 ## Examples
 
 ``` r
+
 f_str("xx.x (xx.x)", mean, sd)
 #> *** Format String ***
 #> xx.x (xx.x)

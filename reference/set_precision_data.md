@@ -45,6 +45,7 @@ inferred from the source data.
 ## Examples
 
 ``` r
+
 prec <- tibble::tribble(
   ~vs, ~max_int, ~max_dec,
   0,        1,        1,

@@ -27,6 +27,7 @@ function has 4 parameters:
 Let’s look at an example:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>% 
   add_layer(
     group_count(RACE, by = "Race")
@@ -38,17 +39,17 @@ tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = SEX) %>%
   kable()
 ```
 
-| row_label1  | row_label2                       | var1_Placebo_F | var1_Placebo_M | var1_Xanomeline High Dose_F | var1_Xanomeline High Dose_M | var1_Xanomeline Low Dose_F | var1_Xanomeline Low Dose_M | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:---------------------------------|:---------------|:---------------|:----------------------------|:----------------------------|:---------------------------|:---------------------------|----------------:|------------:|------------:|
-| Race        | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%)      | 0 ( 0.0%)      | 0 ( 0.0%)                   | 1 ( 2.3%)                   | 0 ( 0.0%)                  | 0 ( 0.0%)                  |               1 |           1 |           1 |
-| Race        | BLACK OR AFRICAN AMERICAN        | 5 ( 9.4%)      | 3 ( 9.1%)      | 6 ( 15.0%)                  | 3 ( 6.8%)                   | 6 ( 12.0%)                 | 0 ( 0.0%)                  |               1 |           1 |           2 |
-| Race        | WHITE                            | 48 ( 90.6%)    | 30 ( 90.9%)    | 34 ( 85.0%)                 | 40 ( 90.9%)                 | 44 ( 88.0%)                | 34 (100.0%)                |               1 |           1 |           3 |
-| Age (Years) | n                                | 53             | 33             | 40                          | 44                          | 50                         | 34                         |               2 |           1 |           1 |
-| Age (Years) | Mean (SD)                        | 76.4 ( 8.73)   | 73.4 ( 8.15)   | 74.7 ( 7.67)                | 74.1 ( 8.16)                | 75.7 ( 8.09)               | 75.6 ( 8.69)               |               2 |           1 |           2 |
-| Age (Years) | Median                           | 78.0           | 74.0           | 76.0                        | 77.0                        | 77.5                       | 77.5                       |               2 |           1 |           3 |
-| Age (Years) | Q1, Q3                           | 70.0, 84.0     | 69.0, 80.0     | 72.0, 79.0                  | 69.0, 80.2                  | 72.0, 81.0                 | 68.2, 82.0                 |               2 |           1 |           4 |
-| Age (Years) | Min, Max                         | 59, 89         | 52, 85         | 56, 88                      | 56, 86                      | 54, 87                     | 51, 88                     |               2 |           1 |           5 |
-| Age (Years) | Missing                          | 0              | 0              | 0                           | 0                           | 0                          | 0                          |               2 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo_F | var1_Placebo_M | var1_Xanomeline High Dose_F | var1_Xanomeline High Dose_M | var1_Xanomeline Low Dose_F | var1_Xanomeline Low Dose_M | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Race | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 2.3%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| Race | BLACK OR AFRICAN AMERICAN | 5 ( 9.4%) | 3 ( 9.1%) | 6 ( 15.0%) | 3 ( 6.8%) | 6 ( 12.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| Race | WHITE | 48 ( 90.6%) | 30 ( 90.9%) | 34 ( 85.0%) | 40 ( 90.9%) | 44 ( 88.0%) | 34 (100.0%) | 1 | 1 | 3 |
+| Age (Years) | n | 53 | 33 | 40 | 44 | 50 | 34 | 2 | 1 | 1 |
+| Age (Years) | Mean (SD) | 76.4 ( 8.73) | 73.4 ( 8.15) | 74.7 ( 7.67) | 74.1 ( 8.16) | 75.7 ( 8.09) | 75.6 ( 8.69) | 2 | 1 | 2 |
+| Age (Years) | Median | 78.0 | 74.0 | 76.0 | 77.0 | 77.5 | 77.5 | 2 | 1 | 3 |
+| Age (Years) | Q1, Q3 | 70.0, 84.0 | 69.0, 80.0 | 72.0, 79.0 | 69.0, 80.2 | 72.0, 81.0 | 68.2, 82.0 | 2 | 1 | 4 |
+| Age (Years) | Min, Max | 59, 89 | 52, 85 | 56, 88 | 56, 86 | 54, 87 | 51, 88 | 2 | 1 | 5 |
+| Age (Years) | Missing | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 6 |
 
 In the example above, the `where` parameter is passed forward into both
 the `RACE` and `AGE` layers. Furthermore, note how the `cols` parameter
@@ -68,6 +69,7 @@ group within a column variable, columns will still be created for those
 groups and will be empty/zero filled.*
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>% 
   add_layer(
     group_desc(AGE, by = "Age (Years)")
@@ -76,14 +78,14 @@ tplyr_table(tplyr_adsl, TRT01P, where= SAFFL =="Y", cols = vars(SEX, RACE)) %>%
   kable()
 ```
 
-| row_label1  | row_label2 | var1_Placebo_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Placebo_F_BLACK OR AFRICAN AMERICAN | var1_Placebo_F_WHITE | var1_Placebo_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Placebo_M_BLACK OR AFRICAN AMERICAN | var1_Placebo_M_WHITE | var1_Xanomeline High Dose_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline High Dose_F_BLACK OR AFRICAN AMERICAN | var1_Xanomeline High Dose_F_WHITE | var1_Xanomeline High Dose_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline High Dose_M_BLACK OR AFRICAN AMERICAN | var1_Xanomeline High Dose_M_WHITE | var1_Xanomeline Low Dose_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline Low Dose_F_BLACK OR AFRICAN AMERICAN | var1_Xanomeline Low Dose_F_WHITE | var1_Xanomeline Low Dose_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline Low Dose_M_BLACK OR AFRICAN AMERICAN | var1_Xanomeline Low Dose_M_WHITE | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:-----------|:------------------------------------------------|:-----------------------------------------|:---------------------|:------------------------------------------------|:-----------------------------------------|:---------------------|:-------------------------------------------------------------|:------------------------------------------------------|:----------------------------------|:-------------------------------------------------------------|:------------------------------------------------------|:----------------------------------|:------------------------------------------------------------|:-----------------------------------------------------|:---------------------------------|:------------------------------------------------------------|:-----------------------------------------------------|:---------------------------------|----------------:|------------:|------------:|
-| Age (Years) | n          |                                                 | 5                                        | 48                   |                                                 | 3                                        | 30                   |                                                              | 6                                                     | 34                                | 1                                                            | 3                                                     | 40                                |                                                             | 6                                                    | 44                               |                                                             |                                                      | 34                               |               1 |           1 |           1 |
-| Age (Years) | Mean (SD)  |                                                 | 75.2 ( 7.79)                             | 76.5 ( 8.89)         |                                                 | 64.7 ( 6.81)                             | 74.2 ( 7.84)         |                                                              | 72.2 ( 6.08)                                          | 75.1 ( 7.91)                      | 61.0 ( )                                                     | 79.3 ( 2.52)                                          | 74.0 ( 8.16)                      |                                                             | 72.5 (11.78)                                         | 76.1 ( 7.54)                     |                                                             |                                                      | 75.6 ( 8.69)                     |               1 |           1 |           2 |
-| Age (Years) | Median     |                                                 | 80.0                                     | 78.0                 |                                                 | 67.0                                     | 74.5                 |                                                              | 73.5                                                  | 76.0                              | 61.0                                                         | 79.0                                                  | 76.0                              |                                                             | 75.0                                                 | 78.0                             |                                                             |                                                      | 77.5                             |               1 |           1 |           3 |
-| Age (Years) | Q1, Q3     |                                                 | 70.0, 81.0                               | 70.5, 84.0           |                                                 | 62.0, 68.5                               | 70.0, 80.8           |                                                              | 68.5, 76.2                                            | 72.0, 79.8                        | 61.0, 61.0                                                   | 78.0, 80.5                                            | 69.0, 80.2                        |                                                             | 63.5, 79.8                                           | 72.0, 81.0                       |                                                             |                                                      | 68.2, 82.0                       |               1 |           1 |           4 |
-| Age (Years) | Min, Max   |                                                 | 64, 81                                   | 59, 89               |                                                 | 57, 70                                   | 52, 85               |                                                              | 63, 79                                                | 56, 88                            | 61, 61                                                       | 77, 82                                                | 56, 86                            |                                                             | 57, 87                                               | 54, 86                           |                                                             |                                                      | 51, 88                           |               1 |           1 |           5 |
-| Age (Years) | Missing    |                                                 | 0                                        | 0                    |                                                 | 0                                        | 0                    |                                                              | 0                                                     | 0                                 | 0                                                            | 0                                                     | 0                                 |                                                             | 0                                                    | 0                                |                                                             |                                                      | 0                                |               1 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Placebo_F_BLACK OR AFRICAN AMERICAN | var1_Placebo_F_WHITE | var1_Placebo_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Placebo_M_BLACK OR AFRICAN AMERICAN | var1_Placebo_M_WHITE | var1_Xanomeline High Dose_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline High Dose_F_BLACK OR AFRICAN AMERICAN | var1_Xanomeline High Dose_F_WHITE | var1_Xanomeline High Dose_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline High Dose_M_BLACK OR AFRICAN AMERICAN | var1_Xanomeline High Dose_M_WHITE | var1_Xanomeline Low Dose_F_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline Low Dose_F_BLACK OR AFRICAN AMERICAN | var1_Xanomeline Low Dose_F_WHITE | var1_Xanomeline Low Dose_M_AMERICAN INDIAN OR ALASKA NATIVE | var1_Xanomeline Low Dose_M_BLACK OR AFRICAN AMERICAN | var1_Xanomeline Low Dose_M_WHITE | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (Years) | n |  | 5 | 48 |  | 3 | 30 |  | 6 | 34 | 1 | 3 | 40 |  | 6 | 44 |  |  | 34 | 1 | 1 | 1 |
+| Age (Years) | Mean (SD) |  | 75.2 ( 7.79) | 76.5 ( 8.89) |  | 64.7 ( 6.81) | 74.2 ( 7.84) |  | 72.2 ( 6.08) | 75.1 ( 7.91) | 61.0 ( ) | 79.3 ( 2.52) | 74.0 ( 8.16) |  | 72.5 (11.78) | 76.1 ( 7.54) |  |  | 75.6 ( 8.69) | 1 | 1 | 2 |
+| Age (Years) | Median |  | 80.0 | 78.0 |  | 67.0 | 74.5 |  | 73.5 | 76.0 | 61.0 | 79.0 | 76.0 |  | 75.0 | 78.0 |  |  | 77.5 | 1 | 1 | 3 |
+| Age (Years) | Q1, Q3 |  | 70.0, 81.0 | 70.5, 84.0 |  | 62.0, 68.5 | 70.0, 80.8 |  | 68.5, 76.2 | 72.0, 79.8 | 61.0, 61.0 | 78.0, 80.5 | 69.0, 80.2 |  | 63.5, 79.8 | 72.0, 81.0 |  |  | 68.2, 82.0 | 1 | 1 | 4 |
+| Age (Years) | Min, Max |  | 64, 81 | 59, 89 |  | 57, 70 | 52, 85 |  | 63, 79 | 56, 88 | 61, 61 | 77, 82 | 56, 86 |  | 57, 87 | 54, 86 |  |  | 51, 88 | 1 | 1 | 5 |
+| Age (Years) | Missing |  | 0 | 0 |  | 0 | 0 |  | 0 | 0 | 0 | 0 | 0 |  | 0 | 0 |  |  | 0 | 1 | 1 | 6 |
 
 ## Additional Treatment Groups
 
@@ -107,6 +109,7 @@ named
 to simplify the process of creating a “Total” group.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>%
   add_treat_grps('Treated' = c("Xanomeline High Dose", "Xanomeline Low Dose")) %>% 
   add_total_group() %>% 
@@ -117,14 +120,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1  | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var1_Treated | var1_Total   | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:-----------|:-------------|:--------------------------|:-------------------------|:-------------|:-------------|----------------:|------------:|------------:|
-| Age (Years) | n          | 86           | 84                        | 84                       | 168          | 254          |               1 |           1 |           1 |
-| Age (Years) | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             | 75.0 ( 8.09) | 75.1 ( 8.25) |               1 |           1 |           2 |
-| Age (Years) | Median     | 76.0         | 76.0                      | 77.5                     | 77.0         | 77.0         |               1 |           1 |           3 |
-| Age (Years) | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               | 71.0, 81.0   | 70.0, 81.0   |               1 |           1 |           4 |
-| Age (Years) | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   | 51, 88       | 51, 89       |               1 |           1 |           5 |
-| Age (Years) | Missing    | 0            | 0                         | 0                        | 0            | 0            |               1 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var1_Treated | var1_Total | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (Years) | n | 86 | 84 | 84 | 168 | 254 | 1 | 1 | 1 |
+| Age (Years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 75.0 ( 8.09) | 75.1 ( 8.25) | 1 | 1 | 2 |
+| Age (Years) | Median | 76.0 | 76.0 | 77.5 | 77.0 | 77.0 | 1 | 1 | 3 |
+| Age (Years) | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 71.0, 81.0 | 70.0, 81.0 | 1 | 1 | 4 |
+| Age (Years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 51, 88 | 51, 89 | 1 | 1 | 5 |
+| Age (Years) | Missing | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 6 |
 
 Note how in the above example, there are two new columns added to the
 data - `var1_Total` and `var1_Treated`. The summaries for the individual
@@ -149,6 +152,7 @@ named `pop_treat_var`, as variable names may differ between the
 datasets.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA, where = AEREL != "NONE") %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
@@ -163,26 +167,26 @@ t %>%
   kable()
 ```
 
-| row_label1           | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:---------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| ALOPECIA             | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |
-| BLISTER              | 0 ( 0.0%)    | 1 ( 1.2%)                 | 5 ( 6.0%)                |               1 |           3 |
-| COLD SWEAT           | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           4 |
-| DERMATITIS CONTACT   | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |           6 |
-| ERYTHEMA             | 9 ( 10.5%)   | 14 ( 16.7%)               | 13 ( 15.5%)              |               1 |           8 |
-| HYPERHIDROSIS        | 2 ( 2.3%)    | 8 ( 9.5%)                 | 4 ( 4.8%)                |               1 |           9 |
-| PRURITUS             | 8 ( 9.3%)    | 26 ( 31.0%)               | 21 ( 25.0%)              |               1 |          10 |
-| PRURITUS GENERALISED | 0 ( 0.0%)    | 1 ( 1.2%)                 | 1 ( 1.2%)                |               1 |          11 |
-| RASH                 | 4 ( 4.7%)    | 8 ( 9.5%)                 | 13 ( 15.5%)              |               1 |          12 |
-| RASH ERYTHEMATOUS    | 0 ( 0.0%)    | 0 ( 0.0%)                 | 2 ( 2.4%)                |               1 |          13 |
-| RASH MACULO-PAPULAR  | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |          14 |
-| RASH PAPULAR         | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |          15 |
-| RASH PRURITIC        | 0 ( 0.0%)    | 2 ( 2.4%)                 | 1 ( 1.2%)                |               1 |          16 |
-| SKIN EXFOLIATION     | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 1.2%)                |               1 |          17 |
-| SKIN IRRITATION      | 2 ( 2.3%)    | 5 ( 6.0%)                 | 6 ( 7.1%)                |               1 |          18 |
-| SKIN ODOUR ABNORMAL  | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |          19 |
-| SKIN ULCER           | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |          20 |
-| URTICARIA            | 0 ( 0.0%)    | 1 ( 1.2%)                 | 1 ( 1.2%)                |               1 |          21 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| ALOPECIA | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 |
+| BLISTER | 0 ( 0.0%) | 1 ( 1.2%) | 5 ( 6.0%) | 1 | 3 |
+| COLD SWEAT | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 4 |
+| DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 6 |
+| ERYTHEMA | 9 ( 10.5%) | 14 ( 16.7%) | 13 ( 15.5%) | 1 | 8 |
+| HYPERHIDROSIS | 2 ( 2.3%) | 8 ( 9.5%) | 4 ( 4.8%) | 1 | 9 |
+| PRURITUS | 8 ( 9.3%) | 26 ( 31.0%) | 21 ( 25.0%) | 1 | 10 |
+| PRURITUS GENERALISED | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 1.2%) | 1 | 11 |
+| RASH | 4 ( 4.7%) | 8 ( 9.5%) | 13 ( 15.5%) | 1 | 12 |
+| RASH ERYTHEMATOUS | 0 ( 0.0%) | 0 ( 0.0%) | 2 ( 2.4%) | 1 | 13 |
+| RASH MACULO-PAPULAR | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 14 |
+| RASH PAPULAR | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 15 |
+| RASH PRURITIC | 0 ( 0.0%) | 2 ( 2.4%) | 1 ( 1.2%) | 1 | 16 |
+| SKIN EXFOLIATION | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 | 17 |
+| SKIN IRRITATION | 2 ( 2.3%) | 5 ( 6.0%) | 6 ( 7.1%) | 1 | 18 |
+| SKIN ODOUR ABNORMAL | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 19 |
+| SKIN ULCER | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 20 |
+| URTICARIA | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 1.2%) | 1 | 21 |
 
 In the above example, `AEREL` doesn’t exist in `adsl`, therefore we used
 [`set_pop_where()`](https://atorus-research.github.io/Tplyr/reference/where.md)
@@ -205,6 +209,7 @@ summarized adverse events. Furthermore, with the population data
 provided, **Tplyr** is able to calculate your header N’s properly:
 
 ``` r
+
 header_n(t) %>% 
   kable()
 ```
@@ -245,6 +250,7 @@ collected at screening, while `LUNGS` is collected at Screening, Day -1,
 and Day 5.
 
 ``` r
+
 tplyr_table(tplyr_adpe, TRT01A) %>%
   add_layer(
     group_count(AVALC, by = vars(PARAM, AVISIT))
@@ -286,6 +292,7 @@ present other visits. To address this, you can use the
 function.
 
 ``` r
+
 tplyr_table(tplyr_adpe, TRT01A) %>%
   add_layer(
     group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 
@@ -317,6 +324,7 @@ visit. For count and shift layers, you can additionally dig further in
 to use target variables:
 
 ``` r
+
 tplyr_table(tplyr_adpe, TRT01A) %>%
   add_layer(
     group_count(AVALC, by = vars(PARAM, AVISIT)) %>% 

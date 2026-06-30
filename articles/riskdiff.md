@@ -24,6 +24,7 @@ We made a large effort to make this flow very naturally with the count
 layer construction, so let’s walk through it step by step.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -40,14 +41,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------------------------------|:----------------------------------|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| 0.024 (-0.046, 0.094)              | 0.000 ( 0.000, 0.000)             | ACTINIC KERATOSIS  | 0 ( 0.0%)    | 1 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           1 |
-| -0.048 (-0.174, 0.079)             | -0.048 (-0.174, 0.079)            | ALOPECIA           | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |
-| 0.024 (-0.046, 0.094)              | 0.119 (-0.015, 0.253)             | BLISTER            | 0 ( 0.0%)    | 1 ( 2.4%)                 | 5 ( 11.9%)               |               1 |           3 |
-| -0.048 (-0.174, 0.079)             | -0.048 (-0.174, 0.079)            | COLD SWEAT         | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           4 |
-| -0.048 (-0.174, 0.079)             | -0.048 (-0.174, 0.079)            | DERMATITIS ATOPIC  | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           5 |
-| 0.000 ( 0.000, 0.000)              | 0.024 (-0.046, 0.094)             | DERMATITIS CONTACT | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 2.4%)                |               1 |           6 |
+| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|:---|:---|---:|---:|
+| 0.024 (-0.046, 0.094) | 0.000 ( 0.000, 0.000) | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 2.4%) | 0 ( 0.0%) | 1 | 1 |
+| -0.048 (-0.174, 0.079) | -0.048 (-0.174, 0.079) | ALOPECIA | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 |
+| 0.024 (-0.046, 0.094) | 0.119 (-0.015, 0.253) | BLISTER | 0 ( 0.0%) | 1 ( 2.4%) | 5 ( 11.9%) | 1 | 3 |
+| -0.048 (-0.174, 0.079) | -0.048 (-0.174, 0.079) | COLD SWEAT | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 4 |
+| -0.048 (-0.174, 0.079) | -0.048 (-0.174, 0.079) | DERMATITIS ATOPIC | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 5 |
+| 0.000 ( 0.000, 0.000) | 0.024 (-0.046, 0.094) | DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 2.4%) | 1 | 6 |
 
 Comparisons are specified with two-element character vectors. These are
 simply your comparison group - the first element, and your reference
@@ -90,6 +91,7 @@ controlled in the same way you format the count summaries - using
 [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md).
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -110,14 +112,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo  | rdiff_Xanomeline Low Dose_Placebo   | row_label1         | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:------------------------------------|:------------------------------------|:-------------------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|
-| 0.024, 0.000, 0.024, -0.046, 0.094  | 0.000, 0.000, 0.000, 0.000, 0.000   | ACTINIC KERATOSIS  | 0 ( 0.0) \[0\] | 1 ( 2.4) \[1\]            | 0 ( 0.0) \[0\]           |               1 |           1 |
-| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | ALOPECIA           | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           2 |
-| 0.024, 0.000, 0.024, -0.046, 0.094  | 0.119, 0.000, 0.119, -0.015, 0.253  | BLISTER            | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\]            | 5 (11.9) \[8\]           |               1 |           3 |
-| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | COLD SWEAT         | 1 ( 4.8) \[3\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           4 |
-| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | DERMATITIS ATOPIC  | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           5 |
-| 0.000, 0.000, 0.000, 0.000, 0.000   | 0.024, 0.000, 0.024, -0.046, 0.094  | DERMATITIS CONTACT | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\]            | 1 ( 2.4) \[2\]           |               1 |           6 |
+| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|:---|:---|---:|---:|
+| 0.024, 0.000, 0.024, -0.046, 0.094 | 0.000, 0.000, 0.000, 0.000, 0.000 | ACTINIC KERATOSIS | 0 ( 0.0) \[0\] | 1 ( 2.4) \[1\] | 0 ( 0.0) \[0\] | 1 | 1 |
+| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | ALOPECIA | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 2 |
+| 0.024, 0.000, 0.024, -0.046, 0.094 | 0.119, 0.000, 0.119, -0.015, 0.253 | BLISTER | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\] | 5 (11.9) \[8\] | 1 | 3 |
+| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | COLD SWEAT | 1 ( 4.8) \[3\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 4 |
+| 0.000, 0.048, -0.048, -0.174, 0.079 | 0.000, 0.048, -0.048, -0.174, 0.079 | DERMATITIS ATOPIC | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 5 |
+| 0.000, 0.000, 0.000, 0.000, 0.000 | 0.024, 0.000, 0.024, -0.046, 0.094 | DERMATITIS CONTACT | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\] | 1 | 6 |
 
 Take a look at the `rdiff` columns now - you’ll see they have 5 values.
 These are:
@@ -141,6 +143,7 @@ functions because it’s already used to capture a varying number of
 comparisons, but it’s not much more difficult to use:
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -162,14 +165,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo  | rdiff_Xanomeline Low Dose_Placebo   | row_label1         | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:------------------------------------|:------------------------------------|:-------------------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|
-| 0.024, 0.000, 0.024, -1.000, 0.054  | 0.000, 0.000, 0.000, -1.000, 0.000  | ACTINIC KERATOSIS  | 0 ( 0.0) \[0\] | 1 ( 2.4) \[1\]            | 0 ( 0.0) \[0\]           |               1 |           1 |
-| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | ALOPECIA           | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           2 |
-| 0.024, 0.000, 0.024, -1.000, 0.054  | 0.119, 0.000, 0.119, -1.000, 0.183  | BLISTER            | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\]            | 5 (11.9) \[8\]           |               1 |           3 |
-| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | COLD SWEAT         | 1 ( 4.8) \[3\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           4 |
-| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | DERMATITIS ATOPIC  | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\]            | 0 ( 0.0) \[0\]           |               1 |           5 |
-| 0.000, 0.000, 0.000, -1.000, 0.000  | 0.024, 0.000, 0.024, -1.000, 0.054  | DERMATITIS CONTACT | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\]            | 1 ( 2.4) \[2\]           |               1 |           6 |
+| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|:---|:---|---:|---:|
+| 0.024, 0.000, 0.024, -1.000, 0.054 | 0.000, 0.000, 0.000, -1.000, 0.000 | ACTINIC KERATOSIS | 0 ( 0.0) \[0\] | 1 ( 2.4) \[1\] | 0 ( 0.0) \[0\] | 1 | 1 |
+| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | ALOPECIA | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 2 |
+| 0.024, 0.000, 0.024, -1.000, 0.054 | 0.119, 0.000, 0.119, -1.000, 0.183 | BLISTER | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\] | 5 (11.9) \[8\] | 1 | 3 |
+| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | COLD SWEAT | 1 ( 4.8) \[3\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 4 |
+| 0.000, 0.048, -0.048, -1.000, 0.012 | 0.000, 0.048, -0.048, -1.000, 0.012 | DERMATITIS ATOPIC | 1 ( 4.8) \[1\] | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 | 5 |
+| 0.000, 0.000, 0.000, -1.000, 0.000 | 0.024, 0.000, 0.024, -1.000, 0.054 | DERMATITIS CONTACT | 0 ( 0.0) \[0\] | 0 ( 0.0) \[0\] | 1 ( 2.4) \[2\] | 1 | 6 |
 
 As seen above, using the `args` argument, we:
 
@@ -190,6 +193,7 @@ The default of
 works on the distinct counts available within the count summary.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 
@@ -209,14 +213,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1                             | row_label2                             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------------------------------|:----------------------------------|:---------------------------------------|:---------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| 0.256 ( 0.104, 0.408)              | 0.256 ( 0.104, 0.408)             | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 21 ( 24.4%)  | 42 ( 50.0%)               | 42 ( 50.0%)              |               1 |           1 |         Inf |
-| 0.012 (-0.023, 0.047)              | 0.000 ( 0.000, 0.000)             | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS                      | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |
-| -0.012 (-0.046, 0.023)             | -0.012 (-0.046, 0.023)            | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA                               | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           2 |
-| 0.012 (-0.023, 0.047)              | 0.060 (-0.003, 0.122)             | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER                                | 0 ( 0.0%)    | 1 ( 1.2%)                 | 5 ( 6.0%)                |               1 |           1 |           3 |
-| -0.012 (-0.046, 0.023)             | -0.012 (-0.046, 0.023)            | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT                             | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| -0.012 (-0.046, 0.023)             | -0.012 (-0.046, 0.023)            | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC                      | 1 ( 1.2%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
+| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| 0.256 ( 0.104, 0.408) | 0.256 ( 0.104, 0.408) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 21 ( 24.4%) | 42 ( 50.0%) | 42 ( 50.0%) | 1 | 1 | Inf |
+| 0.012 (-0.023, 0.047) | 0.000 ( 0.000, 0.000) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| -0.012 (-0.046, 0.023) | -0.012 (-0.046, 0.023) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| 0.012 (-0.023, 0.047) | 0.060 (-0.003, 0.122) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER | 0 ( 0.0%) | 1 ( 1.2%) | 5 ( 6.0%) | 1 | 1 | 3 |
+| -0.012 (-0.046, 0.023) | -0.012 (-0.046, 0.023) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| -0.012 (-0.046, 0.023) | -0.012 (-0.046, 0.023) | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 5 |
 
 If for whatever reason you’d like to run risk difference on the
 non-distinct counts, switch the `distinct` argument to FALSE.
@@ -225,6 +229,7 @@ also will function on multi-level summaries no different than single
 level, so no concerns there either.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS") %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -242,14 +247,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1         | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------------------------------|:----------------------------------|:-------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| 0.009 (-0.018, 0.036)              | 0.000 ( 0.000, 0.000)             | ACTINIC KERATOSIS  | 0 ( 0.0%)    | 1 ( 2.4%)                 | 0 ( 0.0%)                |               1 |           1 |
-| -0.021 (-0.078, 0.035)             | -0.021 (-0.077, 0.035)            | ALOPECIA           | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           2 |
-| 0.018 (-0.022, 0.058)              | 0.068 ( 0.008, 0.128)             | BLISTER            | 0 ( 0.0%)    | 1 ( 2.4%)                 | 5 ( 11.9%)               |               1 |           3 |
-| -0.064 (-0.149, 0.021)             | -0.064 (-0.149, 0.021)            | COLD SWEAT         | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           4 |
-| -0.021 (-0.078, 0.035)             | -0.021 (-0.077, 0.035)            | DERMATITIS ATOPIC  | 1 ( 4.8%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           5 |
-| 0.000 ( 0.000, 0.000)              | 0.017 (-0.021, 0.055)             | DERMATITIS CONTACT | 0 ( 0.0%)    | 0 ( 0.0%)                 | 1 ( 2.4%)                |               1 |           6 |
+| rdiff_Xanomeline High Dose_Placebo | rdiff_Xanomeline Low Dose_Placebo | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|:---|:---|---:|---:|
+| 0.009 (-0.018, 0.036) | 0.000 ( 0.000, 0.000) | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 2.4%) | 0 ( 0.0%) | 1 | 1 |
+| -0.021 (-0.078, 0.035) | -0.021 (-0.077, 0.035) | ALOPECIA | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 2 |
+| 0.018 (-0.022, 0.058) | 0.068 ( 0.008, 0.128) | BLISTER | 0 ( 0.0%) | 1 ( 2.4%) | 5 ( 11.9%) | 1 | 3 |
+| -0.064 (-0.149, 0.021) | -0.064 (-0.149, 0.021) | COLD SWEAT | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 4 |
+| -0.021 (-0.078, 0.035) | -0.021 (-0.077, 0.035) | DERMATITIS ATOPIC | 1 ( 4.8%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 5 |
+| 0.000 ( 0.000, 0.000) | 0.017 (-0.021, 0.055) | DERMATITIS CONTACT | 0 ( 0.0%) | 0 ( 0.0%) | 1 ( 2.4%) | 1 | 6 |
 
 Risk difference also works with the `cols` argument, but it’s important
 to understand how the comparisons work in these situation. Here, it’s
@@ -257,6 +262,7 @@ still the treatment groups that are compared - but the column argument
 is used as a “by” variable. For example:
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA, where= AEBODSYS == "SKIN AND SUBCUTANEOUS TISSUE DISORDERS", cols=SEX) %>% 
   add_layer(
     group_count(AEDECOD) %>% 
@@ -273,14 +279,14 @@ suppressWarnings(build(t)) %>%
   kable()
 ```
 
-| rdiff_Xanomeline High Dose_Placebo_F | rdiff_Xanomeline High Dose_Placebo_M | rdiff_Xanomeline Low Dose_Placebo_F | rdiff_Xanomeline Low Dose_Placebo_M | row_label1         |
-|:-------------------------------------|:-------------------------------------|:------------------------------------|:------------------------------------|:-------------------|
-| 0.000 ( 0.000, 0.000)                | 0.036 (-0.069, 0.140)                | 0.000 ( 0.000, 0.000)               | 0.000 ( 0.000, 0.000)               | ACTINIC KERATOSIS  |
-| -0.077 (-0.296, 0.142)               | 0.000 ( 0.000, 0.000)                | -0.077 (-0.281, 0.127)              | 0.000 ( 0.000, 0.000)               | ALOPECIA           |
-| 0.000 ( 0.000, 0.000)                | 0.036 (-0.069, 0.140)                | 0.083 (-0.087, 0.253)               | 0.167 (-0.096, 0.429)               | BLISTER            |
-| 0.000 ( 0.000, 0.000)                | -0.125 (-0.435, 0.185)               | 0.000 ( 0.000, 0.000)               | -0.125 (-0.444, 0.194)              | COLD SWEAT         |
-| 0.000 ( 0.000, 0.000)                | -0.125 (-0.435, 0.185)               | 0.000 ( 0.000, 0.000)               | -0.125 (-0.444, 0.194)              | DERMATITIS ATOPIC  |
-| 0.000 ( 0.000, 0.000)                | 0.000 ( 0.000, 0.000)                | 0.000 ( 0.000, 0.000)               | 0.056 (-0.106, 0.217)               | DERMATITIS CONTACT |
+| rdiff_Xanomeline High Dose_Placebo_F | rdiff_Xanomeline High Dose_Placebo_M | rdiff_Xanomeline Low Dose_Placebo_F | rdiff_Xanomeline Low Dose_Placebo_M | row_label1 |
+|:---|:---|:---|:---|:---|
+| 0.000 ( 0.000, 0.000) | 0.036 (-0.069, 0.140) | 0.000 ( 0.000, 0.000) | 0.000 ( 0.000, 0.000) | ACTINIC KERATOSIS |
+| -0.077 (-0.296, 0.142) | 0.000 ( 0.000, 0.000) | -0.077 (-0.281, 0.127) | 0.000 ( 0.000, 0.000) | ALOPECIA |
+| 0.000 ( 0.000, 0.000) | 0.036 (-0.069, 0.140) | 0.083 (-0.087, 0.253) | 0.167 (-0.096, 0.429) | BLISTER |
+| 0.000 ( 0.000, 0.000) | -0.125 (-0.435, 0.185) | 0.000 ( 0.000, 0.000) | -0.125 (-0.444, 0.194) | COLD SWEAT |
+| 0.000 ( 0.000, 0.000) | -0.125 (-0.435, 0.185) | 0.000 ( 0.000, 0.000) | -0.125 (-0.444, 0.194) | DERMATITIS ATOPIC |
+| 0.000 ( 0.000, 0.000) | 0.000 ( 0.000, 0.000) | 0.000 ( 0.000, 0.000) | 0.056 (-0.106, 0.217) | DERMATITIS CONTACT |
 
 ## Getting Raw Numbers
 
@@ -317,6 +323,7 @@ This works best when layers are named, as it makes the output much
 clearer.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(name="PreferredTerm",
     group_count(AEDECOD) %>% 
@@ -380,6 +387,7 @@ values from the Preferred Term layer in the table above.
 
 ``` r
 
+
 suppressWarnings(
   get_stats_data(t, layer='PreferredTerm', statistic='riskdiff', where= measure == "dif")
   ) %>% 
@@ -387,14 +395,14 @@ suppressWarnings(
   kable()
 ```
 
-| summary_var        | measure | Xanomeline High Dose_Placebo | Xanomeline Low Dose_Placebo |
-|:-------------------|:--------|-----------------------------:|----------------------------:|
-| ACTINIC KERATOSIS  | dif     |                    0.0238095 |                   0.0000000 |
-| ALOPECIA           | dif     |                   -0.0476190 |                  -0.0476190 |
-| BLISTER            | dif     |                    0.0238095 |                   0.1190476 |
-| COLD SWEAT         | dif     |                   -0.0476190 |                  -0.0476190 |
-| DERMATITIS ATOPIC  | dif     |                   -0.0476190 |                  -0.0476190 |
-| DERMATITIS CONTACT | dif     |                    0.0000000 |                   0.0238095 |
+| summary_var | measure | Xanomeline High Dose_Placebo | Xanomeline Low Dose_Placebo |
+|:---|:---|---:|---:|
+| ACTINIC KERATOSIS | dif | 0.0238095 | 0.0000000 |
+| ALOPECIA | dif | -0.0476190 | -0.0476190 |
+| BLISTER | dif | 0.0238095 | 0.1190476 |
+| COLD SWEAT | dif | -0.0476190 | -0.0476190 |
+| DERMATITIS ATOPIC | dif | -0.0476190 | -0.0476190 |
+| DERMATITIS CONTACT | dif | 0.0000000 | 0.0238095 |
 
 Using this data frame, you have access to the un-formatted numeric
 values before any rounding or formatting. This gives you flexibility to

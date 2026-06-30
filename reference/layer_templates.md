@@ -85,6 +85,7 @@ the examples for details.
 ## Examples
 
 ``` r
+
 op <- options()
 
 new_layer_template(

@@ -52,6 +52,7 @@ A character vector
 ## Examples
 
 ``` r
+
 string <- c(" 0  (0.0%)", " 8  (9.3%)", "78 (90.7%)")
 
 apply_conditional_format(string, 2, x == 0, " 0        ", full_string=TRUE)

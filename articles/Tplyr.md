@@ -66,6 +66,7 @@ functions are available to change individual parameters catered to your
 analysis.
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y")
 t
 #> *** tplyr_table ***
@@ -137,11 +138,12 @@ states. Lastly, `desc` layers create descriptive statistics.
     aspects, such as how denominators should be applied.
 
 ``` r
+
 cnt <- group_count(t, AGEGR1)
 cnt
 #> *** count_layer ***
-#> Self:  count_layer < 0x564fd85f05d8 >
-#> Parent:  tplyr_table < 0x564fd82946c8 >
+#> Self:  count_layer < 0x558b0867fbf8 >
+#> Parent:  tplyr_table < 0x558b083227f0 >
 #> target_var: 
 #>  AGEGR1
 #> by: 
@@ -151,8 +153,8 @@ cnt
 dsc <- group_desc(t, AGE)
 dsc
 #> *** desc_layer ***
-#> Self:  desc_layer < 0x564fd8754748 >
-#> Parent:  tplyr_table < 0x564fd82946c8 >
+#> Self:  desc_layer < 0x558b08749600 >
+#> Parent:  tplyr_table < 0x558b083227f0 >
 #> target_var: 
 #>  AGE
 #> by: 
@@ -162,8 +164,8 @@ dsc
 shf <- group_shift(t, vars(row=COMP8FL, column=COMP24FL))
 shf
 #> *** shift_layer ***
-#> Self:  shift_layer < 0x564fd8858920 >
-#> Parent:  tplyr_table < 0x564fd82946c8 >
+#> Self:  shift_layer < 0x558b0885a570 >
+#> Parent:  tplyr_table < 0x558b083227f0 >
 #> target_var: 
 #>  COMP8FL
 #>  COMP24FL
@@ -195,6 +197,7 @@ you can attach multiple layers that have already been constructed
 upfront:
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)")
@@ -210,6 +213,7 @@ is special in that it also allows you to use piping to use modifier
 functions on the layer being constructed
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)") %>% 
@@ -225,6 +229,7 @@ cleaner to work with if you have a large number of layers being
 constructed.
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P) 
 
 l1 <- group_count(t, AGEGR1, by = "Age categories n (%)")
@@ -267,6 +272,7 @@ object, you use the function
 [`build()`](https://atorus-research.github.io/Tplyr/reference/build.md):
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories n (%)")
@@ -277,11 +283,11 @@ t %>%
   kable()
 ```
 
-| row_label1           | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age categories n (%) | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               1 |           1 |           1 |
-| Age categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               1 |           1 |           2 |
-| Age categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               1 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age categories n (%) | \<65 | 14 ( 16.3%) | 11 ( 13.1%) | 8 ( 9.5%) | 1 | 1 | 1 |
+| Age categories n (%) | \>80 | 30 ( 34.9%) | 18 ( 21.4%) | 29 ( 34.5%) | 1 | 1 | 2 |
+| Age categories n (%) | 65-80 | 42 ( 48.8%) | 55 ( 65.5%) | 47 ( 56.0%) | 1 | 1 | 3 |
 
 But there’s more you can get from **Tplyr**. It’s great to have the
 formatted numbers, but what about the numeric data behind the scenes?
@@ -292,6 +298,7 @@ off of the counts? You can get that information as well using
 This returns the numeric data from each layer as a list of data frames:
 
 ``` r
+
 get_numeric_data(t) %>% 
   head() %>% 
   kable()
@@ -327,6 +334,7 @@ So - why is this object necessary. Consider this example:
 
 ``` r
 
+
 t <- tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)") %>% 
@@ -341,10 +349,10 @@ t %>%
   kable()
 ```
 
-| row_label1  | row_label2 | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:-----------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years) | n          | 86             | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years) | Mean (SD)  | 75.21 ( 8.590) | 74.38 ( 7.886)            | 75.67 ( 8.286)           |               1 |           1 |           2 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.21 ( 8.590) | 74.38 ( 7.886) | 75.67 ( 8.286) | 1 | 1 | 2 |
 
 In a perfect world, the
 [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
@@ -398,6 +406,7 @@ variable using
 [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md).
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
@@ -407,13 +416,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1     | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age categories | \<65       | 14 (16.3)    | 11 (13.1)                 | 8 ( 9.5)                 |               1 |           1 |           1 |
-| Age categories | \>80       | 30 (34.9)    | 18 (21.4)                 | 29 (34.5)                |               1 |           1 |           2 |
-| Age categories | 65-80      | 42 (48.8)    | 55 (65.5)                 | 47 (56.0)                |               1 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age categories | \<65 | 14 (16.3) | 11 (13.1) | 8 ( 9.5) | 1 | 1 | 1 |
+| Age categories | \>80 | 30 (34.9) | 18 (21.4) | 29 (34.5) | 1 | 1 | 2 |
+| Age categories | 65-80 | 42 (48.8) | 55 (65.5) | 47 (56.0) | 1 | 1 | 3 |
 
 ``` r
+
 
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
@@ -424,15 +434,16 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1     | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age categories | \<65       | 14           | 11                        | 8                        |               1 |           1 |           1 |
-| Age categories | \>80       | 30           | 18                        | 29                       |               1 |           1 |           2 |
-| Age categories | 65-80      | 42           | 55                        | 47                       |               1 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age categories | \<65 | 14 | 11 | 8 | 1 | 1 | 1 |
+| Age categories | \>80 | 30 | 18 | 29 | 1 | 1 | 2 |
+| Age categories | 65-80 | 42 | 55 | 47 | 1 | 1 | 3 |
 
 Really - format strings allow you to present your data however you like.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
@@ -442,11 +453,11 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1     | row_label2 | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------|:-----------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age categories | \<65       | 14 (•◡•) 16.3% | 11 (•◡•) 13.1%            | 8 (•◡•) 9.5%             |               1 |           1 |           1 |
-| Age categories | \>80       | 30 (•◡•) 34.9% | 18 (•◡•) 21.4%            | 29 (•◡•) 34.5%           |               1 |           1 |           2 |
-| Age categories | 65-80      | 42 (•◡•) 48.8% | 55 (•◡•) 65.5%            | 47 (•◡•) 56.0%           |               1 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age categories | \<65 | 14 (•◡•) 16.3% | 11 (•◡•) 13.1% | 8 (•◡•) 9.5% | 1 | 1 | 1 |
+| Age categories | \>80 | 30 (•◡•) 34.9% | 18 (•◡•) 21.4% | 29 (•◡•) 34.5% | 1 | 1 | 2 |
+| Age categories | 65-80 | 42 (•◡•) 48.8% | 55 (•◡•) 65.5% | 47 (•◡•) 56.0% | 1 | 1 | 3 |
 
 But should you? Probably not.
 
@@ -460,6 +471,7 @@ controls a great deal of what happens within a descriptive statistics
 layer. Note that there are some built in defaults to what’s output:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
@@ -468,14 +480,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1  | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years) | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years) | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
-| Age (years) | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
-| Age (years) | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
-| Age (years) | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
-| Age (years) | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 2 |
+| Age (years) | Median | 76.0 | 76.0 | 77.5 | 1 | 1 | 3 |
+| Age (years) | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 1 | 1 | 4 |
+| Age (years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 1 | 1 | 5 |
+| Age (years) | Missing | 0 | 0 | 0 | 1 | 1 | 6 |
 
 To override these defaults, just specify the summaries that you want to
 be performed using
@@ -487,6 +499,7 @@ can make your own! This is where
 comes into play. Let’s say you want to derive a geometric mean.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>%
   add_layer(
     group_desc(AGE, by = "Sepal Length") %>%
@@ -501,9 +514,9 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1   | row_label2          | var1_Placebo   | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-------------|:--------------------|:---------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Sepal Length | Geometric Mean (SD) | 74.70 ( 8.590) | 73.94 ( 7.886)            | 75.18 ( 8.286)           |               1 |           1 |           1 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Sepal Length | Geometric Mean (SD) | 74.70 ( 8.590) | 73.94 ( 7.886) | 75.18 ( 8.286) | 1 | 1 | 1 |
 
 In
 [`set_custom_summaries()`](https://atorus-research.github.io/Tplyr/reference/set_custom_summaries.md),
@@ -523,6 +536,7 @@ Sometimes there’s a need to present multiple variables summarized side
 by side. **Tplyr** allows you to do this as well.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(vars(AGE, AVGDD), by = "Age and Avg. Daily Dose")
@@ -531,14 +545,14 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1              | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo | var2_Xanomeline High Dose | var2_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:------------------------|:-----------|:-------------|:--------------------------|:-------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age and Avg. Daily Dose | n          | 86           | 84                        | 84                       | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age and Avg. Daily Dose | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             | 0.0 ( 0.00)  | 71.6 ( 8.11)              | 54.0 ( 0.00)             |               1 |           1 |           2 |
-| Age and Avg. Daily Dose | Median     | 76.0         | 76.0                      | 77.5                     | 0.0          | 75.1                      | 54.0                     |               1 |           1 |           3 |
-| Age and Avg. Daily Dose | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               | 0.0, 0.0     | 70.2, 76.9                | 54.0, 54.0               |               1 |           1 |           4 |
-| Age and Avg. Daily Dose | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   | 0, 0         | 54, 79                    | 54, 54                   |               1 |           1 |           5 |
-| Age and Avg. Daily Dose | Missing    | 0            | 0                         | 0                        | 0            | 0                         | 0                        |               1 |           1 |           6 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo | var2_Xanomeline High Dose | var2_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age and Avg. Daily Dose | n | 86 | 84 | 84 | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age and Avg. Daily Dose | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 0.0 ( 0.00) | 71.6 ( 8.11) | 54.0 ( 0.00) | 1 | 1 | 2 |
+| Age and Avg. Daily Dose | Median | 76.0 | 76.0 | 77.5 | 0.0 | 75.1 | 54.0 | 1 | 1 | 3 |
+| Age and Avg. Daily Dose | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 0.0, 0.0 | 70.2, 76.9 | 54.0, 54.0 | 1 | 1 | 4 |
+| Age and Avg. Daily Dose | Min, Max | 52, 89 | 56, 88 | 51, 88 | 0, 0 | 54, 79 | 54, 54 | 1 | 1 | 5 |
+| Age and Avg. Daily Dose | Missing | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 6 |
 
 **Tplyr** summarizes both variables and merges them together. This makes
 creating tables where you need to compare BASE, AVAL, and CHG next to
@@ -559,6 +573,7 @@ you want a total row within your counts. This can be done with
 [`add_total_row()`](https://atorus-research.github.io/Tplyr/reference/add_total_row.md):
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(AGEGR1, by = "Age categories") %>% 
@@ -568,18 +583,19 @@ tplyr_table(tplyr_adsl, TRT01P) %>%
   kable()
 ```
 
-| row_label1     | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age categories | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               1 |           1 |           1 |
-| Age categories | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               1 |           1 |           2 |
-| Age categories | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               1 |           1 |           3 |
-| Age categories | Total      | 86 (100.0%)  | 84 (100.0%)               | 84 (100.0%)              |               1 |           1 |           4 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age categories | \<65 | 14 ( 16.3%) | 11 ( 13.1%) | 8 ( 9.5%) | 1 | 1 | 1 |
+| Age categories | \>80 | 30 ( 34.9%) | 18 ( 21.4%) | 29 ( 34.5%) | 1 | 1 | 2 |
+| Age categories | 65-80 | 42 ( 48.8%) | 55 ( 65.5%) | 47 ( 56.0%) | 1 | 1 | 3 |
+| Age categories | Total | 86 (100.0%) | 84 (100.0%) | 84 (100.0%) | 1 | 1 | 4 |
 
 Sometimes it’s also necessary to count summaries based on distinct
 values. **Tplyr** allows you to do this as well with
 [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md):
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count('Subjects with at least one adverse event') %>% 
@@ -590,9 +606,9 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                               | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-----------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|:------------|
-| Subjects with at least one adverse event | 47           | 111                       | 118                      |               1 | NA          |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|:---|
+| Subjects with at least one adverse event | 47 | 111 | 118 | 1 | NA |
 
 There’s another trick going on here - to create a summary with row label
 text like you see above, text strings can be used as the target
@@ -605,6 +621,7 @@ body system and counting actual events within that body system.
 **Tplyr** has means of making this simple for the user as well.
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
@@ -614,14 +631,14 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                             | row_label2                             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------------------------|:---------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%)  | 111 (100.0%)              | 118 (100.0%)             |               1 |           1 |         Inf |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS                      | 0 ( 0.0%)    | 1 ( 0.9%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA                               | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           2 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER                                | 0 ( 0.0%)    | 2 ( 1.8%)                 | 8 ( 6.8%)                |               1 |           1 |           3 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT                             | 3 ( 6.4%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC                      | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%) | 111 (100.0%) | 118 (100.0%) | 1 | 1 | Inf |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 0.9%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER | 0 ( 0.0%) | 2 ( 1.8%) | 8 ( 6.8%) | 1 | 1 | 3 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT | 3 ( 6.4%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 5 |
 
 Here we again use
 [`dplyr::vars()`](https://dplyr.tidyverse.org/reference/vars.html) to
@@ -641,6 +658,7 @@ tables that show these data as a matrix, where one state will be
 presented in rows and the other in columns. Let’s look at an example.
 
 ``` r
+
 # Tplyr can use factor orders to dummy values and order presentation
 tplyr_adlb$ANRIND <- factor(tplyr_adlb$ANRIND, c("L", "N", "H"))
 tplyr_adlb$BNRIND <- factor(tplyr_adlb$BNRIND, c("L", "N", "H"))
@@ -654,11 +672,11 @@ tplyr_table(tplyr_adlb, TRTA, where = PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | var1_Placebo_L | var1_Placebo_N | var1_Placebo_H | var1_Xanomeline High Dose_L | var1_Xanomeline High Dose_N | var1_Xanomeline High Dose_H | var1_Xanomeline Low Dose_L | var1_Xanomeline Low Dose_N | var1_Xanomeline Low Dose_H | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:----------------------|:-----------|:---------------|:---------------|:---------------|:----------------------------|:----------------------------|:----------------------------|:---------------------------|:---------------------------|:---------------------------|----------------:|------------:|------------:|
-| Creatine Kinase (U/L) | L          | 0 ( 0%)        | 0 ( 0%)        | 0 ( 0%)        | 0 ( 0%)                     | 0 ( 0%)                     | 0 ( 0%)                     | 0 ( 0%)                    | 0 ( 0%)                    | 0 ( 0%)                    |               1 |          35 |           1 |
-| Creatine Kinase (U/L) | N          | 0 ( 0%)        | 27 ( 87%)      | 4 ( 13%)       | 0 ( 0%)                     | 17 ( 85%)                   | 2 ( 10%)                    | 0 ( 0%)                    | 14 ( 93%)                  | 1 ( 7%)                    |               1 |          35 |           2 |
-| Creatine Kinase (U/L) | H          | 0 ( 0%)        | 0 ( 0%)        | 0 ( 0%)        | 0 ( 0%)                     | 0 ( 0%)                     | 1 ( 5%)                     | 0 ( 0%)                    | 0 ( 0%)                    | 0 ( 0%)                    |               1 |          35 |           3 |
+| row_label1 | row_label2 | var1_Placebo_L | var1_Placebo_N | var1_Placebo_H | var1_Xanomeline High Dose_L | var1_Xanomeline High Dose_N | var1_Xanomeline High Dose_H | var1_Xanomeline Low Dose_L | var1_Xanomeline Low Dose_N | var1_Xanomeline Low Dose_H | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| Creatine Kinase (U/L) | L | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 1 | 35 | 1 |
+| Creatine Kinase (U/L) | N | 0 ( 0%) | 27 ( 87%) | 4 ( 13%) | 0 ( 0%) | 17 ( 85%) | 2 ( 10%) | 0 ( 0%) | 14 ( 93%) | 1 ( 7%) | 1 | 35 | 2 |
+| Creatine Kinase (U/L) | H | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 1 ( 5%) | 0 ( 0%) | 0 ( 0%) | 0 ( 0%) | 1 | 35 | 3 |
 
 The underlying process of shift tables is the same as count layers -
 we’re counting the number of occurrences of something by a set of

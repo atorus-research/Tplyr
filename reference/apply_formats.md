@@ -44,6 +44,7 @@ Note that auto-precision is not currently supported within
 ## Examples
 
 ``` r
+
 library(dplyr)
 
 mtcars %>%

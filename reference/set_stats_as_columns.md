@@ -39,6 +39,7 @@ multiple target variables will also be respected properly.
 ## Examples
 
 ``` r
+
 dat <- tplyr_table(mtcars, gear) %>%
   add_layer(
     group_desc(wt, by = vs) %>%

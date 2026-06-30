@@ -17,6 +17,7 @@ Additionally, we’re sorting by descending total occurrences using the
 “Total” group.
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
   add_total_group() %>%
   add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
@@ -33,17 +34,17 @@ t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
 kable(t)
 ```
 
-| row_label1                  | var1_Placebo | var1_Xanomeline Low Dose | var1_Xanomeline High Dose | var1_Treated | var1_Total   |
-|:----------------------------|:-------------|:-------------------------|:--------------------------|:-------------|:-------------|
-| COMPLETED                   | 58 ( 67.4%)  | 25 ( 29.8%)              | 27 ( 32.1%)               | 52 ( 31.0%)  | 110 ( 43.3%) |
-| ADVERSE EVENT               | 8 ( 9.3%)    | 44 ( 52.4%)              | 40 ( 47.6%)               | 84 ( 50.0%)  | 92 ( 36.2%)  |
-| WITHDRAWAL BY SUBJECT       | 9 ( 10.5%)   | 10 ( 11.9%)              | 8 ( 9.5%)                 | 18 ( 10.7%)  | 27 ( 10.6%)  |
-| STUDY TERMINATED BY SPONSOR | 2 ( 2.3%)    | 2 ( 2.4%)                | 3 ( 3.6%)                 | 5 ( 3.0%)    | 7 ( 2.8%)    |
-| PROTOCOL VIOLATION          | 2 ( 2.3%)    | 1 ( 1.2%)                | 3 ( 3.6%)                 | 4 ( 2.4%)    | 6 ( 2.4%)    |
-| LACK OF EFFICACY            | 3 ( 3.5%)    | 0 ( 0.0%)                | 1 ( 1.2%)                 | 1 ( 0.6%)    | 4 ( 1.6%)    |
-| DEATH                       | 2 ( 2.3%)    | 1 ( 1.2%)                | 0 ( 0.0%)                 | 1 ( 0.6%)    | 3 ( 1.2%)    |
-| PHYSICIAN DECISION          | 1 ( 1.2%)    | 0 ( 0.0%)                | 2 ( 2.4%)                 | 2 ( 1.2%)    | 3 ( 1.2%)    |
-| LOST TO FOLLOW-UP           | 1 ( 1.2%)    | 1 ( 1.2%)                | 0 ( 0.0%)                 | 1 ( 0.6%)    | 2 ( 0.8%)    |
+| row_label1 | var1_Placebo | var1_Xanomeline Low Dose | var1_Xanomeline High Dose | var1_Treated | var1_Total |
+|:---|:---|:---|:---|:---|:---|
+| COMPLETED | 58 ( 67.4%) | 25 ( 29.8%) | 27 ( 32.1%) | 52 ( 31.0%) | 110 ( 43.3%) |
+| ADVERSE EVENT | 8 ( 9.3%) | 44 ( 52.4%) | 40 ( 47.6%) | 84 ( 50.0%) | 92 ( 36.2%) |
+| WITHDRAWAL BY SUBJECT | 9 ( 10.5%) | 10 ( 11.9%) | 8 ( 9.5%) | 18 ( 10.7%) | 27 ( 10.6%) |
+| STUDY TERMINATED BY SPONSOR | 2 ( 2.3%) | 2 ( 2.4%) | 3 ( 3.6%) | 5 ( 3.0%) | 7 ( 2.8%) |
+| PROTOCOL VIOLATION | 2 ( 2.3%) | 1 ( 1.2%) | 3 ( 3.6%) | 4 ( 2.4%) | 6 ( 2.4%) |
+| LACK OF EFFICACY | 3 ( 3.5%) | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 0.6%) | 4 ( 1.6%) |
+| DEATH | 2 ( 2.3%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 0.6%) | 3 ( 1.2%) |
+| PHYSICIAN DECISION | 1 ( 1.2%) | 0 ( 0.0%) | 2 ( 2.4%) | 2 ( 1.2%) | 3 ( 1.2%) |
+| LOST TO FOLLOW-UP | 1 ( 1.2%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 ( 0.6%) | 2 ( 0.8%) |
 
 ## Distinct Versus Event Counts
 
@@ -67,6 +68,7 @@ function sets the variables used to calculate the distinct occurrences
 of some value using the specified `distinct_by` variables.
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>%
@@ -79,14 +81,14 @@ t <- tplyr_table(tplyr_adae, TRTA) %>%
 kable(t)
 ```
 
-| row_label1         | var1_Placebo      | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------------------|:------------------|:--------------------------|:-------------------------|----------------:|------------:|
-| ACTINIC KERATOSIS  | 0 ( 0.00%) \[ 0\] | 1 ( 2.38%) \[ 1\]         | 0 ( 0.00%) \[ 0\]        |               1 |           1 |
-| ALOPECIA           | 1 ( 4.76%) \[ 1\] | 0 ( 0.00%) \[ 0\]         | 0 ( 0.00%) \[ 0\]        |               1 |           2 |
-| BLISTER            | 0 ( 0.00%) \[ 0\] | 1 ( 2.38%) \[ 2\]         | 5 (11.90%) \[ 8\]        |               1 |           3 |
-| COLD SWEAT         | 1 ( 4.76%) \[ 3\] | 0 ( 0.00%) \[ 0\]         | 0 ( 0.00%) \[ 0\]        |               1 |           4 |
-| DERMATITIS ATOPIC  | 1 ( 4.76%) \[ 1\] | 0 ( 0.00%) \[ 0\]         | 0 ( 0.00%) \[ 0\]        |               1 |           5 |
-| DERMATITIS CONTACT | 0 ( 0.00%) \[ 0\] | 0 ( 0.00%) \[ 0\]         | 1 ( 2.38%) \[ 2\]        |               1 |           6 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|---:|---:|
+| ACTINIC KERATOSIS | 0 ( 0.00%) \[ 0\] | 1 ( 2.38%) \[ 1\] | 0 ( 0.00%) \[ 0\] | 1 | 1 |
+| ALOPECIA | 1 ( 4.76%) \[ 1\] | 0 ( 0.00%) \[ 0\] | 0 ( 0.00%) \[ 0\] | 1 | 2 |
+| BLISTER | 0 ( 0.00%) \[ 0\] | 1 ( 2.38%) \[ 2\] | 5 (11.90%) \[ 8\] | 1 | 3 |
+| COLD SWEAT | 1 ( 4.76%) \[ 3\] | 0 ( 0.00%) \[ 0\] | 0 ( 0.00%) \[ 0\] | 1 | 4 |
+| DERMATITIS ATOPIC | 1 ( 4.76%) \[ 1\] | 0 ( 0.00%) \[ 0\] | 0 ( 0.00%) \[ 0\] | 1 | 5 |
+| DERMATITIS CONTACT | 0 ( 0.00%) \[ 0\] | 0 ( 0.00%) \[ 0\] | 1 ( 2.38%) \[ 2\] | 1 | 6 |
 
 You may have seen tables before like the one above. This display shows
 the number of subjects who experienced an adverse event, the percentage
@@ -105,6 +107,7 @@ An additional option for formatting the numbers above would be using
 use a capital ‘X’ or a capital ‘A’. For example:
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>%
@@ -161,6 +164,7 @@ that, `row_label1` continues on with the value “CARDIAC DISORDERS”, but
 `row_label2` changes. These are the summaries for `AEDECOD`.
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
@@ -170,19 +174,20 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                             | row_label2                             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------------------------|:---------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%)  | 111 (100.0%)              | 118 (100.0%)             |               1 |           1 |         Inf |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS                      | 0 ( 0.0%)    | 1 ( 0.9%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA                               | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           2 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER                                | 0 ( 0.0%)    | 2 ( 1.8%)                 | 8 ( 6.8%)                |               1 |           1 |           3 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT                             | 3 ( 6.4%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC                      | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%) | 111 (100.0%) | 118 (100.0%) | 1 | 1 | Inf |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 0.9%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER | 0 ( 0.0%) | 2 ( 1.8%) | 8 ( 6.8%) | 1 | 1 | 3 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT | 3 ( 6.4%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 5 |
 
 This accomplishes what we needed, but it’s not exactly the presentation
 you might hope for. We have a solution for this as well.
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
@@ -194,14 +199,14 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%)  | 111 (100.0%)              | 118 (100.0%)             |               1 |           1 |         Inf |
-| —\>ACTINIC KERATOSIS                   | 0 ( 0.0%)    | 1 ( 0.9%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |
-| —\>ALOPECIA                            | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           2 |
-| —\>BLISTER                             | 0 ( 0.0%)    | 2 ( 1.8%)                 | 8 ( 6.8%)                |               1 |           1 |           3 |
-| —\>COLD SWEAT                          | 3 ( 6.4%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| —\>DERMATITIS ATOPIC                   | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
+| row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|---:|---:|---:|
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%) | 111 (100.0%) | 118 (100.0%) | 1 | 1 | Inf |
+| —\>ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 0.9%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| —\>ALOPECIA | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| —\>BLISTER | 0 ( 0.0%) | 2 ( 1.8%) | 8 ( 6.8%) | 1 | 1 | 3 |
+| —\>COLD SWEAT | 3 ( 6.4%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| —\>DERMATITIS ATOPIC | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 5 |
 
 By using
 [`set_nest_count()`](https://atorus-research.github.io/Tplyr/reference/set_nest_count.md),

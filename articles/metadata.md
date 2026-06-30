@@ -33,6 +33,7 @@ result, thus providing traceability from the result back to the source.
 Consider the following example:
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_count(RACE)
@@ -46,17 +47,17 @@ dat <- t %>% build(metadata=TRUE)
 kable(dat)
 ```
 
-| row_id | row_label1                       | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
-|:-------|:---------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|
-| c1_1   | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%)    | 1 ( 1.2%)                 | 0 ( 0.0%)                |               1 |           1 |
-| c2_1   | BLACK OR AFRICAN AMERICAN        | 8 ( 9.3%)    | 9 ( 10.7%)                | 6 ( 7.1%)                |               1 |           2 |
-| c3_1   | WHITE                            | 78 ( 90.7%)  | 74 ( 88.1%)               | 78 ( 92.9%)              |               1 |           3 |
-| d1_2   | n                                | 79           | 74                        | 81                       |               2 |           1 |
-| d2_2   | Mean (SD)                        | 75.0 ( 8.43) | 73.9 ( 7.87)              | 76.1 ( 8.02)             |               2 |           2 |
-| d3_2   | Median                           | 76.0         | 75.5                      | 78.0                     |               2 |           3 |
-| d4_2   | Q1, Q3                           | 69.5, 81.0   | 70.2, 79.0                | 71.0, 82.0               |               2 |           4 |
-| d5_2   | Min, Max                         | 52, 88       | 56, 88                    | 51, 88                   |               2 |           5 |
-| d6_2   | Missing                          | 0            | 0                         | 0                        |               2 |           6 |
+| row_id | row_label1 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 |
+|:---|:---|:---|:---|:---|---:|---:|
+| c1_1 | AMERICAN INDIAN OR ALASKA NATIVE | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) | 1 | 1 |
+| c2_1 | BLACK OR AFRICAN AMERICAN | 8 ( 9.3%) | 9 ( 10.7%) | 6 ( 7.1%) | 1 | 2 |
+| c3_1 | WHITE | 78 ( 90.7%) | 74 ( 88.1%) | 78 ( 92.9%) | 1 | 3 |
+| d1_2 | n | 79 | 74 | 81 | 2 | 1 |
+| d2_2 | Mean (SD) | 75.0 ( 8.43) | 73.9 ( 7.87) | 76.1 ( 8.02) | 2 | 2 |
+| d3_2 | Median | 76.0 | 75.5 | 78.0 | 2 | 3 |
+| d4_2 | Q1, Q3 | 69.5, 81.0 | 70.2, 79.0 | 71.0, 82.0 | 2 | 4 |
+| d5_2 | Min, Max | 52, 88 | 56, 88 | 51, 88 | 2 | 5 |
+| d6_2 | Missing | 0 | 0 | 0 | 2 | 6 |
 
 To trigger the creation of metadata, the
 [`build()`](https://atorus-research.github.io/Tplyr/reference/build.md)
@@ -86,6 +87,7 @@ what if we want to know who the 8 subjects in the Placebo group who
 where Black or African American:
 
 ``` r
+
 get_meta_subset(t, 'c2_1', 'var1_Placebo') %>% 
   kable()
 ```
@@ -113,6 +115,7 @@ a default of USUBJID. So let’s say we want additionally include the
 variable `SEX`.
 
 ``` r
+
 get_meta_subset(t, 'c2_1', 'var1_Placebo', add_cols = vars(USUBJID, SEX)) %>% 
   kable()
 ```
@@ -139,6 +142,7 @@ created by Tplyr. So let’s say we want to know the subjects relevant for
 the descriptive statistics around age in the Xanomeline High Dose group:
 
 ``` r
+
 get_meta_subset(t, 'd1_2', 'var1_Xanomeline High Dose') %>% 
   head(10) %>% 
   kable()
@@ -178,6 +182,7 @@ Using the last example of
 above:
 
 ``` r
+
 get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 #> tplyr_meta: 4 names, 3 filters
 #> Names:
@@ -210,6 +215,7 @@ into `dplyr` syntax when necessary, which is exactly what happens in
 For example:
 
 ``` r
+
 m <- get_meta_result(t, 'd1_2', 'var1_Xanomeline High Dose')
 
 tplyr_adsl %>% 
@@ -237,6 +243,7 @@ tplyr_adsl %>%
 But - who says you can’t let your imagination run wild?
 
 ``` r
+
 cat(c("tplyr_adsl %>%\n",
   "   filter(\n      ",
   paste(purrr::map_chr(m$filters, ~ rlang::as_label(.)), collpase=",\n      "),
@@ -258,6 +265,7 @@ to refer to that excluded data. To handle this, there’s an additional
 field called an ‘Anti Join’. Consider this example:
 
 ``` r
+
 t <- tplyr_table(tplyr_adae, TRTA) %>%
   set_pop_data(tplyr_adsl) %>%
   set_pop_treat_var(TRT01A) %>%
@@ -274,14 +282,14 @@ tail(x) %>%
   kable()
 ```
 
-| row_id | row_label1                             | row_label2          | var1_Placebo |
-|:-------|:---------------------------------------|:--------------------|:-------------|
-| c18_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN EXFOLIATION    | 0 ( 0.0%)    |
-| c19_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN IRRITATION     | 3 ( 3.5%)    |
-| c20_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ODOUR ABNORMAL | 0 ( 0.0%)    |
-| c21_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ULCER          | 1 ( 1.2%)    |
-| c22_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | URTICARIA           | 0 ( 0.0%)    |
-| c23_1  | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | Missing             | 85 (98.8%)   |
+| row_id | row_label1 | row_label2 | var1_Placebo |
+|:---|:---|:---|:---|
+| c18_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN EXFOLIATION | 0 ( 0.0%) |
+| c19_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN IRRITATION | 3 ( 3.5%) |
+| c20_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ODOUR ABNORMAL | 0 ( 0.0%) |
+| c21_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ULCER | 1 ( 1.2%) |
+| c22_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | URTICARIA | 0 ( 0.0%) |
+| c23_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | Missing | 85 (98.8%) |
 
 The missing row in this example counts the subjects within their
 respective treatment groups who do *not* have any adverse events for the
@@ -289,6 +297,7 @@ body system “SKIN AND SUBCUTANEOUS TISSUE DISORDERS”. Here’s what the
 metadata for the result for the Placebo treatment group looks like.
 
 ``` r
+
 m <- get_meta_result(t, 'c23_1', 'var1_Placebo')
 m
 #> tplyr_meta: 3 names, 4 filters
@@ -326,6 +335,7 @@ Extracting this metadata works very much the same way as extracting
 other results.
 
 ``` r
+
 head(get_meta_subset(t, 'c23_1', 'var1_Placebo'))
 #> # A tibble: 6 × 2
 #>   USUBJID     TRT01A 
@@ -342,6 +352,7 @@ If you’re not working with the `tplyr_table` object, then there’s some
 additional information you need to provide to the function.
 
 ``` r
+
 head(get_meta_subset(t$metadata, 'c23_1', 'var1_Placebo', 
                      target=t$target, pop_data=t$pop_data))
 #> # A tibble: 6 × 2
@@ -374,6 +385,10 @@ great. But how do you *use* that.
 The idea behind this is really to support
 [Shiny](https://shiny.posit.co/). Consider this minimal application.
 Click any of the result cells within the table and see what happens.
+
+### Please Wait
+
+![loading](/__static__/frontend/images/spinner.gif?v=ce6bcde20b2f6c562913c06be83f9e7c8a19b008017407a3094b76fa82bbd6b7f4048e032e07e534d4ab5442b9105294d612863735077ab13a47653a14c5866e)
 
 *Source code available
 [here](https://github.com/atorus-research/Tplyr-shiny-demo)*

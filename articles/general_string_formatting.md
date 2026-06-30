@@ -22,6 +22,7 @@ formatting is handled by using format strings. Consider the following
 example.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
@@ -66,28 +67,28 @@ object is what controls the numbers reported in your resulting table.
 
 The table below outlines the variables available within each layer.
 
-| **Layer Type**                    | **Variables**  | **Description**                                                                                                                                                                                |
-|-----------------------------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Count Layers**                  | n              | Non-distinct counts                                                                                                                                                                            |
-|                                   | pct            | Ratio of non-distinct counts to non-distinct total                                                                                                                                             |
-|                                   | total          | Non-distinct total                                                                                                                                                                             |
-|                                   | distinct_n     | Distinct counts (must use [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md))                                                                         |
-|                                   | distinct_pct   | Ratio of distinct counts to distinct total. If population data are set, distinct_total pulled from population data.                                                                            |
-|                                   | distinct_total | Distinct total (must use [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)). If population data are set, distinct_total pulled from population data. |
-| **Shift layers**                  | n              | Ratio of non-distinct counts to non-distinct total                                                                                                                                             |
-|                                   | pct            | Ratio of non-distinct counts to non-distinct total                                                                                                                                             |
-|                                   | total          | Non-distinct total                                                                                                                                                                             |
-| **Descriptive Statistics Layers** | n              | N                                                                                                                                                                                              |
-|                                   | mean           | Mean                                                                                                                                                                                           |
-|                                   | sd             | Standard Deviation                                                                                                                                                                             |
-|                                   | median         | Median                                                                                                                                                                                         |
-|                                   | var            | Variance                                                                                                                                                                                       |
-|                                   | min            | Minimum                                                                                                                                                                                        |
-|                                   | max            | Maximum                                                                                                                                                                                        |
-|                                   | iqr            | Interquartile Range                                                                                                                                                                            |
-|                                   | q1             | Q1                                                                                                                                                                                             |
-|                                   | q3             | Q3                                                                                                                                                                                             |
-|                                   | missing        | Missing (specifically NA counts)                                                                                                                                                               |
+| **Layer Type** | **Variables** | **Description** |
+|----|----|----|
+| **Count Layers** | n | Non-distinct counts |
+|  | pct | Ratio of non-distinct counts to non-distinct total |
+|  | total | Non-distinct total |
+|  | distinct_n | Distinct counts (must use [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)) |
+|  | distinct_pct | Ratio of distinct counts to distinct total. If population data are set, distinct_total pulled from population data. |
+|  | distinct_total | Distinct total (must use [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)). If population data are set, distinct_total pulled from population data. |
+| **Shift layers** | n | Ratio of non-distinct counts to non-distinct total |
+|  | pct | Ratio of non-distinct counts to non-distinct total |
+|  | total | Non-distinct total |
+| **Descriptive Statistics Layers** | n | N |
+|  | mean | Mean |
+|  | sd | Standard Deviation |
+|  | median | Median |
+|  | var | Variance |
+|  | min | Minimum |
+|  | max | Maximum |
+|  | iqr | Interquartile Range |
+|  | q1 | Q1 |
+|  | q3 | Q3 |
+|  | missing | Missing (specifically NA counts) |
 
 *Note: For the actual equations used in descriptive statistics layers,
 see `vignettes("desc")`*
@@ -100,6 +101,7 @@ layer’s
 call.
 
 ``` r
+
 f_str("xx (xx.x%)", n, pct)
 #> *** Format String ***
 #> xx (xx.x%)
@@ -158,6 +160,7 @@ width of space allotted by the x’s will be preserved. Note the
 `var1_Placebo` row below.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
@@ -186,6 +189,7 @@ You can trigger this behaivor by using a single ‘x’ in the integer side
 of a format group.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
@@ -214,6 +218,7 @@ called “parenthesis hugging”. This is triggered by using an uppercase
 example:
 
 ``` r
+
 
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
@@ -253,6 +258,7 @@ character ‘a’ instead of ‘x’ in the format string.
 Consider the following example.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, where=PARAMCD %in% c("CA", "URATE")) %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
@@ -288,6 +294,7 @@ based on the maximum summarized value of `n` within the data. For
 example:
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_count(RACE) %>% 
@@ -313,6 +320,7 @@ is triggered using auto-precision. Take this example of an adverse event
 table:
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01A) %>% 

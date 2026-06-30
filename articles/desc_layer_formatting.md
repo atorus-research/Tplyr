@@ -15,6 +15,7 @@ missing row or column group, if the factor level is present, then the
 variable or row will still generate)*
 
 ``` r
+
 tplyr_adsl$TRT01P <- as.factor(tplyr_adsl$TRT01P)
 tplyr_adlb$TRTA <- as.factor(tplyr_adlb$TRTA)
 
@@ -35,12 +36,12 @@ tplyr_table(tplyr_adlb_2, TRTA) %>%
 ```
 
 | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:-------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  |              | 5 ( 1)                    | 7 ( 3)                   |
-| CA         | Mean (SD)  |              | 2 ( 0)                    | 2 ( 0)                   |
-| CK         | Mean (SD)  |              | 108 ( 94)                 | 83 ( 78)                 |
-| GGT        | Mean (SD)  |              | 36 ( 49)                  | 35 ( 27)                 |
-| URATE      | Mean (SD)  |              | 289 ( 88)                 | 253 ( 87)                |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) |  | 5 ( 1) | 7 ( 3) |
+| CA | Mean (SD) |  | 2 ( 0) | 2 ( 0) |
+| CK | Mean (SD) |  | 108 ( 94) | 83 ( 78) |
+| GGT | Mean (SD) |  | 36 ( 49) | 35 ( 27) |
+| URATE | Mean (SD) |  | 289 ( 88) | 253 ( 87) |
 
 Note how the entire example above has all records in `var1_Placebo`
 missing. **Tplyr** gives you control over how you fill this space. Let’s
@@ -50,6 +51,7 @@ control this with the
 object using the `empty` parameter.
 
 ``` r
+
 tplyr_table(tplyr_adlb_2, TRTA) %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
@@ -64,12 +66,12 @@ tplyr_table(tplyr_adlb_2, TRTA) %>%
 ```
 
 | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:-------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | MISSING      | 4.61 ( 1.301)             | 6.73 ( 2.940)            |
-| CA         | Mean (SD)  | MISSING      | 2.20 ( 0.137)             | 2.16 ( 0.083)            |
-| CK         | Mean (SD)  | MISSING      | 108.25 ( 93.986)          | 83.13 ( 77.915)          |
-| GGT        | Mean (SD)  | MISSING      | 36.05 ( 48.692)           | 34.92 ( 26.989)          |
-| URATE      | Mean (SD)  | MISSING      | 289.26 ( 88.161)          | 253.06 ( 87.006)         |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | MISSING | 4.61 ( 1.301) | 6.73 ( 2.940) |
+| CA | Mean (SD) | MISSING | 2.20 ( 0.137) | 2.16 ( 0.083) |
+| CK | Mean (SD) | MISSING | 108.25 ( 93.986) | 83.13 ( 77.915) |
+| GGT | Mean (SD) | MISSING | 36.05 ( 48.692) | 34.92 ( 26.989) |
+| URATE | Mean (SD) | MISSING | 289.26 ( 88.161) | 253.06 ( 87.006) |
 
 Look at the `empty` parameter above. Here, we use a named character
 vector, where the name is `.overall`. When this name is used, if all
@@ -79,6 +81,7 @@ missing parameter. In some cases, this may not be what you’d like to
 see. Perhaps we want a string that fills each missing space.
 
 ``` r
+
 tplyr_table(tplyr_adlb_2, TRTA) %>% 
   set_pop_data(tplyr_adsl) %>% 
   set_pop_treat_var(TRT01P) %>% 
@@ -93,12 +96,12 @@ tplyr_table(tplyr_adlb_2, TRTA) %>%
 ```
 
 | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:-------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  |              | 4.61 ( 1.301)             | 6.73 ( 2.940)            |
-| CA         | Mean (SD)  |              | 2.20 ( 0.137)             | 2.16 ( 0.083)            |
-| CK         | Mean (SD)  |              | 108.25 ( 93.986)          | 83.13 ( 77.915)          |
-| GGT        | Mean (SD)  |              | 36.05 ( 48.692)           | 34.92 ( 26.989)          |
-| URATE      | Mean (SD)  |              | 289.26 ( 88.161)          | 253.06 ( 87.006)         |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) |  | 4.61 ( 1.301) | 6.73 ( 2.940) |
+| CA | Mean (SD) |  | 2.20 ( 0.137) | 2.16 ( 0.083) |
+| CK | Mean (SD) |  | 108.25 ( 93.986) | 83.13 ( 77.915) |
+| GGT | Mean (SD) |  | 36.05 ( 48.692) | 34.92 ( 26.989) |
+| URATE | Mean (SD) |  | 289.26 ( 88.161) | 253.06 ( 87.006) |
 
 In the example above, instead of filling the whole space, the `empty`
 text of “NA” replaces the empty value for each element. So for ‘Mean
@@ -126,6 +129,7 @@ needed on each side of a decimal. To use increased precision, use `a+n`
 where `n` is the number of additional spaces you wish to add.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
@@ -139,13 +143,13 @@ tplyr_table(tplyr_adlb, TRTA) %>%
   kable()
 ```
 
-| row_label1 | row_label2 | var1_Placebo         | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:---------------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | 5.3058 ( 2.05463)    | 4.6070 ( 1.30148)         | 6.7320 ( 2.94018)        |
-| CA         | Mean (SD)  | 2.180413 (0.0692494) | 2.204332 (0.1372011)      | 2.161054 (0.0830867)     |
-| CK         | Mean (SD)  | 175.8 ( 288.41)      | 108.2 ( 93.99)            | 83.1 ( 77.91)            |
-| GGT        | Mean (SD)  | 34.5 ( 34.77)        | 36.0 ( 48.69)             | 34.9 ( 26.99)            |
-| URATE      | Mean (SD)  | 260.6499 ( 83.69662) | 289.2606 ( 88.16093)      | 253.0604 ( 87.00646)     |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.3058 ( 2.05463) | 4.6070 ( 1.30148) | 6.7320 ( 2.94018) |
+| CA | Mean (SD) | 2.180413 (0.0692494) | 2.204332 (0.1372011) | 2.161054 (0.0830867) |
+| CK | Mean (SD) | 175.8 ( 288.41) | 108.2 ( 93.99) | 83.1 ( 77.91) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) |
+| URATE | Mean (SD) | 260.6499 ( 83.69662) | 289.2606 ( 88.16093) | 253.0604 ( 87.00646) |
 
 As you can see, the decimal precision is now varying depending on the
 test being performed. Notice that both the integer and the decimal side
@@ -161,6 +165,7 @@ places collected for CA? For this reason, you’re able to set a cap on
 the precision that’s displayed:
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(AVAL, by = PARAMCD) %>% 
@@ -175,13 +180,13 @@ tplyr_table(tplyr_adlb, TRTA) %>%
   kable()
 ```
 
-| row_label1 | row_label2 | var1_Placebo       | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:-------------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | 5.306 ( 2.0546)    | 4.607 ( 1.3015)           | 6.732 ( 2.9402)          |
-| CA         | Mean (SD)  | 2.180 (0.0692)     | 2.204 (0.1372)            | 2.161 (0.0831)           |
-| CK         | Mean (SD)  | 175.8 (288.41)     | 108.2 ( 93.99)            | 83.1 ( 77.91)            |
-| GGT        | Mean (SD)  | 34.5 ( 34.77)      | 36.0 ( 48.69)             | 34.9 ( 26.99)            |
-| URATE      | Mean (SD)  | 260.650 ( 83.6966) | 289.261 ( 88.1609)        | 253.060 ( 87.0065)       |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.306 ( 2.0546) | 4.607 ( 1.3015) | 6.732 ( 2.9402) |
+| CA | Mean (SD) | 2.180 (0.0692) | 2.204 (0.1372) | 2.161 (0.0831) |
+| CK | Mean (SD) | 175.8 (288.41) | 108.2 ( 93.99) | 83.1 ( 77.91) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) |
+| URATE | Mean (SD) | 260.650 ( 83.6966) | 289.261 ( 88.1609) | 253.060 ( 87.0065) |
 
 Now that looks better. The `cap` argument is part of
 [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md).
@@ -205,6 +210,7 @@ What about multiple summary variables? How do we determine precision
 then? We have modifier functions for this:
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA) %>% 
   add_layer(
     group_desc(vars(AVAL, CHG, BASE), by = PARAMCD) %>% 
@@ -221,13 +227,13 @@ tplyr_table(tplyr_adlb, TRTA) %>%
   kable()
 ```
 
-| row_label1 | row_label2 | var1_Placebo       | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo       | var2_Xanomeline High Dose | var2_Xanomeline Low Dose | var3_Placebo       | var3_Xanomeline High Dose | var3_Xanomeline Low Dose |
-|:-----------|:-----------|:-------------------|:--------------------------|:-------------------------|:-------------------|:--------------------------|:-------------------------|:-------------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | 5.306 ( 2.0546)    | 4.607 ( 1.3015)           | 6.732 ( 2.9402)          | -0.542 ( 1.6734)   | -0.544 ( 1.5910)          | -0.395 ( 1.3299)         | 5.847 ( 1.5661)    | 5.151 ( 1.6382)           | 7.196 ( 2.7940)          |
-| CA         | Mean (SD)  | 2.180 (0.0692)     | 2.204 (0.1372)            | 2.161 (0.0831)           | -0.111 (0.0972)    | -0.086 (0.1242)           | -0.155 (0.0621)          | 2.291 (0.0923)     | 2.290 (0.0828)            | 2.317 (0.0719)           |
-| CK         | Mean (SD)  | 175.8 (288.41)     | 108.2 ( 93.99)            | 83.1 ( 77.91)            | 86.5 (275.75)      | 3.6 ( 77.56)              | 1.0 ( 51.54)             | 89.3 ( 38.13)      | 104.6 ( 64.27)            | 82.1 ( 35.71)            |
-| GGT        | Mean (SD)  | 34.5 ( 34.77)      | 36.0 ( 48.69)             | 34.9 ( 26.99)            | 5.9 ( 21.67)       | 7.8 ( 41.48)              | 10.3 ( 20.55)            | 28.6 ( 19.36)      | 28.2 ( 25.84)             | 24.6 ( 11.05)            |
-| URATE      | Mean (SD)  | 260.650 ( 83.6966) | 289.261 ( 88.1609)        | 253.060 ( 87.0065)       | -21.030 ( 37.1799) | -26.296 ( 55.6673)        | -41.906 ( 24.7959)       | 281.680 ( 65.7021) | 315.557 ( 61.8285)        | 294.967 ( 86.9470)       |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | var2_Placebo | var2_Xanomeline High Dose | var2_Xanomeline Low Dose | var3_Placebo | var3_Xanomeline High Dose | var3_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.306 ( 2.0546) | 4.607 ( 1.3015) | 6.732 ( 2.9402) | -0.542 ( 1.6734) | -0.544 ( 1.5910) | -0.395 ( 1.3299) | 5.847 ( 1.5661) | 5.151 ( 1.6382) | 7.196 ( 2.7940) |
+| CA | Mean (SD) | 2.180 (0.0692) | 2.204 (0.1372) | 2.161 (0.0831) | -0.111 (0.0972) | -0.086 (0.1242) | -0.155 (0.0621) | 2.291 (0.0923) | 2.290 (0.0828) | 2.317 (0.0719) |
+| CK | Mean (SD) | 175.8 (288.41) | 108.2 ( 93.99) | 83.1 ( 77.91) | 86.5 (275.75) | 3.6 ( 77.56) | 1.0 ( 51.54) | 89.3 ( 38.13) | 104.6 ( 64.27) | 82.1 ( 35.71) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) | 5.9 ( 21.67) | 7.8 ( 41.48) | 10.3 ( 20.55) | 28.6 ( 19.36) | 28.2 ( 25.84) | 24.6 ( 11.05) |
+| URATE | Mean (SD) | 260.650 ( 83.6966) | 289.261 ( 88.1609) | 253.060 ( 87.0065) | -21.030 ( 37.1799) | -26.296 ( 55.6673) | -41.906 ( 24.7959) | 281.680 ( 65.7021) | 315.557 ( 61.8285) | 294.967 ( 86.9470) |
 
 Three variables are being summarized here - AVAL, CHG, and BASE. So
 which should be used for precision?
@@ -258,6 +264,7 @@ In the output below, Notice how the precision by PARAMCD varies
 depending on what was specified in the data frame `prec_data`.
 
 ``` r
+
 prec_data <- tibble::tribble(
   ~PARAMCD, ~max_int, ~max_dec,
   "BUN",   1, 0,
@@ -283,19 +290,20 @@ tplyr_table(tplyr_adlb, TRTA) %>%
   kable()
 ```
 
-| row_label1 | row_label2 | var1_Placebo        | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:--------------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | 5.3 (2.05)          | 4.6 (1.30)                | 6.7 (2.94)               |
-| CA         | Mean (SD)  | 2.18041 ( 0.069249) | 2.20433 ( 0.137201)       | 2.16105 ( 0.083087)      |
-| CK         | Mean (SD)  | 175.84 (288.405)    | 108.25 ( 93.986)          | 83.13 ( 77.915)          |
-| GGT        | Mean (SD)  | 34.5 ( 34.77)       | 36.0 ( 48.69)             | 34.9 ( 26.99)            |
-| URATE      | Mean (SD)  | 260.65 ( 83.697)    | 289.26 ( 88.161)          | 253.06 ( 87.006)         |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.3 (2.05) | 4.6 (1.30) | 6.7 (2.94) |
+| CA | Mean (SD) | 2.18041 ( 0.069249) | 2.20433 ( 0.137201) | 2.16105 ( 0.083087) |
+| CK | Mean (SD) | 175.84 (288.405) | 108.25 ( 93.986) | 83.13 ( 77.915) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) |
+| URATE | Mean (SD) | 260.65 ( 83.697) | 289.26 ( 88.161) | 253.06 ( 87.006) |
 
 If one of your by variable groups are missing in the precision data,
 **Tplyr** can default back to using auto-precision by using the option
 `default=auto`.
 
 ``` r
+
 prec_data <- tibble::tribble(
   ~PARAMCD, ~max_int, ~max_dec,
   "BUN", 1, 0,
@@ -321,13 +329,13 @@ tplyr_table(tplyr_adlb, TRTA) %>%
 #> Unhandled precision cases were found - calculating precision based on source data
 ```
 
-| row_label1 | row_label2 | var1_Placebo         | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-----------|:---------------------|:--------------------------|:-------------------------|
-| BUN        | Mean (SD)  | 5.3 (2.05)           | 4.6 (1.30)                | 6.7 (2.94)               |
-| CA         | Mean (SD)  | 2.18041 ( 0.069249)  | 2.20433 ( 0.137201)       | 2.16105 ( 0.083087)      |
-| CK         | Mean (SD)  | 175.84 (288.405)     | 108.25 ( 93.986)          | 83.13 ( 77.915)          |
-| GGT        | Mean (SD)  | 34.5 ( 34.77)        | 36.0 ( 48.69)             | 34.9 ( 26.99)            |
-| URATE      | Mean (SD)  | 260.6499 ( 83.69662) | 289.2606 ( 88.16093)      | 253.0604 ( 87.00646)     |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.3 (2.05) | 4.6 (1.30) | 6.7 (2.94) |
+| CA | Mean (SD) | 2.18041 ( 0.069249) | 2.20433 ( 0.137201) | 2.16105 ( 0.083087) |
+| CK | Mean (SD) | 175.84 (288.405) | 108.25 ( 93.986) | 83.13 ( 77.915) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) |
+| URATE | Mean (SD) | 260.6499 ( 83.69662) | 289.2606 ( 88.16093) | 253.0604 ( 87.00646) |
 
 ## Parenthesis Hugging
 
@@ -336,6 +344,7 @@ string will stay stationary. Consider the standard example from the
 descriptive statistic layer vignette.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P) %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)", where= SAFFL=="Y") %>% 
@@ -373,6 +382,7 @@ you can achieve this by using a capital ‘X’. For example, focusing on
 the mean and standard deviation line:
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 
@@ -397,6 +407,7 @@ Similarly, the same functionality works with auto precision by using a
 capital A.
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, PARAMCD == "CK") %>% 
   add_layer(
     group_desc(AVAL, by=vars(PARAMCD, AVISIT)) %>% 

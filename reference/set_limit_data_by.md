@@ -33,6 +33,7 @@ a tplyr_table
 ## Examples
 
 ``` r
+
 tplyr_table(tplyr_adpe, TRT01A) %>%
   add_layer(
     group_desc(AVAL, by = vars(PECAT, PARAM, AVISIT))

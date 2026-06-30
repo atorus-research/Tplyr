@@ -20,6 +20,7 @@ Take a look at the
 You can install **Tplyr** with:
 
 ``` r
+
 # Install from CRAN:
 install.packages("Tplyr")
 
@@ -94,6 +95,7 @@ Factory data
 [here](https://github.com/atorus-research/CDISC_pilot_replication).
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>% 
   add_layer(
     group_desc(AGE, by = "Age (years)")
@@ -105,17 +107,17 @@ tplyr_table(tplyr_adsl, TRT01P, where = SAFFL == "Y") %>%
   kable()
 ```
 
-| row_label1           | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------|:-----------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| Age (years)          | n          | 86           | 84                        | 84                       |               1 |           1 |           1 |
-| Age (years)          | Mean (SD)  | 75.2 ( 8.59) | 74.4 ( 7.89)              | 75.7 ( 8.29)             |               1 |           1 |           2 |
-| Age (years)          | Median     | 76.0         | 76.0                      | 77.5                     |               1 |           1 |           3 |
-| Age (years)          | Q1, Q3     | 69.2, 81.8   | 70.8, 80.0                | 71.0, 82.0               |               1 |           1 |           4 |
-| Age (years)          | Min, Max   | 52, 89       | 56, 88                    | 51, 88                   |               1 |           1 |           5 |
-| Age (years)          | Missing    | 0            | 0                         | 0                        |               1 |           1 |           6 |
-| Age Categories n (%) | \<65       | 14 ( 16.3%)  | 11 ( 13.1%)               | 8 ( 9.5%)                |               2 |           1 |           1 |
-| Age Categories n (%) | \>80       | 30 ( 34.9%)  | 18 ( 21.4%)               | 29 ( 34.5%)              |               2 |           1 |           2 |
-| Age Categories n (%) | 65-80      | 42 ( 48.8%)  | 55 ( 65.5%)               | 47 ( 56.0%)              |               2 |           1 |           3 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Age (years) | n | 86 | 84 | 84 | 1 | 1 | 1 |
+| Age (years) | Mean (SD) | 75.2 ( 8.59) | 74.4 ( 7.89) | 75.7 ( 8.29) | 1 | 1 | 2 |
+| Age (years) | Median | 76.0 | 76.0 | 77.5 | 1 | 1 | 3 |
+| Age (years) | Q1, Q3 | 69.2, 81.8 | 70.8, 80.0 | 71.0, 82.0 | 1 | 1 | 4 |
+| Age (years) | Min, Max | 52, 89 | 56, 88 | 51, 88 | 1 | 1 | 5 |
+| Age (years) | Missing | 0 | 0 | 0 | 1 | 1 | 6 |
+| Age Categories n (%) | \<65 | 14 ( 16.3%) | 11 ( 13.1%) | 8 ( 9.5%) | 2 | 1 | 1 |
+| Age Categories n (%) | \>80 | 30 ( 34.9%) | 18 ( 21.4%) | 29 ( 34.5%) | 2 | 1 | 2 |
+| Age Categories n (%) | 65-80 | 42 ( 48.8%) | 55 ( 65.5%) | 47 ( 56.0%) | 2 | 1 | 3 |
 
 ## **Tplyr** is Qualified
 

@@ -9,6 +9,7 @@ columns output by **Tplyr**.
 Let’s start by looking at an example.
 
 ``` r
+
 t <- tplyr_table(tplyr_adsl, TRT01A) %>%
   add_total_group() %>%
   add_treat_grps(Treated = c("Xanomeline Low Dose", "Xanomeline High Dose")) %>%
@@ -23,24 +24,24 @@ t <- tplyr_table(tplyr_adsl, TRT01A) %>%
 kable(t)
 ```
 
-| row_label1 | row_label2   | var1_Placebo    | var1_Total      | var1_Treated    | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-----------|:-------------|:----------------|:----------------|:----------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| F          | COMPLETED    | 34 ( 39.5%)     | 64 ( 25.2%)     | 30 ( 17.9%)     | 13 ( 15.5%)               | 17 ( 20.2%)              |               1 |           1 |           1 |
-| F          | DISCONTINUED | 19 ( 22.1%)     | 79 ( 31.1%)     | 60 ( 35.7%)     | 27 ( 32.1%)               | 33 ( 39.3%)              |               1 |           1 |           2 |
-| M          | COMPLETED    | 24 ( 27.9%)     | 46 ( 18.1%)     | 22 ( 13.1%)     | 14 ( 16.7%)               | 8 ( 9.5%)                |               1 |           2 |           1 |
-| M          | DISCONTINUED | 9 ( 10.5%)      | 65 ( 25.6%)     | 56 ( 33.3%)     | 30 ( 35.7%)               | 26 ( 31.0%)              |               1 |           2 |           2 |
-| F          | n            | 53              | 143             | 90              | 40                        | 50                       |               2 |           1 |           1 |
-| F          | Mean (SD)    | 156.06 ( 8.010) | 157.25 ( 7.374) | 157.94 ( 6.924) | 158.02 ( 6.370)           | 157.88 ( 7.401)          |               2 |           1 |           2 |
-| F          | Median       | 156.20          | 157.50          | 157.50          | 157.50                    | 157.85                   |               2 |           1 |           3 |
-| F          | Q1, Q3       | 149.90, 162.60  | 152.40, 162.60  | 154.00, 162.60  | 154.28, 164.12            | 154.00, 162.60           |               2 |           1 |           4 |
-| F          | Min, Max     | 137.2, 174.0    | 135.9, 175.3    | 135.9, 175.3    | 146.1, 170.2              | 135.9, 175.3             |               2 |           1 |           5 |
-| F          | Missing      | 0               | 0               | 0               | 0                         | 0                        |               2 |           1 |           6 |
-| M          | n            | 33              | 111             | 78              | 44                        | 34                       |               2 |           2 |           1 |
-| M          | Mean (SD)    | 173.03 ( 8.088) | 172.55 ( 7.946) | 172.34 ( 7.929) | 172.91 ( 7.304)           | 171.60 ( 8.729)          |               2 |           2 |           2 |
-| M          | Median       | 174.00          | 172.70          | 172.70          | 172.70                    | 172.10                   |               2 |           2 |           3 |
-| M          | Q1, Q3       | 170.20, 177.80  | 168.25, 177.80  | 167.60, 177.80  | 170.15, 177.80            | 165.42, 177.48           |               2 |           2 |           4 |
-| M          | Min, Max     | 144.8, 185.4    | 144.8, 195.6    | 147.3, 195.6    | 147.3, 190.5              | 157.5, 195.6             |               2 |           2 |           5 |
-| M          | Missing      | 0               | 0               | 0               | 0                         | 0                        |               2 |           2 |           6 |
+| row_label1 | row_label2 | var1_Placebo | var1_Total | var1_Treated | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|
+| F | COMPLETED | 34 ( 39.5%) | 64 ( 25.2%) | 30 ( 17.9%) | 13 ( 15.5%) | 17 ( 20.2%) | 1 | 1 | 1 |
+| F | DISCONTINUED | 19 ( 22.1%) | 79 ( 31.1%) | 60 ( 35.7%) | 27 ( 32.1%) | 33 ( 39.3%) | 1 | 1 | 2 |
+| M | COMPLETED | 24 ( 27.9%) | 46 ( 18.1%) | 22 ( 13.1%) | 14 ( 16.7%) | 8 ( 9.5%) | 1 | 2 | 1 |
+| M | DISCONTINUED | 9 ( 10.5%) | 65 ( 25.6%) | 56 ( 33.3%) | 30 ( 35.7%) | 26 ( 31.0%) | 1 | 2 | 2 |
+| F | n | 53 | 143 | 90 | 40 | 50 | 2 | 1 | 1 |
+| F | Mean (SD) | 156.06 ( 8.010) | 157.25 ( 7.374) | 157.94 ( 6.924) | 158.02 ( 6.370) | 157.88 ( 7.401) | 2 | 1 | 2 |
+| F | Median | 156.20 | 157.50 | 157.50 | 157.50 | 157.85 | 2 | 1 | 3 |
+| F | Q1, Q3 | 149.90, 162.60 | 152.40, 162.60 | 154.00, 162.60 | 154.28, 164.12 | 154.00, 162.60 | 2 | 1 | 4 |
+| F | Min, Max | 137.2, 174.0 | 135.9, 175.3 | 135.9, 175.3 | 146.1, 170.2 | 135.9, 175.3 | 2 | 1 | 5 |
+| F | Missing | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 6 |
+| M | n | 33 | 111 | 78 | 44 | 34 | 2 | 2 | 1 |
+| M | Mean (SD) | 173.03 ( 8.088) | 172.55 ( 7.946) | 172.34 ( 7.929) | 172.91 ( 7.304) | 171.60 ( 8.729) | 2 | 2 | 2 |
+| M | Median | 174.00 | 172.70 | 172.70 | 172.70 | 172.10 | 2 | 2 | 3 |
+| M | Q1, Q3 | 170.20, 177.80 | 168.25, 177.80 | 167.60, 177.80 | 170.15, 177.80 | 165.42, 177.48 | 2 | 2 | 4 |
+| M | Min, Max | 144.8, 185.4 | 144.8, 195.6 | 147.3, 195.6 | 147.3, 190.5 | 157.5, 195.6 | 2 | 2 | 5 |
+| M | Missing | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 6 |
 
 In this table, we have:
 
@@ -73,6 +74,7 @@ In the example above, the `t` table outputs with three columns:
   layer, and the names of the summaries in the desc layer.
 
 ``` r
+
 t %>%
   select(starts_with("ord")) %>% 
   kable()
@@ -110,57 +112,59 @@ To drop the ordering helpers, you can easily subtract them with ‘dplyr’
 and ‘tidyselect’.
 
 ``` r
+
 t %>% 
   select(-starts_with("ord_")) %>% 
   kable()
 ```
 
-| row_label1 | row_label2   | var1_Placebo    | var1_Total      | var1_Treated    | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-------------|:----------------|:----------------|:----------------|:--------------------------|:-------------------------|
-| F          | COMPLETED    | 34 ( 39.5%)     | 64 ( 25.2%)     | 30 ( 17.9%)     | 13 ( 15.5%)               | 17 ( 20.2%)              |
-| F          | DISCONTINUED | 19 ( 22.1%)     | 79 ( 31.1%)     | 60 ( 35.7%)     | 27 ( 32.1%)               | 33 ( 39.3%)              |
-| M          | COMPLETED    | 24 ( 27.9%)     | 46 ( 18.1%)     | 22 ( 13.1%)     | 14 ( 16.7%)               | 8 ( 9.5%)                |
-| M          | DISCONTINUED | 9 ( 10.5%)      | 65 ( 25.6%)     | 56 ( 33.3%)     | 30 ( 35.7%)               | 26 ( 31.0%)              |
-| F          | n            | 53              | 143             | 90              | 40                        | 50                       |
-| F          | Mean (SD)    | 156.06 ( 8.010) | 157.25 ( 7.374) | 157.94 ( 6.924) | 158.02 ( 6.370)           | 157.88 ( 7.401)          |
-| F          | Median       | 156.20          | 157.50          | 157.50          | 157.50                    | 157.85                   |
-| F          | Q1, Q3       | 149.90, 162.60  | 152.40, 162.60  | 154.00, 162.60  | 154.28, 164.12            | 154.00, 162.60           |
-| F          | Min, Max     | 137.2, 174.0    | 135.9, 175.3    | 135.9, 175.3    | 146.1, 170.2              | 135.9, 175.3             |
-| F          | Missing      | 0               | 0               | 0               | 0                         | 0                        |
-| M          | n            | 33              | 111             | 78              | 44                        | 34                       |
-| M          | Mean (SD)    | 173.03 ( 8.088) | 172.55 ( 7.946) | 172.34 ( 7.929) | 172.91 ( 7.304)           | 171.60 ( 8.729)          |
-| M          | Median       | 174.00          | 172.70          | 172.70          | 172.70                    | 172.10                   |
-| M          | Q1, Q3       | 170.20, 177.80  | 168.25, 177.80  | 167.60, 177.80  | 170.15, 177.80            | 165.42, 177.48           |
-| M          | Min, Max     | 144.8, 185.4    | 144.8, 195.6    | 147.3, 195.6    | 147.3, 190.5              | 157.5, 195.6             |
-| M          | Missing      | 0               | 0               | 0               | 0                         | 0                        |
+| row_label1 | row_label2 | var1_Placebo | var1_Total | var1_Treated | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|:---|:---|
+| F | COMPLETED | 34 ( 39.5%) | 64 ( 25.2%) | 30 ( 17.9%) | 13 ( 15.5%) | 17 ( 20.2%) |
+| F | DISCONTINUED | 19 ( 22.1%) | 79 ( 31.1%) | 60 ( 35.7%) | 27 ( 32.1%) | 33 ( 39.3%) |
+| M | COMPLETED | 24 ( 27.9%) | 46 ( 18.1%) | 22 ( 13.1%) | 14 ( 16.7%) | 8 ( 9.5%) |
+| M | DISCONTINUED | 9 ( 10.5%) | 65 ( 25.6%) | 56 ( 33.3%) | 30 ( 35.7%) | 26 ( 31.0%) |
+| F | n | 53 | 143 | 90 | 40 | 50 |
+| F | Mean (SD) | 156.06 ( 8.010) | 157.25 ( 7.374) | 157.94 ( 6.924) | 158.02 ( 6.370) | 157.88 ( 7.401) |
+| F | Median | 156.20 | 157.50 | 157.50 | 157.50 | 157.85 |
+| F | Q1, Q3 | 149.90, 162.60 | 152.40, 162.60 | 154.00, 162.60 | 154.28, 164.12 | 154.00, 162.60 |
+| F | Min, Max | 137.2, 174.0 | 135.9, 175.3 | 135.9, 175.3 | 146.1, 170.2 | 135.9, 175.3 |
+| F | Missing | 0 | 0 | 0 | 0 | 0 |
+| M | n | 33 | 111 | 78 | 44 | 34 |
+| M | Mean (SD) | 173.03 ( 8.088) | 172.55 ( 7.946) | 172.34 ( 7.929) | 172.91 ( 7.304) | 171.60 ( 8.729) |
+| M | Median | 174.00 | 172.70 | 172.70 | 172.70 | 172.10 |
+| M | Q1, Q3 | 170.20, 177.80 | 168.25, 177.80 | 167.60, 177.80 | 170.15, 177.80 | 165.42, 177.48 |
+| M | Min, Max | 144.8, 185.4 | 144.8, 195.6 | 147.3, 195.6 | 147.3, 190.5 | 157.5, 195.6 |
+| M | Missing | 0 | 0 | 0 | 0 | 0 |
 
 Or you can reorder columns. In this example the “Total” result column is
 moved to the front of the results.
 
 ``` r
+
 t %>%
   select( starts_with("row"), var1_Total, starts_with("var1")) %>% 
   kable()
 ```
 
-| row_label1 | row_label2   | var1_Total      | var1_Placebo    | var1_Treated    | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
-|:-----------|:-------------|:----------------|:----------------|:----------------|:--------------------------|:-------------------------|
-| F          | COMPLETED    | 64 ( 25.2%)     | 34 ( 39.5%)     | 30 ( 17.9%)     | 13 ( 15.5%)               | 17 ( 20.2%)              |
-| F          | DISCONTINUED | 79 ( 31.1%)     | 19 ( 22.1%)     | 60 ( 35.7%)     | 27 ( 32.1%)               | 33 ( 39.3%)              |
-| M          | COMPLETED    | 46 ( 18.1%)     | 24 ( 27.9%)     | 22 ( 13.1%)     | 14 ( 16.7%)               | 8 ( 9.5%)                |
-| M          | DISCONTINUED | 65 ( 25.6%)     | 9 ( 10.5%)      | 56 ( 33.3%)     | 30 ( 35.7%)               | 26 ( 31.0%)              |
-| F          | n            | 143             | 53              | 90              | 40                        | 50                       |
-| F          | Mean (SD)    | 157.25 ( 7.374) | 156.06 ( 8.010) | 157.94 ( 6.924) | 158.02 ( 6.370)           | 157.88 ( 7.401)          |
-| F          | Median       | 157.50          | 156.20          | 157.50          | 157.50                    | 157.85                   |
-| F          | Q1, Q3       | 152.40, 162.60  | 149.90, 162.60  | 154.00, 162.60  | 154.28, 164.12            | 154.00, 162.60           |
-| F          | Min, Max     | 135.9, 175.3    | 137.2, 174.0    | 135.9, 175.3    | 146.1, 170.2              | 135.9, 175.3             |
-| F          | Missing      | 0               | 0               | 0               | 0                         | 0                        |
-| M          | n            | 111             | 33              | 78              | 44                        | 34                       |
-| M          | Mean (SD)    | 172.55 ( 7.946) | 173.03 ( 8.088) | 172.34 ( 7.929) | 172.91 ( 7.304)           | 171.60 ( 8.729)          |
-| M          | Median       | 172.70          | 174.00          | 172.70          | 172.70                    | 172.10                   |
-| M          | Q1, Q3       | 168.25, 177.80  | 170.20, 177.80  | 167.60, 177.80  | 170.15, 177.80            | 165.42, 177.48           |
-| M          | Min, Max     | 144.8, 195.6    | 144.8, 185.4    | 147.3, 195.6    | 147.3, 190.5              | 157.5, 195.6             |
-| M          | Missing      | 0               | 0               | 0               | 0                         | 0                        |
+| row_label1 | row_label2 | var1_Total | var1_Placebo | var1_Treated | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|:---|:---|
+| F | COMPLETED | 64 ( 25.2%) | 34 ( 39.5%) | 30 ( 17.9%) | 13 ( 15.5%) | 17 ( 20.2%) |
+| F | DISCONTINUED | 79 ( 31.1%) | 19 ( 22.1%) | 60 ( 35.7%) | 27 ( 32.1%) | 33 ( 39.3%) |
+| M | COMPLETED | 46 ( 18.1%) | 24 ( 27.9%) | 22 ( 13.1%) | 14 ( 16.7%) | 8 ( 9.5%) |
+| M | DISCONTINUED | 65 ( 25.6%) | 9 ( 10.5%) | 56 ( 33.3%) | 30 ( 35.7%) | 26 ( 31.0%) |
+| F | n | 143 | 53 | 90 | 40 | 50 |
+| F | Mean (SD) | 157.25 ( 7.374) | 156.06 ( 8.010) | 157.94 ( 6.924) | 158.02 ( 6.370) | 157.88 ( 7.401) |
+| F | Median | 157.50 | 156.20 | 157.50 | 157.50 | 157.85 |
+| F | Q1, Q3 | 152.40, 162.60 | 149.90, 162.60 | 154.00, 162.60 | 154.28, 164.12 | 154.00, 162.60 |
+| F | Min, Max | 135.9, 175.3 | 137.2, 174.0 | 135.9, 175.3 | 146.1, 170.2 | 135.9, 175.3 |
+| F | Missing | 0 | 0 | 0 | 0 | 0 |
+| M | n | 111 | 33 | 78 | 44 | 34 |
+| M | Mean (SD) | 172.55 ( 7.946) | 173.03 ( 8.088) | 172.34 ( 7.929) | 172.91 ( 7.304) | 171.60 ( 8.729) |
+| M | Median | 172.70 | 174.00 | 172.70 | 172.70 | 172.10 |
+| M | Q1, Q3 | 168.25, 177.80 | 170.20, 177.80 | 167.60, 177.80 | 170.15, 177.80 | 165.42, 177.48 |
+| M | Min, Max | 144.8, 195.6 | 144.8, 185.4 | 147.3, 195.6 | 147.3, 190.5 | 157.5, 195.6 |
+| M | Missing | 0 | 0 | 0 | 0 | 0 |
 
 For more information, it’s well worth your time to familiarize yourself
 with the [select
@@ -180,6 +184,7 @@ or
 For example, let’s say you wanted to reverse the order of the layers.
 
 ``` r
+
 t %>%
   select(starts_with("row"), starts_with("ord")) %>%
   arrange(desc(ord_layer_index)) %>% 
@@ -235,6 +240,7 @@ worthwhile. Let’s look at example using the variable `ETHNIC` and see
 some of the advantages in practice.
 
 ``` r
+
 tplyr_adsl$ETHNIC <- factor(tplyr_adsl$ETHNIC, levels=c("HISPANIC OR LATINO", "NOT HISPANIC OR LATINO", "DUMMMY"))
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
@@ -283,6 +289,7 @@ To demonstrate the use of `VARN` sorting, consider the variable `RACE.`
 In `ADSL`, `RACE` also has `RACEN`:
 
 ``` r
+
 tplyr_adsl %>% 
   distinct(RACEN, RACE) %>% 
   kable()
@@ -298,6 +305,7 @@ tplyr_adsl %>%
 `RACEN` values into the variable `ord_layer_1`.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(EOSSTT, by = RACE)
@@ -337,6 +345,7 @@ Results will be ordered based on the order in which you create your
 objects.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_desc(HEIGHTBL) %>% 
@@ -397,6 +406,7 @@ must set the sort method using
 [`set_order_count_method()`](https://atorus-research.github.io/Tplyr/reference/ordering.md).
 
 ``` r
+
 tplyr_adsl$AGEGR1 <- factor(tplyr_adsl$AGEGR1, c("<65", "65-80", ">80"))
 # Warnings suppressed to remove 'forcats' implicit NA warning
 suppressWarnings({
@@ -419,6 +429,7 @@ suppressWarnings({
 | \>80       |           3 |
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(RACE) %>%
@@ -452,6 +463,7 @@ and
 [`set_result_order_var()`](https://atorus-research.github.io/Tplyr/reference/ordering.md).
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>%
   add_layer(
     group_count(AEDECOD) %>% 
@@ -497,6 +509,7 @@ But what if you have an additional column variable on top of the
 treatment groups?
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA, cols=SEX) %>%
   add_layer(
     group_count(AEDECOD) %>% 
@@ -542,6 +555,7 @@ is probably Adverse Event tables, where we want to see adverse events
 that occurred within different body systems.
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD))
@@ -551,14 +565,14 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                             | row_label2                             | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------------------------|:---------------------------------------|:-------------|:--------------------------|:-------------------------|----------------:|------------:|------------:|
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%)  | 111 (100.0%)              | 118 (100.0%)             |               1 |           1 |         Inf |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS                      | 0 ( 0.0%)    | 1 ( 0.9%)                 | 0 ( 0.0%)                |               1 |           1 |           1 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA                               | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           2 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER                                | 0 ( 0.0%)    | 2 ( 1.8%)                 | 8 ( 6.8%)                |               1 |           1 |           3 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT                             | 3 ( 6.4%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           4 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC                      | 1 ( 2.1%)    | 0 ( 0.0%)                 | 0 ( 0.0%)                |               1 |           1 |           5 |
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 47 (100.0%) | 111 (100.0%) | 118 (100.0%) | 1 | 1 | Inf |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS | 0 ( 0.0%) | 1 ( 0.9%) | 0 ( 0.0%) | 1 | 1 | 1 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 2 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER | 0 ( 0.0%) | 2 ( 1.8%) | 8 ( 6.8%) | 1 | 1 | 3 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT | 3 ( 6.4%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 4 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC | 1 ( 2.1%) | 0 ( 0.0%) | 0 ( 0.0%) | 1 | 1 | 5 |
 
 In a layer that uses nesting, we need one more order variable - as we’re
 now concerned with the sorting of both the outside and inside variable.
@@ -580,6 +594,7 @@ use ascending sorting instead, we offer the function
 [`set_outer_sort_position()`](https://atorus-research.github.io/Tplyr/reference/set_outer_sort_position.md).
 
 ``` r
+
 tplyr_table(tplyr_adae, TRTA) %>% 
   add_layer(
     group_count(vars(AEBODSYS, AEDECOD)) %>% 
@@ -592,14 +607,14 @@ tplyr_table(tplyr_adae, TRTA) %>%
   kable()
 ```
 
-| row_label1                             | row_label2                             | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:---------------------------------------|:---------------------------------------|----------------:|------------:|------------:|
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS |               1 |           1 |        -Inf |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS                      |               1 |           1 |           1 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA                               |               1 |           1 |           2 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER                                |               1 |           1 |           3 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT                             |               1 |           1 |           4 |
-| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC                      |               1 |           1 |           5 |
+| row_label1 | row_label2 | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|---:|---:|---:|
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | 1 | 1 | -Inf |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ACTINIC KERATOSIS | 1 | 1 | 1 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | ALOPECIA | 1 | 1 | 2 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | BLISTER | 1 | 1 | 3 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | COLD SWEAT | 1 | 1 | 4 |
+| SKIN AND SUBCUTANEOUS TISSUE DISORDERS | DERMATITIS ATOPIC | 1 | 1 | 5 |
 
 Notice that the `Inf` has now switched to `-Inf` to ensure that the
 `AEBODSYS` row stays at the top of the group.
@@ -614,6 +629,7 @@ can take in a 2-element character vector, where the first element
 specifies the outside variable and the second the inside variable.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_layer(
     group_count(vars(EOSSTT, DCDECOD)) %>%
@@ -624,19 +640,19 @@ tplyr_table(tplyr_adsl, TRT01A) %>%
   kable()
 ```
 
-| row_label1   | row_label2                  | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-------------|:----------------------------|----------------:|------------:|------------:|
-| COMPLETED    | COMPLETED                   |               1 |           1 |         Inf |
-| COMPLETED    | COMPLETED                   |               1 |           1 |          58 |
-| DISCONTINUED | DISCONTINUED                |               1 |           2 |         Inf |
-| DISCONTINUED | ADVERSE EVENT               |               1 |           2 |           8 |
-| DISCONTINUED | DEATH                       |               1 |           2 |           2 |
-| DISCONTINUED | LACK OF EFFICACY            |               1 |           2 |           3 |
-| DISCONTINUED | LOST TO FOLLOW-UP           |               1 |           2 |           1 |
-| DISCONTINUED | PHYSICIAN DECISION          |               1 |           2 |           1 |
-| DISCONTINUED | PROTOCOL VIOLATION          |               1 |           2 |           2 |
-| DISCONTINUED | STUDY TERMINATED BY SPONSOR |               1 |           2 |           2 |
-| DISCONTINUED | WITHDRAWAL BY SUBJECT       |               1 |           2 |           9 |
+| row_label1 | row_label2 | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|---:|---:|---:|
+| COMPLETED | COMPLETED | 1 | 1 | Inf |
+| COMPLETED | COMPLETED | 1 | 1 | 58 |
+| DISCONTINUED | DISCONTINUED | 1 | 2 | Inf |
+| DISCONTINUED | ADVERSE EVENT | 1 | 2 | 8 |
+| DISCONTINUED | DEATH | 1 | 2 | 2 |
+| DISCONTINUED | LACK OF EFFICACY | 1 | 2 | 3 |
+| DISCONTINUED | LOST TO FOLLOW-UP | 1 | 2 | 1 |
+| DISCONTINUED | PHYSICIAN DECISION | 1 | 2 | 1 |
+| DISCONTINUED | PROTOCOL VIOLATION | 1 | 2 | 2 |
+| DISCONTINUED | STUDY TERMINATED BY SPONSOR | 1 | 2 | 2 |
+| DISCONTINUED | WITHDRAWAL BY SUBJECT | 1 | 2 | 9 |
 
 In the example above, `EOSTT` is ordered alphabetically (recall that
 using “byfactor” when the variable is not a factor will do alphabetical
@@ -647,6 +663,7 @@ applied to both variables. So in the example below, “bycount” is applied
 to both `EOSTT` and `DSDECOD`.
 
 ``` r
+
 tplyr_table(tplyr_adsl, TRT01A) %>%
   add_total_group() %>%
   add_layer(
@@ -660,19 +677,19 @@ tplyr_table(tplyr_adsl, TRT01A) %>%
   kable()
 ```
 
-| row_label1   | row_label2                  | var1_Total   | ord_layer_index | ord_layer_1 | ord_layer_2 |
-|:-------------|:----------------------------|:-------------|----------------:|------------:|------------:|
-| COMPLETED    | COMPLETED                   | 110 ( 43.3%) |               1 |         110 |         Inf |
-| COMPLETED    | COMPLETED                   | 110 ( 43.3%) |               1 |         110 |         110 |
-| DISCONTINUED | DISCONTINUED                | 144 ( 56.7%) |               1 |         144 |         Inf |
-| DISCONTINUED | ADVERSE EVENT               | 92 ( 36.2%)  |               1 |         144 |          92 |
-| DISCONTINUED | DEATH                       | 3 ( 1.2%)    |               1 |         144 |           3 |
-| DISCONTINUED | LACK OF EFFICACY            | 4 ( 1.6%)    |               1 |         144 |           4 |
-| DISCONTINUED | LOST TO FOLLOW-UP           | 2 ( 0.8%)    |               1 |         144 |           2 |
-| DISCONTINUED | PHYSICIAN DECISION          | 3 ( 1.2%)    |               1 |         144 |           3 |
-| DISCONTINUED | PROTOCOL VIOLATION          | 6 ( 2.4%)    |               1 |         144 |           6 |
-| DISCONTINUED | STUDY TERMINATED BY SPONSOR | 7 ( 2.8%)    |               1 |         144 |           7 |
-| DISCONTINUED | WITHDRAWAL BY SUBJECT       | 27 ( 10.6%)  |               1 |         144 |          27 |
+| row_label1 | row_label2 | var1_Total | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|---:|---:|---:|
+| COMPLETED | COMPLETED | 110 ( 43.3%) | 1 | 110 | Inf |
+| COMPLETED | COMPLETED | 110 ( 43.3%) | 1 | 110 | 110 |
+| DISCONTINUED | DISCONTINUED | 144 ( 56.7%) | 1 | 144 | Inf |
+| DISCONTINUED | ADVERSE EVENT | 92 ( 36.2%) | 1 | 144 | 92 |
+| DISCONTINUED | DEATH | 3 ( 1.2%) | 1 | 144 | 3 |
+| DISCONTINUED | LACK OF EFFICACY | 4 ( 1.6%) | 1 | 144 | 4 |
+| DISCONTINUED | LOST TO FOLLOW-UP | 2 ( 0.8%) | 1 | 144 | 2 |
+| DISCONTINUED | PHYSICIAN DECISION | 3 ( 1.2%) | 1 | 144 | 3 |
+| DISCONTINUED | PROTOCOL VIOLATION | 6 ( 2.4%) | 1 | 144 | 6 |
+| DISCONTINUED | STUDY TERMINATED BY SPONSOR | 7 ( 2.8%) | 1 | 144 | 7 |
+| DISCONTINUED | WITHDRAWAL BY SUBJECT | 27 ( 10.6%) | 1 | 144 | 27 |
 
 ## Sorting Shift Tables
 
@@ -682,6 +699,7 @@ because you likely want the benefits of factor variables on a shift
 layer. For example, consider this table:
 
 ``` r
+
 tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   add_layer(
     group_shift(vars(row = BNRIND, column = ANRIND), by = vars(PARAM, AVISIT))
@@ -692,14 +710,14 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | row_label3 | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:----------------------|:-----------|:-----------|----------------:|------------:|------------:|------------:|
-| Creatine Kinase (U/L) | Week 12    | H          |               1 |          35 |          12 |           1 |
-| Creatine Kinase (U/L) | Week 12    | N          |               1 |          35 |          12 |           3 |
-| Creatine Kinase (U/L) | Week 24    | H          |               1 |          35 |          24 |           1 |
-| Creatine Kinase (U/L) | Week 24    | N          |               1 |          35 |          24 |           3 |
-| Creatine Kinase (U/L) | Week 8     | H          |               1 |          35 |           8 |           1 |
-| Creatine Kinase (U/L) | Week 8     | N          |               1 |          35 |           8 |           3 |
+| row_label1 | row_label2 | row_label3 | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|---:|---:|---:|---:|
+| Creatine Kinase (U/L) | Week 12 | H | 1 | 35 | 12 | 1 |
+| Creatine Kinase (U/L) | Week 12 | N | 1 | 35 | 12 | 3 |
+| Creatine Kinase (U/L) | Week 24 | H | 1 | 35 | 24 | 1 |
+| Creatine Kinase (U/L) | Week 24 | N | 1 | 35 | 24 | 3 |
+| Creatine Kinase (U/L) | Week 8 | H | 1 | 35 | 8 | 1 |
+| Creatine Kinase (U/L) | Week 8 | N | 1 | 35 | 8 | 3 |
 
 There are a few problems here:
 
@@ -710,6 +728,7 @@ There are a few problems here:
 Using factor variables cleans this right up for us:
 
 ``` r
+
 tplyr_adlb$BNRIND <- factor(tplyr_adlb$BNRIND, levels=c("L", "N", "H"))
 tplyr_adlb$ANRIND <- factor(tplyr_adlb$ANRIND, levels=c("L", "N", "H"))
 
@@ -723,17 +742,17 @@ tplyr_table(tplyr_adlb, TRTA, where=PARAMCD == "CK") %>%
   kable()
 ```
 
-| row_label1            | row_label2 | row_label3 | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
-|:----------------------|:-----------|:-----------|----------------:|------------:|------------:|------------:|
-| Creatine Kinase (U/L) | Week 12    | L          |               1 |          35 |          12 |           1 |
-| Creatine Kinase (U/L) | Week 12    | N          |               1 |          35 |          12 |           2 |
-| Creatine Kinase (U/L) | Week 12    | H          |               1 |          35 |          12 |           3 |
-| Creatine Kinase (U/L) | Week 24    | L          |               1 |          35 |          24 |           1 |
-| Creatine Kinase (U/L) | Week 24    | N          |               1 |          35 |          24 |           2 |
-| Creatine Kinase (U/L) | Week 24    | H          |               1 |          35 |          24 |           3 |
-| Creatine Kinase (U/L) | Week 8     | L          |               1 |          35 |           8 |           1 |
-| Creatine Kinase (U/L) | Week 8     | N          |               1 |          35 |           8 |           2 |
-| Creatine Kinase (U/L) | Week 8     | H          |               1 |          35 |           8 |           3 |
+| row_label1 | row_label2 | row_label3 | ord_layer_index | ord_layer_1 | ord_layer_2 | ord_layer_3 |
+|:---|:---|:---|---:|---:|---:|---:|
+| Creatine Kinase (U/L) | Week 12 | L | 1 | 35 | 12 | 1 |
+| Creatine Kinase (U/L) | Week 12 | N | 1 | 35 | 12 | 2 |
+| Creatine Kinase (U/L) | Week 12 | H | 1 | 35 | 12 | 3 |
+| Creatine Kinase (U/L) | Week 24 | L | 1 | 35 | 24 | 1 |
+| Creatine Kinase (U/L) | Week 24 | N | 1 | 35 | 24 | 2 |
+| Creatine Kinase (U/L) | Week 24 | H | 1 | 35 | 24 | 3 |
+| Creatine Kinase (U/L) | Week 8 | L | 1 | 35 | 8 | 1 |
+| Creatine Kinase (U/L) | Week 8 | N | 1 | 35 | 8 | 2 |
+| Creatine Kinase (U/L) | Week 8 | H | 1 | 35 | 8 | 3 |
 
 Now we have the nice “L”, “N”, “H” order that we’d like to see. Other
 sort methods on a shift table are fairly unlikely, as the matrix

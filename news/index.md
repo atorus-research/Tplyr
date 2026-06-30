@@ -1,5 +1,13 @@
 # Changelog
 
+## Tplyr 1.3.3
+
+### Bug fixes
+
+- Resolve [\#213](https://github.com/atorus-research/Tplyr/issues/213)
+  Fix spurious `no non-missing arguments to max` warning and `-Inf` sort
+  value when a count layer targets an all-missing (`NA`) variable
+
 ## Tplyr 1.3.2
 
 CRAN release: 2026-02-26

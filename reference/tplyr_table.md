@@ -74,5 +74,6 @@ capabilities.
 ## Examples
 
 ``` r
+
 tab <- tplyr_table(iris, Species, where = Sepal.Length < 5.8)
 ```

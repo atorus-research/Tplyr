@@ -13,32 +13,33 @@ Skipping the actual construction of the table, here’s the output data
 from **Tplyr** and some manual calculation:
 
 ``` r
+
 kable(full_data)
 ```
 
-| row_id | row_label1                             | row_label2     | var1_Placebo | var1_Xanomeline Low Dose | var1_Xanomeline High Dose |
-|:-------|:---------------------------------------|:---------------|:-------------|:-------------------------|:--------------------------|
-| d1_1   | Baseline                               | n              | 79           | 81                       | 74                        |
-| d2_1   |                                        | Mean (SD)      | 24.1 (12.19) | 24.4 (12.92)             | 21.3 (11.74)              |
-| d3_1   |                                        | Median (Range) | 21.0 ( 5;61) | 21.0 ( 5;57)             | 18.0 ( 3;57)              |
-|        |                                        |                |              |                          |                           |
-| d1_2   | Week 24                                | n              | 79           | 81                       | 74                        |
-| d2_2   |                                        | Mean (SD)      | 26.7 (13.79) | 26.4 (13.18)             | 22.8 (12.48)              |
-| d3_2   |                                        | Median (Range) | 24.0 ( 5;62) | 25.0 ( 6;62)             | 20.0 ( 3;62)              |
-|        |                                        |                |              |                          |                           |
-| d1_3   | Change from Baseline                   | n              | 79           | 81                       | 74                        |
-| d2_3   |                                        | Mean (SD)      | 2.5 ( 5.80)  | 2.0 ( 5.55)              | 1.5 ( 4.26)               |
-| d3_3   |                                        | Median (Range) | 2.0 (-11;16) | 2.0 (-11;17)             | 1.0 ( -7;13)              |
-|        |                                        |                |              |                          |                           |
-| x4_1   | p-value(Dose Response) \[1\]\[2\]      |                |              |                          | 0.245                     |
-| x4_2   |                                        |                |              |                          |                           |
-| x4_3   | p-value(Xan - Placebo) \[1\]\[3\]      |                |              | 0.569                    | 0.233                     |
-| x4_4   | Diff of LS Means (SE)                  |                |              | -0.5 (0.82)              | -1.0 (0.84)               |
-| x4_5   | 95% CI                                 |                |              | (-2.1;1.1)               | (-2.7;0.7)                |
-| x4_6   |                                        |                |              |                          |                           |
-| x4_7   | p-value(Xan High - Xan Low) \[1\]\[3\] |                |              |                          | 0.520                     |
-| x4_8   | Diff of LS Means (SE)                  |                |              |                          | -0.5 (0.84)               |
-| x4_9   | 95% CI                                 |                |              |                          | (-2.2;1.1)                |
+| row_id | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline Low Dose | var1_Xanomeline High Dose |
+|:---|:---|:---|:---|:---|:---|
+| d1_1 | Baseline | n | 79 | 81 | 74 |
+| d2_1 |  | Mean (SD) | 24.1 (12.19) | 24.4 (12.92) | 21.3 (11.74) |
+| d3_1 |  | Median (Range) | 21.0 ( 5;61) | 21.0 ( 5;57) | 18.0 ( 3;57) |
+|  |  |  |  |  |  |
+| d1_2 | Week 24 | n | 79 | 81 | 74 |
+| d2_2 |  | Mean (SD) | 26.7 (13.79) | 26.4 (13.18) | 22.8 (12.48) |
+| d3_2 |  | Median (Range) | 24.0 ( 5;62) | 25.0 ( 6;62) | 20.0 ( 3;62) |
+|  |  |  |  |  |  |
+| d1_3 | Change from Baseline | n | 79 | 81 | 74 |
+| d2_3 |  | Mean (SD) | 2.5 ( 5.80) | 2.0 ( 5.55) | 1.5 ( 4.26) |
+| d3_3 |  | Median (Range) | 2.0 (-11;16) | 2.0 (-11;17) | 1.0 ( -7;13) |
+|  |  |  |  |  |  |
+| x4_1 | p-value(Dose Response) \[1\]\[2\] |  |  |  | 0.245 |
+| x4_2 |  |  |  |  |  |
+| x4_3 | p-value(Xan - Placebo) \[1\]\[3\] |  |  | 0.569 | 0.233 |
+| x4_4 | Diff of LS Means (SE) |  |  | -0.5 (0.82) | -1.0 (0.84) |
+| x4_5 | 95% CI |  |  | (-2.1;1.1) | (-2.7;0.7) |
+| x4_6 |  |  |  |  |  |
+| x4_7 | p-value(Xan High - Xan Low) \[1\]\[3\] |  |  |  | 0.520 |
+| x4_8 | Diff of LS Means (SE) |  |  |  | -0.5 (0.84) |
+| x4_9 | 95% CI |  |  |  | (-2.2;1.1) |
 
 This is the primary efficacy table from the trial. The top portion of
 this table is fairly straightforward with **Tplyr** and can be done
@@ -63,6 +64,7 @@ variable names, and a list of filter conditions. You provide both of
 these fields as a list of quosures:
 
 ``` r
+
 m <- tplyr_meta(
   names = quos(a, b, c),
   filters = quos(a==1, b==2, c==3)
@@ -86,6 +88,7 @@ and
 are available to extend an existing `tplyr_meta` object:
 
 ``` r
+
 m <- m %>% 
   add_variables(quos(x)) %>% 
   add_filters(quos(x == 'a'))
@@ -104,6 +107,7 @@ Now that we can create our own `tplyr_meta` objects, let’s assemble the
 metadata for the bottom portion of Table 14-3.01:
 
 ``` r
+
 # Overall model subset of data
 meta <- tplyr_meta(
   names = quos(TRTP, EFFFL, ITTFL, ANL01FL, SITEGR1, AVISIT, AVISITN, PARAMCD, AVAL, BASE, CHG),
@@ -182,6 +186,7 @@ using the
 function.
 
 ``` r
+
 meta %>% 
   add_anti_join(
     join_meta = tplyr_meta(
@@ -214,6 +219,7 @@ function
 [`append_metadata()`](https://atorus-research.github.io/Tplyr/reference/append_metadata.md):
 
 ``` r
+
 t <- append_metadata(t, eff_meta)
 ```
 
@@ -223,6 +229,7 @@ the `tplyr_table` metadata with the function
 [`get_metadata()`](https://atorus-research.github.io/Tplyr/reference/get_metadata.md):
 
 ``` r
+
 get_metadata(t)
 #> # A tibble: 16 × 6
 #>    row_id row_label1              row_label2 var1_Placebo var1_Xanomeline High…¹
@@ -251,19 +258,20 @@ Finally, as with the automatically created metadata from Tplyr, we can
 query these result cells just the same:
 
 ``` r
+
 get_meta_subset(t, 'x4_1', "var1_Xanomeline High Dose") %>% 
   head() %>% 
   kable()
 ```
 
-| USUBJID     | TRTP                 | EFFFL | ITTFL | ANL01FL | SITEGR1 | AVISIT  | AVISITN | PARAMCD | AVAL | BASE | CHG |
-|:------------|:---------------------|:------|:------|:--------|:--------|:--------|--------:|:--------|-----:|-----:|----:|
-| 01-701-1015 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    8 |   13 |  -5 |
-| 01-701-1023 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   12 |   13 |  -1 |
-| 01-701-1028 | Xanomeline High Dose | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    3 |    3 |   0 |
-| 01-701-1033 | Xanomeline Low Dose  | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    7 |    7 |   0 |
-| 01-701-1034 | Xanomeline High Dose | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   11 |   11 |   0 |
-| 01-701-1047 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   19 |   10 |   9 |
+| USUBJID | TRTP | EFFFL | ITTFL | ANL01FL | SITEGR1 | AVISIT | AVISITN | PARAMCD | AVAL | BASE | CHG |
+|:---|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|
+| 01-701-1015 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 8 | 13 | -5 |
+| 01-701-1023 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 12 | 13 | -1 |
+| 01-701-1028 | Xanomeline High Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 3 | 3 | 0 |
+| 01-701-1033 | Xanomeline Low Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 7 | 7 | 0 |
+| 01-701-1034 | Xanomeline High Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 11 | 11 | 0 |
+| 01-701-1047 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 19 | 10 | 9 |
 
 ## Metadata Without Tplyr
 
@@ -273,19 +281,20 @@ available to query metadata from a dataframe instead of a **Tplyr**
 table, and parameters to provide your own target data frame:
 
 ``` r
+
 get_meta_subset(eff_meta, 'x4_1', "var1_Xanomeline High Dose", target=tplyr_adas) %>% 
   head() %>% 
   kable()
 ```
 
-| USUBJID     | TRTP                 | EFFFL | ITTFL | ANL01FL | SITEGR1 | AVISIT  | AVISITN | PARAMCD | AVAL | BASE | CHG |
-|:------------|:---------------------|:------|:------|:--------|:--------|:--------|--------:|:--------|-----:|-----:|----:|
-| 01-701-1015 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    8 |   13 |  -5 |
-| 01-701-1023 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   12 |   13 |  -1 |
-| 01-701-1028 | Xanomeline High Dose | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    3 |    3 |   0 |
-| 01-701-1033 | Xanomeline Low Dose  | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |    7 |    7 |   0 |
-| 01-701-1034 | Xanomeline High Dose | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   11 |   11 |   0 |
-| 01-701-1047 | Placebo              | Y     | Y     | Y       | 701     | Week 24 |      24 | ACTOT   |   19 |   10 |   9 |
+| USUBJID | TRTP | EFFFL | ITTFL | ANL01FL | SITEGR1 | AVISIT | AVISITN | PARAMCD | AVAL | BASE | CHG |
+|:---|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|
+| 01-701-1015 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 8 | 13 | -5 |
+| 01-701-1023 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 12 | 13 | -1 |
+| 01-701-1028 | Xanomeline High Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 3 | 3 | 0 |
+| 01-701-1033 | Xanomeline Low Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 7 | 7 | 0 |
+| 01-701-1034 | Xanomeline High Dose | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 11 | 11 | 0 |
+| 01-701-1047 | Placebo | Y | Y | Y | 701 | Week 24 | 24 | ACTOT | 19 | 10 | 9 |
 
 As with the **Tplyr** metadata, the only strict criteria here is that
 your custom metadata have a `row_id` column.
@@ -296,6 +305,10 @@ The vignette wouldn’t be complete without the final contextual example -
 so here we go. Ultimately these pieces an all fit together in the
 context of a Shiny application and give you the desired click-through
 experience.
+
+### Please Wait
+
+![loading](/__static__/frontend/images/spinner.gif?v=ce6bcde20b2f6c562913c06be83f9e7c8a19b008017407a3094b76fa82bbd6b7f4048e032e07e534d4ab5442b9105294d612863735077ab13a47653a14c5866e)
 
 *Source code available
 [here](https://github.com/atorus-research/Tplyr-efficacy-shiny-demo)*

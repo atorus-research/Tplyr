@@ -38,6 +38,7 @@ only numbers
 ## Examples
 
 ``` r
+
 get_tplyr_regex('format_string')
 #> [1] "(a(\\+\\d+)?|(\\S+)A(\\+\\d+)?|(\\S+)X+|x+)(\\.([A|a](\\+\\d+)?|[X|x]+)?)?"
 #> attr(,"options")
