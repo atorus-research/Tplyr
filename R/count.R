@@ -435,7 +435,7 @@ process_missing_subjects_row <- function(x) {
   pop_treat_var <- env_get(x, "pop_treat_var", inherit = TRUE)
   built_target <- env_get(x, "built_target")
   by <- env_get(x, "by")
-  distinct_by <- env_get(x, "distinct_by", default = NULL)
+  distinct_by <- env_get(x, "distinct_by", inherit = TRUE, default = NULL)
   header_n <- env_get(x, "header_n", inherit = TRUE)
   target_var <- env_get(x, "target_var")
   missing_subjects_row_label <- env_get(x, "missing_subjects_row_label")

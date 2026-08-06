@@ -2,6 +2,7 @@
 
 ## Bug fixes
 - Resolve #216 Fix `set_shift_layer_formats()` table level defaults being silently ignored by shift layers that don't set their own format strings
+- Resolve #217 Fix incorrect `add_missing_subjects_row()` counts on nested count layers, where `set_distinct_by()` was not being applied to the inner layer
 
 # Tplyr 1.3.3
 
