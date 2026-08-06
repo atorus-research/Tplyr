@@ -470,4 +470,26 @@ test_that("Shift layer defaults can be overridden", {
   expect_equal(s1$format_strings, f_str("xx (xx.xx%)", n, pct))
 })
 
+## table level overrides work
+test_that("Table level overrides work on shift layers", {
+
+  mtcars$cyl2 <- mtcars$cyl + 10
+
+  # Note the layer intentionally sets no format strings of its own - the table
+  # level default is the thing under test
+  t <- tplyr_table(mtcars, gear) %>%
+    set_shift_layer_formats(
+      f_str("xxx (xx.x%)", n, pct)
+    ) %>%
+    add_layer(
+      group_shift(vars(row = cyl, column = cyl2))
+    )
+
+  dat <- suppressWarnings(build(t))
+
+  expect_equal(dat$var1_3_14, c("  1 ( 6.7%)", "  0 ( 0.0%)", "  0 ( 0.0%)"))
+  expect_equal(dat$var1_3_18, c("  0 ( 0.0%)", "  0 ( 0.0%)", " 12 (80.0%)"))
+
+})
+
 options(op)

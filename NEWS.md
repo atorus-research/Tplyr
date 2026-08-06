@@ -1,3 +1,8 @@
+# Tplyr 1.3.4
+
+## Bug fixes
+- Resolve #216 Fix `set_shift_layer_formats()` table level defaults being silently ignored by shift layers that don't set their own format strings
+
 # Tplyr 1.3.3
 
 ## Bug fixes
