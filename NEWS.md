@@ -1,4 +1,4 @@
-# Tplyr 1.3.4
+# Tplyr 1.4.0
 
 ## New Features
 - Resolve #219 Add `max_int` and `max_dec` arguments to `set_format_strings()`, and the corresponding `tplyr.max_precision` option, to set an overall maximum precision that's applied after auto-precision and any '+' modifier are resolved
