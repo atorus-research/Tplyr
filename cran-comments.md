@@ -18,7 +18,7 @@ compatible feature and fixes two bugs:
 * GitHub Actions:
   * windows-latest (R release)
   * macOS-latest (R release)
-  * ubuntu-latest and ubuntu-22.04 (R release)
+  * ubuntu-latest and ubuntu-22.04 (R release and R devel)
 
 ## R CMD check results
 
