@@ -341,3 +341,26 @@ test_that("max_int and max_dec must be non-negative whole numbers", {
     "must be non-negative whole numbers"
   )
 })
+
+
+test_that("Overall precision maximums backfill from the package defaults", {
+
+  op <- options()
+  on.exit(options(op), add = TRUE)
+
+  make_table <- function() {
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(drat) %>%
+          set_format_strings("Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd))
+      )
+  }
+
+  # Option removed entirely - both arguments arrive as NULL
+  options(tplyr.max_precision = NULL)
+  expect_equal(build(make_table())$var1_3, "3.133 (0.2737)")
+
+  # Option only names the decimal - the integer backfills from the default
+  options(tplyr.max_precision = c(dec = 2))
+  expect_equal(build(make_table())$var1_3, "3.13 (0.27)")
+})
