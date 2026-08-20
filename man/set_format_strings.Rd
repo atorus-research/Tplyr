@@ -8,7 +8,13 @@
 \usage{
 set_format_strings(e, ...)
 
-\method{set_format_strings}{desc_layer}(e, ..., cap = getOption("tplyr.precision_cap"))
+\method{set_format_strings}{desc_layer}(
+  e,
+  ...,
+  cap = getOption("tplyr.precision_cap"),
+  max_int = getOption("tplyr.max_precision")["int"],
+  max_dec = getOption("tplyr.max_precision")["dec"]
+)
 
 \method{set_format_strings}{count_layer}(e, ...)
 }
@@ -18,7 +24,21 @@ set_format_strings(e, ...)
 \item{...}{Named parameters containing calls to \code{f_str} to set the format strings}
 
 \item{cap}{A named character vector containing an 'int' element for the cap
-on integer precision, and a 'dec' element for the cap on decimal precision.}
+on integer precision, and a 'dec' element for the cap on decimal precision.
+This caps the length allotted to the 'a' of an auto-precision format, so
+any '+' modifier is applied on top of the capped value.}
+
+\item{max_int}{The overall maximum integer length allowed in the output. This
+is applied after auto-precision and any '+' modifier have been resolved, so
+an 'a+2' format will never be allotted more than \code{max_int} integer
+places. Only applies to auto-precision format groups. Defaults to the
+'int' element of the \code{tplyr.max_precision} option.}
+
+\item{max_dec}{The overall maximum decimal length allowed in the output. This
+is applied after auto-precision and any '+' modifier have been resolved, so
+an 'a+2' format will never display more than \code{max_dec} decimal
+places. Only applies to auto-precision format groups. Defaults to the
+'dec' element of the \code{tplyr.max_precision} option.}
 }
 \value{
 The layer environment with the format string binding added
