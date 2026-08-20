@@ -145,6 +145,9 @@ process_formatting.desc_layer <- function(x, ...) {
     FALSE
   }
 
+  # Overall precision maximums - only bite when auto precision is in play
+  max_prec <- env_get(x, "max_prec", default = c(int = Inf, dec = Inf))
+
   # Extract precision-related bindings if needed
   if (need_prec_table) {
     built_target <- env_get(x, "built_target", inherit = TRUE)
@@ -187,7 +190,7 @@ process_formatting.desc_layer <- function(x, ...) {
     }
 
     # Format display strings using vectorized function
-    current_trans_sum['display_string'] <- construct_desc_string_vec(current_trans_sum, format_strings)
+    current_trans_sum['display_string'] <- construct_desc_string_vec(current_trans_sum, format_strings, max_prec)
 
     # Now do one more transpose to split the columns out
     # Default is to use the treatment variable, but if `cols` was provided
@@ -280,10 +283,12 @@ get_summaries <- function(e = caller_env()) {
 #'   - max_int, max_dec: (optional) auto-precision columns
 #'   - Additional columns for keep_vars (e.g., sd when formatting "Mean (SD)")
 #' @param format_strings Named list of f_str objects keyed by row_label
+#' @param max_prec A named numeric vector with an 'int' and a 'dec' element
+#'   giving the overall maximum precision allowed in the output
 #'
 #' @return Character vector of formatted display strings
 #' @noRd
-construct_desc_string_vec <- function(data, format_strings) {
+construct_desc_string_vec <- function(data, format_strings, max_prec = c(int = Inf, dec = Inf)) {
 
   # Initialize result vector
   result <- character(nrow(data))
@@ -351,13 +356,13 @@ construct_desc_string_vec <- function(data, format_strings) {
 
           # Format this sub-group
           fmt_args <- list(fmt$repl_str)
-          fmt_args[[2]] <- num_fmt_vec_auto(prec_data$value, 1, fmt, p_int, p_dec)
+          fmt_args[[2]] <- num_fmt_vec_auto(prec_data$value, 1, fmt, p_int, p_dec, max_prec)
 
           if (length(fmt$vars) > 1) {
             for (j in seq_along(fmt$vars[-1])) {
               var_name <- as_name(fmt$vars[[j + 1]])
               var_vals <- if (var_name %in% names(prec_data)) prec_data[[var_name]] else rep(NA_real_, nrow(prec_data))
-              fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, p_int, p_dec)
+              fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, p_int, p_dec, max_prec)
             }
           }
 
@@ -380,13 +385,13 @@ construct_desc_string_vec <- function(data, format_strings) {
 
     # Build format arguments list (single precision case)
     fmt_args <- list(fmt$repl_str)
-    fmt_args[[2]] <- num_fmt_vec_auto(non_na_data$value, 1, fmt, max_int, max_dec)
+    fmt_args[[2]] <- num_fmt_vec_auto(non_na_data$value, 1, fmt, max_int, max_dec, max_prec)
 
     if (length(fmt$vars) > 1) {
       for (j in seq_along(fmt$vars[-1])) {
         var_name <- as_name(fmt$vars[[j + 1]])
         var_vals <- if (var_name %in% names(non_na_data)) non_na_data[[var_name]] else rep(NA_real_, nrow(non_na_data))
-        fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, max_int, max_dec)
+        fmt_args[[j + 2]] <- num_fmt_vec_auto(var_vals, j + 1, fmt, max_int, max_dec, max_prec)
       }
     }
 

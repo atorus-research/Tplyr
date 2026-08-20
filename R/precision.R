@@ -23,6 +23,39 @@ nchar_unit <- function(v, side) {
   out
 }
 
+#' Resolve the overall precision maximums for a desc layer
+#'
+#' The `max_int` and `max_dec` arguments of `set_format_strings()` default to
+#' the `tplyr.max_precision` option. A user may provide either argument on its
+#' own, or set the option to a partially named vector, so anything left
+#' unspecified falls back to the package default.
+#'
+#' @param max_int Overall maximum integer length
+#' @param max_dec Overall maximum decimal length
+#'
+#' @return A named numeric vector with an 'int' and a 'dec' element
+#' @noRd
+resolve_max_precision <- function(max_int, max_dec) {
+
+  # NULL or a missing element of the option both mean "not specified"
+  if (is.null(max_int) || length(max_int) == 0) max_int <- NA_real_
+  if (is.null(max_dec) || length(max_dec) == 0) max_dec <- NA_real_
+
+  max_prec <- c(int = unname(as.double(max_int))[1], dec = unname(as.double(max_dec))[1])
+
+  # Backfill anything unspecified with the package defaults
+  defaults <- tplyr_default_options$tplyr.max_precision
+  unspecified <- is.na(max_prec)
+  max_prec[unspecified] <- defaults[names(max_prec)[unspecified]]
+
+  assert_that(
+    all(max_prec >= 0) && all(max_prec %% 1 == 0),
+    msg = "In `set_format_strings`, `max_int` and `max_dec` must be non-negative whole numbers"
+  )
+
+  max_prec
+}
+
 #' Make precision look-up table
 #'
 #' Creates the look up table based on precision_by and precision_on bindings

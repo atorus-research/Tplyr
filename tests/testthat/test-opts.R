@@ -374,6 +374,35 @@ test_that('Precision cap override is picked up from option', {
   options(op)
 })
 
+## Overall precision maximum is effective
+test_that('Overall precision maximum is picked up from option and overridden at the layer', {
+
+  op <- options()
+
+  make_table <- function(...) {
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(drat) %>%
+          set_format_strings('Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd), ...)
+      )
+  }
+
+  # Default option doesn't restrict anything
+  t_def_dat <- suppressWarnings(build(make_table()))
+
+  options('tplyr.max_precision' = c('int' = 99, 'dec' = 3))
+  t_opt_dat <- suppressWarnings(build(make_table()))
+
+  # Layer level setting takes precedence over the option
+  t_lay_dat <- suppressWarnings(build(make_table(max_dec = 2)))
+
+  expect_equal(t_def_dat$var1_3, "3.133 (0.2737)")
+  expect_equal(t_opt_dat$var1_3, "3.133 (0.274)")
+  expect_equal(t_lay_dat$var1_3, "3.13 (0.27)")
+
+  options(op)
+})
+
 options(op)
 
 ## Custom summaries pass through from options

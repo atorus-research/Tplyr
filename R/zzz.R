@@ -149,6 +149,9 @@ tplyr_default_options <- list(
   # Precision caps for decimal and integer precision
   tplyr.precision_cap = c('int' = 99, 'dec' = 99),
 
+  # Overall maximum precision, applied after auto-precision formats resolve
+  tplyr.max_precision = c('int' = 99, 'dec' = 99),
+
   # Custom summaries
   tplyr.custom_summaries = NULL,
 

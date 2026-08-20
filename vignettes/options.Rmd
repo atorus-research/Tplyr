@@ -147,6 +147,43 @@ Both layers in the above example are summarizing the same data. The top layer is
 
 The bottom layer overrides the **Tplyr** option. Instead, integers are capped at 1 space, and decimals are capped at 0. 
 
+## Overall Precision Maximum
+
+The precision cap limits the spaces allotted by the 'a' itself, so a format of 'a+2' can still grow two places past the cap. When your constraint is the width of the output page rather than the 'a', use the `tplyr.max_precision` option instead. This sets a hard ceiling that's applied after auto precision and the '+' modifier are combined.
+
+```{r max_precision1}
+options(tplyr.max_precision = c('int'=99, 'dec'=2))
+```
+
+As with the precision cap, layer level settings override the option - here using the `max_int` and `max_dec` parameters of `set_format_strings()`.
+
+```{r max_precision2}
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(HEIGHTBL, by = "Height at Baseline") %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd)
+      )
+  ) %>% 
+  add_layer(
+    group_desc(HEIGHTBL, by = "Height at Baseline (Limited)") %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        max_dec = 1
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+
+```
+
+Note that the maximums only apply to format groups that use auto precision. If you spell out a precision using 'x', **Tplyr** takes that as a deliberate choice and leaves it alone.
+
+```{r reset_settings_precision, include=FALSE}
+# Restore just this option so the sections below aren't affected
+options(tplyr.max_precision = c('int'=99, 'dec'=99))
+```
+
 ## Custom Summaries
 
 Custom summaries allow you to extend the capabilities of descriptive statistics layers in **Tplyr**. Maybe our defaults don't work how you'd like them to, or maybe you have some custom functions within your organization that you commonly would like to use. Specifying the custom summaries you wish to use in every table would prove quite tedious - therefore, the `tplyr.custom_summaries` option is a better choice.
