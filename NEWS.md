@@ -1,3 +1,12 @@
+# Tplyr 1.3.4
+
+## New Features
+- Resolve #219 Add `max_int` and `max_dec` arguments to `set_format_strings()`, and the corresponding `tplyr.max_precision` option, to set an overall maximum precision that's applied after auto-precision and any '+' modifier are resolved
+
+## Bug fixes
+- Resolve #216 Fix `set_shift_layer_formats()` table level defaults being silently ignored by shift layers that don't set their own format strings
+- Resolve #217 Fix incorrect `add_missing_subjects_row()` counts on nested count layers, where `set_distinct_by()` was not being applied to the inner layer
+
 # Tplyr 1.3.3
 
 ## Bug fixes

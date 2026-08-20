@@ -74,7 +74,7 @@ gather_defaults.count_layer <- function(x) {
 #' @noRd
 gather_defaults.shift_layer <- function(x) {
   # EXTRACT: Get what we need from layer environment
-  table_settings <- x$shift_layer_formats
+  table_settings <- env_get(x, nm = "shift_layer_formats", inherit = TRUE)
   
   # PROCESS: Get the defaults set within options
   opt_settings <- getOption('tplyr.shift_layer_default_formats')
