@@ -251,3 +251,116 @@ test_that("Partially provided decimal precision caps populate correctly", {
   # Manually verified these results look appropriate
   expect_snapshot(as.data.frame(d %>% select(starts_with('var1'))))
 })
+
+
+test_that("max_dec caps the total decimal precision after auto-precision resolves", {
+
+  # drat carries 2 decimals, so auto precision resolves to a=2, a+1=3, a+2=4
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(drat) %>%
+        set_format_strings(
+          "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd),
+          "Median"    = f_str("a.a+1", median),
+          max_dec = 3
+        )
+    )
+
+  d <- build(t)
+
+  # a+1 is under the max so it keeps 3 decimals, a+2 is held back to 3
+  expect_equal(d$var1_3, c("3.133 (0.274)", "3.080"))
+})
+
+test_that("max_dec is applied on top of the auto-precision cap", {
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(drat) %>%
+        set_format_strings(
+          "Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd),
+          cap = c(int = 99, dec = 1),
+          max_dec = 2
+        )
+    )
+
+  d <- build(t)
+
+  # cap holds a at 1, so a+1 is 2 and a+2 would be 3 - max_dec holds both at 2
+  expect_equal(d$var1_3, "3.13 (0.27)")
+})
+
+test_that("max_int and max_dec leave explicitly specified precision alone", {
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(drat) %>%
+        set_format_strings(
+          "Mean (SD)" = f_str("xx.xxx (xx.xxxx)", mean, sd),
+          max_int = 1,
+          max_dec = 1
+        )
+    )
+
+  d <- build(t)
+
+  expect_equal(d$var1_3, " 3.133 ( 0.2737)")
+})
+
+test_that("max_int caps the integer length allotted to auto-precision formats", {
+
+  t <- tplyr_table(mtcars, gear) %>%
+    add_layer(
+      group_desc(disp) %>%
+        set_format_strings("Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd), max_int = 2)
+    )
+
+  d <- build(t)
+
+  # Integers don't truncate, so the allotted space shrinks but the value stays whole
+  expect_equal(d$var1_3, "326.30 (94.853)")
+})
+
+test_that("max_int and max_dec must be non-negative whole numbers", {
+
+  expect_error(
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(drat) %>%
+          set_format_strings("Mean" = f_str("a.a+1", mean), max_dec = -1)
+      ),
+    "must be non-negative whole numbers"
+  )
+
+  expect_error(
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(drat) %>%
+          set_format_strings("Mean" = f_str("a.a+1", mean), max_int = 1.5)
+      ),
+    "must be non-negative whole numbers"
+  )
+})
+
+
+test_that("Overall precision maximums backfill from the package defaults", {
+
+  op <- options()
+  on.exit(options(op), add = TRUE)
+
+  make_table <- function() {
+    tplyr_table(mtcars, gear) %>%
+      add_layer(
+        group_desc(drat) %>%
+          set_format_strings("Mean (SD)" = f_str("a.a+1 (a.a+2)", mean, sd))
+      )
+  }
+
+  # Option removed entirely - both arguments arrive as NULL
+  options(tplyr.max_precision = NULL)
+  expect_equal(build(make_table())$var1_3, "3.133 (0.2737)")
+
+  # Option only names the decimal - the integer backfills from the default
+  options(tplyr.max_precision = c(dec = 2))
+  expect_equal(build(make_table())$var1_3, "3.13 (0.27)")
+})

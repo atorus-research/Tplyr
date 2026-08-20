@@ -166,10 +166,15 @@ num_fmt_vec <- function(vals, i, fmt) {
 #' @param fmt f_str object with formatting information
 #' @param max_int Numeric vector or scalar for auto integer precision (from data)
 #' @param max_dec Numeric vector or scalar for auto decimal precision (from data)
+#' @param max_prec A named numeric vector with an 'int' and a 'dec' element
+#'   giving the overall maximum precision allowed in the output. Applied after
+#'   the auto precision and the format's '+' modifier are added together, and
+#'   only to format groups that use auto precision.
 #'
 #' @return Character vector of formatted values
 #' @noRd
-num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
+num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0,
+                             max_prec = c(int = Inf, dec = Inf)) {
 
   settings <- fmt$settings[[i]]
 
@@ -177,16 +182,18 @@ num_fmt_vec_auto <- function(vals, i, fmt, max_int = 0, max_dec = 0) {
   max_int <- if (length(max_int) > 1) max_int[1] else max_int
   max_dec <- if (length(max_dec) > 1) max_dec[1] else max_dec
 
-  # Calculate integer length - use auto if specified
+  # Calculate integer length - use auto if specified. Auto precision plus the
+  # format's '+' modifier can't exceed the overall maximum, but an explicitly
+  # specified length is left alone
   if (settings$auto_int) {
-    int_len <- settings$int + max_int
+    int_len <- min(settings$int + max_int, max_prec[['int']])
   } else {
     int_len <- settings$int
   }
 
   # Calculate decimal places - use auto if specified
   if (settings$auto_dec) {
-    decimals <- settings$dec + max_dec
+    decimals <- min(settings$dec + max_dec, max_prec[['dec']])
   } else {
     decimals <- settings$dec
   }

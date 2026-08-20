@@ -99,12 +99,26 @@ set_format_strings <- function(e, ...) {
 #'   format strings
 #' @param cap A named character vector containing an 'int' element for the cap
 #'   on integer precision, and a 'dec' element for the cap on decimal precision.
+#'   This caps the length allotted to the 'a' of an auto-precision format, so
+#'   any '+' modifier is applied on top of the capped value.
+#' @param max_int The overall maximum integer length allowed in the output. This
+#'   is applied after auto-precision and any '+' modifier have been resolved, so
+#'   an 'a+2' format will never be allotted more than \code{max_int} integer
+#'   places. Only applies to auto-precision format groups. Defaults to the
+#'   'int' element of the \code{tplyr.max_precision} option.
+#' @param max_dec The overall maximum decimal length allowed in the output. This
+#'   is applied after auto-precision and any '+' modifier have been resolved, so
+#'   an 'a+2' format will never display more than \code{max_dec} decimal
+#'   places. Only applies to auto-precision format groups. Defaults to the
+#'   'dec' element of the \code{tplyr.max_precision} option.
 #'
 #' @return tplyr_layer object with formats attached
 #' @export
 #'
 #' @rdname set_format_strings
-set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision_cap')) {
+set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision_cap'),
+                                          max_int=getOption('tplyr.max_precision')['int'],
+                                          max_dec=getOption('tplyr.max_precision')['dec']) {
 
   # Catch the arguments from the function call so useful errors can be thrown
   check <- enquos(...)
@@ -155,6 +169,10 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
   if (!('int' %in% names(cap))) cap['int'] <- getOption('tplyr.precision_cap')['int']
   if (!('dec' %in% names(cap))) cap['dec'] <- getOption('tplyr.precision_cap')['dec']
 
+  # Collect the overall maximums into a single vector, filling in defaults for
+  # anything the user or the `tplyr.max_precision` option left unspecified
+  max_prec <- resolve_max_precision(max_int, max_dec)
+
   env_bind(e,
            format_strings = format_strings,
            summary_vars = vars(!!!summary_vars),
@@ -163,7 +181,8 @@ set_format_strings.desc_layer <- function(e, ..., cap=getOption('tplyr.precision
            row_labels = row_labels,
            max_length = max_format_length,
            need_prec_table = need_prec_table,
-           cap = cap
+           cap = cap,
+           max_prec = max_prec
   )
   e
 }

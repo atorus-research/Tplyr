@@ -1078,6 +1078,39 @@ test_that("Missing counts on nested count layers function correctly", {
   expect_equal(nrow(x %>% filter(row_label2 == "   Missing")), 1)
   expect_equal(tail(x, 1)$ord_layer_2, Inf)
 
+  # The missing subjects count on a nested layer must honor the outer layer's
+  # set_distinct_by(), otherwise the count collapses to the number of distinct
+  # outer groups rather than the number of distinct subjects
+  missing_row <- x %>% filter(row_label2 == "   Missing")
+
+  pop1 <- tplyr_adsl %>%
+    filter(TRT01A == "Placebo") %>%
+    nrow()
+
+  dat1 <- tplyr_adae %>%
+    filter(TRTA == "Placebo") %>%
+    distinct(USUBJID) %>%
+    nrow()
+
+  expect_equal(
+    as.numeric(sub(" .*", "", missing_row$var1_Placebo)),
+    pop1 - dat1
+  )
+
+  pop2 <- tplyr_adsl %>%
+    filter(TRT01A == "Xanomeline High Dose") %>%
+    nrow()
+
+  dat2 <- tplyr_adae %>%
+    filter(TRTA == "Xanomeline High Dose") %>%
+    distinct(USUBJID) %>%
+    nrow()
+
+  expect_equal(
+    as.numeric(sub(" .*", "", missing_row$`var1_Xanomeline High Dose`)),
+    pop2 - dat2
+  )
+
   # Verify that bycount works for missing values and sort value is assigned correctly
   x <- tplyr_table(tplyr_adae, TRTA) %>%
     set_pop_data(tplyr_adsl) %>%
