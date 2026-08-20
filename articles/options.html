@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,12 +150,20 @@ integer and decimal places default to 99, essentially ensuring that
 precision is not capped by default.</td>
 </tr>
 <tr class="odd">
+<td align="center">tplyr.max_precision</td>
+<td align="left">The default overall maximum precision, applied after
+auto-precision and any ‘+’ modifier are resolved. Both integer and
+decimal places default to 99, essentially ensuring that precision is not
+limited by default. Only applies to format groups that use
+auto-precision.</td>
+</tr>
+<tr class="even">
 <td align="center">tplyr.custom_summaries</td>
 <td align="left">Default custom summaries available to Tplyr. Defaults
 to NULL, as Tplyr’s defaults are seen as built-ins and not custom
 summaries.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="center">tplyr.scipen</td>
 <td align="left">The default ‘scipen’ setting used while Tplyr is
 executing. Defaults to 1000. See the R documentation on the ‘scipen’
@@ -163,7 +171,7 @@ option to understand more, but this allows you to control how small a
 number must be before scientific notation is used when a number is
 string formatted in presentation.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="center">tplyr.quantile_type</td>
 <td align="left">The default quantile algorithm used by Tpylr when using
 the built-in summaries for Q1, Q3, and IQR. Defaults to Type 7, which is
@@ -562,6 +570,86 @@ Instead, integers are capped at 1 space, and decimals are capped at
 0.</p>
 </div>
 <div class="section level2">
+<h2 id="overall-precision-maximum">Overall Precision Maximum<a class="anchor" aria-label="anchor" href="#overall-precision-maximum"></a>
+</h2>
+<p>The precision cap limits the spaces allotted by the ‘a’ itself, so a
+format of ‘a+2’ can still grow two places past the cap. When your
+constraint is the width of the output page rather than the ‘a’, use the
+<code>tplyr.max_precision</code> option instead. This sets a hard
+ceiling that’s applied after auto precision and the ‘+’ modifier are
+combined.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.max_precision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'int'</span><span class="op">=</span><span class="fl">99</span>, <span class="st">'dec'</span><span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>As with the precision cap, layer level settings override the option -
+here using the <code>max_int</code> and <code>max_dec</code> parameters
+of <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">HEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Height at Baseline"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">HEIGHTBL</span>, by <span class="op">=</span> <span class="st">"Height at Baseline (Limited)"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,</span>
+<span>        max_dec <span class="op">=</span> <span class="fl">1</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="19%">
+<col width="7%">
+<col width="10%">
+<col width="17%">
+<col width="17%">
+<col width="10%">
+<col width="8%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+<th align="right">ord_layer_index</th>
+<th align="right">ord_layer_1</th>
+<th align="right">ord_layer_2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Height at Baseline</td>
+<td align="left">Mean (SD)</td>
+<td align="left">162.57 (11.52)</td>
+<td align="left">165.82 (10.13)</td>
+<td align="left">163.43 (10.42)</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Height at Baseline (Limited)</td>
+<td align="left">Mean (SD)</td>
+<td align="left">162.6 (11.5)</td>
+<td align="left">165.8 (10.1)</td>
+<td align="left">163.4 (10.4)</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the maximums only apply to format groups that use auto
+precision. If you spell out a precision using ‘x’,
+<strong>Tplyr</strong> takes that as a deliberate choice and leaves it
+alone.</p>
+</div>
+<div class="section level2">
 <h2 id="custom-summaries">Custom Summaries<a class="anchor" aria-label="anchor" href="#custom-summaries"></a>
 </h2>
 <p>Custom summaries allow you to extend the capabilities of descriptive
@@ -571,7 +659,7 @@ within your organization that you commonly would like to use. Specifying
 the custom summaries you wish to use in every table would prove quite
 tedious - therefore, the <code>tplyr.custom_summaries</code> option is a
 better choice.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.custom_summaries <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/defusing-advanced.html" class="external-link">quos</a></span><span class="op">(</span></span>
 <span>  geometric_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">.var</span><span class="op">[</span><span class="va">.var</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">.var</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -590,7 +678,7 @@ Advanced R.</p>
 <p>Now that geometric mean is set within the <strong>Tplyr</strong>
 options, you can use it within your descriptive statistics layers, just
 like it was one of the built-in summaries.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -638,7 +726,7 @@ places preceded by 0’s) required to switch to scientific notation.
 Decreasing the value of <code>scipen</code> will cause R to switch to
 scientific location for larger numbers.</p>
 <p>This is easier to understand with an example.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># This is the default</span></span>
 <span><span class="fl">.0001</span></span>
 <span><span class="co">#&gt; [1] 1e-04</span></span>
@@ -662,7 +750,7 @@ value we use in <strong>Tplyr</strong> is 9999, which is intended to
 totally prevent numbers from switching to scientific notation. We want
 this to be a conscious decision that you make in order to prevent any
 unexpected outputs.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.scipen <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adae</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
@@ -769,7 +857,7 @@ flexibility to change the algorithm. You can do this with
 m = 1-p. p[k] = (k - 1) / (n - 1). \textrm{In this case, } p[k] = mode[F(x[k])]. \textrm{This is used by S.}
 </annotation></semantics></math> The example below demonstrates using
 the default quantile algorithm in R</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">CUMDOSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -808,7 +896,7 @@ calculates quantiles. To match SAS’s definition, use Type 3:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="normal">Nearest even order statistic. γ = 0 if g = 0 and j is even, and 1 otherwise.</mtext><annotation encoding="application/x-tex">
 \textrm{Nearest even order statistic. γ = 0 if g = 0 and  j is even, and 1 otherwise.}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>tplyr.quantile_type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -848,7 +936,7 @@ languages that IBM rounding.<strong>Tplyr</strong> offers the option
 ‘tplyr.IBMRounding’ to change the default rounding behavior of
 <strong>Tplyr</strong> tables. Review var1_4 in the tables below.</p>
 <p>Using the default R behavior</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">qsec</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -860,7 +948,7 @@ languages that IBM rounding.<strong>Tplyr</strong> offers the option
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> mean       17.69  18.96  15.64                1           1</span></span></code></pre></div>
 <p>Using IBM rounding</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_options.html" class="external-link">with_options</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>tplyr.IBMRounding <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  <span class="op">{</span></span>
@@ -891,7 +979,7 @@ languages that IBM rounding.<strong>Tplyr</strong> offers the option
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

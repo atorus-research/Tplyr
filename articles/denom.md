@@ -533,7 +533,7 @@ Consider this example:
 | SKIN ODOUR ABNORMAL | 0 ( 0.0%) | 1 ( 1.2%) | 0 ( 0.0%) |
 | SKIN ULCER | 1 ( 1.2%) | 0 ( 0.0%) | 0 ( 0.0%) |
 | URTICARIA | 0 ( 0.0%) | 1 ( 1.2%) | 1 ( 1.2%) |
-| Missing Subjects | 85 (98.8%) | 83 (98.8%) | 83 (98.8%) |
+| Missing Subjects | 65 (75.6%) | 42 (50.0%) | 42 (50.0%) |
 
 In the example above, we produce a nested count layer. The function
 [`add_missing_subjects_row()`](https://atorus-research.github.io/Tplyr/reference/add_missing_subjects_row.md)

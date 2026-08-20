@@ -10,7 +10,13 @@ layer. This behaves slightly differently between layers.
 set_format_strings(e, ...)
 
 # S3 method for class 'desc_layer'
-set_format_strings(e, ..., cap = getOption("tplyr.precision_cap"))
+set_format_strings(
+  e,
+  ...,
+  cap = getOption("tplyr.precision_cap"),
+  max_int = getOption("tplyr.max_precision")["int"],
+  max_dec = getOption("tplyr.max_precision")["dec"]
+)
 
 # S3 method for class 'count_layer'
 set_format_strings(e, ...)
@@ -30,7 +36,25 @@ set_format_strings(e, ...)
 
   A named character vector containing an 'int' element for the cap on
   integer precision, and a 'dec' element for the cap on decimal
-  precision.
+  precision. This caps the length allotted to the 'a' of an
+  auto-precision format, so any '+' modifier is applied on top of the
+  capped value.
+
+- max_int:
+
+  The overall maximum integer length allowed in the output. This is
+  applied after auto-precision and any '+' modifier have been resolved,
+  so an 'a+2' format will never be allotted more than `max_int` integer
+  places. Only applies to auto-precision format groups. Defaults to the
+  'int' element of the `tplyr.max_precision` option.
+
+- max_dec:
+
+  The overall maximum decimal length allowed in the output. This is
+  applied after auto-precision and any '+' modifier have been resolved,
+  so an 'a+2' format will never display more than `max_dec` decimal
+  places. Only applies to auto-precision format groups. Defaults to the
+  'dec' element of the `tplyr.max_precision` option.
 
 ## Value
 

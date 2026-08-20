@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.3" id="tplyr-133">Tplyr 1.3.3<a class="anchor" aria-label="anchor" href="#tplyr-133"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.4.0" id="tplyr-140">Tplyr 1.4.0<a class="anchor" aria-label="anchor" href="#tplyr-140"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>
+<ul><li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/219" class="external-link">#219</a> Add <code>max_int</code> and <code>max_dec</code> arguments to <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>, and the corresponding <code>tplyr.max_precision</code> option, to set an overall maximum precision that’s applied after auto-precision and any ‘+’ modifier are resolved</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-0"></a></h3>
+<ul><li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/216" class="external-link">#216</a> Fix <code><a href="../reference/table_format_defaults.html">set_shift_layer_formats()</a></code> table level defaults being silently ignored by shift layers that don’t set their own format strings</li>
+<li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/217" class="external-link">#217</a> Fix incorrect <code><a href="../reference/add_missing_subjects_row.html">add_missing_subjects_row()</a></code> counts on nested count layers, where <code><a href="../reference/set_distinct_by.html">set_distinct_by()</a></code> was not being applied to the inner layer</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.3" id="tplyr-133">Tplyr 1.3.3<a class="anchor" aria-label="anchor" href="#tplyr-133"></a></h2><p class="text-muted">CRAN release: 2026-06-30</p>
 <div class="section level3">
 <h3 id="bug-fixes-1-3-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-3"></a></h3>
 <ul><li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/213" class="external-link">#213</a> Fix spurious <code>no non-missing arguments to max</code> warning and <code>-Inf</code> sort value when a count layer targets an all-missing (<code>NA</code>) variable</li>
@@ -299,7 +311,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

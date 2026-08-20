@@ -289,7 +289,7 @@ tail(x) %>%
 | c20_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ODOUR ABNORMAL | 0 ( 0.0%) |
 | c21_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | SKIN ULCER | 1 ( 1.2%) |
 | c22_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | URTICARIA | 0 ( 0.0%) |
-| c23_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | Missing | 85 (98.8%) |
+| c23_1 | SKIN AND SUBCUTANEOUS TISSUE DISORDERS | Missing | 65 (75.6%) |
 
 The missing row in this example counts the subjects within their
 respective treatment groups who do *not* have any adverse events for the

@@ -1,6 +1,33 @@
 # Changelog
 
+## Tplyr 1.4.0
+
+### New Features
+
+- Resolve [\#219](https://github.com/atorus-research/Tplyr/issues/219)
+  Add `max_int` and `max_dec` arguments to
+  [`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md),
+  and the corresponding `tplyr.max_precision` option, to set an overall
+  maximum precision that’s applied after auto-precision and any ‘+’
+  modifier are resolved
+
+### Bug fixes
+
+- Resolve [\#216](https://github.com/atorus-research/Tplyr/issues/216)
+  Fix
+  [`set_shift_layer_formats()`](https://atorus-research.github.io/Tplyr/reference/table_format_defaults.md)
+  table level defaults being silently ignored by shift layers that don’t
+  set their own format strings
+- Resolve [\#217](https://github.com/atorus-research/Tplyr/issues/217)
+  Fix incorrect
+  [`add_missing_subjects_row()`](https://atorus-research.github.io/Tplyr/reference/add_missing_subjects_row.md)
+  counts on nested count layers, where
+  [`set_distinct_by()`](https://atorus-research.github.io/Tplyr/reference/set_distinct_by.md)
+  was not being applied to the inner layer
+
 ## Tplyr 1.3.3
+
+CRAN release: 2026-06-30
 
 ### Bug fixes
 

@@ -17,7 +17,7 @@ layer. This behaves slightly differently between layers."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,13 @@ layer. This behaves slightly differently between layers.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">set_format_strings</span><span class="op">(</span><span class="va">e</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'desc_layer'</span></span>
-<span><span class="fu">set_format_strings</span><span class="op">(</span><span class="va">e</span>, <span class="va">...</span>, cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"tplyr.precision_cap"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">set_format_strings</span><span class="op">(</span></span>
+<span>  <span class="va">e</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  cap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"tplyr.precision_cap"</span><span class="op">)</span>,</span>
+<span>  max_int <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"tplyr.max_precision"</span><span class="op">)</span><span class="op">[</span><span class="st">"int"</span><span class="op">]</span>,</span>
+<span>  max_dec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"tplyr.max_precision"</span><span class="op">)</span><span class="op">[</span><span class="st">"dec"</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'count_layer'</span></span>
 <span><span class="fu">set_format_strings</span><span class="op">(</span><span class="va">e</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -104,7 +110,25 @@ layer. This behaves slightly differently between layers.</p>
 
 <dt id="arg-cap">cap<a class="anchor" aria-label="anchor" href="#arg-cap"></a></dt>
 <dd><p>A named character vector containing an 'int' element for the cap
-on integer precision, and a 'dec' element for the cap on decimal precision.</p></dd>
+on integer precision, and a 'dec' element for the cap on decimal precision.
+This caps the length allotted to the 'a' of an auto-precision format, so
+any '+' modifier is applied on top of the capped value.</p></dd>
+
+
+<dt id="arg-max-int">max_int<a class="anchor" aria-label="anchor" href="#arg-max-int"></a></dt>
+<dd><p>The overall maximum integer length allowed in the output. This
+is applied after auto-precision and any '+' modifier have been resolved, so
+an 'a+2' format will never be allotted more than <code>max_int</code> integer
+places. Only applies to auto-precision format groups. Defaults to the
+'int' element of the <code>tplyr.max_precision</code> option.</p></dd>
+
+
+<dt id="arg-max-dec">max_dec<a class="anchor" aria-label="anchor" href="#arg-max-dec"></a></dt>
+<dd><p>The overall maximum decimal length allowed in the output. This
+is applied after auto-precision and any '+' modifier have been resolved, so
+an 'a+2' format will never display more than <code>max_dec</code> decimal
+places. Only applies to auto-precision format groups. Defaults to the
+'dec' element of the <code>tplyr.max_precision</code> option.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -229,7 +253,7 @@ on integer precision, and a 'dec' element for the cap on decimal precision.</p><
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

@@ -246,6 +246,56 @@ changes the `by` variables used to determine collected precision. If no
 `target_var` is used. If no `precision_by` variables are specified, then
 the default `by` variables are used.
 
+### Overall Precision Maximums
+
+The `cap` argument limits the “a” itself, which means the `+` modifiers
+still stack on top of it. Space in an output table is often the real
+constraint though, and you may need a hard ceiling on the number of
+decimal places displayed no matter which format string produced the
+number. The `max_int` and `max_dec` arguments give you that ceiling.
+They’re applied *after* auto-precision and the `+` modifier have been
+added together:
+
+``` r
+
+tplyr_table(tplyr_adlb, TRTA) %>% 
+  add_layer(
+    group_desc(AVAL, by = PARAMCD) %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        max_dec = 3
+      )
+  ) %>% 
+  build() %>% 
+  head(20) %>% 
+  select(-starts_with("ord")) %>%
+  kable()
+```
+
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
+|:---|:---|:---|:---|:---|
+| BUN | Mean (SD) | 5.306 ( 2.055) | 4.607 ( 1.301) | 6.732 ( 2.940) |
+| CA | Mean (SD) | 2.180 (0.069) | 2.204 (0.137) | 2.161 (0.083) |
+| CK | Mean (SD) | 175.8 ( 288.41) | 108.2 ( 93.99) | 83.1 ( 77.91) |
+| GGT | Mean (SD) | 34.5 ( 34.77) | 36.0 ( 48.69) | 34.9 ( 26.99) |
+| URATE | Mean (SD) | 260.650 ( 83.697) | 289.261 ( 88.161) | 253.060 ( 87.006) |
+
+Here the standard deviation would normally display two more decimal
+places than the collected precision, but `max_dec` holds it to 3. Where
+the collected precision is small enough that “a+2” lands under the
+maximum, the format string is left alone - so `max_dec` only kicks in
+when a result would otherwise exceed it.
+
+A few things to note:
+
+- `max_int` and `max_dec` only apply to format groups using
+  auto-precision. An explicitly specified format like `xx.xxx` is an
+  intentional choice on your part, so **Tplyr** won’t override it.
+- `max_int` follows the same rules as the integer side of `cap` - it
+  limits the space allotted, but integers never truncate.
+- `cap` and the maximums can be used together. `cap` limits the “a”, and
+  `max_int`/`max_dec` limit the final result.
+
 ## External Precision
 
 Lastly, while dynamic precision might be what you’re looking for, you

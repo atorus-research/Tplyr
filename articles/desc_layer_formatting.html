@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -637,6 +637,106 @@ variables used to determine collected precision. If no
 <code>target_var</code> is used. If no <code>precision_by</code>
 variables are specified, then the default <code>by</code> variables are
 used.</p>
+<div class="section level3">
+<h3 id="overall-precision-maximums">Overall Precision Maximums<a class="anchor" aria-label="anchor" href="#overall-precision-maximums"></a>
+</h3>
+<p>The <code>cap</code> argument limits the “a” itself, which means the
+<code>+</code> modifiers still stack on top of it. Space in an output
+table is often the real constraint though, and you may need a hard
+ceiling on the number of decimal places displayed no matter which format
+string produced the number. The <code>max_int</code> and
+<code>max_dec</code> arguments give you that ceiling. They’re applied
+<em>after</em> auto-precision and the <code>+</code> modifier have been
+added together:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adlb</span>, <span class="va">TRTA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by <span class="op">=</span> <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu"><a href="../reference/set_format_strings.html">set_format_strings</a></span><span class="op">(</span></span>
+<span>        <span class="st">'Mean (SD)'</span> <span class="op">=</span> <span class="fu"><a href="../reference/f_str.html">f_str</a></span><span class="op">(</span><span class="st">'a.a+1 (a.a+2)'</span>, <span class="va">mean</span>, <span class="va">sd</span><span class="op">)</span>,</span>
+<span>        max_dec <span class="op">=</span> <span class="fl">3</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/build.html">build</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"ord"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="12%">
+<col width="12%">
+<col width="19%">
+<col width="28%">
+<col width="27%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">row_label1</th>
+<th align="left">row_label2</th>
+<th align="left">var1_Placebo</th>
+<th align="left">var1_Xanomeline High Dose</th>
+<th align="left">var1_Xanomeline Low Dose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">BUN</td>
+<td align="left">Mean (SD)</td>
+<td align="left">5.306 ( 2.055)</td>
+<td align="left">4.607 ( 1.301)</td>
+<td align="left">6.732 ( 2.940)</td>
+</tr>
+<tr class="even">
+<td align="left">CA</td>
+<td align="left">Mean (SD)</td>
+<td align="left">2.180 (0.069)</td>
+<td align="left">2.204 (0.137)</td>
+<td align="left">2.161 (0.083)</td>
+</tr>
+<tr class="odd">
+<td align="left">CK</td>
+<td align="left">Mean (SD)</td>
+<td align="left">175.8 ( 288.41)</td>
+<td align="left">108.2 ( 93.99)</td>
+<td align="left">83.1 ( 77.91)</td>
+</tr>
+<tr class="even">
+<td align="left">GGT</td>
+<td align="left">Mean (SD)</td>
+<td align="left">34.5 ( 34.77)</td>
+<td align="left">36.0 ( 48.69)</td>
+<td align="left">34.9 ( 26.99)</td>
+</tr>
+<tr class="odd">
+<td align="left">URATE</td>
+<td align="left">Mean (SD)</td>
+<td align="left">260.650 ( 83.697)</td>
+<td align="left">289.261 ( 88.161)</td>
+<td align="left">253.060 ( 87.006)</td>
+</tr>
+</tbody>
+</table>
+<p>Here the standard deviation would normally display two more decimal
+places than the collected precision, but <code>max_dec</code> holds it
+to 3. Where the collected precision is small enough that “a+2” lands
+under the maximum, the format string is left alone - so
+<code>max_dec</code> only kicks in when a result would otherwise exceed
+it.</p>
+<p>A few things to note:</p>
+<ul>
+<li>
+<code>max_int</code> and <code>max_dec</code> only apply to format
+groups using auto-precision. An explicitly specified format like
+<code>xx.xxx</code> is an intentional choice on your part, so
+<strong>Tplyr</strong> won’t override it.</li>
+<li>
+<code>max_int</code> follows the same rules as the integer side of
+<code>cap</code> - it limits the space allotted, but integers never
+truncate.</li>
+<li>
+<code>cap</code> and the maximums can be used together.
+<code>cap</code> limits the “a”, and
+<code>max_int</code>/<code>max_dec</code> limit the final result.</li>
+</ul>
+</div>
 </div>
 <div class="section level2">
 <h2 id="external-precision">External Precision<a class="anchor" aria-label="anchor" href="#external-precision"></a>
@@ -654,7 +754,7 @@ calculating in the background. This is done using the new function
 <code><a href="../reference/set_precision_data.html">set_precision_data()</a></code>. In the output below, Notice how the
 precision by PARAMCD varies depending on what was specified in the data
 frame <code>prec_data</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prec_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">max_int</span>, <span class="op">~</span><span class="va">max_dec</span>,</span>
 <span>  <span class="st">"BUN"</span>,   <span class="fl">1</span>, <span class="fl">0</span>,</span>
@@ -734,7 +834,7 @@ frame <code>prec_data</code>.</p>
 <p>If one of your by variable groups are missing in the precision data,
 <strong>Tplyr</strong> can default back to using auto-precision by using
 the option <code>default=auto</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prec_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">PARAMCD</span>, <span class="op">~</span><span class="va">max_int</span>, <span class="op">~</span><span class="va">max_dec</span>,</span>
 <span>  <span class="st">"BUN"</span>, <span class="fl">1</span>, <span class="fl">0</span>,</span>
@@ -818,7 +918,7 @@ the option <code>default=auto</code>.</p>
 <p>By default, when using ‘x’ or ‘a’, any other character within a
 format string will stay stationary. Consider the standard example from
 the descriptive statistic layer vignette.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adsl</span>, <span class="va">TRT01P</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AGE</span>, by <span class="op">=</span> <span class="st">"Age (years)"</span>, where<span class="op">=</span> <span class="va">SAFFL</span><span class="op">==</span><span class="st">"Y"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -851,7 +951,7 @@ parenthesis should move to the right along with the numbers consuming
 less integer space. Within your <code><a href="../reference/f_str.html">f_str()</a></code>, you can achieve
 this by using a capital ‘X’. For example, focusing on the mean and
 standard deviation line:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adlb</span>, <span class="va">TRTA</span>, <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -872,7 +972,7 @@ standard deviation line:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: `var1_Xanomeline Low Dose` &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Similarly, the same functionality works with auto precision by using
 a capital A.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tplyr_table.html">tplyr_table</a></span><span class="op">(</span><span class="va">tplyr_adlb</span>, <span class="va">TRTA</span>, <span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"CK"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/layer_attachment.html">add_layer</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/layer_constructors.html">group_desc</a></span><span class="op">(</span><span class="va">AVAL</span>, by<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">PARAMCD</span>, <span class="va">AVISIT</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -912,7 +1012,7 @@ other valid format string capabilities.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

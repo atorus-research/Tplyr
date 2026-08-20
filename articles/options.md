@@ -15,6 +15,7 @@ descriptions:
 | tplyr.shift_layer_default_formats | The default shift layer format. Defaults to an auto-calculated n width. |
 | tplyr.desc_layer_default_formats | The default descriptive statistics layer format. Defaults to “n”, “Mean (SD)”, “Median”, “Q1, Q3”, “Min, Max”, and “Missing”. Everything except “n” and “Missing” use auto-precision. Mean, Q1, Q3, and median defaults to +1 decimal places and Standard Deviation defaults to +2. |
 | tplyr.precision_cap | The default precision cap for auto-precision. Both integer and decimal places default to 99, essentially ensuring that precision is not capped by default. |
+| tplyr.max_precision | The default overall maximum precision, applied after auto-precision and any ‘+’ modifier are resolved. Both integer and decimal places default to 99, essentially ensuring that precision is not limited by default. Only applies to format groups that use auto-precision. |
 | tplyr.custom_summaries | Default custom summaries available to Tplyr. Defaults to NULL, as Tplyr’s defaults are seen as built-ins and not custom summaries. |
 | tplyr.scipen | The default ‘scipen’ setting used while Tplyr is executing. Defaults to 1000. See the R documentation on the ‘scipen’ option to understand more, but this allows you to control how small a number must be before scientific notation is used when a number is string formatted in presentation. |
 | tplyr.quantile_type | The default quantile algorithm used by Tpylr when using the built-in summaries for Q1, Q3, and IQR. Defaults to Type 7, which is the R default |
@@ -212,6 +213,52 @@ cap to override the option. Recall a few things about auto precision:
 
 The bottom layer overrides the **Tplyr** option. Instead, integers are
 capped at 1 space, and decimals are capped at 0.
+
+## Overall Precision Maximum
+
+The precision cap limits the spaces allotted by the ‘a’ itself, so a
+format of ‘a+2’ can still grow two places past the cap. When your
+constraint is the width of the output page rather than the ‘a’, use the
+`tplyr.max_precision` option instead. This sets a hard ceiling that’s
+applied after auto precision and the ‘+’ modifier are combined.
+
+``` r
+
+options(tplyr.max_precision = c('int'=99, 'dec'=2))
+```
+
+As with the precision cap, layer level settings override the option -
+here using the `max_int` and `max_dec` parameters of
+[`set_format_strings()`](https://atorus-research.github.io/Tplyr/reference/set_format_strings.md).
+
+``` r
+
+tplyr_table(tplyr_adsl, TRT01P) %>% 
+  add_layer(
+    group_desc(HEIGHTBL, by = "Height at Baseline") %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd)
+      )
+  ) %>% 
+  add_layer(
+    group_desc(HEIGHTBL, by = "Height at Baseline (Limited)") %>% 
+      set_format_strings(
+        'Mean (SD)' = f_str('a.a+1 (a.a+2)', mean, sd),
+        max_dec = 1
+      )
+  ) %>% 
+  build() %>% 
+  kable()
+```
+
+| row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose | ord_layer_index | ord_layer_1 | ord_layer_2 |
+|:---|:---|:---|:---|:---|---:|---:|---:|
+| Height at Baseline | Mean (SD) | 162.57 (11.52) | 165.82 (10.13) | 163.43 (10.42) | 1 | 1 | 1 |
+| Height at Baseline (Limited) | Mean (SD) | 162.6 (11.5) | 165.8 (10.1) | 163.4 (10.4) | 2 | 1 | 1 |
+
+Note that the maximums only apply to format groups that use auto
+precision. If you spell out a precision using ‘x’, **Tplyr** takes that
+as a deliberate choice and leaves it alone.
 
 ## Custom Summaries
 
