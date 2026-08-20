@@ -142,8 +142,8 @@ states. Lastly, `desc` layers create descriptive statistics.
 cnt <- group_count(t, AGEGR1)
 cnt
 #> *** count_layer ***
-#> Self:  count_layer < 0x558c89e9e9f8 >
-#> Parent:  tplyr_table < 0x558c89b43430 >
+#> Self:  count_layer < 0x55801f7cee48 >
+#> Parent:  tplyr_table < 0x55801f473880 >
 #> target_var: 
 #>  AGEGR1
 #> by: 
@@ -153,8 +153,8 @@ cnt
 dsc <- group_desc(t, AGE)
 dsc
 #> *** desc_layer ***
-#> Self:  desc_layer < 0x558c89f68250 >
-#> Parent:  tplyr_table < 0x558c89b43430 >
+#> Self:  desc_layer < 0x55801f8986a0 >
+#> Parent:  tplyr_table < 0x55801f473880 >
 #> target_var: 
 #>  AGE
 #> by: 
@@ -164,8 +164,8 @@ dsc
 shf <- group_shift(t, vars(row=COMP8FL, column=COMP24FL))
 shf
 #> *** shift_layer ***
-#> Self:  shift_layer < 0x558c8a062a70 >
-#> Parent:  tplyr_table < 0x558c89b43430 >
+#> Self:  shift_layer < 0x55801f992ec0 >
+#> Parent:  tplyr_table < 0x55801f473880 >
 #> target_var: 
 #>  COMP8FL
 #>  COMP24FL
