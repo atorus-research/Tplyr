@@ -14,8 +14,7 @@ with no user-facing API change:
 * GitHub Actions:
   * windows-latest (R release)
   * macOS-latest (R release)
-  * ubuntu-latest and ubuntu-22.04 (R release)
-  * ubuntu-latest (R devel)
+  * ubuntu-latest and ubuntu-22.04 (R release and R devel)
 
 ## R CMD check results
 
