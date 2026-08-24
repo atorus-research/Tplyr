@@ -1,3 +1,8 @@
+# Tplyr 1.4.1
+
+## Bug fixes
+- Resolve #215 Fix an unnamed `empty` in `f_str()` being ignored for descriptive statistics rows where every value is missing, which left the cell blank instead of filling the format string. This was a regression introduced in 1.3.2
+
 # Tplyr 1.4.0
 
 ## New Features

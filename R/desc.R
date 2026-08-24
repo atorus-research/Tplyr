@@ -325,13 +325,19 @@ construct_desc_string_vec <- function(data, format_strings, max_prec = c(int = I
       }
     }
 
-    # Handle rows where all values are NA
+    # Rows where every value is NA are only short-circuited when `empty` is
+    # named '.overall', which replaces the whole result. An unnamed `empty`
+    # fills within the format string instead, so those rows carry on to the
+    # normal formatting path where num_fmt_vec_auto() pads each value.
     if (any(all_na_mask) && '.overall' %in% names(fmt$empty)) {
       result[idx[all_na_mask]] <- fmt$empty['.overall']
+      keep_mask <- !all_na_mask
+    } else {
+      keep_mask <- rep(TRUE, length(idx))
     }
 
-    # Process non-all-NA rows
-    non_na_idx <- idx[!all_na_mask]
+    # Process the rows that still need formatting
+    non_na_idx <- idx[keep_mask]
 
     if (length(non_na_idx) == 0) next
 
