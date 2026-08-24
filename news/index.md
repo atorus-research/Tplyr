@@ -1,6 +1,19 @@
 # Changelog
 
+## Tplyr 1.4.1
+
+### Bug fixes
+
+- Resolve [\#215](https://github.com/atorus-research/Tplyr/issues/215)
+  Fix an unnamed `empty` in
+  [`f_str()`](https://atorus-research.github.io/Tplyr/reference/f_str.md)
+  being ignored for descriptive statistics rows where every value is
+  missing, which left the cell blank instead of filling the format
+  string. This was a regression introduced in 1.3.2
+
 ## Tplyr 1.4.0
+
+CRAN release: 2026-08-23
 
 ### New Features
 

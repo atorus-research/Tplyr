@@ -97,11 +97,11 @@ tplyr_table(tplyr_adlb_2, TRTA) %>%
 
 | row_label1 | row_label2 | var1_Placebo | var1_Xanomeline High Dose | var1_Xanomeline Low Dose |
 |:---|:---|:---|:---|:---|
-| BUN | Mean (SD) |  | 4.61 ( 1.301) | 6.73 ( 2.940) |
-| CA | Mean (SD) |  | 2.20 ( 0.137) | 2.16 ( 0.083) |
-| CK | Mean (SD) |  | 108.25 ( 93.986) | 83.13 ( 77.915) |
-| GGT | Mean (SD) |  | 36.05 ( 48.692) | 34.92 ( 26.989) |
-| URATE | Mean (SD) |  | 289.26 ( 88.161) | 253.06 ( 87.006) |
+| BUN | Mean (SD) | NA ( NA) | 4.61 ( 1.301) | 6.73 ( 2.940) |
+| CA | Mean (SD) | NA ( NA) | 2.20 ( 0.137) | 2.16 ( 0.083) |
+| CK | Mean (SD) | NA ( NA) | 108.25 ( 93.986) | 83.13 ( 77.915) |
+| GGT | Mean (SD) | NA ( NA) | 36.05 ( 48.692) | 34.92 ( 26.989) |
+| URATE | Mean (SD) | NA ( NA) | 289.26 ( 88.161) | 253.06 ( 87.006) |
 
 In the example above, instead of filling the whole space, the `empty`
 text of “NA” replaces the empty value for each element. So for ‘Mean

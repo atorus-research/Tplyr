@@ -386,10 +386,6 @@ The idea behind this is really to support
 [Shiny](https://shiny.posit.co/). Consider this minimal application.
 Click any of the result cells within the table and see what happens.
 
-### Please Wait
-
-![loading](/__static__/frontend/images/spinner.gif?v=ce6bcde20b2f6c562913c06be83f9e7c8a19b008017407a3094b76fa82bbd6b7f4048e032e07e534d4ab5442b9105294d612863735077ab13a47653a14c5866e)
-
 *Source code available
 [here](https://github.com/atorus-research/Tplyr-shiny-demo)*
 

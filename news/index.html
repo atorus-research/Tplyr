@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Tplyr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.4.0" id="tplyr-140">Tplyr 1.4.0<a class="anchor" aria-label="anchor" href="#tplyr-140"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.4.1" id="tplyr-141">Tplyr 1.4.1<a class="anchor" aria-label="anchor" href="#tplyr-141"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
+<ul><li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/215" class="external-link">#215</a> Fix an unnamed <code>empty</code> in <code><a href="../reference/f_str.html">f_str()</a></code> being ignored for descriptive statistics rows where every value is missing, which left the cell blank instead of filling the format string. This was a regression introduced in 1.3.2</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.0" id="tplyr-140">Tplyr 1.4.0<a class="anchor" aria-label="anchor" href="#tplyr-140"></a></h2><p class="text-muted">CRAN release: 2026-08-23</p>
 <div class="section level3">
 <h3 id="new-features-1-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>
 <ul><li>Resolve <a href="https://github.com/atorus-research/Tplyr/issues/219" class="external-link">#219</a> Add <code>max_int</code> and <code>max_dec</code> arguments to <code><a href="../reference/set_format_strings.html">set_format_strings()</a></code>, and the corresponding <code>tplyr.max_precision</code> option, to set an overall maximum precision that’s applied after auto-precision and any ‘+’ modifier are resolved</li>
