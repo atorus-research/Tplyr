@@ -162,3 +162,48 @@ test_that("Infinites aren't produced from min/max", {
 
   expect_equal(x$var1_b, "")
 })
+
+
+test_that("An unnamed `empty` fills within the format string when every value is NA", {
+
+  # Drop a whole PARAMCD/treatment cell so the resulting row is entirely NA
+  d <- tplyr_adlb %>%
+    filter(PARAMCD %in% c("CK", "URATE")) %>%
+    filter(!(PARAMCD == "CK" & TRTA == "Placebo"))
+
+  build_empty <- function(...) {
+    t <- tplyr_table(d, TRTA) %>%
+      add_layer(
+        group_desc(AVAL, by = PARAMCD) %>%
+          set_format_strings(...)
+      )
+    build(t)$var1_Placebo[1:2]
+  }
+
+  # Unnamed empty pads within the format string rather than blanking the cell
+  expect_equal(
+    build_empty(
+      "n"        = f_str("xxx", n, empty = "0"),
+      "mean, sd" = f_str("xxx.xx, xxx.xx", mean, sd, empty = "NA")
+    ),
+    c("  0", "    NA,     NA")
+  )
+
+  # A '.overall' empty still replaces the whole result
+  expect_equal(
+    build_empty(
+      "n"        = f_str("xxx", n, empty = c(.overall = "NONE")),
+      "mean, sd" = f_str("xxx.xx, xxx.xx", mean, sd, empty = c(.overall = "NONE"))
+    ),
+    c("NONE", "NONE")
+  )
+
+  # The default empty leaves the cell blank
+  expect_equal(
+    build_empty(
+      "n"        = f_str("xxx", n),
+      "mean, sd" = f_str("xxx.xx, xxx.xx", mean, sd)
+    ),
+    c("", "")
+  )
+})

@@ -1,16 +1,12 @@
-## Submission 1.4.0
+## Submission 1.4.1
 
-This is a minor release (current CRAN version 1.3.3). It adds one backwards
-compatible feature and fixes two bugs:
+This is a patch release (current CRAN version 1.4.0). It fixes a single bug,
+with no user-facing API change:
 
-* New `max_int` and `max_dec` arguments to `set_format_strings()`, along with a
-  corresponding `tplyr.max_precision` option, allowing an overall maximum
-  precision to be applied after auto-precision and any '+' modifier are
-  resolved (#219). The defaults reproduce the previous behaviour exactly.
-* Fix table level defaults from `set_shift_layer_formats()` being silently
-  ignored by shift layers that do not set their own format strings (#216).
-* Fix incorrect `add_missing_subjects_row()` counts on nested count layers,
-  where `set_distinct_by()` was not applied to the inner layer (#217).
+* Fix an unnamed `empty` value in `f_str()` being ignored for descriptive
+  statistics rows where every summarized value is missing, which left the cell
+  blank instead of filling the format string (#215). This was a regression
+  introduced in 1.3.2.
 
 ## Test Environments
 
@@ -27,6 +23,6 @@ compatible feature and fixes two bugs:
 ## Reverse dependencies
 
 Tplyr has no strong reverse dependencies (Depends/Imports/LinkingTo). Two
-packages list it under Suggests (clinify, logrx); the new arguments and option
-are additive with defaults that preserve existing output, so they are
-unaffected.
+packages list it under Suggests (clinify, logrx); this patch restores
+previously documented formatting behaviour and makes no API change, so they
+are unaffected.
