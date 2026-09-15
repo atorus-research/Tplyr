@@ -208,9 +208,10 @@ set_format_strings.count_layer <- function(e, ...) {
 set_format_strings.shift_layer <- function(e, ...) {
 
   dots <- list2(...)
+  format_vars <- map_chr(dots[[1]]$vars, as_name)
 
-  assert_that(all(dots$vars %in% c("n", "pct")),
-              msg = "formats in shift layers can only be n")
+  assert_that(all(format_vars %in% c("n", "pct")),
+              msg = "formats in shift layers can only use `n` and `pct`; distinct counts are not supported for shift layers.")
 
   env_bind(e, format_strings = dots[[1]])
 

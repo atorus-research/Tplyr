@@ -93,3 +93,30 @@ test_that("Shift layer clauses with invalid syntax give informative error", {
 
   expect_snapshot_error(build(t))
 })
+
+test_that("shift layers reject distinct counts with informative errors", {
+  expect_error(
+    tplyr_table(mtcars, carb) %>%
+      add_layer(
+        group_shift(vars(column = vs, row = am)) %>%
+          set_distinct_by(cyl)
+      ),
+    "`set_distinct_by()` is not supported for shift layers.",
+    fixed = TRUE
+  )
+
+  expect_error(
+    tplyr_table(mtcars, carb) %>%
+      add_layer(
+        group_shift(vars(column = vs, row = am)) %>%
+          set_format_strings(
+            f_str(
+              "xx | xx | xx.x% || xx | xx | xx.x%",
+              n, total, pct, distinct_n, distinct_total, distinct_pct
+            )
+          )
+      ),
+    "distinct counts are not supported for shift layers.",
+    fixed = TRUE
+  )
+})

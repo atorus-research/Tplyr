@@ -1,6 +1,8 @@
 # Tplyr 1.4.1
 
 ## Bug fixes
+- Resolve #78 Throw informative errors when shift layers request distinct-count
+  formatting, which is not supported for shift layers
 - Resolve #215 Fix an unnamed `empty` in `f_str()` being ignored for descriptive statistics rows where every value is missing, which left the cell blank instead of filling the format string. This was a regression introduced in 1.3.2
 
 # Tplyr 1.4.0
@@ -244,4 +246,3 @@ presentation on the precision of the data as collected
 # Tplyr 0.1.0.9999
 
 Initial alpha release of Tplyr
-

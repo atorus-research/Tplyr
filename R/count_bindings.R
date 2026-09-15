@@ -103,7 +103,7 @@ set_total_row_label <- function(e, total_row_label) {
 #' `pct`, `distinct_n`, and `distinct_pct`. Additionally, denominators
 #' may be presented using `total` and `distinct_total`
 #'
-#' @param e A `count_layer/shift_layer` object
+#' @param e A `count_layer` object
 #' @param distinct_by Variable(s) to get the distinct data.
 #'
 #' @return The layer object with
@@ -121,6 +121,10 @@ set_total_row_label <- function(e, total_row_label) {
 #'   ) %>%
 #'   build()
 set_distinct_by <- function(e, distinct_by) {
+
+  if (inherits(e, "shift_layer")) {
+    abort("`set_distinct_by()` is not supported for shift layers.")
+  }
 
   distinct_by <- unpack_vars(enquos(distinct_by))
 
